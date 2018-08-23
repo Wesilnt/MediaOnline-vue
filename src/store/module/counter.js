@@ -1,4 +1,4 @@
-import {decrement, increment, log} from "../vuex-type";
+import {decrement, increment, log} from "./type";
 
 const counter={
     namespaced:true,
@@ -26,13 +26,14 @@ const counter={
                 throw new Error("不能再减啦");
             }
         },
-        [log]({sheep}){
-            console.log(sheep);
-        }
+
     },
     actions: {// 可为异步函数
         mapArgs({commit,state,getters}){
             // ....
+        },
+        [log]({state}){
+            console.log(state.sheep);
         },
         async [increment]({dispatch,commit,state}){
             await commit(increment);
