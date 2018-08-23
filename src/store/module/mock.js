@@ -34,7 +34,9 @@ const mocker = {
       } else if (type === "albumList") {
         response = await queryAlbums();
       } else {
-        response = await queryPhotos();
+        response = await queryPhotos({
+          albumId:1
+        });
       }
       await commit({
         type: "saveList",
