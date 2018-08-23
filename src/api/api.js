@@ -8,9 +8,9 @@ const { NODE_ENV } = process.env;
 // /todos       200条
 // users        10条
 /*参考地址 https://github.com/typicode/jsonplaceholder#how-to*/
-let api = "https://jsonplaceholder.typicode.com";
+let api = "https://xcx.test.shbaoyuantech.com:30000";
 
 if (NODE_ENV === "production") {
-  api = "";
+  api = "https://xcx.shbaoyuantech.com";
 }
 export default api;
