@@ -1,28 +1,49 @@
 <template>
     <div>
-        <div>{{count}}</div>
-        <button @click="increment">+</button>
-        <button :disabled="count===0" @click="decrement">-</button>
+        <h2>{{info}}</h2>
+        <p>{{sheep}}只羊</p>
+        <p>{{newNameOfOdevity}}</p>
+        <button @click="add">+</button>
+        <button :disabled="sheep===0" @click="decrement">-</button>
     </div>
 
 </template>
 
 <script>
-import store from "../store/store";
-import { mapMutations } from 'vuex';
+import { createNamespacedHelpers} from 'vuex';
+
+const { mapState,mapMutations ,mapGetters,mapActions} =createNamespacedHelpers('counter');
+
 export default {
   name: "Counter",
+    data:function(){
+      return {info:'睡不着来数羊'}
+    },
   computed: {
-    count() {
-      return store.state.count;
-    }
+      reverseInfo(){
+          return this.info.split('').reverse().join('');
+      },
+      /*odevity(){
+          return this.$store.getters.odevity
+      },*/
+     /* ...mapState({
+          sheep:state=>state.sheep,
+      })*/
+      ...mapState(['sheep']),
+      ...mapGetters({
+          newNameOfOdevity:'odevity'
+      })
+
   },
   methods: {
-      ...mapMutations([
+      /*...mapMutations([
           'increment', // 将 `this.increment()` 映射为 `this.$store.commit('increment')`
-          // `mapMutations` 也支持载荷：
-          'decrement' // 将 `this.incrementBy(amount)` 映射为 `this.$store.commit('incrementBy', amount)`
-      ]),
+          'decrement'
+      ]),*/
+      ...mapActions({
+          add:'increment',
+          decrement:'decrement'
+      })
   }
 };
 </script>

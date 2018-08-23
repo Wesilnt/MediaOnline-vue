@@ -1,6 +1,7 @@
 import "whatwg-fetch";
 import api from "../api/api";
 import { isUrl, json2formData } from "./utils";
+import { getAccessToken, getRefreshToken } from './userAuth';
 
 const codeMessage = {
   200: "服务器成功返回请求的数据。",
@@ -34,9 +35,11 @@ function checkStatus(response) {
 }
 
 const checkResponseCode = response => {
-  if (typeof response.code !== "undefined") {
+  if (typeof response.code === "undefined") {
+      return response;
+  }
     if (response.code === 0) {
-      return response.data || response;
+        return response.data || response;
     }
 
     const errorText = response.message || response.error || response.code;
@@ -50,9 +53,6 @@ const checkResponseCode = response => {
     // 1001: token无效 需退出重新登录
     if (response.code === 1001) error.name = "401-logout";
     throw error;
-  } else {
-    return response;
-  }
 };
 
 /**

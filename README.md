@@ -10,6 +10,11 @@ npm install
 npm run serve
 ```
 [数据使用Vuex](https://vuex.vuejs.org/zh/)
+```
+data 管理约定：
+    数据管理用 Vuex
+    状态管理 使用组件局部data 如显隐
+```
 
 [路由使用Router](https://router.vuejs.org/zh/)
 
