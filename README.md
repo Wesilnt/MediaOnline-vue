@@ -1,5 +1,17 @@
 # MediaOnline-vue
 
+# 文档地址
+
+   [App 接口文档访问地址]( https://xcx.test.shbaoyuantech.com:30000/swagger-ui.html)
+   
+   [Web 后台接口文档访问地址]( http://adminxcx.test.shbaoyuantech.com:30008/swagger-ui.html)
+
+   [App 原型文档访问地址]( http://192.168.1.176:8080/prototype/app )
+
+   [Web 后台原型文档访问地址]( http://192.168.1.176:8080/prototype/web )
+
+   [UI 设计文档访问地址]( ... )
+
 ## Project setup
 ```
 npm install
