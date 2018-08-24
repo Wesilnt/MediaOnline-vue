@@ -10,29 +10,31 @@
       </div>
       <div class="bar-container">
         <div v-for="item in tabs" :key="item" class="list" :class="{active:show===item}">
-          <template v-if="show === 'photo'">
-            <div v-for="listItem in photoList" :key="listItem.id" class="photoWraper">
-              <div class="photo_img">
-                <img :src="listItem.thumbnailUrl" :alt="listItem.title">
+            <template v-if="show === 'photo'">
+              <div v-for="listItem in photoList" :key="listItem.id" class="photoWraper">
+                <div class="photo_img">
+                  <img :src="listItem.thumbnailUrl" :alt="listItem.title">
+                </div>
+                <h4 class="photo_title">{{listItem.title}}</h4>
               </div>
-              <h4 class="photo_title">{{listItem.title}}</h4>
-            </div>
-          </template>
-          <template v-else-if="show === 'post'">
-            <div v-for="listItem in postList" :key="listItem.id">
-              <h3>{{listItem.id}}.{{listItem.title}}</h3>
-              <h5>{{listItem.body}}</h5>
-            </div>
-          </template>
-          <template v-else="show === 'album'">
-            <div v-for="listItem in albumList" :key="listItem.id"><h4 class="photo_title">{{listItem.title}}</h4></div>
-          </template>
+            </template>
+            <template v-else-if="show === 'post'">
+              <div v-for="listItem in postList" :key="listItem.id">
+                <h3>{{listItem.id}}.{{listItem.title}}</h3>
+                <h5>{{listItem.body}}</h5>
+              </div>
+            </template>
+            <template v-else="show === 'album'">
+              <div v-for="listItem in albumList" :key="listItem.id"><h4 class="photo_title">{{listItem.title}}</h4></div>
+            </template>
+
 
         </div>
       </div>
 
     </div>
   </div>
+
 </template>
 
 <script>
