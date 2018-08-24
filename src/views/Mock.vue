@@ -86,6 +86,7 @@ img {
   overflow: hidden;
   border-radius: 4px;
   background: #f7f7f7;
+  min-height: 320px;
   &:before {
     display: none;
     content: "loading";

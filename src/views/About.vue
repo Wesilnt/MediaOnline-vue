@@ -1,5 +1,18 @@
 <template>
   <div class="about">
-    <h1>This is an about page</h1>
+    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <Counter />
   </div>
 </template>
+<script>
+// @ is an alias to /src
+import HelloWorld from "@/components/HelloWorld.vue";
+import Counter from "@/components/Counter";
+export default {
+  name: "about",
+  components: {
+    HelloWorld,
+    Counter
+  }
+};
+</script>

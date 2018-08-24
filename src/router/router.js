@@ -1,29 +1,31 @@
 import Vue from "vue";
 import Router from "vue-router";
+import NavBar from "../components/NavBar";
 import Home from "../views/Home";
+import My from "../views/My";
 
 Vue.use(Router);
 
 export default new Router({
   routes: [
     {
-      path: "/",
-      name: "home",
-      component: Home
+      path: "/app",
+      component: NavBar,
+      children: [
+        { path: "", component: Home },
+        { path: "home", component: Home },
+        { path: "my", component: My }
+      ]
     },
     {
       path: "/about",
       name: "about",
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () =>
-        import(/* webpackChunkName: "about" */ "../views/About.vue")
+      component: () => import("../views/About.vue")
     },
-      {
-          path: "/mock",
-          name: "mock",
-          component:()=>import('../views/Mock.vue')
-      },
+    {
+      path: "/mock",
+      name: "mock",
+      component: () => import("../views/Mock.vue")
+    }
   ]
 });
