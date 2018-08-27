@@ -33,7 +33,8 @@ export default {
   },
   watch: {
     $route(to) {
-      const { path } = to;
+      let { path } = to;
+      if (path === "/") path = "/home";
       this.currentPath = path;
     }
   }

@@ -95,9 +95,10 @@ img {
     bottom: 0;
     padding-top: 200px;
     background: rgba(255, 255, 255, 0.8);
-    font-size: .32rem;
+    font-size: 24px;
     font-weight: 900;
     color: #000;
+    text-align: center;
   }
   &.loading{
     &:before{
