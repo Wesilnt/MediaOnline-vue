@@ -11,19 +11,19 @@
       <mu-menu slot="right">
         <mu-button flat>MENU</mu-button>
         <mu-list slot="content">
-          <mu-list-item button>
+          <mu-list-item button @click="$router.push('/about')">
             <mu-list-item-content>
-              <mu-list-item-title><router-link to="/about">About</router-link></mu-list-item-title>
+              <mu-list-item-title>About</mu-list-item-title>
             </mu-list-item-content>
           </mu-list-item>
-          <mu-list-item button>
+          <mu-list-item button @click="$router.push('/')">
             <mu-list-item-content>
-              <mu-list-item-title><router-link to="/">Index</router-link></mu-list-item-title>
+              <mu-list-item-title>Index</mu-list-item-title>
             </mu-list-item-content>
           </mu-list-item>
-          <mu-list-item button>
+          <mu-list-item button @click="$router.push('/mock')">
             <mu-list-item-content>
-              <mu-list-item-title> <router-link to="/mock">Mock</router-link></mu-list-item-title>
+              <mu-list-item-title>Mock</mu-list-item-title>
             </mu-list-item-content>
           </mu-list-item>
         </mu-list>
@@ -61,7 +61,7 @@ export default {
 <style lang="scss">
 @import "scss/common";
 .container {
-  padding: 20px;
+  padding: 20px 20px 82px;
 }
 a {
   font-weight: bold;

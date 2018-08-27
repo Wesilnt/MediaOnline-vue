@@ -48,8 +48,8 @@ import {
   theme
 } from "muse-ui";
 import 'muse-ui/dist/muse-ui.css';
-import "muse-ui/lib/styles/base.less";
-import "muse-ui/lib/styles/theme.less";
+// import "muse-ui/lib/styles/base.less";
+// import "muse-ui/lib/styles/theme.less";
 
 Vue.config.productionTip = false;
 Vue.use(Alert);

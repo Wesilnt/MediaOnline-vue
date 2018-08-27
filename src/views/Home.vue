@@ -5,12 +5,14 @@
     <mu-button @click="playV">get v</mu-button>
     <p>{{isplay}}</p>
     <p>{{currentTime}}</p>
+    <div class="boxRem"></div>
+    <div class="boxVw"></div>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-
+import "whatwg-fetch";
 export default {
   name: "home",
   data: function() {
@@ -22,7 +24,8 @@ export default {
   },
   methods: {
     playV() {
-      this.$refs.myVideo.play();
+      const video = this.$refs.myVideo;
+      this.isplay ? video.pause() : video.play();
     },
     getV() {
       const isplay = !this.isplay;
@@ -43,3 +46,15 @@ export default {
   }*/
 };
 </script>
+<style lang="scss" scoped>
+.boxRem {
+  width: 10rem;
+  height: 20rem;
+  background: #17a2b8;
+}
+.boxVw {
+  width: 10vw;
+  height: 20vw;
+  background: #28a745;
+}
+</style>
