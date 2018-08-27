@@ -19,7 +19,6 @@ export default {
   methods: {
     togglePath: function(path) {
       if (path !== this.currentPath) {
-        console.log(path);
         this.currentPath = path;
         this.$router.push({ path });
       }

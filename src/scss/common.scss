@@ -1,9 +1,15 @@
-@import "variables";
-@import "root";
-
+//@import "variables";
+//@import "root";
+ul,ol{
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
 .icon{
   display: inline-block;
   width: 36px;
   height: 36px;
-  background: #f0a;
+  background: transparent center no-repeat;
+  background-size: 100%;
+
 }

@@ -9,7 +9,7 @@ Vue.use(Router);
 export default new Router({
   routes: [
     {
-      path: "/app",
+      path: "/",
       component: NavBar,
       children: [
         { path: "", component: Home },

@@ -24,11 +24,9 @@
                 <h5>{{listItem.body}}</h5>
               </div>
             </template>
-            <template v-else="show === 'album'">
+            <template v-else>
               <div v-for="listItem in albumList" :key="listItem.id"><h4 class="photo_title">{{listItem.title}}</h4></div>
             </template>
-
-
         </div>
       </div>
 
@@ -97,7 +95,7 @@ img {
     bottom: 0;
     padding-top: 200px;
     background: rgba(255, 255, 255, 0.8);
-    font-size: 2rem;
+    font-size: .32rem;
     font-weight: 900;
     color: #000;
   }

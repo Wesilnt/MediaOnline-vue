@@ -1,34 +1,25 @@
 <template>
     <div>
         <router-view/>
-        <ul class="navbar">
-            <li v-for="(nav) in navbar" :key="nav.path" class="navbar-item" :class="{active:nav.path===currentPath}" @click="togglePath(nav.path)">
-                <i class="icon"></i>
+        <div class="navbar">
+            <mu-ripple v-for="(nav) in navbar" :key="nav.path" class="navbar-item" :class="{active:nav.path===currentPath}" @click="togglePath(nav.path)">
+                <i class="icon" :style="{backgroundImage:nav.path===currentPath?`url(${nav.activeIcon})`:`url(${nav.icon})`}" />
                 <div class="navbar-item-title">{{nav.name}}</div>
-            </li>
-        </ul>
+            </mu-ripple>
+        </div>
     </div>
 </template>
 
 <script>
+import { navbar } from "../utils/config";
+
 export default {
   name: "NavBar",
   data: function() {
     let currentPath = this.$router.history.current.fullPath;
-    if (currentPath === "/app") currentPath = "/app/home";
+    if (currentPath === "/") currentPath = "/home";
     return {
-      navbar: [
-        {
-          name: "首页",
-          icon: "",
-          path: "/app/home"
-        },
-        {
-          name: "我的",
-          icon: "",
-          path: "/app/my"
-        }
-      ],
+      navbar,
       currentPath
     };
   },
@@ -38,6 +29,12 @@ export default {
         this.currentPath = path;
         this.$router.push({ path });
       }
+    }
+  },
+  watch: {
+    $route(to) {
+      const { path } = to;
+      this.currentPath = path;
     }
   }
 };
@@ -55,7 +52,6 @@ export default {
   align-items: center;
   width: 100%;
   line-height: 1;
-  list-style: none;
   box-shadow: 0 0 2px #ddd;
   color: #ddd;
   background: #fff;
@@ -74,7 +70,7 @@ export default {
     background: #b8c2ca;
   }
   &.active {
-    color: #1edc58;
+    color: #ffa32f;
   }
 }
 .navbar-item-title {

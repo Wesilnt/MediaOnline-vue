@@ -1,6 +1,14 @@
-# MediaOnline-vue
+## Project setup
+```
+npm install
+```
 
-# 文档地址
+### 开发模式
+```
+npm run serve
+```
+
+### 文档地址
 
    [App 接口文档访问地址]( https://xcx.test.shbaoyuantech.com:30000/swagger-ui.html)
    
@@ -12,15 +20,16 @@
 
    [UI 设计文档访问地址]( ... )
 
-## Project setup
+
+
+
+[UI 库 muse-ui](https://muse-ui.org/#/zh-CN)
 ```
-npm install
+Icon地址 
+https://material.io/tools/icons/?icon=assignment_returned&style=baseline
+
 ```
 
-### 开发模式
-```
-npm run serve
-```
 [数据使用Vuex](https://vuex.vuejs.org/zh/)
 ```
 data 管理约定：
