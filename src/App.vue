@@ -36,7 +36,7 @@
 export default {
   name: "App",
   data: function() {
-    const { path } = this.$router.history.current;
+    const { path } = this.$route;
     return {
       needBack: path !== "/home"
     };

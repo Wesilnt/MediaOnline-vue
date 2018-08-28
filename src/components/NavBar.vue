@@ -16,7 +16,7 @@ import { navbar } from "../utils/config";
 export default {
   name: "NavBar",
   data: function() {
-    let currentPath = this.$router.history.current.fullPath;
+    let currentPath = this.$route.path;
     if (currentPath === "/") currentPath = "/home";
     return {
       navbar,
