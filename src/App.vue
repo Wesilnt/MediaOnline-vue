@@ -2,7 +2,7 @@
   <div>
     <mu-appbar style="width: 100%;" color="primary">
       <mu-button icon slot="left" v-if="needBack" @click="goBack">
-        <mu-icon value="arrow_back"></mu-icon>
+        <mu-icon value="arrow_back" />
       </mu-button>
       <mu-button icon slot="left">
         <mu-icon value="menu"></mu-icon>
@@ -29,7 +29,7 @@
         </mu-list>
       </mu-menu>
     </mu-appbar>
-      <router-view class="container"/>
+      <router-view class="my-container"/>
   </div>
 </template>
 <script>
@@ -60,7 +60,7 @@ export default {
 </script>
 <style lang="scss">
 @import "scss/common";
-.container {
+.my-container {
   padding: 20px 20px 82px;
 }
 a {
