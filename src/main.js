@@ -3,6 +3,8 @@ import App from "./App.vue";
 import router from "./router/router";
 import store from "./store/store";
 
+import './import'
+
 import { Button,Navbar, TabItem  } from "mint-ui";
 Vue.component(Button.name, Button);
 Vue.use(Navbar);

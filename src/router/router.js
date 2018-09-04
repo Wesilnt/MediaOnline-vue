@@ -3,6 +3,11 @@ import Router from "vue-router";
 import NavBar from "../components/NavBar";
 import Home from "../views/Home";
 import My from "../views/My";
+import FreeList from '../views/FreeList'
+import VisionList from '../views/VisionList'
+import VideoList from '../components/VideoList'
+import BookList from '../views/BookList'
+import VisionDetail from '../views/VisionDetail'
 
 Vue.use(Router);
 
@@ -11,6 +16,7 @@ export default new Router({
     {
       path: "/",
       component: NavBar,
+      redirect:'/home',
       children: [
         { path: "", component: Home },
         { path: "home", component: Home },
@@ -20,15 +26,31 @@ export default new Router({
         }
       ]
     },
-    {
-      path: "/about",
-      name: "about",
-      component: () => import("../views/About.vue")
+     {
+      path: '/home/freeList',
+      name: 'FreeList',
+      component: FreeList
     },
     {
-      path: "/mock",
-      name: "mock",
-      component: () => import("../views/Mock.vue")
+      path: '/home/visionList',
+      name: 'VisionList',
+      component: VisionList
+    },
+    {
+      path: '/home/visionDetail/:id',
+      name: 'VisionDetail',
+      component: VisionDetail,
+      props: true
+    },
+    {
+      path: '/home/videoList',
+      name: 'VideoList',
+      component: VideoList
+    },
+    {
+      path: '/home/bookList',
+      name: 'BookList',
+      component: BookList
     }
   ]
 });
