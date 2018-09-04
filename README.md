@@ -23,7 +23,7 @@ npm run serve
 
 
 
-[UI 库 muse-ui](https://muse-ui.org/#/zh-CN)
+[UI 库 mint-ui](https://mint-ui.github.io/docs/#/zh-cn2/)
 ```
 Icon地址 
 https://material.io/tools/icons/?icon=assignment_returned&style=baseline

@@ -2,10 +2,10 @@
     <div>
         <router-view/>
         <div class="navbar">
-            <mu-ripple v-for="(nav) in navbar" :key="nav.path" class="navbar-item" :class="{active:nav.path===currentPath}" @click="togglePath(nav.path)">
+            <div v-for="(nav) in navbar" :key="nav.path" class="navbar-item" :class="{active:nav.path===currentPath}" @click="togglePath(nav.path)">
                 <i class="icon" :style="{backgroundImage:nav.path===currentPath?`url(${nav.activeIcon})`:`url(${nav.icon})`}" />
                 <div class="navbar-item-title">{{nav.name}}</div>
-            </mu-ripple>
+            </div>
         </div>
     </div>
 </template>

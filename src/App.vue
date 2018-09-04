@@ -1,34 +1,9 @@
 <template>
   <div>
-    <mu-appbar style="width: 100%;" color="primary">
-      <mu-button icon slot="left" v-if="needBack" @click="goBack">
-        <mu-icon value="arrow_back" />
-      </mu-button>
-      <mu-button icon slot="left">
-        <mu-icon value="menu"></mu-icon>
-      </mu-button>
-      Title
-      <mu-menu slot="right">
-        <mu-button flat>MENU</mu-button>
-        <mu-list slot="content">
-          <mu-list-item button @click="$router.push('/about')">
-            <mu-list-item-content>
-              <mu-list-item-title>About</mu-list-item-title>
-            </mu-list-item-content>
-          </mu-list-item>
-          <mu-list-item button @click="$router.push('/')">
-            <mu-list-item-content>
-              <mu-list-item-title>Index</mu-list-item-title>
-            </mu-list-item-content>
-          </mu-list-item>
-          <mu-list-item button @click="$router.push('/mock')">
-            <mu-list-item-content>
-              <mu-list-item-title>Mock</mu-list-item-title>
-            </mu-list-item-content>
-          </mu-list-item>
-        </mu-list>
-      </mu-menu>
-    </mu-appbar>
+    <mt-button type="primary" @click="$router.push('/about')">about</mt-button>
+    <mt-button type="primary"  @click="$router.push('/')">Index</mt-button>
+    <mt-button type="primary" @click="$router.push('/mock')">mock</mt-button>
+
       <router-view class="my-container"/>
   </div>
 </template>
@@ -36,26 +11,11 @@
 export default {
   name: "App",
   data: function() {
-    const { path } = this.$route;
     return {
-      needBack: path !== "/home"
+      needBack: null
     };
   },
-  methods: {
-    goBack() {
-      this.$router.back();
-    }
-  },
-  watch: {
-    $route(to) {
-      const { path } = to;
-      if (path === "/home") {
-        this.needBack = false;
-      } else {
-        this.needBack = true;
-      }
-    }
-  }
+  methods: {}
 };
 </script>
 <style lang="scss">

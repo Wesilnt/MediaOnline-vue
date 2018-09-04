@@ -3,8 +3,8 @@
         <h2>{{info}}  {{reverseInfo}}</h2>
         <p>{{sheep}}只羊</p>
         <p>{{newNameOfOdevity}}</p>
-        <mu-button color="warning" @click="add">+</mu-button>
-        <mu-button color="info" :disabled="sheep===0" @click="decrement">-</mu-button>
+        <mt-button color="warning" @click="add">+</mt-button>
+        <mt-button color="info" :disabled="sheep===0" @click="decrement">-</mt-button>
     </div>
 
 </template>

@@ -1,7 +1,6 @@
 <template>
-  <div class="my">
+  <div class="Son">
     my {{currentPath}}
-    <mt-button @click="$router.push('/my/son')">to son</mt-button>
   </div>
 </template>
 
@@ -14,11 +13,8 @@ export default {
   },
   data: function() {
     return {
-      currentPath: "/my"
+      currentPath: "/my/son"
     };
-  },
-  mounted() {
-    console.log("loading");
   },
   methods: {
     togglePath: function(path) {
