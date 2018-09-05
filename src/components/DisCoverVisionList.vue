@@ -23,6 +23,7 @@ export default {
 }
 .cell{
     width: 100%;
-    padding-bottom: 36px;
+    height: 240px;
+    margin-bottom: 36px;
 }
 </style>

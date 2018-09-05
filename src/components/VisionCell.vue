@@ -2,13 +2,13 @@
   <div class="cell" @click="enterVisionDetail(vision.id)">
     <ul>
       <li>
-        <img class="cell-icon" :src="vision.url" alt="">
+        <img class="visionicon" :src="vision.url" alt="">
       </li>
       <li>
         <p class="visionTitle">{{vision.title}}</p>
         <p class="visionDetail">{{vision.desc}}</p>
         <p class="visionDetail">{{vision.author}}</p>
-        <p class="visionDetail bottomtext">
+        <p class="visionDetail footText">
           <span class="price">¥{{vision.price}}</span>/共{{vision.count}}讲
         </p>
 
@@ -26,7 +26,6 @@ export default {
   props: ["vision"],
   methods: {
     enterVisionDetail(id) {
-      alert(id)
       this.$router.push({ path: "./home/visionDetail/" + id });
     }
   }
@@ -68,30 +67,30 @@ export default {
     position: relative;
   }
 }
-
-.cell-icon {
+.visionicon {
   width: 180px;
   height: 240px;
   background-color: rgb(253, 231, 231);
   border-radius: 12px;
 }
 .visionTitle {
-  margin-top: 12px;
+  margin-top: 18px;
   font-size: 32px;
   color: rgb(68, 78, 98);
   font-weight: bolder;
 }
 .visionDetail {
-  margin-top: 6px;
+  margin-top: 12px;
   font-size: 24px;
   color: rgb(148, 154, 170);
 }
 .price {
   color: rgb(255, 163, 47);
 }
-.bottomtext {
-  margin-bottom: 0;
+.footText{
+margin-top: 30px;
 }
+
 
 .fit {
   padding-left: 5px;

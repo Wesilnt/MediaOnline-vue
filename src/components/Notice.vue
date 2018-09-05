@@ -1,7 +1,7 @@
 <template>
     <div class="noticebg" v-if="messageCount>0">
         <div class="notice">
-            <img class='notice-icon' />
+            <img class='messageicon' />
             <span class='message'>{{messageCount}}条新消息</span>
             <img class='arrow' src='../assets/ic_arrow.png' />
         </div>
@@ -23,34 +23,38 @@ export default {
   padding-top: 8px;
   box-sizing: border-box;
   .notice {
-    width: 180px;
-    height: 40px;
+    width: 360px;
+    height: 80px;
     background-color: rgb(56, 56, 56);
     border-radius: 4px;
     margin: auto;
-    .notice-icon {
-      width: 32px;
-      height: 32px;
-      border-radius: 4px;
+
+    vertical-align: middle;
+    .messageicon {
+      display: inline-block;
+      width: 64px;
+      height: 64px;
+      border-radius: 8px;
       background-color: rgb(253, 231, 231);
-      margin-left: 4px;
-      margin-top: 4px;
+      margin-left: 8px;
+      margin-right: 30px;
+      margin-top: -4px;
     }
     .message {
+      margin-top: 2px;
       display: inline-block;
-      width: 90px;
-      position: absolute;
+      line-height: 80px;
       color: white;
-      font-size: 14px;
+      font-size: 28px;
       font-weight: bolder;
-      margin-left: 12px;
-      line-height: 40px;
+      text-align: center;
+      width: 180px;
     }
     .arrow {
       width: 14px;
       height: 20px;
-      margin-left: 100px;
-      padding-bottom: 5px;
+      margin-left: 30px;
+      margin-bottom: 5px;
     }
   }
   .line {

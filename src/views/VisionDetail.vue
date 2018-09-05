@@ -12,7 +12,7 @@
         <div :class=" showall?'textFold infoText fulltext':'textFold infoText detault'">position: sticky; 基于用户的滚动位置来定位。 粘性定位的元素是依赖于用户的滚动，在 position:relative 与 position:fixed 定位之间切换。 在目标区域以内，它的行为就像 position:relative; 而当页面滚动超出目标区域时，它的表现就像 position:fixed;，它会固定在目标位置。 元素定位表现为在跨越特定阈值前为相对定位，之后为固定定位。 这个特定阈值指的是 top, right, bottom 或 left 之一，换言之，指定 top, right, bottom 或 left 四个阈值其中之一，才可使粘性定位生效。否则其行为与相对定位相同。 举例： div.sticky { position: -webkit-sticky; position: sticky; top: 0;/*阈值*/ padding: 5px; background-color: #cae8ca; border: 2px solid #4CAF50; } 缺陷：IE低版本不支持sticky的使用
         </div>
         <div :class="showall?'show hide':'show'">
-          <img class="ellipsis" @click="ellipsis" :src="showall?'../assets/classroom_arrow_up.png':'../assets/classroom_arrow_down.png'" alt="">
+          <img class="arrow" @click="ellipsis" :src="showall?'../assets/classroom_arrow_up.png':'../assets/classroom_arrow_down.png'" alt="">
         </div>
       </div>
       <!-- outline -->
@@ -24,8 +24,9 @@
         <img class="zoom" src="../assets/vision_zoom.png" alt="">
       </div>
 
-      <div>
-        <Header title=""> </Header>
+      <!-- try -->
+      <div class="try bottomline">
+        <DetailHeader title="试看课程" subtitle='全部'> </DetailHeader>
       </div>
 
     </div>
@@ -34,7 +35,7 @@
 </template>
 
 <script>
-import Header from '../components/Header.vue'
+import DetailHeader from '../components/DetailHeader.vue'
 
 export default {
   data() {
@@ -54,6 +55,8 @@ export default {
     ellipsis() {
       this.showall = !this.showall;
     }
+  },components:{
+    DetailHeader
   }
 };
 </script>
@@ -69,7 +72,7 @@ export default {
 .navbar {
   position: -webkit-sticky;
   position: sticky;
-  top: 40px;
+  top: 0px;
   left: 0;
   right: 0;
   width: 100%;
@@ -121,7 +124,7 @@ export default {
   margin-top: -40px;
   background: white;
 }
-.ellipsis {
+.arrow {
   width: 48px;
   height: 48px;
   position: absolute;
@@ -136,9 +139,9 @@ export default {
 }
 
 .title {
-  display: flex;
-  justify-content: space-between;
-  font-size: 30px;
+  // display: flex;
+  // justify-content: space-between;
+  font-size: 32px;
   font-weight: bolder;
   color: rgb(39, 51, 75);
   margin: 40px;
@@ -155,7 +158,7 @@ export default {
 .count {
   font-size: 28px;
   color: rgb(155, 161, 176);
-  margin-right: 420px;
+  // margin-right: 420px;
 }
 .zoom {
   width: 72px;
@@ -164,4 +167,5 @@ export default {
   right: 56px;
   bottom: 60px;
 }
+
 </style>

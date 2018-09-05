@@ -27,18 +27,19 @@ p {
 .cell {
   position: relative;
   width: 694px;
+  height: 220px;
   border-radius: 16px;
   margin-left: 28px;
   overflow: hidden;
 }
 .videoPlay {
   position: absolute;
-  width: 60px;
-  height: 60px;
+  width: 80px;
+  height: 80px;
   top: 50%;
   left: 50%;
-  margin-top: -30px; /* 高度的一半 */
-  margin-left: -30px; /* 宽度的一半 */
+  margin-top: -40px; /* 高度的一半 */
+  margin-left: -40px; /* 宽度的一半 */
 }
 .text {
   margin-left: 36px;
@@ -48,11 +49,10 @@ p {
   font-size: 32px;
   color: rgb(51, 51, 51);
   font-weight: bolder;
-  margin-bottom: 8px;
 }
 .videoDetail {
   font-size: 24px;
-  margin-bottom: 8px;
+  margin-top: 4px;
   color: rgb(102, 102, 102);
 }
 .price {

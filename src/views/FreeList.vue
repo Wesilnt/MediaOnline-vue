@@ -1,7 +1,7 @@
 <template>
     <div class="free">
         <div class="freeCell" v-for="(item, index) in freeList" :key="index">
-            <img class="free-icon" src="../assets/home_knowledge_play.png" alt="">
+            <img class="freeicon" src="../assets/home_knowledge_play.png" alt="">
             <span class="content">{{item.type}}|{{item.title}}</span>
         </div>
           <div class="line"></div>
@@ -30,7 +30,8 @@ export default {
   padding-left: 20px;
   box-sizing: border-box;
 }
-.free-icon {
+
+.freeicon {
   width: 68px;
   height: 68px;
   margin: 14px 16px 14px 20px;
