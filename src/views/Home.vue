@@ -2,7 +2,7 @@
   <div>
     <Swiper :images="images"></Swiper>
     <Notice :message-count="messageCount"> </Notice>
-    <Header title="免费专区" subtitle="探索更多" :link="'/home/freeList'"></Header>
+    <Header title="免费专区" subtitle="探索更多" :link="'/home/freezone'"></Header>
     <FreeList :free-list='freeList'></FreeList>
     <div class="sepline"></div>
     <Header title="视野" subtitle="探索更多" :link="'/home/visionList'" ></Header>
@@ -11,7 +11,7 @@
     <Header title="在线课堂"  subtitle="探索更多" :link="'/home/videoList'"></Header>
     <DisCoverVideoList :video-list='videoList'> </DisCoverVideoList>
     <div class="sepline" ></div>
-    <Header title="读书会" subtitle="探索更多" :link="'/home/bookList'"></Header>
+    <Header title="读书会" subtitle="探索更多" :link="'/home/readings'"></Header>
     <BookList :book-list='bookList'></BookList>
     
   </div>

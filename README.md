@@ -55,3 +55,9 @@ npm run lint
 ```
 npm run test:unit
 ```
+
+### 添加目录结构
+    1. views/freezone   免费专区 
+    2. views/readings   读书会
+       readings/BookDetail.vue  读书会-书详情
+       readings/BookSummary.vue    读书会-书简介
