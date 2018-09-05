@@ -22,7 +22,6 @@ export default {
     width: 100%;
 }
 .cell{
-    width: 100%;
     height: 240px;
     margin-bottom: 36px;
 }
