@@ -1,5 +1,6 @@
 <template>
   <div class="cell" @click="enterVisionDetail(vision.id)">
+    
     <ul>
       <li>
         <img class="visionicon" :src="vision.url" alt="">
