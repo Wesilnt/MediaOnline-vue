@@ -5,7 +5,7 @@ import Home from "../views/Home";
 import My from "../views/My";
 import FreeList from '../views/FreeList'
 import VisionList from '../views/VisionList'
-import VideoList from '../components/VideoList'
+import VideoList from '../views/onlineCourse/VideoList'
 import BookList from '../views/BookList'
 import VisionDetail from '../views/VisionDetail'
 
