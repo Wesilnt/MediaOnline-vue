@@ -7,7 +7,6 @@
         </div>
         <div class="line"></div>
     </div>
-
 </template>
 
 <script>
@@ -61,7 +60,7 @@ export default {
     width: 694px;
     height: 2px;
     background-color: rgb(238, 238, 238);
-    margin: 28px 28px 0px;
+    margin: 28px 28px 0;
   }
 }
 </style>

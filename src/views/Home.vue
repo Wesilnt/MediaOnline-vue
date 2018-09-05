@@ -13,7 +13,6 @@
     <div class="sepline" ></div>
     <Header title="读书会" subtitle="探索更多" :link="'/home/bookList'"></Header>
     <BookList :book-list='bookList'></BookList>
-    
   </div>
 </template>
 
@@ -27,7 +26,8 @@ import DisCoverVideoList from "../components/HomeVideoList.vue";
 import BookList from "./BookList.vue";
 
 export default {
-  data() {
+  name: "Homepage",
+  data: function() {
     return {
       images: [
         {
@@ -59,7 +59,7 @@ export default {
       ],
       list: [
         {
-          id:1,
+          id: 1,
           url: "http://dummyimage.com/1745x492/f1d65b",
           title: "中华五千年",
           desc: "听历史故事，涨人生见识",
@@ -69,7 +69,7 @@ export default {
           fit: "4-6岁儿童"
         },
         {
-          id:2,
+          id: 2,
           url: "http://dummyimage.com/1745x492/f1d65b",
           title: "中华五千年",
           desc: "听历史故事，涨人生见识",
@@ -79,7 +79,7 @@ export default {
           fit: "4-6岁儿童"
         },
         {
-          id:3,
+          id: 3,
           url: "http://dummyimage.com/1745x492/f1d65b",
           title: "中华五千年",
           desc: "听历史故事，涨人生见识",
@@ -91,7 +91,7 @@ export default {
       ],
       videoList: [
         {
-          id:4,
+          id: 4,
           url: "http://dummyimage.com/1745x492/f1d65b",
           title: "中华五千年",
           desc: "听历史故事，涨人生见识",
@@ -100,7 +100,7 @@ export default {
           count: 100
         },
         {
-          id:5,
+          id: 5,
           url: "http://dummyimage.com/1745x492/f1d65b",
           title: "中华五千年",
           desc: "听历史故事，涨人生见识",
@@ -109,7 +109,7 @@ export default {
           count: 100
         },
         {
-          id:6,
+          id: 6,
           url: "http://dummyimage.com/1745x492/f1d65b",
           title: "中华五千年",
           desc: "听历史故事，涨人生见识",
