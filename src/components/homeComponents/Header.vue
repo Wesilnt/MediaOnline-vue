@@ -27,7 +27,7 @@ export default {
     width: 100%;
     display: flex;
     justify-content: space-between;
-    background: white url(../assets/pic_line.png) no-repeat left;
+    background: white url(../../assets/home_title_line.png) no-repeat left;
     background-size: 8px 33px;
     padding-left: 28px;
     box-sizing: border-box;

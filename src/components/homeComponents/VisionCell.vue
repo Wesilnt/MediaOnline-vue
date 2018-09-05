@@ -15,7 +15,7 @@
       </li>
       <li>
         <div class="fit">{{vision.fit}}</div>
-        <img class="visionPlay" src="../assets/home_vision_paly.png" alt="">
+        <img class="visionPlay" src="../../assets/home_vision_paly.png" alt="">
       </li>
     </ul>
   </div>

@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import VisionCell from "../components/VisionCell.vue";
+import VisionCell from "../../components/homeComponents/VisionCell.vue";
 export default {
   data() {
     return {
