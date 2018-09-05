@@ -3,7 +3,7 @@
         <router-view/>
         <div class="navbar">
             <div v-for="(nav) in navbar" :key="nav.path" class="navbar-item" :class="{active:nav.path===currentPath}" @click="togglePath(nav.path)">
-                <i class="icon" :style="{backgroundImage:nav.path===currentPath?`url(${nav.activeIcon})`:`url(${nav.icon})`}" />
+                <i class="icon navbar-icon" :style="{backgroundImage:nav.path===currentPath?`url(${nav.activeIcon})`:`url(${nav.icon})`}" />
                 <div class="navbar-item-title">{{nav.name}}</div>
             </div>
         </div>
@@ -79,4 +79,7 @@ export default {
   padding-top: 6px;
   padding-bottom: 4px;
 }
+    .navbar-icon{
+        padding-top: 14px;
+    }
 </style>

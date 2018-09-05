@@ -156,7 +156,6 @@ export default {
         border: 1px #000;
         rows:3;
         cols:3;
-        display: flex;
         flex-wrap: wrap
     }
     .img {

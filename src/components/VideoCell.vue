@@ -27,7 +27,6 @@ p {
 .cell {
   position: relative;
   width: 694px;
-  height: 220px;
   border-radius: 16px;
   margin-left: 28px;
   overflow: hidden;

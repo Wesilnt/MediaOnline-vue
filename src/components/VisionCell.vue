@@ -2,7 +2,7 @@
   <div class="cell" @click="enterVisionDetail(vision.id)">
     <ul>
       <li>
-        <img class="icon" :src="vision.url" alt="">
+        <img class="cell-icon" :src="vision.url" alt="">
       </li>
       <li>
         <p class="visionTitle">{{vision.title}}</p>
@@ -36,40 +36,40 @@ export default {
 <style lang="less" scoped>
 .cell {
   width: 694px;
-  height: 240px;
   margin-left: 28px;
 
   ul,
   li {
     list-style: none;
+    &:after{
+      content: '';
+      clear: both;
+      display: block;
+    }
   }
   ul {
     width: 694px;
-    height: 100%;
     padding: 0;
   }
   li:nth-child(1) {
     width: 180px;
-    height: 100%;
     float: left;
     position: relative;
   }
   li:nth-child(2) {
     width: 336px;
-    height: 100%;
     float: left;
     padding-left: 20px;
     position: relative;
   }
   li:nth-child(3) {
     width: 132px;
-    height: 100%;
     float: right;
     position: relative;
   }
 }
 
-.icon {
+.cell-icon {
   width: 180px;
   height: 240px;
   background-color: rgb(253, 231, 231);

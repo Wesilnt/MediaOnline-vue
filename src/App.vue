@@ -20,7 +20,7 @@ export default {
 };
 </script>
 <style lang="scss">
-@import "scss/common";
+@import "publicUIConfig/common";
 .my-container {
   padding: 20px 20px 82px;
 }

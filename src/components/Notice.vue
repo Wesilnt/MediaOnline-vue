@@ -1,7 +1,7 @@
 <template>
     <div class="noticebg" v-if="messageCount>0">
         <div class="notice">
-            <img class='icon' />
+            <img class='notice-icon' />
             <span class='message'>{{messageCount}}条新消息</span>
             <img class='arrow' src='../assets/ic_arrow.png' />
         </div>
@@ -28,7 +28,7 @@ export default {
     background-color: rgb(56, 56, 56);
     border-radius: 4px;
     margin: auto;
-    .icon {
+    .notice-icon {
       width: 32px;
       height: 32px;
       border-radius: 4px;

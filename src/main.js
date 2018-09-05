@@ -1,6 +1,6 @@
 import Vue from "vue";
 import 'lib-flexible/flexible.js'
-import './import'
+import './publicUIConfig/mintUIComponentImport'
 
 import App from "./App.vue";
 import router from "./router/router";
