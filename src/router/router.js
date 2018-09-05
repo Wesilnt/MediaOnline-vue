@@ -1,16 +1,31 @@
 import Vue from "vue";
 import Router from "vue-router";
-import NavBar from "../components/NavBar";
-import Home from "../views/Home";
-import My from "../views/My";
-import FreeList from '../views/FreeList'
-import VisionList from '../views/onlineVision/VisionList'
-import VideoList from '../views/onlineCourse/VideoList'
-import BookList from '../views/BookList'
-import videoColumnDetail from '../views/onlineCourse/videoColumnDetail.vue'
-import videoCourseDetail from '../views/onlineCourse/videoCourseDetail.vue'
-import VisionDetail from '../views/onlineVision/VisionDetail'
 
+import NavBar from "../components/NavBar";
+import PageLoading from "../components/PageLoading";
+
+import PageInfo_From_Home from "./router_home";
+import PageInfo_From_My from "./router_my";
+import PageInfo_From_OnlineCourse from "./router_onlineCourse";
+
+const Home = () => import(/* webpackChunkName: "home" */ "../views/Home");
+const My = () => import(/* webpackChunkName: "my" */ "../views/My");
+
+
+
+const MyHOB = () => ({
+    // 需要加载的组件 (应该是一个 `Promise` 对象)
+    component: import('../views/My'),
+    // 异步组件加载时使用的组件
+    loading: PageLoading,
+    // 加载失败时使用的组件
+    error: null,
+    // 展示加载时组件的延时时间。默认值是 200 (毫秒)
+    delay: 2000,
+    // 如果提供了超时时间且组件加载也超时了，
+    // 则使用加载失败时使用的组件。默认值是：`Infinity`
+    timeout: 3000
+});
 
 Vue.use(Router);
 
@@ -19,49 +34,18 @@ export default new Router({
     {
       path: "/",
       component: NavBar,
-      redirect:'/home',
+      redirect: "/home",
       children: [
         { path: "", component: Home },
         { path: "home", component: Home },
         {
           path: "my",
-          component: My,
+          component: MyHOB
         }
       ]
     },
-     {
-      path: '/home/freeList',
-      name: 'FreeList',
-      component: FreeList
-    },
-    {
-      path: '/home/visionList',
-      name: 'VisionList',
-      component: VisionList
-    },
-    {
-      path: '/home/visionDetail/:id',
-      name: 'VisionDetail',
-      component: VisionDetail,
-      props: true
-    },
-    {
-      path: '/home/videoList',
-      name: 'VideoList',
-      component: VideoList
-    },
-    {
-      path: '/home/bookList',
-      name: 'BookList',
-      component: BookList
-    },
-    { path:'/videoColumnDetail',
-      name:'videoColumn',
-      component:videoColumnDetail
-    },
-    { path:'/videoCourseDetail',
-      name:'videoCourse',
-      component:videoCourseDetail
-    }
+    ...PageInfo_From_Home,
+    ...PageInfo_From_My,
+    ...PageInfo_From_OnlineCourse
   ]
 });

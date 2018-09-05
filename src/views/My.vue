@@ -44,42 +44,42 @@ export default {
       headBg: bg,
       list: [
         {
-          name: "/my/purchase",
+          name: "/my/my-purchase",
           image: purchase,
           title: "已购清单"
         },
         {
-          name: "/my/record",
+          name: "/my/my-record",
           image: record,
           title: "播放记录"
         },
         {
-          name: "/my/like",
+          name: "/my/my-like",
           image: like,
           title: "我喜欢的"
         },
         {
-          name: puzzle,
+          name: "/my/my-puzzle",
           image: puzzle,
           title: "我的拼团"
         },
         {
-          name: "/my/reply",
+          name: "/my/my-reply",
           image: reply,
           title: "回应我的"
         },
         {
-          name: praise,
+          name: "/my/my-praise",
           image: praise,
           title: "我的集赞"
         },
         {
-          name: "/my/sysMessage",
+          name: "/my/my-sysMessage",
           image: sys,
           title: "系统消息"
         },
         {
-          name: "/my/help",
+          name: "/my/my-help",
           image: help,
           title: "意见反馈"
         }
