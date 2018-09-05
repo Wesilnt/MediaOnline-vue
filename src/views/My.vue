@@ -132,8 +132,6 @@ export default {
         height: 65px;
         margin-top: -25px;
         border-radius: 40%;
-        position: absolute;
-        width:100%;
         align-items: center;
         flex-direction: column;
         display: flex;
@@ -145,7 +143,7 @@ export default {
         display: flex;
         flex-wrap: wrap;
         width: 100%;
-        padding-top: 140px;
+        padding-top: 90px;
     }
     .grid-item{
         width: 33.3%;
