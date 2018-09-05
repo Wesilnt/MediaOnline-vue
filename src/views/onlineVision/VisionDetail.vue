@@ -21,7 +21,7 @@
           <span class='count'>(共30讲)</span>
         </div>
         <img class='outlineImage' src=''>
-        <img class="zoom" src="../assets/vision_zoom.png" alt="">
+        <img class="zoom" src="../../assets/vision_zoom.png" alt="">
       </div>
 
       <!-- try -->
@@ -35,9 +35,9 @@
 </template>
 
 <script>
-import DetailHeader from "../components/DetailHeader.vue";
-import arrowUp from "../assets/classroom_arrow_up.png";
-import arrowDown from "../assets/classroom_arrow_down.png";
+import DetailHeader from '../../components/visionComponents/DetailHeader.vue'
+import arrowUp from "../../assets/vison_arrow_up.png";
+import arrowDown from "../../assets/vision_arrow_down.png";
 
 export default {
   data() {

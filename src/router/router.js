@@ -4,11 +4,11 @@ import NavBar from "../components/NavBar";
 import Home from "../views/Home";
 import My from "../views/My";
 import FreeList from '../views/FreeList'
-import VisionList from '../views/VisionList'
+import VisionList from '../views/onlineVision/VisionList'
 import VideoList from '../views/onlineCourse/VideoList'
 import BookList from '../views/BookList'
-import VisionDetail from '../views/VisionDetail'
 import videoColumnDetail from '../views/onlineCourse/videoColumnDetail.vue'
+import VisionDetail from '../views/onlineVision/VisionDetail'
 
 Vue.use(Router);
 

@@ -1,6 +1,6 @@
 <template>
     <div class="cell" :style="{backgroundImage: 'url(' + video.url + ')' }">
-        <img class="videoPlay" src="../assets/home_video_play.png" alt="">
+        <img class="videoPlay" src="../../assets/home_video_play.png" alt="">
         <div class="text">
             <p class="videoTitle">{{video.title}}</p>
             <p class="videoDetail">{{video.desc}}</p>
