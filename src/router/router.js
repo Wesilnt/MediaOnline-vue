@@ -8,6 +8,7 @@ import VisionList from '../views/VisionList'
 import VideoList from '../views/onlineCourse/VideoList'
 import BookList from '../views/BookList'
 import VisionDetail from '../views/VisionDetail'
+import videoColumnDetail from '../views/onlineCourse/videoColumnDetail.vue'
 
 Vue.use(Router);
 
@@ -51,6 +52,9 @@ export default new Router({
       path: '/home/bookList',
       name: 'BookList',
       component: BookList
-    }
+    },
+    { path:'/videoColumnDetail',
+      name:'videoColumn',
+      component:videoColumnDetail}
   ]
 });
