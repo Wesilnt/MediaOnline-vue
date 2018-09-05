@@ -146,6 +146,7 @@ export default {
     box-sizing: border-box;
     margin-top: 28px;
     margin-bottom: 28px;
+    text-align: center;
     .videocol-navbar-item {
         width: 100px;
         padding-bottom: 22px;
