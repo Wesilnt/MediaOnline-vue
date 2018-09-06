@@ -20,6 +20,7 @@
 
 <script>
     export default {
+        name:'CourseIntroduce',
         data(){
             return {
                 isFold: true,

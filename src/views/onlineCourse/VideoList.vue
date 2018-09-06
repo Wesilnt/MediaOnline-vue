@@ -13,6 +13,7 @@
 import videoListItem from './components/videoListItem.vue'
 
     export default {
+        name:'VideoList',
         data(){
             return {
                 dataList:[

@@ -1,7 +1,7 @@
 const videoColumnDetail = () =>
-  import(/* webpackChunkName: "videoCourse" */ "../views/onlineCourse/videoCourseDetail");
+  import(/* webpackChunkName: "videoCourse" */ "../views/onlineCourse/videoColumnDetail");
 const videoCourseDetail = () =>
-  import(/* webpackChunkName: "videoColumn" */ "../views/onlineCourse/videoColumnDetail");
+  import(/* webpackChunkName: "videoColumn" */ "../views/onlineCourse/videoCourseDetail");
 
 const PageInfo_From_onlineCourse = [
   {
