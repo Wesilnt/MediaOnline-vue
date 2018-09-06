@@ -2,12 +2,12 @@ import Vue from "vue";
 import Router from "vue-router";
 
 import NavBar from "../components/NavBar"; 
-import Home from "../views/Home";
-import My from "../views/My";
-import VisionList from '../views/VisionList'
-import VideoList from '../views/onlineCourse/VideoList' 
-import VisionDetail from '../views/VisionDetail'
-import videoColumnDetail from '../views/onlineCourse/videoColumnDetail.vue'
+// import Home from "../views/Home";
+// import My from "../views/My";
+// import VisionList from '../views/VisionList'
+// import VideoList from '../views/onlineCourse/VideoList' 
+// import VisionDetail from '../views/VisionDetail'
+// import videoColumnDetail from '../views/onlineCourse/videoColumnDetail.vue'
 import FreeZone from '../views/freezone/FreeZone.vue'              //首页-免费专区
 import Readings from '../views/readings/Readings.vue'              //首页-读书会
 import BookDetail from '../views/readings/BookDetail.vue'          //读书会-书详情
@@ -70,22 +70,22 @@ export default new Router({
       name: 'FreeZone',
       component: FreeZone
     },
-    {
-      path: '/home/visionList',
-      name: 'VisionList',
-      component: VisionList
-    },
-    {
-      path: '/home/visionDetail/:id',
-      name: 'VisionDetail',
-      component: VisionDetail,
-      props: true
-    },
-    {
-      path: '/home/videoList',
-      name: 'VideoList',
-      component: VideoList
-    },
+    // {
+    //   path: '/home/visionList',
+    //   name: 'VisionList',
+    //   component: VisionList
+    // },
+    // {
+    //   path: '/home/visionDetail/:id',
+    //   name: 'VisionDetail',
+    //   component: VisionDetail,
+    //   props: true
+    // },
+    // {
+    //   path: '/home/videoList',
+    //   name: 'VideoList',
+    //   component: VideoList
+    // },
     {
       path: '/home/readings',
       name: 'Readings',
@@ -101,29 +101,33 @@ export default new Router({
       name: 'BookSummary',
       component: BookSummary
     },
-    { path:'/videoColumnDetail',
-      name:'videoColumn',
-      component:videoColumnDetail
-    },
-    {
-      path:"/audio/audioplay",
-      name:"AudioPlay",
-      component:AudioPlay
-    },
-    {
-      path:"/audio/audiocmts",
-      name:"AudioCmts",
-      component:AudioCmts
-    },
-    {
-      path:"/audio/audiodraft",
-      name:"AudioDraft",
-      component:AudioDraft
-    },
+    // { path:'/videoColumnDetail',
+    //   name:'videoColumn',
+    //   component:videoColumnDetail
+    // },
+    // {
+    //   path:"/audio/audioplay",
+    //   name:"AudioPlay",
+    //   component:AudioPlay
+    // },
+    // {
+    //   path:"/audio/audiocmts",
+    //   name:"AudioCmts",
+    //   component:AudioCmts
+    // },
+    // {
+    //   path:"/audio/audiodraft",
+    //   name:"AudioDraft",
+    //   component:AudioDraft
+    // },
     {
       path:"/praise",
       name:"Praise",
       component:Praise
-    } 
+    } ,
+    ...PageInfo_From_Home,
+    ...PageInfo_From_My,
+    ...PageInfo_From_OnlineCourse
+
   ]
 });
