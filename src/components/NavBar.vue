@@ -27,7 +27,7 @@ export default {
     togglePath: function(path) {
       if (path !== this.currentPath) {
         this.currentPath = path;
-        this.$router.push({ path });
+          this.$router.push({ path });
       }
     }
   },
@@ -79,7 +79,7 @@ export default {
   padding-top: 6px;
   padding-bottom: 4px;
 }
-    .navbar-icon{
-        padding-top: 14px;
-    }
+.navbar-icon {
+  padding-top: 14px;
+}
 </style>

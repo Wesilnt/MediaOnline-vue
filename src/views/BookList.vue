@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import BookCell from "../components/BookCell.vue";
+import BookCell from "../components/homeComponents/BookCell.vue";
 export default {
   props: ["bookList"],
   components: {

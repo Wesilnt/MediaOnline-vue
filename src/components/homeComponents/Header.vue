@@ -1,8 +1,8 @@
 <template>
   <div class="header">
     <div class="headerContent">
-      <span class="title">{{title}}</span>
-      <span @click="enterList" class="more">{{subtitle}}</span>
+      <span class="headertitle">{{title}}</span>
+      <span @click="enterList" class="headermore">{{subtitle}}</span>
     </div>
   </div>
 </template>
@@ -27,19 +27,19 @@ export default {
     width: 100%;
     display: flex;
     justify-content: space-between;
-    background: white url(../assets/pic_line.png) no-repeat left;
+    background: white url(../../assets/home_title_line.png) no-repeat left;
     background-size: 8px 33px;
     padding-left: 28px;
     box-sizing: border-box;
   }
 }
-.title {
+.headertitle {
   font-size: 36px;
   color: rgb(39, 51, 75);
   font-weight: bolder;
 }
-.more {
-  margin-top: 14px;
+.headermore {
+  margin-top: 16px;
   font-size: 24px;
   line-height: 24px;
   color: rgb(41, 53, 76);

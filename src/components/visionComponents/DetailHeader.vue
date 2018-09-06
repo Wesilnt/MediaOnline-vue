@@ -2,7 +2,7 @@
   <div class="header">
     <span class="title">{{title}}</span>
     <span @click="enterList" class="right">{{subtitle}} 
-      <img class="arrow" src="../assets/vision_arrow.png" alt="">
+      <img class="arrow" src="../../assets/vision_arrow.png" alt="">
     </span>
   </div>
 </template>

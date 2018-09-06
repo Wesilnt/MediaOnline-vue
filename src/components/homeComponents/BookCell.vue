@@ -1,7 +1,7 @@
 <template>
     <div class="cell">
         <img class="cover" :src="book.url" alt="">
-        <img class="play-button" src="../assets/home_video_play.png" alt="">
+        <img class="play-button" src="../../assets/home_video_play.png" alt="">
         <img v-if="book.isNew" src="" alt="">
         <p class="title">{{book.title}}</p>
         <p class="price">¥{{book.price}}</p>

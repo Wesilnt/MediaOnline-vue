@@ -1,5 +1,6 @@
 <template>
   <div class="cell" @click="enterVisionDetail(vision.id)">
+    
     <ul>
       <li>
         <img class="visionicon" :src="vision.url" alt="">
@@ -15,7 +16,7 @@
       </li>
       <li>
         <div class="fit">{{vision.fit}}</div>
-        <img class="visionPlay" src="../assets/home_vision_paly.png" alt="">
+        <img class="visionPlay" src="../../assets/home_vision_paly.png" alt="">
       </li>
     </ul>
   </div>

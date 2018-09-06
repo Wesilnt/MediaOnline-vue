@@ -11,7 +11,7 @@
                 </div>
                 <div class="video-comment-praise">
                     <img :src="isPraise ? praiseHighlight : praiseNormal" @click="onClickPraise">
-                    <label>1314</label>
+                    <span>1314</span>
                 </div>
             </div>
             <div class="video-comment-detail">
@@ -80,6 +80,7 @@ export default {
 .video-userinfo-top-left {
     display: flex;
     flex-direction: row;
+    align-items: center;
 }
 .video-comment-nickname {
     color: rgb(128, 128, 128);

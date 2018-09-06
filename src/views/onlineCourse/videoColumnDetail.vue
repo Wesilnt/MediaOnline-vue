@@ -29,7 +29,7 @@
             <div class="videocol-sction-title">
                 <h4>试看课程</h4>
                 <div class="videocol-all" @click="allFunc">
-                    <label class="videocol-allbtn">全部</label>
+                    <span class="videocol-allbtn">全部</span>
                     <img class="videocol-allbtn-icon" :src="require('../../assets/images/onlinecourse_arrow_right.png')">
                 </div>
            </div>
@@ -41,7 +41,7 @@
             <div class="videocol-sction-title">
                 <h4>精选留言</h4>
                 <div class="videocol-all" @click="allFunc">
-                    <label class="videocol-allbtn">1314条</label>
+                    <span class="videocol-allbtn">1314条</span>
                     <img class="videocol-allbtn-icon" :src="require('../../assets/images/onlinecourse_arrow_right.png')">
                 </div>
            </div>
@@ -146,6 +146,7 @@ export default {
     box-sizing: border-box;
     margin-top: 28px;
     margin-bottom: 28px;
+    text-align: center;
     .videocol-navbar-item {
         width: 100px;
         padding-bottom: 22px;
@@ -174,6 +175,7 @@ export default {
     text-align: left;
     color: rgb(62, 62, 83);
     margin-top:48px;
+    align-items: center;
 }
 
 //分割线
@@ -187,6 +189,7 @@ export default {
 }
 
 .videocol-sction-title h4 {
+    margin: 0;
     font-size: 32px;
     color: rgb(62, 62, 83)
 }

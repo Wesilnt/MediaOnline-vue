@@ -5,6 +5,7 @@
     <Header title="免费专区" subtitle="探索更多" :link="'/home/freezone'"></Header>
     <FreeList :free-list='freeList'></FreeList>
     <div class="sepline"></div>
+
     <Header title="视野" subtitle="探索更多" :link="'/home/visionList'" ></Header>
     <DisCoverVisionList :vision-list='list'></DisCoverVisionList>
     <div class="sepline"></div>
@@ -13,21 +14,23 @@
     <div class="sepline" ></div>
     <Header title="读书会" subtitle="探索更多" :link="'/home/readings'"></Header>
     <BookList :book-list='bookList'></BookList>
-    
+    <div class="homePosition"></div>
+
   </div>
 </template>
 
 <script>
-import Swiper from "../components/Swiper.vue";
-import Notice from "../components/Notice.vue";
-import Header from "../components/Header.vue";
+import Swiper from "../components/homeComponents/Swiper.vue";
+import Notice from "../components/homeComponents/Notice.vue";
+import Header from "../components/homeComponents/Header.vue";
 import FreeList from "./FreeList.vue";
-import DisCoverVisionList from "../components/DisCoverVisionList.vue";
-import DisCoverVideoList from "../components/HomeVideoList.vue";
+import DisCoverVisionList from "../components/homeComponents/DisCoverVisionList.vue";
+import DisCoverVideoList from "../components/homeComponents/HomeVideoList.vue";
 import BookList from "./BookList.vue";
 
 export default {
-  data() {
+  name: "Homepage",
+  data: function() {
     return {
       images: [
         {
@@ -59,7 +62,7 @@ export default {
       ],
       list: [
         {
-          id:1,
+          id: 1,
           url: "http://dummyimage.com/1745x492/f1d65b",
           title: "中华五千年",
           desc: "听历史故事，涨人生见识",
@@ -69,7 +72,7 @@ export default {
           fit: "4-6岁儿童"
         },
         {
-          id:2,
+          id: 2,
           url: "http://dummyimage.com/1745x492/f1d65b",
           title: "中华五千年",
           desc: "听历史故事，涨人生见识",
@@ -79,7 +82,7 @@ export default {
           fit: "4-6岁儿童"
         },
         {
-          id:3,
+          id: 3,
           url: "http://dummyimage.com/1745x492/f1d65b",
           title: "中华五千年",
           desc: "听历史故事，涨人生见识",
@@ -91,7 +94,7 @@ export default {
       ],
       videoList: [
         {
-          id:4,
+          id: 4,
           url: "http://dummyimage.com/1745x492/f1d65b",
           title: "中华五千年",
           desc: "听历史故事，涨人生见识",
@@ -100,7 +103,7 @@ export default {
           count: 100
         },
         {
-          id:5,
+          id: 5,
           url: "http://dummyimage.com/1745x492/f1d65b",
           title: "中华五千年",
           desc: "听历史故事，涨人生见识",
@@ -109,7 +112,7 @@ export default {
           count: 100
         },
         {
-          id:6,
+          id: 6,
           url: "http://dummyimage.com/1745x492/f1d65b",
           title: "中华五千年",
           desc: "听历史故事，涨人生见识",
@@ -196,5 +199,8 @@ export default {
   background-color: rgb(238, 238, 238);
   margin-top: 28px;
   margin-left: 28px;
+}
+.homePosition{
+  height: 100px;
 }
 </style>

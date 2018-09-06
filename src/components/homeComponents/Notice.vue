@@ -3,11 +3,10 @@
         <div class="notice">
             <img class='messageicon' />
             <span class='message'>{{messageCount}}条新消息</span>
-            <img class='arrow' src='../assets/ic_arrow.png' />
+            <img class='arrow' src='../../assets/home_notice_arrow.png' />
         </div>
         <div class="line"></div>
     </div>
-
 </template>
 
 <script>
@@ -61,7 +60,7 @@ export default {
     width: 694px;
     height: 2px;
     background-color: rgb(238, 238, 238);
-    margin: 28px 28px 0px;
+    margin: 28px 28px 0;
   }
 }
 </style>
