@@ -5,10 +5,15 @@ ul,ol{
   padding: 0;
   list-style: none;
 }
-.icon{
+.qhht-icon{
   display: inline-block;
   width: 42px;
   height: 42px;
   background: transparent center no-repeat;
   background-size: 100%;
+}
+.qhht-flex{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }

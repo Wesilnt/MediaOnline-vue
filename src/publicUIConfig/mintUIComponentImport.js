@@ -11,7 +11,8 @@ import {
   Progress,
   TabContainer,
   TabContainerItem,
-  Cell
+  Cell,
+  Badge
 } from "mint-ui";
 
 Vue.component(Swipe.name, Swipe);
@@ -26,4 +27,5 @@ Vue.component(TabItem.name, TabItem);
 Vue.component(TabContainer.name, TabContainer);
 Vue.component(TabContainerItem.name, TabContainerItem);
 Vue.component(Cell.name, Cell);
+Vue.component(Badge.name, Badge);
 Vue.use(InfiniteScroll);

@@ -1,64 +1,110 @@
 <template>
     <section class="my-puzzle-container">
-        <mt-navbar  fixed value="1">
-            <mt-tab-item id="1">选项一</mt-tab-item>
-            <mt-tab-item id="2">选项二</mt-tab-item>
-            <mt-tab-item id="3">选项三</mt-tab-item>
+        <mt-navbar  fixed :value="currentType" v-model="selected">
+            <mt-tab-item
+                    v-for="item in Object.keys(puzzleTabs)"
+                    :key="item"
+                    :id="puzzleTypes[item]">
+                {{puzzleTabs[item]}}
+            </mt-tab-item>
         </mt-navbar>
-        <mt-tab-container value="1" class="my-puzzle-content">
-            <mt-tab-container-item id="1">
-                <div v-for="n in 10" class="my-puzzle-content-cell">
-                    <div></div>
-                </div>
-            </mt-tab-container-item>
-            <mt-tab-container-item id="2">
-                <div v-for="n in 4" >内容</div>
-            </mt-tab-container-item>
-            <mt-tab-container-item id="3">
-                <div v-for="n in 6"  >内容</div>
-            </mt-tab-container-item>
-        </mt-tab-container>
+        <div class="my-puzzle-content">
+            <div v-for="puzzle in puzzleList" :key="puzzle.id" class="my-puzzle-content-cell">
+                <p class="qhht-flex">
+                    <i class="qhht-icon my-puzzle-content-cell-icon"/>
+                    <span class="my-puzzle-content-cell-date">拼团时间：{{puzzle.time}}</span>
+                    <Badge :status="puzzle.status===puzzleTypes.succeed?'success':puzzle.status===puzzleTypes.fail?'warning':'normal'"></Badge>
+                </p>
+                <div>{{puzzle}}</div>
+            </div>
+        </div>
     </section>
 </template>
 
 <script>
+import { createNamespacedHelpers } from "vuex";
+import Badge from "../../components/Badge";
+const { mapState, mapActions } = createNamespacedHelpers("myPuzzle");
 export default {
-  name: "MyPuzzle"
+  name: "MyPuzzle",
+  data: function() {
+    return {
+      selected: '0'
+    };
+  },
+  computed: {
+    ...mapState([
+      "puzzleTabs",
+      "puzzleTypes",
+      "currentType",
+      "puzzleList",
+      "loading"
+    ])
+  },
+  watch: {
+    selected: function(currentType) {
+      this.toggleCurrentType({ currentType });
+    }
+  },
+  created() {
+    this.queryList({ currentType: this.currentType });
+  },
+  methods: {
+    ...mapActions(["queryList", "toggleCurrentType"])
+  },
+  components: {
+    Badge
+  }
 };
 </script>
 
 <style scoped lang="less">
-@navbarColor: #ffa32f;
-.my-puzzle-container {
-  min-height: 100vh;
-  background-color: #fffcf7;
-  .mint-tab-item {
-    position: relative;
-    color: @navbarColor;
-    border: 0;
-    padding: 28px 0;
-    &.is-selected:after {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      margin: 0 auto;
-      width: 120px;
-      height: 4px;
-      border-radius: 4px;
-      background: @navbarColor;
+@active: #ffa32f;
+@fail: #ccc;
+.my-puzzle {
+  &-container {
+    min-height: 100vh;
+    background-color: #fffcf7;
+    .mint-tab-item {
+      position: relative;
+      border: 0;
+      padding: 28px 0;
+      &.is-selected {
+        color: @active;
+        &:after {
+          content: "";
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          margin: 0 auto;
+          width: 120px;
+          height: 4px;
+          border-radius: 4px;
+          background: @active;
+        }
+      }
     }
   }
-}
-.my-puzzle-content {
-  margin-top: 80px;
-  padding: 32px 40px;
-}
-.my-puzzle-content-cell {
-  border-radius: 4px;
-    padding: 32px;
-    background-color: #fff;
-    margin-bottom: 32px;
+  &-content {
+    margin-top: 80px;
+    padding: 32px 40px;
+    &-cell {
+      border-radius: 4px;
+      padding: 32px;
+      background-color: #fff;
+      margin-bottom: 32px;
+      &-icon {
+        width: 24px;
+        height: 24px;
+        margin-right: 12px;
+        background-image: url("../../assets/my_puzzle_clock.png");
+      }
+      &-date {
+        flex-grow: 1;
+        color: @fail;
+      }
+    }
+  }
 }
 </style>
