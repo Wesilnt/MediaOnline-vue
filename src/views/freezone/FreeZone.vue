@@ -4,7 +4,7 @@
         <div class="book-list">
             <router-link to="/audio/audioplay" v-for="item of bookList" :key="item.id">
                 <div class="book-item">
-                    <img :src="item.isPlaying?playingIcon:pauseIcon" />
+                    <img :src="item.isPlaying?playingIcon:pauseIcon" >
                     <div class="book-content">
                         <p :class="{'book-title-playing':item.isPlaying}">
                             文学| 为什么抱怨科技没有食堂?
@@ -22,12 +22,12 @@
     </div>
 </template>
 <script>
-import { Toast } from 'mint-ui';
+import { Toast } from 'mint-ui'
 export default {
   data() {
     return {
-      playingIcon:require("../../assets/freezone_playing.png"),
-      pauseIcon: require("../../assets/freezone_pause.png"),
+      playingIcon: require('../../assets/freezone_playing.png'),
+      pauseIcon: require('../../assets/freezone_pause.png'),
       bookList: [
         { id: 1, isPlaying: true },
         { id: 2, isPlaying: false },
@@ -41,22 +41,22 @@ export default {
         { id: 10, isPlaying: false },
         { id: 11, isPlaying: false }
       ],
-      isSubscribe : false
+      isSubscribe: false
     }
   },
-  methods:{
-      subscribe(){
-          //TODO 订阅代码
-          Toast('订阅')
-      }
+  methods: {
+    subscribe() {
+      //TODO 订阅代码
+      Toast('订阅')
+    }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
-.books-container { 
+.books-container {
   hr {
-    height: 1px;/*no*/
+    height: 1px; /*no*/
     background: rgb(227, 227, 227);
     border: 0;
   }
@@ -65,7 +65,7 @@ export default {
     flex-direction: column;
     padding-bottom: 116px;
     hr {
-      height: 1px;/*no*/
+      height: 1px; /*no*/
       background: rgb(227, 227, 227);
       border: 0;
       margin: 0 40px;
@@ -107,7 +107,7 @@ export default {
     }
     .book-datetime {
       font-size: 24px;
-      border: 1px solid;/*no*/
+      border: 1px solid; /*no*/
       border-radius: 10px;
       padding: 2px 20px;
       color: red;
@@ -126,11 +126,14 @@ export default {
     background-color: rgb(255, 163, 47);
     outline: none;
   }
-  .subscribe{
+  .subscribe {
     background-color: rgb(230, 230, 230);
   }
-  button:focus{outline:0;}
-   
-} 
-.book-subscribe:focus{outline:0;} 
+  button:focus {
+    outline: 0;
+  }
+}
+.book-subscribe:focus {
+  outline: 0;
+}
 </style>

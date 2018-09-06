@@ -4,14 +4,14 @@
 
 <script>
 export default {
-  name: "PageLoading",
+  name: 'PageLoading',
   data: function() {
-    console.log("loadingPage");
+    console.log('loadingPage')
     return {
       loading: true
-    };
+    }
   }
-};
+}
 </script>
 
 <style scoped>

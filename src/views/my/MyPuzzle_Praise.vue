@@ -6,7 +6,7 @@
             <a class="my-puzzle-nodata-btn">我要{{pageName}}</a>
         </div>
         <div v-else class="my-puzzle-container">
-            <mt-navbar  fixed :value="currentType" v-model="selected">
+            <mt-navbar fixed :value="currentType" v-model="selected">
                 <mt-tab-item
                         v-for="item in Object.keys(puzzleTabs)"
                         :key="item"
@@ -15,7 +15,7 @@
                 </mt-tab-item>
             </mt-navbar>
             <div class="my-puzzle-content">
-                <div  v-for="puzzle in puzzleList" :key="puzzle.id" class="my-puzzle-content-cell">
+                <div v-for="puzzle in puzzleList" :key="puzzle.id" class="my-puzzle-content-cell">
                     <p class="qhht-flex">
                         <i class="qhht-icon my-puzzle-content-cell-icon"/>
                         <span class="my-puzzle-content-cell-date">{{pageName}}时间：{{puzzle.time}}</span>
@@ -37,48 +37,48 @@
 </template>
 
 <script>
-import { createNamespacedHelpers } from "vuex";
-import Badge from "../../components/Badge";
-const { mapState, mapActions } = createNamespacedHelpers("myPuzzle_Praise");
+import { createNamespacedHelpers } from 'vuex'
+import Badge from '../../components/Badge'
+const { mapState, mapActions } = createNamespacedHelpers('myPuzzle_Praise')
 export default {
-  name: "myPuzzle_Praise",
+  name: 'MyPuzzlePraise',
   data: function() {
-    const { path } = this.$route;
-    let pageName = "";
-    if (path.endsWith("my-puzzle")) pageName = "拼团";
-    else if (path.endsWith("my-praise")) pageName = "集赞";
+    const { path } = this.$route
+    let pageName = ''
+    if (path.endsWith('my-puzzle')) pageName = '拼团'
+    else if (path.endsWith('my-praise')) pageName = '集赞'
     return {
-      selected: "0",
+      selected: '0',
       pageName
-    };
+    }
   },
   created() {
-    this.queryList({ currentType: this.currentType });
+    this.queryList({ currentType: this.currentType })
   },
   computed: {
     ...mapState([
-      "puzzleTabs",
-      "puzzleTypes",
-      "currentType",
-      "puzzleList",
-      "loading"
+      'puzzleTabs',
+      'puzzleTypes',
+      'currentType',
+      'puzzleList',
+      'loading'
     ])
   },
   watch: {
     selected: function(currentType) {
-      this.toggleCurrentType({ currentType });
+      this.toggleCurrentType({ currentType })
     }
   },
   mounted() {
-    console.log(this);
+    console.log(this)
   },
   methods: {
-    ...mapActions(["queryList", "toggleCurrentType"])
+    ...mapActions(['queryList', 'toggleCurrentType'])
   },
   components: {
     Badge
   }
-};
+}
 </script>
 
 <style scoped lang="less">
@@ -88,25 +88,30 @@ export default {
   &-container {
     min-height: 100vh;
     background-color: #fffcf7;
-    .mint-tab-item {
-      position: relative;
-      border: 0;
-      padding: 28px 0;
-      color: #212d44;
-      &.is-selected {
-        color: @active;
-        &:after {
-          content: "";
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          margin: 0 auto;
-          width: 120px;
-          height: 4px;
-          border-radius: 4px;
-          background: @active;
+    :global {
+      .mint-tab-item {
+        position: relative;
+        border: 0;
+        padding: 28px 0;
+        color: #212d44;
+        &.is-selected {
+          color: @active;
+          &:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: 0 auto;
+            width: 120px;
+            height: 4px;
+            border-radius: 4px;
+            background: @active;
+          }
         }
+      }
+      .mint-tab-item-label {
+        font-size: 24px;
       }
     }
   }
@@ -123,7 +128,7 @@ export default {
         width: 24px;
         height: 24px;
         margin-right: 12px;
-        background-image: url("../../assets/my_puzzle_clock.png");
+        background-image: url('../../assets/my_puzzle_clock.png');
       }
       &-date {
         flex-grow: 1;
@@ -169,7 +174,7 @@ export default {
       width: 180px;
       height: 200px;
       margin-top: 180px;
-      background-image: url("../../assets/my-nodata.png");
+      background-image: url('../../assets/my-nodata.png');
     }
     &-warn {
       font-size: 24px;

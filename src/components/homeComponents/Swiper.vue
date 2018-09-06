@@ -10,17 +10,17 @@
 
 <script>
 export default {
-props:['images']
+  props: ['images']
 }
 </script>
 
 <style lang='less' scoped>
-.mint-swipe{
+.mint-swipe {
+  width: 100%;
+  height: 350px;
+  img {
     width: 100%;
     height: 350px;
-    img{
-        width: 100%;
-        height: 350px;
-    }
+  }
 }
 </style>

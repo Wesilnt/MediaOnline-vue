@@ -4,19 +4,18 @@
             <img class="freeicon" src="" alt="">
             <span class="content">{{item.type}}|{{item.title}}</span>
         </div>
-          <div class="line"></div>
-          <router-view name="FreeList"></router-view>
+          <div class="line"/>
+          <router-view name="FreeList"/>
     </div>
 </template>
 
 <script>
 export default {
-  props: ["freeList"]
-};
+  props: ['freeList']
+}
 </script>
 
 <style lang="less" scoped>
-
 .free {
   margin-left: 28px;
   width: 694px;

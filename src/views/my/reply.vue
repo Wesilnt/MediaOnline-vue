@@ -1,13 +1,10 @@
-<template>
-
-</template>
+<template/>
 
 <script>
-    export default {
-        name: "reply"
-    }
+export default {
+  name: 'Reply'
+}
 </script>
 
 <style scoped>
-
 </style>

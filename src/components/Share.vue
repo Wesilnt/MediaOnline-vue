@@ -33,38 +33,38 @@
   </div>
 </template>
  <script>
-import { Toast } from "mint-ui";
+import { Toast } from 'mint-ui'
 export default {
   data() {
-    return { isOpen: false };
+    return { isOpen: false }
   },
-  props: ["show"],
+  props: ['show'],
   methods: {
     onShareItem(shareScore) {
-      this.isOpen = false;
-      if (shareScore == "poster") {
-        Toast("分享海报");
+      this.isOpen = false
+      if (shareScore == 'poster') {
+        Toast('分享海报')
       }
-      if (shareScore == "friends") {
-        Toast("分享给朋友");
+      if (shareScore == 'friends') {
+        Toast('分享给朋友')
       }
-      if (shareScore == "circle") {
-        Toast("分享到朋友圈");
+      if (shareScore == 'circle') {
+        Toast('分享到朋友圈')
       }
     },
     onCancel() {
-      this.isOpen = false;
+      this.isOpen = false
     },
     afterLeave(el) {
-      this.$emit("close");
+      this.$emit('close')
     }
   },
   watch: {
     show(value) {
-      this.isOpen = value;
+      this.isOpen = value
     }
   }
-};
+}
 </script>
  <style lang="scss" scoped>
 .share-container {
@@ -144,4 +144,3 @@ export default {
   transition: all 0.3s ease;
 }
 </style>
- 

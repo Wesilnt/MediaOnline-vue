@@ -13,67 +13,67 @@
         {{btnState.rightText}}
       </span>
     </div>
-    <mobile-validate v-if="show" @callback="validateCallback"></mobile-validate>
+    <mobile-validate v-if="show" @callback="validateCallback"/>
    
   </div>
 </template>
 <script>
-import MobileVali from "../../components/PhoneVerif.vue";
+import MobileVali from '../../components/PhoneVerif.vue'
 let buttonDatas = [
   {
     isSingle: false, //单按钮还是双按钮
-    leftText: "分享给好友",
-    rightText: "分享海报"
+    leftText: '分享给好友',
+    rightText: '分享海报'
   },
   {
     isSingle: true, //单按钮还是双按钮
-    singleStyle: "solid-large", //按钮样式
-    singleText: "为TA点赞，免费领取伍老师历史课程"
+    singleStyle: 'solid-large', //按钮样式
+    singleText: '为TA点赞，免费领取伍老师历史课程'
   },
   {
     isSingle: false, //单按钮还是双按钮
-    leftText: "帮TA分享",
-    rightText: "我也要集赞"
+    leftText: '帮TA分享',
+    rightText: '我也要集赞'
   },
   {
     isSingle: true, //单按钮还是双按钮
-    singleStyle: "hollow-small", //按钮样式
-    singleText: "现在去领取"
+    singleStyle: 'hollow-small', //按钮样式
+    singleText: '现在去领取'
   },
   {
     isSingle: true, //单按钮还是双按钮
-    singleStyle: "hollow-small", //按钮样式
-    singleText: "马上去学习"
+    singleStyle: 'hollow-small', //按钮样式
+    singleText: '马上去学习'
   },
   {
     isSingle: true, //单按钮还是双按钮
-    singleStyle: "solid-small", //按钮样式
-    singleText: "我也要集赞"
+    singleStyle: 'solid-small', //按钮样式
+    singleText: '我也要集赞'
   },
   {
     isSingle: true, //单按钮还是双按钮
-    singleStyle: "hollow-small", //按钮样式
-    singleText: "活动已结束"
+    singleStyle: 'hollow-small', //按钮样式
+    singleText: '活动已结束'
   },
   {
     isSingle: true, //单按钮还是双按钮
-    singleStyle: "solid-small", //按钮样式
-    singleText: "重新发起集赞"
+    singleStyle: 'solid-small', //按钮样式
+    singleText: '重新发起集赞'
   }
-];
+]
 export default {
-  props: ["state"],
-  components: { "mobile-validate": MobileVali },
+  props: ['state'],
+  components: { 'mobile-validate': MobileVali },
   data() {
     return {
-      show: false, 
+      show: false,
       buttonDatas: buttonDatas,
       btnState: buttonDatas[this.state]
-    };
-  }, 
+    }
+  },
   watch: {
     state: function(newValue) {
-      this.btnState = buttonDatas[newValue];
+      this.btnState = buttonDatas[newValue]
     }
   },
   methods: {
@@ -82,7 +82,7 @@ export default {
         //TODO 发起集赞
       }
       if (this.state == 5) {
-        this.show = true;
+        this.show = true
       }
       if (
         3 == this.state || //集赞完成未领取（发起人）
@@ -91,27 +91,27 @@ export default {
         7 == this.state
       ) {
         //TODO专栏详情
-        return;
+        return
       }
     },
-    onLeft() { 
+    onLeft() {
       //分享
-      this.$emit("share")
+      this.$emit('share')
     },
     onRight() {
       if (0 == this.state) {
         //分享海报
-        this.$router.push({ path: "/save-poster" });
+        this.$router.push({ path: '/save-poster' })
       }
       if (2 == this.state) {
         //我也要集赞
       }
     },
     validateCallback() {
-      this.show = false;
+      this.show = false
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .praise-btns-container {
@@ -146,7 +146,7 @@ export default {
     background-color: rgb(255, 163, 47);
     color: white;
     font-size: 36px;
-    border: 1px rgb(255, 163, 47) solid;/*no*/
+    border: 1px rgb(255, 163, 47) solid; /*no*/
   }
   .btn-single .hollow-small {
     width: 312px;
@@ -157,7 +157,7 @@ export default {
     background-color: white;
     color: rgb(255, 163, 47);
     font-size: 36px;
-    border: 1px rgb(255, 163, 47) solid;/*no*/
+    border: 1px rgb(255, 163, 47) solid; /*no*/
   }
   //双按钮
   .btn-double {
@@ -170,7 +170,7 @@ export default {
     font-size: 36px;
     color: rgb(255, 163, 47);
     border-radius: 96px;
-    border: 1px solid rgb(255, 163, 47);/*no*/
+    border: 1px solid rgb(255, 163, 47); /*no*/
     width: 312px;
     text-align: center;
     line-height: 96px;

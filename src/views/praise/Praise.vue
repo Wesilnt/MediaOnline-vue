@@ -15,7 +15,7 @@
       </div>
       <!-- 2.2 点赞/集赞 操作按钮 -->
       <div class="btn-container">
-        <priasebtn :state="state" @share="onShare"></priasebtn>
+        <priasebtn :state="state" @share="onShare"/>
       </div>
       <!-- 2.3 集赞人数提示 -->
       <div class="number-container">
@@ -40,145 +40,148 @@
       <hr>
     </div>
     <!-- 集赞说明框 -->
-    <praise-explain v-if="showExplain" @close="closeExplain"></praise-explain>
+    <praise-explain v-if="showExplain" @close="closeExplain"/>
     <!-- 分享框 -->
-    <share-pop :show="showShare" @close="closeShare"></share-pop>
+    <share-pop :show="showShare" @close="closeShare"/>
   </div>
 </template>
 <script>
-import PraiseBtn from "./PraiseBtns.vue";
-import PraiseExplain from "./PraiseExplain.vue";
-import Share from "../../components/Share.vue";
+import PraiseBtn from './PraiseBtns.vue'
+import PraiseExplain from './PraiseExplain.vue'
+import Share from '../../components/Share.vue'
 export default {
   data() {
     return {
       showShare: false, //显示分享框
       showExplain: false,
-      state: 1,      //按钮状态
-      praiseDesc:'',   //提示语
+      state: 1, //按钮状态
+      praiseDesc: '', //提示语
       peoples: [
-        { userAvatar: "" },
-        { userAvatar: "" },
-        { userAvatar: "" },
-        { userAvatar: "" },
-        { userAvatar: "" },
-        { userAvatar: "" },
-        { userAvatar: "" },
-        { userAvatar: "" },
-        { userAvatar: "" },
-        { userAvatar: "" },
-        { userAvatar: "" },
-        { userAvatar: "" },
-        { userAvatar: "" },
-        { userAvatar: "" },
-        { userAvatar: "" },
-        { userAvatar: "" },
-        { userAvatar: "" },
-        { userAvatar: "" },
-        { userAvatar: "" },
-        { userAvatar: "" },
-        { userAvatar: "" },
-        { userAvatar: "" },
-        { userAvatar: "" },
-        { userAvatar: "" },
-        { userAvatar: "" },
-        { userAvatar: "" },
-        { userAvatar: "" },
-        { userAvatar: "" },
-        { userAvatar: "" },
-        { userAvatar: "" }
+        { userAvatar: '' },
+        { userAvatar: '' },
+        { userAvatar: '' },
+        { userAvatar: '' },
+        { userAvatar: '' },
+        { userAvatar: '' },
+        { userAvatar: '' },
+        { userAvatar: '' },
+        { userAvatar: '' },
+        { userAvatar: '' },
+        { userAvatar: '' },
+        { userAvatar: '' },
+        { userAvatar: '' },
+        { userAvatar: '' },
+        { userAvatar: '' },
+        { userAvatar: '' },
+        { userAvatar: '' },
+        { userAvatar: '' },
+        { userAvatar: '' },
+        { userAvatar: '' },
+        { userAvatar: '' },
+        { userAvatar: '' },
+        { userAvatar: '' },
+        { userAvatar: '' },
+        { userAvatar: '' },
+        { userAvatar: '' },
+        { userAvatar: '' },
+        { userAvatar: '' },
+        { userAvatar: '' },
+        { userAvatar: '' }
       ]
-    };
+    }
   },
-  created:function(){
-    this._setBtnAndTips({status:1202},false, true)
+  created: function() {
+    this._setBtnAndTips({ status: 1202 }, false, true)
   },
   components: {
     priasebtn: PraiseBtn,
-    "praise-explain": PraiseExplain,
-    "share-pop": Share
+    'praise-explain': PraiseExplain,
+    'share-pop': Share
   },
   methods: {
-    closeExplain() {   //关闭集赞说明框
-      this.showExplain = false;
+    closeExplain() {
+      //关闭集赞说明框
+      this.showExplain = false
     },
-    praiseExplain() {   //显示集赞说明框
-      this.showExplain = true;
+    praiseExplain() {
+      //显示集赞说明框
+      this.showExplain = true
     },
-    onShare() {    //显示分享框
-      this.showShare = true;
+    onShare() {
+      //显示分享框
+      this.showShare = true
     },
-    closeShare() {   //关闭分享框
-      this.showShare = false;
+    closeShare() {
+      //关闭分享框
+      this.showShare = false
     },
     //获取按钮显示和滚动提示文本 isPraised：当前用户是否已点赞， isCurrentUser：发起集赞用户是不是当前用户
-  _setBtnAndTips: function (res, isPraised, isCurrentUser){
-    console.log(res)
-    let btnState = 0
-    let praiseDesc = "帮我点赞免费领取，求助攻"
-    let code = (res&&res.code) ? parseInt(res.code):0
-    let status = (res && res.status)?parseInt(res.status):0
-   //1. 集赞中：发起人         btnState:0
-    if (status == 1202 && isCurrentUser){
-      btnState = 0
-      praiseDesc = '我想免费领取课程,来帮我点赞吧' 
+    _setBtnAndTips: function(res, isPraised, isCurrentUser) {
+      console.log(res)
+      let btnState = 0
+      let praiseDesc = '帮我点赞免费领取，求助攻'
+      let code = res && res.code ? parseInt(res.code) : 0
+      let status = res && res.status ? parseInt(res.status) : 0
+      //1. 集赞中：发起人         btnState:0
+      if (status == 1202 && isCurrentUser) {
+        btnState = 0
+        praiseDesc = '我想免费领取课程,来帮我点赞吧'
+      }
+      //2. 集赞中：好友 未点赞   btnState:1
+      if (status == 1202 && !isCurrentUser && !isPraised) {
+        btnState = 1
+        praiseDesc = '帮我点赞免费领取，求助攻'
+      }
+      //3. 集赞中：好友 已点赞   btnState:2
+      if (status == 1202 && !isCurrentUser && isPraised) {
+        btnState = 2
+        praiseDesc = '感谢你帮我点赞'
+      }
+      //4. 集赞完成：发起人 未领取  btnState:3
+      if (status == 1203 && isCurrentUser) {
+        btnState = 3
+        praiseDesc = '集赞完成，感谢大家帮我点赞'
+      }
+      //5. 集赞完成：发起人 已领取  btnState:4
+      if (status == 1205 && isCurrentUser) {
+        btnState = 4
+        praiseDesc = '集赞完成，感谢大家帮我点赞'
+      }
+      //6. 集赞失败：发起人     btnState:4
+      if (status == 1204 && isCurrentUser) {
+        btnState = 7
+        praiseDesc = '呜呜呜...很遗憾，活动结束'
+      }
+      //7. 集赞完成未领取/已领取：好友 已点赞  btnState:5
+      if ((status == 1203 || status == 1205) && !isCurrentUser && isPraised) {
+        btnState = 5
+        praiseDesc = '集赞完成，感谢您帮我点赞'
+      }
+      //8. 集赞完成未领取/已领取：好友 未点赞  btnState:5
+      if ((status == 1203 || status == 1205) && !isCurrentUser && !isPraised) {
+        btnState = 5
+        praiseDesc = '集赞完成，感谢大家帮我点赞'
+      }
+      //9. 集赞失败：好友 已点赞  btnState:5
+      if (status == 1204 && !isCurrentUser && isPraised) {
+        btnState = 5
+        praiseDesc = '活动结束，感谢你帮我点赞'
+      }
+      //10. 集赞失败：好友 未点赞  btnState:5
+      if (status == 1204 && !isCurrentUser && !isPraised) {
+        btnState = 5
+        praiseDesc = '呜呜呜...很遗憾，活动结束'
+      }
+      //10. 集赞失败：好友 未点赞  btnState:5
+      if (status == 1204 && code == 1005 && !isCurrentUser && !isPraised) {
+        btnState = 5
+        praiseDesc = '呜呜呜...很遗憾，活动结束'
+      }
+      this.state = btnState
+      this.praiseDesc = praiseDesc
     }
-   //2. 集赞中：好友 未点赞   btnState:1
-    if (status == 1202 && !isCurrentUser && !isPraised) {
-      btnState = 1
-      praiseDesc = '帮我点赞免费领取，求助攻'
-    }
-   //3. 集赞中：好友 已点赞   btnState:2
-    if (status == 1202 && !isCurrentUser && isPraised) {
-      btnState = 2
-      praiseDesc = '感谢你帮我点赞'
-    }
-   //4. 集赞完成：发起人 未领取  btnState:3
-    if (status == 1203 && isCurrentUser) {
-      btnState = 3
-      praiseDesc = '集赞完成，感谢大家帮我点赞'
-    }
-   //5. 集赞完成：发起人 已领取  btnState:4
-    if (status == 1205 && isCurrentUser) {
-      btnState = 4
-      praiseDesc = '集赞完成，感谢大家帮我点赞'
-    }
-   //6. 集赞失败：发起人     btnState:4
-    if (status == 1204 && isCurrentUser) {
-      btnState = 7
-      praiseDesc = '呜呜呜...很遗憾，活动结束'
-    }
-   //7. 集赞完成未领取/已领取：好友 已点赞  btnState:5
-    if ((status == 1203 || status == 1205 ) && !isCurrentUser && isPraised) {
-      btnState = 5
-      praiseDesc = '集赞完成，感谢您帮我点赞'
-    }
-   //8. 集赞完成未领取/已领取：好友 未点赞  btnState:5
-    if ((status == 1203 || status == 1205) && !isCurrentUser && !isPraised) {
-      btnState = 5
-      praiseDesc = '集赞完成，感谢大家帮我点赞'
-    }
-   //9. 集赞失败：好友 已点赞  btnState:5
-    if (status == 1204 && !isCurrentUser && isPraised) {
-      btnState = 5
-      praiseDesc = '活动结束，感谢你帮我点赞'
-    }
-   //10. 集赞失败：好友 未点赞  btnState:5
-    if (status == 1204 && !isCurrentUser && !isPraised) {
-      btnState = 5
-      praiseDesc = '呜呜呜...很遗憾，活动结束'
-    }
-   //10. 集赞失败：好友 未点赞  btnState:5
-    if (status == 1204 && code == 1005 && !isCurrentUser && !isPraised) {
-      btnState = 5
-      praiseDesc = '呜呜呜...很遗憾，活动结束'
-    }
-    this.state = btnState
-    this.praiseDesc =praiseDesc
-  },
-
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .praise-container {
@@ -287,7 +290,7 @@ export default {
     align-items: center;
     hr {
       width: 176px;
-      height: 1px;/*no*/
+      height: 1px; /*no*/
       background-color: rgb(240, 240, 240);
     }
     span {

@@ -18,11 +18,10 @@
 </template>
 
 <script>
-    export default {
-        name: "record"
-    }
+export default {
+  name: 'Record'
+}
 </script>
 
 <style scoped>
-
 </style>

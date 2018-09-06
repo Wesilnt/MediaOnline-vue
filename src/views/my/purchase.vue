@@ -20,11 +20,10 @@
 </template>
 
 <script>
-    export default {
-        name: "purchase"
-    }
+export default {
+  name: 'Purchase'
+}
 </script>
 
 <style scoped>
-
 </style>

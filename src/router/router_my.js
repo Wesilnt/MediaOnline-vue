@@ -1,49 +1,49 @@
-import FreeList from "../views/FreeList";
-import PageLoading from "../components/PageLoading";
+import FreeList from '../views/FreeList'
+import PageLoading from '../components/PageLoading'
 const myPuzzle_Praise = () =>
-  import(/* webpackChunkName: "myPuzzle_Praise" */ "../views/my/MyPuzzle_Praise");
+  import(/* webpackChunkName: "myPuzzle_Praise" */ '../views/my/MyPuzzle_Praise')
 const PageInfo_From_My = [
   {
-    path: "/my/my-purchase",
+    path: '/my/my-purchase',
     // name: "MyPurchase",
     component: FreeList
   },
   {
-    path: "/my/my-record",
+    path: '/my/my-record',
     // name: "VisionList",
     component: FreeList
   },
   {
-    path: "/my/my-like",
+    path: '/my/my-like',
     // name: "VisionDetail",
     component: FreeList,
     props: true
   },
   {
-    path: "/my/my-puzzle",
+    path: '/my/my-puzzle',
     // name: "VideoList",
     component: myPuzzle_Praise
   },
   {
-    path: "/my/my-reply",
+    path: '/my/my-reply',
     // name: "BookList",
     component: FreeList
   },
   {
-    path: "/my/my-praise",
+    path: '/my/my-praise',
     // name: "BookList",
     component: myPuzzle_Praise
   },
   {
-    path: "/my/my-sysMessage",
+    path: '/my/my-sysMessage',
     // name: "BookList",
     component: FreeList
   },
   {
-    path: "/my/my-help",
+    path: '/my/my-help',
     // name: "BookList",
     component: FreeList
   }
-];
+]
 
-export default PageInfo_From_My;
+export default PageInfo_From_My

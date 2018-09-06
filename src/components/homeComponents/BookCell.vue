@@ -9,13 +9,13 @@
 </template>
 <script>
 export default {
-  props: ["book"]
-};
+  props: ['book']
+}
 </script>
 <style lang="less" scoped>
-p{
-    margin: 0;
-    padding: 0;
+p {
+  margin: 0;
+  padding: 0;
 }
 .cell {
   position: relative;
@@ -41,13 +41,13 @@ p{
     margin-top: 14px;
     margin-left: 10px;
     font-size: 24px;
-    color: rgb(51, 51, 51)
+    color: rgb(51, 51, 51);
   }
-  .price{
-      margin-top: 4px;
-     font-size: 24px;
-     margin-left: 10px;
-    color: rgb(255, 163, 47)
+  .price {
+    margin-top: 4px;
+    font-size: 24px;
+    margin-left: 10px;
+    color: rgb(255, 163, 47);
   }
 }
 </style>

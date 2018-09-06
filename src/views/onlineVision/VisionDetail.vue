@@ -26,7 +26,7 @@
 
       <!-- try -->
       <div class="try bottomline">
-        <DetailHeader title="试看课程" subtitle='全部'> </DetailHeader>
+        <DetailHeader title="试看课程" subtitle='全部'/>
       </div>
 
     </div>
@@ -36,34 +36,34 @@
 
 <script>
 import DetailHeader from '../../components/visionComponents/DetailHeader.vue'
-import arrowUp from "../../assets/vison_arrow_up.png";
-import arrowDown from "../../assets/vision_arrow_down.png";
+import arrowUp from '../../assets/vison_arrow_up.png'
+import arrowDown from '../../assets/vision_arrow_down.png'
 
 export default {
   data() {
     return {
       arrowUp,
       arrowDown,
-      banner: "",
-      selected: "1",
-      navBars: ["介绍", "试听", "留言"],
+      banner: '',
+      selected: '1',
+      navBars: ['介绍', '试听', '留言'],
       currentNav: 0,
       showall: false
-    };
+    }
   },
-  props: ["id"],
+  props: ['id'],
   methods: {
     navbarTap(index) {
-      this.currentNav = index;
+      this.currentNav = index
     },
     ellipsis() {
-      this.showall = !this.showall;
+      this.showall = !this.showall
     }
   },
   components: {
     DetailHeader
   }
-};
+}
 </script>
 
 <style lang="less" scoped>

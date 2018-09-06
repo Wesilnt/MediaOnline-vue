@@ -13,19 +13,19 @@ export default {
   data() {
     return {
       actives: [
-        { url: require("../../assets/praise_head_bg.png") }, 
-        { url: require("../../assets/praise_head_bg.png") }, 
-        { url: require("../../assets/praise_head_bg.png") }, 
-        { url: require("../../assets/praise_head_bg.png") }
+        { url: require('../../assets/praise_head_bg.png') },
+        { url: require('../../assets/praise_head_bg.png') },
+        { url: require('../../assets/praise_head_bg.png') },
+        { url: require('../../assets/praise_head_bg.png') }
       ]
-    };
+    }
   },
-  methods:{
-      toHelp(){
-          this.$router.push({path:'/praise'})
-      }
+  methods: {
+    toHelp() {
+      this.$router.push({ path: '/praise' })
+    }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .active-item {

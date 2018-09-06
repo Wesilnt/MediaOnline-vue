@@ -1,21 +1,21 @@
 <template>
     <div>
         <div class="list" v-for="(item, index) in videoList" :key="index">
-            <VideoCell :video='item'></VideoCell>
+            <VideoCell :video='item'/>
         </div>
     </div>
 
 </template>
 
 <script>
-import VideoCell from "./VideoCell.vue";
+import VideoCell from './VideoCell.vue'
 
 export default {
   components: {
     VideoCell
   },
-  props: ["videoList"]
-};
+  props: ['videoList']
+}
 </script>
 
 <style lang="less" scoped>

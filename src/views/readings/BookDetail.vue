@@ -108,14 +108,18 @@ export default {
         { isAudition: false, isPlaying: false },
         { isAudition: false, isPlaying: false }
       ]
-    };
+    }
   },
   methods: {
     toLookWhole() {
-      this.$router.push({ path: "/home/readings/summary", query: {}, replace: true }); //query参数，replace 表示当前组件移除
+      this.$router.push({
+        path: '/home/readings/summary',
+        query: {},
+        replace: true
+      }) //query参数，replace 表示当前组件移除
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .book-detail-container {
@@ -128,7 +132,7 @@ export default {
   }
   //1. 作品封面介绍
   .book-header-container {
-    height:440px;
+    height: 440px;
     width: 100%;
     display: flex;
     flex-direction: row;

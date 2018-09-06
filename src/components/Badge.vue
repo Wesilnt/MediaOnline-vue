@@ -3,50 +3,50 @@
 </template>
 <script>
 export default {
-  name: "Badge",
+  name: 'Badge',
   props: {
     content: String,
     status: {
-      default: "normal",
+      default: 'normal',
       validator: function(value) {
         // 这个值必须匹配下列字符串中的一个
-        return ["success", "warning", "normal"].indexOf(value) !== -1;
+        return ['success', 'warning', 'normal'].indexOf(value) !== -1
       }
     },
     succColor: {
       type: String,
-      default: "transparent"
+      default: 'transparent'
     },
     warnColor: {
       type: String,
-      default: "#CCC"
+      default: '#CCC'
     },
     normalColor: {
       type: String,
-      default: "#ffa32f"
+      default: '#ffa32f'
     }
   },
   computed: {
     badge: function() {
-      let text = "中";
-      let color = this.normalColor;
-      let succ = false;
-      if (this.status === "success") {
-        text = "成功";
-        color = this.succColor;
-        succ = true;
-      } else if (this.status === "warning") {
-        text = "失败";
-        color = this.warnColor;
+      let text = '中'
+      let color = this.normalColor
+      let succ = false
+      if (this.status === 'success') {
+        text = '成功'
+        color = this.succColor
+        succ = true
+      } else if (this.status === 'warning') {
+        text = '失败'
+        color = this.warnColor
       }
       return {
         text,
         color,
         succ
-      };
+      }
     }
   }
-};
+}
 </script>
 <style scoped>
 .succ {

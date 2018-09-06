@@ -5,7 +5,7 @@
     </div>
     <transition enter-active-class="fadeIn" leave-active-class="fadeOut">
       <div v-if="isExtend&&src" class="imageExtend" @click="isExtend=false">
-        <div class="extend-back"></div>
+        <div class="extend-back"/>
         <img class="extend-img" :src="src">
       </div>
     </transition>
@@ -13,18 +13,18 @@
 </template>
 <script>
 export default {
-  name: 'bigimage',
+  name: 'Bigimage',
   props: ['src', 'imgerr'],
   data() {
     return {
-      isExtend: false,
+      isExtend: false
     }
   },
   methods: {
     imgerrHandler(e) {
-      e.target.src = this.imgerr;
-    },
-  },
+      e.target.src = this.imgerr
+    }
+  }
 }
 </script>
 
@@ -43,12 +43,12 @@ export default {
     bottom: 0;
     left: 0;
     z-index: 2345;
-    overflow:scroll;
-    top:0;
+    overflow: scroll;
+    top: 0;
   }
   .img {
     width: 100%;
-    height:100%;
+    height: 100%;
     display: block;
   }
   .extend-back {
@@ -72,11 +72,11 @@ export default {
 }
 
 .fadeIn {
-  animation: fadeIn .5s;
+  animation: fadeIn 0.5s;
 }
 
 .fadeOut {
-  animation: fadeIn  .5s reverse;
+  animation: fadeIn 0.5s reverse;
 }
 
 @keyframes fadeIn {

@@ -11,34 +11,34 @@
 </template>
 
 <script>
-import { navbar } from "../utils/config";
+import { navbar } from '../utils/config'
 
 export default {
-  name: "NavBar",
+  name: 'NavBar',
   data: function() {
-    let currentPath = this.$route.path;
-    if (currentPath === "/") currentPath = "/home";
+    let currentPath = this.$route.path
+    if (currentPath === '/') currentPath = '/home'
     return {
       navbar,
       currentPath
-    };
+    }
   },
   methods: {
     togglePath: function(path) {
       if (path !== this.currentPath) {
-        this.currentPath = path;
-          this.$router.push({ path });
+        this.currentPath = path
+        this.$router.push({ path })
       }
     }
   },
   watch: {
     $route(to) {
-      let { path } = to;
-      if (path === "/") path = "/home";
-      this.currentPath = path;
+      let { path } = to
+      if (path === '/') path = '/home'
+      this.currentPath = path
     }
   }
-};
+}
 </script>
 
 <style scoped lang="scss">
@@ -62,7 +62,7 @@ export default {
   padding: 6px 0;
   position: relative;
   &:not(:last-child):after {
-    content: "";
+    content: '';
     position: absolute;
     right: 0;
     top: 20%;

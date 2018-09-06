@@ -24,13 +24,13 @@
 
 <script>
 export default {
-  props: ["vision"],
+  props: ['vision'],
   methods: {
     enterVisionDetail(id) {
-      this.$router.push({ path: "./home/visionDetail/" + id });
+      this.$router.push({ path: './home/visionDetail/' + id })
     }
   }
-};
+}
 </script>
 
 <style lang="less" scoped>
@@ -41,7 +41,7 @@ export default {
   ul,
   li {
     list-style: none;
-    &:after{
+    &:after {
       content: '';
       clear: both;
       display: block;
@@ -88,10 +88,9 @@ export default {
 .price {
   color: rgb(255, 163, 47);
 }
-.footText{
-margin-top: 30px;
+.footText {
+  margin-top: 30px;
 }
-
 
 .fit {
   padding-left: 5px;

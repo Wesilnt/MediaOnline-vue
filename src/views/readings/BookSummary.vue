@@ -1,7 +1,6 @@
 <template>
     <div class="descrip-container">
-        <div class="descrip-header">
-        </div>
+        <div class="descrip-header"/>
         <div class="course-name">
             绿山墙
         </div>
@@ -24,7 +23,7 @@
     </div>
 </template>
 <script>
-export default {};
+export default {}
 </script>
 <style lang="scss" scoped>
 .descrip-container {
@@ -54,13 +53,13 @@ export default {};
     margin: 40px;
     box-sizing: border-box;
     h2 {
-      margin: 40px 0 0 0 ;
+      margin: 40px 0 0 0;
       font-size: 36px;
       color: rgb(5, 4, 0);
     }
     p {
       margin: 0;
-      letter-spacing: 2px;/*no*/
+      letter-spacing: 2px; /*no*/
       font-size: 32px;
       line-height: 52px;
       color: rgb(70, 69, 77);

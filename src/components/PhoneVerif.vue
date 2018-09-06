@@ -16,30 +16,30 @@
   </div>
 </template>
 <script>
-import { Toast } from "mint-ui";
+import { Toast } from 'mint-ui'
 export default {
   data() {
     return {
-      mobileNumber: "",
-      validateCode: ""
-    };
+      mobileNumber: '',
+      validateCode: ''
+    }
   },
   methods: {
     sendCode() {
-      if (this.mobileNumber === "") {
-        Toast("请输入手机号");
-        return;
+      if (this.mobileNumber === '') {
+        Toast('请输入手机号')
+        return
       }
     },
     onConfirm() {
-      if (this.validateCode === "") {
-        Toast("请输入正确的验证码");
-        return;
+      if (this.validateCode === '') {
+        Toast('请输入正确的验证码')
+        return
       }
       this.$emit('callback')
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .mobile-validate {
@@ -78,7 +78,7 @@ export default {
     font-size: 30px;
     width: 205px;
     border: none;
-    border-bottom: 1px solid rgb(204, 204, 204);/*no*/
+    border-bottom: 1px solid rgb(204, 204, 204); /*no*/
     outline: none;
   }
 }
@@ -100,10 +100,10 @@ export default {
     font-size: 30px;
     width: 210px;
     outline: none;
-    border-bottom: 1px solid rgb(204, 204, 204);/*no*/
+    border-bottom: 1px solid rgb(204, 204, 204); /*no*/
   }
   a {
-    border: 1px solid rgb(0, 0, 0);/*no*/
+    border: 1px solid rgb(0, 0, 0); /*no*/
     width: 218px;
     height: 88px;
     color: black;

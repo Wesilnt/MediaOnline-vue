@@ -1,19 +1,18 @@
 <template>
   <div class="list">
     <div v-for="(book,index) in bookList" :key="index">
-      <BookCell :book=book> </BookCell>
-    </div>
+      <BookCell :book=book//////////></div>
   </div>
 </template>
 
 <script>
-import BookCell from "../components/homeComponents/BookCell.vue";
+import BookCell from '../components/homeComponents/BookCell.vue'
 export default {
-  props: ["bookList"],
+  props: ['bookList'],
   components: {
     BookCell
   }
-};
+}
 </script>
 
 <style lang="less" scoped>

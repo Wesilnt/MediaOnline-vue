@@ -27,8 +27,7 @@
     <!-- 进度条 -->
     <div class="slider-container">
       <div slot="start" @click="onSliderTap">05:32</div>
-      <mt-range @click.prevent="onSliderTap" v-model="rangeValue" :min="10" :max="90" :step="1" :bar-height="2">
-      </mt-range>
+      <mt-range @click.prevent="onSliderTap" v-model="rangeValue" :min="10" :max="90" :step="1" :bar-height="2"/>
       <div slot="end">06:23</div>
     </div>
     <!-- <div class="play-slider">
@@ -74,12 +73,12 @@
       </div>
     </mt-popup>
     <!-- 分享框 -->
-    <share-pop :show="showShare" @close="closeShare"></share-pop>
+    <share-pop :show="showShare" @close="closeShare"/>
   </div>
 </template>
 <script>
-import { Toast } from "mint-ui";
-import SharePop from "../Share.vue";
+import { Toast } from 'mint-ui'
+import SharePop from '../Share.vue'
 
 export default {
   data() {
@@ -114,36 +113,36 @@ export default {
         { isPlaying: false }
       ],
       rangeValue: 10,
-      cover: "",
-      progressColor: "#ff0000",
+      cover: '',
+      progressColor: '#ff0000',
       background: 12,
       display: false
-    };
+    }
   },
   components: {
-    "share-pop": SharePop
+    'share-pop': SharePop
   },
   created() {
-    let AudioContext = window.AudioContext || window.webkitAudioContext;
-    let audioCtx = AudioContext ? new AudioContext() : "";
+    let AudioContext = window.AudioContext || window.webkitAudioContext
+    let audioCtx = AudioContext ? new AudioContext() : ''
   },
   methods: {
     //进度条拖动
     sliderChange(value) {
-      console.log(value);
+      console.log(value)
       console.log(this.$refs.content)
     },
-    onSliderTap(e){ 
-       console.log(SharePop)
+    onSliderTap(e) {
+      console.log(SharePop)
     },
     //收藏
     onCollect() {
-      this.isLove = !this.isLove;
+      this.isLove = !this.isLove
       Toast({
-        message: this.isLove ? "已添加到我喜欢的" : "已取消喜欢",
-        iconClass: this.isLove ? "collect-icon" : ""
+        message: this.isLove ? '已添加到我喜欢的' : '已取消喜欢',
+        iconClass: this.isLove ? 'collect-icon' : ''
         // duration: -1
-      });
+      })
     },
     //文稿
     onManuScripts() {},
@@ -151,55 +150,55 @@ export default {
     onComments() {},
     //分享
     onShare() {
-      this.showShare = true;
+      this.showShare = true
     },
     //分享框关闭
     closeShare() {
-      this.showShare = false;
+      this.showShare = false
     },
     //切花播放模式
     onPlayMode() {
-      this.isSingle = !this.isSingle;
+      this.isSingle = !this.isSingle
       Toast({
-        message: this.isSingle ? "单曲循环" : "列表循环"
-      });
+        message: this.isSingle ? '单曲循环' : '列表循环'
+      })
     },
     //上一首
     onPlayPrv() {
       Toast({
-        message: "这是第一条",
-        iconClass: "first-icon"
+        message: '这是第一条',
+        iconClass: 'first-icon'
         // duration: -1
-      });
+      })
     },
     //播放/暂停
     onPlayPause() {
-      this.isPlaying = !this.isPlaying;
+      this.isPlaying = !this.isPlaying
     },
     //下一首
     onPlayNext() {
       Toast({
-        message: "已经是最后一条",
-        iconClass: "last-icon"
+        message: '已经是最后一条',
+        iconClass: 'last-icon'
         // duration: -1
-      });
+      })
     },
     //音频列表
     onPlayList() {
-      this.popupVisible = true;
+      this.popupVisible = true
     },
     //关闭列表窗口
     onCloseList() {
-      this.popupVisible = false;
+      this.popupVisible = false
     },
     //列表Item点击事件
     onItemClick(i) {
-      Toast("播放" + i + "首");
-      this.playIndex = i;
-      this.popupVisible = false;
+      Toast('播放' + i + '首')
+      this.playIndex = i
+      this.popupVisible = false
     }
   }
-};
+}
 </script>
 <style lang="scss">
 .audioplay-container {
@@ -267,11 +266,11 @@ export default {
     }
     .mt-range {
       flex: 1;
-      .mt-range-runway { 
+      .mt-range-runway {
         overflow: hidden;
         border-top-color: rgb(229, 229, 229);
         border-top-style: solid;
-      } 
+      }
       .mt-range-progress {
         background-color: rgb(255, 205, 126);
         height: 4px;

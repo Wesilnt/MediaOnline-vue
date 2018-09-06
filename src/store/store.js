@@ -1,15 +1,15 @@
-import Vue from "vue";
-import Vuex from "vuex";
-import counter from "./module/counter";
-import mocker from "./module/mock";
-import myPuzzle_Praise from "./module/myPuzzle_Praise";
+import Vue from 'vue'
+import Vuex from 'vuex'
+import counter from './module/counter'
+import mocker from './module/mock'
+import myPuzzle_Praise from './module/myPuzzle_Praise'
 
-Vue.use(Vuex);
+Vue.use(Vuex)
 export default new Vuex.Store({
-  strict: process.env.NODE_ENV !== "production",
+  strict: process.env.NODE_ENV !== 'production',
   modules: {
     counter,
     mocker,
-      myPuzzle_Praise
+    myPuzzle_Praise
   }
-});
+})

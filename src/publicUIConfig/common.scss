@@ -1,18 +1,19 @@
-@import "variables";
-@import "root";
-ul,ol{
+@import 'variables';
+@import 'root';
+ul,
+ol {
   margin: 0;
   padding: 0;
   list-style: none;
 }
-.qhht-icon{
+.qhht-icon {
   display: inline-block;
   width: 42px;
   height: 42px;
   background: transparent center no-repeat;
   background-size: 100%;
 }
-.qhht-flex{
+.qhht-flex {
   display: flex;
   justify-content: space-between;
   align-items: center;

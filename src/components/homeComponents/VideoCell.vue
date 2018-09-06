@@ -15,8 +15,8 @@
 
 <script>
 export default {
-  props: ["video"]
-};
+  props: ['video']
+}
 </script>
 
 <style lang="less" scoped>

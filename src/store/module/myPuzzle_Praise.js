@@ -1,16 +1,16 @@
-import { queryMyPuzzleList } from "../../services/my";
+import { queryMyPuzzleList } from '../../services/my'
 const puzzleTabs = {
-  all: "全部",
-  waiting: "中",
-  succeed: "成功",
-  fail: "失败"
-};
+  all: '全部',
+  waiting: '中',
+  succeed: '成功',
+  fail: '失败'
+}
 const puzzleTypes = {
   all: '0',
   waiting: '1',
   succeed: '2',
   fail: '-1'
-};
+}
 
 const myPuzzle_Praise = {
   namespaced: true, // 设置命名空间 ，保持数据独立性
@@ -23,31 +23,31 @@ const myPuzzle_Praise = {
   },
   mutations: {
     saveList(state, payload) {
-      Object.assign(state, payload);
+      Object.assign(state, payload)
     },
     toggleLoading(state, { loading }) {
-      state.loading = loading;
+      state.loading = loading
     }
   },
   actions: {
     async queryList({ dispatch, commit, state }, { currentType }) {
-      const response = await queryMyPuzzleList(currentType);
-      console.log(response);
+      const response = await queryMyPuzzleList(currentType)
+      console.log(response)
       await commit({
-        type: "saveList",
+        type: 'saveList',
         puzzleList: response,
         currentType
-      });
-      commit("toggleLoading", {
+      })
+      commit('toggleLoading', {
         loading: false
-      });
+      })
     },
     async toggleCurrentType({ dispatch, commit }, { currentType }) {
-      await commit("toggleLoading", {
+      await commit('toggleLoading', {
         loading: true
-      });
-      await dispatch({ type: "queryList", currentType });
+      })
+      await dispatch({ type: 'queryList', currentType })
     }
   }
-};
-export default myPuzzle_Praise;
+}
+export default myPuzzle_Praise

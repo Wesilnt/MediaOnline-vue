@@ -7,7 +7,7 @@
             <h4>绿山墙</h4>
             <hr>
             <div class="teacher-info">
-                <span></span>
+                <span/>
                 <div class="teacher-desc">
                     <p>伍智</p>
                     <p>国学老师</p>
@@ -41,7 +41,7 @@ export default {}
     }
     hr {
       margin-top: 72px 0 0 0;
-      height: 1px;/*no*/
+      height: 1px; /*no*/
       border: none;
       background-color: rgb(227, 227, 227);
       width: 100%;
@@ -80,9 +80,9 @@ export default {}
     line-height: 56px;
     margin-top: 60px;
     word-break: break-all;
-    word-wrap:break-word; 
-    word-spacing: 2px;/*no*/
-    letter-spacing: 2px;/*no*/
+    word-wrap: break-word;
+    word-spacing: 2px; /*no*/
+    letter-spacing: 2px; /*no*/
   }
 }
 </style>

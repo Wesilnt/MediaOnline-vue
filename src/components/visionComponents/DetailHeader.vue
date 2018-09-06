@@ -9,13 +9,13 @@
 
 <script>
 export default {
-  props: ["title", "link", "subtitle"],
+  props: ['title', 'link', 'subtitle'],
   methods: {
     enterList() {
-      this.$router.push({ path: this.link });
+      this.$router.push({ path: this.link })
     }
   }
-};
+}
 </script>
 
 <style lang="less" scoped>

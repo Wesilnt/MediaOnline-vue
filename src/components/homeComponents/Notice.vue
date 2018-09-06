@@ -1,18 +1,18 @@
 <template>
     <div class="noticebg" v-if="messageCount>0">
         <div class="notice">
-            <img class='messageicon' />
+            <img class='messageicon' >
             <span class='message'>{{messageCount}}条新消息</span>
-            <img class='arrow' src='../../assets/home_notice_arrow.png' />
+            <img class='arrow' src='../../assets/home_notice_arrow.png' >
         </div>
-        <div class="line"></div>
+        <div class="line"/>
     </div>
 </template>
 
 <script>
 export default {
-  props: ["messageCount"]
-};
+  props: ['messageCount']
+}
 </script>
 
 <style lang="less" scoped>

@@ -44,7 +44,7 @@
         <p v-if="isSpeak" class="speak-btn" @touchstart.prevent="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
           {{isSpeaking?'松开&nbsp;结束':'按住&nbsp;说话'}}
         </p>
-        <textarea v-else rows="1" placeholder="写评论" v-model="commentContent"></textarea>
+        <textarea v-else rows="1" placeholder="写评论" v-model="commentContent"/>
       </div>
       <div v-if="!isSpeak" class="comment-send" @click="onSendComment">
         <img :src="commentContent.length<=0?require('../../assets/cmt_send_unable.png'):require('../../assets/cmt_send_abled.png')">
@@ -53,7 +53,7 @@
   </div>
 </template>
 <script>
-import { Toast } from "mint-ui";
+import { Toast } from 'mint-ui'
 export default {
   data() {
     return {
@@ -68,38 +68,38 @@ export default {
       ],
       isSpeak: true,
       isSpeaking: false,
-      commentContent: ""
-    };
+      commentContent: ''
+    }
   },
   methods: {
     //切换评论方式
     onCommentMethod() {
-      this.isSpeak = !this.isSpeak;
+      this.isSpeak = !this.isSpeak
     },
     //输入或者录入评论
     onInputeComment() {},
     //发送评论
     onSendComment() {
-      Toast("发布评论成功");
+      Toast('发布评论成功')
     },
     //点赞
     onPraise(index) {
-      let isPraised = this.comments[index].isPraised;
-      this.comments[index].isPraised = !isPraised;
-      Toast(isPraised ? "取消点赞" : "点赞成功");
+      let isPraised = this.comments[index].isPraised
+      this.comments[index].isPraised = !isPraised
+      Toast(isPraised ? '取消点赞' : '点赞成功')
     },
     lookWhole() {},
     handleTouchStart(e) {
-      console.log(e);
+      console.log(e)
     },
     handleTouchMove(e) {
-      console.log(e);
+      console.log(e)
     },
     handleTouchEnd(e) {
-      console.log(e);
+      console.log(e)
     }
   }
-};
+}
 </script>
 <style lang='scss'>
 .commment-list {
