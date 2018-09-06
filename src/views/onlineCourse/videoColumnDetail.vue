@@ -60,12 +60,13 @@
 </template>
 
 <script>
-import courseIntroduce from '../../components/courseIntroduce.vue'
+import CourseIntroduce from '../../components/CourseIntroduce.vue'
 import playlist from './components/playlist.vue'
 import videoComment from '../../components/video-comment.vue'
 import toolsNavbar from '../../components/toolsNavbar.vue'
 import videoBigimage from '../../components/videoBigimage.vue'
 export default {
+    name:'videoColumnDetail',
     data(){
         return {
             navbar:['介绍','试看','留言'],
@@ -91,7 +92,7 @@ export default {
         }
     },
     components:{
-        "course-introduce" : courseIntroduce,
+        "course-introduce" : CourseIntroduce,
         "playlist" : playlist,
         "video-comment" : videoComment,
         "tools-navbar" : toolsNavbar,

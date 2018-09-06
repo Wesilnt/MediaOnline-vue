@@ -12,7 +12,7 @@
                  </div>
              <img class="video-detail-header-gift" :src="require('../../assets/images/onlinecourse_video_ic_gift.png')" alt="">    
         </div>
-        <div class="video-detail-navbar">
+        <div class="video-detail-navbar" >
             <div class="video-detail-navbar-item" :class="{'selected':selected == index }" v-for="(item,index) of navbar" :key="index" @click="clickFnc(index)">{{item}}</div>
         </div>
         <div class="video-detail-content">
@@ -50,10 +50,11 @@
 </template>
 
 <script>
-import courseIntroduce from '../../components/courseIntroduce.vue'
+import CourseIntroduce from '../../components/CourseIntroduce.vue'
 import playlist from './components/playlist.vue'
 import videoComment from '../../components/video-comment.vue'
 export default {
+    name:'videoColumnDetail',
     data(){
         return {
             navbar:['资料','目录','留言'],
@@ -71,7 +72,7 @@ export default {
         }
     },
     components:{
-        "course-introduce" : courseIntroduce,
+        "course-introduce" : CourseIntroduce,
         "playlist" : playlist,
         "video-comment" : videoComment
     }   
@@ -227,7 +228,6 @@ export default {
 
     span {
         font-size: 32px;
-        height: 32px;
         color: rgb(255, 163, 47);
     }
 }
