@@ -1,5 +1,5 @@
 <template>
-    <mt-badge :color="badge.color" :class="{succ:badge.succ}"><slot>{{badge.text}}</slot></mt-badge>
+    <mt-badge :color="badge.color" :class="{succ:badge.succ}"><slot />{{badge.text}}</mt-badge>
 </template>
 <script>
 export default {
@@ -24,24 +24,19 @@ export default {
     normalColor: {
       type: String,
       default: "#ffa32f"
-    },
-    text: {
-      type: String,
-      default: "拼团"
     }
   },
-
   computed: {
     badge: function() {
-      let text = `${this.text}中`;
+      let text = "中";
       let color = this.normalColor;
       let succ = false;
       if (this.status === "success") {
-        text = `${this.text}成功`;
+        text = "成功";
         color = this.succColor;
         succ = true;
       } else if (this.status === "warning") {
-        text = `${this.text}失败`;
+        text = "失败";
         color = this.warnColor;
       }
       return {

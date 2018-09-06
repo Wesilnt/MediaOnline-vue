@@ -1,7 +1,7 @@
 import { queryMyPuzzleList } from "../../services/my";
 const puzzleTabs = {
   all: "全部",
-  waiting: "拼团中",
+  waiting: "中",
   succeed: "成功",
   fail: "失败"
 };
@@ -12,7 +12,7 @@ const puzzleTypes = {
   fail: '-1'
 };
 
-const myPuzzle = {
+const myPuzzle_Praise = {
   namespaced: true, // 设置命名空间 ，保持数据独立性
   state: {
     puzzleTabs,
@@ -50,4 +50,4 @@ const myPuzzle = {
     }
   }
 };
-export default myPuzzle;
+export default myPuzzle_Praise;

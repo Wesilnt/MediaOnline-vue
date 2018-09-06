@@ -1,7 +1,7 @@
 import FreeList from "../views/FreeList";
 import PageLoading from "../components/PageLoading";
 const myPuzzle = () =>
-  import(/* webpackChunkName: "myPuzzle" */ "../views/my/MyPuzzle");
+  import(/* webpackChunkName: "myPuzzle_Praise" */ "../views/my/MyPuzzle");
 const PageInfo_From_My = [
   {
     path: "/my/my-purchase",
@@ -32,7 +32,7 @@ const PageInfo_From_My = [
   {
     path: "/my/my-praise",
     // name: "BookList",
-    component: FreeList
+    component: myPuzzle
   },
   {
     path: "/my/my-sysMessage",

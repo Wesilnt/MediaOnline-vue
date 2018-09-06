@@ -2,7 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import counter from "./module/counter";
 import mocker from "./module/mock";
-import myPuzzle from "./module/myPuzzle";
+import myPuzzle_Praise from "./module/myPuzzle_Praise";
 
 Vue.use(Vuex);
 export default new Vuex.Store({
@@ -10,6 +10,6 @@ export default new Vuex.Store({
   modules: {
     counter,
     mocker,
-      myPuzzle
+      myPuzzle_Praise
   }
 });
