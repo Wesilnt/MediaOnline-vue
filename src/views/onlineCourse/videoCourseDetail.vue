@@ -1,5 +1,5 @@
 <template>
-    <div class="videocourse-detail-container">
+    <div class="videocourse-detail-container" ref='father'>
         <div class="video-detail-header">
             <div class="video-detail-header-right-top">
                 <img class="video-detail-collect" :src="require('../../assets/images/onlinecourse_love_normal.png')" alt="">
@@ -12,11 +12,16 @@
                  </div>
              <img class="video-detail-header-gift" :src="require('../../assets/images/onlinecourse_video_ic_gift.png')" alt="">    
         </div>
-        <div class="video-detail-navbar" >
-            <div class="video-detail-navbar-item" :class="{'selected':selected == index }" v-for="(item,index) of navbar" :key="index" @click="clickFnc(index)">{{item}}</div>
-        </div>
+
+        <!-- <div class="switchModule"> -->
+            <div class="video-detail-navbar" :class="navbarFixed == true ? 'isFixed' : ''" ref='navbar'>
+                <div class="video-detail-navbar-item" :class="{'selected':selected == index }" v-for="(item,index) of navbar" :key="index" @click="clickFnc(index)">{{item}}</div>
+            </div>
+        <!-- </div> -->
+
+
         <div class="video-detail-content">
-            <div class="video-detail-sction-title">
+            <div class="video-detail-sction-title" ref='note'>
                 <h4>笔记</h4>
            </div>
            <course-introduce></course-introduce>
@@ -31,12 +36,12 @@
             <mt-progress :value="20" :bar-height="4"></mt-progress>
             <div class="video-test-question-warn">在学习n分钟可解锁自测题</div>
             <hr class="video-detail-line">
-            <div class="video-detail-sction-title">
+            <div class="video-detail-sction-title" ref='catalog'>
                 <h4>目录</h4>
             </div>
             <playlist v-for="(item,index) of dataList" :key="item.id" :iteminfo="item" :lastindex="index == (dataList.length - 1)"></playlist>
             <hr class="video-detail-line">
-            <div class="video-detail-sction-title">
+            <div class="video-detail-sction-title" ref='leavemessage'>
                 <h4>留言</h4>
                 <div class="video-detail-leavemessage">
                     <img src="../../assets/images/onlinecourse_video_detail_ic_editor.png" alt="">
@@ -58,6 +63,7 @@ export default {
     data(){
         return {
             navbar:['资料','目录','留言'],
+            navbarFixed:false, //控制navbar是否吸顶
             selected:0,
             dataList:[
                 {id:0, isPlaying:true, title:'发刊词:为什么抱元没有食堂?', info:'史上最会钓鱼的老头'},
@@ -69,12 +75,65 @@ export default {
     methods:{
         clickFnc(index) {
             this.selected = index
+            console.log("currentindex=" + index)
+            // var noteH = this.$refs.note.offsetTop;
+            // var catalogH = this.$refs.catalog.offsetTop;
+            // var leavemessageH = this.$refs.leavemessage.offsetTop;
+            // console.log('noteH =' + noteH)
+            // console.log('catalogH =' + catalogH)
+            // console.log('leavemessageH =' + leavemessageH)
+            // console.log(this.$refs)
+            switch (index) {
+                case 0 :
+                    this.$refs.note.scrollIntoView({behavior: "instant", block: "center", inline: "nearest"}) 
+                    break;
+                case 1 :
+                     this.$refs.catalog.scrollIntoView({behavior: "instant", block: "center", inline: "nearest"}) 
+                    break;
+                case 2 :
+                    this.$refs.leavemessage.scrollIntoView({behavior: "instant", block: "center", inline: "nearest"})
+                    break;
+            }
+           
+            
+            
+            // this.$refs.note.animate({ scrollTop : noteH },800)
+            // this.$refs.catalog.animate({ scrollTop : catalogH },800)
+            // this.$refs.leavemessage.animate({ scrollTop : leavemessageH },800)
+        },
+        handleScroll () {
+            //1.监听滚动
+            var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+            //2.获取navbar的偏移量
+            // var barOffset = this.$refs.navbar.offsetTop
+        //    console.log(document.querySelector('.video-detail-navbar'))
+            // console.log('===' + barOffset)
+            // console.dir(this.$refs.navbar)
+           this.navbarFixed =  scrollTop > this.$refs.navbar.offsetTop ?  true : false
+
+            var noteH = this.$refs.note.offsetTop;
+            const catalogH = this.$refs.catalog.offsetTop;
+            const leavemessageH = this.$refs.leavemessage.offsetTop;
+            if(scrollTop <= noteH) {
+                console.log("----0----")
+                this.selected = 0
+            } else if(scrollTop < catalogH &&  scrollTop > noteH) {
+                 console.log("----1----")
+                this.selected = 1
+            } else if(scrollTop < leavemessageH && scrollTop > catalogH) {
+                console.log("----2----")
+                this.selected = 2
+            }
+
         }
     },
     components:{
         "course-introduce" : CourseIntroduce,
         "playlist" : playlist,
         "video-comment" : videoComment
+    },
+    mounted () {
+        window.addEventListener('scroll', this.handleScroll)
     }   
 }
 </script>
@@ -143,16 +202,25 @@ export default {
     height: 60px;
 }
 //导航条
+
 .video-detail-navbar {
     width:100%;
     display: flex;
     flex-direction: row;
+    background-color: #fff;
     justify-content: space-around;
     border-bottom: 1px solid lightgray;
     box-sizing: border-box;
-    margin-top: 28px;
-    margin-bottom: 28px;
+    padding-top: 28px;
+    // padding-bottom: 28px;
     text-align: center;
+
+    &.isFixed {
+        position: fixed;
+        top: 0;
+        z-index: 999;
+    }
+
     .video-detail-navbar-item {
         width: 100px;
         padding-bottom: 22px;
@@ -160,12 +228,14 @@ export default {
         color: rgb(62, 62, 83);
     }
 
-   .video-detail-navbar-item.selected {
+.video-detail-navbar-item.selected {
         font-size: 28px;
         color: rgb(255, 163, 47);
         border-bottom: 6px solid rgb(255, 163, 47);
     }
 }
+
+
 //分割线
 .video-detail-line {
     margin-left: -40px;
