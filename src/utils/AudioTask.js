@@ -1,30 +1,30 @@
 import * as _request from './request.js'
-const AUDIO_URL = "/lesson/lessonDetail"
-const UPLOAD_URL = "/lesson/lessonListenRs"
+const AUDIO_URL = '/lesson/lessonDetail'
+const UPLOAD_URL = '/lesson/lessonListenRs'
 const errorList = {
-  "10001": "系统错误",
-  "10002": "网络错误",
-  "10003": "文件错误",
-  "10004": "格式错误",
-  "-1": "未知错误"
+  '10001': '系统错误',
+  '10002': '网络错误',
+  '10003': '文件错误',
+  '10004': '格式错误',
+  '-1': '未知错误'
 }
 
 export default class AudioTask {
   //音频管理对象
   // _am = wx.getBackgroundAudioManager()
   //当前课节数组
-  _audio = {} 
+  _audio = {}
   //当前是否正在播放 true：停止/暂停
   _isPaused = true
   //播放状态
-  _state = "default"
+  _state = 'default'
   //播放模式
-  _mode = "order"          //播放模式  order：顺序  random：随机  single:单个
+  _mode = 'order' //播放模式  order：顺序  random：随机  single:单个
   //时间进度监听数组
   _timeListeners = new Array()
   /**
    *  播放状态监听数组，播放状态回调函数参数值
-   *  state = play:播放    
+   *  state = play:播放
    *  state = wait:缓冲
    *  state = stop:停止
    *  state = pause:暂停
@@ -38,20 +38,21 @@ export default class AudioTask {
   //获取单例对象
   static getInstance() {
     if (!this.instance) {
-      this.instance = new AudioTask();
+      this.instance = new AudioTask()
     }
-    return this.instance;
+    return this.instance
   }
 
   constructor() {
-    this._at = document.createElement("AUDIO");
+    this._at = document.createElement('AUDIO')
     this._init()
     this._audios = []
     this._at.autoplay = true
     // this._at.crossOrigin = 'anonymous'
-    this._at.src = "http://ws.stream.qqmusic.qq.com/M500001VfvsJ21xFqb.mp3?guid=ffffffff82def4af4b12b3cd9337d5e7&uin=346897220&vkey=6292F51E1E384E06DCBDC9AB7C49FD713D632D313AC4858BACB8DDD29067D3C601481D36E62053BF8DFEAF74C0A5CCFADD6471160CAF3E6A&fromtag=46"
-    this._at.style.display = "none"
-    document.body.appendChild(this._at) 
+    this._at.src =
+      'http://ws.stream.qqmusic.qq.com/M500001VfvsJ21xFqb.mp3?guid=ffffffff82def4af4b12b3cd9337d5e7&uin=346897220&vkey=6292F51E1E384E06DCBDC9AB7C49FD713D632D313AC4858BACB8DDD29067D3C601481D36E62053BF8DFEAF74C0A5CCFADD6471160CAF3E6A&fromtag=46'
+    this._at.style.display = 'none'
+    document.body.appendChild(this._at)
     document.body.removeChild(this._at)
     // this._audio = {
     //   "audioUrl": "http://file.djvdj.com/data/2018/02/09/1518149227.mp3",
@@ -134,74 +135,74 @@ export default class AudioTask {
     // })
 
     //进度事件监听
-    this._at.addEventListener("timeupdate",  () =>{ 
-      this._timeListeners.map(_listener => { 
-        _listener(this._at.currentTime, this._at.duration) 
+    this._at.addEventListener('timeupdate', () => {
+      this._timeListeners.map(_listener => {
+        _listener(this._at.currentTime, this._at.duration)
       })
     })
-    this._at.addEventListener("playing", () =>{	
-      this._setState("play")
+    this._at.addEventListener('playing', () => {
+      this._setState('play')
     })
-    this._at.addEventListener("pause", () =>{	
-      this._setState("pause")
+    this._at.addEventListener('pause', () => {
+      this._setState('pause')
     })
     //请求数据时遇到错误
-    this._at.addEventListener("error", () =>{	 
-      this._setState("error")
+    this._at.addEventListener('error', () => {
+      this._setState('error')
     })
     //客户端主动终止下载（不是因为错误引起），
-    this._at.addEventListener("abort", () =>{	 
-      this._setState("abort")
+    this._at.addEventListener('abort', () => {
+      this._setState('abort')
     })
     //寻找中，
-    this._at.addEventListener("seeking", () =>{	 
-      this._setState("seeking")
+    this._at.addEventListener('seeking', () => {
+      this._setState('seeking')
     })
     //可以播放，歌曲全部加载完毕
-    this._at.addEventListener("loadedmetadata", () =>{	 
-      this._setState("loadedmetadata")
+    this._at.addEventListener('loadedmetadata', () => {
+      this._setState('loadedmetadata')
     })
     //成功获取资源长度
-    this._at.addEventListener("canplaythrough", () =>{	 
-      this._setState("canplaythrough")
+    this._at.addEventListener('canplaythrough', () => {
+      this._setState('canplaythrough')
     })
     //寻找完毕
-    this._at.addEventListener("seeked", () =>{	 
-      this._setState("seeked")
+    this._at.addEventListener('seeked', () => {
+      this._setState('seeked')
     })
     //客户端正在请求数据
-    this._at.addEventListener("progress", () =>{	 
-      this._setState("progress")
+    this._at.addEventListener('progress', () => {
+      this._setState('progress')
     })
-    this._at.addEventListener("ended", () =>{	 
-      this._setState("end")
+    this._at.addEventListener('ended', () => {
+      this._setState('end')
     })
     //可以播放，但中途可能因为加载而暂停
-    this._at.addEventListener("canplay", () =>{	 
-      this._setState("canplay")
+    this._at.addEventListener('canplay', () => {
+      this._setState('canplay')
     })
     //等待数据，并非错误
-    this._at.addEventListener("waiting", () =>{	 
-      this._setState("waiting")
+    this._at.addEventListener('waiting', () => {
+      this._setState('waiting')
     })
     //播放速率改变
-    this._at.addEventListener("ratechange", () =>{	 
-      this._setState("ratechange")
+    this._at.addEventListener('ratechange', () => {
+      this._setState('ratechange')
     })
     //音量改变
-    this._at.addEventListener("volumechange", () =>{	 
-      this._setState("volumechange")
+    this._at.addEventListener('volumechange', () => {
+      this._setState('volumechange')
     })
     //网速失速
-    this._at.addEventListener("stalled", () =>{	 
-      this._setState("stalled")
+    this._at.addEventListener('stalled', () => {
+      this._setState('stalled')
     })
   }
   //设置音频播放列表
   setLessonId(lessonId) {
     this._currLessonId = lessonId
     this._play(lessonId)
-  } 
+  }
 
   //播放状态监听
   addStateListener(_listener) {
@@ -223,8 +224,8 @@ export default class AudioTask {
     this._timeListeners.splice(this._timeListeners.indexOf(_listener), 1)
   }
   //0.此元素未初始化  1.正常但没有使用网络  2.正在下载数据  3.没有找到资源
-  getNetworkState(){
-    return this._at.networkState; 
+  getNetworkState() {
+    return this._at.networkState
   }
   //播放/暂停
   play(_callback) {
@@ -243,11 +244,11 @@ export default class AudioTask {
     let audioId = this._audio.preLessonId
     if (!_util.isRealNum(audioId) || audioId < 0) {
       if (this._hasFailure(_callback)) {
-        _callback.failure("已是第一个！")
+        _callback.failure('已是第一个！')
       }
       return
     }
-    this._setState("previous")
+    this._setState('previous')
     if (this._hasSuccess(_callback)) _callback.success()
     this._play(audioId)
   }
@@ -255,10 +256,10 @@ export default class AudioTask {
   next(_callback) {
     let audioId = this._audio.nextLessonId
     if (!_util.isRealNum(audioId) || audioId < 0) {
-      if (this._hasFailure(_callback)) _callback.failure("已是最后一个")
+      if (this._hasFailure(_callback)) _callback.failure('已是最后一个')
       return
     }
-    this._setState("next")
+    this._setState('next')
     if (this._hasSuccess(_callback)) _callback.success()
     this._play(audioId)
   }
@@ -302,7 +303,7 @@ export default class AudioTask {
   }
   //当前播放状态  默认:'default', 播放:'play', 暂停:'pause', 停止:'stop', 结束:'end', 加载:'loading'
   getState() {
-    return this._state;
+    return this._state
   }
   // 是否正在播放
   isPlaying() {
@@ -331,7 +332,7 @@ export default class AudioTask {
     if (this.isPlaying()) {
       this._at.stop()
     } else {
-      this._setState("stop")
+      this._setState('stop')
     }
   }
   //暂停
@@ -343,36 +344,43 @@ export default class AudioTask {
     if (this._undefined(this._interval)) clearInterval(this.interval)
   }
   //定时上传播放进度
-  _uploadProgress() { 
+  _uploadProgress() {
     // self._postProgress({ lessonId: id, time: this.getProgress() })
   }
   //上传播放进度
   _postProgress(data) {
     _network.POST(UPLOAD_URL, {
       params: { lessonId: data.lessonId, listenTime: data.time },
-      success: res => { console.log("time:" + data.time + " id:" + data.lessonId) },
-      fail: msg => { console.log("上传播放时间失败:" + msg) }
+      success: res => {
+        console.log('time:' + data.time + ' id:' + data.lessonId)
+      },
+      fail: msg => {
+        console.log('上传播放时间失败:' + msg)
+      }
     })
   }
   //通过课节ID从服务器获取音频相关数据
-  _loadData(_lessonId) { 
-    this._setState("loading")
+  _loadData(_lessonId) {
+    this._setState('loading')
     _request
     return new Promise((resolve, reject) => {
       _network.GET(AUDIO_URL, {
         params: { lessonId: _lessonId },
         success: res => resolve(res),
-        fail: msg => reject(msg),
+        fail: msg => reject(msg)
       })
-    }).then(res => {
-      this._setState("success", res.data)
-      this._audio = res.data.data
-      return res.data.data
-    }, msg => {
-      let errCode = (msg === "您还未购买该专栏") ? 1201 : -1
-      this._setState("failure", { code: errCode, error: msg })
-      this.pause()
-    })
+    }).then(
+      res => {
+        this._setState('success', res.data)
+        this._audio = res.data.data
+        return res.data.data
+      },
+      msg => {
+        let errCode = msg === '您还未购买该专栏' ? 1201 : -1
+        this._setState('failure', { code: errCode, error: msg })
+        this.pause()
+      }
+    )
   }
   //加载音频数据
   _play(_lessonId) {
@@ -395,11 +403,11 @@ export default class AudioTask {
   //设置音频数据
   _setAudio(audio) {
     if (this._undefined(audio) || this._undefined(audio.audioUrl)) {
-      this._setState("error", { code: -1, error: "暂无播放内容" })
+      this._setState('error', { code: -1, error: '暂无播放内容' })
       return
     }
     this._am.src = audio.audioUrl
-    this._am.seek(this._currTime) 
+    this._am.seek(this._currTime)
     this._am.title = audio.title
     // this._am.epname = audio.title
     // this._am.singer = audio.title
@@ -410,32 +418,41 @@ export default class AudioTask {
   _setState(_state, res) {
     this._state = _state
     if (!this._undefined(res)) {
-      this._stateListeners.map(_listener => { _listener(this._state, res) })
+      this._stateListeners.map(_listener => {
+        _listener(this._state, res)
+      })
     }
     //如果当前音频地址与正在播放的地址不一致(播放错乱或其他小程序正在播放)
-    else { 
-      this._stateListeners.map(_listener => { _listener(this._state) })
-    } 
+    else {
+      this._stateListeners.map(_listener => {
+        _listener(this._state)
+      })
+    }
     this._updateProgress(this._state)
   }
   //更新进度
   _updateProgress(state) {
     if (this._undefined(this._interval)) clearInterval(this.interval)
     switch (state) {
-      case "stop":
-      case "pause":
-      case "end":
-      case "next":
-      case "previous":
-        this._uploadProgress(this, { lessonId: this.getId(), time: parseInt(this._at.currentTime) })
+      case 'stop':
+      case 'pause':
+      case 'end':
+      case 'next':
+      case 'previous':
+        this._uploadProgress(this, {
+          lessonId: this.getId(),
+          time: parseInt(this._at.currentTime)
+        })
         break
-      case "play":
+      case 'play':
         this.interval = setInterval(this._uploadProgress, 5000, this)
         break
     }
-  } 
+  }
   //为定义对象判断
   _undefined(o) {
-    return typeof (o) == "undefined" || "undefined" == o || null == o || "null" == o
+    return (
+      typeof o == 'undefined' || 'undefined' == o || null == o || 'null' == o
+    )
   }
-} 
+}

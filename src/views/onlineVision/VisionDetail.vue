@@ -26,87 +26,88 @@
     </div>
     <!-- try -->
     <div class="try bottomline" ref="try" id="try">
-      <DetailHeader title="试看课程" subtitle='全部'> </DetailHeader>
+      <DetailHeader title="试看课程" subtitle='全部'/>
     </div>
     <!-- try -->
     <div class="message bottomline" ref="message" id="message">
-      <DetailHeader title="精选留言" subtitle='全部'> </DetailHeader>
+      <DetailHeader title="精选留言" subtitle='全部'/>
     </div>
   </div>
 
 </template>
 
 <script>
-import DetailHeader from "../../components/visionComponents/DetailHeader.vue";
-import arrowUp from "../../assets/vison_arrow_up.png";
-import arrowDown from "../../assets/vision_arrow_down.png";
+import DetailHeader from '../../components/visionComponents/DetailHeader.vue'
+import arrowUp from '../../assets/vison_arrow_up.png'
+import arrowDown from '../../assets/vision_arrow_down.png'
 
 export default {
   data() {
     return {
       arrowUp,
       arrowDown,
-      banner: "",
-      selected: "1",
-      navBars: ["介绍", "试听", "留言"],
+      banner: '',
+      selected: '1',
+      navBars: ['介绍', '试听', '留言'],
       currentNav: 0,
       showall: false
-    };
+    }
   },
-  props: ["id"],
+  props: ['id'],
   methods: {
     navbarTap(index) {
-      this.currentNav = index;
-      let positionId;
+      this.currentNav = index
+      let positionId
       switch (index) {
         case 0:
-          positionId = "#intro";
-          break;
+          positionId = '#intro'
+          break
         case 1:
-          positionId = "#try";
-          break;
+          positionId = '#try'
+          break
         case 2:
-          positionId = "#message";
-          break;
+          positionId = '#message'
+          break
         default:
-          break;
+          break
       }
-      let anchor = this.$el.querySelector(positionId);
-      document.body.scrollTop = anchor.offsetHeight - 40;
+      let anchor = this.$el.querySelector(positionId)
+      document.body.scrollTop = anchor.offsetHeight - 40
       // // Firefox
-      document.documentElement.scrollTop = anchor.offsetTop - 40;
+      document.documentElement.scrollTop = anchor.offsetTop - 40
       // Safari
-      window.pageYOffset = anchor.offsetTop - 40;
+      window.pageYOffset = anchor.offsetTop - 40
     },
     ellipsis() {
-      this.showall = !this.showall;
+      this.showall = !this.showall
     },
     handleScroll() {
-      let scrollTop = Math.abs(this.$refs.detailmain.getBoundingClientRect().top);
-      console.log(scrollTop);
+      let scrollTop = Math.abs(
+        this.$refs.detailmain.getBoundingClientRect().top
+      )
+      console.log(scrollTop)
       // let introPosition = this.$el.querySelector("#intro").offsetTop - 40;
-      let tryPosition = this.$el.querySelector("#try").offsetTop -40;
-      let messagePosition = this.$el.querySelector("#message").offsetTop -40;
-      if(scrollTop < tryPosition ){
-        this.currentNav = 0;
-      }else if(scrollTop > tryPosition && scrollTop <  messagePosition){
-        this.currentNav = 1;
-      }else if(scrollTop >messagePosition){
-        this.currentNav = 2;
+      let tryPosition = this.$el.querySelector('#try').offsetTop - 40
+      let messagePosition = this.$el.querySelector('#message').offsetTop - 40
+      if (scrollTop < tryPosition) {
+        this.currentNav = 0
+      } else if (scrollTop > tryPosition && scrollTop < messagePosition) {
+        this.currentNav = 1
+      } else if (scrollTop > messagePosition) {
+        this.currentNav = 2
       }
-
     }
   },
   components: {
     DetailHeader
   },
   mounted() {
-    window.addEventListener("scroll", this.handleScroll);
+    window.addEventListener('scroll', this.handleScroll)
   },
   destroyed() {
-    window.removeEventListener("scroll", this.handleScroll);
+    window.removeEventListener('scroll', this.handleScroll)
   }
-};
+}
 </script>
 
 <style lang="less" scoped>

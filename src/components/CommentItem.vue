@@ -36,34 +36,34 @@
   </div>
 </template>
 <script>
-import { Toast } from "mint-ui";
+import { Toast } from 'mint-ui'
 export default {
-  props:["comment"],
+  props: ['comment'],
   data() {
-    return { 
+    return {
       isSpeak: true,
       isSpeaking: false,
-      commentContent: ""
-    };
+      commentContent: ''
+    }
   },
-  filters:{
-     "dateFormat":function(value){
-        var date = new Date(value)
-        var y = date.getFullYear()
-        var m = date.getMonth() + 1
-        var d = date.getDate()
-        return y + "-" + (m < 10 ? "0" + m : m) + "-" + (d < 10 ? "0" + d : d)
-     }
+  filters: {
+    dateFormat: function(value) {
+      var date = new Date(value)
+      var y = date.getFullYear()
+      var m = date.getMonth() + 1
+      var d = date.getDate()
+      return y + '-' + (m < 10 ? '0' + m : m) + '-' + (d < 10 ? '0' + d : d)
+    }
   },
   methods: {
     //点赞
     onPraise(index) {
-      let isPraised = comment.isPraised;
-      comment.isPraised = !isPraised;
-      Toast(isPraised ? "取消点赞" : "点赞成功");
+      let isPraised = comment.isPraised
+      comment.isPraised = !isPraised
+      Toast(isPraised ? '取消点赞' : '点赞成功')
     }
   }
-};
+}
 </script>
 <style lang='scss'>
 .comment-item {
@@ -101,7 +101,7 @@ export default {
       line-height: 32px;
       color: rgb(128, 128, 128);
     }
-    h5 { 
+    h5 {
       margin: 0 0 0 24px;
       font-size: 22px;
       line-height: 22px;

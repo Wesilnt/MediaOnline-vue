@@ -1,7 +1,7 @@
 <template>
   <div class="list">
     <div v-for="(book,index) in bookList" :key="index">
-      <BookCell :book=book//////////></div>
+      <BookCell :book=book//////////////////////////////></div>
   </div>
 </template>
 

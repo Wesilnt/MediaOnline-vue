@@ -3,7 +3,7 @@
     <!-- 全部留言 -->
     <div class="commment-list">
       <div class="comment-item" v-for="item of comments" :key="item.id">
-         <comment-item :comment="item"></comment-item>
+         <comment-item :comment="item"/>
       </div>
     </div>
     <!-- 评论按钮 -->
@@ -15,7 +15,7 @@
         <p v-if="isSpeak" class="speak-btn" @touchstart.prevent="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
           {{isSpeaking?'松开&nbsp;结束':'按住&nbsp;说话'}}
         </p>
-        <textarea v-else rows="1" placeholder="写评论" v-model="commentContent"></textarea>
+        <textarea v-else rows="1" placeholder="写评论" v-model="commentContent"/>
       </div>
       <div v-if="!isSpeak" class="comment-send" @click="onSendComment">
         <img :src="commentContent.length<=0?require('../../assets/cmt_send_unable.png'):require('../../assets/cmt_send_abled.png')">
@@ -24,95 +24,99 @@
   </div>
 </template>
 <script>
-import { Toast } from "mint-ui";
-import CommentItem from "../CommentItem.vue"
+import { Toast } from 'mint-ui'
+import CommentItem from '../CommentItem.vue'
 export default {
   data() {
     return {
       comments: [
         {
-          id: Date.now() + 1,//评论ID
-          isPraised: true,  //当前用户是否对评论点赞
-          type: 0,          //评论类型 0 文字  1 语音
-          isExpand: false,  //默认是否展开 
-          content:"此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论",
-          review:"此处为老师回复内容此处为老师回复内容此处为老师回复内容此处为老师回复内容此处为老师回复内容此处为老师回复内容",  //回复内容
-          reviewer:"伍智老师：", //回复老师姓名
-          praiseNum:1314,  //点赞人数
-          audioUrl:"",     //语音地址
-          audioTime:0,     //语音时长
-          commentHead:"",  //评论人头像地址
-          commentName:"古风流",  //评论人名称
-          commentTime:Date.now()   //评论时间
-       },
+          id: Date.now() + 1, //评论ID
+          isPraised: true, //当前用户是否对评论点赞
+          type: 0, //评论类型 0 文字  1 语音
+          isExpand: false, //默认是否展开
+          content:
+            '此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论',
+          review:
+            '此处为老师回复内容此处为老师回复内容此处为老师回复内容此处为老师回复内容此处为老师回复内容此处为老师回复内容', //回复内容
+          reviewer: '伍智老师：', //回复老师姓名
+          praiseNum: 1314, //点赞人数
+          audioUrl: '', //语音地址
+          audioTime: 0, //语音时长
+          commentHead: '', //评论人头像地址
+          commentName: '古风流', //评论人名称
+          commentTime: Date.now() //评论时间
+        },
         {
-          id: Date.now() + 2,//评论ID
-          isPraised: true,  //当前用户是否对评论点赞
-          type: 1,          //评论类型 0 文字  1 语音
-          isExpand: false,  //默认是否展开
-          content:"此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论",
-          review:"此处为老师回复内容此处为老师回复内容此处为老师回复内", //回复内容
-          reviewer:"伍智老师：", //回复老师姓名
-          praiseNum:520,  //点赞人数
-          audioUrl:"",     //语音地址
-          audioTime:23,    //语音时长
-          commentHead:"",  //评论人头像地址
-          commentName:"古风流",  //评论人名称
-          commentTime:Date.now()   //评论时间
-       },
+          id: Date.now() + 2, //评论ID
+          isPraised: true, //当前用户是否对评论点赞
+          type: 1, //评论类型 0 文字  1 语音
+          isExpand: false, //默认是否展开
+          content:
+            '此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论',
+          review: '此处为老师回复内容此处为老师回复内容此处为老师回复内', //回复内容
+          reviewer: '伍智老师：', //回复老师姓名
+          praiseNum: 520, //点赞人数
+          audioUrl: '', //语音地址
+          audioTime: 23, //语音时长
+          commentHead: '', //评论人头像地址
+          commentName: '古风流', //评论人名称
+          commentTime: Date.now() //评论时间
+        },
         {
-          id: Date.now() + 3,//评论ID
-          isPraised: true,  //当前用户是否对评论点赞
-          type: 0,          //评论类型 0 文字  1 语音
-          isExpand: false,  //默认是否展开
-          content:"此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论",
-          review:"此处为老师回复内容此处为老师回复内容此处为老师回复内", //回复内容
-          reviewer:"伍智老师：", //回复老师姓名
-          praiseNum:520,  //点赞人数
-          audioUrl:"",     //语音地址
-          audioTime:23,    //语音时长
-          commentHead:"",  //评论人头像地址
-          commentName:"古风流",  //评论人名称
-          commentTime:Date.now()   //评论时间
-       },
+          id: Date.now() + 3, //评论ID
+          isPraised: true, //当前用户是否对评论点赞
+          type: 0, //评论类型 0 文字  1 语音
+          isExpand: false, //默认是否展开
+          content:
+            '此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论',
+          review: '此处为老师回复内容此处为老师回复内容此处为老师回复内', //回复内容
+          reviewer: '伍智老师：', //回复老师姓名
+          praiseNum: 520, //点赞人数
+          audioUrl: '', //语音地址
+          audioTime: 23, //语音时长
+          commentHead: '', //评论人头像地址
+          commentName: '古风流', //评论人名称
+          commentTime: Date.now() //评论时间
+        }
       ],
       isSpeak: true,
       isSpeaking: false,
-      commentContent: ""
-    };
+      commentContent: ''
+    }
   },
-  components:{
-    "comment-item":CommentItem
+  components: {
+    'comment-item': CommentItem
   },
   methods: {
     //切换评论方式
     onCommentMethod() {
-      this.isSpeak = !this.isSpeak;
+      this.isSpeak = !this.isSpeak
     },
     //输入或者录入评论
     onInputeComment() {},
     //发送评论
     onSendComment() {
-      Toast("发布评论成功");
+      Toast('发布评论成功')
     },
     //点赞
     onPraise(index) {
-      let isPraised = this.comments[index].isPraised;
-      this.comments[index].isPraised = !isPraised;
-      Toast(isPraised ? "取消点赞" : "点赞成功");
+      let isPraised = this.comments[index].isPraised
+      this.comments[index].isPraised = !isPraised
+      Toast(isPraised ? '取消点赞' : '点赞成功')
     },
     lookWhole() {},
     handleTouchStart(e) {
-      console.log(e);
+      console.log(e)
     },
     handleTouchMove(e) {
-      console.log(e);
+      console.log(e)
     },
     handleTouchEnd(e) {
-      console.log(e);
+      console.log(e)
     }
   }
-};
+}
 </script>
 <style lang='scss'>
 .commment-list {

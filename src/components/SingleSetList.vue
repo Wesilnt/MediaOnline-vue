@@ -1,22 +1,22 @@
 <template>
   <div class="singleset-list-conteiner">
     <div class="singleset-list" v-for="item of list" :key="item.id">
-      <singleset :item="item" :playing="item.id==playId"></singleset>
+      <singleset :item="item" :playing="item.id==playId"/>
     </div>
   </div>
 
 </template>
 
 <script>
-import SingleSet from "./SingleSetItem.vue";
+import SingleSet from './SingleSetItem.vue'
 export default {
   //list 单集列表数据
-  props: ["list", "playId"],
+  props: ['list', 'playId'],
   components: { singleset: SingleSet },
   data() {
-    return { playingIndex: 0 };
+    return { playingIndex: 0 }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -27,4 +27,3 @@ export default {
   }
 }
 </style>
-

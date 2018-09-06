@@ -68,7 +68,7 @@
     </div>
     <hr>
     <!-- 5. 作品单集/章集 播放列表 -->
-    <singleset-list :list="bookList" :playId="0"></singleset-list>
+    <singleset-list :list="bookList" :play-id="0"/>
     <!-- 6. 分页布局 -->
     <div class="load-more-container">
       <span>没有更多了，不要再拉啦～</span>
@@ -77,15 +77,15 @@
   </div>
 </template>
 <script>
-import SingleSetList from "../../components/SingleSetList.vue";
+import SingleSetList from '../../components/SingleSetList.vue'
 export default {
   data() {
     return {
       bookList: [
         {
           id: 0,
-          title: "发刊词：为什么抱元科技没有食堂？",
-          subtitle: "史上最会钓鱼的老头",
+          title: '发刊词：为什么抱元科技没有食堂？',
+          subtitle: '史上最会钓鱼的老头',
           totaltime: 140,
           learntime: 40,
           isAudition: true,
@@ -93,8 +93,8 @@ export default {
         },
         {
           id: 1,
-          title: "发刊词：为什么抱元科技没有食堂？",
-          subtitle: "史上最会钓鱼的老头",
+          title: '发刊词：为什么抱元科技没有食堂？',
+          subtitle: '史上最会钓鱼的老头',
           totaltime: 140,
           learntime: 40,
           isAudition: true,
@@ -102,8 +102,8 @@ export default {
         },
         {
           id: 2,
-          title: "发刊词：为什么抱元科技没有食堂？",
-          subtitle: "史上最会钓鱼的老头",
+          title: '发刊词：为什么抱元科技没有食堂？',
+          subtitle: '史上最会钓鱼的老头',
           totaltime: 140,
           learntime: 40,
           isAudition: false,
@@ -111,8 +111,8 @@ export default {
         },
         {
           id: 3,
-          title: "发刊词：为什么抱元科技没有食堂？",
-          subtitle: "史上最会钓鱼的老头",
+          title: '发刊词：为什么抱元科技没有食堂？',
+          subtitle: '史上最会钓鱼的老头',
           totaltime: 140,
           learntime: 40,
           isAudition: false,
@@ -120,8 +120,8 @@ export default {
         },
         {
           id: 4,
-          title: "发刊词：为什么抱元科技没有食堂？",
-          subtitle: "史上最会钓鱼的老头",
+          title: '发刊词：为什么抱元科技没有食堂？',
+          subtitle: '史上最会钓鱼的老头',
           totaltime: 140,
           learntime: 40,
           isAudition: false,
@@ -129,8 +129,8 @@ export default {
         },
         {
           id: 5,
-          title: "发刊词：为什么抱元科技没有食堂？",
-          subtitle: "史上最会钓鱼的老头",
+          title: '发刊词：为什么抱元科技没有食堂？',
+          subtitle: '史上最会钓鱼的老头',
           totaltime: 140,
           learntime: 40,
           isAudition: false,
@@ -138,8 +138,8 @@ export default {
         },
         {
           id: 6,
-          title: "发刊词：为什么抱元科技没有食堂？",
-          subtitle: "史上最会钓鱼的老头",
+          title: '发刊词：为什么抱元科技没有食堂？',
+          subtitle: '史上最会钓鱼的老头',
           totaltime: 140,
           learntime: 40,
           isAudition: false,
@@ -147,8 +147,8 @@ export default {
         },
         {
           id: 7,
-          title: "发刊词：为什么抱元科技没有食堂？",
-          subtitle: "史上最会钓鱼的老头",
+          title: '发刊词：为什么抱元科技没有食堂？',
+          subtitle: '史上最会钓鱼的老头',
           totaltime: 140,
           learntime: 40,
           isAudition: false,
@@ -156,8 +156,8 @@ export default {
         },
         {
           id: 8,
-          title: "发刊词：为什么抱元科技没有食堂？",
-          subtitle: "史上最会钓鱼的老头",
+          title: '发刊词：为什么抱元科技没有食堂？',
+          subtitle: '史上最会钓鱼的老头',
           totaltime: 140,
           learntime: 40,
           isAudition: false,
@@ -165,8 +165,8 @@ export default {
         },
         {
           id: 9,
-          title: "发刊词：为什么抱元科技没有食堂？",
-          subtitle: "史上最会钓鱼的老头",
+          title: '发刊词：为什么抱元科技没有食堂？',
+          subtitle: '史上最会钓鱼的老头',
           totaltime: 140,
           learntime: 40,
           isAudition: false,
@@ -174,27 +174,27 @@ export default {
         },
         {
           id: 10,
-          title: "发刊词：为什么抱元科技没有食堂？",
-          subtitle: "史上最会钓鱼的老头",
+          title: '发刊词：为什么抱元科技没有食堂？',
+          subtitle: '史上最会钓鱼的老头',
           totaltime: 140,
           learntime: 40,
           isAudition: false,
           isPlaying: false
         }
       ]
-    };
+    }
   },
-  components: { "singleset-list": SingleSetList },
+  components: { 'singleset-list': SingleSetList },
   methods: {
     toLookWhole() {
       this.$router.push({
-        path: "/home/readings/summary",
+        path: '/home/readings/summary',
         query: {},
         replace: true
-      }); //query参数，replace 表示当前组件移除
+      }) //query参数，replace 表示当前组件移除
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .book-detail-container {

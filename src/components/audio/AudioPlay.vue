@@ -24,8 +24,7 @@
     <!-- 进度条 -->
     <div class="slider-container">
       <div slot="start">{{currentTime | formatDuring}}</div>
-      <mt-range ref="mtrange" v-model="currentTime" :min="0" :max="duration" :step="100/duration" :bar-height="2">
-      </mt-range>
+      <mt-range ref="mtrange" v-model="currentTime" :min="0" :max="duration" :step="100/duration" :bar-height="2"/>
       <div slot="end">{{ duration | formatDuring}}</div>
     </div>
     <!-- <div class="play-slider">
@@ -71,13 +70,13 @@
       </div>
     </mt-popup>
     <!-- 分享框 -->
-    <share-pop :show="showShare" @close="closeShare"></share-pop>
+    <share-pop :show="showShare" @close="closeShare"/>
   </div>
 </template>
 <script>
-import { Toast } from "mint-ui";
-import SharePop from "../Share.vue";
-import AudioTask from "../../utils/AudioTask.js";
+import { Toast } from 'mint-ui'
+import SharePop from '../Share.vue'
+import AudioTask from '../../utils/AudioTask.js'
 
 export default {
   data() {
@@ -115,54 +114,53 @@ export default {
         { isPlaying: false }
       ],
       rangeValue: 0,
-      cover: "",
-      progressColor: "#ff0000",
+      cover: '',
+      progressColor: '#ff0000',
       background: 12,
       display: false,
       touchStart: 0
-    };
+    }
   },
   components: {
-    "share-pop": SharePop
+    'share-pop': SharePop
   },
   created() {
     this.isPlaying = AudioTask.getInstance().isPlaying()
-    AudioTask.getInstance().addTimeListener(this.onTimeUpdate);
-    AudioTask.getInstance().addStateListener(this.onStateUpdate);
+    AudioTask.getInstance().addTimeListener(this.onTimeUpdate)
+    AudioTask.getInstance().addStateListener(this.onStateUpdate)
   },
   mounted: function() {
-    this.$refs.mtrange.$refs.thumb.addEventListener("touchstart", e => {
-      this.touching = true;
-      this.touchStart = e.changedTouches[0].clientX;
-    }); 
-    this.$refs.mtrange.$refs.thumb.addEventListener("touchend", e => {
-      console.log(this.$refs.mtrange.$refs.thumb);
-      if (e.changedTouches[0].clientX - this.touchStart < 5) return;
-      AudioTask.getInstance().seekTo(this.currentTime);
-      this.touching = false;
-    });
-    this.$refs.mtrange.$refs.thumb.addEventListener("touchcancel", e => {
-      this.touching = false;
-    });
+    this.$refs.mtrange.$refs.thumb.addEventListener('touchstart', e => {
+      this.touching = true
+      this.touchStart = e.changedTouches[0].clientX
+    })
+    this.$refs.mtrange.$refs.thumb.addEventListener('touchend', e => {
+      console.log(this.$refs.mtrange.$refs.thumb)
+      if (e.changedTouches[0].clientX - this.touchStart < 5) return
+      AudioTask.getInstance().seekTo(this.currentTime)
+      this.touching = false
+    })
+    this.$refs.mtrange.$refs.thumb.addEventListener('touchcancel', e => {
+      this.touching = false
+    })
   },
-  watch: { 
-  },
+  watch: {},
   methods: {
     //进度条拖动
     sliderChange(value) {
-      console.log(value);
-      console.log(this.$refs.content);
+      console.log(value)
+      console.log(this.$refs.content)
     },
     onSliderTap(e) {
-      console.log(SharePop);
+      console.log(SharePop)
     },
     //收藏
     onCollect() {
-      this.isLove = !this.isLove;
+      this.isLove = !this.isLove
       Toast({
-        message: this.isLove ? "已添加到我喜欢的" : "已取消喜欢",
-        iconClass: this.isLove ? "collect-icon" : ""
-      });
+        message: this.isLove ? '已添加到我喜欢的' : '已取消喜欢',
+        iconClass: this.isLove ? 'collect-icon' : ''
+      })
     },
     //文稿
     onManuScripts() {},
@@ -170,74 +168,74 @@ export default {
     onComments() {},
     //分享
     onShare() {
-      this.showShare = true;
+      this.showShare = true
     },
     //分享框关闭
     closeShare() {
-      this.showShare = false;
+      this.showShare = false
     },
     //切花播放模式
     onPlayMode() {
-      this.isSingle = !this.isSingle;
-      Toast({ message: this.isSingle ? "单曲循环" : "列表循环" });
+      this.isSingle = !this.isSingle
+      Toast({ message: this.isSingle ? '单曲循环' : '列表循环' })
     },
     //上一首
     onPlayPrv() {
       Toast({
-        message: "这是第一条",
-        iconClass: "first-icon"
-      });
+        message: '这是第一条',
+        iconClass: 'first-icon'
+      })
     },
     //播放/暂停
     onPlayPause() {
       if ((this.isPlaying = !this.isPlaying)) {
-        AudioTask.getInstance().play();
+        AudioTask.getInstance().play()
       } else {
-        AudioTask.getInstance().pause();
+        AudioTask.getInstance().pause()
       }
     },
     //下一首
     onPlayNext() {
       Toast({
-        message: "已经是最后一条",
-        iconClass: "last-icon"
-      });
+        message: '已经是最后一条',
+        iconClass: 'last-icon'
+      })
     },
     //音频进度监听
     onTimeUpdate(currentTime, duration) {
-      if (this.touching) return;
-      this.currentTime = currentTime;
-      this.duration = duration;
+      if (this.touching) return
+      this.currentTime = currentTime
+      this.duration = duration
     },
     //播放状态监听
     onStateUpdate(state) {
-      console.log(state);
-      if (state == "canplaythrough") {
-        this.duration = AudioTask.getInstance().getDuration();
+      console.log(state)
+      if (state == 'canplaythrough') {
+        this.duration = AudioTask.getInstance().getDuration()
       }
-      if (state == "ended") {
-        this.isPlaying = false;
+      if (state == 'ended') {
+        this.isPlaying = false
       }
-      if (state == "play") {
-        this.isPlaying = true;
+      if (state == 'play') {
+        this.isPlaying = true
       }
     },
     //音频列表
     onPlayList() {
-      this.popupVisible = true;
+      this.popupVisible = true
     },
     //关闭列表窗口
     onCloseList() {
-      this.popupVisible = false;
+      this.popupVisible = false
     },
     //列表Item点击事件
     onItemClick(i) {
-      Toast("播放" + i + "首");
-      this.playIndex = i;
-      this.popupVisible = false;
+      Toast('播放' + i + '首')
+      this.playIndex = i
+      this.popupVisible = false
     }
   }
-};
+}
 </script>
 <style lang="scss">
 .audioplay-container {

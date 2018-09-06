@@ -24,22 +24,22 @@
 <script>
 export default {
   //singleset 单集  playing是否正在播放
-  props: ["item", "playing"],
+  props: ['item', 'playing'],
   data() {
-    return {};
+    return {}
   },
-  filters:{
-    learntimeFormat:function(value,totaltime){
-      if(value<=1)return "未收听"
-       return "已收听"+parseInt(value*100/totaltime)+"%"
+  filters: {
+    learntimeFormat: function(value, totaltime) {
+      if (value <= 1) return '未收听'
+      return '已收听' + parseInt((value * 100) / totaltime) + '%'
     }
   },
   methods: {
     onItemClick(id) {
-      this.$router.push({ path: "/audio/audioplay", query: { id } });
+      this.$router.push({ path: '/audio/audioplay', query: { id } })
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .singleset-item-container {
@@ -74,7 +74,7 @@ export default {
     height: 34px;
     margin: auto 0;
   }
-   .item-content {
+  .item-content {
     margin-left: 36px;
     display: flex;
     flex-direction: row;
@@ -122,4 +122,3 @@ export default {
   }
 }
 </style>
-

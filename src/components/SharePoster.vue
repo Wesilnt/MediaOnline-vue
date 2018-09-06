@@ -1,17 +1,17 @@
 <template>
   <div class="poster-container">
     <div class="poster-pic-container">
-      <canvas ref="canvasId" width="355" height="504"></canvas>
+      <canvas ref="canvasId" width="355" height="504"/>
     </div>
     <div class="poster-save-btn">
       <button @click="saveImg">保存图片</button>
     </div>
     <img src="" ref="saveimage">
-    <a href="" ref="download" download="poster" v-show="false"></a>
+    <a href="" ref="download" download="poster" v-show="false"/>
   </div>
 </template> 
 <script>
-import { Toast } from "mint-ui";
+import { Toast } from 'mint-ui'
 
 export default {
   data() {
@@ -26,91 +26,91 @@ export default {
       ctx: null,
       canvasData: null,
       posterData: {}
-    };
+    }
   },
   mounted: function() {
-    var canvasData = this.$refs.canvasId;
-    this.canvasData = canvasData;
-    this.ctx = canvasData.getContext("2d");
-    this.ctx.mozImageSmoothingEnabled = false;
-    this.ctx.webkitImageSmoothingEnabled = false;
-    this.ctx.msImageSmoothingEnabled = false;
-    this.ctx.imageSmoothingEnabled = false;
-    this.drawBottomMap();
+    var canvasData = this.$refs.canvasId
+    this.canvasData = canvasData
+    this.ctx = canvasData.getContext('2d')
+    this.ctx.mozImageSmoothingEnabled = false
+    this.ctx.webkitImageSmoothingEnabled = false
+    this.ctx.msImageSmoothingEnabled = false
+    this.ctx.imageSmoothingEnabled = false
+    this.drawBottomMap()
   },
   methods: {
     //将canvas生成的二维码保存为图片
     saveImg() {
-      this.$refs.download.href = this.canvasData.toDataURL("images/png");
-      this.$refs.download.click();
-      this.$refs.saveimage.src = this.canvasData.toDataURL("images/png");
+      this.$refs.download.href = this.canvasData.toDataURL('images/png')
+      this.$refs.download.click()
+      this.$refs.saveimage.src = this.canvasData.toDataURL('images/png')
     },
     //1. 绘制图片模板的 底图
     drawBottomMap: function() {
       var promise = new Promise((resolve, reject) => {
-        this.drawBackground(resolve);
-        this.drawQrcode();
-        this.drawBottomText();
+        this.drawBackground(resolve)
+        this.drawQrcode()
+        this.drawBottomText()
       }).then(() => {
-        this.drawHeadImage();
-        this.drawUserName();
-      });
+        this.drawHeadImage()
+        this.drawUserName()
+      })
     },
 
     //绘制背景图和颜色
     drawBackground(resolve) {
-      this.ctx.fillStyle = "#ffffff";
-      this.ctx.fillRect(0, this.bottomY, this.canvasW, this.bottomH);
-      var cover = new Image();
-      cover.src = require("../assets/poster_header_bg.png");
+      this.ctx.fillStyle = '#ffffff'
+      this.ctx.fillRect(0, this.bottomY, this.canvasW, this.bottomH)
+      var cover = new Image()
+      cover.src = require('../assets/poster_header_bg.png')
       cover.onload = () => {
-        this.ctx.drawImage(cover, 0, 0, this.canvasW, this.bottomY);
-        resolve();
-      };
+        this.ctx.drawImage(cover, 0, 0, this.canvasW, this.bottomY)
+        resolve()
+      }
     },
     //绘制头像
     drawHeadImage() {
-      var header = new Image();
-      header.src = require("../assets/cmt_item_header.png");
+      var header = new Image()
+      header.src = require('../assets/cmt_item_header.png')
       header.onload = () => {
-        let radius = this.headImageW / 2;
-        let x = this.centerX - this.headImageW / 2;
-        let y = this.headImageW;
-        this.ctx.save();
-        this.ctx.beginPath();
-        this.ctx.arc(this.centerX, y + radius, radius, 0, Math.PI * 2, false);
-        this.ctx.clip();
-        this.ctx.drawImage(header, x, y, y, y);
-        this.ctx.restore();
-      };
+        let radius = this.headImageW / 2
+        let x = this.centerX - this.headImageW / 2
+        let y = this.headImageW
+        this.ctx.save()
+        this.ctx.beginPath()
+        this.ctx.arc(this.centerX, y + radius, radius, 0, Math.PI * 2, false)
+        this.ctx.clip()
+        this.ctx.drawImage(header, x, y, y, y)
+        this.ctx.restore()
+      }
     },
     //绘制二维码
     drawQrcode() {
-      var qrcode = new Image();
-      qrcode.src = require("../assets/poster_qrcode.png");
+      var qrcode = new Image()
+      qrcode.src = require('../assets/poster_qrcode.png')
       qrcode.onload = () => {
-        console.log("二维码")
-        this.ctx.drawImage(qrcode, 10, this.bottomY+25, 50, 50);
-      };
+        console.log('二维码')
+        this.ctx.drawImage(qrcode, 10, this.bottomY + 25, 50, 50)
+      }
     },
     //绘制名字
     drawUserName() {
-      let username = "秋之本";
-      this.ctx.fillStyle = "#ffffff";
-      this.ctx.font = "14px Georgia";
-      let textWidth = this.ctx.measureText(username).width;
-      this.ctx.fillText(username, this.centerX - textWidth / 2, 116);
+      let username = '秋之本'
+      this.ctx.fillStyle = '#ffffff'
+      this.ctx.font = '14px Georgia'
+      let textWidth = this.ctx.measureText(username).width
+      this.ctx.fillText(username, this.centerX - textWidth / 2, 116)
     },
     //底部描述
     drawBottomText() {
-      this.ctx.fillStyle = "#000000";
-      this.ctx.font = "14px Georgia";
-      this.ctx.fillText("分享有礼", 70, this.bottomY + 94 / 2 - 5);
-      let text = "长按扫描，和我一起听课吧!";
-      this.ctx.fillText(text, 70, this.bottomY + 94 / 2 + 19);
+      this.ctx.fillStyle = '#000000'
+      this.ctx.font = '14px Georgia'
+      this.ctx.fillText('分享有礼', 70, this.bottomY + 94 / 2 - 5)
+      let text = '长按扫描，和我一起听课吧!'
+      this.ctx.fillText(text, 70, this.bottomY + 94 / 2 + 19)
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 .poster-container {
