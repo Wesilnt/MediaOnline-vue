@@ -21,15 +21,12 @@
         <img src="../../assets/audio_play_share.jpg">
       </div>
     </div>
-    <audio autoplay currentTime :paused="isPlaying">
-      <!-- <source src="http://ws.stream.qqmusic.qq.com/M500001VfvsJ21xFqb.mp3?guid=ffffffff82def4af4b12b3cd9337d5e7&uin=346897220&vkey=6292F51E1E384E06DCBDC9AB7C49FD713D632D313AC4858BACB8DDD29067D3C601481D36E62053BF8DFEAF74C0A5CCFADD6471160CAF3E6A&fromtag=46" type="audio/mpeg"> 您的浏览器不支持 audio 元素。 -->
-    </audio>
     <!-- 进度条 -->
     <div class="slider-container">
-      <div slot="start" @click="onSliderTap">05:32</div>
-      <mt-range @click.prevent="onSliderTap" v-model="rangeValue" :min="10" :max="90" :step="1" :bar-height="2">
+      <div slot="start">{{currentTime | formatDuring}}</div>
+      <mt-range ref="mtrange" v-model="currentTime" :min="0" :max="duration" :step="100/duration" :bar-height="2">
       </mt-range>
-      <div slot="end">06:23</div>
+      <div slot="end">{{ duration | formatDuring}}</div>
     </div>
     <!-- <div class="play-slider">
       <span>05:32</span>
@@ -45,7 +42,7 @@
         <img src="../../assets/audio_play_prv.png">
       </div>
       <div class="btn-item" :class="{'play-btn-active':isPlaying}" @click="onPlayPause">
-        <img :src="isPlaying?require('../../assets/audio_play_pause.png'):require('../../assets/audio_play_play.png')">
+        <img :src="isPlaying?require('../../assets/audio_play_play.png'):require('../../assets/audio_play_pause.png')">
       </div>
       <div class="btn-item" @click="onPlayNext">
         <img src="../../assets/audio_play_next.png">
@@ -80,6 +77,7 @@
 <script>
 import { Toast } from "mint-ui";
 import SharePop from "../Share.vue";
+import AudioTask from "../../utils/AudioTask.js";
 
 export default {
   data() {
@@ -91,6 +89,9 @@ export default {
       popupVisible: false, //是否显示音频列表弹框
       playIndex: 0, //播放第几首
       showShare: false, //是否显示分享框
+      currentTime: 0, //播放音频进度
+      duration: 100, //播放音频最大时长
+      touching: false, //slider触摸
       playList: [
         //播放列表
         { isPlaying: true },
@@ -113,28 +114,47 @@ export default {
         { isPlaying: false },
         { isPlaying: false }
       ],
-      rangeValue: 10,
+      rangeValue: 0,
       cover: "",
       progressColor: "#ff0000",
       background: 12,
-      display: false
+      display: false,
+      touchStart: 0
     };
   },
   components: {
     "share-pop": SharePop
   },
   created() {
-    let AudioContext = window.AudioContext || window.webkitAudioContext;
-    let audioCtx = AudioContext ? new AudioContext() : "";
+    this.isPlaying = AudioTask.getInstance().isPlaying()
+    AudioTask.getInstance().addTimeListener(this.onTimeUpdate);
+    AudioTask.getInstance().addStateListener(this.onStateUpdate);
+  },
+  mounted: function() {
+    this.$refs.mtrange.$refs.thumb.addEventListener("touchstart", e => {
+      this.touching = true;
+      this.touchStart = e.changedTouches[0].clientX;
+    }); 
+    this.$refs.mtrange.$refs.thumb.addEventListener("touchend", e => {
+      console.log(this.$refs.mtrange.$refs.thumb);
+      if (e.changedTouches[0].clientX - this.touchStart < 5) return;
+      AudioTask.getInstance().seekTo(this.currentTime);
+      this.touching = false;
+    });
+    this.$refs.mtrange.$refs.thumb.addEventListener("touchcancel", e => {
+      this.touching = false;
+    });
+  },
+  watch: { 
   },
   methods: {
     //进度条拖动
     sliderChange(value) {
       console.log(value);
-      console.log(this.$refs.content)
+      console.log(this.$refs.content);
     },
-    onSliderTap(e){ 
-       console.log(SharePop)
+    onSliderTap(e) {
+      console.log(SharePop);
     },
     //收藏
     onCollect() {
@@ -142,7 +162,6 @@ export default {
       Toast({
         message: this.isLove ? "已添加到我喜欢的" : "已取消喜欢",
         iconClass: this.isLove ? "collect-icon" : ""
-        // duration: -1
       });
     },
     //文稿
@@ -160,29 +179,48 @@ export default {
     //切花播放模式
     onPlayMode() {
       this.isSingle = !this.isSingle;
-      Toast({
-        message: this.isSingle ? "单曲循环" : "列表循环"
-      });
+      Toast({ message: this.isSingle ? "单曲循环" : "列表循环" });
     },
     //上一首
     onPlayPrv() {
       Toast({
         message: "这是第一条",
         iconClass: "first-icon"
-        // duration: -1
       });
     },
     //播放/暂停
     onPlayPause() {
-      this.isPlaying = !this.isPlaying;
+      if ((this.isPlaying = !this.isPlaying)) {
+        AudioTask.getInstance().play();
+      } else {
+        AudioTask.getInstance().pause();
+      }
     },
     //下一首
     onPlayNext() {
       Toast({
         message: "已经是最后一条",
         iconClass: "last-icon"
-        // duration: -1
       });
+    },
+    //音频进度监听
+    onTimeUpdate(currentTime, duration) {
+      if (this.touching) return;
+      this.currentTime = currentTime;
+      this.duration = duration;
+    },
+    //播放状态监听
+    onStateUpdate(state) {
+      console.log(state);
+      if (state == "canplaythrough") {
+        this.duration = AudioTask.getInstance().getDuration();
+      }
+      if (state == "ended") {
+        this.isPlaying = false;
+      }
+      if (state == "play") {
+        this.isPlaying = true;
+      }
     },
     //音频列表
     onPlayList() {
@@ -267,11 +305,11 @@ export default {
     }
     .mt-range {
       flex: 1;
-      .mt-range-runway { 
+      .mt-range-runway {
         overflow: hidden;
         border-top-color: rgb(229, 229, 229);
         border-top-style: solid;
-      } 
+      }
       .mt-range-progress {
         background-color: rgb(255, 205, 126);
         height: 4px;
@@ -363,7 +401,7 @@ export default {
     flex-direction: row;
     justify-content: space-between;
     margin-top: 58px;
-    padding: 0 36px;
+    padding: 0 36px 52px;
     box-sizing: content-box;
     .btn-item {
       display: flex;
@@ -387,16 +425,15 @@ export default {
       background-color: #ff8a1f;
       border-radius: 50%;
       justify-content: center;
-      padding: 26px 35px;
+      padding: 26px 29px 26px 30px;
       img {
         margin-left: 4px;
-
         width: 20px;
         height: 38px;
       }
     }
     .play-btn-active {
-      padding: 26px 29px 26px 30px;
+      padding: 26px 35px;
       img {
         margin-left: 4px;
         width: 31px;

@@ -15,3 +15,14 @@ export const json2formData = json => {
   }
   return formData;
 };
+export const formatDuring = (mss) => {
+  mss = Math.round(mss)
+  var days = parseInt(mss / (60 * 60 * 24));
+  var hours = parseInt((mss % (60 * 60 * 24)) / (60 * 60));
+  var minutes = parseInt((mss % (60 * 60)) / (60));
+  var seconds = (mss % 60);
+  hours = hours < 10 ? "0" + hours : hours;
+  minutes = minutes < 10 ? "0" + minutes : minutes;
+  seconds = seconds < 10 ? "0" + seconds : seconds;
+  return minutes + ":" + seconds;
+}

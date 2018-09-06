@@ -6,7 +6,7 @@
           此网页由www.shbaoyuantech.com提供
         </div>
         <div class="share-list">
-          <router-link class="share-item" to="/save-poster" tag="div">
+          <router-link class="share-item" to="/share/poster" tag="div">
             <div class="share-icon">
               <img src="../assets/share_poster.png">
             </div>

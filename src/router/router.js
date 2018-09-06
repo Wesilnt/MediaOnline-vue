@@ -16,6 +16,7 @@ import AudioPlay from '../components/audio/AudioPlay.vue'          //音频-播�
 import AudioCmts from '../components/audio/AudioCmts.vue'          //音频-评论
 import AudioDraft from '../components/audio/AudioDraft.vue'        //音频-文稿
 import Praise from '../views/praise/Praise.vue'                    //集赞 
+import SharePoster from '../components/SharePoster.vue'            //分享海报 
 import PageLoading from "../components/PageLoading";
 
 import PageInfo_From_Home from "./router_home";
@@ -105,29 +106,33 @@ export default new Router({
     //   name:'videoColumn',
     //   component:videoColumnDetail
     // },
-    // {
-    //   path:"/audio/audioplay",
-    //   name:"AudioPlay",
-    //   component:AudioPlay
-    // },
-    // {
-    //   path:"/audio/audiocmts",
-    //   name:"AudioCmts",
-    //   component:AudioCmts
-    // },
-    // {
-    //   path:"/audio/audiodraft",
-    //   name:"AudioDraft",
-    //   component:AudioDraft
-    // },
+    {
+      path:"/audio/audioplay",
+      name:"AudioPlay",
+      component:AudioPlay
+    },
+    {
+      path:"/audio/audiocmts",
+      name:"AudioCmts",
+      component:AudioCmts
+    },
+    {
+      path:"/audio/audiodraft",
+      name:"AudioDraft",
+      component:AudioDraft
+    },
     {
       path:"/praise",
       name:"Praise",
       component:Praise
     } ,
+    {
+      path:"/share/poster",
+      name:"SharePoster",
+      component:SharePoster
+    } ,
     ...PageInfo_From_Home,
     ...PageInfo_From_My,
     ...PageInfo_From_OnlineCourse
-
   ]
 });
