@@ -41,7 +41,7 @@ import { createNamespacedHelpers } from "vuex";
 import Badge from "../../components/Badge";
 const { mapState, mapActions } = createNamespacedHelpers("myPuzzle_Praise");
 export default {
-  name: "MyPuzzle",
+  name: "myPuzzle_Praise",
   data: function() {
     const { path } = this.$route;
     let pageName = "";
