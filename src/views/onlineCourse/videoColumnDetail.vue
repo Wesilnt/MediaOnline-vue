@@ -166,6 +166,9 @@ export default {
 .videocol-content {
     padding: 0 40px;
     background-color: #fff;
+    a{
+        text-decoration: none;
+    }
 }
 
 .videocol-sction-title {

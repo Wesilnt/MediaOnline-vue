@@ -101,15 +101,15 @@ export default {
             // this.$refs.catalog.animate({ scrollTop : catalogH },800)
             // this.$refs.leavemessage.animate({ scrollTop : leavemessageH },800)
         },
-        handleScroll () {
+        async handleScroll () {
             //1.监听滚动
             var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
             //2.获取navbar的偏移量
-            // var barOffset = this.$refs.navbar.offsetTop
+            var barOffset = this.$refs.navbar.offsetTop;
         //    console.log(document.querySelector('.video-detail-navbar'))
             // console.log('===' + barOffset)
             // console.dir(this.$refs.navbar)
-           this.navbarFixed =  scrollTop > this.$refs.navbar.offsetTop ?  true : false
+           this.navbarFixed =  scrollTop > barOffset ?  true : false
 
             var noteH = this.$refs.note.offsetTop;
             const catalogH = this.$refs.catalog.offsetTop;
@@ -134,7 +134,10 @@ export default {
     },
     mounted () {
         window.addEventListener('scroll', this.handleScroll)
-    }   
+    },
+    destroyed() {
+        window.removeEventListener('scroll', this.handleScroll)
+    },  
 }
 </script>
 
