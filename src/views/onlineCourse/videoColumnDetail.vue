@@ -12,7 +12,7 @@
             <div class="videocol-navbar-item" :class="{'selected':selected == index }" v-for="(item,index) of navbar" :key="index" @click="clickFnc(index)">{{item}}</div>
         </div>
 
-        <tools-navbar></tools-navbar>
+        <tools-navbar :btnstate="0"></tools-navbar>
 
        <div class="videocol-content">
            <course-introduce></course-introduce>

@@ -5,18 +5,20 @@
             <label>试听</label>
         </div>
         <div class="cl-left-line"></div>
-        <div class="cl-item-origin" v-show="btn_origin.isShow">
-            <div class="cl-origin-price">$19.9</div>
-            <div class="cl-origin-info">原价购买</div>
+        <div class="cl-originbtn" v-show="btn_origin.isShow">
+            <div class="cl-origin-price" v-show="btn_origin.isshowprice">{{btn_origin.price}}</div>
+            <div class="cl-origin-info">{{btn_origin.title}}</div>
         </div>
         <div class="cl-action-btn" v-show="btn_group.isShow || btn_prise.isShow">
+
             <div class="cl-groupbtn" v-show="btn_group.isShow">
-                <div class="cl-groupbtn-price">$9.9</div>
-                <div class="cl-groupbtn-info">三人团</div>
+                <div class="cl-groupbtn-price" v-show="btn_group.isshowprice">{{btn_group.price}}</div>
+                <div class="cl-groupbtn-info" :class="{active : !btn_group.isshowprice}">{{btn_group.title}}</div>
             </div>
+
             <div class="cl-praisebtn" v-show="btn_prise.isShow">
-                    <div class="cl-praisebtn-price">$9.9</div>
-                <div class="cl-praisebtn-info">集赞换</div>
+                <div class="cl-praisebtn-price" v-show="btn_prise.isshowprice">{{btn_prise.price}}</div>
+                <div class="cl-praisebtn-info" :class="{active1 : !btn_prise.isshowprice}">{{btn_prise.title}}</div>
             </div>
         </div>
     </div>
@@ -26,108 +28,99 @@
 
 <script>
     export default {
-
+        name:'toolsNavbar',
+        props:['btnstate'],
         data(){
             return {
-                isAccessPrise : 0,
-                isGoingPrise : 0, 
-                isAccessPay : 0, 
-                isSuccessPraise : 0,
-                btn_group: {
-                    title: "拼团购买",
-                    openType: "none",
-                    isShow: true
-                },
 
                 btn_origin: {
                     title: "原价购买",
                     openType: "none",
-                    isShow: true
+                    isShow: true,
+                    price:0,
+                    btnOriginClass:'',
+                    isshowprice:true
+                },
+
+                btn_group: {
+                    title: "拼团购买",
+                    openType: "none",
+                    isShow: true,
+                     price:0,
+                    btnGroupClass:'',
+                    isshowprice:true
                 },
 
                 btn_prise: {
                     title: "发起集赞",
                     openType: "none",
-                    isShow: true
-                }, 
-                datas:{
-                    authorBriefIntro:"",
-                    availLessonCount:1,
-                    briefIntro:"威风威",
-                    buyCount:0,
-                    canView:0,
-                    categoryList:[],
-                    collectLikeDuration:null , //集赞时长
-                    collectLikePersonCount:null ,//集赞人数
-                    collectLikeTemplateId:null , //集赞模板Id
-                    commentCount:0,
-                    coverPic:"http://qiniu.shbaoyuantech.com/FvqzWWGRqnhcNRPWVCMESMiHy2gL",
-                    createTime:"2018-07-30 10:25:20",
-                    descPicList:null,
-                    description:null,
-                    fitFor:null,
-                    groupBuyDuration:null,
-                    groupBuyPersonCount:null,
-                    groupBuyPrice:null,
-                    groupBuyTemplateId:null,
-                    id:"54877938872483840",
-                    lastModifyTime:"2018-08-02 11:52:28",
-                    lessonCount:11,
-                    name:"测试43",
-                    outline:"",
-                    outlinePic:null,
-                    price:0.01,
-                    profilePic:"",
-                    sort:0,
-                    status:"1502",
-                    userAccessStatus:0 ,//-1:退款 0:没有购买和集赞行为 1001 单购成功 1003 拼团成功 1005 拼团中 1007 集赞成功未领取 1008集赞成功已领取 1009 积攒中
-                    userBought:0,
-                    viewCount:217  
-                },
-                mounted() {
-                        var result = this.data
-                        var btn1 = this.btn_group
-                        var btn2 = this.btn_origin
-                        var btn3 = this.btn_prise
-                        //是否允许集赞
-                        result.collectLikeTemplateId != null || result.userAccessStatus == 1007 || result.userAccessStatus == 1008 || result.userAccessStatus == 1009 ? this.isAccessPrise = true : this.isAccessPrise = false
-                        //是否处在集赞中
-                        result.userAccessStatus == 1009 ? this.isGoingPrise = true : this.isGoingPrise = false
-                        //是否支付完成
-                        result.userAccessStatus == 1001 || result.userAccessStatus == 1003 || result.userAccessStatus == 1005 ? this.isAccessPay = true : this.isAccessPay = false
-                        //是否集赞完成
-                        result.userAccessStatus == 1007 || result.userAccessStatus == 1008 ? this.isSuccessPraise = true : this.isSuccessPraise = false
-                        //是否隐藏拼团按钮,
-                        var groupBuyPrice = result.groupBuyPrice
-                        btn1.isShow = !(groupBuyPrice == null || result.price == 0 || this.isAccessPay || this.isGoingPrise || this.isSuccessPraise || result.userAccessStatus == -1)
-                        //是否隐藏原价购买按钮
-                        btn2.isShow = !(result.price == 0 || this.isAccessPay || this.isGoingPrise || this.isSuccessPraise || result.userAccessStatus == -1)
-                        //是否隐藏集赞按钮
-                        btn3.isShow = !(!this.isAccessPrise || this.isAccessPay || result.userAccessStatus == -1 || result.userAccessStatus == 1008)
+                    isShow: true,
+                     price:0,
+                    btnPraiseClass:'',
+                    isshowprice:true
+                } 
 
-
-                        //显示集赞按钮,文案为发起集赞
-                        if (result.userAccessStatus == 0) {
-                            btn3.title = "发起集赞"
-                            btn3.openType = "getUserInfo"
-                        }
-                        //显示集赞按钮,文案为您已发起集赞,请点击前往
-                        if (this.isGoingPrise) {
-                            btn3.title = "您已发起集赞,请点击前往"
-                            btn3.openType = "none"
-                        }
-                        //显示集赞按钮,文案为已完成集赞,点击领取
-                        if (result.userAccessStatus == 1007) {
-                            btn3.title = "已完成集赞,点击领取"
-                            btn3.openType = "none"
-                        }
-                },
+     
             }
+        },
+        mounted() {
+            switch (this.btnstate) {
+                case 0 : //显示拼团购买,原价购买,发起集赞(默认显示)
+                    this.btn_origin = { title: "原价购买",price:'$19.9', openType: "none", isShow: true, btnOriginClass:'',isshowprice:true}
+                    this.btn_group = { title: "三人团",price:'$19.9', openType: "none", isShow: true, btnGroupClass:'',isshowprice:true}
+                    this.btn_prise = { title: "集赞换",price:'$19.9', openType: "none", isShow: true, btnPraiseClass:'',isshowprice:true}                                                            
+                    break
+                case 1 : //显示原价购买
+                    this.btn_origin = { title: "原价购买", price:'$19.9',openType: "none", isShow: false, btnOriginClass:'',isshowprice:true}
+                    this.btn_group = { title: "原价购买",price:'$19.9', openType: "none", isShow: true, btnGroupClass:'',isshowprice:true}
+                    this.btn_prise = { title: "集赞换", price:'$19.9',openType: "none", isShow: false, btnPraiseClass:'',isshowprice:true} 
+                    break
+                case 2 : //显示原价购买,发起集赞
+                    this.btn_origin = { title: "原价购买",price:'$19.9', openType: "none", isShow: true, btnOriginClass:'',isshowprice:true}
+                    this.btn_group = { title: "三人团", price:'$19.9',openType: "none", isShow: false, btnGroupClass:'',isshowprice:true}
+                    this.btn_prise = { title: "集赞换", price:'$19.9',openType: "none", isShow: true, btnPraiseClass:'',isshowprice:true} 
+                    break
+                case 3 : //显示原价购买,我要拼团
+                    this.btn_origin = { title: "原价购买",price:'$19.9', openType: "none", isShow: true, btnOriginClass:'',isshowprice:true}
+                    this.btn_group = { title: "三人团",price:'$19.9', openType: "none", isShow: true, btnGroupClass:'',isshowprice:true}
+                    this.btn_prise = { title: "集赞换",price:'$19.9', openType: "none", isShow: false, btnPraiseClass:'',isshowprice:true} 
+                    break
+                case 4 : //显示您已发起集赞,请点击前往
+                    this.btn_origin = { title: "",price:'', openType: "none", isShow: false, btnOriginClass:'',isshowprice:true}
+                    this.btn_group = { title: "您已发起集赞,请点击前往",price:'', openType: "none", isShow: true, btnGroupClass:'',isshowprice:false}
+                    this.btn_prise = { title: "",price:'', openType: "none", isShow: false, btnPraiseClass:'',isshowprice:true} 
+                    break
+                case 5 : //显示我要开团
+                    this.btn_origin = { title: "",price:'', openType: "none", isShow: false, btnOriginClass:'',isshowprice:true}
+                    this.btn_group = { title: "我要开团", price:'',openType: "none", isShow: true, btnGroupClass:'',isshowprice:false}
+                    this.btn_prise = { title: "",price:'', openType: "none", isShow: false, btnPraiseClass:'',isshowprice:true} 
+                    break
+                case 6 : //显示继续支付
+                    this.btn_origin = { title: "", price:'$19.9',openType: "none", isShow: false, btnOriginClass:'',isshowprice:true}
+                    this.btn_group = { title: "", price:'$19.9',openType: "none", isShow: false, btnGroupClass:'',isshowprice:true}
+                    this.btn_prise = { title: "继续支付", price:'$19.9',openType: "none", isShow: true, btnPraiseClass:'',isshowprice:true} 
+                    break
+                case 7 : //显示参与拼团
+                    this.btn_origin = { title: "原价购买", price:'$19.9',openType: "none", isShow: false, btnOriginClass:'',isshowprice:true}
+                    this.btn_group = { title: "三人团", price:'$19.9',openType: "none", isShow: false, btnGroupClass:'',isshowprice:true}
+                    this.btn_prise = { title: "参与拼团", price:'19',openType: "none", isShow: true, btnPraiseClass:'',isshowprice:false} 
+                    break
+                case 8 : //显示我要学习
+                    this.btn_origin = { title: "原价购买",price:'$19.9', openType: "none", isShow: false, btnOriginClass:'',isshowprice:true}
+                    this.btn_group = { title: "我要学习",price:'$19.9', openType: "none", isShow: true, btnGroupClass:'',isshowprice:false}
+                    this.btn_prise = { title: "集赞换", price:'$19.9',openType: "none", isShow: false, btnPraiseClass:'',isshowprice:true} 
+                    break
+                case 9 : //显示已完成集赞,点击领取
+                    this.btn_origin = { title: "原价购买",price:'$19.9', openType: "none", isShow: false, btnOriginClass:'',isshowprice:true}
+                    this.btn_group = { title: "已完成集赞,点击领取",price:'$19.9', openType: "none", isShow: true, btnGroupClass:'',isshowprice:false}
+                    this.btn_prise = { title: "集赞换", price:'$19.9',openType: "none", isShow: false, btnPraiseClass:'',isshowprice:true} 
+                    break     
+            }  
         }
     }
 </script>
 
-<style scoped>
+<style lang='scss' scoped>
 .member-container {
     background-color: cyan;
 }  
@@ -158,17 +151,17 @@
     height: 40px;
 }
 .cl-sound label {
-    font-size: 20px;
+    font-size: 10px;
     text-align: left;
     margin-top: 6px;
     color: rgb(105, 105, 105)
 }
 .cl-left-line {
-    width: 1px;
-    background-color: lightgray;
+    width: 2px;
+    background-color: gray;
     margin-left: 28px;
 }
-.cl-item-origin {
+.cl-originbtn {
     text-align: center;
     background-color: #fff;
     display: flex;
@@ -205,20 +198,28 @@
     background: linear-gradient(to right, rgb(254,202,0) 0, rgb(254, 149, 2) 100%);
     flex-grow: 1;
     height: 80px;
+    align-items: center;
 }
+
 .cl-groupbtn-price {
     font-size: 30px;
     color: white;
 }
 .cl-groupbtn-info {
-    font-size: 30px;
+    font-size: 20px;
     color: white;
+    &.active {
+        height: 80px;
+        line-height: 80px;
+    }
 }
+
 .cl-praisebtn {
     text-align: center;
     background: linear-gradient(to right,rgb(254, 119, 0) 0,rgb(255, 79, 5) 100%);
     flex-grow: 1;
     height: 80px;
+    align-items: center;
 }
 .cl-praisebtn-price {
     font-size: 30px;
@@ -227,6 +228,10 @@
 .cl-praisebtn-info {
     font-size: 20px;
     color: white;
+    &.active1 {
+        height: 80px;
+        line-height: 80px;
+    }
 }
 </style>
 
