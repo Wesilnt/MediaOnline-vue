@@ -1,7 +1,7 @@
 <template>
     <div>
-        <div class="list" v-for="(item, index) in videoList" :key="index">
-            <VideoCell :video='item'/>
+        <div v-for="(item, index) in videoList" :key="index" class="list">
+            <VideoCell :video="item"/>
         </div>
     </div>
 

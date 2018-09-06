@@ -1,9 +1,9 @@
 <template>
-    <div class="noticebg" v-if="messageCount>0">
+    <div v-if="messageCount>0" class="noticebg">
         <div class="notice">
-            <img class='messageicon' >
-            <span class='message'>{{messageCount}}条新消息</span>
-            <img class='arrow' src='../../assets/home_notice_arrow.png' >
+            <img class="messageicon" >
+            <span class="message">{{messageCount}}条新消息</span>
+            <img class="arrow" src="../../assets/home_notice_arrow.png" >
         </div>
         <div class="line"/>
     </div>

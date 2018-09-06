@@ -9,7 +9,7 @@
        </div>
 
         <div class="videocol-navbar">
-            <div class="videocol-navbar-item" :class="{'selected':selected == index }" v-for="(item,index) of navbar" :key="index" @click="clickFnc(index)">{{item}}</div>
+            <div v-for="(item,index) of navbar" :class="{'selected':selected == index }" :key="index" class="videocol-navbar-item" @click="clickFnc(index)">{{item}}</div>
         </div>
 
         <tools-navbar :btnstate="0"/>
@@ -23,14 +23,14 @@
             <div class="videocol-bigimage">
                 <!-- <img class="videocol-bigimage-bg" :src="require('../../../imgs/pic_share@2x.png')"> -->
                 <vue-bigimage :src="require('../../assets/images/onlinecourse-pic-share.png')"/>   
-                <img class="videocol-bigimage-search" :src="require('../../assets/images/onlinecourse_bigimage_search.png')">
+                <img :src="require('../../assets/images/onlinecourse_bigimage_search.png')" class="videocol-bigimage-search">
             </div>
             <hr class="lineone">
             <div class="videocol-sction-title">
                 <h4>试看课程</h4>
                 <div class="videocol-all" @click="allFunc">
                     <span class="videocol-allbtn">全部</span>
-                    <img class="videocol-allbtn-icon" :src="require('../../assets/images/onlinecourse_arrow_right.png')">
+                    <img :src="require('../../assets/images/onlinecourse_arrow_right.png')" class="videocol-allbtn-icon">
                 </div>
            </div>
             <router-link to="/videoCourseDetail">
@@ -42,7 +42,7 @@
                 <h4>精选留言</h4>
                 <div class="videocol-all" @click="allFunc">
                     <span class="videocol-allbtn">1314条</span>
-                    <img class="videocol-allbtn-icon" :src="require('../../assets/images/onlinecourse_arrow_right.png')">
+                    <img :src="require('../../assets/images/onlinecourse_arrow_right.png')" class="videocol-allbtn-icon">
                 </div>
            </div>
            <video-comment/>
@@ -51,7 +51,7 @@
                 <h4>购买须知</h4>
            </div>
            <div class="videocol-purchase-tip-fatherView">
-                <div class="videocol-purchase-tip" v-for="item of purchaseList" :key="item.id">{{item.id + '.' + item.info}}</div>
+                <div v-for="item of purchaseList" :key="item.id" class="videocol-purchase-tip">{{item.id + '.' + item.info}}</div>
            </div>
 
             
@@ -67,6 +67,13 @@ import toolsNavbar from '../../components/toolsNavbar.vue'
 import videoBigimage from '../../components/videoBigimage.vue'
 export default {
   name: 'VideoColumnDetail',
+  components: {
+    'course-introduce': CourseIntroduce,
+    playlist: playlist,
+    'video-comment': videoComment,
+    'tools-navbar': toolsNavbar,
+    'vue-bigimage': videoBigimage
+  },
   data() {
     return {
       navbar: ['介绍', '试看', '留言'],
@@ -114,13 +121,6 @@ export default {
     allFunc() {
       console.log('点击全部')
     }
-  },
-  components: {
-    'course-introduce': CourseIntroduce,
-    playlist: playlist,
-    'video-comment': videoComment,
-    'tools-navbar': toolsNavbar,
-    'vue-bigimage': videoBigimage
   }
 }
 </script>

@@ -79,6 +79,7 @@
 <script>
 import SingleSetList from '../../components/SingleSetList.vue'
 export default {
+  components: { 'singleset-list': SingleSetList },
   data() {
     return {
       bookList: [
@@ -184,7 +185,6 @@ export default {
       ]
     }
   },
-  components: { 'singleset-list': SingleSetList },
   methods: {
     toLookWhole() {
       this.$router.push({

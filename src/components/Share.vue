@@ -1,7 +1,7 @@
 <template>
-  <div class="share-container" v-show="show">
+  <div v-show="show" class="share-container">
     <transition @after-leave="afterLeave">
-      <div class="share-content" v-show="isOpen">
+      <div v-show="isOpen" class="share-content">
         <div class="share-src">
           此网页由www.shbaoyuantech.com提供
         </div>
@@ -35,10 +35,15 @@
  <script>
 import { Toast } from 'mint-ui'
 export default {
+  props: ['show'],
   data() {
     return { isOpen: false }
   },
-  props: ['show'],
+  watch: {
+    show(value) {
+      this.isOpen = value
+    }
+  },
   methods: {
     onShareItem(shareScore) {
       this.isOpen = false
@@ -57,11 +62,6 @@ export default {
     },
     afterLeave(el) {
       this.$emit('close')
-    }
-  },
-  watch: {
-    show(value) {
-      this.isOpen = value
     }
   }
 }

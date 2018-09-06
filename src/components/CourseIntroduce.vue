@@ -1,6 +1,6 @@
 <template>
     <div class="cl-courseIntroduce">
-        <div class='foldbase' :class=" isFold ? 'fold' : 'extend'" @click="foldFn">
+        <div :class=" isFold ? 'fold' : 'extend'" class="foldbase" @click="foldFn">
             <p>
                 
                 主讲人伍智,国学一级教师,代表作蹒跚集累计销量数百万册.

@@ -5,20 +5,20 @@
             <label>试听</label>
         </div>
         <div class="cl-left-line"/>
-        <div class="cl-originbtn" v-show="btn_origin.isShow">
-            <div class="cl-origin-price" v-show="btn_origin.isshowprice">{{btn_origin.price}}</div>
+        <div v-show="btn_origin.isShow" class="cl-originbtn">
+            <div v-show="btn_origin.isshowprice" class="cl-origin-price">{{btn_origin.price}}</div>
             <div class="cl-origin-info">{{btn_origin.title}}</div>
         </div>
-        <div class="cl-action-btn" v-show="btn_group.isShow || btn_prise.isShow">
+        <div v-show="btn_group.isShow || btn_prise.isShow" class="cl-action-btn">
 
-            <div class="cl-groupbtn" v-show="btn_group.isShow">
-                <div class="cl-groupbtn-price" v-show="btn_group.isshowprice">{{btn_group.price}}</div>
-                <div class="cl-groupbtn-info" :class="{active : !btn_group.isshowprice}">{{btn_group.title}}</div>
+            <div v-show="btn_group.isShow" class="cl-groupbtn">
+                <div v-show="btn_group.isshowprice" class="cl-groupbtn-price">{{btn_group.price}}</div>
+                <div :class="{active : !btn_group.isshowprice}" class="cl-groupbtn-info">{{btn_group.title}}</div>
             </div>
 
-            <div class="cl-praisebtn" v-show="btn_prise.isShow">
-                <div class="cl-praisebtn-price" v-show="btn_prise.isshowprice">{{btn_prise.price}}</div>
-                <div class="cl-praisebtn-info" :class="{active1 : !btn_prise.isshowprice}">{{btn_prise.title}}</div>
+            <div v-show="btn_prise.isShow" class="cl-praisebtn">
+                <div v-show="btn_prise.isshowprice" class="cl-praisebtn-price">{{btn_prise.price}}</div>
+                <div :class="{active1 : !btn_prise.isshowprice}" class="cl-praisebtn-info">{{btn_prise.title}}</div>
             </div>
         </div>
     </div>

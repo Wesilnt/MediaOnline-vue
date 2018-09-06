@@ -62,8 +62,8 @@ let buttonDatas = [
   }
 ]
 export default {
-  props: ['state'],
   components: { 'mobile-validate': MobileVali },
+  props: ['state'],
   data() {
     return {
       show: false,

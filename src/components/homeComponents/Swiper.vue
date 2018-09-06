@@ -1,8 +1,8 @@
 <template>
     <div>
-        <mt-swipe :auto='3000'>
-            <mt-swipe-item v-for="(list,index) in images" :key='index'>
-                <img :src='list.url' :alt='list.desc' >
+        <mt-swipe :auto="3000">
+            <mt-swipe-item v-for="(list,index) in images" :key="index">
+                <img :src="list.url" :alt="list.desc" >
             </mt-swipe-item>
         </mt-swipe>
     </div>

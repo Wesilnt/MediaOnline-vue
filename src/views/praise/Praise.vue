@@ -24,7 +24,7 @@
       <hr>
       <!-- 2.4 点赞人列表 -->
       <div class="people-list">
-        <div class="people-item" v-for="(item, index) in peoples" :key="index">
+        <div v-for="(item, index) in peoples" :key="index" class="people-item">
           <img class="icon" src="../../assets/praise_header_bg.png">
         </div>
       </div>
@@ -50,6 +50,11 @@ import PraiseBtn from './PraiseBtns.vue'
 import PraiseExplain from './PraiseExplain.vue'
 import Share from '../../components/Share.vue'
 export default {
+  components: {
+    priasebtn: PraiseBtn,
+    'praise-explain': PraiseExplain,
+    'share-pop': Share
+  },
   data() {
     return {
       showShare: false, //显示分享框
@@ -92,11 +97,6 @@ export default {
   },
   created: function() {
     this._setBtnAndTips({ status: 1202 }, false, true)
-  },
-  components: {
-    priasebtn: PraiseBtn,
-    'praise-explain': PraiseExplain,
-    'share-pop': Share
   },
   methods: {
     closeExplain() {

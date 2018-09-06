@@ -20,7 +20,8 @@
       "prettier"
     ],
     "rules": {
-      "prettier/prettier": "error"
+      "prettier/prettier": "error",
+      "vue/require-v-for-key": "warning"
     }
   },
   "prettier": {

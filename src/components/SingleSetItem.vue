@@ -1,7 +1,7 @@
 <template> 
     <div class="singleset-item-container" tag="div" @click="onItemClick(item.id)">
       <div class="item-content">
-        <div class="item-icon" :class="{'icon-playing':playing}">
+        <div :class="{'icon-playing':playing}" class="item-icon">
           <img :src="playing?require('../assets/readings_detail_play.png'):require('../assets/readings_detail_pause.png')">
         </div>
         <div class="item-describe">
@@ -23,16 +23,16 @@
 
 <script>
 export default {
-  //singleset 单集  playing是否正在播放
-  props: ['item', 'playing'],
-  data() {
-    return {}
-  },
   filters: {
     learntimeFormat: function(value, totaltime) {
       if (value <= 1) return '未收听'
       return '已收听' + parseInt((value * 100) / totaltime) + '%'
     }
+  },
+  //singleset 单集  playing是否正在播放
+  props: ['item', 'playing'],
+  data() {
+    return {}
   },
   methods: {
     onItemClick(id) {

@@ -1,7 +1,7 @@
 <template>
   <div class="audioplay-container">
     <!-- 封面 -->
-    <img class="cover" :src="cover">
+    <img :src="cover" class="cover">
     <!-- 主，副标题 -->
     <h3> 夏启的故事：王位应该传给谁</h3>
     <h4> 伍老师</h4>
@@ -10,7 +10,7 @@
       <div class="tab-item" @click="onCollect">
         <img :src="isLove?require('../../assets/audio_love_collect.png'):require('../../assets/audio_love_normal.png')">
       </div>
-      <router-link to='/audio/audiodraft' class="tab-item" tag="div">
+      <router-link to="/audio/audiodraft" class="tab-item" tag="div">
         <img src="../../assets/audio_play_manuscripts.png">
       </router-link>
       <router-link to="/audio/audiocmts" class="tab-item" tag="div">
@@ -40,7 +40,7 @@
       <div class="btn-item" @click="onPlayPrv">
         <img src="../../assets/audio_play_prv.png">
       </div>
-      <div class="btn-item" :class="{'play-btn-active':isPlaying}" @click="onPlayPause">
+      <div :class="{'play-btn-active':isPlaying}" class="btn-item" @click="onPlayPause">
         <img :src="isPlaying?require('../../assets/audio_play_play.png'):require('../../assets/audio_play_pause.png')">
       </div>
       <div class="btn-item" @click="onPlayNext">
@@ -58,7 +58,7 @@
         </div>
         <hr>
         <div class="list-container">
-          <div class="list-item" v-for="(item,i) of playList" :key="i">
+          <div v-for="(item,i) of playList" :key="i" class="list-item">
             <div class="list-content" @click="onItemClick(i)">
               <img v-if="i==playIndex" src="../../assets/audio_list_playing.png">
               <p :class="{'p-playing':i==playIndex}">文学 | 为什么抱元科技没有食堂?</p>
@@ -79,6 +79,9 @@ import SharePop from '../Share.vue'
 import AudioTask from '../../utils/AudioTask.js'
 
 export default {
+  components: {
+    'share-pop': SharePop
+  },
   data() {
     return {
       play: true,
@@ -121,9 +124,7 @@ export default {
       touchStart: 0
     }
   },
-  components: {
-    'share-pop': SharePop
-  },
+  watch: {},
   created() {
     this.isPlaying = AudioTask.getInstance().isPlaying()
     AudioTask.getInstance().addTimeListener(this.onTimeUpdate)
@@ -140,18 +141,17 @@ export default {
       AudioTask.getInstance().seekTo(this.currentTime)
       this.touching = false
     })
-    this.$refs.mtrange.$refs.thumb.addEventListener('touchcancel', e => {
+    this.$refs.mtrange.$refs.thumb.addEventListener('touchcancel', () => {
       this.touching = false
     })
   },
-  watch: {},
   methods: {
     //进度条拖动
     sliderChange(value) {
       console.log(value)
       console.log(this.$refs.content)
     },
-    onSliderTap(e) {
+    onSliderTap() {
       console.log(SharePop)
     },
     //收藏

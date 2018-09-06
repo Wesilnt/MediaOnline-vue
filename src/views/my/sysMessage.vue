@@ -11,7 +11,7 @@
         </mu-flex>
         <mu-flex>
             <mu-list >
-                <mu-list-item class="list-item" v-for="item,index in list" :key="index">
+                <mu-list-item v-for="item,index in list" :key="index" class="list-item">
                     <mu-list-item-content>
                         <div class="item-title">{{item.type}}</div>
                         <div class="item-time">{{item.time}}</div>

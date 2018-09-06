@@ -2,18 +2,18 @@
   <div>
     <Swiper :images="images"/>
     <Notice :message-count="messageCount"/>
-    <Header title="免费专区" subtitle="探索更多" :link="'/home/freezone'"/>
-    <FreeList :free-list='freeList'/>
+    <Header :link="'/home/freezone'" title="免费专区" subtitle="探索更多"/>
+    <FreeList :free-list="freeList"/>
     <div class="sepline"/>
 
-    <Header title="视野" subtitle="探索更多" :link="'/home/visionList'" />
-    <DisCoverVisionList :vision-list='list'/>
+    <Header :link="'/home/visionList'" title="视野" subtitle="探索更多" />
+    <DisCoverVisionList :vision-list="list"/>
     <div class="sepline"/>
-    <Header title="在线课堂" subtitle="探索更多" :link="'/home/videoList'"/>
-    <DisCoverVideoList :video-list='videoList'/>
+    <Header :link="'/home/videoList'" title="在线课堂" subtitle="探索更多"/>
+    <DisCoverVideoList :video-list="videoList"/>
     <div class="sepline" />
-    <Header title="读书会" subtitle="探索更多" :link="'/home/readings'"/>
-    <BookList :book-list='bookList'/>
+    <Header :link="'/home/readings'" title="读书会" subtitle="探索更多"/>
+    <BookList :book-list="bookList"/>
     <div class="homePosition"/>
 
   </div>
@@ -30,6 +30,15 @@ import BookList from './BookList.vue'
 
 export default {
   name: 'Homepage',
+  components: {
+    Swiper,
+    Notice,
+    Header,
+    FreeList,
+    DisCoverVisionList,
+    DisCoverVideoList,
+    BookList
+  },
   data: function() {
     return {
       images: [
@@ -178,15 +187,6 @@ export default {
         }
       ]
     }
-  },
-  components: {
-    Swiper,
-    Notice,
-    Header,
-    FreeList,
-    DisCoverVisionList,
-    DisCoverVideoList,
-    BookList
   }
   // props:['bannerList']
 }

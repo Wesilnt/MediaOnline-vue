@@ -1,6 +1,6 @@
 <template>
     <div class="free">
-        <div class="freeCell" v-for="(item, index) in freeList" :key="index">
+        <div v-for="(item, index) in freeList" :key="index" class="freeCell">
             <img class="freeicon" src="" alt="">
             <span class="content">{{item.type}}|{{item.title}}</span>
         </div>

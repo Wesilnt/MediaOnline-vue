@@ -2,15 +2,15 @@
   <div class="my">
       <div justify-content="center">
           <div class="user-info">
-              <img class="user-info-avatar" :src="avatarUrl">
+              <img :src="avatarUrl" class="user-info-avatar">
               <span class="user-info-nickname">{{nickName}}</span>
               <div class="edit-info">完善资料领书币</div>
           </div>
-          <div class='background-cover'/>
+          <div class="background-cover"/>
           <div class="grid-list">
-              <div class="grid-item" v-for="item,index in list" :key="'tile' + index">
+              <div v-for="item,index in list" :key="'tile' + index" class="grid-item">
                   <router-link :to="item.name">
-                      <img class="img" :src="item.image">
+                      <img :src="item.image" class="img">
                   </router-link>
                   <span class="title">{{item.title}}</span>
               </div>

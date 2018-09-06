@@ -1,7 +1,7 @@
 <template>
     <div class="help">
         <div>
-            <textarea class="input-text" rows="8" v-bind="content" placeholder="请填写您的意见和建议"/>
+            <textarea v-bind="content" class="input-text" rows="8" placeholder="请填写您的意见和建议"/>
             <button class="submit-button">提交反馈</button>
             <p class="text-desc">紧急问题可以通过以下方式联系我们：</p>
             <p class="text-mail">qhht@con.shbaoyuantech.com</p>

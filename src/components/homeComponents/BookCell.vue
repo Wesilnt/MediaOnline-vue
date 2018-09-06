@@ -1,6 +1,6 @@
 <template>
     <div class="cell">
-        <img class="cover" :src="book.url" alt="">
+        <img :src="book.url" class="cover" alt="">
         <img class="play-button" src="../../assets/home_video_play.png" alt="">
         <img v-if="book.isNew" src="" alt="">
         <p class="title">{{book.title}}</p>

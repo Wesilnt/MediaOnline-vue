@@ -14,6 +14,9 @@ import videoListItem from './components/videoListItem.vue'
 
 export default {
   name: 'VideoList',
+  components: {
+    videolistitem: videoListItem
+  },
   data() {
     return {
       dataList: [
@@ -65,10 +68,7 @@ export default {
       ]
     }
   },
-  methods: {},
-  components: {
-    videolistitem: videoListItem
-  }
+  methods: {}
 }
 </script>
 

@@ -19,7 +19,7 @@
         <div class="center-container">
           <div v-if="comment.type==0" class="text-container">
             <p :class="{fold:!comment.isExpand}">{{comment.content}}</p>
-            <span @click="comment.isExpand=true" v-if="!comment.isExpand">全文</span>
+            <span v-if="!comment.isExpand" @click="comment.isExpand=true">全文</span>
           </div>
           <div v-else class="voice-container">
             <img src="../assets/cmt_voice_icon.png">
@@ -27,7 +27,7 @@
           </div>
 
         </div>
-        <div class="bottom-container" v-if="comment.review.length>0">
+        <div v-if="comment.review.length>0" class="bottom-container">
           <font>{{comment.reviewer}}</font>
           {{comment.review}}
         </div>
@@ -38,14 +38,6 @@
 <script>
 import { Toast } from 'mint-ui'
 export default {
-  props: ['comment'],
-  data() {
-    return {
-      isSpeak: true,
-      isSpeaking: false,
-      commentContent: ''
-    }
-  },
   filters: {
     dateFormat: function(value) {
       var date = new Date(value)
@@ -55,11 +47,19 @@ export default {
       return y + '-' + (m < 10 ? '0' + m : m) + '-' + (d < 10 ? '0' + d : d)
     }
   },
+  props: ['comment'],
+  data() {
+    return {
+      isSpeak: true,
+      isSpeaking: false,
+      commentContent: ''
+    }
+  },
   methods: {
     //点赞
-    onPraise(index) {
-      let isPraised = comment.isPraised
-      comment.isPraised = !isPraised
+    onPraise() {
+      let isPraised = this.comment.isPraised
+      this.comment.isPraised = !isPraised
       Toast(isPraised ? '取消点赞' : '点赞成功')
     }
   }

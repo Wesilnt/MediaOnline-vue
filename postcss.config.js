@@ -1,9 +1,9 @@
 module.exports = {
   plugins: {
     autoprefixer: {},
-    "postcss-pxtorem": {
+    'postcss-pxtorem': {
       rootValue: 750,
-      selectorBlackList: ["mint-"]
+      selectorBlackList: ['mint-']
     }
   }
-};
+}

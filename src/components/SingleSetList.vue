@@ -1,6 +1,6 @@
 <template>
   <div class="singleset-list-conteiner">
-    <div class="singleset-list" v-for="item of list" :key="item.id">
+    <div v-for="item of list" :key="item.id" class="singleset-list">
       <singleset :item="item" :playing="item.id==playId"/>
     </div>
   </div>
@@ -10,9 +10,9 @@
 <script>
 import SingleSet from './SingleSetItem.vue'
 export default {
+  components: { singleset: SingleSet },
   //list 单集列表数据
   props: ['list', 'playId'],
-  components: { singleset: SingleSet },
   data() {
     return { playingIndex: 0 }
   }

@@ -1,9 +1,9 @@
 <template>
-    <div class="myScroll" v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="30">
-        <img class="head" :src="banner" alt="">
+    <div v-infinite-scroll="loadMore" class="myScroll" infinite-scroll-disabled="loading" infinite-scroll-distance="30">
+        <img :src="banner" class="head" alt="">
         <div class="middle"/>
-        <div class="list" v-for="(item, index) in list" :key="index">
-            <VisionCell :vision='item' class="cell"/>
+        <div v-for="(item, index) in list" :key="index" class="list">
+            <VisionCell :vision="item" class="cell"/>
             <div class="sep"/>
         </div>
         <div class="bottomtip">没有更多了，不要再拉了</div>
@@ -13,14 +13,14 @@
 <script>
 import VisionCell from '../../components/homeComponents/VisionCell.vue'
 export default {
+  components: {
+    VisionCell
+  },
   data() {
     return {
       banner: '',
       list: []
     }
-  },
-  components: {
-    VisionCell
   },
   created() {
     this.banner = 'http://dummyimage.com/1745x492/e3c933'

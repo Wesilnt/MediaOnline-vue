@@ -3,11 +3,11 @@
     <div class="validate-container">
       <div class="number-container">
         <span>手机号：</span>
-        <input placeholder="手机号" type="number" v-model="mobileNumber">
+        <input v-model="mobileNumber" placeholder="手机号" type="number">
       </div>
       <div class="code-container">
         <span>验证码：</span>
-        <input type="text" placeholder="验证码" v-model="validateCode">
+        <input v-model="validateCode" type="text" placeholder="验证码">
         <a href="" @click.prevent="sendCode">发送短信</a>
       </div>
       <a class="validate-confirm" @click.prevent="onConfirm">确认</a>

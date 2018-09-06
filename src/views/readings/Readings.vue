@@ -18,7 +18,7 @@
         </div>
         <!-- 3. 读书会列表 -->
         <div class="read-list-container">
-            <router-link to="/home/readings/book" class="list-item" v-for="(item,i) of readList" :key="i" tag="div">
+            <router-link v-for="(item,i) of readList" :key="i" to="/home/readings/book" class="list-item" tag="div">
                 <div class="top-container">
                     <span>上新</span>
                     <img src="../../assets/readings_item_play.png">

@@ -2,7 +2,7 @@
     <div class="books-container">
         <hr>
         <div class="book-list">
-            <router-link to="/audio/audioplay" v-for="item of bookList" :key="item.id">
+            <router-link v-for="item of bookList" :key="item.id" to="/audio/audioplay">
                 <div class="book-item">
                     <img :src="item.isPlaying?playingIcon:pauseIcon" >
                     <div class="book-content">

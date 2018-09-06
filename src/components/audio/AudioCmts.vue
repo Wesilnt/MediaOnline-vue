@@ -2,7 +2,7 @@
   <div class="comments-container">
     <!-- 全部留言 -->
     <div class="commment-list">
-      <div class="comment-item" v-for="item of comments" :key="item.id">
+      <div v-for="item of comments" :key="item.id" class="comment-item">
          <comment-item :comment="item"/>
       </div>
     </div>
@@ -11,11 +11,11 @@
       <div class="comment-method" @click="onCommentMethod">
         <img :src="isSpeak?require('../../assets/audio_cmt_text.png'):require('../../assets/audio_cmt_speak.png')">
       </div>
-      <div class="comment-button" :class="{touched:isSpeaking}">
+      <div :class="{touched:isSpeaking}" class="comment-button">
         <p v-if="isSpeak" class="speak-btn" @touchstart.prevent="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
           {{isSpeaking?'松开&nbsp;结束':'按住&nbsp;说话'}}
         </p>
-        <textarea v-else rows="1" placeholder="写评论" v-model="commentContent"/>
+        <textarea v-else v-model="commentContent" rows="1" placeholder="写评论"/>
       </div>
       <div v-if="!isSpeak" class="comment-send" @click="onSendComment">
         <img :src="commentContent.length<=0?require('../../assets/cmt_send_unable.png'):require('../../assets/cmt_send_abled.png')">
@@ -27,6 +27,9 @@
 import { Toast } from 'mint-ui'
 import CommentItem from '../CommentItem.vue'
 export default {
+  components: {
+    'comment-item': CommentItem
+  },
   data() {
     return {
       comments: [
@@ -84,9 +87,6 @@ export default {
       isSpeaking: false,
       commentContent: ''
     }
-  },
-  components: {
-    'comment-item': CommentItem
   },
   methods: {
     //切换评论方式

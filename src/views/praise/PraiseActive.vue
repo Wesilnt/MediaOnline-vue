@@ -1,9 +1,9 @@
 <template>
     <div class="praise-active">
-        <div class="active-item" v-for="(item,i) of actives" :key="i">
+        <div v-for="(item,i) of actives" :key="i" class="active-item">
             <img :src="item.url">
         </div>
-        <div @click="toHelp" class="help-btn">
+        <div class="help-btn" @click="toHelp">
             为TA助力，免费领取某某课程
         </div>
     </div>

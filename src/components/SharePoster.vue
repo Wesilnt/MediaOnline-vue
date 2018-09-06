@@ -6,8 +6,8 @@
     <div class="poster-save-btn">
       <button @click="saveImg">保存图片</button>
     </div>
-    <img src="" ref="saveimage">
-    <a href="" ref="download" download="poster" v-show="false"/>
+    <img ref="saveimage" src="">
+    <a v-show="false" ref="download" href="" download="poster"/>
   </div>
 </template> 
 <script>

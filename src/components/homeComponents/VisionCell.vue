@@ -3,7 +3,7 @@
     
     <ul>
       <li>
-        <img class="visionicon" :src="vision.url" alt="">
+        <img :src="vision.url" class="visionicon" alt="">
       </li>
       <li>
         <p class="visionTitle">{{vision.title}}</p>

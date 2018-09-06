@@ -2,7 +2,7 @@
   <div class="header">
     <div class="headerContent">
       <span class="headertitle">{{title}}</span>
-      <span @click="enterList" class="headermore">{{subtitle}}</span>
+      <span class="headermore" @click="enterList">{{subtitle}}</span>
     </div>
   </div>
 </template>

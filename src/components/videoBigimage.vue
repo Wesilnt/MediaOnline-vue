@@ -6,7 +6,7 @@
     <transition enter-active-class="fadeIn" leave-active-class="fadeOut">
       <div v-if="isExtend&&src" class="imageExtend" @click="isExtend=false">
         <div class="extend-back"/>
-        <img class="extend-img" :src="src">
+        <img :src="src" class="extend-img">
       </div>
     </transition>
   </div>

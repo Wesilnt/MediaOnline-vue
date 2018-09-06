@@ -6,7 +6,7 @@
             <a class="my-puzzle-nodata-btn">我要{{pageName}}</a>
         </div>
         <div v-else class="my-puzzle-container">
-            <mt-navbar fixed :value="currentType" v-model="selected">
+            <mt-navbar :value="currentType" v-model="selected" fixed>
                 <mt-tab-item
                         v-for="item in Object.keys(puzzleTabs)"
                         :key="item"
@@ -22,7 +22,7 @@
                         <Badge :status="puzzle.status===puzzleTypes.succeed?'success':puzzle.status===puzzleTypes.fail?'warning':'normal'">{{pageName}}</Badge>
                     </p>
                     <div class="qhht-flex">
-                        <img class="my-puzzle-content-img" :src="puzzle.url" :alt="puzzle.title" :title="puzzle.title">
+                        <img :src="puzzle.url" :alt="puzzle.title" :title="puzzle.title" class="my-puzzle-content-img">
                         <ul class="my-puzzle-display">
                             <li><h3> {{puzzle.title}}</h3></li>
                             <li>{{puzzle.description}}</li>

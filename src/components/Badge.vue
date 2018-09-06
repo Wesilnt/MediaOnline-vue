@@ -5,7 +5,6 @@
 export default {
   name: 'Badge',
   props: {
-    content: String,
     status: {
       default: 'normal',
       validator: function(value) {

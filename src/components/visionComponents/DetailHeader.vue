@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <span class="title">{{title}}</span>
-    <span @click="enterList" class="right">{{subtitle}} 
+    <span class="right" @click="enterList">{{subtitle}} 
       <img class="arrow" src="../../assets/vision_arrow.png" alt="">
     </span>
   </div>

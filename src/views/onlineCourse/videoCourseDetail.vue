@@ -1,27 +1,27 @@
 <template>
-    <div class="videocourse-detail-container" ref='father'>
+    <div ref="father" class="videocourse-detail-container">
         <div class="video-detail-header">
             <div class="video-detail-header-right-top">
-                <img class="video-detail-collect" :src="require('../../assets/images/onlinecourse_love_normal.png')" alt="">
-                <img class="video-detail-share" :src="require('../../assets/images/onlinecourse_video_detail_ic_editor.png')" alt="">
+                <img :src="require('../../assets/images/onlinecourse_love_normal.png')" class="video-detail-collect" alt="">
+                <img :src="require('../../assets/images/onlinecourse_video_detail_ic_editor.png')" class="video-detail-share" alt="">
             </div>
 
              <div class="video-detail-header-left-bottom">
                  <img :src="require('../../assets/images/onlinecourse-video-detail-header.jpg')" alt="" >
                  <label>开始播放</label>   
                  </div>
-             <img class="video-detail-header-gift" :src="require('../../assets/images/onlinecourse_video_ic_gift.png')" alt="">    
+             <img :src="require('../../assets/images/onlinecourse_video_ic_gift.png')" class="video-detail-header-gift" alt="">    
         </div>
 
         <!-- <div class="switchModule"> -->
-            <div class="video-detail-navbar" :class="navbarFixed == true ? 'isFixed' : ''" ref='navbar'>
-                <div class="video-detail-navbar-item" :class="{'selected':selected == index }" v-for="(item,index) of navbar" :key="index" @click="clickFnc(index)">{{item}}</div>
+            <div ref="navbar" :class="navbarFixed == true ? 'isFixed' : ''" class="video-detail-navbar">
+                <div v-for="(item,index) of navbar" :class="{'selected':selected == index }" :key="index" class="video-detail-navbar-item" @click="clickFnc(index)">{{item}}</div>
             </div>
         <!-- </div> -->
 
 
         <div class="video-detail-content">
-            <div class="video-detail-sction-title" ref='note'>
+            <div ref="note" class="video-detail-sction-title">
                 <h4>笔记</h4>
            </div>
            <course-introduce/>
@@ -30,18 +30,18 @@
                 <h4>自测题</h4>
             </div>
             <div class="video-detail-questions">
-                <img class="video-test-question-img" :src="require('../../assets/images/onlinecourse-pic-share.png')" alt="">
+                <img :src="require('../../assets/images/onlinecourse-pic-share.png')" class="video-test-question-img" alt="">
             </div>
             <div class="video-test-question-title">共3道自测题</div>
             <mt-progress :value="20" :bar-height="4"/>
             <div class="video-test-question-warn">在学习n分钟可解锁自测题</div>
             <hr class="video-detail-line">
-            <div class="video-detail-sction-title" ref='catalog'>
+            <div ref="catalog" class="video-detail-sction-title">
                 <h4>目录</h4>
             </div>
             <playlist v-for="(item,index) of dataList" :key="item.id" :iteminfo="item" :lastindex="index == (dataList.length - 1)"/>
             <hr class="video-detail-line">
-            <div class="video-detail-sction-title" ref='leavemessage'>
+            <div ref="leavemessage" class="video-detail-sction-title">
                 <h4>留言</h4>
                 <div class="video-detail-leavemessage">
                     <img src="../../assets/images/onlinecourse_video_detail_ic_editor.png" alt="">
@@ -60,6 +60,11 @@ import playlist from './components/playlist.vue'
 import videoComment from '../../components/video-comment.vue'
 export default {
   name: 'VideoColumnDetail',
+  components: {
+    'course-introduce': CourseIntroduce,
+    playlist: playlist,
+    'video-comment': videoComment
+  },
   data() {
     return {
       navbar: ['资料', '目录', '留言'],
@@ -86,6 +91,12 @@ export default {
         }
       ]
     }
+  },
+  mounted() {
+    window.addEventListener('scroll', this.handleScroll)
+  },
+  destroyed() {
+    window.removeEventListener('scroll', this.handleScroll)
   },
   methods: {
     clickFnc(index) {
@@ -153,17 +164,6 @@ export default {
         this.selected = 2
       }
     }
-  },
-  components: {
-    'course-introduce': CourseIntroduce,
-    playlist: playlist,
-    'video-comment': videoComment
-  },
-  mounted() {
-    window.addEventListener('scroll', this.handleScroll)
-  },
-  destroyed() {
-    window.removeEventListener('scroll', this.handleScroll)
   }
 }
 </script>

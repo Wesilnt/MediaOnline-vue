@@ -1,7 +1,7 @@
 <template>
     <div class="list">
-        <div class="cell" v-for="(item, index) in visionList" :key="index">
-            <VisionCell :vision='item'/>
+        <div v-for="(item, index) in visionList" :key="index" class="cell">
+            <VisionCell :vision="item"/>
         </div>
     </div>
 </template>
@@ -9,10 +9,10 @@
 <script>
 import VisionCell from './VisionCell.vue'
 export default {
-  props: ['visionList'],
   components: {
     VisionCell
-  }
+  },
+  props: ['visionList']
 }
 </script>
 
