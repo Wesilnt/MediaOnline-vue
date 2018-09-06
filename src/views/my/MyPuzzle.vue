@@ -15,7 +15,10 @@
                     <span class="my-puzzle-content-cell-date">拼团时间：{{puzzle.time}}</span>
                     <Badge :status="puzzle.status===puzzleTypes.succeed?'success':puzzle.status===puzzleTypes.fail?'warning':'normal'"></Badge>
                 </p>
-                <div>{{puzzle}}</div>
+                <div class="qhht-flex">
+                    <img class="my-puzzle-content-img" src="http://img.zcool.cn/community/01867b56b02cf432f875520fad3d02.jpg@1280w_1l_2o_100sh.jpg" :alt="puzzle.title" :title="puzzle.title">
+                    {{puzzle}}
+                </div>
             </div>
         </div>
     </section>
@@ -29,7 +32,7 @@ export default {
   name: "MyPuzzle",
   data: function() {
     return {
-      selected: '0'
+      selected: "0"
     };
   },
   computed: {
@@ -104,7 +107,15 @@ export default {
         flex-grow: 1;
         color: @fail;
       }
+        .qhht-flex:first-child {
+            margin-bottom: 24px;
+        }
     }
+      &-img{
+          width:  136px;
+          height: 180px;
+          border-radius: 6px;
+      }
   }
 }
 </style>
