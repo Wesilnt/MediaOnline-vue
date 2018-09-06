@@ -53,7 +53,10 @@
 
     <!-- 4. 作品简介 -->
     <div class="book-introduce-container">
-      <span>音频简介</span>
+      <div class="book-introduce-header">
+        <span>音频简介</span>
+        <span>共{{bookList.length}}集</span>
+      </div>
       <div class="introduce-content">
         <p>
           人类教育部新课必读书目，国民四大才子宅王鹏代表作，现代诗性小说大师之作。 人类教育部新课必读书目，国民四大才子宅王鹏代表作，现代诗性小说大师之作。 人类教育部新课必读书目，国民四大才子宅王鹏代表作，现代诗性小说大师之作。
@@ -65,28 +68,7 @@
     </div>
     <hr>
     <!-- 5. 作品单集/章集 播放列表 -->
-    <div class="book-list-container">
-      <router-link to="/audio/audioplay" v-for="item of bookList" :key="item.id" class="book-item" tag="div">
-        <div class="item-content">
-          <div class="item-icon" :class="{'icon-playing':item.isPlaying}">
-            <img :src="item.isPlaying?require('../../assets/readings_detail_play.png'):require('../../assets/readings_detail_pause.png')">
-          </div>
-          <div class="item-describe">
-            <h3 :class="{'item-playing':item.isPlaying}">
-              发刊词：为什么抱元科技没有食堂？
-            </h3>
-            <h4>
-              史上最会钓鱼的老头
-            </h4>
-            <div class="bottom-container">
-              <span v-if="item.isAudition">试听</span>
-              <p>00:06:22 | 已听1%</p>
-            </div>
-          </div>
-        </div>
-        <hr>
-      </router-link>
-    </div>
+    <singleset-list :list="bookList" :playId="0"></singleset-list>
     <!-- 6. 分页布局 -->
     <div class="load-more-container">
       <span>没有更多了，不要再拉啦～</span>
@@ -95,31 +77,124 @@
   </div>
 </template>
 <script>
+import SingleSetList from "../../components/SingleSetList.vue";
 export default {
   data() {
     return {
       bookList: [
-        { isAudition: true, isPlaying: true },
-        { isAudition: true, isPlaying: false },
-        { isAudition: false, isPlaying: false },
-        { isAudition: false, isPlaying: false },
-        { isAudition: false, isPlaying: false },
-        { isAudition: false, isPlaying: false },
-        { isAudition: false, isPlaying: false },
-        { isAudition: false, isPlaying: false }
+        {
+          id: 0,
+          title: "发刊词：为什么抱元科技没有食堂？",
+          subtitle: "史上最会钓鱼的老头",
+          totaltime: 140,
+          learntime: 40,
+          isAudition: true,
+          isPlaying: true
+        },
+        {
+          id: 1,
+          title: "发刊词：为什么抱元科技没有食堂？",
+          subtitle: "史上最会钓鱼的老头",
+          totaltime: 140,
+          learntime: 40,
+          isAudition: true,
+          isPlaying: false
+        },
+        {
+          id: 2,
+          title: "发刊词：为什么抱元科技没有食堂？",
+          subtitle: "史上最会钓鱼的老头",
+          totaltime: 140,
+          learntime: 40,
+          isAudition: false,
+          isPlaying: false
+        },
+        {
+          id: 3,
+          title: "发刊词：为什么抱元科技没有食堂？",
+          subtitle: "史上最会钓鱼的老头",
+          totaltime: 140,
+          learntime: 40,
+          isAudition: false,
+          isPlaying: false
+        },
+        {
+          id: 4,
+          title: "发刊词：为什么抱元科技没有食堂？",
+          subtitle: "史上最会钓鱼的老头",
+          totaltime: 140,
+          learntime: 40,
+          isAudition: false,
+          isPlaying: false
+        },
+        {
+          id: 5,
+          title: "发刊词：为什么抱元科技没有食堂？",
+          subtitle: "史上最会钓鱼的老头",
+          totaltime: 140,
+          learntime: 40,
+          isAudition: false,
+          isPlaying: false
+        },
+        {
+          id: 6,
+          title: "发刊词：为什么抱元科技没有食堂？",
+          subtitle: "史上最会钓鱼的老头",
+          totaltime: 140,
+          learntime: 40,
+          isAudition: false,
+          isPlaying: false
+        },
+        {
+          id: 7,
+          title: "发刊词：为什么抱元科技没有食堂？",
+          subtitle: "史上最会钓鱼的老头",
+          totaltime: 140,
+          learntime: 40,
+          isAudition: false,
+          isPlaying: false
+        },
+        {
+          id: 8,
+          title: "发刊词：为什么抱元科技没有食堂？",
+          subtitle: "史上最会钓鱼的老头",
+          totaltime: 140,
+          learntime: 40,
+          isAudition: false,
+          isPlaying: false
+        },
+        {
+          id: 9,
+          title: "发刊词：为什么抱元科技没有食堂？",
+          subtitle: "史上最会钓鱼的老头",
+          totaltime: 140,
+          learntime: 40,
+          isAudition: false,
+          isPlaying: false
+        },
+        {
+          id: 10,
+          title: "发刊词：为什么抱元科技没有食堂？",
+          subtitle: "史上最会钓鱼的老头",
+          totaltime: 140,
+          learntime: 40,
+          isAudition: false,
+          isPlaying: false
+        }
       ]
-    }
+    };
   },
+  components: { "singleset-list": SingleSetList },
   methods: {
     toLookWhole() {
       this.$router.push({
-        path: '/home/readings/summary',
+        path: "/home/readings/summary",
         query: {},
         replace: true
-      }) //query参数，replace 表示当前组件移除
+      }); //query参数，replace 表示当前组件移除
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 .book-detail-container {
@@ -212,12 +287,23 @@ export default {
     flex-direction: column;
     padding: 0 40px;
     box-sizing: content-box;
-    span {
+    .book-introduce-header {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
       margin-top: 48px;
+    }
+    .book-introduce-header :nth-child(1) {
       font-size: 32px;
       line-height: 36px;
       font-weight: 800;
       color: rgb(62, 62, 83);
+    }
+    .book-introduce-header :nth-child(2) {
+      font-size: 24px;
+      align-self: flex-end;
+      line-height: 24px;
+      color: rgb(170, 175, 188);
     }
     .introduce-content {
       margin-top: 40px;
@@ -245,81 +331,7 @@ export default {
     }
   }
   //5. 作品单集/章集列表
-  .book-list-container {
-    display: flex;
-    flex-direction: column;
-    .book-item {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      .item-icon {
-        align-self: center;
-        width: 96px;
-        height: 96px;
-        padding: 28px 31px 28px 35px;
-        box-sizing: border-box;
-        background-color: #fde3e3;
-        border-radius: 96px;
-      }
-      .icon-playing {
-        padding: 31px 28px 31px 29px;
-      }
-      .item-icon img {
-        width: 28px;
-        height: 40px;
-        margin: auto 0;
-      }
-      .icon-playing img {
-        width: 38px;
-        height: 34px;
-        margin: auto 0;
-      }
-    }
-    .book-item .item-content {
-      margin-left: 36px;
-      display: flex;
-      flex-direction: row;
-    }
-    .item-describe {
-      display: flex;
-      flex-direction: column;
-      margin-left: 20px;
-      h3 {
-        font-size: 28px;
-        color: rgb(22, 35, 60);
-        margin: 24px 0 0 0;
-        line-height: 14px;
-      }
-      h4 {
-        margin: 20px 0 0 0;
-        font-size: 24px;
-        line-height: 24px;
-        color: rgb(102, 102, 102);
-      }
-      .item-playing {
-        color: rgb(255, 163, 47);
-      }
-    }
-    .bottom-container {
-      display: flex;
-      flex-direction: row;
-      margin: 20px 0 24px 0;
-      align-items: center;
-    }
-    .bottom-container span {
-      background-color: #ea605c;
-      color: white;
-      padding: 2px 10px;
-      border-radius: 10px;
-      font-size: 26px;
-      margin-right: 20px;
-    }
-    .bottom-container p {
-      font-size: 24px;
-      color: rgb(148, 154, 170);
-      margin: 0;
-    }
-  }
+
   // 6. 分页布局
   .load-more-container {
     width: 100%;
