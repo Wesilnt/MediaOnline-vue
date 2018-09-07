@@ -17,7 +17,7 @@
       </div>
       <!-- outline -->
       <div class="outline bottomline">
-        <div class="title">课程列表
+        <div class="noticeBuyText">课程列表
           <span class="count">(共30讲)</span>
         </div>
         <img class="outlineImage" src="">
@@ -29,13 +29,23 @@
       <DetailHeader title="试看课程" subtitle="全部" />
       <SingleSetList :list='courseList'></SingleSetList>
     </div>
-    <!-- try -->
+    <!-- message -->
     <div id="message" ref="message" class="message bottomline">
       <DetailHeader title="精选留言" subtitle="全部" />
       <div v-for="item of comments" :key="item.id" class="comment-item">
-         <comment-item :comment="item"/>
+        <comment-item :comment="item" />
       </div>
+    </div>
+
+    <div class="noticeBuyArea">
+      <div class="noticeBuyText">
+        购买须知
+        <p class="noticeBuyTextDetail">
+基于用户的滚动位置来定位。 粘性定位的元素是依赖于用户的滚动，在 position:relative 与 position:fixed 定位之间切换。 基于用户的滚动位置来定位。 粘性定位的元素是依赖于用户的滚动，在 position:relative 与 position:fixed 定位之间切换。 
+        </p>
       </div>
+    </div>
+    <tools-navbar :btnstate="0"/>
   </div>
 
 </template>
@@ -46,11 +56,13 @@ import arrowUp from '../../assets/vison_arrow_up.png'
 import arrowDown from '../../assets/vision_arrow_down.png'
 import SingleSetList from '../../components/SingleSetList.vue'
 import CommentItem from '../../components/CommentItem.vue'
+import toolsNavbar from '../../components/toolsNavbar.vue'
 export default {
   components: {
     DetailHeader,
     SingleSetList,
-    CommentItem
+    CommentItem,
+    toolsNavbar
   },
   props: ['id'],
   data() {
@@ -275,7 +287,7 @@ export default {
   border-bottom: 8px solid rgb(238, 238, 238);
 }
 
-.title {
+.noticeBuyText {
   font-size: 32px;
   font-weight: bolder;
   color: rgb(39, 51, 75);
@@ -301,6 +313,12 @@ export default {
   right: 56px;
   bottom: 60px;
 }
-
-
+.noticeBuyArea{
+  margin-bottom: 200px;
+}
+.noticeBuyTextDetail {
+  margin-top: 10px;
+  color: rgb(128, 128, 128);
+  font-weight: 400;
+}
 </style>
