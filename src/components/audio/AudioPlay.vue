@@ -23,10 +23,12 @@
     </div>
     <!-- 进度条 -->
     <div class="slider-container">
-      <div slot="start">{{currentTime | formatDuring}}</div>
-      <mt-range ref="mtrange" v-model="currentTime" :min="0" :max="duration" :step="100/duration" :bar-height="2"/>
+      <div slot="start">{{parseInt(currentTime) | formatDuring}}</div>
+      <!-- <mt-range ref="mtrange" v-model="currentTime" :min="0" :max="duration" :step="100/duration" :bar-height="2"/> -->
+    <input type="range" @input="onInputChange" v-model="currentTime" ref="range" :min="0" :max="duration" />
       <div slot="end">{{ duration | formatDuring}}</div>
     </div>
+    <!-- <vue-slider></vue-slider> -->
     <!-- <div class="play-slider">
       <span>05:32</span>
       <mu-slider :display-value="display" @change="sliderChange" class="demo-slider" v-model="background"></mu-slider>
@@ -90,7 +92,7 @@ export default {
       popupVisible: false, //是否显示音频列表弹框
       playIndex: 0, //播放第几首
       showShare: false, //是否显示分享框
-      currentTime: 0, //播放音频进度
+      currentTime: '0', //播放音频进度
       duration: 100, //播放音频最大时长
       touching: false, //slider触摸
       playList: [
@@ -129,22 +131,35 @@ export default {
     AudioTask.getInstance().addTimeListener(this.onTimeUpdate)
     AudioTask.getInstance().addStateListener(this.onStateUpdate)
   },
+  destroyed() {
+    AudioTask.getInstance().removeTimeListener(this.onTimeUpdate)
+    AudioTask.getInstance().removeStateListener(this.onStateUpdate)
+  },
   mounted: function() {
-    this.$refs.mtrange.$refs.thumb.addEventListener('touchstart', e => {
+    this.$refs.range.addEventListener('touchstart', e => {
+      // this.$refs.mtrange.$refs.thumb.addEventListener('touchstart', e => {
       this.touching = true
+      // this.touching = true
       this.touchStart = e.changedTouches[0].clientX
     })
-    this.$refs.mtrange.$refs.thumb.addEventListener('touchend', e => {
-      console.log(this.$refs.mtrange.$refs.thumb)
-      if (e.changedTouches[0].clientX - this.touchStart < 5) return
-      AudioTask.getInstance().seekTo(this.currentTime)
+    this.$refs.range.addEventListener('touchend', e => {
+      // console.log(this.$refs.mtrange.$refs.thumb)
+      // if (e.changedTouches[0].clientX - this.touchStart < 5) return
+      AudioTask.getInstance().seekTo(parseInt(this.currentTime))
       this.touching = false
     })
-    this.$refs.mtrange.$refs.thumb.addEventListener('touchcancel', () => {
+    this.$refs.range.addEventListener('touchcancel', () => {
       this.touching = false
     })
   },
   methods: {
+    onInputChange(e) {
+      let percent = parseInt(e.target.value * 100 / e.target.max)
+      e.target.style =
+        'background: linear-gradient(to right,#FFCD7D ' +
+        percent +
+        '%,  #E5E5E5 1%, #E5E5E5'
+    },
     //进度条拖动
     sliderChange(value) {
       console.log(value)
@@ -205,6 +220,13 @@ export default {
       if (this.touching) return
       this.currentTime = currentTime
       this.duration = duration
+      this.$nextTick(() => {
+        let percent = parseInt(Math.ceil(currentTime * 100 / duration))
+        this.$refs.range.style =
+          'background: linear-gradient(to right,#FFCD7D ' +
+          percent +
+          '%, #E5E5E5 1%, #E5E5E5'
+      })
     },
     //播放状态监听
     onStateUpdate(state) {
@@ -287,118 +309,92 @@ export default {
       height: 40px;
     }
   }
+
   .slider-container {
     padding: 0 24px;
     display: flex;
     flex-direction: row;
     align-items: center;
     margin-top: 32px;
-    .mt-range-thumb {
-      background-image: url(../../assets/audio_play_slider.png);
-      background-size: 32px;
-      background-color: transparent;
-      height: 32px;
-      width: 32px;
-    }
-    .mt-range {
-      flex: 1;
-      .mt-range-runway {
-        overflow: hidden;
-        border-top-color: rgb(229, 229, 229);
-        border-top-style: solid;
-      }
-      .mt-range-progress {
-        background-color: rgb(255, 205, 126);
-        height: 4px;
-      }
-    }
+
     > :nth-child(1) {
       margin-right: 20px;
     }
     > :nth-child(3) {
       margin-left: 20px;
     }
+    input[type='range'] {
+      // background-image: -webkit-linear-gradient(left,red, yellow);   //我咋记得是 to left
+      background: #e5e5e5;
+      /*-webkit-box-shadow: 0 1px 0 0px #424242, 0 1px 0 #060607 inset, 0px 2px 10px 0px black inset, 1px 0px 2px rgba(0, 0, 0, 0.4) inset, 0 0px 1px rgba(0, 0, 0, 0.6) inset;*/
+      -webkit-appearance: none; /*去除默认样式*/
+      background-color: #ebeff4;
+      /*border-radius: 15px;*/
+      width: 80% !important;
+      -webkit-appearance: none;
+      height: 4px;
+      padding: 0;
+      border: none;
+      /*input的长度为80%，margin-left的长度为10%*/
+    }
+    input[type='range']::-webkit-slider-thumb {
+      -webkit-appearance: none; /*去除默认样式*/
+      cursor: default;
+      top: 0;
+      height: 32px;
+      width: 32px;
+      transform: translateY(0px);
+      /*background: none repeat scroll 0 0 #5891f5;*/
+      background: url(../../assets/audio_play_slider.png) no-repeat;
+      background-position: center;
+      background-size: 32px;
+      border-radius: 15px;
+      // border: 5px solid #006eb3;
+      /*-webkit-box-shadow: 0 -1px 1px #fc7701 inset;*/
+    }
   }
-  // .mt-range {
-  //   > :nth-child(1),
-  //   :nth-child(3) {
-  //   }
-  // margin-top: 32px;
+
+  // .play-slider {
+  //   padding: 0 24px;
+  //   margin-top: 32px;
+  //   display: flex;
+  //   flex-direction: row;
+  //   justify-content: space-between;
   //   align-items: center;
-  // padding: 0 24px;
-  //   :nth-child(1),
-  //   :nth-child(3) {
+  //   span {
   //     color: rgb(189, 192, 199);
   //     font-size: 20px;
   //   }
-  //   .mt-range-content {
-  //     width: 74.66666667%;
-  //     margin: 0 20px 0 20px;
-  //     box-sizing: border-box;
-  //   }
-  //   .mt-range-runway {
-  //     width: 100%;
-  //     overflow: hidden;
-  //     border-top-color: rgb(229, 229, 229);
-  //     border-top-style: solid;
-  //   }
-  //   .mt-range-progress {
-  //     background-color: rgb(255, 205, 126);
-  //     height: 4px;
-  //   }
-  // .mt-range-thumb {
-  //   background-image: url(../../assets/audio_play_slider.png);
-  //   background-size: 32px;
-  //   background-color: transparent;
-  //   height: 32px;
-  //   width: 32px;
-  //     position: absolute;
-  //     margin-top: -16px;
-  // top: 50%;
-  //     background-repeat: no-repeat;
+  //   .mu-slider {
+  //     margin: 0 20px;
+  //     .mu-slider-track {
+  //       background-color: rgb(229, 229, 229);
+  //     }
+  //     .mu-slider-fill {
+  //       background-color: rgb(255, 205, 126);
+  //     }
+  //     .mu-slider-thumb {
+  //       background-image: url(../../assets/audio_play_slider.png);
+  //       background-size: 32px;
+  //       height: 32px;
+  //       background-color: transparent;
+  //       width: 32px;
+  //       max-width: 32px;
+  //       max-height: 32px;
+  //       border: none;
+  //     }
+  //     .zero .mu-slider-thumb {
+  //       border: none;
+  //     }
   //   }
   // }
 
-  .play-slider {
-    padding: 0 24px;
-    margin-top: 32px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    span {
-      color: rgb(189, 192, 199);
-      font-size: 20px;
-    }
-    .mu-slider {
-      margin: 0 20px;
-      .mu-slider-track {
-        background-color: rgb(229, 229, 229);
-      }
-      .mu-slider-fill {
-        background-color: rgb(255, 205, 126);
-      }
-      .mu-slider-thumb {
-        background-image: url(../../assets/audio_play_slider.png);
-        background-size: 32px;
-        height: 32px;
-        background-color: transparent;
-        width: 32px;
-        max-width: 32px;
-        max-height: 32px;
-        border: none;
-      }
-      .zero .mu-slider-thumb {
-        border: none;
-      }
-    }
-  }
   .play-btns {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     margin-top: 58px;
-    padding: 0 36px 52px;
+    padding: 0 36px 22px;
     box-sizing: content-box;
     .btn-item {
       display: flex;

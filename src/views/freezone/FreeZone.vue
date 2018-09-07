@@ -20,8 +20,8 @@
                 <button :class="{subscribe:isSubscribe}" @click="isSubscribe = !isSubscribe">订阅</button> 
         </div>
     </div>
-</template>
-<script>
+</template> 
+<script>  
 export default {
   data() {
     return {
