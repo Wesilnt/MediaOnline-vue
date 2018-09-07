@@ -22,7 +22,6 @@
     </div>
 </template>
 <script>
-import { Toast } from 'mint-ui'
 export default {
   data() {
     return {

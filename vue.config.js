@@ -1,5 +1,5 @@
 module.exports = {
-  css: {
+ /* css: {
     loaderOptions: {
       css: {
         // options here will be passed to css-loader
@@ -7,12 +7,15 @@ module.exports = {
       postcss: {
         // options here will be passed to postcss-loader
         plugins: [
-          require('postcss-px2rem')({
-            remUnit: 75
+          require('postcss-pxtorem')({
+            remUnit:  37.5,
+            // rootValue: 37.5,
+            selectorBlackList: ['van-'],
+            // propList: ['src']
           })
         ]
       }
     }
-  },
+  },*/
   lintOnSave: undefined
 }

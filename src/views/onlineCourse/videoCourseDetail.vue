@@ -55,6 +55,11 @@
 </template>
 
 <script>
+// import { getVideoList } from '../../services/onlinecourse/videolist.js'
+// const response = getVideoList({ type : 0, pageSize : 10})
+// console.log(response)
+// console.log("heloo world")
+
 import CourseIntroduce from '../../components/CourseIntroduce.vue'
 import playlist from './components/playlist.vue'
 import videoComment from '../../components/video-comment.vue'

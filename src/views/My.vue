@@ -91,7 +91,7 @@ export default {
   methods: {}
 }
 </script>
-<style lang="scss" scoped>
+<style lang="less" scoped>
 .my {
   padding: 0;
 }
@@ -164,6 +164,7 @@ export default {
   height: 120px;
 }
 .title {
+  font-size: 26px;
   padding-top: 24px;
 }
 </style>
