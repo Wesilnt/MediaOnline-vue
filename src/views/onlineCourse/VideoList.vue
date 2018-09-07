@@ -1,9 +1,9 @@
 <template>
     <div class="home-container">
-        <div class="home-header"><img :src="require('../../assets/images/onlinecourse-pic-share.png')" alt=""></div>
+        <div class="home-header"><img :src="columnHeaderImage" alt=""></div>
             <div class="home-video">
             <router-link to="/videoColumnDetail">
-                <videolistitem v-for="item of dataList" :key="item.id" :iteminfo="item"/>
+                <videolistitem v-for="item of columns" :key="item.id" :iteminfo="item"/>
             </router-link>
     </div>
     <div class="home-warnTip">没有更多了,不要在拉了~</div>
@@ -11,68 +11,43 @@
 </template>
 <script>
 import videoListItem from './components/videoListItem.vue'
-import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions } = createNamespacedHelpers('videolist')
-export default {
-  name: 'VideoList',
-  data() {
-    return {
-      dataList: [
-        {
-          id: 0,
-          title: '中华五千年 (上)',
-          info: '听历史故事,涨人生知识',
-          name: '伍智',
-          job: '国学老师',
-          price: '99.00',
-          number: '100'
+import { createNamespacedHelpers } from "vuex";
+const { mapState, mapActions } = createNamespacedHelpers("columnInfo");
+    export default {
+        name:'VideoList',
+        data(){
+            
+            return {
+                
+                dataList:[
+                    {id:0,title:'中华五千年 (上)',info:'听历史故事,涨人生知识',name:'伍智',job:'国学老师',price:'99.00',number:'100'},
+                    {id:1,title:'中华五千年 (上)',info:'听历史故事,涨人生知识',name:'伍智',job:'国学老师',price:'99.00',number:'100'},
+                    {id:2,title:'中华五千年 (上)',info:'听历史故事,涨人生知识',name:'伍智',job:'国学老师',price:'99.00',number:'100'},
+                    {id:3,title:'中华五千年 (上)',info:'听历史故事,涨人生知识',name:'伍智',job:'国学老师',price:'99.00',number:'100'},
+                    {id:4,title:'中华五千年 (上)',info:'听历史故事,涨人生知识',name:'伍智',job:'国学老师',price:'99.00',number:'100'},
+                ]
+            }
+
         },
-        {
-          id: 1,
-          title: '中华五千年 (上)',
-          info: '听历史故事,涨人生知识',
-          name: '伍智',
-          job: '国学老师',
-          price: '99.00',
-          number: '100'
+
+        computed: {
+            ...mapState([          
+                "columnHeaderImage",
+                "columns",
+                "columnOriginData"   
+            ]),
         },
-        {
-          id: 2,
-          title: '中华五千年 (上)',
-          info: '听历史故事,涨人生知识',
-          name: '伍智',
-          job: '国学老师',
-          price: '99.00',
-          number: '100'
+        components:{
+          "videolistitem" : videoListItem
         },
-        {
-          id: 3,
-          title: '中华五千年 (上)',
-          info: '听历史故事,涨人生知识',
-          name: '伍智',
-          job: '国学老师',
-          price: '99.00',
-          number: '100'
+        created() {
+            this.getColumnList({type:1005,pageSize:10})           
         },
-        {
-          id: 4,
-          title: '中华五千年 (上)',
-          info: '听历史故事,涨人生知识',
-          name: '伍智',
-          job: '国学老师',
-          price: '99.00',
-          number: '100'
+        methods:{
+            ...mapActions([
+                'getColumnList'
+            ])
         }
-      ]
-    }
-  },
-  components: {
-    videolistitem: videoListItem
-  },
-  created() {
-    console.log('开始触发getVideoList方法')
-    this.$store.dispatch('getVideoList')
-  }
 }
 </script>
 
