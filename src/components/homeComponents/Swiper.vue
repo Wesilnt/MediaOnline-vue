@@ -1,10 +1,10 @@
 <template>
     <div>
-        <mt-swipe :auto="3000">
-            <mt-swipe-item v-for="(list,index) in images" :key="index">
-                <img :src="list.url" :alt="list.desc" >
-            </mt-swipe-item>
-        </mt-swipe>
+        <van-swipe :auto="2000">
+            <van-swipe-item v-for="(list,index) in images" :key="index">
+                <img class="swiperImg" :src="list.url" :alt="list.desc" >
+            </van-swipe-item>
+        </van-swipe>
     </div>
 </template>
 
@@ -15,12 +15,9 @@ export default {
 </script>
 
 <style lang='less' scoped>
-.mint-swipe {
+.swiperImg {
   width: 100%;
-  height: 350px;
-  img {
-    width: 100%;
-    height: 350px;
-  }
+  height: 46.7vw;
+ 
 }
 </style>
