@@ -10,13 +10,5 @@ module.exports = {
       ediaQuery: false // (Boolean) Allow px to be converted in media queries.
     },
     autoprefixer: {},
-    /*'postcss-pxtorem': {
-      remUnit: 75,
-      rootValue: 16,
-      selectorBlackList: ['van-'],
-      // minPixelValue: 6,
-      // remPrecision:8,
-      propList: ['*']
-    }*/
   }
 }

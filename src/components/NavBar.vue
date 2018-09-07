@@ -76,7 +76,7 @@ export default {
 }
 .navbar-item-title {
   /*font-weight: bolder;*/
-    font-size: 20px;
+  font-size: 20px;
   padding-top: 6px;
   padding-bottom: 4px;
 }

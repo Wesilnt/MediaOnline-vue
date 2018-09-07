@@ -148,9 +148,9 @@ export default {
     flex-grow: 1;
     margin-left: 32px;
     align-self: start;
-      h3{
-          font-size: 32px;
-      }
+    h3 {
+      font-size: 32px;
+    }
     li:not(:last-child) {
       margin-bottom: 32px;
     }
