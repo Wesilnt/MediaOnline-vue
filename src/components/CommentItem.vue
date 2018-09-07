@@ -36,7 +36,6 @@
   </div>
 </template>
 <script>
-import { Toast } from 'mint-ui'
 export default {
   filters: {
     dateFormat: function(value) {

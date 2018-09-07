@@ -11,12 +11,10 @@
 </template>
 <script>
 import videoListItem from './components/videoListItem.vue'
-
+import { createNamespacedHelpers } from 'vuex'
+const { mapState, mapActions } = createNamespacedHelpers('videolist')
 export default {
   name: 'VideoList',
-  components: {
-    videolistitem: videoListItem
-  },
   data() {
     return {
       dataList: [
@@ -68,7 +66,13 @@ export default {
       ]
     }
   },
-  methods: {}
+  components: {
+    videolistitem: videoListItem
+  },
+  created() {
+    console.log('开始触发getVideoList方法')
+    this.$store.dispatch('getVideoList')
+  }
 }
 </script>
 

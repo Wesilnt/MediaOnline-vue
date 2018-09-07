@@ -4,6 +4,7 @@ import counter from './module/counter'
 import mocker from './module/mock'
 import myPuzzle_Praise from './module/myPuzzle_Praise'
 import homeData from './module/homeData'
+import videolist from './module/onlinecourse/videolist'
 
 Vue.use(Vuex)
 export default new Vuex.Store({
@@ -12,6 +13,7 @@ export default new Vuex.Store({
     counter,
     mocker,
     myPuzzle_Praise,
-    homeData
+    homeData,
+    videolist
   }
 })

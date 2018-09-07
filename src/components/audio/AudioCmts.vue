@@ -24,7 +24,6 @@
   </div>
 </template>
 <script>
-import { Toast } from 'mint-ui'
 import CommentItem from '../CommentItem.vue'
 export default {
   components: {

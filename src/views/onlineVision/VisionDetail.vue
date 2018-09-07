@@ -313,7 +313,7 @@ export default {
   right: 56px;
   bottom: 60px;
 }
-.noticeBuyArea{
+.noticeBuyArea {
   margin-bottom: 200px;
 }
 .noticeBuyTextDetail {

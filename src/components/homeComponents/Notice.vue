@@ -37,7 +37,7 @@ export default {
       background-color: rgb(253, 231, 231);
       margin-left: 8px;
       margin-right: 30px;
-      margin-top: -4px;
+      margin-top: 2px;
     }
     .message {
       margin-top: 2px;
