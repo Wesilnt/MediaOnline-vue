@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import counter from './module/counter'
 import mocker from './module/mock'
 import myPuzzle_Praise from './module/myPuzzle_Praise'
+import homeData from './module/homeData'
 
 Vue.use(Vuex)
 export default new Vuex.Store({
@@ -10,6 +11,7 @@ export default new Vuex.Store({
   modules: {
     counter,
     mocker,
-    myPuzzle_Praise
+    myPuzzle_Praise,
+    homeData
   }
 })
