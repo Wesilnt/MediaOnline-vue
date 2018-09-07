@@ -78,7 +78,7 @@ export default {
           title: '系统消息'
         },
         {
-          name: '/my/my-help',
+          name: '/my/Help',
           image: help,
           title: '意见反馈'
         }

@@ -2,9 +2,11 @@
     <div class="help">
         <div>
             <textarea v-bind="content" class="input-text" rows="8" placeholder="请填写您的意见和建议"/>
-            <button class="submit-button">提交反馈</button>
+            <div class="sub-dev">
+                <button class="button">提交反馈</button>
+            </div>
             <p class="text-desc">紧急问题可以通过以下方式联系我们：</p>
-            <p class="text-mail">qhht@con.shbaoyuantech.com</p>
+            <div class="text-mail"><div class="mail-label">邮箱： </div>qhht@con.shbaoyuantech.com</div>
         </div>
     </div>
 </template>
@@ -24,36 +26,57 @@ export default {
 
 <style scoped>
 .help {
-  padding: 40px 20px 20px 20px;
-  font-size: 16px;
+  padding: 40px 20px 0px 20px;
 }
 .input-text {
   width: 100%;
-  height: 200px;
-  placeholder: 'text';
-  border-radius: 10px;
-  padding: 20px;
-  background: rgb(247, 247, 247);
-}
-.submit-button {
-  width: 100%;
-  height: 40px;
-  margin-top: 30px;
+  height: 400px;
   border-radius: 30px;
-  background-color: rgb(251, 252, 252);
-  color: rgb(172, 172, 180);
-  font-size: 16px;
+  padding: 40px;
+  background: #f7f7f7;
+  border-color: #b5b5b5;
+  color: #b5b5b5;
+  font-size: 28px;
+  box-shadow: 0px 0px 0px #ffffff;
+  border-width: 1px;
+  -webkit-appearance: none;
 }
-.text-desc {
-  padding-top: 20px;
-  padding-bottom: 0px;
-  width: 100%;
+.sub-dev{
+    padding: 100px 55px 0px 55px;
+}
+.button {
+    width: 100%;
+    height: 80px;
+    background: #f7f7f7;
+    color: #b5b5b5;
+    border-radius: 50px;
+    border-color: #b5b5b5;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 28px;
+    border-width: 1px;
+}
+.text-desc{
+    width: 100%;
+    padding: 80px 55px 32px 55px;
+    color: black;
+    font-size: 28px;
+    float: left;
+    color: #3f4651;
+    font-size: 28px;
+}
+.mail-label{
   color: black;
+  font-size: 28px;
+    float: left;
+    color: rgb(172, 172, 180);
+    font-size: 28px;
 }
 .text-mail {
   width: 100%;
-  padding-top: 0px;
-  color: rgb(255, 163, 47);
-  font-size: 16px;
+  padding: 32px 55px 0px 55px;
+  color: #ffa32f;
+  font-size: 28px;
 }
 </style>

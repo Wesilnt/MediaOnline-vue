@@ -2,6 +2,7 @@ import FreeList from '../views/FreeList'
 import PageLoading from '../components/PageLoading'
 const myPuzzle_Praise = () =>
   import(/* webpackChunkName: "myPuzzle_Praise" */ '../views/my/MyPuzzle_Praise')
+const help = () => import("../views/my/Help")
 const PageInfo_From_My = [
   {
     path: '/my/my-purchase',
@@ -40,9 +41,9 @@ const PageInfo_From_My = [
     component: FreeList
   },
   {
-    path: '/my/my-help',
+    path: '/my/Help',
     // name: "BookList",
-    component: FreeList
+    component: help
   }
 ]
 
