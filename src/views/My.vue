@@ -8,7 +8,7 @@
           </div>
           <div class="background-cover"/>
           <div class="grid-list">
-              <div v-for="item,index in list" :key="'tile' + index" class="grid-item">
+              <div v-for="item in list" :key="item.name"  class="grid-item">
                   <router-link :to="item.name">
                       <img :src="item.image" class="img">
                   </router-link>
