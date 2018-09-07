@@ -69,7 +69,7 @@ export default {
 .comment-item {
   display: flex;
   flex-direction: row;
-  padding: 40px 40px 0;
+  padding: 0px 40px 48px;
   .comment-header {
     width: 80px;
     height: 80px;

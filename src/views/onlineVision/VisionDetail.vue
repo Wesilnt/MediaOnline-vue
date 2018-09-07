@@ -26,12 +26,16 @@
     </div>
     <!-- try -->
     <div id="try" ref="try" class="try bottomline">
-      <DetailHeader title="试看课程" subtitle="全部"/>
+      <DetailHeader title="试看课程" subtitle="全部" />
+      <SingleSetList :list='courseList'></SingleSetList>
     </div>
     <!-- try -->
     <div id="message" ref="message" class="message bottomline">
-      <DetailHeader title="精选留言" subtitle="全部"/>
-    </div>
+      <DetailHeader title="精选留言" subtitle="全部" />
+      <div v-for="item of comments" :key="item.id" class="comment-item">
+         <comment-item :comment="item"/>
+      </div>
+      </div>
   </div>
 
 </template>
@@ -40,10 +44,13 @@
 import DetailHeader from '../../components/visionComponents/DetailHeader.vue'
 import arrowUp from '../../assets/vison_arrow_up.png'
 import arrowDown from '../../assets/vision_arrow_down.png'
-
+import SingleSetList from '../../components/SingleSetList.vue'
+import CommentItem from '../../components/CommentItem.vue'
 export default {
   components: {
-    DetailHeader
+    DetailHeader,
+    SingleSetList,
+    CommentItem
   },
   props: ['id'],
   data() {
@@ -54,7 +61,87 @@ export default {
       selected: '1',
       navBars: ['介绍', '试听', '留言'],
       currentNav: 0,
-      showall: false
+      showall: false,
+      courseList: [
+        {
+          id: 0,
+          title: '发刊词：为什么抱元科技没有食堂？',
+          subtitle: '史上最会钓鱼的老头',
+          totaltime: 140,
+          learntime: 40,
+          isAudition: true,
+          isPlaying: true
+        },
+        {
+          id: 1,
+          title: '发刊词：为什么抱元科技没有食堂？',
+          subtitle: '史上最会钓鱼的老头',
+          totaltime: 140,
+          learntime: 40,
+          isAudition: true,
+          isPlaying: false
+        },
+        {
+          id: 2,
+          title: '发刊词：为什么抱元科技没有食堂？',
+          subtitle: '史上最会钓鱼的老头',
+          totaltime: 140,
+          learntime: 40,
+          isAudition: false,
+          isPlaying: false
+        }
+      ],
+      comments: [
+        {
+          id: Date.now() + 1, //评论ID
+          isPraised: true, //当前用户是否对评论点赞
+          type: 0, //评论类型 0 文字  1 语音
+          isExpand: false, //默认是否展开
+          content:
+            '此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论',
+          review:
+            '此处为老师回复内容此处为老师回复内容此处为老师回复内容此处为老师回复内容此处为老师回复内容此处为老师回复内容', //回复内容
+          reviewer: '伍智老师：', //回复老师姓名
+          praiseNum: 1314, //点赞人数
+          audioUrl: '', //语音地址
+          audioTime: 0, //语音时长
+          commentHead: '', //评论人头像地址
+          commentName: '古风流', //评论人名称
+          commentTime: Date.now() //评论时间
+        },
+        {
+          id: Date.now() + 2, //评论ID
+          isPraised: true, //当前用户是否对评论点赞
+          type: 1, //评论类型 0 文字  1 语音
+          isExpand: false, //默认是否展开
+          content:
+            '此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论',
+          review: '此处为老师回复内容此处为老师回复内容此处为老师回复内', //回复内容
+          reviewer: '伍智老师：', //回复老师姓名
+          praiseNum: 520, //点赞人数
+          audioUrl: '', //语音地址
+          audioTime: 23, //语音时长
+          commentHead: '', //评论人头像地址
+          commentName: '古风流', //评论人名称
+          commentTime: Date.now() //评论时间
+        },
+        {
+          id: Date.now() + 3, //评论ID
+          isPraised: true, //当前用户是否对评论点赞
+          type: 0, //评论类型 0 文字  1 语音
+          isExpand: false, //默认是否展开
+          content:
+            '此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论',
+          review: '此处为老师回复内容此处为老师回复内容此处为老师回复内', //回复内容
+          reviewer: '伍智老师：', //回复老师姓名
+          praiseNum: 520, //点赞人数
+          audioUrl: '', //语音地址
+          audioTime: 23, //语音时长
+          commentHead: '', //评论人头像地址
+          commentName: '古风流', //评论人名称
+          commentTime: Date.now() //评论时间
+        }
+      ]
     }
   },
   mounted() {
@@ -214,15 +301,6 @@ export default {
   right: 56px;
   bottom: 60px;
 }
-.try {
-  width: 100%;
-  height: 1200px;
-  background-color: blue;
-}
 
-.message {
-  width: 100%;
-  height: 1200px;
-  background-color: yellow;
-}
+
 </style>

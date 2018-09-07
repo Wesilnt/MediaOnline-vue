@@ -1,7 +1,7 @@
 <template>
     <div class="free">
         <div v-for="(item, index) in freeList" :key="index" class="freeCell">
-            <img class="freeicon" src="" alt="">
+            <img class="freeicon" src="../assets/home_knowledge_play.png" alt="">
             <span class="content">{{item.type}}|{{item.title}}</span>
         </div>
           <div class="line"/>
