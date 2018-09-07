@@ -14,7 +14,7 @@ export async function queryAlbums(params) {
 
 /* POST parmas_formData */
 export async function queryPhotos(params) {
-  return request(`/photos?${stringify(params)}`)
+  return request(`/photos?${stringify(params)}`);
 }
 /*export async function queryPhotos(params) {
     return request.post('/photos', params);

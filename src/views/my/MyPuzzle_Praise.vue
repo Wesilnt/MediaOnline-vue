@@ -9,26 +9,27 @@
             <van-tabs v-model="selected">
                 <van-tab  v-for="item in Object.keys(puzzleTabs)"
                            :title="item==='waiting'?`${pageName}${puzzleTabs[item]}`: puzzleTabs[item]">
+                    <div class="my-puzzle-content">
+                        <div v-for="puzzle in puzzleList" :key="puzzle.id" class="my-puzzle-content-cell">
+                            <p class="qhht-flex">
+                                <i class="qhht-icon my-puzzle-content-cell-icon"/>
+                                <span class="my-puzzle-content-cell-date">{{pageName}}时间：{{puzzle.time}}</span>
+                                <Badge :status="puzzle.status===puzzleTypes.succeed?'success':puzzle.status===puzzleTypes.fail?'warning':'normal'">{{pageName}}</Badge>
+                            </p>
+                            <div class="qhht-flex">
+                                <img :src="puzzle.url" :alt="puzzle.title" :title="puzzle.title" class="my-puzzle-content-img">
+                                <ul class="my-puzzle-display">
+                                    <li><h3> {{puzzle.title}}</h3></li>
+                                    <li>{{puzzle.description}}</li>
+                                    <li><span class="my-puzzle-total-price">￥{{puzzle.totalPrice}}</span> / 共{{puzzle.totalLessons}}讲</li>
+                                </ul>
+                            </div>
+                            <div class="my-puzzle-price">{{pageName}}价：<span class="my-puzzle-price-num">￥{{puzzle.price}}</span></div>
+                        </div>
+                    </div>
                 </van-tab>
             </van-tabs>
-            <div class="my-puzzle-content">
-                <div v-for="puzzle in puzzleList" :key="puzzle.id" class="my-puzzle-content-cell">
-                    <p class="qhht-flex">
-                        <i class="qhht-icon my-puzzle-content-cell-icon"/>
-                        <span class="my-puzzle-content-cell-date">{{pageName}}时间：{{puzzle.time}}</span>
-                        <Badge :status="puzzle.status===puzzleTypes.succeed?'success':puzzle.status===puzzleTypes.fail?'warning':'normal'">{{pageName}}</Badge>
-                    </p>
-                    <div class="qhht-flex">
-                        <img :src="puzzle.url" :alt="puzzle.title" :title="puzzle.title" class="my-puzzle-content-img">
-                        <ul class="my-puzzle-display">
-                            <li><h3> {{puzzle.title}}</h3></li>
-                            <li>{{puzzle.description}}</li>
-                            <li><span class="my-puzzle-total-price">￥{{puzzle.totalPrice}}</span> / 共{{puzzle.totalLessons}}讲</li>
-                        </ul>
-                    </div>
-                    <div class="my-puzzle-price">{{pageName}}价：<span class="my-puzzle-price-num">￥{{puzzle.price}}</span></div>
-                </div>
-            </div>
+
         </div>
     </section>
 </template>
@@ -88,7 +89,9 @@ export default {
     font-size: 24px;
     min-height: 100vh;
     background-color: #fffcf7;
-    /*:global {*/
+    .van-tabs {
+      padding-top: 0;
+    }
     .van-tab {
       position: relative;
       border: 0;
@@ -116,7 +119,6 @@ export default {
     /*}*/
   }
   &-content {
-    margin-top: 80px;
     padding: 32px 40px;
     &-cell {
       position: relative;

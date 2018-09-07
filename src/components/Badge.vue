@@ -1,5 +1,5 @@
 <template>
-    <mt-badge :color="badge.color" :class="{succ:badge.succ}"><slot />{{badge.text}}</mt-badge>
+    <span class="qhht-badge" :class="`qhht-badge-${status}`"><slot />{{badge.text}}</span>
 </template>
 <script>
 export default {
@@ -11,44 +11,39 @@ export default {
         // 这个值必须匹配下列字符串中的一个
         return ['success', 'warning', 'normal'].indexOf(value) !== -1
       }
-    },
-    succColor: {
-      type: String,
-      default: 'transparent'
-    },
-    warnColor: {
-      type: String,
-      default: '#CCC'
-    },
-    normalColor: {
-      type: String,
-      default: '#ffa32f'
     }
   },
   computed: {
     badge: function() {
       let text = '中'
-      let color = this.normalColor
-      let succ = false
       if (this.status === 'success') {
         text = '成功'
-        color = this.succColor
-        succ = true
       } else if (this.status === 'warning') {
         text = '失败'
-        color = this.warnColor
       }
       return {
-        text,
-        color,
-        succ
+        text
       }
     }
   }
 }
 </script>
-<style scoped>
+<style scoped lang="less">
+.qhht-badge {
+  border-radius: 8px;
+  padding: 2px 8px;
+  color: #fff;
+  &-success {
+    color: #ffa32f;
+    background: transparent;
+  }
+  &-warning {
+    background: #ccc;
+  }
+  &-normal {
+    background: #ffa32f;
+  }
+}
 .succ {
-  color: #ffa32f;
 }
 </style>
