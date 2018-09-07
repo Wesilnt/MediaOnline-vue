@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import 'lib-flexible/flexible.js'
+import 'amfe-flexible/index.min.js'
 import './publicUIConfig/mintUIComponentImport'
 
 import App from './App.vue'

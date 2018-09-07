@@ -41,7 +41,7 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="less">
 .navbar {
   position: fixed;
   left: 0;
@@ -76,6 +76,7 @@ export default {
 }
 .navbar-item-title {
   /*font-weight: bolder;*/
+    font-size: 20px;
   padding-top: 6px;
   padding-bottom: 4px;
 }

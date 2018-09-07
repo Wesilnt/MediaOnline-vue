@@ -6,14 +6,11 @@
             <a class="my-puzzle-nodata-btn">我要{{pageName}}</a>
         </div>
         <div v-else class="my-puzzle-container">
-            <mt-navbar :value="currentType" v-model="selected" fixed>
-                <mt-tab-item
-                        v-for="item in Object.keys(puzzleTabs)"
-                        :key="item"
-                        :id="puzzleTypes[item]">
-                    {{item==='waiting'?`${pageName}${puzzleTabs[item]}`: puzzleTabs[item]}}
-                </mt-tab-item>
-            </mt-navbar>
+            <van-tabs v-model="selected">
+                <van-tab  v-for="item in Object.keys(puzzleTabs)"
+                           :title="item==='waiting'?`${pageName}${puzzleTabs[item]}`: puzzleTabs[item]">
+                </van-tab>
+            </van-tabs>
             <div class="my-puzzle-content">
                 <div v-for="puzzle in puzzleList" :key="puzzle.id" class="my-puzzle-content-cell">
                     <p class="qhht-flex">
@@ -39,7 +36,9 @@
 <script>
 import { createNamespacedHelpers } from 'vuex'
 import Badge from '../../components/Badge'
+
 const { mapState, mapActions } = createNamespacedHelpers('myPuzzle_Praise')
+
 export default {
   name: 'MyPuzzlePraise',
   data: function() {
@@ -86,34 +85,35 @@ export default {
 @fail: #ccc;
 .my-puzzle {
   &-container {
+    font-size: 24px;
     min-height: 100vh;
     background-color: #fffcf7;
-    :global {
-      .mint-tab-item {
-        position: relative;
-        border: 0;
-        padding: 28px 0;
-        color: #212d44;
-        &.is-selected {
-          color: @active;
-          &:after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            margin: 0 auto;
-            width: 120px;
-            height: 4px;
-            border-radius: 4px;
-            background: @active;
-          }
+    /*:global {*/
+    .van-tab {
+      position: relative;
+      border: 0;
+      padding: 28px 0;
+      color: #212d44;
+      &&--active {
+        color: @active;
+        &:after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          margin: 0 auto;
+          width: 120px;
+          height: 4px;
+          border-radius: 4px;
+          background: @active;
         }
       }
-      .mint-tab-item-label {
-        font-size: 24px;
-      }
     }
+    .van-ellipsis {
+      font-size: 36px;
+    }
+    /*}*/
   }
   &-content {
     margin-top: 80px;
@@ -148,6 +148,9 @@ export default {
     flex-grow: 1;
     margin-left: 32px;
     align-self: start;
+      h3{
+          font-size: 32px;
+      }
     li:not(:last-child) {
       margin-bottom: 32px;
     }
@@ -163,7 +166,7 @@ export default {
     &-num {
       font-weight: 600;
       color: #333;
-      font-size: 30px;
+      font-size: 26px;
     }
   }
   &-nodata {

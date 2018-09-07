@@ -3,7 +3,6 @@ import Router from 'vue-router'
 
 import NavBar from '../components/NavBar'
 // import Home from "../views/Home";
-// import My from "../views/My";
 // import VisionList from '../views/VisionList'
 // import VideoList from '../views/onlineCourse/VideoList'
 // import VisionDetail from '../views/VisionDetail'
@@ -38,7 +37,7 @@ const MyHOB = () => ({
   // 如果提供了超时时间且组件加载也超时了，
   // 则使用加载失败时使用的组件。默认值是：`Infinity`
   timeout: 3000
-})
+});
 
 Vue.use(Router)
 
