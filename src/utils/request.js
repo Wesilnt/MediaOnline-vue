@@ -63,9 +63,10 @@ const checkResponseCode = response => {
  * @return {object}           An object containing either "data" or "err"
  */
 function request(url, options) {
-  const accessToken = getAccessToken()
-  const refreshToken = getRefreshToken()
-  const baseURI = isUrl(url) ? '' : api
+  // const accessToken = getAccessToken();
+  const accessToken = '9009f5f8-e2bc-4cb0-98d9-721b32153c56'
+  const refreshToken = getRefreshToken();
+  const baseURI = isUrl(url) ? "" : api;
 
   const defaultOptions = {
     // credentials: 'include',
@@ -105,9 +106,9 @@ function request(url, options) {
     })
     .then(checkResponseCode)
     .catch(e => {
-      const { dispatch } = store
-      const status = e.name
-      if (status === '401-logout') {
+      // const { dispatch } = store;
+      const status = e.name;
+      if (status === "401-logout") {
         // dispatch({ type: "login/logout" });
       }
       if (status === 401) {

@@ -1,8 +1,11 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
-import counter from './module/counter'
-import mocker from './module/mock'
-import myPuzzle_Praise from './module/myPuzzle_Praise'
+
+import Vue from "vue";
+import Vuex from "vuex";
+import counter from "./module/counter";
+import mocker from "./module/mock";
+import myPuzzle_Praise from "./module/myPuzzle_Praise";
+import videolist from "./module/onlinecourse/videolist"
+
 
 Vue.use(Vuex)
 export default new Vuex.Store({
@@ -10,6 +13,8 @@ export default new Vuex.Store({
   modules: {
     counter,
     mocker,
-    myPuzzle_Praise
+    myPuzzle_Praise,
+    videolist
+
   }
 })
