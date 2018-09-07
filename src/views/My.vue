@@ -43,17 +43,17 @@ export default {
       headBg: bg,
       list: [
         {
-          name: '/my/my-purchase',
+          name: '/my/Purchase',
           image: purchase,
           title: '已购清单'
         },
         {
-          name: '/my/my-record',
+          name: '/my/Record',
           image: record,
           title: '播放记录'
         },
         {
-          name: '/my/my-like',
+          name: '/my/Like',
           image: like,
           title: '我喜欢的'
         },
@@ -63,7 +63,7 @@ export default {
           title: '我的拼团'
         },
         {
-          name: '/my/my-reply',
+          name: '/my/Reply',
           image: reply,
           title: '回应我的'
         },
@@ -73,7 +73,7 @@ export default {
           title: '我的集赞'
         },
         {
-          name: '/my/my-sysMessage',
+          name: '/my/SysMessage',
           image: sys,
           title: '系统消息'
         },

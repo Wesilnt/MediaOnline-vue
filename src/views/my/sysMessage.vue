@@ -34,25 +34,25 @@ export default {
     return {
       list: [
         {
-          name: '/my/purchase',
+          name: '/my/a',
           type: '系统通知',
           time: '08-08',
           content: '感谢您一直以来对秦汉胡同的支持'
         },
         {
-          name: '/my/purchase',
+          name: '/my/b',
           type: '小胡同',
           time: '08-08',
           content: '您的反馈我们已经收到，谢谢'
         },
         {
-          name: '/my/purchase',
+          name: '/my/c',
           type: '系统通知',
           time: '08-08',
           content: '感谢您一直以来对秦汉胡同的支持'
         },
         {
-          name: '/my/purchase',
+          name: '/my/d',
           type: '小胡同',
           time: '08-08',
           content: '您的反馈我们已经收到，谢谢'

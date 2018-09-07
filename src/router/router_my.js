@@ -1,23 +1,27 @@
-import FreeList from '../views/FreeList'
-import PageLoading from '../components/PageLoading'
+const purchase = () => import("../views/my/Purchase")
+const record = () => import("../views/my/Record")
+const like = () => import("../views/my/Like")
+const reply = () => import("../views/my/Reply")
 const myPuzzle_Praise = () =>
   import(/* webpackChunkName: "myPuzzle_Praise" */ '../views/my/MyPuzzle_Praise')
+const sysMessage = () => import("../views/my/SysMessage")
 const help = () => import("../views/my/Help")
+
 const PageInfo_From_My = [
   {
-    path: '/my/my-purchase',
+    path: '/my/Purchase',
     // name: "MyPurchase",
-    component: FreeList
+    component: purchase
   },
   {
-    path: '/my/my-record',
+    path: '/my/Record',
     // name: "VisionList",
-    component: FreeList
+    component: record
   },
   {
-    path: '/my/my-like',
+    path: '/my/Like',
     // name: "VisionDetail",
-    component: FreeList,
+    component: like,
     props: true
   },
   {
@@ -26,9 +30,9 @@ const PageInfo_From_My = [
     component: myPuzzle_Praise
   },
   {
-    path: '/my/my-reply',
+    path: '/my/Reply',
     // name: "BookList",
-    component: FreeList
+    component: reply
   },
   {
     path: '/my/my-praise',
@@ -36,9 +40,9 @@ const PageInfo_From_My = [
     component: myPuzzle_Praise
   },
   {
-    path: '/my/my-sysMessage',
+    path: '/my/SysMessage',
     // name: "BookList",
-    component: FreeList
+    component: sysMessage
   },
   {
     path: '/my/Help',

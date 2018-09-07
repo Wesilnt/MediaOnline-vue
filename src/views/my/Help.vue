@@ -41,37 +41,37 @@ export default {
   border-width: 1px;
   -webkit-appearance: none;
 }
-.sub-dev{
-    padding: 100px 55px 0px 55px;
+.sub-dev {
+  padding: 100px 55px 0px 55px;
 }
 .button {
-    width: 100%;
-    height: 80px;
-    background: #f7f7f7;
-    color: #b5b5b5;
-    border-radius: 50px;
-    border-color: #b5b5b5;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 28px;
-    border-width: 1px;
+  width: 100%;
+  height: 80px;
+  background: #f7f7f7;
+  color: #b5b5b5;
+  border-radius: 50px;
+  border-color: #b5b5b5;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 28px;
+  border-width: 1px;
 }
-.text-desc{
-    width: 100%;
-    padding: 80px 55px 32px 55px;
-    color: black;
-    font-size: 28px;
-    float: left;
-    color: #3f4651;
-    font-size: 28px;
-}
-.mail-label{
+.text-desc {
+  width: 100%;
+  padding: 80px 55px 32px 55px;
   color: black;
   font-size: 28px;
-    float: left;
-    color: rgb(172, 172, 180);
-    font-size: 28px;
+  float: left;
+  color: #3f4651;
+  font-size: 28px;
+}
+.mail-label {
+  color: black;
+  font-size: 28px;
+  float: left;
+  color: rgb(172, 172, 180);
+  font-size: 28px;
 }
 .text-mail {
   width: 100%;
