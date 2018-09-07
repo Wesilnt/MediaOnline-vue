@@ -193,7 +193,6 @@ export default {
       let scrollTop = Math.abs(
         this.$refs.detailmain.getBoundingClientRect().top
       )
-      console.log(scrollTop)
       // let introPosition = this.$el.querySelector("#intro").offsetTop - 40;
       let tryPosition = this.$el.querySelector('#try').offsetTop - 40
       let messagePosition = this.$el.querySelector('#message').offsetTop - 40

@@ -1,3 +1,7 @@
+import { stringify } from 'qs'
+import  request  from '../utils/request'
+
+
 const _bannerList = [
     {
         clickUrl: '#',
@@ -149,23 +153,23 @@ const _bookList = [
     }
 ]
 
-export default {
-    getBannerList(cb) {
-        setTimeout(() => cb(_bannerList), 100)
-    },
-    getFreeList(cb) {
+
+
+    export  function   getFreeList(cb) {
         setTimeout(() => cb(_freeList), 100)
-    },
-    getNewMessageCount(cb){
+    };
+    export  function   getNewMessageCount(cb){
         setTimeout(() => cb(_newMessageCount), 100)
-    },
-    getVisionList(cb) {
+    };
+    export  function  getVisionList(cb) {
         setTimeout(() => cb(_visionList), 100)
-    },
-    getVideoList(cb) {
+    };
+    export  function   getVideoList(cb) {
         setTimeout(() => cb(_videoList), 100)
-    },
-    getBookList(cb) {
+    };
+    export  function    getBookList(cb) {
         setTimeout(() => cb(_bookList), 100)
-    }
-}
+    };
+export async function getBannerList(params) {
+    return request(`/index/bannerList?${stringify(params)}`)
+  }

@@ -1,4 +1,4 @@
-import homeService from '../../services/homeService'
+import {getBannerList,getFreeList,getNewMessageCount, getVisionList,getVideoList,getBookList} from '../../services/homeService'
 
 const homeData = {
     namespaced: true,
@@ -11,33 +11,37 @@ const homeData = {
         bookList: []
     },
     actions: {
-        getBannerList({ commit }) {
-            homeService.getBannerList(bannerList => {
-                commit('setBannerList', bannerList)
-            })
+        async getBannerList({ commit }) {
+            // homeService.getBannerList(bannerList => {
+            //     commit('setBannerList', bannerList)
+            // })
+            console.log('获取banner')
+          let result = await getBannerList({type:0});
+          console.log(result);
+          commit('setBannerList', result)
         },
         getFreeList({ commit }) {
-            homeService.getFreeList(freeList => {
+            getFreeList(freeList => {
                 commit('setFreeList', freeList)
             })
         },
         getNewMessageCount({commit}){
-            homeService.getNewMessageCount(newMessageCount=>{
+            getNewMessageCount(newMessageCount=>{
                 commit('setNewMessageCount', newMessageCount)
             })
         },
         getVisionList({ commit }) {
-            homeService.getVisionList(visionList => {
+            getVisionList(visionList => {
                 commit('setVisionList', visionList)
             })
         },
         getVideoList({ commit }) {
-            homeService.getVideoList(videoList => {
+            getVideoList(videoList => {
                 commit('setVideoList', videoList)
             })
         },
         getBookList({ commit }) {
-            homeService.getBookList(bookList => {
+            getBookList(bookList => {
                 commit('setBookList', bookList)
             })
         }
