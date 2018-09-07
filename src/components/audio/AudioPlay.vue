@@ -74,7 +74,6 @@
   </div>
 </template>
 <script>
-import { Toast } from 'mint-ui'
 import SharePop from '../Share.vue'
 import AudioTask from '../../utils/AudioTask.js'
 

@@ -9,7 +9,7 @@ module.exports = {
       minPixelValue: 1, // (Number) Set the minimum pixel value to replace.
       ediaQuery: false // (Boolean) Allow px to be converted in media queries.
     },
-    autoprefixer: {}
+    autoprefixer: {},
     /*'postcss-pxtorem': {
       remUnit: 75,
       rootValue: 16,
