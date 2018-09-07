@@ -1,22 +1,23 @@
 <template>
     <div class="cl-videolist-container">
-        <div class="cl-videolist-item-title">{{iteminfo.title}}</div>
-        <div class="cl-videolist-item-info">{{iteminfo.info}}</div>
+        <div class="cl-videolist-item-title">{{iteminfo.name}}</div>
+        <div class="cl-videolist-item-info">{{iteminfo.briefIntro}}</div>
         <div class="cl-videolist-item-teacher">
-            <div class="cl-videolist-item-name">{{iteminfo.name}}</div>
-            <div class="cl-videolist-item-job">{{iteminfo.job}}</div>      
+            <div class="cl-videolist-item-name">{{iteminfo.commentator}}</div>
+            <div class="cl-videolist-item-job">{{iteminfo.commentatorIntro}}</div>      
         </div>
         <div class="cl-videolist-item-bottom">
-            <div class="cl-videolist-item-price">${{iteminfo.price}}</div>
-            <div class="cl-videolist-item-sets">共{{iteminfo.number}}讲</div>
+            <div class="cl-videolist-item-price">¥{{iteminfo.price}}</div>
+            <div class="cl-videolist-item-sets">共{{iteminfo.lessonCount}}讲</div>
         </div>
-        <img :src="require('../../../assets/images/onlinecourse-video-course-play.png')">
+        <img :src="iteminfo.coverPicH">
        
     </div>
 </template>
 
 <script>
 export default {
+  name:'videoListItem',
   props: ['iteminfo']
 }
 </script>
