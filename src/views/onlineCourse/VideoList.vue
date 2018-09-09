@@ -29,7 +29,6 @@ const { mapState, mapActions } = createNamespacedHelpers("columnInfo");
             }
 
         },
-
         computed: {
             ...mapState([          
                 "columnHeaderImage",

@@ -55,14 +55,11 @@
 </template>
 
 <script>
-// import { getVideoList } from '../../services/onlinecourse/videolist.js'
-// const response = getVideoList({ type : 0, pageSize : 10})
-// console.log(response)
-// console.log("heloo world")
-
 import CourseIntroduce from '../../components/CourseIntroduce.vue'
 import playlist from './components/playlist.vue'
 import videoComment from '../../components/video-comment.vue'
+import { createNamespacedHelpers } from "vuex";
+const { mapState, mapActions } = createNamespacedHelpers("videoCourseDetail");
 export default {
   name: 'VideoColumnDetail',
   components: {
@@ -97,6 +94,16 @@ export default {
       ]
     }
   },
+  computed: {
+    ...mapState([          
+        'lessonList',              //目录课程
+        'originData',            //接口返回数据
+        'videoBgImage',              //视频背景图
+        'videoNote',                 //课程笔记
+        'courseListImage',           //课程列表下面的大图展示
+        'videoCourseComments'      //视频课程的留言  
+    ]),
+  },
   mounted() {
     window.addEventListener('scroll', this.handleScroll)
   },
@@ -104,6 +111,9 @@ export default {
     window.removeEventListener('scroll', this.handleScroll)
   },
   methods: {
+    ...mapActions([
+        'getVideoCourseDetail'
+    ]),
     clickFnc(index) {
       this.selected = index
       console.log('currentindex=' + index)

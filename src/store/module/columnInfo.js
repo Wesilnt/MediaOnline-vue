@@ -17,7 +17,8 @@ const columnInfo = {
     actions:{
        async getColumnList ({ commit },{ type,pageSize }) {            
             //获取视频列表数据
-            const result = await getColumns({ type, pageSize })
+            const currentPage = 1
+            const result = await getColumns({ type, pageSize, currentPage })
             console.log(result)
             commit('addColumns',result)
         }

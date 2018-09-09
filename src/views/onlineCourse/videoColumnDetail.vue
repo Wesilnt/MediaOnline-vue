@@ -65,6 +65,8 @@ import playlist from './components/playlist.vue'
 import videoComment from '../../components/video-comment.vue'
 import toolsNavbar from '../../components/toolsNavbar.vue'
 import videoBigimage from '../../components/videoBigimage.vue'
+import { createNamespacedHelpers } from "vuex";
+const { mapState, mapActions } = createNamespacedHelpers("videoColumnDetail");
 export default {
   name: 'VideoColumnDetail',
   components: {
@@ -114,14 +116,28 @@ export default {
       ]
     }
   },
-  methods: {
-    clickFnc(index) {
-      this.selected = index
+    computed: {
+        ...mapState([          
+            'lessonList',              //试看课程数组
+            'originData',            //接口返回数据
+            'headImage',                 //头图
+            'columnIntroduce',           //专栏介绍
+            'courseListImage',           //课程列表下面的大图展示
+            'videoColumnComments',       //视频专栏的留言
+            'purchaseTip'  
+        ]),
     },
-    allFunc() {
-      console.log('点击全部')
+    methods: {
+        clickFnc(index) {
+            this.selected = index
+        },
+        allFunc() {
+            console.log('点击全部')
+        },
+        ...mapActions([
+            'getVideoColumnDetail'
+        ])
     }
-  }
 }
 </script>
 

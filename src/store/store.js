@@ -5,6 +5,8 @@ import mocker from "./module/mock";
 import myPuzzle_Praise from "./module/myPuzzle_Praise";
 import columnInfo from "./module/columnInfo"
 import homeData from './module/homeData'
+import videoColumnDetail from './module/videoColumnDetail'
+import videoCourseDetail from './module/videoCourseDetail'
 
 Vue.use(Vuex)
 export default new Vuex.Store({
@@ -14,7 +16,9 @@ export default new Vuex.Store({
     mocker,
     myPuzzle_Praise,
     homeData,
-    columnInfo
+    columnInfo,
+    videoColumnDetail,
+    videoCourseDetail
 
   }
 })
