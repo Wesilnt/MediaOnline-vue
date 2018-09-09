@@ -254,7 +254,7 @@ export default {
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 .audioplay-container {
   display: flex;
   flex-direction: column;
