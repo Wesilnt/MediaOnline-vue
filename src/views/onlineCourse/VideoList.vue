@@ -2,12 +2,10 @@
     <div class="home-container">
         <div class="home-header"><img :src="columnHeaderImage" alt=""></div>
             <div class="home-video">
-            <router-link to="/videoColumnDetail">
-                <videolistitem v-for="item of columns" :key="item.id" :iteminfo="item"/>
-            </router-link>
+                <videolistitem v-for="item of columns" :key="item.id" :iteminfo="item" @jumpEvent="jumpToVideoDetail(item.id)"/>
+            </div>
+        <div class="home-warnTip">没有更多了,不要在拉了~</div>
     </div>
-    <div class="home-warnTip">没有更多了,不要在拉了~</div>
-</div>
 </template>
 <script>
 import videoListItem from './components/videoListItem.vue'
@@ -18,14 +16,7 @@ const { mapState, mapActions } = createNamespacedHelpers("columnInfo");
         data(){
             
             return {
-                
-                dataList:[
-                    {id:0,title:'中华五千年 (上)',info:'听历史故事,涨人生知识',name:'伍智',job:'国学老师',price:'99.00',number:'100'},
-                    {id:1,title:'中华五千年 (上)',info:'听历史故事,涨人生知识',name:'伍智',job:'国学老师',price:'99.00',number:'100'},
-                    {id:2,title:'中华五千年 (上)',info:'听历史故事,涨人生知识',name:'伍智',job:'国学老师',price:'99.00',number:'100'},
-                    {id:3,title:'中华五千年 (上)',info:'听历史故事,涨人生知识',name:'伍智',job:'国学老师',price:'99.00',number:'100'},
-                    {id:4,title:'中华五千年 (上)',info:'听历史故事,涨人生知识',name:'伍智',job:'国学老师',price:'99.00',number:'100'},
-                ]
+               
             }
 
         },
@@ -45,7 +36,12 @@ const { mapState, mapActions } = createNamespacedHelpers("columnInfo");
         methods:{
             ...mapActions([
                 'getColumnList'
-            ])
+            ]),
+            //点击具体的一个视频专栏
+            jumpToVideoDetail(courseId){
+                console.log('路由跳转 courseID = ' + courseId)
+                this.$router.push({name:'videoColumnDetail',params:{ courseId }})
+            }
         }
 }
 </script>

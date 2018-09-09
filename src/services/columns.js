@@ -17,6 +17,6 @@ export async function getVideoColumnDetail(params) {
 }
 
 // 获取视频课程详情
-export async function getVideolessonDetail(params) {
+export async function getVideoLessonDetail(params) {
   return request(`/lesson/lessonDetail?${stringify(params)}`)
 }

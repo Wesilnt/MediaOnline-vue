@@ -110,6 +110,11 @@ export default {
   destroyed() {
     window.removeEventListener('scroll', this.handleScroll)
   },
+  created(){
+      //获取课程ID
+      const lessonId = this.$route.params.lessonID
+      this.getVideoCourseDetail({lessonId})
+  },
   methods: {
     ...mapActions([
         'getVideoCourseDetail'

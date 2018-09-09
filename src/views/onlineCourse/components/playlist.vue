@@ -1,5 +1,5 @@
 <template>
-    <div class="cl-playlist-container-father">
+    <div class="cl-playlist-container-father" @click="$emit('jumpEvent')">
         <div class="cl-playlist-container">
             <div class="cl-list-left"><img :class="{'cl-img-active' : iteminfo.isPlaying}" :src="iteminfo.isPlaying ? imgPlaying : imgPause"></div>
             <div class="cl-list-right">

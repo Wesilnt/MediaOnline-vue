@@ -33,9 +33,9 @@
                     <img :src="require('../../assets/images/onlinecourse_arrow_right.png')" class="videocol-allbtn-icon">
                 </div>
            </div>
-            <router-link to="/videoCourseDetail">
-                <playlist v-for="(item,index) of dataList" :key="item.id" :iteminfo="item" :lastindex="index == (dataList.length - 1)"/>
-            </router-link>
+
+            <playlist v-for="(item,index) of lessonList" :key="item.id" :iteminfo="item" :lastindex="index == (dataList.length - 1)" @jumpEvent="gotoVideoCourseDetailPage(item.id)"/>
+
 
             <hr class="lineone">
             <div class="videocol-sction-title">
@@ -68,54 +68,57 @@ import videoBigimage from '../../components/videoBigimage.vue'
 import { createNamespacedHelpers } from "vuex";
 const { mapState, mapActions } = createNamespacedHelpers("videoColumnDetail");
 export default {
-  name: 'VideoColumnDetail',
-  components: {
-    'course-introduce': CourseIntroduce,
-    playlist: playlist,
-    'video-comment': videoComment,
-    'tools-navbar': toolsNavbar,
-    'vue-bigimage': videoBigimage
-  },
-  data() {
-    return {
-      navbar: ['介绍', '试看', '留言'],
-      selected: 0,
-      dataList: [
-        {
-          id: 0,
-          isPlaying: true,
-          title: '发刊词:为什么抱元没有食堂?',
-          info: '史上最会钓鱼的老头'
-        },
-        {
-          id: 1,
-          isPlaying: false,
-          title: '001 名画为什么这么值钱',
-          info: '史上最会钓鱼的老头'
-        },
-        {
-          id: 2,
-          isPlaying: true,
-          title: '002 斯大林格勒战役?',
-          info: '史上最会钓鱼的老头'
+    name: 'VideoColumnDetail',
+    components: {
+        'course-introduce': CourseIntroduce,
+        playlist: playlist,
+        'video-comment': videoComment,
+        'tools-navbar': toolsNavbar,
+        'vue-bigimage': videoBigimage
+    },
+    data() {
+        return {
+        navbar: ['介绍', '试看', '留言'],
+        selected: 0,
+        dataList: [
+            {
+            id: 0,
+            isPlaying: true,
+            title: '发刊词:为什么抱元没有食堂?',
+            info: '史上最会钓鱼的老头'
+            },
+            {
+            id: 1,
+            isPlaying: false,
+            title: '001 名画为什么这么值钱',
+            info: '史上最会钓鱼的老头'
+            },
+            {
+            id: 2,
+            isPlaying: true,
+            title: '002 斯大林格勒战役?',
+            info: '史上最会钓鱼的老头'
+            }
+        ],
+        purchaseList: [
+            {
+            id: 10,
+            info: '少年艺术课哈哈哈哈少年艺术课哈哈哈哈少年艺术课哈哈哈哈'
+            },
+            {
+            id: 11,
+            info: '少年艺术课哈哈哈哈少年艺术课哈哈哈哈少年艺术课哈哈哈哈'
+            },
+            {
+            id: 12,
+            info: '少年艺术课哈哈哈哈少年艺术课哈哈哈哈少年艺术课哈哈哈哈'
+            }
+        ]
         }
-      ],
-      purchaseList: [
-        {
-          id: 10,
-          info: '少年艺术课哈哈哈哈少年艺术课哈哈哈哈少年艺术课哈哈哈哈'
-        },
-        {
-          id: 11,
-          info: '少年艺术课哈哈哈哈少年艺术课哈哈哈哈少年艺术课哈哈哈哈'
-        },
-        {
-          id: 12,
-          info: '少年艺术课哈哈哈哈少年艺术课哈哈哈哈少年艺术课哈哈哈哈'
-        }
-      ]
-    }
-  },
+    },
+    watch:{
+
+    },
     computed: {
         ...mapState([          
             'lessonList',              //试看课程数组
@@ -127,17 +130,30 @@ export default {
             'purchaseTip'  
         ]),
     },
+   
     methods: {
+        ...mapActions([
+            "getVideoColumnDetail"
+        ]),
+
         clickFnc(index) {
             this.selected = index
         },
         allFunc() {
             console.log('点击全部')
         },
-        ...mapActions([
-            'getVideoColumnDetail'
-        ])
-    }
+        gotoVideoCourseDetailPage(lessonID){
+            console.log('路由跳转 lessonID = ' + lessonID)
+            this.$router.push({name:'videoCourseDetail',params:{ lessonID }})
+        }
+
+    }, 
+
+    created (){
+        //获取专栏Id
+        const courseId = this.$route.params.courseId 
+        this.getVideoColumnDetail({courseId : courseId})
+    },
 }
 </script>
 

@@ -1,4 +1,4 @@
-import { getColumns } from '../../services/columns.js'
+import { getVideoLessonDetail } from '../../services/columns.js'
 
 const videoCourseDetail = {
     namespaced: true, // 设置命名空间 ，保持数据独立性
@@ -14,18 +14,18 @@ const videoCourseDetail = {
     mutations: {
         bindVideoCourseDetail(state,payload) {
             state.originData = payload
-            state.lessonList = payload.categoryList[0].lessonList
             state.headImage = payload.profilePic
             state.columnIntroduce = payload.description
             state.courseListImage = payload.outlinePic
-            // state.purchaseTip = payload.
 
         }
     },
     actions:{
        async getVideoCourseDetail ({ commit },{ lessonId }) {            
             //获取视频列表数据
-            const result = await getVideolessonDetail({ lessonId })
+            console.log(lessonId)
+            const result = await getVideoLessonDetail({ lessonId })
+            console.log('视频课程详情接口')
             console.log(result)
             commit('bindVideoCourseDetail',result)
         }

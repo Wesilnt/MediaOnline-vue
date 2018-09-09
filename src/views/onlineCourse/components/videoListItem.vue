@@ -1,5 +1,5 @@
 <template>
-    <div class="cl-videolist-container" :style="{ background : 'url('+iteminfo.coverPicH+')' }">
+    <div class="cl-videolist-container" :style="{ background : 'url('+iteminfo.coverPicH+')' }" @click="$emit('jumpEvent')">
         <div class="cl-videolist-item-title">{{iteminfo.name}}</div>
         <div class="cl-videolist-item-info">{{iteminfo.briefIntro}}</div>
         <div class="cl-videolist-item-teacher">

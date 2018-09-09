@@ -1,17 +1,15 @@
-const videoColumnDetail = () =>
-  import(/* webpackChunkName: "videoCourse" */ '../views/onlineCourse/videoColumnDetail')
-const videoCourseDetail = () =>
-  import(/* webpackChunkName: "videoColumn" */ '../views/onlineCourse/videoCourseDetail')
+import videoColumnDetail from  '../views/onlineCourse/videoColumnDetail'
+import videoCourseDetail from  '../views/onlineCourse/videoCourseDetail'
 
 const PageInfo_From_onlineCourse = [
   {
-    path: '/videoColumnDetail',
-    name: 'videoColumn',
+    path: '/videoColumnDetail/:courseId',
+    name: 'videoColumnDetail',
     component: videoColumnDetail
   },
   {
-    path: '/videoCourseDetail',
-    name: 'videoCourse',
+    path: '/videoCourseDetail/:lessonID',
+    name: 'videoCourseDetail',
     component: videoCourseDetail
   }
 ]

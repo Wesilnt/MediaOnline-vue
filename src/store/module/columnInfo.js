@@ -5,7 +5,7 @@ const columnInfo = {
     state: {
         columnHeaderImage : '',       //专栏头图
         columns : [],                 //专栏数组
-        columnOriginData : null       //接口返回数据
+        columnOriginData : null,       //接口返回数据
     },
     mutations: {
         addColumns(state,payload) {
