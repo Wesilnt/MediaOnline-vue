@@ -45,7 +45,7 @@ export default {
         {
           name: '/my/Purchase',
           image: purchase,
-          title: '已购清单'
+          title: '已购清单(问题)'
         },
         {
           name: '/my/Record',
@@ -81,7 +81,7 @@ export default {
           name: '/my/Help',
           image: help,
           title: '意见反馈'
-        }
+        },
       ]
     }
   },

@@ -1,3 +1,4 @@
+import QuestionList from '../views/onlineCourse/QuestionList'
 const purchase = () => import("../views/my/Purchase")
 const record = () => import("../views/my/Record")
 const like = () => import("../views/my/Like")
@@ -11,7 +12,8 @@ const PageInfo_From_My = [
   {
     path: '/my/Purchase',
     // name: "MyPurchase",
-    component: purchase
+    // component: purchase
+    component: QuestionList
   },
   {
     path: '/my/Record',

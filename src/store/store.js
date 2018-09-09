@@ -1,12 +1,13 @@
-import Vue from "vue";
-import Vuex from "vuex";
-import counter from "./module/counter";
-import mocker from "./module/mock";
-import myPuzzle_Praise from "./module/myPuzzle_Praise";
-import columnInfo from "./module/columnInfo"
+import Vue from 'vue'
+import Vuex from 'vuex'
+import counter from './module/counter'
+import mocker from './module/mock'
+import myPuzzle_Praise from './module/myPuzzle_Praise'
+import columnInfo from './module/columnInfo'
 import homeData from './module/homeData'
 import videoColumnDetail from './module/videoColumnDetail'
-import videoCourseDetail from './module/videoCourseDetail' 
+import videoCourseDetail from './module/videoCourseDetail'
+import questionList from './module/questionList'
 
 Vue.use(Vuex)
 export default new Vuex.Store({
@@ -18,6 +19,7 @@ export default new Vuex.Store({
     homeData,
     columnInfo,
     videoColumnDetail,
-    videoCourseDetail
+    videoCourseDetail,
+    questionList
   }
 })
