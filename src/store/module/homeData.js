@@ -1,4 +1,4 @@
-import {getBannerList,getFreeList,getNewMessageCount, getVisionList,getVideoList,getBookList} from '../../services/homeService'
+import { getBannerList, getFreeList, getNewMessageCount, getVisionList, getVideoList, getBookList } from '../../services/homeService'
 
 const homeData = {
     namespaced: true,
@@ -12,38 +12,29 @@ const homeData = {
     },
     actions: {
         async getBannerList({ commit }) {
-            // homeService.getBannerList(bannerList => {
-            //     commit('setBannerList', bannerList)
-            // })
-            console.log('获取banner')
-          let result = await getBannerList({type:0});
-          console.log(result);
-          commit('setBannerList', result)
+            let result = await getBannerList({ type: 0 });
+            commit('setBannerList', result)
         },
-        getFreeList({ commit }) {
-            getFreeList(freeList => {
-                commit('setFreeList', freeList)
-            })
+        async getFreeList({ commit }) {
+            let result = await getFreeList({ pageSize: 2 })
+            commit('setFreeList', result)
+
         },
-        getNewMessageCount({commit}){
-            getNewMessageCount(newMessageCount=>{
-                commit('setNewMessageCount', newMessageCount)
-            })
+       async getNewMessageCount({ commit }) {
+           let result = await getNewMessageCount({busiTypes:3101})
+            commit('setNewMessageCount', result)
         },
-        getVisionList({ commit }) {
-            getVisionList(visionList => {
-                commit('setVisionList', visionList)
-            })
+        async getVisionList({ commit }) {
+            let result = await getVisionList()
+            commit('setVisionList', result)
         },
-        getVideoList({ commit }) {
-            getVideoList(videoList => {
-                commit('setVideoList', videoList)
-            })
+        async getVideoList({ commit }) {
+            let result = await getVideoList()
+            commit('setVideoList', result)
         },
-        getBookList({ commit }) {
-            getBookList(bookList => {
-                commit('setBookList', bookList)
-            })
+        async getBookList({ commit }) {
+            let result = await getBookList()
+            commit('setBookList', result)
         }
     },
     mutations: {
@@ -53,7 +44,7 @@ const homeData = {
         setFreeList(state, freeList) {
             state.freeList = freeList;
         },
-        setNewMessageCount(state, newMessageCount){
+        setNewMessageCount(state, newMessageCount) {
             state.newMessageCount = newMessageCount;
         },
         setVisionList(state, visionList) {

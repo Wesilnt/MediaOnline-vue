@@ -1,12 +1,12 @@
 <template>
-    <div :style="{backgroundImage: 'url(' + video.url + ')' }" class="cell">
+    <div :style="{backgroundImage: 'url(' + video.coverPic + ')' }" class="cell">
         <img class="videoPlay" src="../../assets/home_video_play.png" alt="">
         <div class="text">
-            <p class="videoTitle">{{video.title}}</p>
-            <p class="videoDetail">{{video.desc}}</p>
-            <p class="videoDetail">{{video.author}}</p>
+            <p class="videoTitle">{{video.name}}</p>
+            <p class="videoDetail">{{video.briefIntro}}</p>
+            <p class="videoDetail">{{video.authorName}}</p>
             <p class="videoDetail">
-                <span class="price">¥{{video.price}}</span>/共{{video.count}}讲
+                <span class="price">¥{{video.price}}</span>/共{{video.lessonCount}}讲
             </p>
         </div>
 

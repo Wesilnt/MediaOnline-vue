@@ -3,19 +3,19 @@
     
     <ul>
       <li>
-        <img :src="vision.url" class="visionicon" alt="">
+        <img :src="vision.coverPic" class="visionicon" alt="">
       </li>
       <li>
-        <p class="visionTitle">{{vision.title}}</p>
-        <p class="visionDetail">{{vision.desc}}</p>
-        <p class="visionDetail">{{vision.author}}</p>
+        <p class="visionTitle">{{vision.name}}</p>
+        <p class="visionDetail">{{vision.briefIntro}}</p>
+        <p class="visionDetail">{{vision.authorName}}</p>
         <p class="visionDetail footText">
-          <span class="price">¥{{vision.price}}</span>/共{{vision.count}}讲
+          <span class="price">¥{{vision.price}}</span>/共{{vision.lessonCount}}讲
         </p>
 
       </li>
       <li>
-        <div class="fit">{{vision.fit}}</div>
+        <div class="fit">{{vision.fitFor}}岁</div>
         <img class="visionPlay" src="../../assets/home_vision_paly.png" alt="">
       </li>
     </ul>
