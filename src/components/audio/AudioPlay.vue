@@ -53,7 +53,8 @@
       </div>
     </div>
     <!-- 音频列表弹框 -->
-    <mt-popup v-model="popupVisible" position="bottom">
+
+    <van-popup v-model="popupVisible" position="bottom" :overlay="false">
       <div class="play-list-container">
         <div class="list-header">
           <h3>播放列表</h3>
@@ -70,7 +71,7 @@
         </div>
         <div class="list-close" @click="onCloseList">关闭</div>
       </div>
-    </mt-popup>
+    </van-popup>
     <!-- 分享框 -->
     <share-pop :show="showShare" @close="closeShare"/>
   </div>
@@ -171,10 +172,11 @@ export default {
     //收藏
     onCollect() {
       this.isLove = !this.isLove
-      Toast({
-        message: this.isLove ? '已添加到我喜欢的' : '已取消喜欢',
-        iconClass: this.isLove ? 'collect-icon' : ''
-      })
+      if (this.isLove) {
+        this.$toast.success({ duration: 0, message: '已添加到我喜欢的' })
+      } else {
+        this.$toast('已取消喜欢')
+      }
     },
     //文稿
     onManuScripts() {},
@@ -188,17 +190,14 @@ export default {
     closeShare() {
       this.showShare = false
     },
-    //切花播放模式
+    //切换播放模式
     onPlayMode() {
       this.isSingle = !this.isSingle
-      Toast({ message: this.isSingle ? '单曲循环' : '列表循环' })
+      this.$toast(this.isSingle ? '单曲循环' : '列表循环')
     },
     //上一首
     onPlayPrv() {
-      Toast({
-        message: '这是第一条',
-        iconClass: 'first-icon'
-      })
+      this.$toast.fail('这是第一条')
     },
     //播放/暂停
     onPlayPause() {
@@ -210,10 +209,7 @@ export default {
     },
     //下一首
     onPlayNext() {
-      Toast({
-        message: '已经是最后一条',
-        iconClass: 'last-icon'
-      })
+      this.$toast.fail('已经是最后一条')
     },
     //音频进度监听
     onTimeUpdate(currentTime, duration) {
@@ -319,8 +315,12 @@ export default {
 
     > :nth-child(1) {
       margin-right: 20px;
+      font-size: 20px;
+      color: rgb(146, 145, 150);
     }
     > :nth-child(3) {
+      font-size: 20px;
+      color: rgb(146, 145, 150);
       margin-left: 20px;
     }
     input[type='range'] {
@@ -435,22 +435,22 @@ export default {
     }
   }
 }
-.mint-popup,
-.mint-popup-bottom {
+/*音频列表弹框*/
+.van-popup {
   background-color: transparent;
   width: 100%;
   .play-list-container {
     background-color: white;
-    border-top-left-radius: 40px;
-    border-top-right-radius: 40px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
     width: 100%;
     .list-header h3 {
-      font-size: 28px;
+      font-size: 14px;
       color: black;
       margin: 0;
       text-align: center;
-      padding-bottom: 36px;
-      padding-top: 36px;
+      padding-bottom: 18px;
+      padding-top: 18px;
     }
     hr {
       width: 100%;
@@ -461,54 +461,73 @@ export default {
     }
     .list-container {
       overflow: scroll;
-      padding-bottom: 20px;
-      max-height: 718px;
+      padding-bottom: 10px;
+      max-height: 358px;
     }
     .list-item {
       display: flex;
       flex-direction: column;
-      padding: 0px 20px;
+      padding: 0px 10px;
     }
     .list-content {
       display: flex;
       flex-direction: row;
       align-items: center;
       img {
-        margin-right: 20px;
-        width: 28px;
-        height: 28px;
+        margin-right: 10px;
+        width: 14px;
+        height: 14px;
       }
       p {
-        padding: 34px 0;
+        padding: 17px 0;
         margin: 0;
-        font-size: 28px;
+        font-size: 14px;
         color: rgb(22, 35, 60);
       }
       .p-playing {
-        font-size: 28px;
+        font-size: 14px;
         color: rgb(255, 163, 47);
       }
     }
   }
   .list-close {
-    font-size: 36px;
+    font-size: 18px;
     text-align: center;
     width: 100%;
-    height: 90px;
+    height: 45px;
     color: rgb(38, 38, 38);
-    line-height: 90px;
+    line-height: 45px;
     background-color: rgb(245, 245, 245);
   }
 }
-
-.collect-icon {
+/**收藏提示ICON*/
+.van-toast--default {
+  width: auto;
+}
+.van-toast__icon {
   background-image: url(../../assets/audio_love_collect.png);
-  background-size: 56px;
+  background-size: 28px;
   background-repeat: no-repeat;
   margin: 0 auto;
-  height: 56px;
-  width: 56px;
+  height: 28px;
+  width: 28px;
 }
+.van-icon-success::before {
+  content: none;
+}
+.van-icon-fail {
+  background-image: url(../../assets/audio_play_tip.png);
+  background-size: 28px;
+  background-repeat: no-repeat;
+  margin: 0 auto;
+  height: 28px;
+  width: 28px;
+}
+
+.van-icon-fail::before {
+  content: none;
+}
+
 .first-icon,
 .last-icon {
   background-image: url(../../assets/audio_play_tip.png);

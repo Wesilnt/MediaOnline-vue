@@ -12,9 +12,13 @@ import store from './store/store'
 import { formatDuring } from './utils/utils.js'
 Vue.filter('formatDuring', formatDuring)
 Vue.config.productionTip = false
+    //vant组件引入
+import { Popup, Toast } from 'vant';
+Vue.use(Popup)
+Vue.use(Toast)
 
 new Vue({
-  router,
-  store,
-  render: h => h(App)
+    router,
+    store,
+    render: h => h(App)
 }).$mount('#app')
