@@ -5,6 +5,7 @@ import './publicUIConfig/mintUIComponentImport'
 import App from './App.vue'
 import router from './router/router'
 import store from './store/store'
+
 // import { Range, Popup } from 'mint-ui'
 // Vue.component(Popup.name, Popup)
 // Vue.component(Range.name, Range)
@@ -12,13 +13,13 @@ import store from './store/store'
 import { formatDuring } from './utils/utils.js'
 Vue.filter('formatDuring', formatDuring)
 Vue.config.productionTip = false
-    //vant组件引入
-import { Popup, Toast } from 'vant';
+//vant组件引入
+import { Popup, Toast } from 'vant'
 Vue.use(Popup)
 Vue.use(Toast)
 
 new Vue({
-    router,
-    store,
-    render: h => h(App)
+  router,
+  store,
+  render: h => h(App)
 }).$mount('#app')

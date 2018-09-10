@@ -10,10 +10,27 @@
                 <p class="question-title">
                     请回答
                 </p>
-                <p class="question-content">{{currentQueston.question}}</p>
-                <ol>
-                    <li v-for="opt in opts" :key="opt">
-                        <a  class="qhht-flex question-btn-option">{{currentQueston[`opt${opt}`]}}</a>
+                <p class="question-content">{{currentQuestion.question}}</p>
+                <ol class="animated"  :class="warnClass">
+                    <li v-for="opt in opts" :key="opt" :class="{
+                    'hasSelect-answer':answers[currentQuestion.id]
+                    }">
+                        <a
+                            @click="handleAnswerClick({answer:opt})"
+                            class="qhht-flex question-btn-option"
+                            :class="[
+                                {
+                                    'option-selected':answers[currentQuestion.id]===opt,
+                                    'error-anwser':answers[currentQuestion.id]===opt&&answers[currentQuestion.id]!==currentQuestion.rightOpt,
+                                    'correct-anwser':opt===`opt${currentQuestion.rightOpt}`
+                                }
+                            ]"
+                        >
+                            <span>{{currentQuestion[opt]}}</span>
+                            <span class="question-checked-percent">{{answers[currentQuestion.id]?currentQuestion[`${opt}Pct`]+'%':''}}</span>
+                            <i class="option-checked" :style="{width:answers[currentQuestion.id]?currentQuestion[`${opt}Pct`]+'%':'0'}" ></i>
+                        </a>
+
                     </li>
                 </ol>
                 <div class="qhht-flex question-footer">
@@ -40,19 +57,25 @@ export default {
   name: 'QuestionList',
   data: function() {
     return {
-      show: true,
-      opts: ['A', 'B', 'C', 'D']
+      show: false,
+      opts: ['optA', 'optB', 'optC', 'optD']
     }
   },
   created() {
-    this.queryList({ currentType: this.currentType })
+    this.queryList({ currentType: null })
   },
   computed: {
-    ...mapState(['questionList', 'questionIndex', 'loading']),
-    ...mapGetters(['currentQueston', 'questionInfo'])
+    ...mapState([
+      'questionList',
+      'questionIndex',
+      'answers',
+      'warnClass',
+      'loading'
+    ]),
+    ...mapGetters(['currentQuestion', 'questionInfo'])
   },
   methods: {
-    ...mapActions(['queryList', 'handleNextClick']),
+    ...mapActions(['queryList', 'handleAnswerClick', 'handleNextClick']),
     handlePopupShow() {
       this.show = true
     },
@@ -97,12 +120,51 @@ export default {
   text-align: center;
 }
 .question-btn-option {
+  position: relative;
   height: 94px;
+  overflow: hidden;
   margin-bottom: 30px;
-  padding: 0 18px 0 52px;
+  padding: 0 52px 0;
   border-radius: 94px;
   border: 2px solid @active;
   color: #262626;
+  /*<!--box-shadow: 0 0 6px 2px @active;-->*/
+}
+.option-checked {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  transition: width 0.6s linear;
+  z-index: -1;
+}
+.hasSelect-answer {
+  .question-btn-option {
+    border-color: #edf0f7;
+  }
+  .option-checked {
+    background-color: #edf0f7;
+  }
+  .error-anwser {
+    border-color: #ed6c67;
+    .option-checked {
+      background-color: #ed6c67;
+    }
+  }
+  .correct-anwser {
+    border-color: #76c282;
+    .option-checked {
+      background-color: #76c282;
+    }
+  }
+}
+.question-checked-percent{
+    position: absolute;
+    right: 18px;
+    line-height: 94px;
+    color:#B3B3B3;
 }
 .question-footer {
   padding-top: 10px;
