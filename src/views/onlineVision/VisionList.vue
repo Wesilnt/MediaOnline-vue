@@ -21,8 +21,10 @@ export default {
   },
   computed: mapState(['bannerPic', 'visionList']),
   methods: {
-    ...mapActions(['getVisionListData']),
-    loadMore(){}
+    ...mapActions(['getVisionListData', 'getMoreData']),
+    loadMore(){
+      this.getMoreData()
+    }
   },
   created() {
     this.getVisionListData()

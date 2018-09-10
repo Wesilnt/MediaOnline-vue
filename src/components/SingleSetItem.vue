@@ -9,11 +9,11 @@
             {{item.title}}
           </h3>
           <h4>
-            {{item.subtitle}}
+            {{item.subTitle}}
           </h4>
           <div class="bottom-container">
             <span v-if="item.isAudition">试听</span>
-            <p>{{item.totaltime | formatDuring}} | {{item.learntime |learntimeFormat(item.totaltime)}}</p>
+            <p>{{item.totalTime | formatDuring}} | {{item.learntime |learntimeFormat(item.totalTime)}}</p>
           </div>
         </div>
       </div>
