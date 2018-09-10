@@ -1,6 +1,6 @@
 <template>
     <div ref="father" class="videocourse-detail-container">
-        <div class="video-detail-header">
+        <div class="video-detail-header" :style="{ background : 'url('+coverPic+')' }">
             <div class="video-detail-header-right-top">
                 <img :src="require('../../assets/images/onlinecourse_love_normal.png')" class="video-detail-collect" alt="">
                 <img :src="require('../../assets/images/onlinecourse_video_detail_ic_editor.png')" class="video-detail-share" alt="">
@@ -13,11 +13,10 @@
              <img :src="require('../../assets/images/onlinecourse_video_ic_gift.png')" class="video-detail-header-gift" alt="">    
         </div>
 
-        <!-- <div class="switchModule"> -->
+    
             <div ref="navbar" :class="navbarFixed == true ? 'isFixed' : ''" class="video-detail-navbar">
                 <div v-for="(item,index) of navbar" :class="{'selected':selected == index }" :key="index" class="video-detail-navbar-item" @click="clickFnc(index)">{{item}}</div>
             </div>
-        <!-- </div> -->
 
 
         <div class="video-detail-content">
@@ -33,13 +32,13 @@
                 <img :src="require('../../assets/images/onlinecourse-pic-share.png')" class="video-test-question-img" alt="">
             </div>
             <div class="video-test-question-title">共3道自测题</div>
-            <mt-progress :value="20" :bar-height="4"/>
+            <!-- <mt-progress :value="20" :bar-height="4"/> -->
             <div class="video-test-question-warn">在学习n分钟可解锁自测题</div>
             <hr class="video-detail-line">
             <div ref="catalog" class="video-detail-sction-title">
                 <h4>目录</h4>
             </div>
-            <playlist v-for="(item,index) of dataList" :key="item.id" :iteminfo="item" :lastindex="index == (dataList.length - 1)"/>
+            <playlist v-for="(item,index) of lessonList" :key="item.id" :iteminfo="item" :lastindex="index == (dataList.length - 1)"/>
             <hr class="video-detail-line">
             <div ref="leavemessage" class="video-detail-sction-title">
                 <h4>留言</h4>
@@ -48,7 +47,7 @@
                     <span>我要留言</span>
                 </div>
             </div>
-            <video-comment/>
+            <video-comment v-for="item in singleComments" :key="item.id" :comment="item"/>
 
         </div>
     </div>
@@ -97,11 +96,11 @@ export default {
   computed: {
     ...mapState([          
         'lessonList',              //目录课程
-        'originData',            //接口返回数据
-        'videoBgImage',              //视频背景图
-        'videoNote',                 //课程笔记
-        'courseListImage',           //课程列表下面的大图展示
-        'videoCourseComments'      //视频课程的留言  
+        'coverPic',              //视频背景图
+        'audioUrl',              //音频地址
+        'videoUrl',             //视频地址
+        'courseId',              //专栏ID
+        'singleComments'
     ]),
   },
   mounted() {
@@ -114,10 +113,17 @@ export default {
       //获取课程ID
       const lessonId = this.$route.params.lessonID
       this.getVideoCourseDetail({lessonId})
+      //获取目录课程数据
+      var courseId = this.courseId
+      this.getLessonListByCourse({ courseId : courseId, currentPage:1, pageSize:10})
+      //获取单集评论
+      this.getCommentList({regionType:2202,regionId:lessonId,currentPage:1,pageSize:11})
   },
   methods: {
     ...mapActions([
-        'getVideoCourseDetail'
+        'getVideoCourseDetail',
+        'getLessonListByCourse',
+        'getCommentList'
     ]),
     clickFnc(index) {
       this.selected = index

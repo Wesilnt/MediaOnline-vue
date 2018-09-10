@@ -1,29 +1,20 @@
 <template>
     <div class="cl-courseIntroduce">
         <div :class=" isFold ? 'fold' : 'extend'" class="foldbase" @click="foldFn">
-            <p>
-                
-                主讲人伍智,国学一级教师,代表作蹒跚集累计销量数百万册.
-            主讲人伍智,国学一级教师,代表作蹒跚集累计销量数百万册.
-            主讲人伍智,国学一级教师,代表作蹒跚集累计销量数百万册.
-            主讲人伍智,国学一级教师,代表作蹒跚集累计销量数百万册.
-            主讲人伍智,国学一级教师,代表作蹒跚集累计销量数百万册.
-            主讲人伍智,国学一级教师,代表作蹒跚集累计销量数百万册.
-            主讲人伍智,国学一级教师,代表作蹒跚集累计销量数百万册.
-                
-            
-            </p>
+           <div v-html="courseinfo"></div>
         </div>
         <div class="arrow-icon"><img :src="isFold ? imgUp: imgDown" @click="foldFn"></div>
     </div>
 </template>
 
 <script>
+
 export default {
   name: 'CourseIntroduce',
+  props:["courseinfo"],
   data() {
     return {
-      isFold: true,
+      isFold: false,
       imgUp: require('../assets/images/onlinecourse_arrow_down.png'),
       imgDown: require('../assets/images/onlinecourse_arrow_up.png')
     }
@@ -31,7 +22,6 @@ export default {
   methods: {
     foldFn() {
       this.isFold = !this.isFold
-      console.log('123')
     }
   }
 }

@@ -1,26 +1,31 @@
 import { getVideoColumnDetail } from '../../services/columns.js'
+import { getCommentList } from '../../services/comment.js'
 
 const videoColumnDetail = {
     namespaced: true, // 设置命名空间 ，保持数据独立性
     state: {
-        lessonList : [],              //试看课程数组
-        originData : null,            //接口返回数据
-        headImage:'',                 //头图
-        columnIntroduce:'',           //专栏介绍
-        courseListImage:'',           //课程列表下面的大图展示
+        freeLessonList : [],              //试看课程数组
+        profilePic:'',                 //头图
+        description:'',           //专栏介绍
+        outlinePic:'',           //课程列表下面的大图展示
         videoColumnComments:[],       //视频专栏的留言
-        purchaseTip:''                //购买须知
-
+        buyIntro:'',               //购买须知
+        lessonCount:0,                 //专栏课集总数
+        commentCount:0              //留言条数
     },
     mutations: {
         bindVideoColumnDetail(state,payload) {
-            state.originData = payload
-            state.lessonList = payload.freeLessonList
-            state.headImage = payload.profilePic
-            state.columnIntroduce = payload.description
-            state.courseListImage = payload.outlinePic
-            state.purchaseTip = payload.buyIntro
 
+            state.freeLessonList = payload.freeLessonList
+            state.profilePic = payload.profilePic
+            state.description = payload.description
+            state.outlinePic = payload.outlinePic
+            state.buyIntro = payload.buyIntro
+            state.lessonCount = payload.lessonCount
+            state.commentCount = payload.commentCount
+        },
+        bindCommentList(state,payload) {
+            state.videoColumnComments = payload.result
         }
     },
     actions:{
@@ -31,6 +36,12 @@ const videoColumnDetail = {
             console.log('视频专栏接口数据:')
             console.log(result)
             commit('bindVideoColumnDetail',result)
+        },
+        async getCommentList ({commit},{ regionType, regionId, commentId, currentPage, pageSize}) {
+            const result = await getCommentList({regionType, regionId, commentId, currentPage, pageSize})
+            console.log('视频专栏留言数据:')
+            console.log(result)
+            commit('bindCommentList',result)
         }
     }
 }

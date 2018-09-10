@@ -19,6 +19,10 @@ export async function getVideoColumnDetail(params) {
 export async function getVideoLessonDetail(params) {
   return request(`/lesson/lessonDetail?${stringify(params)}`)
 }
+// 专栏下的课节列表
+export async function getLessonListByCourse(params) {
+  return request(`/lesson/getLessonListByCourse?${stringify(params)}`)
+}
 
 // TODO 日后删除
 export async function getQuestionList(params) {

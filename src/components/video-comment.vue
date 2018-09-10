@@ -1,31 +1,24 @@
 <template>
     <div class="video-comment-container">
         <div class="video-comment-usericon">
-            <!-- <img src=""> -->
+            <img :src="comment.fromAvatarUrl">
         </div>
         <div class="video-comment-userinfo">
             <div class="video-userinfo-top">
                 <div class="video-userinfo-top-left">
-                    <span class="video-comment-nickname">古风流</span>
+                    <span class="video-comment-nickname">{{comment.fromNickName}}</span>
                     <span class="video-comment-comTime">08-08</span>
                 </div>
                 <div class="video-comment-praise">
                     <img :src="isPraise ? praiseHighlight : praiseNormal" @click="onClickPraise">
-                    <span>1314</span>
+                    <span>{{comment.likeCount}}</span>
                 </div>
             </div>
-            <div class="video-comment-detail">
-                此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论
-                此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论
-                此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论
-                此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论
-                此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论
-                此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论
-            </div>
+            <div class="video-comment-detail">{{comment.content}}</div>
             <div class="video-comment-total">全部</div>
             <div class="video-comment-replay">
-                <span class="video-comment-replay-name">伍智回复古风流:</span>
-                名画为什么这么值钱名画为什么这么值钱名画为什么这么值钱?
+                <span class="video-comment-replay-name">{{comment.childComment.fromNickName}}回复{{comment.fromNickName}}:</span>
+                {{comment.childComment.content}}
             </div>
         </div>
     </div>
@@ -33,6 +26,7 @@
 
 <script>
 export default {
+  props:['comment'],
   data() {
     return {
       praiseNormal: require('../assets/images/onlinecourse_praise_highlight.png'),
@@ -58,9 +52,15 @@ export default {
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  background-color: red;
+  // background-color: red;
   margin-top: 40px;
   margin-right: 32px;
+  img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border:none;
+  }
 }
 .video-comment-userinfo {
   display: flex;
