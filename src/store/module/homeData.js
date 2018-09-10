@@ -17,8 +17,7 @@ const homeData = {
         },
         async getFreeList({ commit }) {
             let result = await getFreeList({ pageSize: 2 })
-            commit('setFreeList', result)
-
+            commit('setFreeList', result.result)
         },
        async getNewMessageCount({ commit }) {
            let result = await getNewMessageCount({busiTypes:3101})

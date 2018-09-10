@@ -8,6 +8,7 @@ import homeData from './module/homeData'
 import videoColumnDetail from './module/videoColumnDetail'
 import videoCourseDetail from './module/videoCourseDetail'
 import questionList from './module/questionList'
+import visionData from './module/visionData'
 
 Vue.use(Vuex)
 export default new Vuex.Store({
@@ -20,6 +21,7 @@ export default new Vuex.Store({
     columnInfo,
     videoColumnDetail,
     videoCourseDetail,
-    questionList
+    questionList,
+    visionData
   }
 })
