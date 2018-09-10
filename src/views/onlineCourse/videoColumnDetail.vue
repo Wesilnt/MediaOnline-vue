@@ -8,7 +8,7 @@
            </div>
        </div>
 
-        <div class="videocol-navbar">
+        <div class="videocol-navbar" ref="navbar" :class="navbarFixed == true ? 'isFixed' : ''">
             <div v-for="(item,index) of navbar" :class="{'selected':selected == index }" :key="index" class="videocol-navbar-item" @click="clickFnc(index)">{{item}}</div>
         </div>
 
@@ -17,7 +17,7 @@
        <div class="videocol-content">
            <course-introduce :courseinfo="description"/>
            <hr class="lineone">
-            <div class="videocol-sction-title">
+            <div class="videocol-sction-title" ref="note">
                 <h4>课程列表 <label>(共{{lessonCount}}讲)</label></h4>
            </div>
             <div class="videocol-bigimage">
@@ -25,7 +25,7 @@
                 <img :src="require('../../assets/images/onlinecourse_bigimage_search.png')" class="videocol-bigimage-search">
             </div>
             <hr class="lineone">
-            <div class="videocol-sction-title">
+            <div class="videocol-sction-title" ref="catalog">
                 <h4>试看课程</h4>
                 <div class="videocol-all" @click="allFunc">
                     <span class="videocol-allbtn">全部</span>
@@ -37,7 +37,7 @@
 
 
             <hr class="lineone">
-            <div class="videocol-sction-title">
+            <div class="videocol-sction-title" ref="leavemessage">
                 <h4>精选留言</h4>
                 <div class="videocol-all" @click="allFunc">
                     <span class="videocol-allbtn">{{commentCount}}条</span>
@@ -81,6 +81,7 @@ export default {
         return {
             navbar: ['介绍', '试看', '留言'],
             selected: 0,
+            navbarFixed: false, //控制navbar是否吸顶
             dataList: [
                 
             ]   
@@ -117,10 +118,59 @@ export default {
         gotoVideoCourseDetailPage(lessonID){
             console.log('路由跳转 lessonID = ' + lessonID)
             this.$router.push({name:'videoCourseDetail',params:{ lessonID }})
-        }
+        },
+        async handleScroll() {
+            //1.监听滚动
+            var scrollTop =
+                window.pageYOffset ||
+                document.documentElement.scrollTop ||
+                document.body.scrollTop
+            //2.获取navbar的偏移量
+            var barOffset = this.$refs.navbar.offsetTop
+            this.navbarFixed = scrollTop > barOffset ? true : false
+            var noteH = this.$refs.note.offsetTop
+            const catalogH = this.$refs.catalog.offsetTop
+            const leavemessageH = this.$refs.leavemessage.offsetTop
+            if (scrollTop <= noteH) {
+                // console.log('----0----')
+                this.selected = 0
+            } else if (scrollTop < catalogH && scrollTop > noteH) {
+                // console.log('----1----')
+                this.selected = 1
+            } else if (scrollTop < leavemessageH && scrollTop > catalogH) {
+                // console.log('----2----')
+                this.selected = 2
+            }
+        },
+        clickFnc(index) {
+            this.selected = index
+            console.log('currentindex=' + index)
+            switch (index) {
+                case 0:
+                this.$refs.note.scrollIntoView({
+                    behavior: 'instant',
+                    block: 'center',
+                    inline: 'nearest'
+                })
+                break
+                case 1:
+                this.$refs.catalog.scrollIntoView({
+                    behavior: 'instant',
+                    block: 'center',
+                    inline: 'nearest'
+                })
+                break
+                case 2:
+                this.$refs.leavemessage.scrollIntoView({
+                    behavior: 'instant',
+                    block: 'center',
+                    inline: 'nearest'
+                })
+                break
+            }
+        },
 
     }, 
-
     created (){
         //获取专栏Id
         const courseId = this.$route.params.courseId 
@@ -128,9 +178,11 @@ export default {
         //获取专栏评论列表
         this.getCommentList({regionType:2201,regionId:courseId,currentPage:1,pageSize:11})
     },
-    mounted(){
-        console.log('-=-=-=-=-=-')
-        console.log(this.lessonCount)
+    mounted() {
+        window.addEventListener('scroll', this.handleScroll)
+    },
+    destroyed() {
+        window.removeEventListener('scroll', this.handleScroll)
     }
 }
 </script>
@@ -177,11 +229,20 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+  background-color: #fff;
   border-bottom: 1px solid lightgray;
   box-sizing: border-box;
-  margin-top: 28px;
-  margin-bottom: 28px;
+  padding-top: 28px;
+//   margin-bottom: 28px;
   text-align: center;
+
+
+  &.isFixed {
+    position: fixed;
+    top: 0;
+    z-index: 999;
+  }
+
   .videocol-navbar-item {
     width: 100px;
     padding-bottom: 22px;

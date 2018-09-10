@@ -16,7 +16,10 @@
             </div>
             <div class="video-comment-detail">{{comment.content}}</div>
             <div class="video-comment-total">全部</div>
-            <div class="video-comment-replay">
+            <div class="video-comment-replay" v-if="regionType==2201" >
+                  单集名称
+            </div>
+            <div class="video-comment-replay" v-else-if="regionType==2202" >
                 <span class="video-comment-replay-name">{{comment.childComment.fromNickName}}回复{{comment.fromNickName}}:</span>
                 {{comment.childComment.content}}
             </div>
@@ -31,7 +34,8 @@ export default {
     return {
       praiseNormal: require('../assets/images/onlinecourse_praise_highlight.png'),
       praiseHighlight: require('../assets/images/onlinecourse_praise_normal.png'),
-      isPraise: false
+      isPraise: false,
+      regionType:2201,  //2201 专栏评论  2202 单集评论
     }
   },
   methods: {
