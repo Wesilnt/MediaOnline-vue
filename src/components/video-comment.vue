@@ -40,7 +40,13 @@
 
 <script>
 export default {
-  props:['comment'],
+  props:{
+    comment:{
+      default:{
+        
+      }
+    }
+  },
   data() {
     return {
       praiseNormal: require('../assets/images/onlinecourse_praise_highlight.png'),

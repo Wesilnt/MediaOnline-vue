@@ -1,6 +1,6 @@
 <template>
-    <div ref="father" class="videocourse-detail-container">
-        <div class="video-detail-header" :style="{ background : 'url('+coverPic+')' }">
+    <div class="videocourse-detail-container" id="detailmain" ref="detailmain">
+        <div class="video-detail-header" :style="{ background : 'url('+radioShowPic+')' }">
             <div class="video-detail-header-right-top">
                 <img :src="require('../../assets/images/onlinecourse_love_normal.png')" class="video-detail-collect" alt="">
                 <img :src="require('../../assets/images/onlinecourse_video_detail_ic_editor.png')" class="video-detail-share" alt="">
@@ -20,35 +20,35 @@
 
 
         <div class="video-detail-content">
-            <div ref="note" class="video-detail-sction-title">
+            <div id="note" ref="note" class="video-detail-sction-title">
                 <h4>笔记</h4>
            </div>
-           <course-introduce/>
+           <course-introduce :courseinfo="description" />
             <hr class="video-detail-line">
             <div class="video-detail-sction-title">
                 <h4>自测题</h4>
             </div>
             <div class="video-detail-questions">
-                <img :src="require('../../assets/images/onlinecourse-pic-share.png')" class="video-test-question-img" alt="">
+                <img :src="lockIcon" class="video-test-question-img" alt="">
             </div>
             <div class="video-test-question-title">共3道自测题</div>
             <!-- <mt-progress :value="20" :bar-height="4"/> -->
             <div class="video-test-question-warn">在学习n分钟可解锁自测题</div>
             <hr class="video-detail-line">
-            <div ref="catalog" class="video-detail-sction-title">
+            <div id="catalog" ref="catalog" class="video-detail-sction-title">
                 <h4>目录</h4>
             </div>
-            <playlist v-for="(item,index) of lessonList" :key="item.id" :iteminfo="item" :lastindex="index == (dataList.length - 1)"/>
+            <playlist v-for="(item,index) of lessonList" :key="item.id" :iteminfo="item" :lastindex="index == (lessonList.length - 1)"/>
             <hr class="video-detail-line">
-            <div ref="leavemessage" class="video-detail-sction-title">
+            <div id="leavemessage" ref="leavemessage" class="video-detail-sction-title">
                 <h4>留言</h4>
                 <div class="video-detail-leavemessage">
                     <img src="../../assets/images/onlinecourse_video_detail_ic_editor.png" alt="">
                     <span>我要留言</span>
                 </div>
             </div>
-            <video-comment v-for="item in singleComments" :key="item.id" :comment="item"/>
-
+            <!-- <video-comment v-for="item in singleComments" :key="item.id" :comment="item"/> -->
+            <commentitem class="video-course-comment" v-for="item in singleComments" :key="item.id" :comment="item" :unindent="true" :regiontype="2202"/>
         </div>
     </div>
 </template>
@@ -56,6 +56,7 @@
 <script>
 import CourseIntroduce from '../../components/CourseIntroduce.vue'
 import playlist from './components/playlist.vue'
+import CommentItem from '../../components/CommentItem.vue'
 import videoComment from '../../components/video-comment.vue'
 import { createNamespacedHelpers } from "vuex";
 const { mapState, mapActions } = createNamespacedHelpers("videoCourseDetail");
@@ -64,43 +65,30 @@ export default {
   components: {
     'course-introduce': CourseIntroduce,
     playlist: playlist,
-    'video-comment': videoComment
+    'video-comment': videoComment,
+    'commentitem' : CommentItem
   },
   data() {
     return {
       navbar: ['资料', '目录', '留言'],
       navbarFixed: false, //控制navbar是否吸顶
       selected: 0,
-      dataList: [
-        {
-          id: 0,
-          isPlaying: true,
-          title: '发刊词:为什么抱元没有食堂?',
-          info: '史上最会钓鱼的老头'
-        },
-        {
-          id: 1,
-          isPlaying: false,
-          title: '001 名画为什么这么值钱',
-          info: '史上最会钓鱼的老头'
-        },
-        {
-          id: 2,
-          isPlaying: true,
-          title: '002 斯大林格勒战役?',
-          info: '史上最会钓鱼的老头'
-        }
-      ]
+      lockIcon:require('../../assets/images/onlinecourse_lock.jpg'),//未解锁
+      unlockIcon:require('../../assets/images/onlinecourse_unlock.jpg')//已解锁
     }
   },
   computed: {
     ...mapState([          
         'lessonList',              //目录课程
-        'coverPic',              //视频背景图
+        'radioShowPic',              //视频背景图
         'audioUrl',              //音频地址
         'videoUrl',             //视频地址
         'courseId',              //专栏ID
-        'singleComments'
+        'singleComments',
+        'description',           //笔记
+        'isFree',
+        'isLike',
+        'createTime',
     ]),
   },
   mounted() {
@@ -126,69 +114,48 @@ export default {
         'getCommentList'
     ]),
     clickFnc(index) {
-      this.selected = index
-      console.log('currentindex=' + index)
-      // var noteH = this.$refs.note.offsetTop;
-      // var catalogH = this.$refs.catalog.offsetTop;
-      // var leavemessageH = this.$refs.leavemessage.offsetTop;
-      // console.log('noteH =' + noteH)
-      // console.log('catalogH =' + catalogH)
-      // console.log('leavemessageH =' + leavemessageH)
-      // console.log(this.$refs)
-      switch (index) {
-        case 0:
-          this.$refs.note.scrollIntoView({
-            behavior: 'instant',
-            block: 'center',
-            inline: 'nearest'
-          })
-          break
-        case 1:
-          this.$refs.catalog.scrollIntoView({
-            behavior: 'instant',
-            block: 'center',
-            inline: 'nearest'
-          })
-          break
-        case 2:
-          this.$refs.leavemessage.scrollIntoView({
-            behavior: 'instant',
-            block: 'center',
-            inline: 'nearest'
-          })
-          break
-      }
+        this.selected = index
+        let positionId
+        switch (index) {
+            case 0:
+                positionId = '#note'
+            break
+            case 1:
+                positionId = '#catalog'
+            break
+            case 2:
+                positionId = '#leavemessage'
+            break
+            default:
+            break
+        }
 
-      // this.$refs.note.animate({ scrollTop : noteH },800)
-      // this.$refs.catalog.animate({ scrollTop : catalogH },800)
-      // this.$refs.leavemessage.animate({ scrollTop : leavemessageH },800)
+        let anchor = this.$el.querySelector(positionId)
+        document.body.scrollTop = anchor.offsetHeight - 50
+        // // Firefox
+        document.documentElement.scrollTop = anchor.offsetTop - 50
+        // Safari
+        window.pageYOffset = anchor.offsetTop - 50
     },
     async handleScroll() {
       //1.监听滚动
-      var scrollTop =
-        window.pageYOffset ||
-        document.documentElement.scrollTop ||
-        document.body.scrollTop
-      //2.获取navbar的偏移量
-      var barOffset = this.$refs.navbar.offsetTop
-      //    console.log(document.querySelector('.video-detail-navbar'))
-      // console.log('===' + barOffset)
-      // console.dir(this.$refs.navbar)
-      this.navbarFixed = scrollTop > barOffset ? true : false
-
-      var noteH = this.$refs.note.offsetTop
-      const catalogH = this.$refs.catalog.offsetTop
-      const leavemessageH = this.$refs.leavemessage.offsetTop
-      if (scrollTop <= noteH) {
-        console.log('----0----')
-        this.selected = 0
-      } else if (scrollTop < catalogH && scrollTop > noteH) {
-        console.log('----1----')
-        this.selected = 1
-      } else if (scrollTop < leavemessageH && scrollTop > catalogH) {
-        console.log('----2----')
-        this.selected = 2
-      }
+    //   var scrollTop =
+    //     window.pageYOffset ||
+    //     document.documentElement.scrollTop ||
+    //     document.body.scrollTop
+        let scrollTop = Math.abs(
+             this.$refs.detailmain.getBoundingClientRect().top
+        )
+        let noteH = this.$el.querySelector('#note').offsetTop -50
+        let catalogH = this.$el.querySelector('#catalog').offsetTop -50
+        // let leavemessageH = this.$el.querySelector('#leavemessage').offsetTop -50
+        if (scrollTop < noteH) {
+            this.selected = 0
+        } else if (scrollTop < catalogH && scrollTop > noteH) {
+            this.selected = 1
+        } else if (scrollTop > catalogH) {
+            this.selected = 2
+        }
     }
   }
 }
@@ -259,6 +226,11 @@ export default {
 //导航条
 
 .video-detail-navbar {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0px;
+  left: 0;
+  right: 0;
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -269,6 +241,7 @@ export default {
   padding-top: 28px;
   // padding-bottom: 28px;
   text-align: center;
+  z-index: 999;
 
   &.isFixed {
     position: fixed;
@@ -336,6 +309,9 @@ export default {
   text-align: center;
 }
 //我要留言
+.video-course-comment {
+    margin-top: 56px;
+}
 .video-detail-leavemessage {
   width: 220px;
   height: 60px;
