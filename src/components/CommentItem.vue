@@ -31,8 +31,8 @@
           <!-- <font>{{comment.content | getSingleCourseName()}}</font> -->
           {{comment.content | getSingleCourseName(1)}}
         </div>
-        <div v-else-if="regiontype===2202">
-          <font>{{comment.childComment && comment.childComment.fromNickName}}</font>
+        <div class="bottom-container" v-else-if="regiontype===2202">
+          <font>{{comment.childComment && comment.childComment.fromNickName}}回复{{comment && comment.fromNickName}}</font>
           {{comment.childComment && comment.childComment.content }}
         </div>
       </div>
