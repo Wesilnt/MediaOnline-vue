@@ -1,24 +1,22 @@
 <template>
-    <div class="cl-tools-navbar">
-        <div class="cl-sound">
-            <img src="../assets/images/onlinecourse-tabbar-try.png">
-            <label>试听</label>
+    <div class="purchase-toolbar">
+        <div class="toolbar-audition" @click="$emit('router-to-audition')">
+            <i class="qhht-icon audition-icon"></i>
+            <p class="under-text">试听</p>
         </div>
-        <div class="cl-left-line"/>
-        <div v-show="btn_origin.isShow" class="cl-originbtn">
-            <div v-show="btn_origin.isshowprice" class="cl-origin-price">{{btn_origin.price}}</div>
-            <div class="cl-origin-info">{{btn_origin.title}}</div>
+        <hr class="vertical-line"/>
+        <div v-show="price[0]" class="toolbar-price" @click="buyByOriginPrice(originPrice)">
+            <p class="toolbar-price-num">￥{{price[0] | formatPrice}}</p>
+            <span class="under-text">原价购买</span>
         </div>
-        <div v-show="btn_group.isShow || btn_prise.isShow" class="cl-action-btn">
-
-            <div v-show="btn_group.isShow" class="cl-groupbtn">
-                <div v-show="btn_group.isshowprice" class="cl-groupbtn-price">{{btn_group.price}}</div>
-                <div :class="{active : !btn_group.isshowprice}" class="cl-groupbtn-info">{{btn_group.title}}</div>
+        <div v-show=" collage || collect" class="toolbar-btnGroup">
+            <div v-show="collage" class="toolbar-btn toolbar-btn-left" @click="$emit('router-to-collage')">
+                <div v-show="price[1]"  class="toolbar-btn-price">￥{{price[1] | formatPrice}}</div>
+                <div>{{collageText}}</div>
             </div>
-
-            <div v-show="btn_prise.isShow" class="cl-praisebtn">
-                <div v-show="btn_prise.isshowprice" class="cl-praisebtn-price">{{btn_prise.price}}</div>
-                <div :class="{active1 : !btn_prise.isshowprice}" class="cl-praisebtn-info">{{btn_prise.title}}</div>
+            <div v-show="collect" class="toolbar-btn toolbar-btn-right" @click="$emit('router-to-collect')">
+                <div class="toolbar-btn-price">￥0.00</div>
+                <div>发起集赞</div>
             </div>
         </div>
     </div>
@@ -29,8 +27,41 @@
 <script>
 export default {
   name: 'ToolsNavbar',
-  props: ['btnstate'],
-  data() {
+  props: {
+    originPrice: {
+      type: String,
+      default: '0'
+    },
+    collage: {
+      type: Boolean,
+      default: false
+    },
+    collect: {
+      type: Boolean,
+      default: false
+    },
+    price: {
+      type: Array,
+      default: ['', '']
+    },
+    collageText: {
+      default: '拼团购买'
+    }
+  },
+  filters: {
+    formatPrice: function(price) {
+        if(!price) return '';
+      if (price.includes('.')) return price
+      else return price + '.00'
+    }
+  },
+  methods: {
+    buyByOriginPrice(price) {
+      console.log('买' + price)
+      console.log(this.collect)
+    }
+  }
+  /*data() {
     return {
       btn_origin: {
         title: '原价购买',
@@ -59,13 +90,13 @@ export default {
         isshowprice: true
       }
     }
-  },
-  mounted() {
+  },*/
+  /*  mounted() {
     switch (this.btnstate) {
       case 0: //显示拼团购买,原价购买,发起集赞(默认显示)
         this.btn_origin = {
           title: '原价购买',
-          price: '$19.9',
+          price: '19.9',
           openType: 'none',
           isShow: true,
           btnOriginClass: '',
@@ -73,7 +104,7 @@ export default {
         }
         this.btn_group = {
           title: '三人团',
-          price: '$19.9',
+          price: '19.9',
           openType: 'none',
           isShow: true,
           btnGroupClass: '',
@@ -81,7 +112,7 @@ export default {
         }
         this.btn_prise = {
           title: '集赞换',
-          price: '$19.9',
+          price: '19.9',
           openType: 'none',
           isShow: true,
           btnPraiseClass: '',
@@ -91,7 +122,7 @@ export default {
       case 1: //显示原价购买
         this.btn_origin = {
           title: '原价购买',
-          price: '$19.9',
+          price: '19.9',
           openType: 'none',
           isShow: false,
           btnOriginClass: '',
@@ -99,7 +130,7 @@ export default {
         }
         this.btn_group = {
           title: '原价购买',
-          price: '$19.9',
+          price: '19.9',
           openType: 'none',
           isShow: true,
           btnGroupClass: '',
@@ -107,7 +138,7 @@ export default {
         }
         this.btn_prise = {
           title: '集赞换',
-          price: '$19.9',
+          price: '19.9',
           openType: 'none',
           isShow: false,
           btnPraiseClass: '',
@@ -117,7 +148,7 @@ export default {
       case 2: //显示原价购买,发起集赞
         this.btn_origin = {
           title: '原价购买',
-          price: '$19.9',
+          price: '19.9',
           openType: 'none',
           isShow: true,
           btnOriginClass: '',
@@ -125,7 +156,7 @@ export default {
         }
         this.btn_group = {
           title: '三人团',
-          price: '$19.9',
+          price: '19.9',
           openType: 'none',
           isShow: false,
           btnGroupClass: '',
@@ -133,7 +164,7 @@ export default {
         }
         this.btn_prise = {
           title: '集赞换',
-          price: '$19.9',
+          price: '19.9',
           openType: 'none',
           isShow: true,
           btnPraiseClass: '',
@@ -143,7 +174,7 @@ export default {
       case 3: //显示原价购买,我要拼团
         this.btn_origin = {
           title: '原价购买',
-          price: '$19.9',
+          price: '19.9',
           openType: 'none',
           isShow: true,
           btnOriginClass: '',
@@ -151,7 +182,7 @@ export default {
         }
         this.btn_group = {
           title: '三人团',
-          price: '$19.9',
+          price: '19.9',
           openType: 'none',
           isShow: true,
           btnGroupClass: '',
@@ -159,7 +190,7 @@ export default {
         }
         this.btn_prise = {
           title: '集赞换',
-          price: '$19.9',
+          price: '19.9',
           openType: 'none',
           isShow: false,
           btnPraiseClass: '',
@@ -221,7 +252,7 @@ export default {
       case 6: //显示继续支付
         this.btn_origin = {
           title: '',
-          price: '$19.9',
+          price: '19.9',
           openType: 'none',
           isShow: false,
           btnOriginClass: '',
@@ -229,7 +260,7 @@ export default {
         }
         this.btn_group = {
           title: '',
-          price: '$19.9',
+          price: '19.9',
           openType: 'none',
           isShow: false,
           btnGroupClass: '',
@@ -237,7 +268,7 @@ export default {
         }
         this.btn_prise = {
           title: '继续支付',
-          price: '$19.9',
+          price: '19.9',
           openType: 'none',
           isShow: true,
           btnPraiseClass: '',
@@ -247,7 +278,7 @@ export default {
       case 7: //显示参与拼团
         this.btn_origin = {
           title: '原价购买',
-          price: '$19.9',
+          price: '19.9',
           openType: 'none',
           isShow: false,
           btnOriginClass: '',
@@ -255,7 +286,7 @@ export default {
         }
         this.btn_group = {
           title: '三人团',
-          price: '$19.9',
+          price: '19.9',
           openType: 'none',
           isShow: false,
           btnGroupClass: '',
@@ -273,7 +304,7 @@ export default {
       case 8: //显示我要学习
         this.btn_origin = {
           title: '原价购买',
-          price: '$19.9',
+          price: '19.9',
           openType: 'none',
           isShow: false,
           btnOriginClass: '',
@@ -281,7 +312,7 @@ export default {
         }
         this.btn_group = {
           title: '我要学习',
-          price: '$19.9',
+          price: '19.9',
           openType: 'none',
           isShow: true,
           btnGroupClass: '',
@@ -289,7 +320,7 @@ export default {
         }
         this.btn_prise = {
           title: '集赞换',
-          price: '$19.9',
+          price: '19.9',
           openType: 'none',
           isShow: false,
           btnPraiseClass: '',
@@ -299,7 +330,7 @@ export default {
       case 9: //显示已完成集赞,点击领取
         this.btn_origin = {
           title: '原价购买',
-          price: '$19.9',
+          price: '19.9',
           openType: 'none',
           isShow: false,
           btnOriginClass: '',
@@ -307,7 +338,7 @@ export default {
         }
         this.btn_group = {
           title: '已完成集赞,点击领取',
-          price: '$19.9',
+          price: '19.9',
           openType: 'none',
           isShow: true,
           btnGroupClass: '',
@@ -315,7 +346,7 @@ export default {
         }
         this.btn_prise = {
           title: '集赞换',
-          price: '$19.9',
+          price: '19.9',
           openType: 'none',
           isShow: false,
           btnPraiseClass: '',
@@ -323,129 +354,98 @@ export default {
         }
         break
     }
-  }
+  }*/
 }
 </script>
 
-<style lang='scss' scoped>
-.member-container {
-  background-color: cyan;
-}
-.cl-tools-navbar {
+<style scoped lang='less' >
+@origin: #ffa32f;
+.purchase-toolbar {
   position: fixed;
-  bottom: 0px;
+  bottom: 0;
+  left: 0;
   width: 100%;
   height: 120px;
-  background-color: #fff;
+  line-height: 1;
   display: flex;
-  flex-direction: row;
-  padding: 20px;
-  box-sizing: border-box;
+  align-items: center;
   justify-content: space-between;
-  border-top: 1px solid lightgray;
-  z-index: 999;
-}
-.cl-sound {
-  width: 50px;
+  border-top: 2px solid #efefef;
   background-color: #fff;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  z-index: 10;
 }
-.cl-sound img {
-  align-self: center;
+.toolbar-audition {
+  margin: 0 28px;
+  line-height: 24px;
+}
+.audition-icon {
+  background-image: url('../assets/images/onlinecourse-tabbar-try.png');
   width: 40px;
   height: 40px;
+  margin-bottom: 12px;
 }
-.cl-sound label {
-  font-size: 10px;
-  text-align: left;
-  margin-top: 6px;
-  color: rgb(105, 105, 105);
+.under-text {
+  font-size: 20px;
+
+  color: #696969;
 }
-.cl-left-line {
+.vertical-line {
+  height: 70px;
   width: 2px;
-  background-color: gray;
-  margin-left: 28px;
+  border: none;
+  margin-right: 28px;
+  background-color: #efefef;
 }
-.cl-originbtn {
-  text-align: center;
-  background-color: #fff;
+.toolbar-price {
+  margin-left: 28px;
+  margin-right: 56px;
+  line-height: 32px;
+}
+.toolbar-price-num {
+  font-weight: 700;
+  color: @origin;
+  font-size: 30px;
+}
+.toolbar-btnGroup {
   display: flex;
-  flex-direction: column;
-  margin-left: 48px;
   flex-grow: 1;
   justify-content: space-between;
-}
-.cl-origin-price {
-  color: rgb(255, 163, 47);
-  text-align: center;
-  font-size: 16px;
-}
-.cl-origin-info {
-  color: rgb(105, 105, 105);
-  text-align: center;
-  font-size: 20px;
-}
-.cl-action-btn {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  flex-grow: 1;
+  border-radius: 80px;
   align-items: center;
-  width: 400px;
   height: 80px;
-  border-radius: 60px;
-  box-shadow: 0 0 16px rgb(229, 218, 207);
-  overflow: hidden;
-  margin-left: 56px;
-}
-.cl-groupbtn {
+  margin-right: 20px;
   text-align: center;
+  font-size: 30px;
+  overflow: hidden;
+  color: #fff;
+}
+.toolbar-btn {
+  height: 100%;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  padding: 10px 0;
+}
+.toolbar-btn-left {
   background: linear-gradient(
     to right,
     rgb(254, 202, 0) 0,
     rgb(254, 149, 2) 100%
   );
-  flex-grow: 1;
-  height: 80px;
-  align-items: center;
 }
-
-.cl-groupbtn-price {
-  font-size: 30px;
-  color: white;
-}
-.cl-groupbtn-info {
-  font-size: 20px;
-  color: white;
-  &.active {
-    height: 80px;
-    line-height: 80px;
-  }
-}
-
-.cl-praisebtn {
-  text-align: center;
+.toolbar-btn-right {
   background: linear-gradient(
     to right,
     rgb(254, 119, 0) 0,
     rgb(255, 79, 5) 100%
   );
-  flex-grow: 1;
-  height: 80px;
-  align-items: center;
 }
-.cl-praisebtn-price {
-  font-size: 30px;
-  color: white;
-}
-.cl-praisebtn-info {
-  font-size: 20px;
-  color: white;
-  &.active1 {
-    height: 80px;
-    line-height: 80px;
+.toolbar-btn-price {
+  font-weight: 700;
+  & + div {
+    font-size: 20px;
   }
 }
 </style>

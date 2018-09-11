@@ -109,12 +109,12 @@ export default new Router({
       component: AudioPlay
     },
     {
-      path: '/audio/audiocmts',
+      path: '/audio/audiocmts/:lessonid',
       name: 'AudioCmts',
       component: AudioCmts
     },
     {
-      path: '/audio/audiodraft',
+      path: '/audio/audiodraft/:lessonid',
       name: 'AudioDraft',
       component: AudioDraft
     },

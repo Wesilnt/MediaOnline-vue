@@ -31,7 +31,7 @@
     </div>
     <!-- message -->
     <div id="message" ref="message" class="message bottomline">
-      <DetailHeader title="精选留言" subtitle="全部" />
+      <DetailHeader title="精选留言" :subtitle="visionDetail.commentCount + '条'" />
       <div v-for="item of commentList" :key="item.id" class="comment-item">
         <comment-item :comment="item" />
       </div>

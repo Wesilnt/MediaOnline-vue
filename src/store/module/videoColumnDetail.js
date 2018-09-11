@@ -12,7 +12,10 @@ const videoColumnDetail = {
         buyIntro:'',               //购买须知
         lessonCount:0,                 //专栏课集总数
         commentCount:0,              //留言条数
-        buyCount:0             //购买数量
+        buyCount:0,             //购买数量
+    },
+    getters: {
+
     },
     mutations: {
         bindVideoColumnDetail(state,payload) {

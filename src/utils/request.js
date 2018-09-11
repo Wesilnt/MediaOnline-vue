@@ -111,7 +111,7 @@ function request(url, options) {
       }
     }
   }
-
+ 
   return fetch(`${baseURI}${url}`, newOptions)
     .then(checkStatus.bind(this, url))
     .then(response => {

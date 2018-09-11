@@ -18,8 +18,8 @@
         </div>
         <div class="center-container">
           <div v-if="comment.commentType==3301" class="text-container">
-            <p :class="{fold:!isExpand}" ref="cmtContent">{{comment.content}}</p>
-            <p  style="visibility:hidden;position:absolute;color:red;margin:0 40px 0 0" id="ref" ref="reference">{{comment.content}}</p>
+            <p :class="{fold:!isExpand}" ref="cmtContent">{{comment.content | getSingleCourseName(0)}}</p>
+            <p  style="visibility:hidden;position:absolute;color:red;margin:0 40px 0 0" id="ref" ref="reference">{{comment.content | getSingleCourseName(0)}}</p>
             <span v-if="!isExpand && canExpand" @click="isExpand=true">全文</span>
           </div>
           <div v-else class="voice-container">
@@ -27,15 +27,20 @@
             <span>{{comment.audioTime}}"</span>
           </div>
         </div>
-        <!-- <div v-if="comment.childComment.length>0" class="bottom-container">
-          <font>{{comment.reviewer}}</font>
-          {{comment.review}}
-        </div> -->
+        <div v-if="regiontype==2201" class="bottom-container">
+          <!-- <font>{{comment.content | getSingleCourseName()}}</font> -->
+          {{comment.content | getSingleCourseName(1)}}
+        </div>
+        <div class="bottom-container" v-else-if="regiontype===2202">
+          <font>{{comment.childComment && comment.childComment.fromNickName}}回复{{comment && comment.fromNickName}}</font>
+          {{comment.childComment && comment.childComment.content }}
+        </div>
       </div>
     </div>
   </div>
 </template>
 <script>
+
 export default {
   filters: {
     dateFormat: function(value) {
@@ -44,9 +49,19 @@ export default {
       var m = date.getMonth() + 1
       var d = date.getDate()
       return y + '-' + (m < 10 ? '0' + m : m) + '-' + (d < 10 ? '0' + d : d)
+    },
+    getSingleCourseName:function(value,index) { 
+      console.log('---------------------') 
+      console.log(value) 
+      let arr = value.split('=>')
+      return arr[index]
     }
   },
-  props: ['comment','unindent'],
+  props:{
+    comment:{
+      default:{}
+    },unindent:'',regiontype:''
+  }, 
   data() {
     return {
       canExpand: true,
@@ -64,7 +79,7 @@ export default {
     }
   },
   mounted() {
-    console.log(this.comment)
+    // console.log(this.comment)
     this.$nextTick(() => {
       let ref = this.$refs.reference
       if (ref) {
@@ -93,6 +108,7 @@ export default {
     display: flex;
     flex-direction: column;
     margin-left: 32px;
+    flex:1
   }
   .top-container {
     display: inline-flex;

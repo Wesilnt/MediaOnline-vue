@@ -21,7 +21,21 @@
     </div>
 </template>
 <script>
-export default {}
+import { createNamespacedHelpers } from 'vuex'
+const { mapState, mapActions } = createNamespacedHelpers('audio'); 
+export default {
+  data(){
+    return{
+      lessonId:this.$route.params.lessonid
+    }
+  },
+  created(){
+      this.getAudioDesc({lessonId:this.lessonId})
+  },
+  methods:{
+    ...mapActions(["getAudioDesc"])
+  }
+}
 </script>
 <style lang='scss'>
 .detail-container {

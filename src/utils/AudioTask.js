@@ -237,6 +237,10 @@ export default class AudioTask {
   setPlayMode(mode) {
     this._mode = mode
   }
+  //播放模式   order：顺序播放  random：随机播放  single:单个播放
+  getPlayMode() {
+    return this._mode 
+  }
   //当前播放状态  默认:'default', 播放:'play', 暂停:'pause', 停止:'stop', 结束:'end', 加载:'loading'
   getState() {
     return this._state

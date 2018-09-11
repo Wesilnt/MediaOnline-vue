@@ -1,20 +1,20 @@
 <template>
   <div class="audioplay-container">
     <!-- 封面 -->
-    <img :src="audioDetail.coverPic" class="cover">
+    <img :src="audio.coverPic" class="cover">
     <!-- 主，副标题 -->
-    <h3> {{audioDetail.title}}</h3>
-    <h4> {{audioDetail.subTitle}}</h4>
+    <h3> {{audio.title}}</h3>
+    <h4> {{audio.subTitle}}</h4>
     <!-- 中间tabbar -->
     <div class="tab-container">
       <div class="tab-item" @click="onCollect">
-        <img :src="audioDetail.isLike?require('../../assets/audio_love_collect.png'):require('../../assets/audio_love_normal.png')">
+        <img :src="isLike.like?require('../../assets/audio_love_collect.png'):require('../../assets/audio_love_normal.png')">
       </div>
-      <router-link to="/audio/audiodraft" class="tab-item" tag="div">
+      <router-link :to="'/audio/audiodraft/'+lessonId" v-if="false" class="tab-item" tag="div">
         <img src="../../assets/audio_play_manuscripts.png">
       </router-link>
-      <router-link to="/audio/audiocmts" class="tab-item" tag="div">
-        <span>10</span>
+      <router-link :to="'/audio/audiocmts/'+lessonId" class="tab-item" tag="div">
+        <span>{{audio.commentCount}}</span>
         <img src="../../assets/audio_play_comments.png">
       </router-link>
       <div class="tab-item" @click="onShare">
@@ -61,10 +61,10 @@
         </div>
         <hr>
         <div class="list-container">
-          <div v-for="(item,i) of playList" :key="i" class="list-item">
-            <div class="list-content" @click="onItemClick(i)">
-              <img v-if="i==playIndex" src="../../assets/audio_list_playing.png">
-              <p :class="{'p-playing':i==playIndex}">文学 | 为什么抱元科技没有食堂?</p>
+          <div v-for="item of singleSetList" :key="item.id" class="list-item">
+            <div class="list-content" @click="onItemClick(item)">
+              <img v-if="lessonId==item.id" src="../../assets/audio_list_playing.png">
+              <p :class="{'p-playing':lessonId==item.id}">{{item.title}}</p>
             </div>
             <hr>
           </div>
@@ -78,7 +78,7 @@
 </template>
 <script>
 import {createNamespacedHelpers} from 'vuex'
-const {mapState,mapActions}  = createNamespacedHelpers('audio')
+const {mapState,mapActions,mapGetters}  = createNamespacedHelpers('audio')
 
 import SharePop from '../Share.vue'
 import AudioTask from '../../utils/AudioTask.js'
@@ -91,7 +91,6 @@ export default {
     return {
       lessonId:this.$route.query.id,
       play: true,
-      isLove: true, //是否已收藏
       isSingle: false, //是否单个循环
       isPlaying: false, //是否正在播放
       popupVisible: false, //是否显示音频列表弹框
@@ -100,28 +99,6 @@ export default {
       currentTime: '0', //播放音频进度
       duration: 100, //播放音频最大时长
       touching: false, //slider触摸
-      playList: [
-        //播放列表
-        { isPlaying: true },
-        { isPlaying: false },
-        { isPlaying: false },
-        { isPlaying: false },
-        { isPlaying: false },
-        { isPlaying: false },
-        { isPlaying: false },
-        { isPlaying: false },
-        { isPlaying: false },
-        { isPlaying: false },
-        { isPlaying: false },
-        { isPlaying: false },
-        { isPlaying: false },
-        { isPlaying: false },
-        { isPlaying: false },
-        { isPlaying: false },
-        { isPlaying: false },
-        { isPlaying: false },
-        { isPlaying: false }
-      ],
       rangeValue: 0,
       cover: '',
       progressColor: '#ff0000',
@@ -130,10 +107,20 @@ export default {
       touchStart: 0
     }
   },
-  computed:{...mapState(["audioDetail"])},
+  computed:{...mapState({audio:"audioDetail",isLike(state){ 
+    let like = state.isLike.like
+    if(!state.isLike.isLoad){
+      if(like)
+      this.$toast.success({duration:2000,message: '已添加到我喜欢的'})
+      else
+      this.$toast.fail({duration:2000,message:'已取消喜欢'})
+    }
+    return state.isLike
+  },'singleSetList':"singleSetList"})},
   created() {
     this.getAudioDetail({lessonId:this.lessonId})
     this.isPlaying = AudioTask.getInstance().isPlaying()
+    this.isSingle = AudioTask.getInstance().getPlayMode() == "single"
     AudioTask.getInstance().addTimeListener(this.onTimeUpdate)
     AudioTask.getInstance().addStateListener(this.onStateUpdate)
   },
@@ -160,17 +147,14 @@ export default {
       let percent = parseInt(e.target.value * 100 / e.target.max)
       e.target.style =  'background: linear-gradient(to right,#FFCD7D ' + percent + '%,  #E5E5E5 1%, #E5E5E5'
     },
-    //进度条拖动
+    //进度条拖动 OTAwOWY1ZjgtZTJiYy00Y2IwLTk4ZDktNzIxYjMyMTUzYzU2
     sliderChange(value) {
       console.log(value)
       console.log(this.$refs.content)
-    },
-    onSliderTap() {
-      console.log(SharePop)
-    },
+    }, 
     //收藏
     onCollect() {
-      this.postFavorite({})
+      this.postFavorite({lessonId:this.lessonId})
     },
     //文稿
     onManuScripts() {},
@@ -197,7 +181,7 @@ export default {
     //播放/暂停
     onPlayPause() {
       if ((this.isPlaying = !this.isPlaying)) { 
-        AudioTask.getInstance().play(this.audioDetail.audioUrl)
+        AudioTask.getInstance().play(this.audio.audioUrl)
       } else {
         AudioTask.getInstance().pause()
       }
@@ -220,8 +204,7 @@ export default {
       })
     },
     //播放状态监听
-    onStateUpdate(state) {
-      console.log(state)
+    onStateUpdate(state) { 
       if (state == 'canplaythrough') {
         this.duration = AudioTask.getInstance().getDuration()
       }
@@ -241,15 +224,18 @@ export default {
       this.popupVisible = false
     },
     //列表Item点击事件
-    onItemClick(i) {
-      Toast('播放' + i + '首')
-      this.playIndex = i
+    onItemClick(audio) { 
+      if(audio.isFree){
+          this.getAudioDetail({lessonId:audio.id})
+      }else{
+          this.$toast({duration:2000,message:'你还未购买该专栏,请购买之后收听!!!'})
+      } 
       this.popupVisible = false
     }
   }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .audioplay-container {
   display: flex;
   flex-direction: column;
@@ -278,8 +264,8 @@ export default {
     margin: 64px 120px 0;
     span {
       position: relative;
-      left: 51px;
-      top: -22px;
+      left: 45px;
+      top: -20px;
       font-size: 20px;
       color: rgb(146, 145, 150);
     }
@@ -495,32 +481,32 @@ export default {
     background-color: rgb(245, 245, 245);
   }
 }
-/**收藏提示ICON*/
-.van-toast--default {
-  width: auto;
-}
-.van-toast__icon {
+/**收藏提示ICON*/ 
+.van-icon-success {
   background-image: url(../../assets/audio_love_collect.png);
   background-size: 28px;
   background-repeat: no-repeat;
-  margin: 0 auto;
+  margin: 1px auto 12px;
   height: 28px;
-  width: 28px;
+  width: 28px; 
 }
 .van-icon-success::before {
   content: none;
 }
-.van-icon-fail {
-  background-image: url(../../assets/audio_play_tip.png);
-  background-size: 28px;
-  background-repeat: no-repeat;
-  margin: 0 auto;
-  height: 28px;
-  width: 28px;
+.van-toast--text{
+  max-width: 80%;
+  white-space: nowrap;
 }
 
 .van-icon-fail::before {
   content: none;
+}
+.van-toast--default .van-toast__text {
+  padding-top: 0;
+}
+.van-toast--default{
+  min-height: 0;
+  width: auto;
 }
 
 .first-icon,
@@ -531,13 +517,5 @@ export default {
   margin: 0 auto;
   height: 56px;
   width: 56px;
-}
-.van-toast--text {
-  width: auto;
-  min-width: 0;
-}
-.van-toast--default{
-  min-height: 0;
-  width: auto;
-}
+} 
 </style>

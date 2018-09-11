@@ -24,6 +24,8 @@
   </div>
 </template>
 <script>
+import { createNamespacedHelpers } from 'vuex'
+const { mapState, mapActions } = createNamespacedHelpers('audio')
 import CommentItem from '../CommentItem.vue'
 export default {
   components: {
@@ -31,6 +33,7 @@ export default {
   },
   data() {
     return {
+      lessonId:this.$route.params.lessonid,
       comments: [
         {
           id: Date.now() + 1, //评论ID
@@ -70,7 +73,8 @@ export default {
           isPraised: true, //当前用户是否对评论点赞
           type: 0, //评论类型 0 文字  1 语音
           isExpand: false, //默认是否展开
-          content: '论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论',
+          content:
+            '论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论',
           review: '此处为老师回复内容此处为老师回复内容此处为老师回复内', //回复内容
           reviewer: '伍智老师：', //回复老师姓名
           praiseNum: 520, //点赞人数
@@ -86,7 +90,17 @@ export default {
       commentContent: ''
     }
   },
+  created() {
+    this.getCommentList({
+      regionType: 2202,               //留言位置（2201:专栏,2202:单集)
+      regionId: this.lessonId,        //位置id
+      commentId: 0,                   //评论id
+      currentPage: 1,                 //当前页码
+      pageSize: 20                    //每页显示条数
+    })
+  },
   methods: {
+    ...mapActions(['getCommentList']),
     //切换评论方式
     onCommentMethod() {
       this.isSpeak = !this.isSpeak
@@ -95,7 +109,7 @@ export default {
     onInputeComment() {},
     //发送评论
     onSendComment() {
-      Toast('发布评论成功')
+      this.$toast('发布评论成功')
     },
     //点赞
     onPraise(index) {
