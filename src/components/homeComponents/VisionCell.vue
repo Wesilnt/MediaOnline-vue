@@ -1,24 +1,25 @@
 <template>
   <div class="cell" @click="enterVisionDetail(vision.id)">
-    
-    <ul>
-      <li>
-        <img :src="vision.coverPic" class="visionicon" alt="">
-      </li>
-      <li>
-        <p class="visionTitle">{{vision.name}}</p>
-        <p class="visionDetail">{{vision.briefIntro}}</p>
-        <p class="visionDetail">{{vision.authorName}}</p>
-        <p class="visionDetail footText">
-          <span class="price">¥{{vision.price}}</span>/共{{vision.lessonCount}}讲
-        </p>
+    <div>
+      <img :src="vision.coverPic" class="visionicon" alt="">
+    </div>
+    <div class="detailContent">
+      <p class="visionTitle">{{vision.name}}</p>
+      <p class="visionDetail">{{vision.briefIntro}}</p>
+      <p class="visionDetail">{{vision.authorName}}</p>
+      <p class="visionDetail footText">
+        <span class="price">¥{{vision.price}}</span>/共{{vision.lessonCount}}讲
+      </p>
+    </div>
+    <div>
+      <div class="fit">{{vision.fitFor}}岁</div>
+      <div class="visionPlay">
+        <div class="visionPlayContent">
+          <div class="palyTringle" />试听
+        </div>
+      </div>
+    </div>
 
-      </li>
-      <li>
-        <div class="fit">{{vision.fitFor}}岁</div>
-        <img class="visionPlay" src="../../assets/home_vision_paly.png" alt="">
-      </li>
-    </ul>
   </div>
 </template>
 
@@ -37,37 +38,15 @@ export default {
 .cell {
   width: 694px;
   margin-left: 28px;
-
-  ul,
-  li {
-    list-style: none;
-    &:after {
-      content: '';
-      clear: both;
-      display: block;
-    }
-  }
-  ul {
-    width: 694px;
-    padding: 0;
-  }
-  li:nth-child(1) {
-    width: 180px;
-    float: left;
-    position: relative;
-  }
-  li:nth-child(2) {
-    width: 336px;
-    float: left;
-    padding-left: 20px;
-    position: relative;
-  }
-  li:nth-child(3) {
-    width: 132px;
-    float: right;
-    position: relative;
-  }
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
 }
+.detailContent {
+  flex: 2;
+  margin-left: 20px;
+}
+
 .visionicon {
   width: 180px;
   height: 240px;
@@ -104,9 +83,33 @@ export default {
   text-align: center;
   line-height: 40px;
 }
+.palyTringle {
+  display: inline-block;
+  width: 10px;
+  height: 0px;
+  border-style: solid;
+  border-width: 10px;
+  border-color: transparent;
+  border-left-color: #fff;
+  top: 0;
+  left: 20px;
+}
 .visionPlay {
   width: 132px;
-  height: 70px;
+  height: 60px;
+  border-radius: 30px;
+  background-color: #ffa32f;
   margin-top: 96px;
+  color: #fff;
+  font-size: 24px;
+  text-align: center;
+  -webkit-box-shadow: 0 0 15px 2px #e5dacf;
+  -moz-box-shadow: 0 0 15px 2px #e5dacf;
+  box-shadow: 0 0 15px 2px #e5dacf;
+}
+.visionPlayContent {
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 60px;
 }
 </style>
