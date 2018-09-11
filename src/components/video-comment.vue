@@ -14,8 +14,19 @@
                     <span>{{comment.likeCount}}</span>
                 </div>
             </div>
-            <div class="video-comment-detail">{{comment.content}}</div>
-            <div class="video-comment-total">全部</div>
+
+            <div :class="showTotal ? 'total-comment' : 'detail-comment'">
+              <div class="intro-content" res="desc">
+                <span class="video-comment-detail">
+                  {{comment.content}}
+                </span>
+                <div class="video-comment-totalBtn" @click="showTotalIntro" v-if="showExchangeBtn">
+                  <p>{{exchangeBtn ? '全部' : '收起'}}</p>
+                </div>
+              </div>
+            </div>
+
+
             <div class="video-comment-replay" v-if="regionType==2201" >
                   单集名称
             </div>
@@ -36,11 +47,18 @@ export default {
       praiseHighlight: require('../assets/images/onlinecourse_praise_normal.png'),
       isPraise: false,
       regionType:2201,  //2201 专栏评论  2202 单集评论
+      showTotal:true,   //是否显示所有文本内容
+      exchangeBtn:true, //显示展开还是收起
+      showExchangeBtn:false, //是否显示展开收起按钮
     }
   },
   methods: {
     onClickPraise() {
       this.isPraise = !this.isPraise
+    },
+    showTotalIntro () {
+      this.showTotal = !this.showTotal
+      this.showExchangeBtn = !this.showExchangeBtn
     }
   }
 }
@@ -107,13 +125,28 @@ export default {
   font-size: 28px;
   color: rgb(255, 163, 47);
 }
+
+//评论内容
+.total-comment {
+  height: auto;
+  overflow: hidden;
+  font-size: 28px;
+  color:rgb(51, 51, 51);
+  margin: 10px;
+}
+
+.detail-comment {
+
+}
+
+
 .video-comment-detail {
   height: 100%;
   font-size: 28px;
   color: rgb(51, 51, 51);
   margin-bottom: 8px;
 }
-.video-comment-total {
+.video-comment-totalBtn {
   font-size: 28px;
   color: rgb(255, 149, 33);
   text-align: right;

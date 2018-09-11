@@ -1,7 +1,7 @@
 <template>
   <div class="comments-container">
     <!-- 全部留言 -->
-    <div class="comment-item" >
+    <div class="comment-item" :style="{padding:'0px '+unindent?0:40+'px 48px'}">
       <div class="comment-header">
         <img :src="comment.fromAvatarUrl">
       </div>
@@ -46,11 +46,11 @@ export default {
       return y + '-' + (m < 10 ? '0' + m : m) + '-' + (d < 10 ? '0' + d : d)
     }
   },
-  props: ['comment'],
+  props: ['comment','unindent'],
   data() {
     return {
       canExpand: true,
-      isExpand:false
+      isExpand:false,
     }
   },
   methods: {

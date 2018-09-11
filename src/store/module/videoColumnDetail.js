@@ -11,11 +11,11 @@ const videoColumnDetail = {
         videoColumnComments:[],       //视频专栏的留言
         buyIntro:'',               //购买须知
         lessonCount:0,                 //专栏课集总数
-        commentCount:0              //留言条数
+        commentCount:0,              //留言条数
+        buyCount:0             //购买数量
     },
     mutations: {
         bindVideoColumnDetail(state,payload) {
-
             state.freeLessonList = payload.freeLessonList
             state.profilePic = payload.profilePic
             state.description = payload.description
@@ -23,6 +23,7 @@ const videoColumnDetail = {
             state.buyIntro = payload.buyIntro
             state.lessonCount = payload.lessonCount
             state.commentCount = payload.commentCount
+            state.buyCount = payload.buyCount
         },
         bindCommentList(state,payload) {
             state.videoColumnComments = payload.result
