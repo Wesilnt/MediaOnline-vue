@@ -12,6 +12,7 @@ import visionData from './module/visionData'
 import audio from './module/audioData'
 import readings from './module/readingsData'
 import myFeedback from './module/myFeedback'
+import mySysMessage from './module/mySysMessage'
 
 Vue.use(Vuex)
 export default new Vuex.Store({
@@ -26,6 +27,7 @@ export default new Vuex.Store({
     videoCourseDetail,
     questionList,
     myFeedback,
+    mySysMessage,
     visionData,
     readings,
     audio

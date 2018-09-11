@@ -4,9 +4,9 @@
           <div class="user-info">
               <img :src="avatarUrl" class="user-info-avatar">
               <span class="user-info-nickname">{{nickName}}</span>
-              <div class="edit-info">完善资料领书币</div>
+              <div class="edit-info">编辑个人资料</div>
           </div>
-          <div class="background-cover"/>
+          <!--<div class="background-cover"/>-->
           <div class="grid-list">
               <div v-for="item in list" :key="item.name"  class="grid-item">
                   <router-link :to="item.name">
@@ -98,52 +98,50 @@ export default {
   flex-direction: column;
   display: flex;
   justify-content: flex-start;
-  height: 340px;
+  height: 322px;
   background: rgb(247, 202, 118);
   z-index: 2;
 }
 
 .user-info-avatar {
-  width: 120px;
-  height: 120px;
-  margin-top: 72px;
+  width: 112px;
+  height: 112px;
+  margin-top: 56px;
   border-radius: 50%;
   background-color: rgb(253, 231, 231);
 }
 
 .user-info-nickname {
-  margin-top: 18px;
+  margin-top: 24px;
   color: #fff;
   font-size: 32px;
 }
 .edit-info {
   height: 48px;
   border-radius: 30px;
-  margin: 20px;
-  padding: 10px 40px 10px 40px;
+  padding: 10px 40px 48px 40px;
   font-size: 24px;
   color: rgb(255, 255, 255);
-  background-color: rgb(255, 150, 33);
 }
 
-.background-cover {
-  background-color: rgb(247, 202, 118);
-  width: 100%;
-  height: 65px;
-  margin-top: -25px;
-  border-radius: 40%;
-  align-items: center;
-  flex-direction: column;
-  display: flex;
-  justify-content: flex-start;
-  padding-top: 5px;
-  z-index: -1;
-}
+/*.background-cover {*/
+  /*background-color: rgb(247, 202, 118);*/
+  /*width: 100%;*/
+  /*height: 65px;*/
+  /*margin-top: -25px;*/
+  /*border-radius: 40%;*/
+  /*align-items: center;*/
+  /*flex-direction: column;*/
+  /*display: flex;*/
+  /*justify-content: flex-start;*/
+  /*padding-top: 5px;*/
+  /*z-index: -1;*/
+/*}*/
 .grid-list {
   display: flex;
   flex-wrap: wrap;
   width: 100%;
-  padding-top: 90px;
+  padding-top: 56px;
 }
 .grid-item {
   width: 33.3%;
@@ -152,13 +150,13 @@ export default {
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
-  padding-bottom: 48px;
+  padding-bottom: 56px;
   border: 1px #000;
   flex-wrap: wrap;
 }
 .img {
-  width: 120px;
-  height: 120px;
+  width: 112px;
+  height: 112px;
 }
 .title {
   font-size: 26px;

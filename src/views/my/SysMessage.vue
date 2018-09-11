@@ -1,27 +1,33 @@
 <template>
-    <div>
-        <div class="container" justify-content="around">
-            <div class="avatar-item-left">
-                <img class="head-img-left" src="../../assets/images/my_sys_notify.png">
-                <div class="head-notice">全部通知</div>
+    <div class="sysmessage-container">
+        <div class="sysmessage-head" justify-content="around">
+            <div class="sysmessage-head-left">
+                <img class="sysmessage-head-left-img" src="../../assets/images/my_sys_notify.png">
+                <div class="sysmessage-head-left-text">全部通知</div>
             </div>
-            <div class="avatar-item-right">
-                <img class="head-img-right" src="../../assets/images/my_sys_menu.png">
+            <div class="sysmessage-head-right">
+                <img class="sysmessage-head-right-img" src="../../assets/images/my_sys_menu.png">
             </div>
         </div>
+        <div class="divider-line"></div>
         <div>
             <div>
-                <div v-for="item in list" :key="item.name" class="list-item">
-                    <div>
-                        <div class="divider-line"></div>
-                        <div class="item-head">
-                            <div class="item-title">{{item.type}}</div>
-                            <div class="item-time">{{item.time}}</div>
-                        </div>
-                        <div class="item-content">{{item.content}}</div>
-                    </div>
+                <div v-for="item in messageList" :key="item.id">
+                    <van-swipe-cell  :right-width="150" :on-close="onClose(item.id)">
+                            <div class="sysmessage-list-item">
+                                <div class="item-head">
+                                    <div v-if="item.busiType===3102" class="sysmessage-list-item-title">留言入选通知</div>
+                                    <div v-if="item.busiType===3103" class="sysmessage-list-item-title">系统消息</div>
+                                    <div v-if="item.busiType===3105" class="sysmessage-list-item-title">留言升级通知</div>
+                                    <div v-if="item.busiType===3106" class="sysmessage-list-item-title">用户反馈通知</div>
+                                    <div class="sysmessage-list-item-time">{{item.createTime | formatDate }}</div>
+                                </div>
+                                <div class="sysmessage-list-item-content">{{item.content}}</div>
+                            </div>
+                        <span slot="right">删除</span>
+                    </van-swipe-cell>
+                    <div class="divider-line"></div>
                 </div>
-                <div class="divider-line-end"></div>
                 <div/>
             </div>
         </div>
@@ -29,116 +35,147 @@
 </template>
 
 <script>
-export default {
-  name: 'SysMessage',
-  components: {
-    // NavBar
-  },
-  data: function() {
-    return {
-      list: [
-        {
-          name: '/my/a',
-          type: '系统通知',
-          time: '08-08',
-          content: '感谢您一直以来对秦汉胡同的支持'
-        },
-        {
-          name: '/my/b',
-          type: '小胡同',
-          time: '08-08',
-          content: '您的反馈我们已经收到，谢谢'
-        },
-        {
-          name: '/my/c',
-          type: '系统通知',
-          time: '08-08',
-          content: '感谢您一直以来对秦汉胡同的支持'
-        },
-        {
-          name: '/my/d',
-          type: '小胡同',
-          time: '08-08',
-          content: '您的反馈我们已经收到，谢谢'
+  import {createNamespacedHelpers} from 'vuex'
+
+  const {
+    mapState,
+    mapActions,
+  } = createNamespacedHelpers('mySysMessage')
+  export default {
+    name: 'SysMessage',
+    components: {
+      // NavBar
+    },
+    data: function () {
+      return {
+
+      }
+    },
+    computed: {
+      ...mapState(['messageList', 'loading'])
+    },
+    methods: {
+      ...mapActions(['queryList','delSysMessage']),
+      onClose(id) {
+        return (clickPosition, instance) =>{
+          console.log(id)
+          switch (clickPosition) {
+            case 'left':
+            case 'cell':
+            case 'outside':
+              instance.close();
+              break;
+            case 'right':
+              instance.close();
+              this.delSysMessage({msgId:id})
+              break;
+          }
         }
-      ]
+      }
+    },
+    created() {
+      this.queryList()
+    },
+    filters: {
+      formatDate: function (time) {
+        var date = new Date(time);
+        const seperator1 = '-'
+        let month = date.getMonth() + 1
+        let strDate = date.getDate()
+        if (month >= 1 && month <= 9) {
+          month = '0' + month
+        }
+        if (strDate >= 0 && strDate <= 9) {
+          strDate = '0' + strDate
+        }
+        return (
+          month + seperator1 + strDate
+        )
+      }
     }
-  },
-  methods: {}
-}
+  }
 </script>
 
 <style scoped>
-.container {
-  display: flex;
-  justify-content: space-between;
-  padding: 54px 30px 34px 30px;
-}
+    sysmessage-container {
+        padding: 30px;
+    }
 
-.avatar-item-left {
-  flex-direction: column;
-  align-items: center; /*垂直居中*/
-  justify-content: center; /*水平居中*/
-}
+    .sysmessage-head {
+        display: flex;
+        justify-content: space-between;
+        padding: 54px 30px 34px 30px;
+    }
 
-.head-notice {
-  width: 300px;
-  padding-top: 5px;
-  font-size: 36px;
-}
+    .sysmessage-head-left {
+        align-items: center; /*垂直居中*/
+        justify-content: center; /*水平居中*/
+        display: flex;
+        flex-direction: row;
+    }
 
-.avatar-item-right {
-}
+    .sysmessage-head-left-text {
+        width: 300px;
+        padding-top: 5px;
+        font-size: 36px;
+    }
 
-.head-img-left {
-  width: 60px;
-  height: 60px;
-  float: left;
-  margin-right: 20px;
-}
+    .sysmessage-head-right {
+        display: none;
+    }
 
-.head-img-right {
-  width: 42px;
-  height: 39px;
-  float: left;
-}
+    .sysmessage-head-left-img {
+        width: 60px;
+        height: 60px;
+        margin-right: 20px;
+    }
 
-.divider-line {
-  border-top: 1px solid #ddd;
-  text-align: center;
-}
+    .sysmessage-head-right-img {
+        width: 42px;
+        height: 39px;
+    }
 
-.list-item {
-  padding: 16px 16px 24px 30px;
-  font-size: 16px;
-  white-space: nowrap;
-}
-.item-head {
-  padding-top: 30px;
-}
 
-.item-title {
-  padding: 0px 24px 0px 0px;
-  font-weight: bold;
-  font-size: 32px;
-  display: inline;
-}
+    .divider-line {
+        height: 1px;
+        background: #ddd;
+        text-align: center;
+        margin: 0px 30px 0px 30px;
+    }
 
-.item-time {
-  font-size: 22px;
-  display: inline;
-  color: #9ba1b0;
-}
+    .sysmessage-list-item {
+        padding: 0px 32px 0px 32px;
+    }
 
-.item-content {
-  padding: 32px 32px 0px 70px;
-  font-size: 28px;
-  color: #808080;
-}
+    .sysmessage-list-item-title {
+        font-weight: bold;
+        font-size: 32px;
+        display: inline;
+        padding-right: 24px;
+    }
 
-.divider-line-end {
-  border-top: 1px solid #ddd;
-  text-align: center;
-  margin: 0px 30px 0px 30px;
-}
+    .sysmessage-list-item-time {
+        font-size: 22px;
+        display: inline;
+        color: #9ba1b0;
+    }
+
+    .sysmessage-list-item-content {
+        padding: 0px 32px 32px 70px;
+        font-size: 28px;
+        color: #808080;
+    }
+
+    .van-swipe-cell span {
+        width: 150px;
+        height: 100%;
+        color: #FFFFFF;
+        font-size: 18px;
+        display: block;
+        line-height: 44px;
+        background-color: #F44;
+        display: flex;
+        justify-content:center;
+        align-items:Center;
+    }
 </style>
