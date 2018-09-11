@@ -14,7 +14,7 @@ export default {
   props:["courseinfo"],
   data() {
     return {
-      isFold: false,
+      isFold: true,
       imgUp: require('../assets/images/onlinecourse_arrow_down.png'),
       imgDown: require('../assets/images/onlinecourse_arrow_up.png')
     }

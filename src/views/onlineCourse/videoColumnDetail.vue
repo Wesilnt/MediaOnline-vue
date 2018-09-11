@@ -1,23 +1,19 @@
 <template>
     <div class="videocol-dec-container">
        <div class="videocol-header" :style="{ background : 'url('+profilePic+')' }">
-           <div class="videocol-header-title">孩子的第一堂课</div>
-           <div class="videocol-header-bottom">
-               <label>你一定会喜欢的国学课</label>
-               <label>999人已购买</label>
-           </div>
+            <span class="videocol-header-bottom">{{buyCount}}人已购买</span>
        </div>
 
-        <div class="videocol-navbar" ref="navbar" :class="navbarFixed == true ? 'isFixed' : ''">
+        <div class="videocol-navbar" id="navbar" ref="navbar">
             <div v-for="(item,index) of navbar" :class="{'selected':selected == index }" :key="index" class="videocol-navbar-item" @click="clickFnc(index)">{{item}}</div>
         </div>
 
         <tools-navbar :btnstate="0"/>
 
        <div class="videocol-content">
-           <course-introduce :courseinfo="description"/>
+           <course-introduce ref="desc" id="desc" :courseinfo="description"/>
            <hr class="lineone">
-            <div class="videocol-sction-title" ref="note">
+            <div class="videocol-sction-title">
                 <h4>课程列表 <label>(共{{lessonCount}}讲)</label></h4>
            </div>
             <div class="videocol-bigimage">
@@ -25,7 +21,7 @@
                 <img :src="require('../../assets/images/onlinecourse_bigimage_search.png')" class="videocol-bigimage-search">
             </div>
             <hr class="lineone">
-            <div class="videocol-sction-title" ref="catalog">
+            <div class="videocol-sction-title" id="tryCourse" ref="tryCourse">
                 <h4>试看课程</h4>
                 <div class="videocol-all" @click="allFunc">
                     <span class="videocol-allbtn">全部</span>
@@ -33,25 +29,24 @@
                 </div>
            </div>
 
-            <playlist v-for="(item,index) of freeLessonList" :key="item.id" :iteminfo="item" :lastindex="index == (dataList.length - 1)" @jumpEvent="gotoVideoCourseDetailPage(item.id)"/>
-
+            <playlist v-for="(item,index) of freeLessonList" :key="item.id" :iteminfo="item" :lastindex="index === (freeLessonList.length - 1)" @jumpEvent="gotoVideoCourseDetailPage(item.id)"/>
 
             <hr class="lineone">
-            <div class="videocol-sction-title" ref="leavemessage">
+            <div class="videocol-sction-title" id="leavemessage" ref="leavemessage">
                 <h4>精选留言</h4>
                 <div class="videocol-all" @click="allFunc">
                     <span class="videocol-allbtn">{{commentCount}}条</span>
                     <img :src="require('../../assets/images/onlinecourse_arrow_right.png')" class="videocol-allbtn-icon">
                 </div>
            </div>
-           <video-comment v-for="item of videoColumnComments" :key="item.id" :comment="item"/>
+           <!-- <video-comment v-for="item of videoColumnComments" :key="item.id" :comment="item"/> -->
+            <commentitem class="video-column-comment" v-for="item of videoColumnComments" :key="item.id" :comment="item" :unindent="true"/>
             <hr class="lineone">
             <div class="videocol-sction-title">
                 <h4>购买须知</h4>
            </div>
            <div class="videocol-purchase-tip-fatherView">
                <p v-html="buyIntro"></p>
-                <!-- <div v-for="item of purchaseList" :key="item.id" class="videocol-purchase-tip">{{item.id + '.' + item.info}}</div> -->
            </div>
 
             
@@ -63,6 +58,7 @@
 import CourseIntroduce from '../../components/CourseIntroduce.vue'
 import playlist from './components/playlist.vue'
 import videoComment from '../../components/video-comment.vue'
+import CommentItem from '../../components/CommentItem.vue'
 import toolsNavbar from '../../components/toolsNavbar.vue'
 import videoBigimage from '../../components/videoBigimage.vue'
 import { createNamespacedHelpers } from "vuex";
@@ -75,7 +71,8 @@ export default {
         playlist: playlist,
         'video-comment': videoComment,
         'tools-navbar': toolsNavbar,
-        'vue-bigimage': videoBigimage
+        'vue-bigimage': videoBigimage,
+        'commentitem' : CommentItem
     },
     data() {
         return {
@@ -99,7 +96,8 @@ export default {
             'videoColumnComments',       //视频专栏的留言
             'buyIntro',               //购买须知
             'lessonCount',                 //专栏课集总数
-            'commentCount'            //留言总条数
+            'commentCount',            //留言总条数
+            'buyCount'
         ]),
     },
    
@@ -108,10 +106,6 @@ export default {
             "getVideoColumnDetail",
             "getCommentList"
         ]),
-
-        clickFnc(index) {
-            this.selected = index
-        },
         allFunc() {
             console.log('点击全部')
         },
@@ -126,48 +120,44 @@ export default {
                 document.documentElement.scrollTop ||
                 document.body.scrollTop
             //2.获取navbar的偏移量
-            var barOffset = this.$refs.navbar.offsetTop
-            this.navbarFixed = scrollTop > barOffset ? true : false
-            var noteH = this.$refs.note.offsetTop
-            const catalogH = this.$refs.catalog.offsetTop
-            const leavemessageH = this.$refs.leavemessage.offsetTop
-            if (scrollTop <= noteH) {
-                // console.log('----0----')
+            // var barOffset = this.$refs.navbar.offsetTop
+            // var barOffset = this.$el.querySelector('#navbar').offsetTop
+            // console.log('barOffset='+barOffset)
+            // console.log('scrollTop='+scrollTop)
+            // this.navbarFixed = scrollTop > barOffset ? true : false
+            let tryCourseH = this.$el.querySelector('#tryCourse').offsetTop -50
+            let messageH = this.$el.querySelector('#leavemessage').offsetTop -50
+            if (scrollTop < tryCourseH) {
                 this.selected = 0
-            } else if (scrollTop < catalogH && scrollTop > noteH) {
-                // console.log('----1----')
+            } else if (scrollTop < messageH && scrollTop > tryCourseH) {
                 this.selected = 1
-            } else if (scrollTop < leavemessageH && scrollTop > catalogH) {
-                // console.log('----2----')
+            } else if (scrollTop > messageH) {
                 this.selected = 2
             }
         },
         clickFnc(index) {
             this.selected = index
-            console.log('currentindex=' + index)
+            let positionId
             switch (index) {
                 case 0:
-                this.$refs.note.scrollIntoView({
-                    behavior: 'instant',
-                    block: 'center',
-                    inline: 'nearest'
-                })
+                    positionId = '#desc'
                 break
                 case 1:
-                this.$refs.catalog.scrollIntoView({
-                    behavior: 'instant',
-                    block: 'center',
-                    inline: 'nearest'
-                })
+                    positionId = '#tryCourse'
                 break
                 case 2:
-                this.$refs.leavemessage.scrollIntoView({
-                    behavior: 'instant',
-                    block: 'center',
-                    inline: 'nearest'
-                })
+                    positionId = '#leavemessage'
+                break
+                default:
                 break
             }
+
+            let anchor = this.$el.querySelector(positionId)
+            document.body.scrollTop = anchor.offsetHeight - 50
+            // // Firefox
+            document.documentElement.scrollTop = anchor.offsetTop - 50
+            // Safari
+            window.pageYOffset = anchor.offsetTop - 50
         },
 
     }, 
@@ -201,30 +191,24 @@ export default {
   padding: 0 40px;
   box-sizing: border-box;
   text-align: left;
-  .videocol-header-title {
-    padding-top: 168px;
-    margin-bottom: 20px;
-    font-size: 36px;
-    color: rgb(255, 255, 255);
-  }
+  position: relative;
 }
 
 .videocol-header-bottom {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  position: absolute;
+  bottom: 20px;
+  right: 40px;
   font-size: 28px;
-  color: rgb(255, 255, 255);
-  // &:nth-child(1) {
-
-  // }
-  // &:nth-child(2) {
-
-  // }
+  color:red;
 }
 
 //导航条
 .videocol-navbar {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0px;
+  left: 0;
+  right: 0;
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -233,15 +217,8 @@ export default {
   border-bottom: 1px solid lightgray;
   box-sizing: border-box;
   padding-top: 28px;
-//   margin-bottom: 28px;
   text-align: center;
-
-
-  &.isFixed {
-    position: fixed;
-    top: 0;
-    z-index: 999;
-  }
+   z-index: 999;
 
   .videocol-navbar-item {
     width: 100px;
@@ -321,12 +298,10 @@ export default {
   bottom: 20px;
 }
 
-// .playlist_fatherView{
-//     border-bottom:1px solid lightgray;
-// }
-// .playlist_fatherView:not(:last-child) {
-//     border-bottom:1px solid lightgray;
-// }
+//留言评论部分
+.video-column-comment {
+    margin-top: 56px;
+}
 
 .videocol-all {
   display: flex;
