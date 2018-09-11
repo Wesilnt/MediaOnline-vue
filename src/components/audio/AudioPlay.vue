@@ -1,14 +1,14 @@
 <template>
   <div class="audioplay-container">
     <!-- 封面 -->
-    <img :src="cover" class="cover">
+    <img :src="audioDetail.coverPic" class="cover">
     <!-- 主，副标题 -->
-    <h3> 夏启的故事：王位应该传给谁</h3>
-    <h4> 伍老师</h4>
+    <h3> {{audioDetail.title}}</h3>
+    <h4> {{audioDetail.subTitle}}</h4>
     <!-- 中间tabbar -->
     <div class="tab-container">
       <div class="tab-item" @click="onCollect">
-        <img :src="isLove?require('../../assets/audio_love_collect.png'):require('../../assets/audio_love_normal.png')">
+        <img :src="audioDetail.isLike?require('../../assets/audio_love_collect.png'):require('../../assets/audio_love_normal.png')">
       </div>
       <router-link to="/audio/audiodraft" class="tab-item" tag="div">
         <img src="../../assets/audio_play_manuscripts.png">
@@ -54,7 +54,7 @@
     </div>
     <!-- 音频列表弹框 -->
 
-    <van-popup v-model="popupVisible" position="bottom" :overlay="false">
+    <van-popup v-model="popupVisible" position="bottom"  close-on-click-overlay>
       <div class="play-list-container">
         <div class="list-header">
           <h3>播放列表</h3>
@@ -77,6 +77,9 @@
   </div>
 </template>
 <script>
+import {createNamespacedHelpers} from 'vuex'
+const {mapState,mapActions}  = createNamespacedHelpers('audio')
+
 import SharePop from '../Share.vue'
 import AudioTask from '../../utils/AudioTask.js'
 
@@ -86,9 +89,10 @@ export default {
   },
   data() {
     return {
+      lessonId:this.$route.query.id,
       play: true,
       isLove: true, //是否已收藏
-      isSingle: true, //是否单个循环
+      isSingle: false, //是否单个循环
       isPlaying: false, //是否正在播放
       popupVisible: false, //是否显示音频列表弹框
       playIndex: 0, //播放第几首
@@ -126,8 +130,9 @@ export default {
       touchStart: 0
     }
   },
-  watch: {},
+  computed:{...mapState(["audioDetail"])},
   created() {
+    this.getAudioDetail({lessonId:this.lessonId})
     this.isPlaying = AudioTask.getInstance().isPlaying()
     AudioTask.getInstance().addTimeListener(this.onTimeUpdate)
     AudioTask.getInstance().addStateListener(this.onStateUpdate)
@@ -137,15 +142,11 @@ export default {
     AudioTask.getInstance().removeStateListener(this.onStateUpdate)
   },
   mounted: function() {
-    this.$refs.range.addEventListener('touchstart', e => {
-      // this.$refs.mtrange.$refs.thumb.addEventListener('touchstart', e => {
-      this.touching = true
-      // this.touching = true
+    this.$refs.range.addEventListener('touchstart', e => { 
+      this.touching = true 
       this.touchStart = e.changedTouches[0].clientX
     })
     this.$refs.range.addEventListener('touchend', e => {
-      // console.log(this.$refs.mtrange.$refs.thumb)
-      // if (e.changedTouches[0].clientX - this.touchStart < 5) return
       AudioTask.getInstance().seekTo(parseInt(this.currentTime))
       this.touching = false
     })
@@ -154,12 +155,10 @@ export default {
     })
   },
   methods: {
+    ...mapActions(['getAudioDetail','postFavorite']),
     onInputChange(e) {
       let percent = parseInt(e.target.value * 100 / e.target.max)
-      e.target.style =
-        'background: linear-gradient(to right,#FFCD7D ' +
-        percent +
-        '%,  #E5E5E5 1%, #E5E5E5'
+      e.target.style =  'background: linear-gradient(to right,#FFCD7D ' + percent + '%,  #E5E5E5 1%, #E5E5E5'
     },
     //进度条拖动
     sliderChange(value) {
@@ -171,12 +170,7 @@ export default {
     },
     //收藏
     onCollect() {
-      this.isLove = !this.isLove
-      if (this.isLove) {
-        this.$toast.success({ duration: 0, message: '已添加到我喜欢的' })
-      } else {
-        this.$toast('已取消喜欢')
-      }
+      this.postFavorite({})
     },
     //文稿
     onManuScripts() {},
@@ -194,15 +188,16 @@ export default {
     onPlayMode() {
       this.isSingle = !this.isSingle
       this.$toast(this.isSingle ? '单曲循环' : '列表循环')
+      AudioTask.getInstance().setPlayMode(this.isSingle?'single':'order')
     },
     //上一首
     onPlayPrv() {
-      this.$toast.fail('这是第一条')
+      this.$toast.fail({message:'这是第一条'})
     },
     //播放/暂停
     onPlayPause() {
-      if ((this.isPlaying = !this.isPlaying)) {
-        AudioTask.getInstance().play()
+      if ((this.isPlaying = !this.isPlaying)) { 
+        AudioTask.getInstance().play(this.audioDetail.audioUrl)
       } else {
         AudioTask.getInstance().pause()
       }
@@ -536,5 +531,13 @@ export default {
   margin: 0 auto;
   height: 56px;
   width: 56px;
+}
+.van-toast--text {
+  width: auto;
+  min-width: 0;
+}
+.van-toast--default{
+  min-height: 0;
+  width: auto;
 }
 </style>

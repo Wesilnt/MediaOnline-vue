@@ -70,8 +70,7 @@ export default {
           isPraised: true, //当前用户是否对评论点赞
           type: 0, //评论类型 0 文字  1 语音
           isExpand: false, //默认是否展开
-          content:
-            '此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论',
+          content: '论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论',
           review: '此处为老师回复内容此处为老师回复内容此处为老师回复内', //回复内容
           reviewer: '伍智老师：', //回复老师姓名
           praiseNum: 520, //点赞人数
@@ -122,6 +121,7 @@ export default {
   display: flex;
   flex-direction: column;
   padding-bottom: 160px;
+  padding-top: 40px;
 }
 
 .comment-publish {

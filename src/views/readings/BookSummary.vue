@@ -23,7 +23,15 @@
     </div>
 </template>
 <script>
-export default {}
+import { createNamespacedHelpers } from 'vuex'
+const { mapState, mapGetters } = createNamespacedHelpers('readings'); 
+export default {
+  computed:{
+    ...mapGetters(["getBookIntroduce"])
+  },
+  methods:{
+  }
+}
 </script>
 <style lang="scss" scoped>
 .descrip-container {

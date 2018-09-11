@@ -11,15 +11,16 @@
             <h2>{{comment.commentName}}</h2>
             <h5>{{comment.commentTime | dateFormat("MM-mm")}}</h5>
           </div>
-          <div class="thumb-container" @click="onPraise(i)">
+          <div class="thumb-container" @click="onPraise()">
             <img :src="comment.isPraised?require('../assets/cmt_praise_selected.png'):require('../assets/cmt_praise_normal.png')">
             <span>{{comment.praiseNum}}</span>
           </div>
         </div>
         <div class="center-container">
           <div v-if="comment.type==0" class="text-container">
-            <p :class="{fold:!comment.isExpand}">{{comment.content}}</p>
-            <span v-if="!comment.isExpand" @click="comment.isExpand=true">全文</span>
+            <p :class="{fold:!comment.isExpand}" ref="cmtContent">{{comment.content}}</p>
+            <p  style="visibility:hidden;position:absolute;color:red;margin:0 40px 0 0" id="ref" ref="reference">{{comment.content}}</p>
+            <span v-if="!comment.isExpand && canExpand" @click="comment.isExpand=true">全文</span>
           </div>
           <div v-else class="voice-container">
             <img src="../assets/cmt_voice_icon.png">
@@ -49,9 +50,7 @@ export default {
   props: ['comment'],
   data() {
     return {
-      isSpeak: true,
-      isSpeaking: false,
-      commentContent: ''
+      canExpand: true
     }
   },
   methods: {
@@ -59,8 +58,19 @@ export default {
     onPraise() {
       let isPraised = this.comment.isPraised
       this.comment.isPraised = !isPraised
-      Toast(isPraised ? '取消点赞' : '点赞成功')
+      this.$toast({ 
+        message: isPraised ? '取消点赞' : '点赞成功'
+      })
     }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      let ref = this.$refs.reference
+      if (ref) {
+        console.log(ref.scrollHeight)
+        this.canExpand = ref.scrollHeight > 22 * 3
+      }
+    })
   }
 }
 </script>
@@ -136,6 +146,7 @@ export default {
       p {
         margin: 0;
         font-size: 28px;
+        line-height: 44px;
       }
       span {
         font-size: 28px;
@@ -181,5 +192,9 @@ export default {
     color: rgb(179, 179, 179);
     font-size: 36px;
   }
+}
+.van-toast--text {
+  width: auto;
+  min-width: 0;
 }
 </style>

@@ -9,19 +9,23 @@ import videoColumnDetail from './module/videoColumnDetail'
 import videoCourseDetail from './module/videoCourseDetail'
 import questionList from './module/questionList'
 import visionData from './module/visionData'
+import readings from './module/readingsData'
+import audio from './module/audioData'
 
 Vue.use(Vuex)
 export default new Vuex.Store({
-  strict: process.env.NODE_ENV !== 'production',
-  modules: {
-    counter,
-    mocker,
-    myPuzzle_Praise,
-    homeData,
-    columnInfo,
-    videoColumnDetail,
-    videoCourseDetail,
-    questionList,
-    visionData
-  }
+    strict: process.env.NODE_ENV !== 'production',
+    modules: {
+        counter,
+        mocker,
+        myPuzzle_Praise,
+        homeData,
+        columnInfo,
+        videoColumnDetail,
+        videoCourseDetail,
+        questionList,
+        visionData,
+        readings,
+        audio
+    }
 })

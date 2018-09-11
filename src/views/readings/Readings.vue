@@ -1,14 +1,14 @@
 <template>
     <div class="read-container">
         <!-- 1. 头部信息 -->
-        <div class="header-container">
-            <h5 class="title">
+        <div class="header-container" :style="{background:'url('+bannerPic+')'}">
+            <!-- <h5 class="title">
                 有声书
             </h5>
             <hr>
             <p class="desc">
                 联合各领域名师大家精心打造课程专栏，提升中国少年的综合素养，建立光靠做题无法培养的竞争力。
-            </p>
+            </p> -->
         </div>
         <!-- 2. 全部书籍按钮 -->
         <div class="read-btn">
@@ -18,14 +18,14 @@
         </div>
         <!-- 3. 读书会列表 -->
         <div class="read-list-container">
-            <router-link v-for="(item,i) of readList" :key="i" to="/home/readings/book" class="list-item" tag="div">
-                <div class="top-container">
+            <router-link v-for="item of bookList" :key="item.id"   :to="'/home/readings/book?id='+item.id" class="list-item" tag="div">
+                <div class="top-container" :style="{background:'url('+item.coverPic+')'}">
                     <span>上新</span>
                     <img src="../../assets/readings_item_play.png">
                 </div>
                 <div class="bottom-container">
-                    <p>小鸡喔喔叫</p>
-                    <span>¥ 4.99</span>
+                    <p>{{item.name}}</p>
+                    <span>¥ {{item.price}}</span>
                 </div>
             </router-link>
         </div>
@@ -36,11 +36,21 @@
     </div>
 </template>
 <script>
+import { createNamespacedHelpers } from 'vuex'
+const { mapState, mapActions } = createNamespacedHelpers('readings'); 
 export default {
   data() {
-    return {
-      readList: [{}, {}, {}, {}, {}, {}, {}, {}, {}]
+    return { 
     }
+  },
+  computed: {
+    ...mapState(['bannerPic','bookList'])
+  },
+  created() {
+    this.getReadingsList()
+  },
+  methods: {
+    ...mapActions(['getReadingsList'])
   }
 }
 </script>
@@ -56,6 +66,7 @@ export default {
     background-color: #f6c26b;
     color: white;
     padding: 40px;
+    height: 372px;
     h5 {
       font-size: 48px;
       line-height: 56px;
