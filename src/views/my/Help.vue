@@ -1,24 +1,25 @@
 <template>
     <div class="help">
-        <textarea :value="content" @input="updateContent" class="textarea-content" rows="8" placeholder="请填写您的意见和建议"/>
-            <button v-bind:class="['help-button-submit',hasValue ? 'button-submit-normal':'button-submit-disable']" @click="handleFeedback">提交反馈</button>
-        <div class="div-text-desc">紧急问题可以通过以下方式联系我们：</div>
-        <div class="div-text-mail">
-            <div class="div-mail-label">邮箱：</div>
-            qhht@con.shbaoyuantech.com
+        <textarea :value="content" @input="handleInput" class="textarea-content" rows="8" placeholder="请填写您的意见和建议"/>
+        <div class="help-warning">
+            <p class="content-length">{{contentLength}}/200</p>
+            <button class="help-button-submit" :disabled="contentLength===0 || contentLength>=200" :class="{'button-submit-canclick':contentLength>0 && contentLength<200}" @click="handleFeedback">提交反馈</button>
+            <p class="help-text-desc">紧急问题可以通过以下方式联系我们：</p>
+            <p class="help-text-mail">
+                <span class="help-mail-label">邮箱：</span>
+                qhht@con.shbaoyuantech.com
+            </p>
         </div>
+
     </div>
 </template>
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
 
-const {
-  mapState,
-  mapActions,
-  mapMutations,
-  mapGetters
-} = createNamespacedHelpers('myFeedback')
+const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
+  'myFeedback'
+)
 export default {
   name: 'Help',
   data: function() {
@@ -27,21 +28,11 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['hasValue']),
-    ...mapState(['content', 'error', 'loading'])
+    ...mapGetters(['contentLength']),
+    ...mapState(['content', 'loading', 'posted'])
   },
   methods: {
-    ...mapActions(['handleFeedback']),
-    ...mapMutations(['updateContent'])
-  },
-  watch: {
-    loading: function(newValue) {
-      if (!newValue && this.error.length == 0) {
-        alert('您的反馈已提交，谢谢')
-      } else if (this.error.length != 0) {
-        alert(this.error)
-      }
-    }
+    ...mapActions(['handleFeedback', 'handleInput'])
   }
 }
 </script>
@@ -53,7 +44,7 @@ export default {
 }
 .textarea-content {
   width: 100%;
-  height: 400px;
+  min-height: 320px;
   padding: 40px;
   background: #f7f7f7;
   color: #333333;
@@ -61,37 +52,44 @@ export default {
   border: 1px solid #ededed;
   -webkit-appearance: none;
 }
+.help-warning {
+  margin: 72px 55px 0;
+}
+.content-length {
+  color: #acacb4;
+  text-align: right;
+}
+
 .help-button-submit {
   display: block;
-  width: 640px;
+  width: 100%;
   height: 80px;
-  margin: 118px auto 80px;
+  margin: 24px auto 80px;
   text-align: center;
   border-radius: 50px;
   border: 1px solid #d4d3d7;
   background: #fbfcfc;
   color: #b5b5b5;
   pointer-events: none;
+  outline: none;
+  transition: background, color, border, box-shadow 0.4s linear;
 }
-.button-submit-normal {
+.button-submit-canclick {
   background: #ffa32f;
   color: white;
   border: none;
+  box-shadow: 0 0 10px #ffaa3f;
+  pointer-events: auto;
 }
-.div-text-desc {
-  width: 100%;
-  padding: 80px 55px 32px 55px;
-  float: left;
+
+.help-text-desc {
   color: #3f4651;
+  margin-bottom: 32px;
 }
-.div-text-mail {
-  width: 100%;
-  padding: 32px 55px 0;
+.help-text-mail {
   color: #ffa32f;
 }
-.div-mail-label {
-  font-size: 28px;
-  float: left;
+.help-mail-label {
   color: #acacb4;
 }
 </style>

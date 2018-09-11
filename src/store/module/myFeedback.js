@@ -1,50 +1,52 @@
 import { postFeedback } from '../../services/my'
+import { Toast } from 'vant'
 
 const myFeedback = {
   namespaced: true, // 设置命名空间 ，保持数据独立性
   state: {
-    content:'',
-    loading: false,
-    error:''
+    content: '',
+    loading: false //http
   },
-
-  getters:{
-    hasValue:({content},)=> {
-      if(content.length > 0){
-        return true
-      }else{
-        return false
-      }
-    }
+  getters: {
+    contentLength: ({ content }) => content.length
   },
-
   mutations: {
-    toggleLoading(state, { loading }) {
-      state.loading = loading
-    },
-    updateContent(state, e){
-      if(e){
-        state.content =  e.target.value
-      }
+    updateStatus(state, payload) {
+      Object.assign(state, payload)
     }
   },
-
+  /*
+*  posted: function(newValue) {
+      if (!newValue) {
+        alert('您的反馈已提交，谢谢')
+      }
+* */
   actions: {
+    async handleInput({ commit }, payload) {
+      const content = payload.target.value
+      if (content.length >= 200) {
+         Toast.fail('您的字数超出限制')
+      }
+      await commit('updateStatus', {
+        content
+      })
+    },
     async handleFeedback({ dispatch, commit, state }) {
-      await commit('toggleLoading', {
+      const { content } = state
+      await commit('updateStatus', {
         loading: true
       })
-      const {content}=state;
-      const response = await postFeedback({content})
-      if(response) {
-        console.log(response)
-      }else {
-       state.error = "网络请求失败"
-      }
-      await commit('toggleLoading', {
-        loading: false
+      const response = await postFeedback({ content })
+      if (!response) return
+      await Toast.success({
+        duration: 3000,
+        message: '您的反馈已提交'
+      })
+      await commit('updateStatus', {
+        loading: false,
+        content: ''
       })
     }
-  },
+  }
 }
 export default myFeedback
