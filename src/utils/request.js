@@ -1,4 +1,5 @@
 import 'whatwg-fetch'
+import { Toast } from 'vant';
 import api from '../api/api'
 import { isUrl, json2formData } from './utils'
 import { getAccessToken, getRefreshToken } from './userAuth'
@@ -21,7 +22,9 @@ const codeMessage = {
     504: '网关超时。'
 }
 
-function checkStatus(response) {
+function checkStatus(url,response) {
+    console.log(url);
+    console.log(response);
     if (response.status >= 200 && response.status < 300) {
         return response
     }
@@ -31,10 +34,13 @@ function checkStatus(response) {
     error.url = response.url
     error.name = response.status
     error.response = response
+    console.error('返回错误状态码'+error)
+    console.dir(error)
+    console.error('接口名称  '+url)
     throw error
 }
 
-const checkResponseCode = response => {
+const checkResponseCode = (url,response )=> {
     if (typeof response.code === 'undefined') {
         return response
     }
@@ -52,6 +58,10 @@ const checkResponseCode = response => {
     if (response.code === 1002) error.name = 401
         // 1001: token无效 需退出重新登录
     if (response.code === 1001) error.name = '401-logout'
+    Toast.fail(response.error);
+    console.error('返回响应错误'+error)
+    console.dir(error)
+    console.error('接口名称  '+url)
     throw error
 }
 
@@ -97,28 +107,30 @@ function request(url, options) {
     }
 
     return fetch(`${baseURI}${url}`, newOptions)
-        .then(checkStatus)
+        .then(checkStatus.bind(this,url))
         .then(response => {
             if (newOptions.method === 'DELETE' || response.status === 204) {
                 return response.text()
             }
-            console.log(response)
             return response.json()
         })
-        .then(checkResponseCode)
+        .then(checkResponseCode.bind(this,url))
         .catch(e => {
             // const { dispatch } = store;
             const status = e.name;
             if (status === "401-logout") {
+                Toast.fail('401-logout');
                 // dispatch({ type: "login/logout" });
             }
             if (status === 401) {
                 if (!accessToken) {
+                    Toast.fail('no accessToken');
                     /*dispatch({
                       type: "login/logout"
                     });
                     return;*/
                 }
+
                 /* dispatch({
                   type: "login/refreshToken",
                   payload: {
@@ -129,14 +141,17 @@ function request(url, options) {
                 return
             }
             if (status === 403) {
+                Toast.fail('403');
                 // dispatch(routerRedux.push("/exception/403"));
                 return
             }
             if (status <= 504 && status >= 500) {
+                Toast.fail('500');
                 // dispatch(routerRedux.push('/exception/500'));
                 return
             }
             if (status >= 404 && status < 422) {
+                Toast.fail('404');
                 // dispatch(routerRedux.push("/exception/404"));
             }
         })

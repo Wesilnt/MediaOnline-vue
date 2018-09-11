@@ -1,4 +1,4 @@
-import { queryMyPuzzleList } from '../../services/my'
+import { queryMyPuzzleList, queryMyPraise } from '../../services/my'
 const puzzleTabs = {
   all: '全部',
   waiting: '中',
@@ -6,10 +6,10 @@ const puzzleTabs = {
   fail: '失败'
 }
 const puzzleTypes = {
-  all: '0',
-  waiting: '1',
-  succeed: '2',
-  fail: '-1'
+  all: '1200',
+  waiting: '1202',
+  succeed: '1203',
+  fail: '1204'
 }
 
 const myPuzzle_Praise = {
@@ -17,8 +17,10 @@ const myPuzzle_Praise = {
   state: {
     puzzleTabs,
     puzzleTypes,
-    currentType: 0,
+    currentType: '1200',
     puzzleList: [],
+    pageSize: 10,
+    currentPage: 1,
     loading: false
   },
   mutations: {
@@ -30,23 +32,32 @@ const myPuzzle_Praise = {
     }
   },
   actions: {
-    async queryList({ dispatch, commit, state }, { currentType }) {
-      const response = await queryMyPuzzleList(currentType)
+    async queryList(
+      { dispatch, commit, state },
+      { pageName, currentType: type }
+    ) {
+      const { pageSize, currentPage } = state
+      const params = { pageSize, currentPage, type }
+      const response =
+        pageName === '集赞'
+          ? await queryMyPraise(params)
+          : await queryMyPuzzleList(params)
       console.log(response)
+      if (!response) return
       await commit({
         type: 'saveList',
         puzzleList: response,
-        currentType
+        currentType: type
       })
       commit('toggleLoading', {
         loading: false
       })
     },
-    async toggleCurrentType({ dispatch, commit }, { currentType }) {
+    async toggleCurrentType({ dispatch, commit }, payload) {
       await commit('toggleLoading', {
         loading: true
       })
-      await dispatch({ type: 'queryList', currentType })
+      await dispatch({ type: 'queryList', ...payload })
     }
   }
 }

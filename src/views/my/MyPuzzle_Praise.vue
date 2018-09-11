@@ -6,8 +6,9 @@
             <a class="my-puzzle-nodata-btn">我要{{pageName}}</a>
         </div>
         <div v-else class="my-puzzle-container">
-            <van-tabs v-model="selected" color="#ffa32f" line-width="60">
+            <van-tabs v-model="selected" color="#ffa32f" :line-width='60'>
                 <van-tab  v-for="item in Object.keys(puzzleTabs)"
+                          :key="item"
                            :title="item==='waiting'?`${pageName}${puzzleTabs[item]}`: puzzleTabs[item]">
                     <div class="my-puzzle-content">
                         <div v-for="puzzle in puzzleList" :key="puzzle.id" class="my-puzzle-content-cell">
@@ -48,12 +49,13 @@ export default {
     if (path.endsWith('my-puzzle')) pageName = '拼团'
     else if (path.endsWith('my-praise')) pageName = '集赞'
     return {
-      selected: '0',
+      selected: '1200',
       pageName
     }
   },
   created() {
-    this.queryList({ currentType: this.currentType })
+    const { pageName, currentType } = this
+    this.queryList({ pageName, currentType })
   },
   computed: {
     ...mapState([
@@ -66,12 +68,12 @@ export default {
   },
   watch: {
     selected: function(currentType) {
-      this.toggleCurrentType({ currentType })
+      const { pageName, puzzleTypes } = this
+      const Types = Object.values(puzzleTypes)
+      this.toggleCurrentType({ currentType: Types[currentType], pageName })
     }
   },
-  mounted() {
-    console.log(this)
-  },
+
   methods: {
     ...mapActions(['queryList', 'toggleCurrentType'])
   },
