@@ -1,12 +1,16 @@
 <template>
-    <div class="free">
-        <div v-for="(item, index) in freeList" :key="index" class="freeCell">
-            <img class="freeicon" src="../assets/home_knowledge_play.png" alt="">
-            <span class="content">{{item.type}}|{{item.title}}</span>
+  <div class="free">
+    <div v-for="(item, index) in freeList" :key="index" class="freeCell">
+      <div class="freeCellContent">
+        <div class="free-play-button">
+          <div class="bookPlayTringle"></div>
         </div>
-          <div class="line"/>
-          <router-view name="FreeList"/>
+        <span class="content">{{item.type}}|{{item.title}}</span>
+      </div>
     </div>
+    <div class="line" />
+    <router-view name="FreeList" />
+  </div>
 </template>
 
 <script>
@@ -19,7 +23,6 @@ export default {
 .free {
   margin-left: 28px;
   width: 694px;
-  height: 200px;
   background-color: rgba(245, 245, 245, 0.5);
   border-radius: 14px;
 }
@@ -27,15 +30,16 @@ export default {
   height: 88px;
   width: 100%;
   padding-left: 20px;
-  box-sizing: border-box;
 }
-
-.freeicon {
+.free-play-button {
+  margin-top: 20px;
+  display: inline-block;
   width: 68px;
   height: 68px;
-  margin: 14px 16px 14px 20px;
-  vertical-align: middle;
+  background-color: red;
+  border-radius: 50%;
 }
+
 .content {
   line-height: 88px;
   font-size: 28px;

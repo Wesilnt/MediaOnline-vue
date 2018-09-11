@@ -1,7 +1,7 @@
 <template>
   <div class="cell">
     <img :src="book.coverPic" class="cover" alt="">
-    <!-- <img class="play-button" src="../../assets/home_video_play.png" alt=""> -->
+
     <div class="play-button">
       <div class="bookPlayTringle"></div>
     </div>
