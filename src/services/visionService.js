@@ -7,3 +7,7 @@ export function getVisionList(params){
 export function getVisionDetail(params){
     return request(`/course/detail?${stringify(params)}`)
 }
+
+export function getCommentList(params){
+    return request(`/comment/commentList?${stringify(params)}`)
+}

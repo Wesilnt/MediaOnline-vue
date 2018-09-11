@@ -3,35 +3,34 @@
     <!-- 全部留言 -->
     <div class="comment-item" >
       <div class="comment-header">
-        <img src="../assets/cmt_item_header.png">
+        <img :src="comment.fromAvatarUrl">
       </div>
       <div class="comment-detail">
         <div class="top-container">
           <div class="username-date">
-            <h2>{{comment.commentName}}</h2>
-            <h5>{{comment.commentTime | dateFormat("MM-mm")}}</h5>
+            <h2>{{comment.fromNickName}}</h2>
+            <h5>{{comment.createTime | dateFormat("MM-mm")}}</h5>
           </div>
           <div class="thumb-container" @click="onPraise()">
             <img :src="comment.isPraised?require('../assets/cmt_praise_selected.png'):require('../assets/cmt_praise_normal.png')">
-            <span>{{comment.praiseNum}}</span>
+            <span>{{comment.likeCount}}</span>
           </div>
         </div>
         <div class="center-container">
-          <div v-if="comment.type==0" class="text-container">
-            <p :class="{fold:!comment.isExpand}" ref="cmtContent">{{comment.content}}</p>
+          <div v-if="comment.commentType==3301" class="text-container">
+            <p :class="{fold:!isExpand}" ref="cmtContent">{{comment.content}}</p>
             <p  style="visibility:hidden;position:absolute;color:red;margin:0 40px 0 0" id="ref" ref="reference">{{comment.content}}</p>
-            <span v-if="!comment.isExpand && canExpand" @click="comment.isExpand=true">全文</span>
+            <span v-if="!isExpand && canExpand" @click="isExpand=true">全文</span>
           </div>
           <div v-else class="voice-container">
             <img src="../assets/cmt_voice_icon.png">
             <span>{{comment.audioTime}}"</span>
           </div>
-
         </div>
-        <div v-if="comment.review.length>0" class="bottom-container">
+        <!-- <div v-if="comment.childComment.length>0" class="bottom-container">
           <font>{{comment.reviewer}}</font>
           {{comment.review}}
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
@@ -50,7 +49,8 @@ export default {
   props: ['comment'],
   data() {
     return {
-      canExpand: true
+      canExpand: true,
+      isExpand:false
     }
   },
   methods: {
@@ -64,6 +64,7 @@ export default {
     }
   },
   mounted() {
+    console.log(this.comment)
     this.$nextTick(() => {
       let ref = this.$refs.reference
       if (ref) {

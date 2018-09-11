@@ -32,7 +32,7 @@
     <!-- message -->
     <div id="message" ref="message" class="message bottomline">
       <DetailHeader title="精选留言" subtitle="全部" />
-      <div v-for="item of comments" :key="item.id" class="comment-item">
+      <div v-for="item of commentList" :key="item.id" class="comment-item">
         <comment-item :comment="item" />
       </div>
     </div>
@@ -76,62 +76,12 @@ export default {
       banner: '',
       navBars: ['介绍', '试听', '留言'],
       currentNav: 0,
-      showall: false,
-      comments: [
-        {
-          id: Date.now() + 1, //评论ID
-          isPraised: true, //当前用户是否对评论点赞
-          type: 0, //评论类型 0 文字  1 语音
-          isExpand: false, //默认是否展开
-          content:
-            '此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论',
-          review:
-            '此处为老师回复内容此处为老师回复内容此处为老师回复内容此处为老师回复内容此处为老师回复内容此处为老师回复内容', //回复内容
-          reviewer: '伍智老师：', //回复老师姓名
-          praiseNum: 1314, //点赞人数
-          audioUrl: '', //语音地址
-          audioTime: 0, //语音时长
-          commentHead: '', //评论人头像地址
-          commentName: '古风流', //评论人名称
-          commentTime: Date.now() //评论时间
-        },
-        {
-          id: Date.now() + 2, //评论ID
-          isPraised: true, //当前用户是否对评论点赞
-          type: 1, //评论类型 0 文字  1 语音
-          isExpand: false, //默认是否展开
-          content:
-            '此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论',
-          review: '此处为老师回复内容此处为老师回复内容此处为老师回复内', //回复内容
-          reviewer: '伍智老师：', //回复老师姓名
-          praiseNum: 520, //点赞人数
-          audioUrl: '', //语音地址
-          audioTime: 23, //语音时长
-          commentHead: '', //评论人头像地址
-          commentName: '古风流', //评论人名称
-          commentTime: Date.now() //评论时间
-        },
-        {
-          id: Date.now() + 3, //评论ID
-          isPraised: true, //当前用户是否对评论点赞
-          type: 0, //评论类型 0 文字  1 语音
-          isExpand: false, //默认是否展开
-          content:
-            '此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论',
-          review: '此处为老师回复内容此处为老师回复内容此处为老师回复内', //回复内容
-          reviewer: '伍智老师：', //回复老师姓名
-          praiseNum: 520, //点赞人数
-          audioUrl: '', //语音地址
-          audioTime: 23, //语音时长
-          commentHead: '', //评论人头像地址
-          commentName: '古风流', //评论人名称
-          commentTime: Date.now() //评论时间
-        }
-      ]
+      showall: false
     }
   },
   created() {
     this.getVisionDetail(this.id)
+    this.getCommentList(this.id)
   },
   mounted() {
     window.addEventListener('scroll', this.handleScroll)
@@ -139,9 +89,9 @@ export default {
   destroyed() {
     window.removeEventListener('scroll', this.handleScroll)
   },
-  computed: mapState(['visionDetail']),
+  computed: mapState(['visionDetail','commentList']),
   methods: {
-    ...mapActions(['getVisionDetail']),
+    ...mapActions(['getVisionDetail', 'getCommentList']),
     navbarTap(index) {
       this.currentNav = index
       let positionId
