@@ -1,6 +1,6 @@
 <template>
   <div id="detailmain" ref="detailmain">
-    <img :src="banner" class="head" alt="">
+    <img :src="visionDetail.coverPic" class="head" alt="">
 
     <div class="navbar">
       <span v-for="(nav,index) in navBars" :key="index" :class="currentNav==index?'item active':'item'" @click="navbarTap(index)">{{nav}}</span>
@@ -8,8 +8,8 @@
     <!-- introduce -->
     <div id="intro" ref="intro" class="intro">
       <div class="info bottomline">
-        <p class="infoText">【本课程建议9岁以上孩子学习】</p>
-        <div :class=" showall?'textFold infoText fulltext':'textFold infoText detault'">position: sticky; 基于用户的滚动位置来定位。 粘性定位的元素是依赖于用户的滚动，在 position:relative 与 position:fixed 定位之间切换。 在目标区域以内，它的行为就像 position:relative; 而当页面滚动超出目标区域时，它的表现就像 position:fixed;，它会固定在目标位置。 元素定位表现为在跨越特定阈值前为相对定位，之后为固定定位。 这个特定阈值指的是 top, right, bottom 或 left 之一，换言之，指定 top, right, bottom 或 left 四个阈值其中之一，才可使粘性定位生效。否则其行为与相对定位相同。 举例： div.sticky { position: -webkit-sticky; position: sticky; top: 0;/*阈值*/ padding: 5px; background-color: #cae8ca; border: 2px solid #4CAF50; } 缺陷：IE低版本不支持sticky的使用
+        <!-- <p class="infoText">【本课程建议9岁以上孩子学习】</p> -->
+        <div :class=" showall?'textFold infoText fulltext':'textFold infoText detault'">{{visionDetail.description}}
         </div>
         <div :class="showall?'show hide':'show'">
           <img :src="showall?arrowUp:arrowDown" class="visionarrow" alt="" @click="ellipsis">
@@ -18,16 +18,16 @@
       <!-- outline -->
       <div class="outline bottomline">
         <div class="noticeBuyText">课程列表
-          <span class="count">(共30讲)</span>
+          <span class="count">(共{{visionDetail.lessonCount}}讲)</span>
         </div>
-        <img class="outlineImage" src="">
+         <videoBigimage :src="visionDetail.outlinePic" class="outlineImage"></videoBigimage>
         <img class="zoom" src="../../assets/vision_zoom.png" alt="">
       </div>
     </div>
     <!-- try -->
     <div id="try" ref="try" class="try bottomline">
       <DetailHeader title="试看课程" subtitle="全部" />
-      <SingleSetList :list='courseList'></SingleSetList>
+      <SingleSetList :list='visionDetail.freeLessonList'></SingleSetList>
     </div>
     <!-- message -->
     <div id="message" ref="message" class="message bottomline">
@@ -41,11 +41,11 @@
       <div class="noticeBuyText">
         购买须知
         <p class="noticeBuyTextDetail">
-基于用户的滚动位置来定位。 粘性定位的元素是依赖于用户的滚动，在 position:relative 与 position:fixed 定位之间切换。 基于用户的滚动位置来定位。 粘性定位的元素是依赖于用户的滚动，在 position:relative 与 position:fixed 定位之间切换。 
+          {{visionDetail.buyIntro}}
         </p>
       </div>
     </div>
-    <tools-navbar :btnstate="0"/>
+    <tools-navbar :btnstate="0" />
   </div>
 
 </template>
@@ -57,9 +57,13 @@ import arrowDown from '../../assets/vision_arrow_down.png'
 import SingleSetList from '../../components/SingleSetList.vue'
 import CommentItem from '../../components/CommentItem.vue'
 import toolsNavbar from '../../components/toolsNavbar.vue'
+import videoBigimage from '../../components/videoBigimage.vue'
+import { createNamespacedHelpers } from 'vuex'
+const { mapState, mapActions } = createNamespacedHelpers('visionData')
 export default {
   components: {
     DetailHeader,
+    videoBigimage,
     SingleSetList,
     CommentItem,
     toolsNavbar
@@ -70,39 +74,9 @@ export default {
       arrowUp,
       arrowDown,
       banner: '',
-      selected: '1',
       navBars: ['介绍', '试听', '留言'],
       currentNav: 0,
       showall: false,
-      courseList: [
-        {
-          id: 0,
-          title: '发刊词：为什么抱元科技没有食堂？',
-          subtitle: '史上最会钓鱼的老头',
-          totaltime: 140,
-          learntime: 40,
-          isAudition: true,
-          isPlaying: true
-        },
-        {
-          id: 1,
-          title: '发刊词：为什么抱元科技没有食堂？',
-          subtitle: '史上最会钓鱼的老头',
-          totaltime: 140,
-          learntime: 40,
-          isAudition: true,
-          isPlaying: false
-        },
-        {
-          id: 2,
-          title: '发刊词：为什么抱元科技没有食堂？',
-          subtitle: '史上最会钓鱼的老头',
-          totaltime: 140,
-          learntime: 40,
-          isAudition: false,
-          isPlaying: false
-        }
-      ],
       comments: [
         {
           id: Date.now() + 1, //评论ID
@@ -156,13 +130,18 @@ export default {
       ]
     }
   },
+  created() {
+    this.getVisionDetail(this.id)
+  },
   mounted() {
     window.addEventListener('scroll', this.handleScroll)
   },
   destroyed() {
     window.removeEventListener('scroll', this.handleScroll)
   },
+  computed: mapState(['visionDetail']),
   methods: {
+    ...mapActions(['getVisionDetail']),
     navbarTap(index) {
       this.currentNav = index
       let positionId
@@ -299,7 +278,7 @@ export default {
   width: 670px;
   height: 800px;
   margin: 0px 40px 40px;
-  background-color: pink;
+  background-size: 100%;
 }
 .count {
   font-size: 28px;

@@ -9,6 +9,8 @@ import videoColumnDetail from './module/videoColumnDetail'
 import videoCourseDetail from './module/videoCourseDetail'
 import questionList from './module/questionList'
 import visionData from './module/visionData'
+import audio from './module/audioData'
+import readings from './module/readingsData'
 import myFeedback from './module/myFeedback'
 
 Vue.use(Vuex)
@@ -24,6 +26,8 @@ export default new Vuex.Store({
     videoCourseDetail,
     questionList,
     myFeedback,
-    visionData
+    visionData,
+    readings,
+    audio
   }
 })

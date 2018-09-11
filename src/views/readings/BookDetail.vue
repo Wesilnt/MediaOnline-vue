@@ -2,8 +2,8 @@
   <div class="book-detail-container">
     <!-- 1. 头部 -->
     <div class="book-header-container">
-      <div class="book-cover">
-        <span>上新</span>
+      <div class="book-cover" :style="{background:'url('+bookDetail.coverPic+')'}">
+        <span v-if="new Date().getTime() - new Date(bookDetail.createTime).getTime()<30*24*3600*1000">上新</span>
       </div>
     </div>
     <!-- 2. 书的相关人物信息 -->
@@ -13,7 +13,7 @@
           <font>作</font>
           <font>者:</font>
         </div>
-        <font>宅王鹏</font>
+        <font>{{bookDetail.authorName}}</font>
       </div>
       <hr>
       <div class="person-item">
@@ -22,7 +22,7 @@
           <font>讲</font>
           <font>者:</font>
         </div>
-        <font>宅王鹏</font>
+        <font>{{bookDetail.commentator}}</font>
       </div>
       <hr>
       <div class="person-item">
@@ -30,7 +30,7 @@
           <font>系</font>
           <font>列:</font>
         </div>
-        <font>宅王鹏</font>
+        <font>{{bookDetail.series}}</font>
       </div>
       <hr>
     </div>
@@ -55,11 +55,11 @@
     <div class="book-introduce-container">
       <div class="book-introduce-header">
         <span>音频简介</span>
-        <span>共{{bookList.length}}集</span>
+        <span>共{{bookDetail.availLessonCount}}集</span>
       </div>
       <div class="introduce-content">
         <p>
-          人类教育部新课必读书目，国民四大才子宅王鹏代表作，现代诗性小说大师之作。 人类教育部新课必读书目，国民四大才子宅王鹏代表作，现代诗性小说大师之作。 人类教育部新课必读书目，国民四大才子宅王鹏代表作，现代诗性小说大师之作。
+           {{bookDetail.radioIntro}}
         </p>
         <div class="intoduce-whole">
           <span @click="toLookWhole">查看全部</span>
@@ -68,7 +68,7 @@
     </div>
     <hr>
     <!-- 5. 作品单集/章集 播放列表 -->
-    <singleset-list :list="bookList" :play-id="0"/>
+    <singleset-list :list="singleSetList" :play-id="0"/>
     <!-- 6. 分页布局 -->
     <div class="load-more-container">
       <span>没有更多了，不要再拉啦～</span>
@@ -77,11 +77,16 @@
   </div>
 </template>
 <script>
+import { createNamespacedHelpers } from 'vuex'
+const { mapState, mapActions } = createNamespacedHelpers('readings'); 
 import SingleSetList from '../../components/SingleSetList.vue'
 export default {
   components: { 'singleset-list': SingleSetList },
   data() {
     return {
+      courseId:this.$route.query.id,
+      currentPage:1,
+      pageSize:20,
       bookList: [
         {
           id: 0,
@@ -109,88 +114,25 @@ export default {
           learntime: 40,
           isAudition: false,
           isPlaying: false
-        },
-        {
-          id: 3,
-          title: '发刊词：为什么抱元科技没有食堂？',
-          subtitle: '史上最会钓鱼的老头',
-          totaltime: 140,
-          learntime: 40,
-          isAudition: false,
-          isPlaying: false
-        },
-        {
-          id: 4,
-          title: '发刊词：为什么抱元科技没有食堂？',
-          subtitle: '史上最会钓鱼的老头',
-          totaltime: 140,
-          learntime: 40,
-          isAudition: false,
-          isPlaying: false
-        },
-        {
-          id: 5,
-          title: '发刊词：为什么抱元科技没有食堂？',
-          subtitle: '史上最会钓鱼的老头',
-          totaltime: 140,
-          learntime: 40,
-          isAudition: false,
-          isPlaying: false
-        },
-        {
-          id: 6,
-          title: '发刊词：为什么抱元科技没有食堂？',
-          subtitle: '史上最会钓鱼的老头',
-          totaltime: 140,
-          learntime: 40,
-          isAudition: false,
-          isPlaying: false
-        },
-        {
-          id: 7,
-          title: '发刊词：为什么抱元科技没有食堂？',
-          subtitle: '史上最会钓鱼的老头',
-          totaltime: 140,
-          learntime: 40,
-          isAudition: false,
-          isPlaying: false
-        },
-        {
-          id: 8,
-          title: '发刊词：为什么抱元科技没有食堂？',
-          subtitle: '史上最会钓鱼的老头',
-          totaltime: 140,
-          learntime: 40,
-          isAudition: false,
-          isPlaying: false
-        },
-        {
-          id: 9,
-          title: '发刊词：为什么抱元科技没有食堂？',
-          subtitle: '史上最会钓鱼的老头',
-          totaltime: 140,
-          learntime: 40,
-          isAudition: false,
-          isPlaying: false
-        },
-        {
-          id: 10,
-          title: '发刊词：为什么抱元科技没有食堂？',
-          subtitle: '史上最会钓鱼的老头',
-          totaltime: 140,
-          learntime: 40,
-          isAudition: false,
-          isPlaying: false
         }
       ]
     }
   },
+
+  computed: {
+    ...mapState(['bookDetail','singleSetList'])
+  },
+  created() {
+    console.log(this.courseId)
+    this.getBookDetail({courseId:this.courseId})
+    this.getSingleSetList({courseId:this.courseId,currentPage:this.currentPage,pageSize:this.pageSize})
+  },
   methods: {
+    ...mapActions(['getBookDetail','getSingleSetList']),
     toLookWhole() {
       this.$router.push({
         path: '/home/readings/summary',
-        query: {},
-        replace: true
+        query: {}
       }) //query参数，replace 表示当前组件移除
     }
   }
@@ -254,7 +196,7 @@ export default {
       color: rgb(170, 175, 188);
       font-size: 28px;
     }
-    .person-item font :nth-child(2) {
+    .person-item > :nth-child(2) {
       color: rgb(22, 35, 60);
       font-size: 28px;
     }

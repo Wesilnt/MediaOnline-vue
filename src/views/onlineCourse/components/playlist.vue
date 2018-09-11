@@ -4,15 +4,14 @@
             <div class="cl-list-left"><img :class="{'cl-img-active' : iteminfo.isPlaying}" :src="iteminfo.isPlaying ? imgPlaying : imgPause"></div>
             <div class="cl-list-right">
                 <div :class="{'cl-list-title' : true, 'cl-list-title-active' : iteminfo.isPlaying}">{{iteminfo.title}}</div>
-                <div class="cl-list-info">{{iteminfo.info}}</div>
+                <div class="cl-list-info">{{iteminfo.subTitle}}</div>
                 <div class="cl-list-bottom">
                     <input class="cl-bottom-btn" type="button" value="试听">
-                    <div class="cl-time">00:06:22</div>
-                    <div class="cl-number">已听1%</div>
+                    <div class="cl-time">{{iteminfo.totalTimeStr}}</div>
+                    <div class="cl-number">{{iteminfo.totalTime}}</div>
                 </div>
             </div>  
        
-        <!-- <div class="cl-bottom-line"></div> -->
         </div>
              <hr v-if="!lastindex">
     </div>
@@ -107,17 +106,19 @@ export default {
   .cl-bottom-btn {
     border-radius: 16px;
     background-color: rgb(237, 108, 103);
+    padding: 7px 17px;
     height: 50px;
     align-self: center;
+    font-size: 24px;
     color: white;
-    line-height: 4px;
+    line-height: 41px;
     border: none;
   }
 
   .cl-time {
     font-size: 26px;
     color: rgb(102, 102, 102);
-    margin-left: 10px;
+    margin-left: 20px;
 
     &:after {
       content: '|';

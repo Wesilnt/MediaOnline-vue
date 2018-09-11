@@ -27,7 +27,7 @@ export default {
   props: ['vision'],
   methods: {
     enterVisionDetail(id) {
-      this.$router.push({ path: './home/visionDetail/' + id })
+      this.$router.push({ path: '/home/visionDetail/' + id })
     }
   }
 }

@@ -9,11 +9,11 @@
             {{item.title}}
           </h3>
           <h4>
-            {{item.subtitle}}
+            {{item.subTitle}}
           </h4>
           <div class="bottom-container">
-            <span v-if="item.isAudition">试听</span>
-            <p>{{item.totaltime | formatDuring}} | {{item.learntime |learntimeFormat(item.totaltime)}}</p>
+            <span v-if="item.isAudition">试听</span> 
+            <p>{{item.totalTime | formatDuring}} | {{item.learnTime |learntimeFormat(item.totalTime)}}</p> 
           </div>
         </div>
       </div>
@@ -30,10 +30,7 @@ export default {
     }
   },
   //singleset 单集  playing是否正在播放
-  props: ['item', 'playing'],
-  data() {
-    return {}
-  },
+  props: ['item', 'playing'], 
   methods: {
     onItemClick(id) {
       this.$router.push({ path: '/audio/audioplay', query: { id } })
@@ -56,18 +53,19 @@ export default {
     align-self: center;
     width: 96px;
     height: 96px;
-    padding: 28px 31px 28px 35px;
+    // padding: 28px 31px 28px 35px;
     box-sizing: border-box;
     background-color: #fde3e3;
+    display: flex; 
     border-radius: 96px;
   }
   .icon-playing {
     padding: 31px 28px 31px 29px;
   }
   .item-icon img {
+    margin: auto 31px auto 35px;
     width: 28px;
-    height: 40px;
-    margin: auto 0;
+    height: 40px; 
   }
   .icon-playing img {
     width: 38px;

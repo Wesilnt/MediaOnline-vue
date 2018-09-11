@@ -1,6 +1,6 @@
 <template>
     <div class="videocol-dec-container">
-       <div class="videocol-header">
+       <div class="videocol-header" :style="{ background : 'url('+profilePic+')' }">
            <div class="videocol-header-title">孩子的第一堂课</div>
            <div class="videocol-header-bottom">
                <label>你一定会喜欢的国学课</label>
@@ -8,25 +8,24 @@
            </div>
        </div>
 
-        <div class="videocol-navbar">
+        <div class="videocol-navbar" ref="navbar" :class="navbarFixed == true ? 'isFixed' : ''">
             <div v-for="(item,index) of navbar" :class="{'selected':selected == index }" :key="index" class="videocol-navbar-item" @click="clickFnc(index)">{{item}}</div>
         </div>
 
         <tools-navbar :btnstate="0"/>
 
        <div class="videocol-content">
-           <course-introduce/>
+           <course-introduce :courseinfo="description"/>
            <hr class="lineone">
-            <div class="videocol-sction-title">
-                <h4>课程列表 <label>(共30讲)</label></h4>
+            <div class="videocol-sction-title" ref="note">
+                <h4>课程列表 <label>(共{{lessonCount}}讲)</label></h4>
            </div>
             <div class="videocol-bigimage">
-                <!-- <img class="videocol-bigimage-bg" :src="require('../../../imgs/pic_share@2x.png')"> -->
-                <vue-bigimage :src="require('../../assets/images/onlinecourse-pic-share.png')"/>   
+                <vue-bigimage :src="outlinePic"/>   
                 <img :src="require('../../assets/images/onlinecourse_bigimage_search.png')" class="videocol-bigimage-search">
             </div>
             <hr class="lineone">
-            <div class="videocol-sction-title">
+            <div class="videocol-sction-title" ref="catalog">
                 <h4>试看课程</h4>
                 <div class="videocol-all" @click="allFunc">
                     <span class="videocol-allbtn">全部</span>
@@ -34,24 +33,25 @@
                 </div>
            </div>
 
-            <playlist v-for="(item,index) of lessonList" :key="item.id" :iteminfo="item" :lastindex="index == (dataList.length - 1)" @jumpEvent="gotoVideoCourseDetailPage(item.id)"/>
+            <playlist v-for="(item,index) of freeLessonList" :key="item.id" :iteminfo="item" :lastindex="index == (dataList.length - 1)" @jumpEvent="gotoVideoCourseDetailPage(item.id)"/>
 
 
             <hr class="lineone">
-            <div class="videocol-sction-title">
+            <div class="videocol-sction-title" ref="leavemessage">
                 <h4>精选留言</h4>
                 <div class="videocol-all" @click="allFunc">
-                    <span class="videocol-allbtn">1314条</span>
+                    <span class="videocol-allbtn">{{commentCount}}条</span>
                     <img :src="require('../../assets/images/onlinecourse_arrow_right.png')" class="videocol-allbtn-icon">
                 </div>
            </div>
-           <video-comment/>
+           <video-comment v-for="item of videoColumnComments" :key="item.id" :comment="item"/>
             <hr class="lineone">
             <div class="videocol-sction-title">
                 <h4>购买须知</h4>
            </div>
            <div class="videocol-purchase-tip-fatherView">
-                <div v-for="item of purchaseList" :key="item.id" class="videocol-purchase-tip">{{item.id + '.' + item.info}}</div>
+               <p v-html="buyIntro"></p>
+                <!-- <div v-for="item of purchaseList" :key="item.id" class="videocol-purchase-tip">{{item.id + '.' + item.info}}</div> -->
            </div>
 
             
@@ -67,6 +67,7 @@ import toolsNavbar from '../../components/toolsNavbar.vue'
 import videoBigimage from '../../components/videoBigimage.vue'
 import { createNamespacedHelpers } from "vuex";
 const { mapState, mapActions } = createNamespacedHelpers("videoColumnDetail");
+
 export default {
     name: 'VideoColumnDetail',
     components: {
@@ -78,42 +79,12 @@ export default {
     },
     data() {
         return {
-        navbar: ['介绍', '试看', '留言'],
-        selected: 0,
-        dataList: [
-            {
-            id: 0,
-            isPlaying: true,
-            title: '发刊词:为什么抱元没有食堂?',
-            info: '史上最会钓鱼的老头'
-            },
-            {
-            id: 1,
-            isPlaying: false,
-            title: '001 名画为什么这么值钱',
-            info: '史上最会钓鱼的老头'
-            },
-            {
-            id: 2,
-            isPlaying: true,
-            title: '002 斯大林格勒战役?',
-            info: '史上最会钓鱼的老头'
-            }
-        ],
-        purchaseList: [
-            {
-            id: 10,
-            info: '少年艺术课哈哈哈哈少年艺术课哈哈哈哈少年艺术课哈哈哈哈'
-            },
-            {
-            id: 11,
-            info: '少年艺术课哈哈哈哈少年艺术课哈哈哈哈少年艺术课哈哈哈哈'
-            },
-            {
-            id: 12,
-            info: '少年艺术课哈哈哈哈少年艺术课哈哈哈哈少年艺术课哈哈哈哈'
-            }
-        ]
+            navbar: ['介绍', '试看', '留言'],
+            selected: 0,
+            navbarFixed: false, //控制navbar是否吸顶
+            dataList: [
+                
+            ]   
         }
     },
     watch:{
@@ -121,19 +92,21 @@ export default {
     },
     computed: {
         ...mapState([          
-            'lessonList',              //试看课程数组
-            'originData',            //接口返回数据
-            'headImage',                 //头图
-            'columnIntroduce',           //专栏介绍
-            'courseListImage',           //课程列表下面的大图展示
+            'freeLessonList',              //试看课程数组
+            'profilePic',                 //头图
+            'description',           //专栏介绍
+            'outlinePic',           //课程列表下面的大图展示
             'videoColumnComments',       //视频专栏的留言
-            'purchaseTip'  
+            'buyIntro',               //购买须知
+            'lessonCount',                 //专栏课集总数
+            'commentCount'            //留言总条数
         ]),
     },
    
     methods: {
         ...mapActions([
-            "getVideoColumnDetail"
+            "getVideoColumnDetail",
+            "getCommentList"
         ]),
 
         clickFnc(index) {
@@ -145,15 +118,72 @@ export default {
         gotoVideoCourseDetailPage(lessonID){
             console.log('路由跳转 lessonID = ' + lessonID)
             this.$router.push({name:'videoCourseDetail',params:{ lessonID }})
-        }
+        },
+        async handleScroll() {
+            //1.监听滚动
+            var scrollTop =
+                window.pageYOffset ||
+                document.documentElement.scrollTop ||
+                document.body.scrollTop
+            //2.获取navbar的偏移量
+            var barOffset = this.$refs.navbar.offsetTop
+            this.navbarFixed = scrollTop > barOffset ? true : false
+            var noteH = this.$refs.note.offsetTop
+            const catalogH = this.$refs.catalog.offsetTop
+            const leavemessageH = this.$refs.leavemessage.offsetTop
+            if (scrollTop <= noteH) {
+                // console.log('----0----')
+                this.selected = 0
+            } else if (scrollTop < catalogH && scrollTop > noteH) {
+                // console.log('----1----')
+                this.selected = 1
+            } else if (scrollTop < leavemessageH && scrollTop > catalogH) {
+                // console.log('----2----')
+                this.selected = 2
+            }
+        },
+        clickFnc(index) {
+            this.selected = index
+            console.log('currentindex=' + index)
+            switch (index) {
+                case 0:
+                this.$refs.note.scrollIntoView({
+                    behavior: 'instant',
+                    block: 'center',
+                    inline: 'nearest'
+                })
+                break
+                case 1:
+                this.$refs.catalog.scrollIntoView({
+                    behavior: 'instant',
+                    block: 'center',
+                    inline: 'nearest'
+                })
+                break
+                case 2:
+                this.$refs.leavemessage.scrollIntoView({
+                    behavior: 'instant',
+                    block: 'center',
+                    inline: 'nearest'
+                })
+                break
+            }
+        },
 
     }, 
-
     created (){
         //获取专栏Id
         const courseId = this.$route.params.courseId 
         this.getVideoColumnDetail({courseId : courseId})
+        //获取专栏评论列表
+        this.getCommentList({regionType:2201,regionId:courseId,currentPage:1,pageSize:11})
     },
+    mounted() {
+        window.addEventListener('scroll', this.handleScroll)
+    },
+    destroyed() {
+        window.removeEventListener('scroll', this.handleScroll)
+    }
 }
 </script>
 
@@ -199,11 +229,20 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+  background-color: #fff;
   border-bottom: 1px solid lightgray;
   box-sizing: border-box;
-  margin-top: 28px;
-  margin-bottom: 28px;
+  padding-top: 28px;
+//   margin-bottom: 28px;
   text-align: center;
+
+
+  &.isFixed {
+    position: fixed;
+    top: 0;
+    z-index: 999;
+  }
+
   .videocol-navbar-item {
     width: 100px;
     padding-bottom: 22px;
@@ -263,7 +302,7 @@ export default {
   width: 100%;
   height: 800px;
   margin-bottom: 40px;
-  background-color: red;
+  background-color: #fff;
 }
 
 .videocol-bigimage-bg {

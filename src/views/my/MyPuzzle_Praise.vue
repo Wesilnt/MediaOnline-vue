@@ -6,7 +6,7 @@
             <a class="my-puzzle-nodata-btn">我要{{pageName}}</a>
         </div>
         <div v-else class="my-puzzle-container">
-            <van-tabs v-model="selected">
+            <van-tabs v-model="selected" color="#ffa32f" line-width="60">
                 <van-tab  v-for="item in Object.keys(puzzleTabs)"
                            :title="item==='waiting'?`${pageName}${puzzleTabs[item]}`: puzzleTabs[item]">
                     <div class="my-puzzle-content">

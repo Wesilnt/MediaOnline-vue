@@ -1,5 +1,4 @@
 import { getBannerList, getFreeList, getNewMessageCount, getVisionList, getVideoList, getBookList } from '../../services/homeService'
-
 const homeData = {
     namespaced: true,
     state: {
@@ -19,8 +18,8 @@ const homeData = {
             let result = await getFreeList({ pageSize: 2 })
             commit('setFreeList', result.result)
         },
-       async getNewMessageCount({ commit }) {
-           let result = await getNewMessageCount({busiTypes:3101})
+        async getNewMessageCount({ commit }) {
+            let result = await getNewMessageCount({ busiTypes: 3101 })
             commit('setNewMessageCount', result)
         },
         async getVisionList({ commit }) {
