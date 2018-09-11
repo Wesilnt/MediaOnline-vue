@@ -7,8 +7,16 @@
         <div class="videocol-navbar" id="navbar" ref="navbar">
             <div v-for="(item,index) of navbar" :class="{'selected':selected == index }" :key="index" class="videocol-navbar-item" @click="clickFnc(index)">{{item}}</div>
         </div>
+            <tools-navbar
+                v-on:router-to-audition="routerToAudition"
+                v-on:router-to-collage="routerToCollage"
+                v-on:router-to-collect="routerToCollect"
+                :price="['100','10']"
+                collageText="拼团拼团"
+                :collect='true'
+                :collage='true'
+            />
 
-        <tools-navbar :btnstate="0"/>
 
        <div class="videocol-content">
            <course-introduce ref="desc" id="desc" :courseinfo="description"/>
@@ -61,119 +69,125 @@ import videoComment from '../../components/video-comment.vue'
 import CommentItem from '../../components/CommentItem.vue'
 import toolsNavbar from '../../components/toolsNavbar.vue'
 import videoBigimage from '../../components/videoBigimage.vue'
-import { createNamespacedHelpers } from "vuex";
-const { mapState, mapActions } = createNamespacedHelpers("videoColumnDetail");
+import { createNamespacedHelpers } from 'vuex'
+const { mapState, mapActions } = createNamespacedHelpers('videoColumnDetail')
 
 export default {
-    name: 'VideoColumnDetail',
-    components: {
-        'course-introduce': CourseIntroduce,
-        playlist: playlist,
-        'video-comment': videoComment,
-        'tools-navbar': toolsNavbar,
-        'vue-bigimage': videoBigimage,
-        'commentitem' : CommentItem
-    },
-    data() {
-        return {
-            navbar: ['介绍', '试看', '留言'],
-            selected: 0,
-            navbarFixed: false, //控制navbar是否吸顶
-            dataList: [
-                
-            ]   
-        }
-    },
-    watch:{
-
-    },
-    computed: {
-        ...mapState([          
-            'freeLessonList',              //试看课程数组
-            'profilePic',                 //头图
-            'description',           //专栏介绍
-            'outlinePic',           //课程列表下面的大图展示
-            'videoColumnComments',       //视频专栏的留言
-            'buyIntro',               //购买须知
-            'lessonCount',                 //专栏课集总数
-            'commentCount',            //留言总条数
-            'buyCount'
-        ]),
-    },
-   
-    methods: {
-        ...mapActions([
-            "getVideoColumnDetail",
-            "getCommentList"
-        ]),
-        allFunc() {
-            console.log('点击全部')
-        },
-        gotoVideoCourseDetailPage(lessonID){
-            console.log('路由跳转 lessonID = ' + lessonID)
-            this.$router.push({name:'videoCourseDetail',params:{ lessonID }})
-        },
-        async handleScroll() {
-            //1.监听滚动
-            var scrollTop =
-                window.pageYOffset ||
-                document.documentElement.scrollTop ||
-                document.body.scrollTop
-            //2.获取navbar的偏移量
-            // var barOffset = this.$refs.navbar.offsetTop
-            // var barOffset = this.$el.querySelector('#navbar').offsetTop
-            // console.log('barOffset='+barOffset)
-            // console.log('scrollTop='+scrollTop)
-            // this.navbarFixed = scrollTop > barOffset ? true : false
-            let tryCourseH = this.$el.querySelector('#tryCourse').offsetTop -50
-            let messageH = this.$el.querySelector('#leavemessage').offsetTop -50
-            if (scrollTop < tryCourseH) {
-                this.selected = 0
-            } else if (scrollTop < messageH && scrollTop > tryCourseH) {
-                this.selected = 1
-            } else if (scrollTop > messageH) {
-                this.selected = 2
-            }
-        },
-        clickFnc(index) {
-            this.selected = index
-            let positionId
-            switch (index) {
-                case 0:
-                    positionId = '#desc'
-                break
-                case 1:
-                    positionId = '#tryCourse'
-                break
-                case 2:
-                    positionId = '#leavemessage'
-                break
-                default:
-                break
-            }
-
-            let anchor = this.$el.querySelector(positionId)
-            document.body.scrollTop = anchor.offsetHeight - 50
-            // // Firefox
-            document.documentElement.scrollTop = anchor.offsetTop - 50
-            // Safari
-            window.pageYOffset = anchor.offsetTop - 50
-        },
-
-    }, 
-    created (){
-        //获取专栏Id
-        const courseId = this.$route.params.courseId 
-        this.getVideoColumnDetail({courseId : courseId})
-        //获取专栏评论列表
-        this.getCommentList({regionType:2201,regionId:courseId,currentPage:1,pageSize:11})
-    },
-    mounted() {
-        window.addEventListener('scroll', this.handleScroll)
-    },
-    destroyed() {
-        window.removeEventListener('scroll', this.handleScroll)
+  name: 'VideoColumnDetail',
+  components: {
+    'course-introduce': CourseIntroduce,
+    playlist: playlist,
+    'video-comment': videoComment,
+    'tools-navbar': toolsNavbar,
+    'vue-bigimage': videoBigimage,
+    commentitem: CommentItem
+  },
+  data() {
+    return {
+      navbar: ['介绍', '试看', '留言'],
+      selected: 0,
+      navbarFixed: false, //控制navbar是否吸顶
+      dataList: []
     }
+  },
+  watch: {},
+  computed: {
+    ...mapState([
+      'freeLessonList', //试看课程数组
+      'profilePic', //头图
+      'description', //专栏介绍
+      'outlinePic', //课程列表下面的大图展示
+      'videoColumnComments', //视频专栏的留言
+      'buyIntro', //购买须知
+      'lessonCount', //专栏课集总数
+      'commentCount', //留言总条数
+      'buyCount'
+    ])
+  },
+
+  methods: {
+    ...mapActions(['getVideoColumnDetail', 'getCommentList']),
+    allFunc() {
+      console.log('点击全部')
+    },
+    gotoVideoCourseDetailPage(lessonID) {
+      console.log('路由跳转 lessonID = ' + lessonID)
+      this.$router.push({ name: 'videoCourseDetail', params: { lessonID } })
+    },
+    async handleScroll() {
+      //1.监听滚动
+      var scrollTop =
+        window.pageYOffset ||
+        document.documentElement.scrollTop ||
+        document.body.scrollTop
+      //2.获取navbar的偏移量
+      // var barOffset = this.$refs.navbar.offsetTop
+      // var barOffset = this.$el.querySelector('#navbar').offsetTop
+      // console.log('barOffset='+barOffset)
+      // console.log('scrollTop='+scrollTop)
+      // this.navbarFixed = scrollTop > barOffset ? true : false
+      let tryCourseH = this.$el.querySelector('#tryCourse').offsetTop - 50
+      let messageH = this.$el.querySelector('#leavemessage').offsetTop - 50
+      if (scrollTop < tryCourseH) {
+        this.selected = 0
+      } else if (scrollTop < messageH && scrollTop > tryCourseH) {
+        this.selected = 1
+      } else if (scrollTop > messageH) {
+        this.selected = 2
+      }
+    },
+    clickFnc(index) {
+      this.selected = index
+      let positionId
+      switch (index) {
+        case 0:
+          positionId = '#desc'
+          break
+        case 1:
+          positionId = '#tryCourse'
+          break
+        case 2:
+          positionId = '#leavemessage'
+          break
+        default:
+          break
+      }
+
+      let anchor = this.$el.querySelector(positionId)
+      document.body.scrollTop = anchor.offsetHeight - 50
+      // // Firefox
+      document.documentElement.scrollTop = anchor.offsetTop - 50
+      // Safari
+      window.pageYOffset = anchor.offsetTop - 50
+    },
+    routerToAudition() {
+      console.log('跳转到试听')
+    },
+    routerToCollage() {
+      console.log('跳转到拼团')
+    },
+    routerToCollect() {
+      console.log('跳转到集赞')
+    }
+  },
+  created() {
+    //获取专栏Id
+    const courseId = this.$route.params.courseId
+    this.getVideoColumnDetail({ courseId: courseId })
+    //获取专栏评论列表
+    this.getCommentList({
+      regionType: 2201,
+      regionId: courseId,
+      currentPage: 1,
+      pageSize: 11
+    })
+  },
+  mounted() {
+    window.addEventListener('scroll', this.handleScroll)
+  },
+  destroyed() {
+    window.removeEventListener('scroll', this.handleScroll)
+  }
 }
 </script>
 
@@ -199,7 +213,7 @@ export default {
   bottom: 20px;
   right: 40px;
   font-size: 28px;
-  color:red;
+  color: red;
 }
 
 //导航条
@@ -218,7 +232,7 @@ export default {
   box-sizing: border-box;
   padding-top: 28px;
   text-align: center;
-   z-index: 999;
+  z-index: 999;
 
   .videocol-navbar-item {
     width: 100px;
@@ -300,7 +314,7 @@ export default {
 
 //留言评论部分
 .video-column-comment {
-    margin-top: 56px;
+  margin-top: 56px;
 }
 
 .videocol-all {

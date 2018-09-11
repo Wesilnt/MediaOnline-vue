@@ -15,17 +15,11 @@ const myFeedback = {
       Object.assign(state, payload)
     }
   },
-  /*
-*  posted: function(newValue) {
-      if (!newValue) {
-        alert('您的反馈已提交，谢谢')
-      }
-* */
   actions: {
     async handleInput({ commit }, payload) {
       const content = payload.target.value
-      if (content.length >= 200) {
-         Toast.fail('您的字数超出限制')
+      if (content.length > 200) {
+       return  Toast.fail('您的字数超出限制')
       }
       await commit('updateStatus', {
         content

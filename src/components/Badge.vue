@@ -1,5 +1,5 @@
 <template>
-    <span class="qhht-badge" :class="`qhht-badge-${status}`"><slot />{{badge.text}}</span>
+    <span class="qhht-badge" :class="`qhht-badge-${status}`"><slot />{{text}}</span>
 </template>
 <script>
 export default {
@@ -21,9 +21,7 @@ export default {
       } else if (this.status === 'warning') {
         text = '失败'
       }
-      return {
-        text
-      }
+      return text
     }
   }
 }
@@ -43,7 +41,5 @@ export default {
   &-normal {
     background: #ffa32f;
   }
-}
-.succ {
 }
 </style>
