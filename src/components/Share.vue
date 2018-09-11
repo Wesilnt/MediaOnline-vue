@@ -47,13 +47,13 @@ export default {
     onShareItem(shareScore) {
       this.isOpen = false
       if (shareScore == 'poster') {
-        Toast('分享海报')
+        this.$toast('分享海报')
       }
       if (shareScore == 'friends') {
-        Toast('分享给朋友')
+         this.$toast('分享给朋友')
       }
       if (shareScore == 'circle') {
-        Toast('分享到朋友圈')
+         this.$toast('分享到朋友圈')
       }
     },
     onCancel() {
