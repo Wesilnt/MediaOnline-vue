@@ -1,8 +1,6 @@
 import { stringify } from 'qs';
 import request from '../utils/request';
 /*  *****我的**** */
-import { stringify } from 'qs'
-import request from '../utils/request'
 
 /* 我的拼团 */
 export async function queryMyPuzzleList(params) {
