@@ -1,3 +1,5 @@
+import { stringify } from 'qs';
+import request from '../utils/request';
 /*  *****我的**** */
 
 /*export async function queryPhotos(params) {
@@ -45,4 +47,9 @@ export async function queryMyPuzzleList(params) {
       status: '-1'
     }
   ]
+}
+
+//意见反馈
+export async function postFeedback(params) {
+  return request.post('/feedback/feedbackContent', params);
 }
