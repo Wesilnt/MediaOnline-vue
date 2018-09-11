@@ -1,15 +1,11 @@
 <template>
     <div class="help">
-        <div>
-            <textarea :value="content" @input="updateContent" class="textarea-content" rows="8" placeholder="请填写您的意见和建议"/>
-            <div class="div-button-submit">
-                <button v-bind:class="[hasValue ? 'button-submit-normal':'button-submit-disable']" @click="handleFeedback">提交反馈</button>
-            </div>
-            <div class="div-text-desc">紧急问题可以通过以下方式联系我们：</div>
-            <div class="div-text-mail">
-                <div class="div-mail-label">邮箱：</div>
-                qhht@con.shbaoyuantech.com
-            </div>
+        <textarea :value="content" @input="updateContent" class="textarea-content" rows="8" placeholder="请填写您的意见和建议"/>
+            <button v-bind:class="['help-button-submit',hasValue ? 'button-submit-normal':'button-submit-disable']" @click="handleFeedback">提交反馈</button>
+        <div class="div-text-desc">紧急问题可以通过以下方式联系我们：</div>
+        <div class="div-text-mail">
+            <div class="div-mail-label">邮箱：</div>
+            qhht@con.shbaoyuantech.com
         </div>
     </div>
 </template>
@@ -52,7 +48,8 @@ export default {
 
 <style scoped>
 .help {
-  padding: 40px 20px 0px 20px;
+  padding: 40px 20px 0;
+  font-size: 28px;
 }
 .textarea-content {
   width: 100%;
@@ -60,61 +57,41 @@ export default {
   padding: 40px;
   background: #f7f7f7;
   color: #333333;
-  font-size: 28px;
-  border-color: #b5b5b5;
-  border-radius: 30px;
-  border-width: 1px;
+  border-radius: 12px;
+  border: 1px solid #ededed;
   -webkit-appearance: none;
 }
-.div-button-submit {
-  padding: 100px 55px 0px 55px;
-}
-.button-submit-disable {
-  width: 100%;
+.help-button-submit {
+  display: block;
+  width: 640px;
   height: 80px;
-  background: #f7f7f7;
-  color: #b5b5b5;
-  border-radius: 50px;
-  border-color: #b5b5b5;
+  margin: 118px auto 80px;
   text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 28px;
-  border-width: 1px;
+  border-radius: 50px;
+  border: 1px solid #d4d3d7;
+  background: #fbfcfc;
+  color: #b5b5b5;
+  pointer-events: none;
 }
 .button-submit-normal {
-  width: 100%;
-  height: 80px;
   background: #ffa32f;
   color: white;
-  border-radius: 50px;
-  border-color: #b5b5b5;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 28px;
-  border-width: 1px;
+  border: none;
 }
 .div-text-desc {
   width: 100%;
   padding: 80px 55px 32px 55px;
-  color: black;
-  font-size: 28px;
   float: left;
   color: #3f4651;
-  font-size: 28px;
 }
 .div-text-mail {
   width: 100%;
-  padding: 32px 55px 0px 55px;
+  padding: 32px 55px 0;
   color: #ffa32f;
-  font-size: 28px;
 }
 .div-mail-label {
-  color: black;
   font-size: 28px;
   float: left;
-  color: rgb(172, 172, 180);
-  font-size: 28px;
+  color: #acacb4;
 }
 </style>

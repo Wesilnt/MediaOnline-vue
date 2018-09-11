@@ -33,7 +33,7 @@ function checkStatus(url, response) {
   error.name = response.status
   error.response = response
   Toast.fail({
-    duration: 0, // 持续展示 toast
+    duration: 4000, // 持续展示 toast
     message: response.error
   })
   console.error('返回错误状态码' + error)
@@ -61,7 +61,7 @@ const checkResponseCode = (url, response) => {
   // 1001: token无效 需退出重新登录
   if (response.code === 1001) error.name = '401-logout'
   Toast.fail({
-    duration: 0, // 持续展示 toast
+    duration: 4000, // 持续展示 toast
     message: response.error
   })
   // toast.fail(response.error);

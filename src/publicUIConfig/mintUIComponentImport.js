@@ -5,7 +5,10 @@ import 'vant/packages/vant-css/src/button.css'
 import 'vant/packages/vant-css/src/checkbox.css'
 
 import Vue from 'vue'
-import { Button, Tab, Tabs, Toast, Tag, Swipe, SwipeItem ,Popup } from 'vant'
+import { Button, Tab, Tabs, Toast, Tag, Swipe, SwipeItem ,Popup } from 'vant';
+import { PullRefresh } from 'vant';
+
+Vue.use(PullRefresh);
 
 
 Vue.use(Toast)
