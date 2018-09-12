@@ -157,7 +157,7 @@ function request(url, options) {
     })
 }
 
-request.post = (url, body, formData = true) => {
+request.post = (url, body) => {
   const bodyData = json2formData(body)
   return request(url, { method: 'POST', body: bodyData })
 }
