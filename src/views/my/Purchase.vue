@@ -12,7 +12,7 @@
 
         <div v-for="item in list" :key="item.name">
             <div class="record-item">
-                <img src="" class="avatar"/>
+                <img :src='null' class="avatar"/>
 
                 <div class="div-content">
                     <div class="name">{{item.name}}</div>

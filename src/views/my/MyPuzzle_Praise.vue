@@ -1,34 +1,42 @@
 <template>
     <section>
-        <div v-if="puzzleList.length===0 && selected===puzzleTypes.all && totalCount===0" class="my-puzzle-nodata">
+        <div v-show="allNoData" class="my-puzzle-nodata">
             <i class="qhht-icon my-puzzle-nodata-icon"></i>
             <p class="my-puzzle-nodata-warn">暂无{{pageName}}信息</p>
             <a class="my-puzzle-nodata-btn">我要{{pageName}}</a>
         </div>
-        <div v-else class="my-puzzle-container">
+        <div  v-show="!allNoData" class="my-puzzle-container">
             <van-tabs v-model="selected" color="#ffa32f" :line-width='60'>
                 <van-tab  v-for="item in Object.keys(puzzleTabs)"
                           :key="item"
                            :title="item==='waiting'?`${pageName}${puzzleTabs[item]}`: puzzleTabs[item]">
                     <div class="my-puzzle-content">
-                        <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
-                            <Skeleton></Skeleton>
-                            <div v-for="puzzle in puzzleList" :key="puzzle.id" class="my-puzzle-content-cell">
-                            <p class="qhht-flex">
-                                <i class="qhht-icon my-puzzle-content-cell-icon"></i>
-                                <span class="my-puzzle-content-cell-date">{{pageName}}时间：{{puzzle.createTime}}</span>
-                                <Badge :status="isPraise?puzzle.collectLikeStatus:puzzle.groupBuyStatus">{{pageName}}</Badge>
-                            </p>
-                            <div class="qhht-flex">
-                                <img :alt="puzzle.course.name" :title="puzzle.course.name" class="my-puzzle-content-img" v-lazy="puzzle.course.coverPic" >
-                                <ul class="my-puzzle-display">
-                                    <li><h3> {{puzzle.course.name}}</h3></li>
-                                    <li>{{puzzle.course.priefIntro?puzzle.course.priefIntro:'暂无简介'}}</li>
-                                    <li><span class="my-puzzle-total-price">￥{{puzzle.course.price}}</span> / 共{{puzzle.course.lessonCount}}讲</li>
-                                </ul>
-                            </div>
-                            <div v-show="!isPraise" class="my-puzzle-price">{{pageName}}价：<span class="my-puzzle-price-num">￥{{puzzle.price}}</span></div>
-                        </div>
+                        <van-pull-refresh v-model="loadrefresh" @refresh="onRefresh">
+                            <Skeleton :loading="puzzleList.length===0" rows="1">无数据</Skeleton>
+                            <van-list
+                                v-model="loadQuery"
+                                :finished="finished"
+                                @load="onLoadMore"
+                                :immediate-check="false"
+                            >
+                                <div v-for="puzzle in puzzleList" :key="puzzle.id" class="my-puzzle-content-cell">
+                                    <p class="qhht-flex">
+                                        <i class="qhht-icon my-puzzle-content-cell-icon"></i>
+                                        <span class="my-puzzle-content-cell-date">{{pageName}}时间：{{puzzle.createTime}}</span>
+                                        <Badge :status="isPraise?puzzle.collectLikeStatus:puzzle.groupBuyStatus">{{pageName}}</Badge>
+                                    </p>
+                                    <div class="qhht-flex">
+                                        <img :alt="puzzle.course.name" :title="puzzle.course.name" class="my-puzzle-content-img" v-lazy="puzzle.course.coverPic" >
+                                        <ul class="my-puzzle-display">
+                                            <li><h3> {{puzzle.course.name}}</h3></li>
+                                            <li>{{puzzle.course.priefIntro?puzzle.course.priefIntro:'暂无简介'}}</li>
+                                            <li><span class="my-puzzle-total-price">￥{{puzzle.course.price}}</span> / 共{{puzzle.course.lessonCount}}讲</li>
+                                        </ul>
+                                    </div>
+                                    <div v-show="!isPraise" class="my-puzzle-price">{{pageName}}价：<span class="my-puzzle-price-num">￥{{puzzle.price}}</span></div>
+                                </div>
+                                <p v-if="finished" class="my-puzzle-finished">没有数据啦</p>
+                            </van-list>
                         </van-pull-refresh>
                     </div>
                 </van-tab>
@@ -42,7 +50,9 @@ import { createNamespacedHelpers } from 'vuex'
 import Badge from '../../components/Badge'
 import Skeleton from '../../components/Skeleton'
 
-const { mapState, mapActions } = createNamespacedHelpers('myPuzzle_Praise')
+const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
+  'myPuzzle_Praise'
+)
 
 export default {
   name: 'MyPuzzlePraise',
@@ -52,10 +62,12 @@ export default {
     if (path.endsWith('my-puzzle')) pageName = '拼团'
     else if (path.endsWith('my-praise')) pageName = '集赞'
     return {
-      refreshing: false,
       selected: '1200',
       pageName,
-      isPraise: pageName === '集赞'
+      isPraise: pageName === '集赞',
+      loadrefresh: false,
+      loadQuery: false,
+      allNoData: false
     }
   },
   // created() {
@@ -69,15 +81,18 @@ export default {
       'currentType',
       'puzzleList',
       'loading',
+      'refreshing',
       'totalCount',
       'pageSize',
       'currentPage'
-    ])
+    ]),
+    ...mapGetters(['finished'])
   },
   watch: {
     selected: function(currentType) {
       const { isPraise, puzzleTypes, pageSize, currentPage } = this
       const Types = Object.values(puzzleTypes)
+      console.log(this.pageName)
       this.toggleCurrentType({
         pageSize,
         currentPage,
@@ -85,26 +100,35 @@ export default {
         isPraise
       })
     },
-    loading: function(newLoading) {
-      console.log(newLoading, this.refreshing)
-      if (!newLoading && this.refreshing) {
-        this.$toast('刷新成功')
-        this.refreshing = false
-      }
+    refreshing: function(refreshing) {
+      this.loadrefresh = !!refreshing
+    },
+    loading: function(loading) {
+      this.loadQuery = !!loading
+    },
+    puzzleList: function(puzzleList) {
+      this.allNoData =
+        puzzleList.length === 0 &&
+        this.currentType === this.puzzleTypes.all &&
+        this.totalCount === 0
     }
   },
-
   methods: {
     ...mapActions(['queryList', 'toggleCurrentType']),
     onRefresh() {
-      const { isPraise, puzzleTypes, pageSize, currentPage, currentType } = this
-      console.log(currentType)
-      const Types = Object.values(puzzleTypes)
+      this.loadList(8, true)
+    },
+    onLoadMore() {
+      if (!this.finished) this.loadList(this.pageSize * 2)
+    },
+    loadList(pageSize, refresh = false) {
+      const { isPraise, currentPage, currentType } = this
       this.toggleCurrentType({
         pageSize,
         currentPage,
         currentType,
-        isPraise
+        isPraise,
+        refresh
       })
     }
   },
@@ -154,7 +178,10 @@ export default {
   }
   &-content {
     padding: 32px 40px;
-    min-height: 50vh;
+    .van-list {
+      min-height: 50vh;
+    }
+
     &-cell {
       position: relative;
       border-radius: 4px;
@@ -232,6 +259,10 @@ export default {
       letter-spacing: 1px;
       font-size: 30px;
     }
+  }
+  &-finished {
+    text-align: center;
+    color: #ddd;
   }
 }
 </style>

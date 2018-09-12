@@ -8,7 +8,6 @@
         <div v-else class="like-container">
             <div class="like-head-top-img">
             </div>
-
             <div class="like-head">
                 <img class="like-head-left-icon" src="../../assets/images/my_record_play.png"/>
                 <div class="like-head-record-text">最近播放</div>

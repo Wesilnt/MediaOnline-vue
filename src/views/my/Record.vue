@@ -8,14 +8,12 @@
         <div v-else class="playRecord-container">
             <div class="playRecord-head-top-img">
             </div>
-
             <div class="playRecord-head">
                 <img class="playRecord-head-left-icon" src="../../assets/images/my_record_play.png"/>
                 <p class="playRecord-head-record-text">最近播放</p>
                 <p class="playRecord-head-record-number">(共26条记录)</p>
                 <img class="playRecord-head-right-icon" src="../../assets/images/my_sys_menu.png">
             </div>
-
             <div v-for="item in playRecordList" :key="item.id">
                 <van-swipe-cell :right-width="150" :on-close="onClose(item.id)">
                     <div class="playRecord-item">

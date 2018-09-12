@@ -10,8 +10,8 @@
     <!-- <div class="poster-save-btn">
       <button @click="saveImg">保存图片</button>
     </div> -->
-    <!-- <img ref="saveimage" src=""> -->
-    <a v-show="false" ref="download" href="" download="poster"/>
+    <!-- <img ref="saveimage" :src='null'> -->
+    <a v-show="false" ref="download"  download="poster"/>
   </div>
 </template> 
 <script>

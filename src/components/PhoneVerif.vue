@@ -8,7 +8,7 @@
       <div class="code-container">
         <span>验证码：</span>
         <input v-model="validateCode" type="text" placeholder="验证码">
-        <a href="" @click.prevent="sendCode">发送短信</a>
+        <a @click.prevent="sendCode">发送短信</a>
       </div>
       <a class="validate-confirm" @click.prevent="onConfirm">确认</a>
     </div>

@@ -1,7 +1,7 @@
 <template>
     <div class="detail-container">
         <div class="detail-cover">
-            <!-- <img src="" alt=""> -->
+            <!-- <img :src='null' alt=""> -->
         </div>
         <div class="detail-content">
             <h4>绿山墙</h4>

@@ -5,7 +5,7 @@
     <div class="play-button">
       <img class="bookPlayTringle" src="../../assets/home_video_play.jpg" alt="">
     </div>
-    <img v-if="book.isNew" src="" alt="">
+    <img v-if="book.isNew" :src='null' alt="">
     <p class="title">{{book.name}}</p>
     <p class="price">¥{{book.price}}</p>
   </div>
