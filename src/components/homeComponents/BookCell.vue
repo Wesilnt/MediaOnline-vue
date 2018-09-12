@@ -3,7 +3,7 @@
     <img :src="book.coverPic" class="cover" alt="">
 
     <div class="play-button">
-      <div class="bookPlayTringle"></div>
+      <img class="bookPlayTringle" src="../../assets/home_video_play.jpg" alt="">
     </div>
     <img v-if="book.isNew" src="" alt="">
     <p class="title">{{book.name}}</p>
@@ -41,24 +41,18 @@ p {
     height: 50px;
     background: #fff;
     border-radius: 50%;
-      -webkit-box-shadow: 0 0 8px 1px #e5dacf;
-  -moz-box-shadow: 0 0 8px 1px #e5dacf;
-  box-shadow: 0 0 8px 1px #e5dacf;
+    -webkit-box-shadow: 0 0 8px 1px #e5dacf;
+    -moz-box-shadow: 0 0 8px 1px #e5dacf;
+    box-shadow: 0 0 8px 1px #e5dacf;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   .bookPlayTringle {
-  display: inline-block;
-  width: 0px;
-  height: 0px;
-  border-style: solid;
-  border-width: 10px 18px;
-  border-color: transparent;
-  border-left-color: #ffa32f;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin-top: -10px;
-  margin-left: -6px;
-}
+    width: 16px;
+    height: 18px;
+    margin-left: 2px;
+  }
   .title {
     margin-top: 14px;
     margin-left: 10px;

@@ -13,9 +13,9 @@
     </div>
     <div>
       <div class="fit">{{vision.fitFor}}岁</div>
-      <div class="visionPlay">
+      <div class="visionPlay" @click.stop="enterVisionPlay">
         <div class="visionPlayContent">
-          <div class="palyTringle" />试听
+          <img class="palyTringle" src="../../assets/home_vision_play.jpg" alt="">试听
         </div>
       </div>
     </div>
@@ -29,6 +29,9 @@ export default {
   methods: {
     enterVisionDetail(id) {
       this.$router.push({ path: '/home/visionDetail/' + id })
+    },
+    enterVisionPlay(){
+       this.$router.push({ path: '/audio/audioplay', query: { id:this.vision.id }  })
     }
   }
 }
@@ -84,15 +87,9 @@ export default {
   line-height: 40px;
 }
 .palyTringle {
-  display: inline-block;
-  width: 10px;
-  height: 0px;
-  border-style: solid;
-  border-width: 10px;
-  border-color: transparent;
-  border-left-color: #fff;
-  top: 0;
-  left: 20px;
+  width: 16px;
+  height: 20px;
+  margin-right: 8px;
 }
 .visionPlay {
   width: 132px;

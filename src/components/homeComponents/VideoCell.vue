@@ -1,7 +1,7 @@
 <template>
   <div :style="{backgroundImage: 'url(' + video.coverPic + ')' }" class="cell">
     <div class="videoPlay">
-      <div class="videoPlayTringle"></div>
+      <img class="videoPlayTringle" src="../../assets/home_video_play.jpg" alt="">
     </div>
     <div class="text">
       <p class="videoTitle">{{video.name}}</p>
@@ -47,20 +47,13 @@ p {
   -webkit-box-shadow: 0 0 15px 2px #e5dacf;
   -moz-box-shadow: 0 0 15px 2px #e5dacf;
   box-shadow: 0 0 15px 2px #e5dacf;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .videoPlayTringle {
-  display: inline-block;
-  width: 0px;
-  height: 0px;
-  border-style: solid;
-  border-width: 10px 18px;
-  border-color: transparent;
-  border-left-color: #ffa32f;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin-top: -10px;
-  margin-left: -9px;
+  width: 18px;
+  height: 20px;
 }
 .text {
   margin-left: 36px;

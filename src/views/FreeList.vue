@@ -3,12 +3,11 @@
     <div v-for="(item, index) in freeList" :key="index" class="freeCell">
       <div class="free-play-button-container">
         <div class="free-play-button">
-          <div class="freePlayTringle">
-          </div>
+          <img class="freePlayIcon" src="../assets/home_video_play.jpg" alt="">
         </div>
-        </div>
-        <span class="content">{{item.type}}|{{item.title}}</span>
       </div>
+      <span class="content">{{item.type}}|{{item.title}}</span>
+    </div>
     <div class="line" />
     <router-view name="FreeList" />
   </div>
@@ -31,8 +30,8 @@ export default {
   height: 88px;
   width: 100%;
 }
-.free-play-button-container{
- display: inline-block;
+.free-play-button-container {
+  display: inline-block;
   width: 88px;
   height: 88px;
   vertical-align: middle;
@@ -44,21 +43,16 @@ export default {
   height: 48px;
   background-color: #ffffff;
   border-radius: 50%;
-   -webkit-box-shadow: 0 0 15px 2px #e5dacf;
+  -webkit-box-shadow: 0 0 15px 2px #e5dacf;
   -moz-box-shadow: 0 0 15px 2px #e5dacf;
   box-shadow: 0 0 15px 2px #e5dacf;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
- .freePlayTringle {
-  // display: inline-block;
-  width: 0px;
-  height: 0px;
-  border-style: solid;
-  border-width: 10px 18px;
-  border-color: transparent;
-  border-left-color: #ffa32f;
-  position: relative;
-  top: 30%;
-  left: 35%;
+.freePlayIcon {
+  width: 16px;
+  height: 18px;
 }
 .content {
   font-size: 28px;
