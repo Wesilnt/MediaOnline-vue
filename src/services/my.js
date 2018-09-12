@@ -1,7 +1,10 @@
 import { stringify } from 'qs'
 import request from '../utils/request'
 /*  *****我的**** */
-
+//我的播放记录
+export async function getPlayRecord(params) {
+  return request(`/lesson/myLessonPlayRecord?${stringify(params)}`)
+}
 //我喜欢的(我的收藏)
 export async function getMyLike() {
   return request.post(`/favorite/getLessonListByFavorite?`,true)
