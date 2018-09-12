@@ -23,6 +23,14 @@ export async function getVideoLessonDetail(params) {
 export async function getLessonListByCourse(params) {
   return request(`/lesson/getLessonListByCourse?${stringify(params)}`)
 }
+//收藏接口
+export async function doFavorite(params) {
+  return request.post('/favorite/doFavorite',params)
+}
+//取消收藏接口
+export async function unFavorite(params) {
+  return request.post('/favorite/unFavorite',params)
+}
 
 // TODO 日后删除
 export async function getQuestionList(params) {

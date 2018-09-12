@@ -57,7 +57,7 @@ const videoColumnDetail = {
         },
         async likeComment ({commit,state},commentId) {
 
-           const result = await likeComment( {'commentId':commentId})
+           const result = await likeComment({'commentId':commentId})
         //    console.log(commentId)
            console.log('点赞结果')
            console.log(result)

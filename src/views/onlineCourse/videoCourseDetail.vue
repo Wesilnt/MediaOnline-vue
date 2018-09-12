@@ -1,16 +1,16 @@
 <template>
     <div class="videocourse-detail-container" id="detailmain" ref="detailmain">
         <div class="video-detail-header" :style="{ background : 'url('+radioShowPic+')' }">
-            <div class="video-detail-header-right-top">
-                <img :src="require('../../assets/images/onlinecourse_love_normal.png')" class="video-detail-collect" alt="">
-                <img :src="require('../../assets/images/onlinecourse_video_detail_ic_editor.png')" class="video-detail-share" alt="">
+            <div class="video-detail-header-right-top" @click="onCollectFavorite">
+                <img :src="isLike?collectIcon:unCollectIcon" class="video-detail-collect" alt="">
+                <img :src="require('../../assets/images/onlinecourse-play_ic_share@2x.png')" class="video-detail-share" alt="">
             </div>
 
-             <div class="video-detail-header-left-bottom">
+             <div class="video-detail-header-left-bottom" @click="playVideo">
                  <img :src="require('../../assets/images/onlinecourse-video-detail-header.jpg')" alt="" >
                  <label>开始播放</label>   
                  </div>
-             <img :src="require('../../assets/images/onlinecourse_video_ic_gift.png')" class="video-detail-header-gift" alt="">    
+             <!-- <img :src="require('../../assets/images/onlinecourse_video_ic_gift.png')" class="video-detail-header-gift" alt="">     -->
         </div>
 
     
@@ -50,6 +50,10 @@
             <!-- <video-comment v-for="item in singleComments" :key="item.id" :comment="item"/> -->
             <commentitem class="video-course-comment" v-for="item in singleComments" :key="item.id" :comment="item" :unindent="true" :regiontype="2202"/>
         </div>
+
+        <!-- style="display:none" -->
+        <video class="videoitem" ref="videoitem" :src="videoUrl" controls="controls" width="100%" height='100%' preload="auto"></video>
+        <p>{{fullscreen}}</p>
     </div>
 </template>
 
@@ -73,26 +77,36 @@ export default {
       navbar: ['资料', '目录', '留言'],
       navbarFixed: false, //控制navbar是否吸顶
       selected: 0,
-      lockIcon: require('../../assets/images/onlinecourse_lock.jpg'), //未解锁
-      unlockIcon: require('../../assets/images/onlinecourse_unlock.jpg') //已解锁
+      lockIcon:require('../../assets/images/onlinecourse_lock.jpg'),//未解锁
+      unlockIcon:require('../../assets/images/onlinecourse_unlock.jpg'),//已解锁
+      collectIcon:require('../../assets/images/onlinecourse_love_highlight.png'),//已收藏
+      unCollectIcon:require('../../assets/images/onlinecourse_love_normal.png'),//未搜藏
+      fullscreen:0
     }
   },
   computed: {
-    ...mapState([
-      'lessonList', //目录课程
-      'radioShowPic', //视频背景图
-      'audioUrl', //音频地址
-      'videoUrl', //视频地址
-      'courseId', //专栏ID
-      'singleComments',
-      'description', //笔记
-      'isFree',
-      'isLike',
-      'createTime'
-    ])
+    ...mapState([          
+        'lessonList',              //目录课程
+        'radioShowPic',              //视频背景图
+        'audioUrl',              //音频地址
+        'videoUrl',             //视频地址
+        'courseId',              //专栏ID
+        'singleComments',
+        'description',           //笔记
+        'isFree',
+        'isLike',
+        'createTime',
+        'isAchieveCollect',           //是否完成收藏
+        'collectionId'          //收藏Id
+    ]),
   },
   mounted() {
     window.addEventListener('scroll', this.handleScroll)
+     const vid = this.$refs.videoitem 
+    vid.addEventListener('timeupdate',this.getVideoProgress)
+    vid.addEventListener("x5videoexitfullscreen",()=>{
+      this.fullscreen = 1
+    })
   },
   destroyed() {
     window.removeEventListener('scroll', this.handleScroll)
@@ -118,10 +132,38 @@ export default {
   },
   methods: {
     ...mapActions([
-      'getVideoCourseDetail',
-      'getLessonListByCourse',
-      'getCommentList'
+        'getVideoCourseDetail',
+        'getLessonListByCourse',
+        'getCommentList',
+        'doCollectFavorite',
+        'unCollectFavorite'
     ]),
+    //播放视频
+    playVideo(){
+      console.log(this.$refs.videoitem)
+      const vid = this.$refs.videoitem 
+      vid.play()
+      console.log(vid.currentTime)
+    },
+    //监听视频实时进度
+    getVideoProgress(){
+        console.log(this.$refs.videoitem.currentTime)
+        //1.监听视频播放进度
+        if(this.$refs.videoitem.currentTime>4){
+          this.$refs.videoitem.pause()
+        }
+        //2.
+    },
+    //收藏
+    onCollectFavorite(){
+      const lessonId = this.$route.params.lessonID
+        if(this.isLike) {
+          this.unCollectFavorite(lessonId)
+        }else {
+          
+          this.doCollectFavorite(lessonId)
+        }
+    },
     clickFnc(index) {
       this.selected = index
       let positionId

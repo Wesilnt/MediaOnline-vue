@@ -1,4 +1,4 @@
-import { getVideoLessonDetail,getLessonListByCourse } from '../../services/columns.js'
+import { getVideoLessonDetail,getLessonListByCourse,doFavorite,unFavorite } from '../../services/columns.js'
 import { getCommentList } from '../../services/comment.js'
 
 const videoCourseDetail = {
@@ -17,7 +17,9 @@ const videoCourseDetail = {
         //所有单集接口
         lessonList : [],              //目录课程
         //评论接口
-        singleComments:[]         //单集评论数组
+        singleComments:[],         //单集评论数组
+        isAchieveCollect:false,           //是否收藏成功
+        collectionId:0       
     },
     mutations: {
         bindVideoCourseDetail(state,payload) {
@@ -35,6 +37,15 @@ const videoCourseDetail = {
         },
         bindCommentList(state,payload) {
             state.singleComments = payload.result
+        },
+        //完成收藏
+        bindCollection(state,payload) {
+            state.isLike = 1
+            state.collectionId = payload.id
+        },
+        //取消收藏
+        deleteCollection(state) {
+            state.isLike = 0
         }
 
     },
@@ -42,8 +53,8 @@ const videoCourseDetail = {
        async getVideoCourseDetail ({ commit },{ lessonId }) {            
             //获取视频列表数据
             const result = await getVideoLessonDetail({ lessonId })
-            // console.log('视频课程详情接口')
-            // console.log(result)
+            console.log('视频课程详情接口')
+            console.log(result)
             commit('bindVideoCourseDetail',result)
         },
 
@@ -62,6 +73,20 @@ const videoCourseDetail = {
             // console.log('视频专栏留言数据:')
             // console.log(result)
             commit('bindCommentList',result)
+        },
+
+        async doCollectFavorite({commit},lessonId) {
+            const result = await doFavorite({"lessonId" : lessonId})
+            console.log('完成收藏')
+            console.log(result)
+            commit('bindCollection',result)
+        },
+
+        async unCollectFavorite({commit},collectionId) {
+            const result = await unFavorite({"lessonId" : collectionId})
+            console.log('取消收藏')
+            console.log(result)
+            commit('deleteCollection')
         }
     }
 }
