@@ -36,7 +36,8 @@
     </div>
     <!-- 3. 作品属性 -->
     <div class="book-properties-container">
-      <div class="property-item">
+      <p>{{bookDetail.radioIntro}}</p>
+      <!-- <div class="property-item">
         <img src="../../assets/readings_detail_star.png">
         <p> 教育部新课必读书目 </p>
       </div>
@@ -47,7 +48,7 @@
       <div class="property-item">
         <img src="../../assets/readings_detail_star.png">
         <p>现代诗性小说大师之作</p>
-      </div>
+      </div> -->
     </div>
     <hr>
 
@@ -59,7 +60,7 @@
       </div>
       <div class="introduce-content">
         <p>
-           {{bookDetail.radioIntro}}
+           {{bookDetail.description}}
         </p>
         <div class="intoduce-whole">
           <span @click="toLookWhole">查看全部</span>
@@ -78,7 +79,7 @@
 </template>
 <script>
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions } = createNamespacedHelpers('readings'); 
+const { mapState, mapActions ,mapGetters} = createNamespacedHelpers('readings'); 
 import SingleSetList from '../../components/SingleSetList.vue'
 export default {
   components: { 'singleset-list': SingleSetList },
@@ -86,36 +87,7 @@ export default {
     return {
       courseId:this.$route.query.id,
       currentPage:1,
-      pageSize:20,
-      bookList: [
-        {
-          id: 0,
-          title: '发刊词：为什么抱元科技没有食堂？',
-          subtitle: '史上最会钓鱼的老头',
-          totaltime: 140,
-          learntime: 40,
-          isAudition: true,
-          isPlaying: true
-        },
-        {
-          id: 1,
-          title: '发刊词：为什么抱元科技没有食堂？',
-          subtitle: '史上最会钓鱼的老头',
-          totaltime: 140,
-          learntime: 40,
-          isAudition: true,
-          isPlaying: false
-        },
-        {
-          id: 2,
-          title: '发刊词：为什么抱元科技没有食堂？',
-          subtitle: '史上最会钓鱼的老头',
-          totaltime: 140,
-          learntime: 40,
-          isAudition: false,
-          isPlaying: false
-        }
-      ]
+      pageSize:20, 
     }
   },
 
@@ -206,21 +178,27 @@ export default {
     padding: 40px 40px;
     display: flex;
     flex-direction: column;
-    .property-item {
-      display: flex;
-      flex-direction: row;
-      margin: 8px 0px;
-      align-items: center;
-    }
-    .property-item img {
-      width: 28px;
-      height: 28px;
-    }
-    .property-item p {
-      color: rgb(22, 35, 60);
-      font-size: 28px;
-      line-height: 28px;
-      margin: 0;
+    // .property-item {
+    //   display: flex;
+    //   flex-direction: row;
+    //   margin: 8px 0px;
+    //   align-items: center;
+    // }
+    // .property-item img {
+    //   width: 28px;
+    //   height: 28px;
+    // }
+    // .property-item p {
+    //   color: rgb(22, 35, 60);
+    //   font-size: 28px;
+    //   line-height: 28px;
+    //   margin: 0;
+    // }
+    p{
+        color: rgb(22, 35, 60);
+        font-size: 28px;
+        line-height: 44px;
+        margin: 8px 0px;
     }
   }
   //4. 作品简介

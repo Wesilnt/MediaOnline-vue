@@ -264,7 +264,7 @@ export default {
     margin: 64px 120px 0;
     span {
       position: relative;
-      left: 45px;
+      left: 48px;
       top: -20px;
       font-size: 20px;
       color: rgb(146, 145, 150);

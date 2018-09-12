@@ -41,11 +41,15 @@ export default {
     },
     getters: {
         //获取
-        getBookIntroduce(state) {
+        getBookIntroduce:function(state) {
+          console.log(state)
             return {
-                name: state.name,
-                coverPic: state.coverPic,
-                description: state.description,
+                name: state.bookDetail.name,                         //单集名称
+                coverPic: state.bookDetail.coverPic,                 //封面图
+                profilePic: state.bookDetail.profilePic,             //介绍图
+                authorBriefIntro:state.bookDetail.authorIntro,       //作者介绍
+                radioIntro:state.bookDetail.commentatorIntro,        //播讲者介绍  
+                description:state.bookDetail.description,            //内容介绍
             }
         }
     }

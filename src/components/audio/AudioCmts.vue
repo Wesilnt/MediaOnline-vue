@@ -2,13 +2,13 @@
   <div class="comments-container">
     <!-- 全部留言 -->
     <div class="commment-list">
-      <div v-for="item of comments" :key="item.id" class="comment-item">
+      <div v-for="item of commentList" :key="item.id" class="comment-item">
          <comment-item :comment="item"/>
       </div>
     </div>
     <!-- 评论按钮 -->
     <div class="comment-publish">
-      <div class="comment-method" @click="onCommentMethod">
+      <div class="comment-method" @click="onCommentMethod" v-if="false">
         <img :src="isSpeak?require('../../assets/audio_cmt_text.png'):require('../../assets/audio_cmt_speak.png')">
       </div>
       <div :class="{touched:isSpeaking}" class="comment-button">
@@ -25,7 +25,7 @@
 </template>
 <script>
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions } = createNamespacedHelpers('audio')
+const { mapState, mapActions,mapMutations } = createNamespacedHelpers('comment')
 import CommentItem from '../CommentItem.vue'
 export default {
   components: {
@@ -33,74 +33,20 @@ export default {
   },
   data() {
     return {
-      lessonId:this.$route.params.lessonid,
-      comments: [
-        {
-          id: Date.now() + 1, //评论ID
-          isPraised: true, //当前用户是否对评论点赞
-          type: 0, //评论类型 0 文字  1 语音
-          isExpand: false, //默认是否展开
-          content:
-            '此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论',
-          review:
-            '此处为老师回复内容此处为老师回复内容此处为老师回复内容此处为老师回复内容此处为老师回复内容此处为老师回复内容', //回复内容
-          reviewer: '伍智老师：', //回复老师姓名
-          praiseNum: 1314, //点赞人数
-          audioUrl: '', //语音地址
-          audioTime: 0, //语音时长
-          commentHead: '', //评论人头像地址
-          commentName: '古风流', //评论人名称
-          commentTime: Date.now() //评论时间
-        },
-        {
-          id: Date.now() + 2, //评论ID
-          isPraised: true, //当前用户是否对评论点赞
-          type: 1, //评论类型 0 文字  1 语音
-          isExpand: false, //默认是否展开
-          content:
-            '此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论',
-          review: '此处为老师回复内容此处为老师回复内容此处为老师回复内', //回复内容
-          reviewer: '伍智老师：', //回复老师姓名
-          praiseNum: 520, //点赞人数
-          audioUrl: '', //语音地址
-          audioTime: 23, //语音时长
-          commentHead: '', //评论人头像地址
-          commentName: '古风流', //评论人名称
-          commentTime: Date.now() //评论时间
-        },
-        {
-          id: Date.now() + 3, //评论ID
-          isPraised: true, //当前用户是否对评论点赞
-          type: 0, //评论类型 0 文字  1 语音
-          isExpand: false, //默认是否展开
-          content:
-            '论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论此处为评论',
-          review: '此处为老师回复内容此处为老师回复内容此处为老师回复内', //回复内容
-          reviewer: '伍智老师：', //回复老师姓名
-          praiseNum: 520, //点赞人数
-          audioUrl: '', //语音地址
-          audioTime: 23, //语音时长
-          commentHead: '', //评论人头像地址
-          commentName: '古风流', //评论人名称
-          commentTime: Date.now() //评论时间
-        }
-      ],
-      isSpeak: true,
+      lessonId:this.$route.params.lessonid, 
+      isSpeak: false,
       isSpeaking: false,
       commentContent: ''
     }
   },
+  computed:{...mapState(["commentList"])},
   created() {
-    this.getCommentList({
-      regionType: 2202,               //留言位置（2201:专栏,2202:单集)
-      regionId: this.lessonId,        //位置id
-      commentId: 0,                   //评论id
-      currentPage: 1,                 //当前页码
-      pageSize: 20                    //每页显示条数
-    })
+    this.setLessonId(this.lessonId)
+    this.getCommentList(false)
   },
   methods: {
-    ...mapActions(['getCommentList']),
+    ...mapMutations(["setLessonId"]),
+    ...mapActions(['getCommentList','postComment']),
     //切换评论方式
     onCommentMethod() {
       this.isSpeak = !this.isSpeak
@@ -109,7 +55,15 @@ export default {
     onInputeComment() {},
     //发送评论
     onSendComment() {
-      this.$toast('发布评论成功')
+      console.log("fsdf")
+      this.postComment({
+        regionId:this.lessonId,                     //单集id       
+        regionType:2202,                            //目标类型（2201：专栏，2202：单集）     
+        commentType:3301,                           //评论类型（3301:text,3302:voice,3303:text&voice)
+        content:this.commentContent,                //留言内容
+        duration:"",                                //音频长度 
+      })
+      // this.$toast('发布评论成功')
     },
     //点赞
     onPraise(index) {
@@ -163,7 +117,7 @@ export default {
     border-radius: 120px;
     overflow: hidden;
     height: 100%;
-    margin: 20px;
+    margin: 20px 20px 20px 0;
     background-color: rgb(242, 242, 242);
     display: flex;
     flex-direction: row;
@@ -196,6 +150,9 @@ export default {
   .comment-send {
     width: 64px;
     height: 64px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     img {
       width: 64px;
       height: 64px;

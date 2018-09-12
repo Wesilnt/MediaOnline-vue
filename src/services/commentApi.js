@@ -7,5 +7,5 @@ export function getCommentList(params) {
 }
 
 export function postComment(params) {
-  return request.post(`/comment/commentList?${stringify(params)}`)
+  return request.post(`/comment/comment`,params)
 }

@@ -92,6 +92,7 @@ export default {
       margin: 20px 0 0 0;
       font-size: 24px;
       line-height: 24px;
+      font-weight: 300;
       color: rgb(102, 102, 102);
     }
     .item-playing {

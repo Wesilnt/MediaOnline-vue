@@ -1,22 +1,22 @@
 <template>
     <div class="descrip-container">
-        <div class="descrip-header"/>
+        <div class="descrip-header" :style="{background:'url('+getBookIntroduce.coverPic+')'}"/>
         <div class="course-name">
-            绿山墙
+           {{getBookIntroduce.name}}
         </div>
         <hr>
         <div class="course-detail">
             <div class="course-content">
                 <h2>内容介绍:</h2>
-                <p>本书讲述安环科啊哈买好没喇嘛哈一哈组计划了你的将神卡刚复活哦哦哦啊哦套哦跑客户帕克海派就回家吧奔。</p>
+                <p>{{getBookIntroduce.description||'暂无相关介绍'}}</p>
             </div>
             <div class="course-author">
                 <h2>作者介绍:</h2>
-                <p>本书讲述安环科啊哈买好没喇嘛哈一哈组计划了你的将神卡刚复活哦哦哦啊哦套哦跑客户帕克海派就回家吧奔。</p>
+                <p>{{getBookIntroduce.authorIntro||'暂无相关介绍'}}</p>
             </div>
             <div class="course-speaker">
                 <h2>播讲者介绍:</h2>
-                <p>本书讲述安环科啊哈买好没喇嘛哈一哈组计划了你的将神卡刚复活哦哦哦啊哦套哦跑客户帕克海派就回家吧奔。</p>
+                <p>{{getBookIntroduce.commentatorIntro||'暂无相关介绍'}}</p>
             </div>
         </div>
 
