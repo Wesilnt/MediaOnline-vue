@@ -22,7 +22,7 @@ export default {
 .header {
   box-sizing: border-box;
   width: 100%;
-  padding: 40px 28px 20px;
+  padding: 56px 28px 40px;
   .headerContent {
     width: 100%;
     display: flex;

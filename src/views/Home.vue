@@ -6,13 +6,13 @@
     <FreeList :free-list="freeList"/>
     <div class="sepline"/>
 
-    <Header :link="'/home/visionList'" title="视野" subtitle="探索更多" />
+    <Header :link="'/home/visionList'" title="少年视野" subtitle="探索更多" />
     <DisCoverVisionList :vision-list="visionList"/>
     <div class="sepline"/>
-    <Header :link="'/home/videoList'" title="在线课堂" subtitle="探索更多"/>
+    <Header :link="'/home/videoList'" title="少年必修" subtitle="探索更多"/>
     <DisCoverVideoList :video-list="videoList"/>
     <div class="sepline" />
-    <Header :link="'/home/readings'" title="读书会" subtitle="探索更多"/>
+    <Header :link="'/home/readings'" title="中国少年读书会" subtitle="探索更多"/>
     <BookList :book-list="bookList"/>
     <div class="homePosition"/>
 
