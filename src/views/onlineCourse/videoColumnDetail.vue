@@ -48,7 +48,7 @@
                 </div>
            </div>
            <!-- <video-comment v-for="item of videoColumnComments" :key="item.id" :comment="item"/> -->
-            <commentitem class="video-column-comment" v-for="item of videoColumnComments" :key="item.id" :comment="item" :unindent="true" :regiontype="2201"/>
+            <commentitem class="video-column-comment" v-for="(item,index) of videoColumnComments" :key="index" :comment="item" :unindent="true" :regiontype="2201"/>
             <hr class="lineone">
             <div class="videocol-sction-title">
                 <h4>购买须知</h4>
@@ -107,7 +107,7 @@ export default {
     methods: {
         ...mapActions([
             "getVideoColumnDetail",
-            "getCommentList"
+            "getCommentList"           
         ]),
         allFunc() {
             console.log('点击全部')

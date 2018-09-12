@@ -17,3 +17,9 @@ export async function postComment(params) {
 export async function voiceComment(params) {
   return request(`/comment/voiceComment?${stringify(params)}`)
 }
+
+//给留言点赞
+export async function likeComment(params) {
+  console.log(params)
+    return request.post(`/comment/likeComment?${stringify(params)}`,false)
+}

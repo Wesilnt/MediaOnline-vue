@@ -12,7 +12,7 @@
             <h5>{{comment.createTime | dateFormat("MM-mm")}}</h5>
           </div>
           <div class="thumb-container" @click="onPraise()">
-            <img :src="comment.isPraised?require('../assets/cmt_praise_selected.png'):require('../assets/cmt_praise_normal.png')">
+            <img :src="comment.userCommentLikeId?require('../assets/cmt_praise_selected.png'):require('../assets/cmt_praise_normal.png')">
             <span>{{comment.likeCount}}</span>
           </div>
         </div>
@@ -40,7 +40,8 @@
   </div>
 </template>
 <script>
-
+import { createNamespacedHelpers } from 'vuex'
+const { mapState, mapActions } = createNamespacedHelpers('videoColumnDetail')
 export default {
   filters: {
     dateFormat: function(value) {
@@ -51,17 +52,11 @@ export default {
       return y + '-' + (m < 10 ? '0' + m : m) + '-' + (d < 10 ? '0' + d : d)
     },
     getSingleCourseName:function(value,index) { 
-      console.log('---------------------') 
-      console.log(value) 
       let arr = value.split('=>')
       return arr[index]
     }
   },
-  props:{
-    comment:{
-      default:{}
-    },unindent:'',regiontype:''
-  }, 
+  props:['comment','unindent','regiontype'],
   data() {
     return {
       canExpand: true,
@@ -69,13 +64,14 @@ export default {
     }
   },
   methods: {
+    ...mapActions(["likeComment"]),
     //点赞
     onPraise() {
-      let isPraised = this.comment.isPraised
-      this.comment.isPraised = !isPraised
-      this.$toast({ 
-        message: isPraised ? '取消点赞' : '点赞成功'
-      })
+      this.likeComment(this.comment.id)
+      // this.comment.userCommentLikeId = null==this.comment.userCommentLikeId?0:1
+      // this.$toast({ 
+      //   message: !this.comment.userCommentLikeId ? '取消点赞' : '点赞成功'
+      // })
     }
   },
   mounted() {

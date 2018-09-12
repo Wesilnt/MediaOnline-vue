@@ -7,8 +7,8 @@
                 <div class="cl-list-info">{{iteminfo.subTitle}}</div>
                 <div class="cl-list-bottom">
                     <input class="cl-bottom-btn" type="button" value="试听">
-                    <div class="cl-time">{{iteminfo.totalTimeStr}}</div>
-                    <div class="cl-number">{{iteminfo.totalTime}}</div>
+                    <div class="cl-time">{{iteminfo.createTime | handleDate() }}</div>
+                    <div class="cl-number">{{ studyProgress |getProgress(iteminfo.learnTime,iteminfo.totalTime) }}</div>
                 </div>
             </div>  
        
@@ -23,10 +23,27 @@ export default {
   data() {
     return {
       imgPlaying: require('../../../assets/images/onlinecourse_ic_playing.png'),
-      imgPause: require('../../../assets/images//onlinecourse_play_ic_pause.png')
+      imgPause: require('../../../assets/images//onlinecourse_play_ic_pause.png'),
+      studyProgress:'' //收听进度
     }
   },
-  methods: {}
+  filters:{
+    //截取得到时分秒
+    handleDate: function(value) {
+      return value.substr(11,8) 
+    },
+    //计算收听进度
+    getProgress(learnTime,totalTime) {
+      if (learnTime == ""){
+        return "未收听"
+      }else {
+        return '已收听' + Math.round(learnTime / totalTime * 10000) / 100.00 + "%"
+      }      
+    }
+  },
+  methods: {
+
+  }
 }
 </script>
 
