@@ -50,7 +50,7 @@ export default {
   },
   filters: {
     formatPrice: function(price) {
-        if(!price) return '';
+      if (!price) return ''
       if (price.includes('.')) return price
       else return price + '.00'
     }
@@ -371,22 +371,23 @@ export default {
   align-items: center;
   justify-content: space-between;
   border-top: 2px solid #efefef;
+  text-align: center;
   background-color: #fff;
   z-index: 10;
 }
 .toolbar-audition {
-  margin: 0 28px;
+  margin: 0 16px;
   line-height: 24px;
 }
 .audition-icon {
+  width: 52px;
+  height: 52px;
   background-image: url('../assets/images/onlinecourse-tabbar-try.png');
-  width: 40px;
-  height: 40px;
-  margin-bottom: 12px;
+    background-position-y: top;
+  background-size: 40px;
 }
 .under-text {
   font-size: 20px;
-
   color: #696969;
 }
 .vertical-line {
@@ -397,8 +398,8 @@ export default {
   background-color: #efefef;
 }
 .toolbar-price {
-  margin-left: 28px;
-  margin-right: 56px;
+  /*margin-left: 28px;*/
+  margin-right: 28px;
   line-height: 32px;
 }
 .toolbar-price-num {

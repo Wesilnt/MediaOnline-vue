@@ -97,21 +97,15 @@ function request(url, options) {
     if (!(newOptions.body instanceof FormData)) {
       newOptions.headers = {
         Accept: 'application/json',
-        'Content-Type': 'application/json; charset=utf-8',
+          'Content-Type': 'application/json; charset=utf-8',
         ...newOptions.headers
       }
-      if (newOptions.headers['Content-Type'] !== 'application/octet-stream') {
-        newOptions.body = JSON.stringify(newOptions.body)
-      }
-    } else {
-      // newOptions.body is FormData
-      newOptions.headers = {
-        Accept: 'application/json',
-        ...newOptions.headers
-      }
+      // if (newOptions.headers['Content-Type'] !== 'application/octet-stream') {
+      //   newOptions.body =json2formData(newOptions.body)
+      // }
     }
   }
- 
+
   return fetch(`${baseURI}${url}`, newOptions)
     .then(checkStatus.bind(this, url))
     .then(response => {
@@ -164,7 +158,7 @@ function request(url, options) {
 }
 
 request.post = (url, body, formData = true) => {
-  const bodyData = formData ? json2formData(body) : body
+  const bodyData = json2formData(body)
   return request(url, { method: 'POST', body: bodyData })
 }
 

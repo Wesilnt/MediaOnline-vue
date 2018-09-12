@@ -1,7 +1,7 @@
 <template>
     <section>
-        <div v-if="puzzleList.length===0 && selected===puzzleTypes.all" class="my-puzzle-nodata">
-            <i class="qhht-icon my-puzzle-nodata-icon"/>
+        <div v-if="puzzleList.length===0 && selected===puzzleTypes.all && totalCount===0" class="my-puzzle-nodata">
+            <i class="qhht-icon my-puzzle-nodata-icon"></i>
             <p class="my-puzzle-nodata-warn">暂无{{pageName}}信息</p>
             <a class="my-puzzle-nodata-btn">我要{{pageName}}</a>
         </div>
@@ -11,26 +11,28 @@
                           :key="item"
                            :title="item==='waiting'?`${pageName}${puzzleTabs[item]}`: puzzleTabs[item]">
                     <div class="my-puzzle-content">
-                        <div v-for="puzzle in puzzleList" :key="puzzle.id" class="my-puzzle-content-cell">
+                        <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
+                            <Skeleton></Skeleton>
+                            <div v-for="puzzle in puzzleList" :key="puzzle.id" class="my-puzzle-content-cell">
                             <p class="qhht-flex">
-                                <i class="qhht-icon my-puzzle-content-cell-icon"/>
-                                <span class="my-puzzle-content-cell-date">{{pageName}}时间：{{puzzle.time}}</span>
-                                <Badge :status="puzzle.status===puzzleTypes.succeed?'success':puzzle.status===puzzleTypes.fail?'warning':'normal'">{{pageName}}</Badge>
+                                <i class="qhht-icon my-puzzle-content-cell-icon"></i>
+                                <span class="my-puzzle-content-cell-date">{{pageName}}时间：{{puzzle.createTime}}</span>
+                                <Badge :status="isPraise?puzzle.collectLikeStatus:puzzle.groupBuyStatus">{{pageName}}</Badge>
                             </p>
                             <div class="qhht-flex">
-                                <img :src="puzzle.url" :alt="puzzle.title" :title="puzzle.title" class="my-puzzle-content-img">
+                                <img :alt="puzzle.course.name" :title="puzzle.course.name" class="my-puzzle-content-img" v-lazy="puzzle.course.coverPic" >
                                 <ul class="my-puzzle-display">
-                                    <li><h3> {{puzzle.title}}</h3></li>
-                                    <li>{{puzzle.description}}</li>
-                                    <li><span class="my-puzzle-total-price">￥{{puzzle.totalPrice}}</span> / 共{{puzzle.totalLessons}}讲</li>
+                                    <li><h3> {{puzzle.course.name}}</h3></li>
+                                    <li>{{puzzle.course.priefIntro?puzzle.course.priefIntro:'暂无简介'}}</li>
+                                    <li><span class="my-puzzle-total-price">￥{{puzzle.course.price}}</span> / 共{{puzzle.course.lessonCount}}讲</li>
                                 </ul>
                             </div>
-                            <div class="my-puzzle-price">{{pageName}}价：<span class="my-puzzle-price-num">￥{{puzzle.price}}</span></div>
+                            <div v-show="!isPraise" class="my-puzzle-price">{{pageName}}价：<span class="my-puzzle-price-num">￥{{puzzle.price}}</span></div>
                         </div>
+                        </van-pull-refresh>
                     </div>
                 </van-tab>
             </van-tabs>
-
         </div>
     </section>
 </template>
@@ -38,6 +40,7 @@
 <script>
 import { createNamespacedHelpers } from 'vuex'
 import Badge from '../../components/Badge'
+import Skeleton from '../../components/Skeleton'
 
 const { mapState, mapActions } = createNamespacedHelpers('myPuzzle_Praise')
 
@@ -49,36 +52,64 @@ export default {
     if (path.endsWith('my-puzzle')) pageName = '拼团'
     else if (path.endsWith('my-praise')) pageName = '集赞'
     return {
+      refreshing: false,
       selected: '1200',
-      pageName
+      pageName,
+      isPraise: pageName === '集赞'
     }
   },
-  created() {
-    const { pageName, currentType } = this
-    this.queryList({ pageName, currentType })
-  },
+  // created() {
+  // const { pageName, currentType } = this
+  // this.queryList({ pageName, currentType })
+  // },
   computed: {
     ...mapState([
       'puzzleTabs',
       'puzzleTypes',
       'currentType',
       'puzzleList',
-      'loading'
+      'loading',
+      'totalCount',
+      'pageSize',
+      'currentPage'
     ])
   },
   watch: {
     selected: function(currentType) {
-      const { pageName, puzzleTypes } = this
+      const { isPraise, puzzleTypes, pageSize, currentPage } = this
       const Types = Object.values(puzzleTypes)
-      this.toggleCurrentType({ currentType: Types[currentType], pageName })
+      this.toggleCurrentType({
+        pageSize,
+        currentPage,
+        currentType: Types[currentType],
+        isPraise
+      })
+    },
+    loading: function(newLoading) {
+      console.log(newLoading, this.refreshing)
+      if (!newLoading && this.refreshing) {
+        this.$toast('刷新成功')
+        this.refreshing = false
+      }
     }
   },
 
   methods: {
-    ...mapActions(['queryList', 'toggleCurrentType'])
+    ...mapActions(['queryList', 'toggleCurrentType']),
+    onRefresh() {
+      const { isPraise, puzzleTypes, pageSize, currentPage, currentType } = this
+      console.log(currentType)
+      const Types = Object.values(puzzleTypes)
+      this.toggleCurrentType({
+        pageSize,
+        currentPage,
+        currentType,
+        isPraise
+      })
+    }
   },
   components: {
-    Badge
+    Badge,Skeleton
   }
 }
 </script>
@@ -122,6 +153,7 @@ export default {
   }
   &-content {
     padding: 32px 40px;
+      min-height: 50vh;
     &-cell {
       position: relative;
       border-radius: 4px;
@@ -145,7 +177,7 @@ export default {
     &-img {
       width: 136px;
       height: 180px;
-      border-radius: 6px;
+      border-radius: 12px;
     }
   }
   &-display {

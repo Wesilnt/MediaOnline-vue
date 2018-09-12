@@ -1,24 +1,25 @@
 <template>
-    <span class="qhht-badge" :class="`qhht-badge-${status}`"><slot />{{text}}</span>
+    <span class="qhht-badge" :class="`qhht-badge-${status}`"><slot />{{badge}}</span>
 </template>
 <script>
+const puzzleTypes = [1200, 1202, 1203, 1204]
 export default {
   name: 'Badge',
   props: {
     status: {
-      default: 'normal',
+      default: 1202,
       validator: function(value) {
         // 这个值必须匹配下列字符串中的一个
-        return ['success', 'warning', 'normal'].indexOf(value) !== -1
+        return puzzleTypes.indexOf(value) !== -1
       }
     }
   },
   computed: {
     badge: function() {
-      let text = '中'
-      if (this.status === 'success') {
+        let text = '中'
+      if (this.status === 1203) {
         text = '成功'
-      } else if (this.status === 'warning') {
+      } else if (this.status === 1204) {
         text = '失败'
       }
       return text
@@ -31,14 +32,14 @@ export default {
   border-radius: 8px;
   padding: 2px 8px;
   color: #fff;
-  &-success {
+  &-1203 {
     color: #ffa32f;
     background: transparent;
   }
-  &-warning {
+  &-1204 {
     background: #ccc;
   }
-  &-normal {
+  &-1202 {
     background: #ffa32f;
   }
 }

@@ -1,4 +1,8 @@
-import { queryMyPuzzleList, queryMyPraise } from '../../services/my'
+import {
+  queryMyPuzzleList,
+  queryMyPraise,
+  likeComment
+} from '../../services/my'
 const puzzleTabs = {
   all: '全部',
   waiting: '中',
@@ -19,8 +23,9 @@ const myPuzzle_Praise = {
     puzzleTypes,
     currentType: '1200',
     puzzleList: [],
-    pageSize: 10,
+    pageSize: 6,
     currentPage: 1,
+    totalCount: 1,
     loading: false
   },
   mutations: {
@@ -34,26 +39,31 @@ const myPuzzle_Praise = {
   actions: {
     async queryList(
       { dispatch, commit, state },
-      { pageName, currentType: type }
+      { isPraise, currentType: type }
     ) {
       const { pageSize, currentPage } = state
       const params = { pageSize, currentPage, type }
-      const response =
-        pageName === '集赞'
-          ? await queryMyPraise(params)
-          : await queryMyPuzzleList(params)
-      console.log(response)
-      if (!response) return
-      await commit({
-        type: 'saveList',
-        puzzleList: response,
-        currentType: type
-      })
-      commit('toggleLoading', {
-        loading: false
-      })
+      const response = isPraise
+        ? await queryMyPraise(params)
+        : await queryMyPuzzleList(params)
+      if (response) {
+        const { pageSize, currentPage, totalCount, result } = response
+        await commit({
+          type: 'saveList',
+          puzzleList: result,
+          currentType: type,
+          pageSize,
+          currentPage,
+          totalCount
+        })
+        commit('toggleLoading', {
+          loading: false
+        })
+      }
     },
     async toggleCurrentType({ dispatch, commit }, payload) {
+      const response = await likeComment({ commentId: '66114883225124872' })
+      console.log(response)
       await commit('toggleLoading', {
         loading: true
       })
