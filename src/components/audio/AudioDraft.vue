@@ -22,18 +22,18 @@
 </template>
 <script>
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions } = createNamespacedHelpers('audio'); 
+const { mapState, mapActions } = createNamespacedHelpers('audio')
 export default {
-  data(){
-    return{
-      lessonId:this.$route.params.lessonid
+  data() {
+    return {
+      lessonId: this.$route.params.lessonid
     }
   },
-  created(){
-      this.getAudioDesc({lessonId:this.lessonId})
+  created() {
+    this.getAudioDesc({ lessonId: this.lessonId })
   },
-  methods:{
-    ...mapActions(["getAudioDesc"])
+  methods: {
+    ...mapActions(['getAudioDesc'])
   }
 }
 </script>

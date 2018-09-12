@@ -58,38 +58,38 @@ import CourseIntroduce from '../../components/CourseIntroduce.vue'
 import playlist from './components/playlist.vue'
 import CommentItem from '../../components/CommentItem.vue'
 import videoComment from '../../components/video-comment.vue'
-import { createNamespacedHelpers } from "vuex";
-const { mapState, mapActions } = createNamespacedHelpers("videoCourseDetail");
+import { createNamespacedHelpers } from 'vuex'
+const { mapState, mapActions } = createNamespacedHelpers('videoCourseDetail')
 export default {
   name: 'VideoColumnDetail',
   components: {
     'course-introduce': CourseIntroduce,
     playlist: playlist,
     'video-comment': videoComment,
-    'commentitem' : CommentItem
+    commentitem: CommentItem
   },
   data() {
     return {
       navbar: ['资料', '目录', '留言'],
       navbarFixed: false, //控制navbar是否吸顶
       selected: 0,
-      lockIcon:require('../../assets/images/onlinecourse_lock.jpg'),//未解锁
-      unlockIcon:require('../../assets/images/onlinecourse_unlock.jpg')//已解锁
+      lockIcon: require('../../assets/images/onlinecourse_lock.jpg'), //未解锁
+      unlockIcon: require('../../assets/images/onlinecourse_unlock.jpg') //已解锁
     }
   },
   computed: {
-    ...mapState([          
-        'lessonList',              //目录课程
-        'radioShowPic',              //视频背景图
-        'audioUrl',              //音频地址
-        'videoUrl',             //视频地址
-        'courseId',              //专栏ID
-        'singleComments',
-        'description',           //笔记
-        'isFree',
-        'isLike',
-        'createTime',
-    ]),
+    ...mapState([
+      'lessonList', //目录课程
+      'radioShowPic', //视频背景图
+      'audioUrl', //音频地址
+      'videoUrl', //视频地址
+      'courseId', //专栏ID
+      'singleComments',
+      'description', //笔记
+      'isFree',
+      'isLike',
+      'createTime'
+    ])
   },
   mounted() {
     window.addEventListener('scroll', this.handleScroll)
@@ -97,65 +97,74 @@ export default {
   destroyed() {
     window.removeEventListener('scroll', this.handleScroll)
   },
-  created(){
-      //获取课程ID
-      const lessonId = this.$route.params.lessonID
-      this.getVideoCourseDetail({lessonId})
-      //获取目录课程数据
-      var courseId = this.courseId
-      this.getLessonListByCourse({ courseId : courseId, currentPage:1, pageSize:10})
-      //获取单集评论
-      this.getCommentList({regionType:2202,regionId:lessonId,currentPage:1,pageSize:11})
+  created() {
+    //获取课程ID
+    const lessonId = this.$route.params.lessonID
+    this.getVideoCourseDetail({ lessonId })
+    //获取目录课程数据
+    var courseId = this.courseId
+    this.getLessonListByCourse({
+      courseId: courseId,
+      currentPage: 1,
+      pageSize: 10
+    })
+    //获取单集评论
+    this.getCommentList({
+      regionType: 2202,
+      regionId: lessonId,
+      currentPage: 1,
+      pageSize: 11
+    })
   },
   methods: {
     ...mapActions([
-        'getVideoCourseDetail',
-        'getLessonListByCourse',
-        'getCommentList'
+      'getVideoCourseDetail',
+      'getLessonListByCourse',
+      'getCommentList'
     ]),
     clickFnc(index) {
-        this.selected = index
-        let positionId
-        switch (index) {
-            case 0:
-                positionId = '#note'
-            break
-            case 1:
-                positionId = '#catalog'
-            break
-            case 2:
-                positionId = '#leavemessage'
-            break
-            default:
-            break
-        }
+      this.selected = index
+      let positionId
+      switch (index) {
+        case 0:
+          positionId = '#note'
+          break
+        case 1:
+          positionId = '#catalog'
+          break
+        case 2:
+          positionId = '#leavemessage'
+          break
+        default:
+          break
+      }
 
-        let anchor = this.$el.querySelector(positionId)
-        document.body.scrollTop = anchor.offsetHeight - 50
-        // // Firefox
-        document.documentElement.scrollTop = anchor.offsetTop - 50
-        // Safari
-        window.pageYOffset = anchor.offsetTop - 50
+      let anchor = this.$el.querySelector(positionId)
+      document.body.scrollTop = anchor.offsetHeight - 50
+      // // Firefox
+      document.documentElement.scrollTop = anchor.offsetTop - 50
+      // Safari
+      window.pageYOffset = anchor.offsetTop - 50
     },
     async handleScroll() {
       //1.监听滚动
-    //   var scrollTop =
-    //     window.pageYOffset ||
-    //     document.documentElement.scrollTop ||
-    //     document.body.scrollTop
-        let scrollTop = Math.abs(
-             this.$refs.detailmain.getBoundingClientRect().top
-        )
-        let noteH = this.$el.querySelector('#note').offsetTop -50
-        let catalogH = this.$el.querySelector('#catalog').offsetTop -50
-        // let leavemessageH = this.$el.querySelector('#leavemessage').offsetTop -50
-        if (scrollTop < noteH) {
-            this.selected = 0
-        } else if (scrollTop < catalogH && scrollTop > noteH) {
-            this.selected = 1
-        } else if (scrollTop > catalogH) {
-            this.selected = 2
-        }
+      //   var scrollTop =
+      //     window.pageYOffset ||
+      //     document.documentElement.scrollTop ||
+      //     document.body.scrollTop
+      let scrollTop = Math.abs(
+        this.$refs.detailmain.getBoundingClientRect().top
+      )
+      let noteH = this.$el.querySelector('#note').offsetTop - 50
+      let catalogH = this.$el.querySelector('#catalog').offsetTop - 50
+      // let leavemessageH = this.$el.querySelector('#leavemessage').offsetTop -50
+      if (scrollTop < noteH) {
+        this.selected = 0
+      } else if (scrollTop < catalogH && scrollTop > noteH) {
+        this.selected = 1
+      } else if (scrollTop > catalogH) {
+        this.selected = 2
+      }
     }
   }
 }
@@ -310,7 +319,7 @@ export default {
 }
 //我要留言
 .video-course-comment {
-    margin-top: 56px;
+  margin-top: 56px;
 }
 .video-detail-leavemessage {
   width: 220px;

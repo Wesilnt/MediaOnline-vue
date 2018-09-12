@@ -104,77 +104,72 @@ export default {
       'buyCount'
     ])
   },
-    methods: {
-        ...mapActions([
-            "getVideoColumnDetail",
-            "getCommentList"           
-        ]),
-        allFunc() {
-            console.log('点击全部')
-        },
-        gotoVideoCourseDetailPage(lessonID){
-            console.log('路由跳转 lessonID = ' + lessonID)
-            this.$router.push({name:'videoCourseDetail',params:{ lessonID }})
-        },
-        async handleScroll() {
-            //1.监听滚动
-            // var scrollTop =
-            //     window.pageYOffset ||
-            //     document.documentElement.scrollTop ||
-            //     document.body.scrollTop
-        let scrollTop = Math.abs(
-             this.$refs.detailmain.getBoundingClientRect().top
-        )
-            let tryCourseH = this.$el.querySelector('#tryCourse').offsetTop -50
-            let messageH = this.$el.querySelector('#leavemessage').offsetTop -50
-            console.log("==============")
-            console.log(scrollTop)
-            console.log(tryCourseH)
-            console.log(messageH)
-            if (scrollTop < tryCourseH) {
-                this.selected = 0
-            } else if (scrollTop < messageH && scrollTop > tryCourseH) {
-                this.selected = 1
-            } else if (scrollTop > messageH) {
-                this.selected = 2
-            }
-        },
-        clickFnc(index) {
-            this.selected = index
-            let positionId
-            switch (index) {
-                case 0:
-                    positionId = '#desc'
-                break
-                case 1:
-                    positionId = '#tryCourse'
-                break
-                case 2:
-                    positionId = '#leavemessage'
-                break
-                default:
-                break
-            }
-
-            let anchor = this.$el.querySelector(positionId)
-            document.body.scrollTop = anchor.offsetHeight - 50
-            // // Firefox
-            document.documentElement.scrollTop = anchor.offsetTop - 50
-            // Safari
-            window.pageYOffset = anchor.offsetTop - 50
-        },
-            routerToAudition() {
-                console.log('跳转到试听')
-            },
-            routerToCollage() {
-                console.log('跳转到拼团')
-            },
-            routerToCollect() {
-                console.log('跳转到集赞')
-            },
-
+  methods: {
+    ...mapActions(['getVideoColumnDetail', 'getCommentList']),
+    allFunc() {
+      console.log('点击全部')
     },
+    gotoVideoCourseDetailPage(lessonID) {
+      console.log('路由跳转 lessonID = ' + lessonID)
+      this.$router.push({ name: 'videoCourseDetail', params: { lessonID } })
+    },
+    async handleScroll() {
+      //1.监听滚动
+      // var scrollTop =
+      //     window.pageYOffset ||
+      //     document.documentElement.scrollTop ||
+      //     document.body.scrollTop
+      let scrollTop = Math.abs(
+        this.$refs.detailmain.getBoundingClientRect().top
+      )
+      let tryCourseH = this.$el.querySelector('#tryCourse').offsetTop - 50
+      let messageH = this.$el.querySelector('#leavemessage').offsetTop - 50
+      console.log('==============')
+      console.log(scrollTop)
+      console.log(tryCourseH)
+      console.log(messageH)
+      if (scrollTop < tryCourseH) {
+        this.selected = 0
+      } else if (scrollTop < messageH && scrollTop > tryCourseH) {
+        this.selected = 1
+      } else if (scrollTop > messageH) {
+        this.selected = 2
+      }
+    },
+    clickFnc(index) {
+      this.selected = index
+      let positionId
+      switch (index) {
+        case 0:
+          positionId = '#desc'
+          break
+        case 1:
+          positionId = '#tryCourse'
+          break
+        case 2:
+          positionId = '#leavemessage'
+          break
+        default:
+          break
+      }
 
+      let anchor = this.$el.querySelector(positionId)
+      document.body.scrollTop = anchor.offsetHeight - 50
+      // // Firefox
+      document.documentElement.scrollTop = anchor.offsetTop - 50
+      // Safari
+      window.pageYOffset = anchor.offsetTop - 50
+    },
+    routerToAudition() {
+      console.log('跳转到试听')
+    },
+    routerToCollage() {
+      console.log('跳转到拼团')
+    },
+    routerToCollect() {
+      console.log('跳转到集赞')
+    }
+  },
 
   created() {
     //获取专栏Id

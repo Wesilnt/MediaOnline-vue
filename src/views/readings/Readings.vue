@@ -37,14 +37,13 @@
 </template>
 <script>
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions } = createNamespacedHelpers('readings'); 
+const { mapState, mapActions } = createNamespacedHelpers('readings')
 export default {
   data() {
-    return { 
-    }
+    return {}
   },
   computed: {
-    ...mapState(['bannerPic','bookList'])
+    ...mapState(['bannerPic', 'bookList'])
   },
   created() {
     this.getReadingsList()

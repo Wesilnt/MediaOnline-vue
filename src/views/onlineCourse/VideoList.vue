@@ -9,40 +9,30 @@
 </template>
 <script>
 import videoListItem from './components/videoListItem.vue'
-import { createNamespacedHelpers } from "vuex";
-const { mapState, mapActions } = createNamespacedHelpers("columnInfo");
-    export default {
-        name:'VideoList',
-        data(){
-            
-            return {
-               
-            }
-
-        },
-        computed: {
-            ...mapState([          
-                "columnHeaderImage",
-                "columns",
-                "columnOriginData"   
-            ]),
-        },
-        components:{
-          "videolistitem" : videoListItem
-        },
-        created() {
-            this.getColumnList({type:1005,pageSize:10})           
-        },
-        methods:{
-            ...mapActions([
-                'getColumnList'
-            ]),
-            //点击具体的一个视频专栏
-            jumpToVideoDetail(courseId){
-                console.log('路由跳转 courseID = ' + courseId)
-                this.$router.push({name:'videoColumnDetail',params:{ courseId }})
-            }
-        }
+import { createNamespacedHelpers } from 'vuex'
+const { mapState, mapActions } = createNamespacedHelpers('columnInfo')
+export default {
+  name: 'VideoList',
+  data() {
+    return {}
+  },
+  computed: {
+    ...mapState(['columnHeaderImage', 'columns', 'columnOriginData'])
+  },
+  components: {
+    videolistitem: videoListItem
+  },
+  created() {
+    this.getColumnList({ type: 1005, pageSize: 10 })
+  },
+  methods: {
+    ...mapActions(['getColumnList']),
+    //点击具体的一个视频专栏
+    jumpToVideoDetail(courseId) {
+      console.log('路由跳转 courseID = ' + courseId)
+      this.$router.push({ name: 'videoColumnDetail', params: { courseId } })
+    }
+  }
 }
 </script>
 

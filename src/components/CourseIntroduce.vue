@@ -8,10 +8,9 @@
 </template>
 
 <script>
-
 export default {
   name: 'CourseIntroduce',
-  props:["courseinfo"],
+  props: ['courseinfo'],
   data() {
     return {
       isFold: true,

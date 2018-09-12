@@ -40,11 +40,9 @@
 
 <script>
 export default {
-  props:{
-    comment:{
-      default:{
-        
-      }
+  props: {
+    comment: {
+      default: {}
     }
   },
   data() {
@@ -52,17 +50,17 @@ export default {
       praiseNormal: require('../assets/images/onlinecourse_praise_highlight.png'),
       praiseHighlight: require('../assets/images/onlinecourse_praise_normal.png'),
       isPraise: false,
-      regionType:2201,  //2201 专栏评论  2202 单集评论
-      showTotal:true,   //是否显示所有文本内容
-      exchangeBtn:true, //显示展开还是收起
-      showExchangeBtn:false, //是否显示展开收起按钮
+      regionType: 2201, //2201 专栏评论  2202 单集评论
+      showTotal: true, //是否显示所有文本内容
+      exchangeBtn: true, //显示展开还是收起
+      showExchangeBtn: false //是否显示展开收起按钮
     }
   },
   methods: {
     onClickPraise() {
       this.isPraise = !this.isPraise
     },
-    showTotalIntro () {
+    showTotalIntro() {
       this.showTotal = !this.showTotal
       this.showExchangeBtn = !this.showExchangeBtn
     }
@@ -87,7 +85,7 @@ export default {
     width: 80px;
     height: 80px;
     border-radius: 50%;
-    border:none;
+    border: none;
   }
 }
 .video-comment-userinfo {
@@ -137,14 +135,12 @@ export default {
   height: auto;
   overflow: hidden;
   font-size: 28px;
-  color:rgb(51, 51, 51);
+  color: rgb(51, 51, 51);
   margin: 10px;
 }
 
 .detail-comment {
-
 }
-
 
 .video-comment-detail {
   height: 100%;

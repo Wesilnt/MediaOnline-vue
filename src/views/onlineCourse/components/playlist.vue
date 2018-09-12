@@ -24,26 +24,26 @@ export default {
     return {
       imgPlaying: require('../../../assets/images/onlinecourse_ic_playing.png'),
       imgPause: require('../../../assets/images//onlinecourse_play_ic_pause.png'),
-      studyProgress:'' //收听进度
+      studyProgress: '' //收听进度
     }
   },
-  filters:{
+  filters: {
     //截取得到时分秒
     handleDate: function(value) {
-      return value.substr(11,8) 
+      return value.substr(11, 8)
     },
     //计算收听进度
-    getProgress(learnTime,totalTime) {
-      if (learnTime == ""){
-        return "未收听"
-      }else {
-        return '已收听' + Math.round(learnTime / totalTime * 10000) / 100.00 + "%"
-      }      
+    getProgress(learnTime, totalTime) {
+      if (learnTime == '') {
+        return '未收听'
+      } else {
+        return (
+          '已收听' + Math.round((learnTime / totalTime) * 10000) / 100.0 + '%'
+        )
+      }
     }
   },
-  methods: {
-
-  }
+  methods: {}
 }
 </script>
 

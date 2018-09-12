@@ -17,7 +17,7 @@
 
 <script>
 export default {
-  name:'videoListItem',
+  name: 'videoListItem',
   props: ['iteminfo']
 }
 </script>

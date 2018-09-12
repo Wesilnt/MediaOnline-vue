@@ -30,8 +30,11 @@ export default {
     enterVisionDetail(id) {
       this.$router.push({ path: '/home/visionDetail/' + id })
     },
-    enterVisionPlay(){
-       this.$router.push({ path: '/audio/audioplay', query: { id:this.vision.id }  })
+    enterVisionPlay() {
+      this.$router.push({
+        path: '/audio/audioplay',
+        query: { id: this.vision.id }
+      })
     }
   }
 }

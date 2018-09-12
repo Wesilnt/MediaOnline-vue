@@ -51,25 +51,25 @@ export default {
       var d = date.getDate()
       return y + '-' + (m < 10 ? '0' + m : m) + '-' + (d < 10 ? '0' + d : d)
     },
-    getSingleCourseName:function(value,index) { 
+    getSingleCourseName: function(value, index) {
       let arr = value.split('=>')
       return arr[index]
     }
   },
-  props:['comment','unindent','regiontype'],
+  props: ['comment', 'unindent', 'regiontype'],
   data() {
     return {
       canExpand: true,
-      isExpand:false,
+      isExpand: false
     }
   },
   methods: {
-    ...mapActions(["likeComment"]),
+    ...mapActions(['likeComment']),
     //点赞
     onPraise() {
       this.likeComment(this.comment.id)
       // this.comment.userCommentLikeId = null==this.comment.userCommentLikeId?0:1
-      // this.$toast({ 
+      // this.$toast({
       //   message: !this.comment.userCommentLikeId ? '取消点赞' : '点赞成功'
       // })
     }
@@ -104,7 +104,7 @@ export default {
     display: flex;
     flex-direction: column;
     margin-left: 32px;
-    flex:1
+    flex: 1;
   }
   .top-container {
     display: inline-flex;

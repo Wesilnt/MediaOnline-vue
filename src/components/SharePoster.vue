@@ -75,27 +75,34 @@ export default {
       var header = new Image()
       header.src = require('../assets/cmt_item_header.png')
       header.onload = () => {
-        let radius = this.headImageW 
-        let x = 102  
+        let radius = this.headImageW
+        let x = 102
         let y = 925
         this.ctx.save()
         this.ctx.beginPath()
-        this.ctx.arc(x + this.headImageW/2, y+this.headImageW/2, this.headImageW/2, 0, Math.PI * 2, false)
+        this.ctx.arc(
+          x + this.headImageW / 2,
+          y + this.headImageW / 2,
+          this.headImageW / 2,
+          0,
+          Math.PI * 2,
+          false
+        )
         this.ctx.clip()
-        this.ctx.drawImage(header, x, y, this.headImageW , this.headImageW )
+        this.ctx.drawImage(header, x, y, this.headImageW, this.headImageW)
         this.ctx.restore()
         this.$refs.saveimage.src = this.canvasData.toDataURL('images/png')
       }
     },
-      //绘制名字
-      drawUserName() {
-        let username = '秋之本'
-        this.ctx.fillStyle = '#262626'
-        this.ctx.font = '30px Georgia'
-        let textWidth = this.ctx.measureText(username).width
-        this.ctx.fillText(username, 102+72+20, 930+30)
-        this.$refs.saveimage.src = this.canvasData.toDataURL('images/png')
-      },
+    //绘制名字
+    drawUserName() {
+      let username = '秋之本'
+      this.ctx.fillStyle = '#262626'
+      this.ctx.font = '30px Georgia'
+      let textWidth = this.ctx.measureText(username).width
+      this.ctx.fillText(username, 102 + 72 + 20, 930 + 30)
+      this.$refs.saveimage.src = this.canvasData.toDataURL('images/png')
+    },
     //绘制二维码
     drawQrcode() {
       var qrcode = new Image()

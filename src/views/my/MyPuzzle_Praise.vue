@@ -109,7 +109,8 @@ export default {
     }
   },
   components: {
-    Badge,Skeleton
+    Badge,
+    Skeleton
   }
 }
 </script>
@@ -153,7 +154,7 @@ export default {
   }
   &-content {
     padding: 32px 40px;
-      min-height: 50vh;
+    min-height: 50vh;
     &-cell {
       position: relative;
       border-radius: 4px;

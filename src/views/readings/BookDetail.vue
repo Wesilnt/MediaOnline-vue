@@ -79,28 +79,32 @@
 </template>
 <script>
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions ,mapGetters} = createNamespacedHelpers('readings'); 
+const { mapState, mapActions, mapGetters } = createNamespacedHelpers('readings')
 import SingleSetList from '../../components/SingleSetList.vue'
 export default {
   components: { 'singleset-list': SingleSetList },
   data() {
     return {
-      courseId:this.$route.query.id,
-      currentPage:1,
-      pageSize:20, 
+      courseId: this.$route.query.id,
+      currentPage: 1,
+      pageSize: 20
     }
   },
 
   computed: {
-    ...mapState(['bookDetail','singleSetList'])
+    ...mapState(['bookDetail', 'singleSetList'])
   },
   created() {
     console.log(this.courseId)
-    this.getBookDetail({courseId:this.courseId})
-    this.getSingleSetList({courseId:this.courseId,currentPage:this.currentPage,pageSize:this.pageSize})
+    this.getBookDetail({ courseId: this.courseId })
+    this.getSingleSetList({
+      courseId: this.courseId,
+      currentPage: this.currentPage,
+      pageSize: this.pageSize
+    })
   },
   methods: {
-    ...mapActions(['getBookDetail','getSingleSetList']),
+    ...mapActions(['getBookDetail', 'getSingleSetList']),
     toLookWhole() {
       this.$router.push({
         path: '/home/readings/summary',
@@ -194,11 +198,11 @@ export default {
     //   line-height: 28px;
     //   margin: 0;
     // }
-    p{
-        color: rgb(22, 35, 60);
-        font-size: 28px;
-        line-height: 44px;
-        margin: 8px 0px;
+    p {
+      color: rgb(22, 35, 60);
+      font-size: 28px;
+      line-height: 44px;
+      margin: 8px 0px;
     }
   }
   //4. 作品简介

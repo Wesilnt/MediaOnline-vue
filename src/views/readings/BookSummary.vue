@@ -24,13 +24,12 @@
 </template>
 <script>
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapGetters } = createNamespacedHelpers('readings'); 
+const { mapState, mapGetters } = createNamespacedHelpers('readings')
 export default {
-  computed:{
-    ...mapGetters(["getBookIntroduce"])
+  computed: {
+    ...mapGetters(['getBookIntroduce'])
   },
-  methods:{
-  }
+  methods: {}
 }
 </script>
 <style lang="scss" scoped>

@@ -25,7 +25,9 @@
 </template>
 <script>
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions,mapMutations } = createNamespacedHelpers('comment')
+const { mapState, mapActions, mapMutations } = createNamespacedHelpers(
+  'comment'
+)
 import CommentItem from '../CommentItem.vue'
 export default {
   components: {
@@ -33,20 +35,20 @@ export default {
   },
   data() {
     return {
-      lessonId:this.$route.params.lessonid, 
+      lessonId: this.$route.params.lessonid,
       isSpeak: false,
       isSpeaking: false,
       commentContent: ''
     }
   },
-  computed:{...mapState(["commentList"])},
+  computed: { ...mapState(['commentList']) },
   created() {
     this.setLessonId(this.lessonId)
     this.getCommentList(false)
   },
   methods: {
-    ...mapMutations(["setLessonId"]),
-    ...mapActions(['getCommentList','postComment']),
+    ...mapMutations(['setLessonId']),
+    ...mapActions(['getCommentList', 'postComment']),
     //切换评论方式
     onCommentMethod() {
       this.isSpeak = !this.isSpeak
@@ -55,13 +57,13 @@ export default {
     onInputeComment() {},
     //发送评论
     onSendComment() {
-      console.log("fsdf")
+      console.log('fsdf')
       this.postComment({
-        regionId:this.lessonId,                     //单集id       
-        regionType:2202,                            //目标类型（2201：专栏，2202：单集）     
-        commentType:3301,                           //评论类型（3301:text,3302:voice,3303:text&voice)
-        content:this.commentContent,                //留言内容
-        duration:"",                                //音频长度 
+        regionId: this.lessonId, //单集id
+        regionType: 2202, //目标类型（2201：专栏，2202：单集）
+        commentType: 3301, //评论类型（3301:text,3302:voice,3303:text&voice)
+        content: this.commentContent, //留言内容
+        duration: '' //音频长度
       })
       // this.$toast('发布评论成功')
     },

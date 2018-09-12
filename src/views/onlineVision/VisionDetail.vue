@@ -89,7 +89,7 @@ export default {
   destroyed() {
     window.removeEventListener('scroll', this.handleScroll)
   },
-  computed: mapState(['visionDetail','commentList']),
+  computed: mapState(['visionDetail', 'commentList']),
   methods: {
     ...mapActions(['getVisionDetail', 'getCommentList']),
     navbarTap(index) {

@@ -383,7 +383,7 @@ export default {
   width: 52px;
   height: 52px;
   background-image: url('../assets/images/onlinecourse-tabbar-try.png');
-    background-position-y: top;
+  background-position-y: top;
   background-size: 40px;
 }
 .under-text {

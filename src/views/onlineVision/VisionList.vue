@@ -22,7 +22,7 @@ export default {
   computed: mapState(['bannerPic', 'visionList']),
   methods: {
     ...mapActions(['getVisionListData', 'getMoreData']),
-    loadMore(){
+    loadMore() {
       this.getMoreData()
     }
   },

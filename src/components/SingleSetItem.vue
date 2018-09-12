@@ -30,7 +30,7 @@ export default {
     }
   },
   //singleset 单集  playing是否正在播放
-  props: ['item', 'playing'], 
+  props: ['item', 'playing'],
   methods: {
     onItemClick(id) {
       this.$router.push({ path: '/audio/audioplay', query: { id } })
@@ -56,7 +56,7 @@ export default {
     // padding: 28px 31px 28px 35px;
     box-sizing: border-box;
     background-color: #fde3e3;
-    display: flex; 
+    display: flex;
     border-radius: 96px;
   }
   .icon-playing {
@@ -65,7 +65,7 @@ export default {
   .item-icon img {
     margin: auto 31px auto 35px;
     width: 28px;
-    height: 40px; 
+    height: 40px;
   }
   .icon-playing img {
     width: 38px;

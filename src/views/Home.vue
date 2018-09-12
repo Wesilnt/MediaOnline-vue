@@ -30,7 +30,7 @@ import BookList from './BookList.vue'
 import homeData from '../store/module/homeData.js'
 
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions } = createNamespacedHelpers('homeData');
+const { mapState, mapActions } = createNamespacedHelpers('homeData')
 
 export default {
   name: 'Homepage',
@@ -43,7 +43,7 @@ export default {
     DisCoverVideoList,
     BookList
   },
-  computed:mapState([
+  computed: mapState([
     'bannerList',
     'newMessageCount',
     'freeList',
@@ -51,7 +51,7 @@ export default {
     'videoList',
     'bookList'
   ]),
-  methods:{
+  methods: {
     ...mapActions([
       'getBannerList',
       'getNewMessageCount',
@@ -61,13 +61,13 @@ export default {
       'getBookList'
     ])
   },
-  created(){
-    this.getBannerList();
-    this.getNewMessageCount();
-    this.getFreeList();
-    this.getVisionList();
-    this.getVideoList();
-    this.getBookList();
+  created() {
+    this.getBannerList()
+    this.getNewMessageCount()
+    this.getFreeList()
+    this.getVisionList()
+    this.getVideoList()
+    this.getBookList()
   }
 }
 </script>

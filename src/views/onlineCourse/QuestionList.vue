@@ -100,7 +100,7 @@ export default {
       this[popup] = false
     },
     handleNextClick() {
-      const { questionIndex, questionList, answers, questionInfo } = this;
+      const { questionIndex, questionList, answers, questionInfo } = this
       const { userSelect } = questionInfo
       if (!userSelect) {
         clearTimeout(timeInter)

@@ -18,6 +18,5 @@ export default {
 .swiperImg {
   width: 100%;
   height: 46.7vw;
- 
 }
 </style>

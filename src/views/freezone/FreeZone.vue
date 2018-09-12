@@ -21,9 +21,9 @@
         </div>
     </div>
 </template> 
-<script>  
-  import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions ,mapGetters} = createNamespacedHelpers('freezone'); 
+<script>
+import { createNamespacedHelpers } from 'vuex'
+const { mapState, mapActions, mapGetters } = createNamespacedHelpers('freezone')
 export default {
   data() {
     return {

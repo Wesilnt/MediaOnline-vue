@@ -81,7 +81,7 @@ export default {
           name: '/my/Help',
           image: help,
           title: '意见反馈'
-        },
+        }
       ]
     }
   },
@@ -125,17 +125,17 @@ export default {
 }
 
 /*.background-cover {*/
-  /*background-color: rgb(247, 202, 118);*/
-  /*width: 100%;*/
-  /*height: 65px;*/
-  /*margin-top: -25px;*/
-  /*border-radius: 40%;*/
-  /*align-items: center;*/
-  /*flex-direction: column;*/
-  /*display: flex;*/
-  /*justify-content: flex-start;*/
-  /*padding-top: 5px;*/
-  /*z-index: -1;*/
+/*background-color: rgb(247, 202, 118);*/
+/*width: 100%;*/
+/*height: 65px;*/
+/*margin-top: -25px;*/
+/*border-radius: 40%;*/
+/*align-items: center;*/
+/*flex-direction: column;*/
+/*display: flex;*/
+/*justify-content: flex-start;*/
+/*padding-top: 5px;*/
+/*z-index: -1;*/
 /*}*/
 .grid-list {
   display: flex;

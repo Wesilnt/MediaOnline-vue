@@ -50,10 +50,10 @@ export default {
         this.$toast('分享海报')
       }
       if (shareScore == 'friends') {
-         this.$toast('分享给朋友')
+        this.$toast('分享给朋友')
       }
       if (shareScore == 'circle') {
-         this.$toast('分享到朋友圈')
+        this.$toast('分享到朋友圈')
       }
     },
     onCancel() {

@@ -21,5 +21,5 @@ export async function voiceComment(params) {
 //给留言点赞
 export async function likeComment(params) {
   console.log(params)
-    return request.post(`/comment/likeComment?${stringify(params)}`,false)
+    return request.post(`/comment/likeComment?${stringify(params)}`)
 }

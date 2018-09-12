@@ -16,7 +16,7 @@ export default {
   },
   computed: {
     badge: function() {
-        let text = '中'
+      let text = '中'
       if (this.status === 1203) {
         text = '成功'
       } else if (this.status === 1204) {
