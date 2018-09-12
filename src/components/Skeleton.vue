@@ -1,9 +1,11 @@
 <template>
     <section>
-        <div v-for="row in rows">
+        <div v-for="row in rows" :key="row">
             <div class="skeleton-container">
                 <i class="qhht-icon skeleton-avatar"></i>
-                <div class="skeleton-container"></div>
+                <div class="skeleton-paragraph">
+                    <p v-for="row in rows" :key="row"></p>
+                </div>
             </div>
         </div>
     </section>
@@ -31,7 +33,11 @@ export default {
     rows: {
       default: 3, // 是否展示展位图
       type: Number
-    }
+    },
+      paragraphs: {
+          default: 4, // 是否展示展位图
+          type: Number
+      },
   }
 }
 </script>

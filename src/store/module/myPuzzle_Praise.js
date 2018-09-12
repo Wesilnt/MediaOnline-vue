@@ -1,8 +1,4 @@
-import {
-  queryMyPuzzleList,
-  queryMyPraise,
-  likeComment
-} from '../../services/my'
+import { queryMyPuzzleList, queryMyPraise } from '../../services/my'
 const puzzleTabs = {
   all: '全部',
   waiting: '中',
@@ -46,6 +42,7 @@ const myPuzzle_Praise = {
       const response = isPraise
         ? await queryMyPraise(params)
         : await queryMyPuzzleList(params)
+
       if (response) {
         const { pageSize, currentPage, totalCount, result } = response
         await commit({
@@ -62,8 +59,6 @@ const myPuzzle_Praise = {
       }
     },
     async toggleCurrentType({ dispatch, commit }, payload) {
-      const response = await likeComment({ commentId: '66114883225124872' })
-      console.log(response)
       await commit('toggleLoading', {
         loading: true
       })
