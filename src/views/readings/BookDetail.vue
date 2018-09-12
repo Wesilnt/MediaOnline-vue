@@ -81,8 +81,7 @@
 import SingleSetList from '../../components/SingleSetList.vue'
 import AudioTask from '../../utils/AudioTask.js'
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions, mapGetters } = createNamespacedHelpers('readings')
-import SingleSetList from '../../components/SingleSetList.vue'
+const { mapState, mapActions, mapGetters } = createNamespacedHelpers('readings') 
 export default {
   components: { 'singleset-list': SingleSetList },
   data() {
