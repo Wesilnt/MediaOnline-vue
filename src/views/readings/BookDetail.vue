@@ -69,7 +69,7 @@
     </div>
     <hr>
     <!-- 5. 作品单集/章集 播放列表 -->
-    <singleset-list :list="singleSetList" :play-id="0"/>
+    <singleset-list :list="singleSetList" :play-id="playLessonId"/>
     <!-- 6. 分页布局 -->
     <div class="load-more-container">
       <span>没有更多了，不要再拉啦～</span>
@@ -78,6 +78,8 @@
   </div>
 </template>
 <script>
+import SingleSetList from '../../components/SingleSetList.vue'
+import AudioTask from '../../utils/AudioTask.js'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers('readings')
 import SingleSetList from '../../components/SingleSetList.vue'
@@ -85,9 +87,10 @@ export default {
   components: { 'singleset-list': SingleSetList },
   data() {
     return {
-      courseId: this.$route.query.id,
-      currentPage: 1,
-      pageSize: 20
+      courseId:this.$route.query.id,
+      playLessonId:0,
+      currentPage:1,
+      pageSize:20, 
     }
   },
 
@@ -95,21 +98,14 @@ export default {
     ...mapState(['bookDetail', 'singleSetList'])
   },
   created() {
-    console.log(this.courseId)
-    this.getBookDetail({ courseId: this.courseId })
-    this.getSingleSetList({
-      courseId: this.courseId,
-      currentPage: this.currentPage,
-      pageSize: this.pageSize
-    })
+    this.playLessonId = AudioTask.getInstance().getId()
+    this.getBookDetail({courseId:this.courseId})
+    this.getSingleSetList({courseId:this.courseId,currentPage:this.currentPage,pageSize:this.pageSize})
   },
   methods: {
     ...mapActions(['getBookDetail', 'getSingleSetList']),
     toLookWhole() {
-      this.$router.push({
-        path: '/home/readings/summary',
-        query: {}
-      }) //query参数，replace 表示当前组件移除
+      this.$router.push({ path: '/home/readings/summary' }) 
     }
   }
 }

@@ -14,7 +14,8 @@ import readings from './module/readingsData'
 import myFeedback from './module/myFeedback'
 import mySysMessage from './module/mySysMessage'
 import comment from './module/commentData'
-import freezone from './module/freezoneData'
+import freezone from './module/freezoneData'    
+import audiotask from './module/audioTask'    
 
 Vue.use(Vuex)
 export default new Vuex.Store({
@@ -34,6 +35,7 @@ export default new Vuex.Store({
     readings,
     audio,
     comment,
-    freezone
-  }
+    freezone,
+    audiotask
+  },
 })

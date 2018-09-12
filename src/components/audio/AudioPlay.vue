@@ -23,10 +23,24 @@
     </div>
     <!-- 进度条 -->
     <div class="slider-container">
-      <div slot="start">{{parseInt(currentTime) | formatDuring}}</div>
-      <!-- <mt-range ref="mtrange" v-model="currentTime" :min="0" :max="duration" :step="100/duration" :bar-height="2"/> -->
-    <input type="range" @input="onInputChange" v-model="currentTime" ref="range" :min="0" :max="duration" />
-      <div slot="end">{{ duration | formatDuring}}</div>
+      <div slot="start">{{parseInt(touching?progress:currentTime(touching,progress)) | formatDuring}}</div>
+      <!-- <mt-range ref="mtrange" v-model="currentTime" :min="0" :max="duration" :step="100/duration" :bar-height="2"/> 
+       let percent = parseInt(e.target.value * 100 / e.target.max)
+      e.target.style =  'background: linear-gradient(to right,#FFCD7D ' + percent + '%,  #E5E5E5 1%, #E5E5E5'
+      -->
+    <input type="range" 
+       @input="onInputChange" 
+       :value="touching?progress:currentTime(touching,progress)" 
+       :min="0" 
+       :max="maxTime" 
+       :style="{background:touching
+       ?'linear-gradient(to right,#FFCD7D ' + parseInt(progress * 100 / maxTime) + '%,  #E5E5E5 1%, #E5E5E5'
+       : 'linear-gradient(to right,#FFCD7D ' + parseInt(currentTime(touching,progress) * 100 / maxTime) + '%,  #E5E5E5 1%, #E5E5E5'}"
+       @touchstart="handleTouchStart" 
+       @touchcancel="handleTouchCancel" 
+       @touchmove="handleTouchMove"
+       @touchend="handleTouchEnd"/>
+      <div slot="end">{{ maxTime | formatDuring}}</div>
     </div>
     <!-- <vue-slider></vue-slider> -->
     <!-- <div class="play-slider">
@@ -37,13 +51,13 @@
     <!-- 播放按钮 -->
     <div class="play-btns">
       <div class="btn-item" @click="onPlayMode">
-        <img :src="isSingle?require('../../assets/audio_play_single.png'):require('../../assets/audio_play_sort.png')">
+        <img :src="'single'==playMode?require('../../assets/audio_play_single.png'):require('../../assets/audio_play_sort.png')">
       </div>
       <div class="btn-item" @click="onPlayPrv">
         <img src="../../assets/audio_play_prv.png">
       </div>
-      <div :class="{'play-btn-active':isPlaying}" class="btn-item" @click="onPlayPause">
-        <img :src="isPlaying?require('../../assets/audio_play_play.png'):require('../../assets/audio_play_pause.png')">
+      <div :class="{'play-btn-active':playing}" class="btn-item" @click="onPlayPause">
+        <img :src="playing?require('../../assets/audio_play_play.png'):require('../../assets/audio_play_pause.png')">
       </div>
       <div class="btn-item" @click="onPlayNext">
         <img src="../../assets/audio_play_next.png">
@@ -92,82 +106,70 @@ export default {
       lessonId: this.$route.query.id,
       play: true,
       isSingle: false, //是否单个循环
-      isPlaying: false, //是否正在播放
+      // isPlaying: false, //是否正在播放
       popupVisible: false, //是否显示音频列表弹框
       playIndex: 0, //播放第几首
       showShare: false, //是否显示分享框
-      currentTime: '0', //播放音频进度
-      duration: 100, //播放音频最大时长
+      // currentTime: '0', //播放音频进度
+      // duration: 100, //播放音频最大时长
       touching: false, //slider触摸
+      progress:0,
       rangeValue: 0,
       cover: '',
       progressColor: '#ff0000',
       background: 12,
       display: false,
-      touchStart: 0
+      touchStart: 0,
+      audioTask:AudioTask.getInstance()  //音频播放任务管理
     }
   },
-  computed: {
-    ...mapState({
-      audio: 'audioDetail',
-      isLike(state) {
-        let like = state.isLike.like
-        if (!state.isLike.isLoad) {
-          if (like)
-            this.$toast.success({ duration: 2000, message: '已添加到我喜欢的' })
-          else this.$toast.fail({ duration: 2000, message: '已取消喜欢' })
-        }
-        return state.isLike
-      },
-      singleSetList: 'singleSetList'
-    })
+  computed:{...mapState({isLike(state){ 
+    let like = state.isLike.like
+    if(!state.isLike.isLoad){
+      if(like)
+      this.$toast.success({duration:2000,message: '已添加到我喜欢的'})
+      else
+      this.$toast.fail({duration:2000,message:'已取消喜欢'})
+    }
+    return state.isLike
+  },'singleSetList':'singleSetList'}),
+  ...mapGetters(["audio",'currentTime','maxTime', 'playMode','status','playing']), 
   },
   created() {
-    this.getAudioDetail({ lessonId: this.lessonId })
-    this.isPlaying = AudioTask.getInstance().isPlaying()
-    this.isSingle = AudioTask.getInstance().getPlayMode() == 'single'
-    AudioTask.getInstance().addTimeListener(this.onTimeUpdate)
-    AudioTask.getInstance().addStateListener(this.onStateUpdate)
-  },
-  destroyed() {
-    AudioTask.getInstance().removeTimeListener(this.onTimeUpdate)
-    AudioTask.getInstance().removeStateListener(this.onStateUpdate)
-  },
-  mounted: function() {
-    this.$refs.range.addEventListener('touchstart', e => {
-      this.touching = true
-      this.touchStart = e.changedTouches[0].clientX
-    })
-    this.$refs.range.addEventListener('touchend', e => {
-      AudioTask.getInstance().seekTo(parseInt(this.currentTime))
-      this.touching = false
-    })
-    this.$refs.range.addEventListener('touchcancel', () => {
-      this.touching = false
-    })
+    this.playAudio({lessonId:this.lessonId}) 
   },
   methods: {
-    ...mapActions(['getAudioDetail', 'postFavorite']),
-    onInputChange(e) {
-      let percent = parseInt((e.target.value * 100) / e.target.max)
-      e.target.style =
-        'background: linear-gradient(to right,#FFCD7D ' +
-        percent +
-        '%,  #E5E5E5 1%, #E5E5E5'
-    },
+    ...mapActions(['getAudioDetail','postFavorite','playAudio','pauseAudio','setPlayMode','seekTo']),
     //进度条拖动 OTAwOWY1ZjgtZTJiYy00Y2IwLTk4ZDktNzIxYjMyMTUzYzU2
     sliderChange(value) {
       console.log(value)
       console.log(this.$refs.content)
+    }, 
+    //拖动进度改变进度
+    onInputChange(e) {
+      this.progress = e.target.value  
+    },
+    handleTouchStart(e){
+      this.touching = true 
+      console.log(e)
+    },
+    handleTouchMove(){
+
+    },
+    handleTouchEnd(e){ 
+        this.touching = false 
+      // this.audioTask.seekTo(parseInt(this.currentTime))
+      // this.touching = false
+      this.seekTo(this.progress)
+     
+    },
+    handleTouchCancel(){
+      this.touching = false
     },
     //收藏
     onCollect() {
       this.postFavorite({ lessonId: this.lessonId })
     },
-    //文稿
-    onManuScripts() {},
-    //评论
-    onComments() {},
     //分享
     onShare() {
       this.showShare = true
@@ -178,9 +180,9 @@ export default {
     },
     //切换播放模式
     onPlayMode() {
-      this.isSingle = !this.isSingle
-      this.$toast(this.isSingle ? '单曲循环' : '列表循环')
-      AudioTask.getInstance().setPlayMode(this.isSingle ? 'single' : 'order')
+      let mode = this.playMode == "single"?'order':'single'
+      this.$toast(mode=='single' ? '单曲循环' : '列表循环') 
+      this.setPlayMode(mode)
     },
     //上一首
     onPlayPrv() {
@@ -188,41 +190,37 @@ export default {
     },
     //播放/暂停
     onPlayPause() {
-      if ((this.isPlaying = !this.isPlaying)) {
-        AudioTask.getInstance().play(this.audio.audioUrl)
-      } else {
-        AudioTask.getInstance().pause()
-      }
+      this.playAudio() 
     },
     //下一首
     onPlayNext() {
       this.$toast.fail('已经是最后一条')
     },
     //音频进度监听
-    onTimeUpdate(currentTime, duration) {
-      if (this.touching) return
-      this.currentTime = currentTime
-      this.duration = duration
-      this.$nextTick(() => {
-        let percent = parseInt(Math.ceil((currentTime * 100) / duration))
-        this.$refs.range.style =
-          'background: linear-gradient(to right,#FFCD7D ' +
-          percent +
-          '%, #E5E5E5 1%, #E5E5E5'
-      })
-    },
+    // onTimeUpdate(currentTime, duration) {
+    //   if (this.touching) return
+    //   this.currentTime = currentTime
+    //   this.duration = duration
+    //   this.$nextTick(() => {
+    //     let percent = parseInt(Math.ceil(currentTime * 100 / duration))
+    //     this.$refs.range.style =
+    //       'background: linear-gradient(to right,#FFCD7D ' +
+    //       percent +
+    //       '%, #E5E5E5 1%, #E5E5E5'
+    //   })
+    // },
     //播放状态监听
-    onStateUpdate(state) {
-      if (state == 'canplaythrough') {
-        this.duration = AudioTask.getInstance().getDuration()
-      }
-      if (state == 'ended') {
-        this.isPlaying = false
-      }
-      if (state == 'play') {
-        this.isPlaying = true
-      }
-    },
+    // onStateUpdate(status) { 
+    //   if (status == 'canplaythrough') {
+    //     this.duration = AudioTask.getInstance().getDuration()
+    //   }
+    //   if (status == 'ended') {
+    //     this.isPlaying = false
+    //   }
+    //   if (status == 'play') {
+    //     this.isPlaying = true
+    //   }
+    // },
     //音频列表
     onPlayList() {
       this.popupVisible = true
@@ -232,15 +230,13 @@ export default {
       this.popupVisible = false
     },
     //列表Item点击事件
-    onItemClick(audio) {
-      if (audio.isFree) {
-        this.getAudioDetail({ lessonId: audio.id })
-      } else {
-        this.$toast({
-          duration: 2000,
-          message: '你还未购买该专栏,请购买之后收听!!!'
-        })
-      }
+
+    onItemClick(audio) { 
+      if(audio.isFree){
+         this.playAudio({lessonId:this.lessonId})  
+      }else{
+          this.$toast({duration:2000,message:'你还未购买该专栏,请购买之后收听!!!'})
+      } 
       this.popupVisible = false
     }
   }

@@ -1,5 +1,5 @@
 <template>
-  <div class="cell">
+  <div class="cell" @click="onItemClick">
     <img :src="book.coverPic" class="cover" alt="">
 
     <div class="play-button">
@@ -12,7 +12,12 @@
 </template>
 <script>
 export default {
-  props: ['book']
+  props: ['book'],
+  methods:{
+    onItemClick(){
+       this.$router.push({path:'/home/readings/book',query:{id:this.book.id}})
+    }
+  }
 }
 </script>
 <style lang="less" scoped>

@@ -1,4 +1,4 @@
-import * as _request from './request.js'
+import AudioState from '../store/module/audioTask'
 const AUDIO_URL = '/lesson/lessonDetail'
 const UPLOAD_URL = '/lesson/lessonListenRs'
 const errorList = {
@@ -161,7 +161,8 @@ export default class AudioTask {
     return this._at.networkState
   }
   //播放/暂停
-  play(audioUrl) {
+  play(audioUrl,lessonId) {
+    AudioState.actions.getAudioDetail({lessonId:lessonId})
     // this._play()
     console.log(audioUrl)
     this._at.src = audioUrl
@@ -263,8 +264,7 @@ export default class AudioTask {
   }
   //播放拖动某位置
   seekTo(value) {
-    this._at.fastSeek = value
-    console.log(value)
+    this._at.fastSeek = value 
     this._at.currentTime = value
   }
   //停止

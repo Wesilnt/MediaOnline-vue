@@ -87,6 +87,9 @@ export default {
 }
 </script>
 <style lang='scss'>
+.comments-container{
+  width: 100%;
+}
 .comment-item {
   display: flex;
   flex-direction: row;
@@ -94,10 +97,14 @@ export default {
   .comment-header {
     width: 80px;
     height: 80px;
+    display: flex;
+    align-items: center;
+    flex-direction: row;
     img {
       width: 80px;
       height: 80px;
       border-radius: 50%;
+      align-self: center;
     }
   }
   .comment-detail {

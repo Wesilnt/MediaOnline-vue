@@ -2,6 +2,7 @@
       <router-view/>
 </template>
 <script>
+import {mapMutations, mapActions} from 'vuex'
 export default {
   name: 'App',
   data: function() {
@@ -9,7 +10,10 @@ export default {
       needBack: null
     }
   },
-  methods: {}
+  created(){
+     this.initAudio() 
+  },
+  methods: {...mapActions(["initAudio"])}
 }
 </script>
 <style lang="scss">
