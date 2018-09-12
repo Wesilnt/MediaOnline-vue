@@ -1,6 +1,6 @@
-import { postDelMessage } from '../../services/my'
+import { postDelSysMessage } from '../../services/my'
 import { getMessage } from '../../services/my'
-const mySysMessage = {
+const myReply = {
   namespaced: true, // 设置命名空间 ，保持数据独立性
   state: {
     messageList: [],
@@ -13,12 +13,6 @@ const mySysMessage = {
     },
     toggleLoading(state, { loading }) {
       state.loading = loading
-    },
-    modifyMessageList(state,{id}){
-      for (var i = 0; i < state.messageList.length; i++) {
-        if (state.messageList[i].id === id)
-          state.messageList.splice(i,1)
-      }
     }
   },
   actions: {
@@ -26,7 +20,8 @@ const mySysMessage = {
       await commit('toggleLoading', {
         loading: true
       })
-      const response = await getMessage({ busiTypes: '3102,3103,3105,3106'})
+      const response = await getMessage({ busiTypes: '3101'})
+      if(!response)return
       await commit({
         type: 'saveList',
         messageList: response
@@ -35,9 +30,9 @@ const mySysMessage = {
         loading: false
       })
     },
-    async delSysMessage({ dispatch, commit, state },{ msgId }) {
+    async delMessage({ dispatch, commit, state },{ msgId }) {
       //删除服务器上的消息
-      const response = await postDelMessage({ id: msgId})
+      const response = await postDelSysMessage({ id: msgId})
       if (!response)return
       //删除本地的消息
       await commit('modifyMessageList', {
@@ -46,4 +41,4 @@ const mySysMessage = {
     }
   }
 }
-export default mySysMessage
+export default myReply

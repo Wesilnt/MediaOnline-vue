@@ -1,9 +1,9 @@
-import { postDelMessage } from '../../services/my'
-import { getMessage } from '../../services/my'
-const mySysMessage = {
+import { getMyLike } from '../../services/my'
+import { postDelMyLike } from '../../services/my'
+const myLike = {
   namespaced: true, // 设置命名空间 ，保持数据独立性
   state: {
-    messageList: [],
+    likeList: [],
     loading: false
   },
   mutations: {
@@ -14,10 +14,10 @@ const mySysMessage = {
     toggleLoading(state, { loading }) {
       state.loading = loading
     },
-    modifyMessageList(state,{id}){
-      for (var i = 0; i < state.messageList.length; i++) {
-        if (state.messageList[i].id === id)
-          state.messageList.splice(i,1)
+    modifyLikeList(state,{id}){
+      for (var i = 0; i < state.LikeList.length; i++) {
+        if (state.LikeList[i].id === id)
+          state.LikeList.splice(i,1)
       }
     }
   },
@@ -26,24 +26,24 @@ const mySysMessage = {
       await commit('toggleLoading', {
         loading: true
       })
-      const response = await getMessage({ busiTypes: '3102,3103,3105,3106'})
+      const response = await getMyLike()
       await commit({
         type: 'saveList',
-        messageList: response
+        likeList: response
       })
       commit('toggleLoading', {
         loading: false
       })
     },
-    async delSysMessage({ dispatch, commit, state },{ msgId }) {
+    async delMyLike({ dispatch, commit, state },{ id }) {
       //删除服务器上的消息
-      const response = await postDelMessage({ id: msgId})
+      const response = await postDelMyLike({ lessonId: id})
       if (!response)return
       //删除本地的消息
-      await commit('modifyMessageList', {
-        id: msgId
+      await commit('modifyLikeList', {
+        id: id
       })
     }
   }
 }
-export default mySysMessage
+export default myLike

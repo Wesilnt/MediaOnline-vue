@@ -13,6 +13,8 @@ import audio from './module/audioData'
 import readings from './module/readingsData'
 import myFeedback from './module/myFeedback'
 import mySysMessage from './module/mySysMessage'
+import myReply from './module/myReply'
+import myLike from './module/myLike'
 import comment from './module/commentData'
 import freezone from './module/freezoneData'    
 import audiotask from './module/audioTask'    
@@ -31,6 +33,8 @@ export default new Vuex.Store({
     questionList,
     myFeedback,
     mySysMessage,
+    myReply,
+    myLike,
     visionData,
     readings,
     audio,

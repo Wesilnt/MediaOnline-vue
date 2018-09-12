@@ -1,146 +1,155 @@
 <template>
-    <div>
-        <div class="reply-container" v-for="item in list" :key="item.name">
-            <div class="div1">
-                <div class="div3">
-                    <img src="" class="avatar"/>
+    <div class="reply-container">
+        <div v-for="item in messageList" :key="item.id">
+            <div class="replay-list-item">
+                <img src="item.content | jsonToData('fromAvatarUrl')" class="replay-list-item-avatar"/>
+                <div class="replay-list-item-content">
+                    <p class="replay-list-item-content-name">{{ item.content | jsonToData('fromNickName') }}</p>
+                    <p class="replay-list-item-content-detail">{{ item.content | jsonToData('reply') }}</p>
+                    <p class="replay-list-item-content-time">{{ item.createTime | formatDate }}</p>
                 </div>
-                <div class="div4">
-                    <div class="name">{{item.name}}</div>
-                    <div class="content">{{item.content}}</div>
-                    <div class="time">{{item.time}}</div>
-                </div>
-            </div>
-            <div class="div2">
-                <div class="content-my">{{item.content}}</div>
+                <p class="replay-list-item-parent-content">{{ item.content | jsonToData('parentContent') }}</p>
             </div>
             <div class="divider-line"></div>
         </div>
+
         <div class="read-more-container">
-            <div class="read-more">查看更早的消息</div>
+            <p class="read-more">查看更早的消息</p>
         </div>
+        <div class="divider-line"></div>
 
     </div>
 </template>
 
 <script>
-export default {
-  name: 'Reply',
-  components: {
-    // NavBar
-  },
-  data: function() {
-    return {
-      list: [
-        {
-          name: '白杨1',
-          type: '系统通知',
-          time: '08-08',
-          content: '感谢您一直以来对秦汉胡同的支持'
-        },
-        {
-          name: '白杨2',
-          type: '小胡同',
-          time: '08-08',
-          content: '您的反馈我们已经收到，谢谢'
-        },
-        {
-          name: '白杨3',
-          type: '系统通知',
-          time: '08-08',
-          content: '感谢您一直以来对秦汉胡同的支持'
-        },
-        {
-          name: '白杨4',
-          type: '小胡同',
-          time: '08-08',
-          content: '您的反馈我们已经收到，谢谢'
+  import { createNamespacedHelpers } from 'vuex'
+  import { json2formData } from "../../utils/utils";
+
+  const { mapState, mapActions } = createNamespacedHelpers(
+    'myReply'
+  )
+  export default {
+    name: 'Reply',
+    components: {
+      // NavBar
+    },
+    data: function () {
+      return {}
+    },
+    computed: {
+      ...mapState(['messageList', 'loading'])
+    },
+    methods: {
+      ...mapActions(['queryList', 'delMessage']),
+    },
+    created() {
+      this.queryList()
+    },
+    filters: {
+      formatDate: function (time) {
+        var date = new Date(time/1000);
+        const seperator1 = '-'
+        let month = date.getMonth() + 1
+        let strDate = date.getDate()
+        if (month >= 1 && month <= 9) {
+          month = '0' + month
         }
-      ]
+        if (strDate >= 0 && strDate <= 9) {
+          strDate = '0' + strDate
+        }
+        return (
+          month + seperator1 + strDate
+        )
+      },
+      jsonToData:function (json, name) {
+        var obj = JSON.parse(json)
+        switch(name) {
+          case "fromNickName":
+            return obj.fromNickName
+            break
+          case "reply":
+            return obj.reply
+            break
+          case "parentContent":
+            return obj.reply
+            break
+          case "fromAvatarUrl":
+            return obj.fromAvatarUrl
+            break
+
+        }
+      }
     }
-  },
-  methods: {}
-}
+  }
 </script>
 
 <style scoped>
-.reply-container {
-  float: left;
-  width: 100%;
-  height: 250px;
-}
+    .reply-container {
+        display: flex;
+        flex-direction: column;
+    }
 
-.div1 {
-  float: left;
-  width: 70%;
-  height: 250px;
-}
+    .replay-list-item {
+        width: 100%;
+        padding: 30px 36px 16px 20px;
+        display: flex;
+        flex-direction: row;
+    }
+    .replay-list-item-avatar {
+        width: 94px;
+        height: 94px;
+        background-color: #ff9521;
+        border-radius: 12px;
+        outline: none;
+    }
+    .replay-list-item-content-name {
+        padding: 0px 0px 0px 0px;
+        font-size: 28px;
+        color: #57668f;
+    }
 
-.div2 {
-  width: 30%;
-  height: 250px;
-  float: right;
-}
+    .replay-list-item-content {
+        width: 70%;
+        float: right;
+        font-size: 26px;
+        padding: 6px 20px 0px 20px;
+    }
 
-.div3 {
-  float: left;
-  width: 30%;
-  height: 250px;
-  padding: 18px 0px 0px 20px;
-}
+    .replay-list-item-content-time {
+        font-size: 26px;
+        color: #737373;
+        padding: 0px 0px 16px 0px;
+    }
 
-.avatar {
-  width: 94px;
-  height: 94px;
-  background-color: #ff9521;
-  border-radius: 12px;
-}
+    .replay-list-item-parent-content {
+        width: 130px;
+        height: 120px;
+        font-size: 26px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+    }
 
-.name {
-  padding: 6px 0px 0px 0px;
-  font-size: 28px;
-  color: #57668f;
-}
+    .divider-line {
+        height: 1px;
+        background: #ddd;
+        text-align: center;
+        margin: 0px 30px 0px 30px;
+    }
 
-.content {
-  font-size: 28px;
-  color: #111111;
-  padding: 20px 30px 22px 0px;
-}
+    .read-more-container {
+        width: 100%;
+        height: 118px;
+        text-align: center;
+    }
 
-.time {
-  font-size: 26px;
-  color: #737373;
-  padding: 0px 0px 16px 0px;
-}
-
-.div4 {
-  width: 70%;
-  height: 250px;
-  float: right;
-  font-size: 26px;
-  padding: 24px 20px 0px 0px;
-}
-
-.content-my {
-  padding: 36px 36px 0px 36px;
-  font-size: 26px;
-}
-
-.divider-line {
-  border-bottom: 1px solid #ddd;
-  text-align: center;
-}
-
-.read-more-container {
-  text-align: center;
-}
-
-.read-more {
-  width: 100%;
-  height: 118px;
-  font-size: 26px;
-  color: #737373;
-  align-content: center;
-}
+    .read-more {
+        width: 100%;
+        height: 118px;
+        font-size: 26px;
+        color: #737373;
+        line-height: 118px;
+    }
 </style>
