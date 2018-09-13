@@ -60,7 +60,7 @@ import CommentItem from '../../components/CommentItem.vue'
 import videoComment from '../../components/video-comment.vue'
 import QuestionList from './QuestionList'
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions } = createNamespacedHelpers('videoCourseDetail')
+const { mapState, mapActions, mapMutations } = createNamespacedHelpers('videoCourseDetail')
 export default {
   name: 'VideoCourseDetail',
   components: {
@@ -75,31 +75,38 @@ export default {
       navbar: ['资料', '目录', '留言'],
       navbarFixed: false, //控制navbar是否吸顶
       selected: 0,
-      currentVideoTime: 0,
-      lockIcon: require('../../assets/images/onlinecourse_lock.jpg'), //未解锁
-      unlockIcon: require('../../assets/images/onlinecourse_unlock.jpg'), //已解锁
-      collectIcon: require('../../assets/images/onlinecourse_love_highlight.png'), //已收藏
-      unCollectIcon: require('../../assets/images/onlinecourse_love_normal.png') //未搜藏
+      currentVideoTime:0,
+      lockIcon:require('../../assets/images/onlinecourse_lock.jpg'),//未解锁
+      unlockIcon:require('../../assets/images/onlinecourse_unlock.jpg'),//已解锁
+      collectIcon:require('../../assets/images/onlinecourse_love_highlight.png'),//已收藏
+      unCollectIcon:require('../../assets/images/onlinecourse_love_normal.png'),//未搜藏
+      //视频播放相关属性
+      timer:0,          //定时器
+      loaclPlayTotalTime:0,   //本地累计播放时长
+      localPlayTime:0,         //本地播放位置
+      isUnlockQuestion:false   //是否解锁自测题    
     }
   },
   computed: {
-    ...mapState([
-      'lessonList', //目录课程
-      'radioShowPic', //视频背景图
-      'audioUrl', //音频地址
-      'videoUrl', //视频地址
-      'courseId', //专栏ID
-      'singleComments',
-      'description', //笔记
-      'isFree',
-      'isLike',
-      'questionBOList', //自测题列表
-      'createTime',
-      'isAchieveCollect', //是否完成收藏
-      'collectionId', //收藏Id
-      'learnTime', //上次播放位置
-      'learnTotalTime' //累计播放时长
-    ])
+    ...mapState([          
+        'lessonList',              //目录课程
+        'radioShowPic',              //视频背景图
+        'audioUrl',              //音频地址
+        'videoUrl',             //视频地址
+        'courseId',              //专栏ID
+        'singleComments',
+        'description',           //笔记
+        'totalTime',             //服务器返回的视频总长度
+        'isFree',
+        'isLike',
+        'questionBOList',        //自测题列表
+        'createTime',
+        'isAchieveCollect',           //是否完成收藏
+        'collectionId',          //收藏Id
+        'learnTime',            //服务器上次播放位置
+        'learnTotalTime',       //服务器累计播放时长  
+
+    ]),
   },
   mounted() {
     //监听滚动
@@ -115,13 +122,14 @@ export default {
   },
   beforeDestroy() {
     console.log('Vue实例销毁了,页面也销毁了')
+    const vid = this.$refs.videoitem
+    vid.removeEventListener('timeupdate',this.getVideoProgress)
+    vid.removeEventListener('play',this.getVideoPlay)
+    vid.removeEventListener('pause',this.getVideoPause)
   },
   destroyed() {
     window.removeEventListener('scroll', this.handleScroll)
-    const vid = this.$refs.videoitem
-    // vid.removeEventListener('timeupdate',this.getVideoProgress)
-    // vid.removeEventListener('play',this.getVideoPlay)
-    // vid.removeEventListener('pause',this.getVideoPause)
+
   },
   created() {
     //获取课程ID
@@ -143,6 +151,9 @@ export default {
     })
   },
   methods: {
+    ...mapMutations([
+      'updateLocalVideoData'
+    ]),
     ...mapActions([
       'getVideoCourseDetail',
       'getLessonListByCourse',
@@ -150,29 +161,58 @@ export default {
       'doCollectFavorite',
       'unCollectFavorite'
     ]),
+    openTimer(){
+      console.log(this.loaclPlayTotalTime)
+      console.log(Math.round(parseInt(this.totalTime) * 0.7))         
+      console.log(parseInt(this.totalTime))
+      this.timer = setInterval(()=>{      
+        if(this.loaclPlayTotalTime >= Math.round(parseInt(this.totalTime) * 0.7)) {
+          this.isUnlockQuestion = true          
+          console.log('已经解锁自测题' + this.isUnlockQuestion)
+        }
+        if(this.loaclPlayTotalTime > Math.round(parseInt(this.totalTime))) {
+          this.loaclPlayTotalTime = 0
+          this.clearTimer()
+          this.getVideoPause()
+        }
+        this.loaclPlayTotalTime++     
+      },1000)
+    },
+    clearTimer(){
+       clearInterval(this.timer)
+    },
     //播放视频
     clickPlayVideoBtn() {
       this.$refs.videoitem.play()
     },
-    getVideoPlay() {
-      this.$refs.videoitem.currentTime = 40
+    getVideoPlay(){
+      console.log('视频播放')
+      //从本地获取历史播放位置
+      let historyPosition = window.localStorage.getItem('HistoryPlayPosition')
+      this.$refs.videoitem.currentTime = historyPosition || 0
+      //开启定时器记录视频累计播放时长
+      this.openTimer()
     },
-    getVideoPause() {},
-    getVideoProgress() {
-      console.log(this.$refs.videoitem.currentTime)
-      // if(this.$refs.videoitem.currentTime>4){
-      //   this.$refs.videoitem.pause()
-      // }
-
+    getVideoPause(){
+      console.log('视频暂停')
+      this.clearTimer()
+      let newTotalTime = this.loaclPlayTotalTime
+      let newPlayTime = this.$refs.videoitem.currentTime
+      console.log(newPlayTime)
+      window.localStorage.setItem('PlayTotalTime',newTotalTime)
+      window.localStorage.setItem('HistoryPlayPosition',newPlayTime)
+    },
+    getVideoProgress(){
+        // console.log(this.$refs.videoitem.currentTime)
       //累计观看视频总长度*70%后解锁答题功能
 
-      //1.进入单集详情页面后,获取服务器播放时长和累计进度.拿服务器的累计进度和我本地的进度比较,如果我本地的记录大于服务器进度,就将我本地的进度提交给服务器
+      //1.进入单集详情页面后,获取服务器播放时长和累计进度.拿服务器的累计进度和我本地的进度比较,如果我本地的记录大于服务器进度,就将我本地的进度提交给服务器,反之,如果我本地记录小与服务器的记录,就用服务器的记录更新我本地的记录
       //2.点击播放按钮,进入播放器,
       //3.监听play,开启定时器
       //4.监听暂停状态,  获取当前播放进度,  获取计时器长度分别作为播放进度和累计时长,并存入本地
       //5.情况一:不离开播放器页面.暂停时,获取本地存储的播放时长,加上计时器进度,更新本地记录的累计时长.销毁计时器.重新播放,开启定时器
-      //6.情况二:播放一段时间后,离开重新进入播放器页面.首先获取本地保存的视频播放记录,拿到累计时长和播放进度.根据服务器播放进度回到历史进度
-      //7.情况三:关闭应用后,再回到播放器界面
+      //6.情况二:播放一段时间后,离开重新进入播放器页面.首先获取本地保存的视频播放记录,拿到累计时长和播放进度.根据本地播放进度回到历史进度
+      //7.情况三:关闭应用后,再回到播放器界面,根据本地播放记录回到历史记录
     },
     //收藏
     onCollectFavorite() {
