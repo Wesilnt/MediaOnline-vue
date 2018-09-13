@@ -1,4 +1,4 @@
-import { getVideoLessonDetail,getLessonListByCourse,doFavorite,unFavorite } from '../../services/columns.js'
+import { getVideoLessonDetail,getLessonListByCourse,doFavorite,unFavorite,lessonListenForVedio } from '../../services/columns.js'
 import { getCommentList } from '../../services/comment.js'
 
 const videoCourseDetail = {
@@ -14,12 +14,16 @@ const videoCourseDetail = {
         isLike:0,
         createTime:'',
         description:'',           //笔记
+        learnTime:0,               //上次播放位置
+        learnTotalTime:0,          //累计播放时长 
+        questionBOList:[],        //自测题列表
         //所有单集接口
         lessonList : [],              //目录课程
         //评论接口
         singleComments:[],         //单集评论数组
         isAchieveCollect:false,           //是否收藏成功
-        collectionId:0       
+        collectionId:0
+    
     },
     mutations: {
         bindVideoCourseDetail(state,payload) {
@@ -31,6 +35,7 @@ const videoCourseDetail = {
             state.isLike = payload.isLike
             state.createTime = payload.createTime
             state.description = payload.description
+            state.questionBOList = payload.questionBOList
         },
         bindAllCourse(state,payload) {
             state.lessonList = payload.result
@@ -46,6 +51,11 @@ const videoCourseDetail = {
         //取消收藏
         deleteCollection(state) {
             state.isLike = 0
+        },
+
+        //提交播放数据
+        submitVideoPlayData(state){
+
         }
 
     },
@@ -53,40 +63,42 @@ const videoCourseDetail = {
        async getVideoCourseDetail ({ commit },{ lessonId }) {            
             //获取视频列表数据
             const result = await getVideoLessonDetail({ lessonId })
-            console.log('视频课程详情接口')
+            console.log('视频单集详情接口')
             console.log(result)
             commit('bindVideoCourseDetail',result)
+
+            //在这里
+
+
+
         },
 
         async getLessonListByCourse ( { commit}, { courseId, currentPage, pageSize}) {
             //获取目录课程数据
-            // console.log('courseId')
-            // console.log(courseId)
             const result = await getLessonListByCourse({ courseId, currentPage, pageSize })
-            // console.log('目录课程数据:')
-            // console.log(result)
             commit('bindAllCourse',result)
         },
 
         async getCommentList ({commit},{ regionType, regionId, commentId, currentPage, pageSize}) {
             const result = await getCommentList({regionType, regionId, commentId, currentPage, pageSize})
-            // console.log('视频专栏留言数据:')
-            // console.log(result)
             commit('bindCommentList',result)
         },
 
         async doCollectFavorite({commit},lessonId) {
             const result = await doFavorite({"lessonId" : lessonId})
-            console.log('完成收藏')
-            console.log(result)
             commit('bindCollection',result)
         },
 
         async unCollectFavorite({commit},collectionId) {
             const result = await unFavorite({"lessonId" : collectionId})
-            console.log('取消收藏')
-            console.log(result)
             commit('deleteCollection')
+        },
+
+        async lessonListenForVedio({commit},{ payload }) {
+            const result = await lessonListenForVedio({'lessonId' : payload.lessonId, 'listenTime' : payload.listenTime, 'showTime' : payload.showTime})
+            console.log("提交视频播放数据成功")
+            console.log(result)
+            commit('submitVideoPlayData')
         }
     }
 }

@@ -94,19 +94,35 @@ export default {
         'description',           //笔记
         'isFree',
         'isLike',
+        'questionBOList',        //自测题列表
         'createTime',
         'isAchieveCollect',           //是否完成收藏
-        'collectionId'          //收藏Id
+        'collectionId',          //收藏Id
+        'learnTime',            //上次播放位置
+        'learnTotalTime'       //累计播放时长  
     ]),
   },
   mounted() {
+    //监听滚动
     window.addEventListener('scroll', this.handleScroll)
+    //视频播放器相关监听
     const vid = this.$refs.videoitem 
+    //视频进度
     vid.addEventListener('timeupdate',this.getVideoProgress)
-    vid.addEventListener('play',this.beginPlayVideo)
+    //视频开始播放
+    vid.addEventListener('play',this.getVideoPlay)
+    //视频暂停
+    vid.addEventListener('pause',this.getVideoPause)
+  },
+  beforeDestroy() {
+    console.log('Vue实例销毁了,页面也销毁了')
   },
   destroyed() {
     window.removeEventListener('scroll', this.handleScroll)
+    const vid = this.$refs.videoitem
+    // vid.removeEventListener('timeupdate',this.getVideoProgress)
+    // vid.removeEventListener('play',this.getVideoPlay)
+    // vid.removeEventListener('pause',this.getVideoPause)
   },
   created() {
     //获取课程ID
@@ -117,7 +133,7 @@ export default {
     this.getLessonListByCourse({
       courseId: courseId,
       currentPage: 1,
-      pageSize: 10
+      pageSize: 11
     })
     //获取单集评论
     this.getCommentList({
@@ -139,24 +155,21 @@ export default {
     clickPlayVideoBtn(){
       this.$refs.videoitem.play() 
     },
-    //视频开始播放
-    beginPlayVideo(){
+    getVideoPlay(){
       this.$refs.videoitem.currentTime = 40
     },
-    //视频实时进度
+    getVideoPause(){
+
+    },
     getVideoProgress(){
         console.log(this.$refs.videoitem.currentTime)
-        //1.监听视频播放进度
         // if(this.$refs.videoitem.currentTime>4){
         //   this.$refs.videoitem.pause()
         // }
-        //2.监听视频暂停和视频结束,上传观看进度
 
 
 
-        //累计观看视频总长度*70%后解锁答题功能
-        //1.正常观看  视频长度 * 70%
-        //2.快进观看
+      //累计观看视频总长度*70%后解锁答题功能
 
       //1.进入单集详情页面后,获取服务器播放时长和累计进度.拿服务器的累计进度和我本地的进度比较,如果我本地的记录大于服务器进度,就将我本地的进度提交给服务器
       //2.点击播放按钮,进入播放器,
@@ -207,10 +220,6 @@ export default {
     },
     async handleScroll() {
       //1.监听滚动
-      //   var scrollTop =
-      //     window.pageYOffset ||
-      //     document.documentElement.scrollTop ||
-      //     document.body.scrollTop
       let scrollTop = Math.abs(
         this.$refs.detailmain.getBoundingClientRect().top
       )
@@ -225,10 +234,6 @@ export default {
         this.selected = 2
       }
     }
-  },
-  beforeDestroy() {
-    alert('Vue实例销毁了,页面也销毁了')
-    console.log('Vue实例销毁了,页面也销毁了')
   }
 }
 </script>

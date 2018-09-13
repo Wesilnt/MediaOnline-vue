@@ -31,6 +31,10 @@ export async function doFavorite(params) {
 export async function unFavorite(params) {
   return request.post('/favorite/unFavorite',params)
 }
+//提交视频课节收听进度
+export async function lessonListenForVedio(params) {
+  return request.post('/lesson/lessonListenForVedio',params)
+}
 
 // TODO 日后删除
 export async function getQuestionList(params) {
