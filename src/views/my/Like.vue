@@ -63,15 +63,13 @@
               break;
             case 'right':
               instance.close();
-              this.delMyLike({msgId: id})
+              this.delMyLike({id: id})
               break;
           }
         }
       }
     },
-    created() {
-      this.queryList()
-    }
+   cccccc
   }
 </script>
 

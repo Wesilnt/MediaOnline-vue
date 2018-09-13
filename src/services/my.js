@@ -1,9 +1,17 @@
 import { stringify } from 'qs'
 import request from '../utils/request'
 /*  *****我的**** */
+//我的已购课程
+export async function getMyPurchase(params) {
+  return request(`/user/myCourseList?${stringify(params)}`)
+}
 //我的播放记录
 export async function getPlayRecord(params) {
   return request(`/lesson/myLessonPlayRecord?${stringify(params)}`)
+}
+//删除播放记录
+export async function postDelPlayRecord(params) {
+  return request.post('/lesson/delUserLesson',params)
 }
 //我喜欢的(我的收藏)
 export async function getMyLike() {
@@ -11,7 +19,7 @@ export async function getMyLike() {
 }
 //我喜欢的 删除
 export async function postDelMyLike(params) {
-  return request.post(`/favorite/unFavorite?${stringify(params)}`,true)
+  return request.post('/favorite/unFavorite',params)
 }
 /* 我的拼团 */
 export async function queryMyPuzzleList(params) {

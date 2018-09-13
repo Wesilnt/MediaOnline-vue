@@ -21,7 +21,7 @@
                     <div v-for="item in messageList" :key="item.id">
                         <van-swipe-cell :right-width="150" :on-close="onClose(item.id)">
                             <div class="sysmessage-list-item">
-                                <div class="item-head">
+                                <div>
                                     <div v-if="item.busiType===3102" class="sysmessage-list-item-title">留言入选通知</div>
                                     <div v-if="item.busiType===3103" class="sysmessage-list-item-title">系统消息</div>
                                     <div v-if="item.busiType===3105" class="sysmessage-list-item-title">留言升级通知</div>
@@ -32,7 +32,6 @@
                             </div>
                             <span slot="right">删除</span>
                         </van-swipe-cell>
-                        <div class="divider-line"></div>
                     </div>
                     <div/>
                 </div>
@@ -104,7 +103,6 @@
     @active: #ffa32f;
     .sysmessage {
         &-container {
-            padding: 30px;
         }
 
         &-head {
@@ -150,6 +148,7 @@
 
         &-list-item {
             padding: 0px 32px 0px 32px;
+            border-bottom: 1px solid #ddd;
         }
 
         &-list-item-title {
@@ -170,20 +169,6 @@
             font-size: 28px;
             color: #808080;
         }
-
-        .van-swipe-cell span {
-            width: 150px;
-            height: 100%;
-            color: #FFFFFF;
-            font-size: 18px;
-            display: block;
-            line-height: 44px;
-            background-color: #F44;
-            display: flex;
-            justify-content: center;
-            align-items: Center;
-        }
-
         &-nodata {
             height: 100vh;
             text-align: center;
@@ -200,4 +185,17 @@
             }
         }
     }
+    .van-swipe-cell span {
+        width: 150px;
+        height: 100%;
+        color: #FFFFFF;
+        font-size: 18px;
+        display: block;
+        line-height: 44px;
+        background-color: #F44;
+        display: flex;
+        justify-content: center;
+        align-items: Center;
+    }
+
 </style>

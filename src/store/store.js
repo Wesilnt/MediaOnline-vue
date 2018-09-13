@@ -16,6 +16,7 @@ import mySysMessage from './module/mySysMessage'
 import myReply from './module/myReply'
 import myLike from './module/myLike'
 import myPlayRecord from './module/myPlayRecord'
+import myPurchase from './module/myPurchase'
 import comment from './module/commentData'
 import freezone from './module/freezoneData'
 import audiotask from './module/audioTask'
@@ -37,6 +38,7 @@ export default new Vuex.Store({
     myReply,
     myLike,
     myPlayRecord,
+    myPurchase,
     visionData,
     readings,
     audio,

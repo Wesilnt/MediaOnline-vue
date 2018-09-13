@@ -37,7 +37,7 @@ const myPlayRecord = {
     },
     async delPlayRecord({ dispatch, commit, state },{ id }) {
       //删除服务器上的消息
-      const response = await postDelPlayRecord({ lessonId: id})
+      const response = await postDelPlayRecord({ id: id })
       if (!response)return
       //删除本地的消息
       await commit('playRecordList', {

@@ -15,9 +15,9 @@ const myLike = {
       state.loading = loading
     },
     modifyLikeList(state,{id}){
-      for (var i = 0; i < state.LikeList.length; i++) {
-        if (state.LikeList[i].id === id)
-          state.LikeList.splice(i,1)
+      for (var i = 0; i < state.likeList.length; i++) {
+        if (state.likeList[i].id === id)
+          state.likeList.splice(i,1)
       }
     }
   },
