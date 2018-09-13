@@ -6,7 +6,7 @@
                 <img :src="require('../../assets/images/onlinecourse-play_ic_share@2x.png')" class="video-detail-share" alt="">
             </div>
 
-             <div class="video-detail-header-left-bottom" @click="playVideo">
+             <div class="video-detail-header-left-bottom" @click="clickPlayVideoBtn">
                  <img :src="require('../../assets/images/onlinecourse-video-detail-header.jpg')" alt="" >
                  <label>开始播放</label>   
                  </div>
@@ -53,7 +53,6 @@
 
         <!-- style="display:none" -->
         <video class="videoitem" ref="videoitem" :src="videoUrl" controls="controls" width="100%" height='100%' preload="auto"></video>
-        <p>{{fullscreen}}</p>
     </div>
 </template>
 
@@ -77,11 +76,11 @@ export default {
       navbar: ['资料', '目录', '留言'],
       navbarFixed: false, //控制navbar是否吸顶
       selected: 0,
+      currentVideoTime:0,
       lockIcon:require('../../assets/images/onlinecourse_lock.jpg'),//未解锁
       unlockIcon:require('../../assets/images/onlinecourse_unlock.jpg'),//已解锁
       collectIcon:require('../../assets/images/onlinecourse_love_highlight.png'),//已收藏
       unCollectIcon:require('../../assets/images/onlinecourse_love_normal.png'),//未搜藏
-      fullscreen:0
     }
   },
   computed: {
@@ -102,11 +101,9 @@ export default {
   },
   mounted() {
     window.addEventListener('scroll', this.handleScroll)
-     const vid = this.$refs.videoitem 
+    const vid = this.$refs.videoitem 
     vid.addEventListener('timeupdate',this.getVideoProgress)
-    vid.addEventListener("x5videoexitfullscreen",()=>{
-      this.fullscreen = 1
-    })
+    vid.addEventListener('play',this.beginPlayVideo)
   },
   destroyed() {
     window.removeEventListener('scroll', this.handleScroll)
@@ -139,20 +136,40 @@ export default {
         'unCollectFavorite'
     ]),
     //播放视频
-    playVideo(){
-      console.log(this.$refs.videoitem)
-      const vid = this.$refs.videoitem 
-      vid.play()
-      console.log(vid.currentTime)
+    clickPlayVideoBtn(){
+      this.$refs.videoitem.play() 
     },
-    //监听视频实时进度
+    //视频开始播放
+    beginPlayVideo(){
+      this.$refs.videoitem.currentTime = 40
+    },
+    //视频实时进度
     getVideoProgress(){
         console.log(this.$refs.videoitem.currentTime)
         //1.监听视频播放进度
-        if(this.$refs.videoitem.currentTime>4){
-          this.$refs.videoitem.pause()
-        }
-        //2.
+        // if(this.$refs.videoitem.currentTime>4){
+        //   this.$refs.videoitem.pause()
+        // }
+        //2.监听视频暂停和视频结束,上传观看进度
+
+
+
+        //累计观看视频总长度*70%后解锁答题功能
+        //1.正常观看  视频长度 * 70%
+        //2.快进观看
+
+      //1.进入单集详情页面后,获取服务器播放时长和累计进度.拿服务器的累计进度和我本地的进度比较,如果我本地的记录大于服务器进度,就将我本地的进度提交给服务器
+      //2.点击播放按钮,进入播放器,
+      //3.监听play,开启定时器
+      //4.监听暂停状态,  获取当前播放进度,  获取计时器长度分别作为播放进度和累计时长,并存入本地
+      //5.情况一:不离开播放器页面.暂停时,获取本地存储的播放时长,加上计时器进度,更新本地记录的累计时长.销毁计时器.重新播放,开启定时器
+      //6.情况二:播放一段时间后,离开重新进入播放器页面.首先获取本地保存的视频播放记录,拿到累计时长和播放进度.根据服务器播放进度回到历史进度
+      //7.情况三:关闭应用后,再回到播放器界面
+
+
+
+
+
     },
     //收藏
     onCollectFavorite(){
@@ -208,6 +225,10 @@ export default {
         this.selected = 2
       }
     }
+  },
+  beforeDestroy() {
+    alert('Vue实例销毁了,页面也销毁了')
+    console.log('Vue实例销毁了,页面也销毁了')
   }
 }
 </script>
