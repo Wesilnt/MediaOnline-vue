@@ -32,15 +32,17 @@ export default {
   font-weight: bolder;
 }
 .right {
-  // margin-top: 6px;
+  margin-top: 4px;
   font-size: 24px;
   color: rgb(41, 53, 76);
+  display: flex;
+  vertical-align: middle;
 }
 
 .arrow {
   width: 15px;
-  height: 30px;
+  height: 26px;
   margin-left: 20px;
-  vertical-align: middle;
+  margin-top: 4px;
 }
 </style>
