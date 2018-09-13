@@ -1,5 +1,6 @@
 @import 'variables';
 @import 'root';
+$active: #ffa32f;
 ul,
 ol {
   margin: 0;
@@ -18,18 +19,28 @@ ol {
   justify-content: space-between;
   align-items: center;
 }
-.qhht-fullWidth{
+.qhht-fullWidth {
   display: block;
   width: 100%;
 }
-.qhht-clearFloat{
-  &:after{
+.qhht-clearFloat {
+  &:after {
     content: '';
     display: block;
     clear: both;
   }
 }
-
+.qhht-blockButton {
+  display: block;
+  height: 80px;
+  border-radius: 80px;
+  margin: 0 auto;
+  font-size: 30px;
+  text-align: center;
+  letter-spacing: 2px;
+  background-color: $active;
+  color: #fff;
+}
 
 @-webkit-keyframes shake {
   from,
@@ -91,4 +102,3 @@ ol {
   -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
 }
-

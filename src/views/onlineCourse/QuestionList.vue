@@ -1,6 +1,6 @@
 <template>
     <div>
-        <van-button type="warning" @click="openQuestionAnswer" class="qhht-fullWidth">答问</van-button>
+        <button @click="openQuestionAnswer" class="qhht-blockButton question-btn"><slot>开始答题</slot></button>
         <van-popup v-model="questionShow" position="right" class="question-container" >
             <div class="question-wrapper">
                 <div  class="question-btn-close">
@@ -40,7 +40,7 @@
                 </div>
             </div>
 
-            <a  class="question-btn-next" @click="handleNextClick">
+            <a  class="qhht-blockButton question-btn-next" @click="handleNextClick">
                 {{questionInfo.nextBtnText}}
             </a>
         </van-popup>
@@ -61,7 +61,7 @@
                 <i class="settlement-qr"></i>
                 <p>分享二维码，邀请好友一起试听</p>
             </div>
-            <a  class="question-btn-next" @click="handlePopupHide('settlementShow')">
+            <a  class="qhht-blockButton question-btn-next" @click="handlePopupHide('settlementShow')">
                 保存图片
             </a>
         </van-popup>
@@ -85,15 +85,25 @@ export default {
     }
   },
   computed: {
-    ...mapState(['questionIndex', 'answers', 'loading']),
+    ...mapState(['questionIndex', 'answers', 'loading', 'answersChecked']),
     ...mapGetters(['questionList', 'questionInfo'])
   },
   methods: {
-    ...mapActions(['handleNext', 'uploadAnswer']),
-    openQuestionAnswer() {
-      const answeredLen = Object.keys(this.answers).length
-      const questionListLen = this.questionList.length
-      if (answeredLen === questionListLen) {
+    ...mapActions([
+      'renderAnswers',
+      'handleNext',
+      'uploadAnswer',
+      'resetQuestionList'
+    ]),
+    async openQuestionAnswer() {
+      if (!this.answersChecked) {
+        await this.renderAnswers()
+      }
+      const questionListLen = await this.questionList.length
+      if (!questionListLen) {
+        return
+      }
+      if (this.questionIndex === questionListLen) {
         this.handlePopupShow('settlementShow')
       } else {
         this.handlePopupShow('questionShow')
@@ -137,15 +147,22 @@ export default {
     handleAnswerClick(answer) {
       this.uploadAnswer({
         lessonId: this.$route.params.lessonID,
-        answer:answer[answer.length-1]
+        answer
       })
     }
+  },
+  destroyed: function() {
+    console.log('销毁')
+    this.resetQuestionList()
   }
 }
 </script>
 
 <style scoped lang="less">
 @active: #ffa32f;
+.question-btn {
+  width: 600px;
+}
 .question-container {
   width: 80%;
   margin: 0 10%;
@@ -227,12 +244,9 @@ export default {
   color: #a6a6a6;
 }
 .question-btn-next {
-  display: block;
   height: 94px;
-  text-align: center;
   line-height: 94px;
-  background-color: @active;
-  color: #fff;
+  border-radius: 0;
 }
 .settlement-container {
   width: 100%;

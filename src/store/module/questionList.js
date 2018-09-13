@@ -1,21 +1,23 @@
 import { uploadAnswer } from '../../services/columns'
+
 const questionList = {
   namespaced: true, // 设置命名空间 ，保持数据独立性
   state: {
     answers: {},
+    answersChecked: false,
     questionIndex: 0,
-    correct: 0,
     loading: false
   },
+
   getters: {
     questionList: (state, getters, { videoCourseDetail }) =>
       videoCourseDetail.questionBOList,
-    questionInfo: ({ questionIndex, answers }, getters) => {
+    questionInfo: ({ questionIndex, answers, text }, getters) => {
       const { questionList } = getters
       const queations = {
         question: ''
       }
-      const current = questionIndex + 1
+      const current =questionIndex+1
       const currentQuestion = { ...queations, ...questionList[questionIndex] }
       const { rightOpt, id } = currentQuestion
       const len = questionList.length
@@ -53,30 +55,49 @@ const questionList = {
     }
   },
   actions: {
+    async renderAnswers({ getters, commit }) {
+      const { questionList } = getters
+      const answers = questionList.reduce((prev, { id, answer }) => {
+        if (answer) prev[id] = answer
+        return prev
+      }, {})
+      commit('saveStatus', {
+        answers,
+        answersChecked: true,
+        questionIndex: Object.values(answers).length
+      })
+    },
     async uploadAnswer(
       { dispatch, commit, state, getters },
       { answer, lessonId }
     ) {
-      const { answers } = state
       const { id } = getters.questionInfo
-      if (answers[id]) {
-        return
-      }
-      await commit('toggleLoading', {
+      await commit('saveStatus', {
         loading: true
       })
       commit('saveAnswer', {
         answers: { [id]: answer }
       })
-      const response = await uploadAnswer({ answer, lessonId })
+      const response = await uploadAnswer({
+        answer: answer[answer.length - 1],
+        lessonId
+      })
       if (!response) return
-      await commit('toggleLoading', {
+      await commit('saveStatus', {
         loading: false
       })
     },
     async handleNext({ dispatch, commit }, { nextIndex }) {
       await commit('saveStatus', {
         questionIndex: nextIndex
+      })
+    },
+    async resetQuestionList({ commit }) {
+      await commit('saveStatus', {
+        answers: {},
+        answersChecked: false,
+        questionIndex: 0,
+        loading: false
       })
     }
   }
