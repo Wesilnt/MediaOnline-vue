@@ -12,6 +12,7 @@ import store from './store/store'
 import { formatDuring } from './utils/utils.js'
 Vue.filter('formatDuring', formatDuring)
 Vue.config.productionTip = false
+
 //vant组件引入
 import { Popup, Toast } from 'vant'
 import { SwipeCell, Dialog } from 'vant'

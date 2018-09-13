@@ -1,6 +1,6 @@
 <template>
     <div>
-        <van-button type="warning" @click="handlePopupShow('questionShow')" class="qhht-fullWidth">答问</van-button>
+        <van-button type="warning" @click="openQuestionAnswer" class="qhht-fullWidth">答问</van-button>
         <van-popup v-model="questionShow" position="right" class="question-container" >
             <div class="question-wrapper">
                 <div  class="question-btn-close">
@@ -16,7 +16,7 @@
                     'hasSelect-answer':questionInfo.userSelect
                     }">
                         <a
-                            @click="handleAnswerClick({answer:opt})"
+                            @click="handleAnswerClick(opt)"
                             class="qhht-flex question-btn-option"
                             :class="[
                                 {
@@ -27,8 +27,10 @@
                             ]"
                         >
                             <span>{{questionInfo[opt]}}</span>
-                            <span class="question-checked-percent">{{questionInfo.userSelect?questionInfo[`${opt}Pct`]+'%':''}}</span>
-                            <i class="option-checked" :style="{width:questionInfo.userSelect?questionInfo[`${opt}Pct`]+'%':'0'}" ></i>
+                            <!-- <span class="question-checked-percent">{{questionInfo.userSelect?questionInfo[`${opt}Pct`]+'%':''}}</span> -->
+                            <!--<i  class="option-checked" :style="{width:questionInfo.userSelect?questionInfo[`${opt}Pct`]+'%':'0'}" ></i>-->
+                            <!-- <span class="question-checked-percent">{{questionInfo.userSelect?questionInfo[`${opt}Pct`]+'%':''}}</span> -->
+                            <i  class="option-checked" :style="{width:opt===`opt${!questionInfo.userSelect?0:questionInfo.rightOpt}`?'100%':questionInfo.userSelect===opt?'100%':'0'}" ></i>
                         </a>
 
                     </li>
@@ -59,19 +61,17 @@
                 <i class="settlement-qr"></i>
                 <p>分享二维码，邀请好友一起试听</p>
             </div>
-            <a  class="question-btn-next">
+            <a  class="question-btn-next" @click="handlePopupHide('settlementShow')">
                 保存图片
             </a>
-
         </van-popup>
     </div>
-
 </template>
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
-  'questionList'
+  'videoCourseDetail/questionList'
 )
 let timeInter = ''
 export default {
@@ -84,15 +84,21 @@ export default {
       opts: ['optA', 'optB', 'optC', 'optD']
     }
   },
-  created() {
-    this.queryList({ currentType: null })
-  },
   computed: {
-    ...mapState(['questionList', 'questionIndex', 'answers', 'loading']),
-    ...mapGetters(['questionInfo'])
+    ...mapState(['questionIndex', 'answers', 'loading']),
+    ...mapGetters(['questionList', 'questionInfo'])
   },
   methods: {
-    ...mapActions(['queryList', 'handleAnswerClick', 'handleNext']),
+    ...mapActions(['handleNext', 'uploadAnswer']),
+    openQuestionAnswer() {
+      const answeredLen = Object.keys(this.answers).length
+      const questionListLen = this.questionList.length
+      if (answeredLen === questionListLen) {
+        this.handlePopupShow('settlementShow')
+      } else {
+        this.handlePopupShow('questionShow')
+      }
+    },
     handlePopupShow(popup) {
       this[popup] = true
     },
@@ -124,14 +130,16 @@ export default {
         }, [])
         this.handlePopupHide('questionShow')
         this.handlePopupShow('settlementShow')
-        console.log(corrects)
       } else {
         this.handleNext({ nextIndex })
       }
+    },
+    handleAnswerClick(answer) {
+      this.uploadAnswer({
+        lessonId: this.$route.params.lessonID,
+        answer:answer[answer.length-1]
+      })
     }
-  },
-  components: {
-    // Badge
   }
 }
 </script>
@@ -185,7 +193,7 @@ export default {
   width: 100%;
   height: 100%;
   background-color: #fff;
-  transition: width 0.4s cubic-bezier(0.68, 0.9, 0.72, 1.12);
+  transition: width 0.3s cubic-bezier(0.68, 0.9, 0.72, 1.12);
   z-index: -1;
 }
 .hasSelect-answer {
@@ -291,7 +299,7 @@ export default {
   width: 504px;
   margin: 48px auto 52px;
   border: none;
-  border-bottom: 0.267vw dashed #8297ea;
+  border-bottom: 1px dashed #8297ea;
 }
 .settlement-qr {
   display: block;

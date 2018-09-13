@@ -1,7 +1,6 @@
-<template xmlns="http://www.w3.org/1999/html">
+<template>
     <div>
         <div class="record-head">
-
             <div class="last-record-text">最近学习</div>
 
                 <img class="head-left-icon" src="../../assets/images/onlinecourse_arrow_down.png"/>
@@ -9,11 +8,9 @@
                 <img class="head-right-icon" src="../../assets/images/my_sys_menu.png"/>
             </div>
         </div>
-
         <div v-for="item in list" :key="item.name">
             <div class="record-item">
                 <img :src='null' class="avatar"/>
-
                 <div class="div-content">
                     <div class="name">{{item.name}}</div>
                     <div class="content">{{item.readto}}</div>
