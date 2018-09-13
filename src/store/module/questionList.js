@@ -1,16 +1,17 @@
-import { getQuestionList } from '../../services/columns'
-
+import { uploadAnswer } from '../../services/columns'
 const questionList = {
   namespaced: true, // 设置命名空间 ，保持数据独立性
   state: {
-    questionList: [],
     answers: {},
     questionIndex: 0,
     correct: 0,
     loading: false
   },
   getters: {
-    questionInfo: ({ questionIndex, questionList, answers }) => {
+    questionList: (state, getters, { videoCourseDetail }) =>
+      videoCourseDetail.questionBOList,
+    questionInfo: ({ questionIndex, answers }, getters) => {
+      const { questionList } = getters
       const queations = {
         question: ''
       }
@@ -28,7 +29,7 @@ const questionList = {
           ? '请回答'
           : isCorrect
             ? '回答正确'
-            : '回答错误'
+            : '您答错啦'
       return {
         headerTitle,
         nextBtnText,
@@ -41,12 +42,8 @@ const questionList = {
     }
   },
   mutations: {
-    saveList(state, payload) {
-      console.log(payload)
-      Object.assign(state, payload)
-    },
     saveAnswer(state, { answers }) {
-      state.answers = { ... state.answers, ...answers }
+      state.answers = { ...state.answers, ...answers }
     },
     saveStatus(state, payload) {
       Object.assign(state, { ...payload })
@@ -56,33 +53,31 @@ const questionList = {
     }
   },
   actions: {
-    async queryList({ dispatch, commit, state }, { currentType }) {
-      await commit('toggleLoading', {
-        loading: true
-      })
-      const response = await getQuestionList(currentType)
-      await commit({
-        type: 'saveList',
-        questionList: response
-      })
-      commit('toggleLoading', {
-        loading: false
-      })
-    },
-    async handleAnswerClick({ dispatch, commit, state, getters }, { answer }) {
+    async uploadAnswer(
+      { dispatch, commit, state, getters },
+      { answer, lessonId }
+    ) {
       const { answers } = state
       const { id } = getters.questionInfo
       if (answers[id]) {
         return
       }
+      await commit('toggleLoading', {
+        loading: true
+      })
       commit('saveAnswer', {
         answers: { [id]: answer }
       })
+      const response = await uploadAnswer({ answer, lessonId })
+      if (!response) return
+      await commit('toggleLoading', {
+        loading: false
+      })
     },
-    async handleNext({ dispatch, commit },{nextIndex}) {
-       await commit('saveStatus', {
-            questionIndex: nextIndex
-        })
+    async handleNext({ dispatch, commit }, { nextIndex }) {
+      await commit('saveStatus', {
+        questionIndex: nextIndex
+      })
     }
   }
 }

@@ -5,7 +5,6 @@ import './publicUIConfig/mintUIComponentImport'
 import App from './App.vue'
 import router from './router/router'
 import store from './store/store'
-
 // import { Range, Popup } from 'mint-ui'
 // Vue.component(Popup.name, Popup)
 // Vue.component(Range.name, Range)
@@ -13,6 +12,7 @@ import store from './store/store'
 import { formatDuring } from './utils/utils.js'
 Vue.filter('formatDuring', formatDuring)
 Vue.config.productionTip = false
+
 //vant组件引入
 import { Popup, Toast } from 'vant'
 import { SwipeCell, Dialog } from 'vant'

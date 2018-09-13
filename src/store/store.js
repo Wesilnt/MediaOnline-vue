@@ -7,7 +7,6 @@ import columnInfo from './module/columnInfo'
 import homeData from './module/homeData'
 import videoColumnDetail from './module/videoColumnDetail'
 import videoCourseDetail from './module/videoCourseDetail'
-import questionList from './module/questionList'
 import visionData from './module/visionData'
 import audio from './module/audioData'
 import readings from './module/readingsData'
@@ -32,7 +31,6 @@ export default new Vuex.Store({
     columnInfo,
     videoColumnDetail,
     videoCourseDetail,
-    questionList,
     myFeedback,
     mySysMessage,
     myReply,

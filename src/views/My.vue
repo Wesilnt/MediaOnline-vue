@@ -45,7 +45,7 @@ export default {
         {
           name: '/my/Purchase',
           image: purchase,
-          title: '已购清单(问题)'
+          title: '已购清单'
         },
         {
           name: '/my/Record',

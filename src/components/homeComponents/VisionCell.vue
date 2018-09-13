@@ -31,9 +31,12 @@ export default {
       this.$router.push({ path: '/home/visionDetail/' + id })
     },
     enterVisionPlay() {
+      if(this.vision.freeLessonList.length == 0){
+        return;
+      }
       this.$router.push({
         path: '/audio/audioplay',
-        query: { id: this.vision.id }
+        query: { id: this.vision.freeLessonList[0].id }
       })
     }
   }

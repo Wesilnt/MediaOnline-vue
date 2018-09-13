@@ -6,19 +6,15 @@
                 <img :src="require('../../assets/images/onlinecourse-play_ic_share@2x.png')" class="video-detail-share" alt="">
             </div>
 
-             <div class="video-detail-header-left-bottom" @click="playVideo">
+             <div class="video-detail-header-left-bottom" @click="clickPlayVideoBtn">
                  <img :src="require('../../assets/images/onlinecourse-video-detail-header.jpg')" alt="" >
                  <label>开始播放</label>   
                  </div>
              <!-- <img :src="require('../../assets/images/onlinecourse_video_ic_gift.png')" class="video-detail-header-gift" alt="">     -->
         </div>
-
-    
             <div ref="navbar" :class="navbarFixed == true ? 'isFixed' : ''" class="video-detail-navbar">
                 <div v-for="(item,index) of navbar" :class="{'selected':selected == index }" :key="index" class="video-detail-navbar-item" @click="clickFnc(index)">{{item}}</div>
             </div>
-
-
         <div class="video-detail-content">
             <div id="note" ref="note" class="video-detail-sction-title">
                 <h4>笔记</h4>
@@ -34,6 +30,7 @@
             <div class="video-test-question-title">共3道自测题</div>
             <!-- <mt-progress :value="20" :bar-height="4"/> -->
             <div class="video-test-question-warn">在学习n分钟可解锁自测题</div>
+            <QuestionList  />
             <hr class="video-detail-line">
             <div id="catalog" ref="catalog" class="video-detail-sction-title">
                 <h4>目录</h4>
@@ -53,7 +50,6 @@
 
         <!-- style="display:none" -->
         <video class="videoitem" ref="videoitem" :src="videoUrl" controls="controls" width="100%" height='100%' preload="auto"></video>
-        <p>{{fullscreen}}</p>
     </div>
 </template>
 
@@ -62,54 +58,70 @@ import CourseIntroduce from '../../components/CourseIntroduce.vue'
 import playlist from './components/playlist.vue'
 import CommentItem from '../../components/CommentItem.vue'
 import videoComment from '../../components/video-comment.vue'
+import QuestionList from './QuestionList'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState, mapActions } = createNamespacedHelpers('videoCourseDetail')
 export default {
-  name: 'VideoColumnDetail',
+  name: 'VideoCourseDetail',
   components: {
     'course-introduce': CourseIntroduce,
     playlist: playlist,
     'video-comment': videoComment,
-    commentitem: CommentItem
+    commentitem: CommentItem,
+    QuestionList
   },
   data() {
     return {
       navbar: ['资料', '目录', '留言'],
       navbarFixed: false, //控制navbar是否吸顶
       selected: 0,
-      lockIcon:require('../../assets/images/onlinecourse_lock.jpg'),//未解锁
-      unlockIcon:require('../../assets/images/onlinecourse_unlock.jpg'),//已解锁
-      collectIcon:require('../../assets/images/onlinecourse_love_highlight.png'),//已收藏
-      unCollectIcon:require('../../assets/images/onlinecourse_love_normal.png'),//未搜藏
-      fullscreen:0
+      currentVideoTime: 0,
+      lockIcon: require('../../assets/images/onlinecourse_lock.jpg'), //未解锁
+      unlockIcon: require('../../assets/images/onlinecourse_unlock.jpg'), //已解锁
+      collectIcon: require('../../assets/images/onlinecourse_love_highlight.png'), //已收藏
+      unCollectIcon: require('../../assets/images/onlinecourse_love_normal.png') //未搜藏
     }
   },
   computed: {
-    ...mapState([          
-        'lessonList',              //目录课程
-        'radioShowPic',              //视频背景图
-        'audioUrl',              //音频地址
-        'videoUrl',             //视频地址
-        'courseId',              //专栏ID
-        'singleComments',
-        'description',           //笔记
-        'isFree',
-        'isLike',
-        'createTime',
-        'isAchieveCollect',           //是否完成收藏
-        'collectionId'          //收藏Id
-    ]),
+    ...mapState([
+      'lessonList', //目录课程
+      'radioShowPic', //视频背景图
+      'audioUrl', //音频地址
+      'videoUrl', //视频地址
+      'courseId', //专栏ID
+      'singleComments',
+      'description', //笔记
+      'isFree',
+      'isLike',
+      'questionBOList', //自测题列表
+      'createTime',
+      'isAchieveCollect', //是否完成收藏
+      'collectionId', //收藏Id
+      'learnTime', //上次播放位置
+      'learnTotalTime' //累计播放时长
+    ])
   },
   mounted() {
+    //监听滚动
     window.addEventListener('scroll', this.handleScroll)
-     const vid = this.$refs.videoitem 
-    vid.addEventListener('timeupdate',this.getVideoProgress)
-    vid.addEventListener("x5videoexitfullscreen",()=>{
-      this.fullscreen = 1
-    })
+    //视频播放器相关监听
+    const vid = this.$refs.videoitem
+    //视频进度
+    vid.addEventListener('timeupdate', this.getVideoProgress)
+    //视频开始播放
+    vid.addEventListener('play', this.getVideoPlay)
+    //视频暂停
+    vid.addEventListener('pause', this.getVideoPause)
+  },
+  beforeDestroy() {
+    console.log('Vue实例销毁了,页面也销毁了')
   },
   destroyed() {
     window.removeEventListener('scroll', this.handleScroll)
+    const vid = this.$refs.videoitem
+    // vid.removeEventListener('timeupdate',this.getVideoProgress)
+    // vid.removeEventListener('play',this.getVideoPlay)
+    // vid.removeEventListener('pause',this.getVideoPause)
   },
   created() {
     //获取课程ID
@@ -120,7 +132,7 @@ export default {
     this.getLessonListByCourse({
       courseId: courseId,
       currentPage: 1,
-      pageSize: 10
+      pageSize: 11
     })
     //获取单集评论
     this.getCommentList({
@@ -132,37 +144,44 @@ export default {
   },
   methods: {
     ...mapActions([
-        'getVideoCourseDetail',
-        'getLessonListByCourse',
-        'getCommentList',
-        'doCollectFavorite',
-        'unCollectFavorite'
+      'getVideoCourseDetail',
+      'getLessonListByCourse',
+      'getCommentList',
+      'doCollectFavorite',
+      'unCollectFavorite'
     ]),
     //播放视频
-    playVideo(){
-      console.log(this.$refs.videoitem)
-      const vid = this.$refs.videoitem 
-      vid.play()
-      console.log(vid.currentTime)
+    clickPlayVideoBtn() {
+      this.$refs.videoitem.play()
     },
-    //监听视频实时进度
-    getVideoProgress(){
-        console.log(this.$refs.videoitem.currentTime)
-        //1.监听视频播放进度
-        if(this.$refs.videoitem.currentTime>4){
-          this.$refs.videoitem.pause()
-        }
-        //2.
+    getVideoPlay() {
+      this.$refs.videoitem.currentTime = 40
+    },
+    getVideoPause() {},
+    getVideoProgress() {
+      console.log(this.$refs.videoitem.currentTime)
+      // if(this.$refs.videoitem.currentTime>4){
+      //   this.$refs.videoitem.pause()
+      // }
+
+      //累计观看视频总长度*70%后解锁答题功能
+
+      //1.进入单集详情页面后,获取服务器播放时长和累计进度.拿服务器的累计进度和我本地的进度比较,如果我本地的记录大于服务器进度,就将我本地的进度提交给服务器
+      //2.点击播放按钮,进入播放器,
+      //3.监听play,开启定时器
+      //4.监听暂停状态,  获取当前播放进度,  获取计时器长度分别作为播放进度和累计时长,并存入本地
+      //5.情况一:不离开播放器页面.暂停时,获取本地存储的播放时长,加上计时器进度,更新本地记录的累计时长.销毁计时器.重新播放,开启定时器
+      //6.情况二:播放一段时间后,离开重新进入播放器页面.首先获取本地保存的视频播放记录,拿到累计时长和播放进度.根据服务器播放进度回到历史进度
+      //7.情况三:关闭应用后,再回到播放器界面
     },
     //收藏
-    onCollectFavorite(){
+    onCollectFavorite() {
       const lessonId = this.$route.params.lessonID
-        if(this.isLike) {
-          this.unCollectFavorite(lessonId)
-        }else {
-          
-          this.doCollectFavorite(lessonId)
-        }
+      if (this.isLike) {
+        this.unCollectFavorite(lessonId)
+      } else {
+        this.doCollectFavorite(lessonId)
+      }
     },
     clickFnc(index) {
       this.selected = index
@@ -190,10 +209,6 @@ export default {
     },
     async handleScroll() {
       //1.监听滚动
-      //   var scrollTop =
-      //     window.pageYOffset ||
-      //     document.documentElement.scrollTop ||
-      //     document.body.scrollTop
       let scrollTop = Math.abs(
         this.$refs.detailmain.getBoundingClientRect().top
       )

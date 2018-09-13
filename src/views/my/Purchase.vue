@@ -1,4 +1,4 @@
-<template xmlns="http://www.w3.org/1999/html">
+<template>
     <div>
         <div class="purchase-head">
             <div class="purchase-head-text">最近学习</div>
