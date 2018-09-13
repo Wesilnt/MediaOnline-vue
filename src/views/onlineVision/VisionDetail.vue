@@ -26,7 +26,7 @@
     </div>
     <!-- try -->
     <div id="try" ref="try" class="try bottomline">
-      <DetailHeader title="试看课程" subtitle="全部" />
+      <DetailHeader title="试看课程" subtitle="全部" link='visionCourseList' :params='{"courseList":visionDetail.categoryList}'/>
       <SingleSetList :list='visionDetail.freeLessonList'></SingleSetList>
     </div>
     <!-- message -->
@@ -45,7 +45,15 @@
         </p>
       </div>
     </div>
-    <tools-navbar :btnstate="0" />
+   <tools-navbar
+                v-on:router-to-audition="routerToAudition"
+                v-on:router-to-collage="routerToCollage"
+                v-on:router-to-collect="routerToCollect"
+                :price="['100','10']"
+                collageText="拼团拼团"
+                :collect='true'
+                :collage='true'
+            />
   </div>
 
 </template>
@@ -122,7 +130,6 @@ export default {
       let scrollTop = Math.abs(
         this.$refs.detailmain.getBoundingClientRect().top
       )
-      // let introPosition = this.$el.querySelector("#intro").offsetTop - 40;
       let tryPosition = this.$el.querySelector('#try').offsetTop - 40
       let messagePosition = this.$el.querySelector('#message').offsetTop - 40
       if (scrollTop < tryPosition) {
@@ -132,6 +139,15 @@ export default {
       } else if (scrollTop > messagePosition) {
         this.currentNav = 2
       }
+    },
+     routerToAudition() {
+      console.log('跳转到试听')
+    },
+    routerToCollage() {
+      console.log('跳转到拼团')
+    },
+    routerToCollect() {
+      console.log('跳转到集赞')
     }
   }
 }

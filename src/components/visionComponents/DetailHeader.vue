@@ -9,10 +9,10 @@
 
 <script>
 export default {
-  props: ['title', 'link', 'subtitle'],
+  props: ['title', 'link', 'subtitle','params'],
   methods: {
     enterList() {
-      this.$router.push({ path: this.link })
+      this.$router.push({ name:this.link, params:this.params })
     }
   }
 }
