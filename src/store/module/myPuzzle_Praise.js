@@ -23,23 +23,23 @@ const myPuzzle_Praise = {
     pageSize: 8,
     currentPage: 1,
     totalCount: 9,
-    loading: false,
+    querying: false,
     refreshing: false
   },
   getters: {
     finished: ({ totalCount, currentPage, pageSize }) => {
       return totalCount <= currentPage * pageSize
-    },
+    }
   },
   mutations: {
     saveStatus(state, payload) {
-        Object.assign(state, payload)
+      Object.assign(state, payload)
     }
   },
   actions: {
     async queryList(
       { dispatch, commit, state },
-      { isPraise, currentType: type, pageSize, currentPage }
+      { isPraise, currentType: type, pageSize, currentPage, loadType }
     ) {
       const params = { pageSize, currentPage, type }
       const response = isPraise
@@ -55,15 +55,14 @@ const myPuzzle_Praise = {
           pageSize,
           currentPage,
           totalCount,
-          loading: false,
-          refreshing: false
+          [loadType]: false
         })
       }
     },
     async toggleCurrentType({ dispatch, commit }, payload) {
-      await commit('saveStatus', {
-        loading: true,
-        refreshing: payload.refresh
+        console.log(payload.loadType);
+        await commit('saveStatus', {
+        [payload.loadType]: true
       })
       await dispatch({ type: 'queryList', ...payload })
     }

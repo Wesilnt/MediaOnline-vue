@@ -12,11 +12,12 @@
                            :title="item==='waiting'?`${pageName}${puzzleTabs[item]}`: puzzleTabs[item]">
                     <div class="my-puzzle-content">
                         <van-pull-refresh v-model="loadrefresh" @refresh="onRefresh">
-                            <Skeleton :loading="puzzleList.length===0" rows="1">无数据</Skeleton>
+                            <Skeleton v-show="!querying" :loading="puzzleList.length===0" rows="1">暂无相关信息</Skeleton>
                             <van-list
                                 v-model="loadQuery"
                                 :finished="finished"
                                 @load="onLoadMore"
+                                :offset="60"
                                 :immediate-check="false"
                             >
                                 <div v-for="puzzle in puzzleList" :key="puzzle.id" class="my-puzzle-content-cell">
@@ -35,7 +36,7 @@
                                     </div>
                                     <div v-show="!isPraise" class="my-puzzle-price">{{pageName}}价：<span class="my-puzzle-price-num">￥{{puzzle.price}}</span></div>
                                 </div>
-                                <p v-if="finished" class="my-puzzle-finished">没有数据啦</p>
+                                <p  v-show="!querying && finished && puzzleList.length>4" class="my-puzzle-finished">没有数据啦</p>
                             </van-list>
                         </van-pull-refresh>
                     </div>
@@ -70,17 +71,13 @@ export default {
       allNoData: false
     }
   },
-  // created() {
-  // const { pageName, currentType } = this
-  // this.queryList({ pageName, currentType })
-  // },
   computed: {
     ...mapState([
       'puzzleTabs',
       'puzzleTypes',
       'currentType',
       'puzzleList',
-      'loading',
+      'querying',
       'refreshing',
       'totalCount',
       'pageSize',
@@ -92,7 +89,6 @@ export default {
     selected: function(currentType) {
       const { isPraise, puzzleTypes, pageSize, currentPage } = this
       const Types = Object.values(puzzleTypes)
-      console.log(this.pageName)
       this.toggleCurrentType({
         pageSize,
         currentPage,
@@ -103,8 +99,8 @@ export default {
     refreshing: function(refreshing) {
       this.loadrefresh = !!refreshing
     },
-    loading: function(loading) {
-      this.loadQuery = !!loading
+    querying: function(querying) {
+      this.loadQuery = !!querying
     },
     puzzleList: function(puzzleList) {
       this.allNoData =
@@ -116,19 +112,19 @@ export default {
   methods: {
     ...mapActions(['queryList', 'toggleCurrentType']),
     onRefresh() {
-      this.loadList(8, true)
+      this.loadList(8, 'refreshing')
     },
     onLoadMore() {
       if (!this.finished) this.loadList(this.pageSize * 2)
     },
-    loadList(pageSize, refresh = false) {
+    loadList(pageSize, loadType = 'querying') {
       const { isPraise, currentPage, currentType } = this
       this.toggleCurrentType({
         pageSize,
         currentPage,
         currentType,
         isPraise,
-        refresh
+        loadType
       })
     }
   },
