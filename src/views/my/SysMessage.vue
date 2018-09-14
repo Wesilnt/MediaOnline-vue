@@ -49,162 +49,157 @@
 </template>
 
 <script>
+import { createNamespacedHelpers } from 'vuex'
 
-  import {createNamespacedHelpers} from 'vuex'
-
-  const {
-    mapState,
-    mapActions,
-  } = createNamespacedHelpers('mySysMessage')
-  export default {
-    name: 'SysMessage',
-    components: {
-      // NavBar
-    },
-    data: function () {
-      return {}
-    },
-    computed: {
-      ...mapState(['messageList', 'loading'])
-    },
-    methods: {
-      ...mapActions(['queryList', 'delSysMessage']),
-      onClose(id) {
-        return (clickPosition, instance) => {
-          console.log(id)
-          switch (clickPosition) {
-            case 'left':
-            case 'cell':
-            case 'outside':
-              instance.close();
-              break;
-            case 'right':
-              instance.close();
-              this.delSysMessage({msgId: id})
-              break;
-          }
+const { mapState, mapActions } = createNamespacedHelpers('mySysMessage')
+export default {
+  name: 'SysMessage',
+  components: {
+    // NavBar
+  },
+  data: function() {
+    return {}
+  },
+  computed: {
+    ...mapState(['messageList', 'loading'])
+  },
+  methods: {
+    ...mapActions(['queryList', 'delSysMessage']),
+    onClose(id) {
+      return (clickPosition, instance) => {
+        console.log(id)
+        switch (clickPosition) {
+          case 'left':
+          case 'cell':
+          case 'outside':
+            instance.close()
+            break
+          case 'right':
+            instance.close()
+            this.delSysMessage({ msgId: id })
+            break
         }
-      }
-    },
-    created() {
-      this.queryList()
-    },
-    filters: {
-      formatDate: function (time) {
-        var date = new Date(time)
-        const seperator1 = '-'
-        let month = date.getMonth() + 1
-        let strDate = date.getDate()
-        if (month >= 1 && month <= 9) {
-          month = '0' + month
-        }
-        if (strDate >= 0 && strDate <= 9) {
-          strDate = '0' + strDate
-        }
-        return month + seperator1 + strDate
       }
     }
+  },
+  created() {
+    this.queryList()
+  },
+  filters: {
+    formatDate: function(time) {
+      var date = new Date(time)
+      const seperator1 = '-'
+      let month = date.getMonth() + 1
+      let strDate = date.getDate()
+      if (month >= 1 && month <= 9) {
+        month = '0' + month
+      }
+      if (strDate >= 0 && strDate <= 9) {
+        strDate = '0' + strDate
+      }
+      return month + seperator1 + strDate
+    }
   }
+}
 </script>
 
 <style scoped lang="less">
-    @active: #ffa32f;
-    .sysmessage {
-        &-container {
-        }
-        &-head {
-            display: flex;
-            flex-direction: row;
-            padding: 34px 0px 34px 0px;
-            margin: 0px 30px 0px 30px;
-            border-bottom: 0.1px solid #ddd;
-            &-left-icon {
-                width: 40px;
-                height: 40px;
-                margin: 7px 20px 0px 0px;
-            }
-            &-record-text {
-                padding: 3px 8px 0px 0px;
-                font-size: 36px;
-                color: #3e3e53;
-            }
-            &-right-icon {
-                width: 28px;
-                height: 26px;
-                margin: 10px 0px 0px 0px;
-                position: absolute;
-                right: 30px;
-            }
-        }
-        &-list {
-            padding: 0px 30px 0px 30px;
-
-            &-item {
-                width: 100%;
-                display: flex;
-                flex-direction: row;
-                padding: 24px 0px 32px 0px;
-                border-bottom: 0.1px solid #ddd;
-                &-content {
-                    flex-grow: 1;
-                    &-top {
-                        display: flex;
-                        flex-direction: row;
-                        &-title {
-                            font-weight: bold;
-                            font-size: 32px;
-                            display: inline;
-                            padding-right: 24px;
-                        }
-                        &-time {
-                            font-size: 22px;
-                            display: inline;
-                            color: #9ba1b0;
-                        }
-                    }
-                    &-detail {
-                        padding: 32px 32px 0px 70px;
-                        font-size: 28px;
-                        color: #808080;
-                    }
-                }
-                &-img-more {
-                    width: 34px;
-                    height: 6px;
-                    margin: 59px 0px 0px 0px;
-                    /*position: absolute;*/
-                    /*right: 30px;*/
-                }
-            }
-        }
-        &-nodata {
-            height: 100vh;
-            text-align: center;
-            color: #949aaa;
-            &-icon {
-                width: 180px;
-                height: 200px;
-                margin-top: 180px;
-                background-image: url('../../assets/my-nodata.png');
-            }
-            &-warn {
-                font-size: 24px;
-                margin: 40px 0;
-            }
-        }
+@active: #ffa32f;
+.sysmessage {
+  &-container {
+  }
+  &-head {
+    display: flex;
+    flex-direction: row;
+    padding: 34px 0px 34px 0px;
+    margin: 0px 30px 0px 30px;
+    border-bottom: 0.1px solid #ddd;
+    &-left-icon {
+      width: 40px;
+      height: 40px;
+      margin: 7px 20px 0px 0px;
     }
-
-    .van-swipe-cell span {
-        width: 150px;
-        height: 100%;
-        color: #FFFFFF;
-        font-size: 18px;
-        display: block;
-        line-height: 44px;
-        background-color: #F44;
-        display: flex;
-        justify-content: center;
-        align-items: Center;
+    &-record-text {
+      padding: 3px 8px 0px 0px;
+      font-size: 36px;
+      color: #3e3e53;
     }
+    &-right-icon {
+      width: 28px;
+      height: 26px;
+      margin: 10px 0px 0px 0px;
+      position: absolute;
+      right: 30px;
+    }
+  }
+  &-list {
+    padding: 0px 30px 0px 30px;
 
+    &-item {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      padding: 24px 0px 32px 0px;
+      border-bottom: 0.1px solid #ddd;
+      &-content {
+        flex-grow: 1;
+        &-top {
+          display: flex;
+          flex-direction: row;
+          &-title {
+            font-weight: bold;
+            font-size: 32px;
+            display: inline;
+            padding-right: 24px;
+          }
+          &-time {
+            font-size: 22px;
+            display: inline;
+            color: #9ba1b0;
+          }
+        }
+        &-detail {
+          padding: 32px 32px 0px 70px;
+          font-size: 28px;
+          color: #808080;
+        }
+      }
+      &-img-more {
+        width: 34px;
+        height: 6px;
+        margin: 59px 0px 0px 0px;
+        /*position: absolute;*/
+        /*right: 30px;*/
+      }
+    }
+  }
+  &-nodata {
+    height: 100vh;
+    text-align: center;
+    color: #949aaa;
+    &-icon {
+      width: 180px;
+      height: 200px;
+      margin-top: 180px;
+      background-image: url('../../assets/my-nodata.png');
+    }
+    &-warn {
+      font-size: 24px;
+      margin: 40px 0;
+    }
+  }
+}
+
+.van-swipe-cell span {
+  width: 150px;
+  height: 100%;
+  color: #ffffff;
+  font-size: 18px;
+  display: block;
+  line-height: 44px;
+  background-color: #f44;
+  display: flex;
+  justify-content: center;
+  align-items: Center;
+}
 </style>

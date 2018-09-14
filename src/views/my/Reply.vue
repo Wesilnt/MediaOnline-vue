@@ -22,132 +22,122 @@
 </template>
 
 <script>
+import { createNamespacedHelpers } from 'vuex'
 
-  import {createNamespacedHelpers} from 'vuex'
-
-  const {mapState, mapActions} = createNamespacedHelpers(
-    'myReply'
-  )
-  export default {
-    name: 'Reply',
-    components: {
-      // NavBar
+const { mapState, mapActions } = createNamespacedHelpers('myReply')
+export default {
+  name: 'Reply',
+  components: {
+    // NavBar
+  },
+  data: function() {
+    return {}
+  },
+  computed: {
+    ...mapState(['messageList', 'loading'])
+  },
+  methods: {
+    ...mapActions(['queryList', 'delMessage'])
+  },
+  created() {
+    this.queryList()
+  },
+  filters: {
+    formatDate: function(time) {
+      var date = new Date(time / 1000)
+      const seperator1 = '-'
+      let month = date.getMonth() + 1
+      let strDate = date.getDate()
+      if (month >= 1 && month <= 9) {
+        month = '0' + month
+      }
+      if (strDate >= 0 && strDate <= 9) {
+        strDate = '0' + strDate
+      }
+      return month + seperator1 + strDate
     },
-    data: function () {
-      return {}
-    },
-    computed: {
-      ...mapState(['messageList', 'loading'])
-    },
-    methods: {
-      ...mapActions(['queryList', 'delMessage']),
-    },
-    created() {
-      this.queryList()
-    },
-    filters: {
-      formatDate: function (time) {
-        var date = new Date(time / 1000);
-        const seperator1 = '-'
-        let month = date.getMonth() + 1
-        let strDate = date.getDate()
-        if (month >= 1 && month <= 9) {
-          month = '0' + month
-        }
-        if (strDate >= 0 && strDate <= 9) {
-          strDate = '0' + strDate
-        }
-        return (
-          month + seperator1 + strDate
-        )
-      },
-      jsonToData: function (json, name) {
-        var obj = JSON.parse(json)
-        switch (name) {
-          case "fromNickName":
-            return obj.fromNickName
-            break
-          case "reply":
-            return obj.reply
-            break
-          case "parentContent":
-            return obj.reply
-            break
-          case "fromAvatarUrl":
-            return obj.fromAvatarUrl
-            break
-
-        }
+    jsonToData: function(json, name) {
+      var obj = JSON.parse(json)
+      switch (name) {
+        case 'fromNickName':
+          return obj.fromNickName
+        case 'reply':
+          return obj.reply
+        case 'parentContent':
+          return obj.reply
+        case 'fromAvatarUrl':
+          return obj.fromAvatarUrl
       }
     }
   }
+}
 </script>
 
 <style scoped lang="less">
-    .reply {
-        display: flex;
-        flex-direction: column;
-        font-size: 28px;
-        &-list {
-            padding: 0px 30px 0px 30px;
-            &-item {
-                width: 100%;
-                padding: 30px 0px 30px 0px;
-                display: flex;
-                flex-direction: row;
-                border-bottom: #ddd 1px solid;
-                &-avatar {
-                    width: 94px;
-                    height: 94px;
-                    background-color: #ff9521;
-                    border-radius: 12px;
-                    outline: none;
-                }
+.reply {
+  display: flex;
+  flex-direction: column;
+  font-size: 28px;
+  &-list {
+    padding: 0px 30px 0px 30px;
+    &-item {
+      width: 100%;
+      padding: 30px 0px 30px 0px;
+      display: flex;
+      flex-direction: row;
+      border-bottom: #ddd 1px solid;
+      &-avatar {
+        width: 94px;
+        height: 94px;
+        background-color: #ff9521;
+        border-radius: 12px;
+        outline: none;
+      }
 
-                &-content {
-                    width: 70%;
-                    float: right;
-                    font-size: 26px;
-                    padding: 6px 20px 0px 20px;
-                    &-name {
-                        padding: 0px 0px 20px 0px;
-                        font-size: 28px;
-                        color: #57668f;
-                    }
-                    &-detail {
-                        padding: 0px 0px 22px 0px;
-                        font-size: 28px;
-                        color: #57668f;
-                    }
-                    &-time {
-                        font-size: 26px;
-                        color: #737373;
-                    }
-                }
-                &-parent-content {
-                    width: 130px;
-                    height: 120px;
-                    font-size: 26px;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    display: -webkit-box;
-                    -webkit-line-clamp: 3;
-                    -webkit-box-orient: vertical;
-                }
-            }
+      &-content {
+        width: 70%;
+        float: right;
+        font-size: 26px;
+        padding: 6px 20px 0px 20px;
+        &-name {
+          padding: 0px 0px 20px 0px;
+          font-size: 28px;
+          color: #57668f;
         }
-        &-read-more {
-            width: 100%;
-            height: 118px;
-            text-align: center;
-            border-bottom: #ddd 1px solid;
-            &-text {
-                width: 100%;
-                height: 118px;
-                font-size: 26px;
-                color: #737373;
-                line-height: 118px;
-            }
+        &-detail {
+          padding: 0px 0px 22px 0px;
+          font-size: 28px;
+          color: #57668f;
         }
+        &-time {
+          font-size: 26px;
+          color: #737373;
+        }
+      }
+      &-parent-content {
+        width: 130px;
+        height: 120px;
+        font-size: 26px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+      }
     }
+  }
+  &-read-more {
+    width: 100%;
+    height: 118px;
+    text-align: center;
+    border-bottom: #ddd 1px solid;
+    &-text {
+      width: 100%;
+      height: 118px;
+      font-size: 26px;
+      color: #737373;
+      line-height: 118px;
+    }
+  }
+}
 </style>

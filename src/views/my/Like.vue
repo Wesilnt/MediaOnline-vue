@@ -23,7 +23,7 @@
                         <div class="like-list-item-content">
                             <p class="like-list-item-content-name">{{item.title}}</p>
                             <div>
-                                <p v-if="" class="like-list-item-content-detail">{{item.courseName}} -
+                                <p class="like-list-item-content-detail">{{item.courseName}} -
                                     {{item.subTitle}} - {{item.learnTime}} / {{item.totalTime}}</p>
                             </div>
                         </div>
@@ -37,160 +37,138 @@
 </template>
 
 <script>
+import { createNamespacedHelpers } from 'vuex'
 
-  import {createNamespacedHelpers} from 'vuex'
-
-  const {mapState, mapActions} = createNamespacedHelpers(
-    'myLike'
-  )
-  export default {
-    name: 'Like',
-    components: {
-      // NavBar
-    },
-    data: function () {
-      return {}
-    },
-    computed: {
-      ...mapState(['likeList', 'loading'])
-    },
-    methods: {
-      ...mapActions(['queryList', 'delMyLike']),
-      onClose(id) {
-        return (clickPosition, instance) => {
-          console.log(id)
-          switch (clickPosition) {
-            case 'left':
-            case 'cell':
-            case 'outside':
-              instance.close();
-              break;
-            case 'right':
-              instance.close();
-              this.delMyLike({id: id})
-              break;
-          }
-        }
-      }
-    },
-    created() {
-      this.queryList()
-    }
+const { mapState, mapActions } = createNamespacedHelpers('myLike')
+export default {
+  name: 'Like',
+  components: {
+    // NavBar
+  },
+  data: function() {
+    return {}
+  },
+  computed: {
+    ...mapState(['likeList', 'loading'])
+  },
+  methods: {
+    ...mapActions(['queryList', 'delMyLike'])
+  },
+  created() {
+    this.queryList()
   }
+}
 </script>
 
 <style scoped lang="less">
-    .like {
-        &-container {
-
-        }
-        &-head-top-img {
-            width: 100%;
-            height: 300px;
-            background: #fde3e3;
-        }
-        &-head {
-            padding: 40px 30px 40px 0px;
-            display: flex;
-            flex-direction: row;
-            margin-right: 30px;
-            margin-left: 30px;
-            border-bottom: 0.1px solid #ddd;
-            &-left-icon {
-                width: 40px;
-                height: 40px;
-                margin: 7px 20px 0px 0px;
-            }
-            &-record-text {
-                padding: 3px 8px 0px 0px;
-                font-size: 36px;
-                color: #3e3e53;
-            }
-            &-record-number {
-                padding: 6px 0px 0px 0px;
-                font-size: 28px;
-                color: #57668f;
-            }
-
-            &-right-icon {
-                width: 28px;
-                height: 26px;
-                margin: 10px 0px 0px 0px;
-                position: absolute;
-                right: 30px;
-            }
-        }
-        &-list {
-            padding: 0px 30px 0px 30px;
-            &-item {
-                width: 100%;
-                padding: 24px 0px 24px 10px;
-                display: flex;
-                flex-direction: row;
-                border-bottom: 0.1px solid #ddd;
-                &-order-number{
-                    font-size: 36px;
-                    color: #949aaa;
-                    padding: 24px 35px 24px 0px ;
-                }
-                &-avatar {
-                    width: 94px;
-                    height: 94px;
-                    background-color: #ff9521;
-                    border-radius: 12px;
-                    margin: 30px 0px 0px 0px;
-                }
-                &-content {
-                    flex-grow: 1;
-                    &-name {
-                        padding: 6px 0px 0px 0px;
-                        font-size: 36px;
-                        color: #333030;
-                    }
-                    &-detail {
-                        font-size: 24px;
-                        color: #7d7d7e;
-                        padding: 16px 0px 0px 0px;
-                    }
-                }
-                &-img-more {
-                    width: 34px;
-                    height: 6px;
-                    margin: 59px 0px 0px 0px;
-                    /*position: absolute;*/
-                    /*right: 30px;*/
-                }
-            }
-        }
-
-
-
-        &-nodata {
-            height: 100vh;
-            text-align: center;
-            color: #949aaa;
-            &-icon {
-                width: 180px;
-                height: 200px;
-                margin-top: 180px;
-                background-image: url('../../assets/my-nodata.png');
-            }
-            &-warn {
-                font-size: 24px;
-                margin: 40px 0;
-            }
-        }
+.like {
+  &-container {
+  }
+  &-head-top-img {
+    width: 100%;
+    height: 300px;
+    background: #fde3e3;
+  }
+  &-head {
+    padding: 40px 30px 40px 0px;
+    display: flex;
+    flex-direction: row;
+    margin-right: 30px;
+    margin-left: 30px;
+    border-bottom: 0.1px solid #ddd;
+    &-left-icon {
+      width: 40px;
+      height: 40px;
+      margin: 7px 20px 0px 0px;
     }
-    .van-swipe-cell span {
-        width: 150px;
-        height: 100%;
-        color: #FFFFFF;
-        font-size: 18px;
-        display: block;
-        line-height: 44px;
-        background-color: #F44;
-        display: flex;
-        justify-content: center;
-        align-items: Center;
+    &-record-text {
+      padding: 3px 8px 0px 0px;
+      font-size: 36px;
+      color: #3e3e53;
     }
+    &-record-number {
+      padding: 6px 0px 0px 0px;
+      font-size: 28px;
+      color: #57668f;
+    }
+
+    &-right-icon {
+      width: 28px;
+      height: 26px;
+      margin: 10px 0px 0px 0px;
+      position: absolute;
+      right: 30px;
+    }
+  }
+  &-list {
+    padding: 0px 30px 0px 30px;
+    &-item {
+      width: 100%;
+      padding: 24px 0px 24px 10px;
+      display: flex;
+      flex-direction: row;
+      border-bottom: 0.1px solid #ddd;
+      &-order-number {
+        font-size: 36px;
+        color: #949aaa;
+        padding: 24px 35px 24px 0px;
+      }
+      &-avatar {
+        width: 94px;
+        height: 94px;
+        background-color: #ff9521;
+        border-radius: 12px;
+        margin: 30px 0px 0px 0px;
+      }
+      &-content {
+        flex-grow: 1;
+        &-name {
+          padding: 6px 0px 0px 0px;
+          font-size: 36px;
+          color: #333030;
+        }
+        &-detail {
+          font-size: 24px;
+          color: #7d7d7e;
+          padding: 16px 0px 0px 0px;
+        }
+      }
+      &-img-more {
+        width: 34px;
+        height: 6px;
+        margin: 59px 0px 0px 0px;
+        /*position: absolute;*/
+        /*right: 30px;*/
+      }
+    }
+  }
+
+  &-nodata {
+    height: 100vh;
+    text-align: center;
+    color: #949aaa;
+    &-icon {
+      width: 180px;
+      height: 200px;
+      margin-top: 180px;
+      background-image: url('../../assets/my-nodata.png');
+    }
+    &-warn {
+      font-size: 24px;
+      margin: 40px 0;
+    }
+  }
+}
+.van-swipe-cell span {
+  width: 150px;
+  height: 100%;
+  color: #ffffff;
+  font-size: 18px;
+  display: block;
+  line-height: 44px;
+  background-color: #f44;
+  display: flex;
+  justify-content: center;
+  align-items: Center;
+}
 </style>
