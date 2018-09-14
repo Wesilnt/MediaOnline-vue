@@ -92,7 +92,7 @@ export default {
       'answersChecked',
       'newGrade'
     ]),
-    ...mapGetters(['questionList', 'questionInfo', 'grade','title'])
+    ...mapGetters(['questionList', 'questionInfo', 'grade', 'title'])
   },
   methods: {
     ...mapActions([
@@ -151,6 +151,7 @@ export default {
       }
     },
     handleAnswerClick(answer) {
+      if (this.questionIndex === Object.keys(this.answers).length && this.userSelect) return
       this.uploadAnswer({
         lessonId: this.$route.params.lessonID,
         answer

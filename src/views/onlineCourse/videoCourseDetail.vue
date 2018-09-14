@@ -51,6 +51,7 @@
             <!-- <video-comment v-for="item in singleComments" :key="item.id" :comment="item"/> -->
             <commentitem class="video-course-comment" v-for="item in singleComments" :key="item.id" :comment="item" :unindent="true" :regiontype="2202"/>
         </div>
+        <CommentBar />
 
         <!-- style="display:none" -->
         <video class="videoitem" ref="videoitem" :src="videoUrl" controls="controls" width="100%" height='100%' preload="auto"></video>
@@ -65,8 +66,8 @@ import playlist from './components/playlist.vue'
 import CommentItem from '../../components/CommentItem.vue'
 import videoComment from '../../components/video-comment.vue'
 import QuestionList from './QuestionList'
+import CommentBar from '../../components/CommentBar'
 import { createNamespacedHelpers } from 'vuex'
-import { log } from '../../store/module/type'
 const {
   mapState,
   mapGetters,
@@ -80,7 +81,8 @@ export default {
     playlist: playlist,
     'video-comment': videoComment,
     commentitem: CommentItem,
-    QuestionList
+    QuestionList,
+      CommentBar
   },
   data() {
     return {

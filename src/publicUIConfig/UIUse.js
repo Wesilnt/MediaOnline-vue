@@ -18,10 +18,12 @@ import {
   Lazyload,
   PullRefresh,
   List,
-  Progress
+  Progress,
+  Field
 } from 'vant'
 
 Vue.use(Progress)
+Vue.use(Field)
 Vue.use(Toast)
 Vue.use(Button)
 Vue.use(Tag)
