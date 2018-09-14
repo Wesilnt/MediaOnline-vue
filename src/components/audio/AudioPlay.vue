@@ -10,7 +10,7 @@
       <div class="tab-item" @click="onCollect">
         <img :src="isLike?require('../../assets/audio_love_collect.png'):require('../../assets/audio_love_normal.png')">
       </div>
-      <router-link :to="'/audio/audiodraft/'+lessonId" v-if="false" class="tab-item" tag="div">
+      <router-link :to="'/audio/audiodraft/'+lessonId" v-if="!hiddenDraft" class="tab-item" tag="div">
         <img src="../../assets/audio_play_manuscripts.png">
       </router-link>
       <router-link :to="'/audio/audiocmts/'+lessonId" class="tab-item" tag="div">
@@ -87,14 +87,14 @@
       </div>
     </van-popup>
     <!-- 分享框 -->
-    <share-pop :show="showShare" @close="closeShare"/>
+    <share-pop :show="showShare" @close="closeShare" :shareid="audio.courseId"/>
   </div>
 </template>
 <script>
 import { createNamespacedHelpers } from 'vuex'
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers('audio')
 
-import SharePop from '../Share.vue'
+import SharePop from '../share/Share.vue'
 import AudioTask from '../../utils/AudioTask.js'
 
 export default {
@@ -104,6 +104,7 @@ export default {
   data() {
     return {
       lessonId: this.$route.query.id,
+      hiddenDraft:this.$route.query.hiddenDraft,
       isInit:true,
       play: true,
       isSingle: false, //是否单个循环
@@ -186,13 +187,13 @@ export default {
       },
     //上一首
     onPlayPrv() {
-         if(!this.audio)return
-         let preId = this.audio.preLessonId
-         if(preId&&-1!=preId){
-           this.pre({lessonId:preId})
-         }else{
-             this.$toast.fail('这是第一条')
-         }
+      if(!this.audio)return
+      let preId = this.audio.preLessonId
+      if(preId&&-1!=preId){
+        this.pre({lessonId:preId})
+      }else{
+          this.$toast.fail('这是第一条')
+      }
     },
     //下一首
     onPlayNext() {

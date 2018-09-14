@@ -19,6 +19,7 @@ import myPurchase from './module/myPurchase'
 import comment from './module/commentData'
 import freezone from './module/freezoneData'
 import audiotask from './module/audioTask'
+import share from './module/shareData'
 
 Vue.use(Vuex)
 export default new Vuex.Store({
@@ -42,6 +43,7 @@ export default new Vuex.Store({
     audio,
     comment,
     freezone,
-    audiotask
-  },
+    audiotask,
+    share
+  },   
 })

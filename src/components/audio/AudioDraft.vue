@@ -1,36 +1,39 @@
 <template>
     <div class="detail-container">
-        <div class="detail-cover">
-            <!-- <img :src='null' alt=""> -->
-        </div>
+      <div class="draft-content" v-html="draftContent.manuscript"/>
+        <!-- <div class="detail-cover" :style="{background:'url('+audio.coverPic+')'}"> 
+        </div> 
         <div class="detail-content">
-            <h4>绿山墙</h4>
+            <h4>{{audio.title}}</h4>
             <hr>
             <div class="teacher-info">
                 <span/>
                 <div class="teacher-desc">
-                    <p>伍智</p>
-                    <p>国学老师</p>
+                    <p>{{audio.teacherName}}</p>
+                    <p>{{audio.subTitle}}</p>
                 </div>
             </div>
             <div class="detail-text">
-                <p>本书讲述安环科啊哈麻辣辣的发动机卡萨法即可，一组第卅饭店扩大收费监督卡父卡斯蒂略分 法即可大煞风景了 本书讲述安环科啊哈麻辣辣的发动机卡萨法即可，一组第卅饭店扩大收费监督卡 本书讲述安环科啊哈麻辣辣的发动机卡萨法即可，一组第卅饭店扩大收费监督卡 本书讲述安环科啊哈麻辣辣的发动机卡萨法即可，一组第卅饭店扩大收费监督卡</p>
-            </div>
-
-        </div>
+                <div class="description" v-html="audio.description"/>
+            </div> 
+        </div> -->
     </div>
 </template>
 <script>
-import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions } = createNamespacedHelpers('audio')
+import { createNamespacedHelpers, mapState } from 'vuex'
+const { mapGetters, mapActions } = createNamespacedHelpers('audio')
 export default {
   data() {
     return {
       lessonId: this.$route.params.lessonid
     }
   },
+  computed: {
+    ...mapGetters(['audio']),
+    ...mapState(['draftContent'])
+  },
   created() {
-    this.getAudioDesc({ lessonId: this.lessonId })
+    this.getAudioDesc(this.lessonId)
   },
   methods: {
     ...mapActions(['getAudioDesc'])
@@ -41,17 +44,22 @@ export default {
 .detail-container {
   display: flex;
   flex-direction: column;
+  .draft-content{
+    padding: 0 5.333333333%;
+    width: 89.33333333%; 
+  }
   .detail-cover {
     height: 300px;
     width: 100%;
     background-color: #fde3e3;
   }
   .detail-content {
-    padding: 0 40px;
+    box-sizing: border-box;
+    width: 100%;
     h4 {
       font-size: 52px;
       color: rgb(47, 59, 81);
-      margin-top: 72px;
+      margin: 72px 0 0 40px;
     }
     hr {
       margin-top: 72px 0 0 0;
@@ -61,7 +69,7 @@ export default {
       width: 100%;
     }
     .teacher-info {
-      margin-top: 40px;
+      margin: 40px 0 0 40px;
       display: flex;
       flex-direction: row;
       align-items: center;
@@ -92,11 +100,17 @@ export default {
     font-size: 32px;
     color: rgb(51, 51, 51);
     line-height: 56px;
-    margin-top: 60px;
     word-break: break-all;
     word-wrap: break-word;
     word-spacing: 2px; /*no*/
     letter-spacing: 2px; /*no*/
+    padding: 0 5.333333333%;
+    width: 89.33333333%;
+    margin: 60px 0;
+    box-sizing: content-box;
+    img{
+      width: 100%;
+    }
   }
 }
 </style>

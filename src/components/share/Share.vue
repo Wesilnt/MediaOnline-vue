@@ -6,21 +6,21 @@
           此网页由www.shbaoyuantech.com提供
         </div>
         <div class="share-list">
-          <router-link class="share-item" to="/share/poster" tag="div">
+          <router-link class="share-item" :to="'/share/poster/'+shareid" tag="div">
             <div class="share-icon">
-              <img src="../assets/share_poster.png">
+              <img src="../../assets/share_poster.png">
             </div>
             <span class="share-label">生成海报</span>
           </router-link>
           <div class="share-item" @click="onShareItem('friends')">
             <div class="share-icon">
-              <img src="../assets/share_friends.png">
+              <img src="../../assets/share_friends.png">
             </div>
             <span class="share-label">发送给朋友</span>
           </div>
           <div class="share-item" @click="onShareItem('circle')">
             <div class="share-icon">
-              <img src="../assets/share_circle.png">
+              <img src="../../assets/share_circle.png">
             </div>
             <span class="share-label">分享到朋友圈</span>
           </div>
@@ -34,7 +34,7 @@
 </template>
  <script>
 export default {
-  props: ['show'],
+  props: ['show','shareid'],
   data() {
     return { isOpen: false }
   },

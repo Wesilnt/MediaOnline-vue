@@ -12,6 +12,5 @@ export function postComment(params) {
 
 //给留言点赞
 export async function likeComment(params) {
-  console.log(params)
     return request.post(`/comment/likeComment?${stringify(params)}`)
 }

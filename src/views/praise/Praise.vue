@@ -48,7 +48,7 @@
 <script>
 import PraiseBtn from './PraiseBtns.vue'
 import PraiseExplain from './PraiseExplain.vue'
-import Share from '../../components/Share.vue'
+import Share from '../../components/share/Share.vue'
 export default {
   components: {
     priasebtn: PraiseBtn,

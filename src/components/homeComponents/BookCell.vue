@@ -15,7 +15,7 @@ export default {
   props: ['book'],
   methods:{
     onItemClick(){
-       this.$router.push({path:'/home/readings/book',query:{id:this.book.id}})
+       this.$router.push({path:'/audio/audioplay',query:{id:this.book.freeLessonList[0].id,hiddenDraft:true}})
     }
   }
 }

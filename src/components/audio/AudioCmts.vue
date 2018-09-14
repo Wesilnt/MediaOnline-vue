@@ -2,6 +2,9 @@
   <div class="comments-container">
     <!-- 全部留言 -->
     <!-- <div class="commment-list"> -->
+      <div v-if="commentList.length<=0" class="nodata-container">
+          还没有评论，快来评论吧!
+      </div>
       <van-list
           class="commment-list"
           v-model="refreshing"
@@ -117,7 +120,13 @@ export default {
   padding-bottom: 160px;
   padding-top: 10px;
 }
-
+.nodata-container{
+  height: 100vh;
+  width: 100%;
+  text-align: center;
+  line-height: 80vh;
+  font-size: 20px;
+}
 .comment-publish {
   position: fixed;
   bottom: 0;

@@ -20,3 +20,7 @@ export function getAudioDesc(params) {
 export function getSingleSetList(params) {
     return request(`/lesson/getLessonListByCourse?${stringify(params)}`)
 }
+
+export function postLearnRate(params) { 
+    return request.post(`/lesson/lessonListenRs`,params)
+}

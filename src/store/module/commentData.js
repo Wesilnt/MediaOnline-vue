@@ -51,7 +51,7 @@ export default {
       let res = await getCommentList({
         regionType: 2202, //留言位置（2201:专栏,2202:单集)
         regionId: lessonId, //位置id
-        currentPage: page, //当前页码
+        currentPage: page, //当前页码 
         pageSize: state.pageSize //每页显示条数
       })   
       if(null==res.result)return
@@ -61,8 +61,8 @@ export default {
     async postComment({ state,commit,dispatch}, params) {
       const res = await postComment(params)
       console.log(res)
-      commit("postComment", res)
-      dispatch('getCommentList', {lessonId:params.regionId,isLoadMore:false})
+      // commit("postComment", res)
+      // dispatch('getCommentList', {lessonId:params.regionId,isLoadMore:false})
     },
     async likeComment({commit,state}, commentId) {
       const result = await likeComment({'commentId': commentId})

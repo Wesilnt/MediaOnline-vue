@@ -82,8 +82,7 @@ function request(url, options) {
   // const accessToken = getAccessToken();
   const accessToken = '9009f5f8-e2bc-4cb0-98d9-721b32153c56'
   const refreshToken = getRefreshToken()
-  const baseURI = isUrl(url) ? '' : api
-
+  const baseURI = isUrl(url) ? '' : api 
   const defaultOptions = {
     // credentials: 'include',
     // mode: 'no-cors',
@@ -91,7 +90,7 @@ function request(url, options) {
     headers: {
       Authorization: `Bearer ${btoa(accessToken)}`
     }
-  }
+  } 
   const newOptions = { ...defaultOptions, ...options }
   if (newOptions.method === 'POST' || newOptions.method === 'PUT') {
     if (!(newOptions.body instanceof FormData)) {

@@ -7,15 +7,9 @@ import NavBar from '../components/NavBar'
 // import VideoList from '../views/onlineCourse/VideoList'
 // import VisionDetail from '../views/VisionDetail'
 // import videoColumnDetail from '../views/onlineCourse/videoColumnDetail.vue'
-import FreeZone from '../views/freezone/FreeZone.vue' //首页-免费专区
-import Readings from '../views/readings/Readings.vue' //首页-读书会
-import BookDetail from '../views/readings/BookDetail.vue' //读书会-书详情
-import BookSummary from '../views/readings/BookSummary.vue' //书详情-书简介
-import AudioPlay from '../components/audio/AudioPlay.vue' //音频-播放
-import AudioCmts from '../components/audio/AudioCmts.vue' //音频-评论
-import AudioDraft from '../components/audio/AudioDraft.vue' //音频-文稿
+import FreeZone from '../views/freezone/FreeZone.vue' //首页-免费专区 
 import Praise from '../views/praise/Praise.vue' //集赞
-import SharePoster from '../components/SharePoster.vue' //分享海报
+import SharePoster from '../components/share/SharePoster.vue' //分享海报
 import PageLoading from '../components/PageLoading'
 
 import PageInfo_From_Home from './router_home'
@@ -77,7 +71,7 @@ export default new Router({
       component: Praise
     },
     {
-      path: '/share/poster',
+      path: '/share/poster/:id',
       name: 'SharePoster',
       component: SharePoster
     },

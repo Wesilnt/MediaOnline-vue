@@ -1,13 +1,15 @@
 import { getAudioDetail, postFavorite,postUnFavorite, getAudioDesc, getSingleSetList,getCommentList } from '../../services/audioApi'
+import { Toast } from 'vant';
 
 export default {
     namespaced: true,
     state: {
         isLike:false,
         singleSetList:[],
-        currentPage: 1,  //音频列表分页-页码
-        pageSize:20,      //分页-记录条数
+        currentPage: 1,    //音频列表分页-页码
+        pageSize:20,       //分页-记录条数
         commentList:[],    //评论列表  
+        draftContent:{}
 
     },
     mutations: {
@@ -28,6 +30,9 @@ export default {
         getCommentList(state, res) {
          state.commentList = res.result
         },
+        bindDraftContnet(state,res){
+          state.draftContent = res
+        }
     },
     actions: { 
         //播放音频
@@ -74,17 +79,24 @@ export default {
         //音频收藏 我喜欢的
         async postFavorite({ commit }, params) {
             const res = await postFavorite(params) 
-            commit("postFavorite", res)
+            if(res) commit("postFavorite", res) 
         },
         //音频取消 我喜欢的
         async postFavorite({ commit }, params) {
             const res = await postUnFavorite(params)
-            commit("postFavorite", res)
+            if(res)commit("postFavorite", res) 
         },
         //音频单集文稿详情
-        async getAudioDesc({ commit }, params) {
-            const res = await getAudioDesc(params) 
-            commit("getAudioDesc", res)
+        async getAudioDesc({ state,commit,dispatch },lessonId) {
+          let params = {lessonId: lessonId}
+          const res = await getAudioDesc(params) 
+            console.log(res)
+          commit('bindDraftContnet',res)
+          //     if(state.audioDetail){
+          //   commit("getAudioDesc", res)
+          // }else{
+          //   dispatch('getAudioDetail', {lessonId}, { root: true })
+          // }
         },
         //音频单集列表
         async getSingleSetList({ commit }, params) {

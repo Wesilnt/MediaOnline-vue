@@ -33,7 +33,7 @@ export default {
   props: ['item', 'playing'],
   methods: {
     onItemClick(id) {
-      this.$router.push({ path: '/audio/audioplay', query: { id } })
+      this.$router.push({ path: '/audio/audioplay', query: { id, hiddenDraft:true } })
     }
   }
 }
@@ -82,10 +82,10 @@ export default {
     flex-direction: column;
     margin-left: 20px;
     h3 {
-      font-size: 28px;
+      font-size: 32px;
       color: rgb(22, 35, 60);
       margin: 24px 0 0 0;
-      line-height: 14px;
+      line-height: 32px;
       font-weight: 500;
     }
     h4 {
@@ -118,6 +118,7 @@ export default {
     font-size: 24px;
     color: rgb(148, 154, 170);
     margin: 0;
+    line-height: 24px;
   }
 }
 </style>

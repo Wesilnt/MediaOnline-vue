@@ -15,9 +15,12 @@
   </div>
 </template> 
 <script>
+import { createNamespacedHelpers } from 'vuex'
+const { mapState, mapActions, mapGetters } = createNamespacedHelpers('share')
 export default {
   data() {
     return {
+      id:this.$route.params.id,
       centerX: 355 / 2, //canvas中心X坐标
       canvasW: 750, //canvas宽度
       canvasH: 1334, //canvas高度
@@ -30,6 +33,12 @@ export default {
       posterData: {}
     }
   },
+  created(){
+    this.$nextTick( () =>{
+     
+    })
+  },
+  computed:{...mapState(['poster'])},
   mounted: function() {
     var canvasData = this.$refs.canvasId
     this.canvasData = canvasData
@@ -38,9 +47,13 @@ export default {
     this.ctx.webkitImageSmoothingEnabled = false
     this.ctx.msImageSmoothingEnabled = false
     this.ctx.imageSmoothingEnabled = false
-    this.drawBottomMap()
+    this.getPosterInfo({busId:this.id,pageUrl:"http://localhost:8080/#/audio/audioplay"})
+    .then(res=>{
+       this.drawBottomMap()
+    })
   },
   methods: {
+    ...mapActions(['getPosterInfo']),
     //将canvas生成的二维码保存为图片
     saveImg() {
       this.$refs.download.href = this.canvasData.toDataURL('images/png')
@@ -64,7 +77,7 @@ export default {
       this.ctx.fillStyle = '#ffffff'
       this.ctx.fillRect(0, this.bottomY, this.canvasW, this.bottomH)
       var cover = new Image()
-      cover.src = require('../assets/poster_header_bg.jpg')
+      cover.src = require('../../assets/poster_header_bg.jpg')
       cover.onload = () => {
         this.ctx.drawImage(cover, 0, 0, this.canvasW, this.canvasH)
         resolve()
@@ -73,11 +86,13 @@ export default {
     //绘制头像
     drawHeadImage() {
       var header = new Image()
-      header.src = require('../assets/cmt_item_header.png')
+      console.log( this.poster.avatarUrl)
+      header.setAttribute('crossOrigin', 'anonymous');
+      header.src =  this.poster.avatarUrl+"?timeStamp="+Date.now()
       header.onload = () => {
         let radius = this.headImageW
         let x = 102
-        let y = 925
+        let y = 920
         this.ctx.save()
         this.ctx.beginPath()
         this.ctx.arc(
@@ -96,19 +111,20 @@ export default {
     },
     //绘制名字
     drawUserName() {
-      let username = '秋之本'
+      let username =  this.poster.nickName
       this.ctx.fillStyle = '#262626'
       this.ctx.font = '30px Georgia'
       let textWidth = this.ctx.measureText(username).width
-      this.ctx.fillText(username, 102 + 72 + 20, 930 + 30)
+      this.ctx.fillText(username, 102 + 72 + 20, 930 + 25)
       this.$refs.saveimage.src = this.canvasData.toDataURL('images/png')
     },
     //绘制二维码
-    drawQrcode() {
+    drawQrcode() {  
+      let temp = "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=676587443,820607910&fm=111&gp=0.jpg";
       var qrcode = new Image()
-      qrcode.src = require('../assets/poster_qrcode.png')
-      qrcode.onload = () => {
-        console.log('二维码')
+      qrcode.setAttribute('crossOrigin', 'anonymous')
+      qrcode.src = temp +"?timeStamp="+Date.now() //this.poster.qrCodeUrl+"?timeStamp="+Date.now()
+      qrcode.onload =  () => { 
         this.ctx.drawImage(qrcode, 440, 880, 200, 200)
         this.$refs.saveimage.src = this.canvasData.toDataURL('images/png')
       }
