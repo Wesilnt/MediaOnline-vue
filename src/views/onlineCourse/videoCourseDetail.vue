@@ -12,6 +12,7 @@
                  </div>
              <!-- <img :src="require('../../assets/images/onlinecourse_video_ic_gift.png')" class="video-detail-header-gift" alt="">     -->
         </div>
+        <video class="videoitem" ref="videoitem" :src="videoUrl" controls="controls" width="100%" height='100%' preload="auto"></video>
             <div ref="navbar" :class="navbarFixed == true ? 'isFixed' : ''" class="video-detail-navbar">
                 <div v-for="(item,index) of navbar" :class="{'selected':selected == index }" :key="index" class="video-detail-navbar-item" @click="clickFnc(index)">{{item}}</div>
             </div>
@@ -52,9 +53,6 @@
             <commentitem class="video-course-comment" v-for="item in singleComments" :key="item.id" :comment="item" :unindent="true" :regiontype="2202"/>
         </div>
         <CommentBar />
-
-        <!-- style="display:none" -->
-        <video class="videoitem" ref="videoitem" :src="videoUrl" controls="controls" width="100%" height='100%' preload="auto"></video>
         <!-- <van-field class="video-detail-input-" v-model="inputValue" placeholder="请输入用户名" /> -->
 
     </div>
@@ -82,89 +80,71 @@ export default {
     'video-comment': videoComment,
     commentitem: CommentItem,
     QuestionList,
-      CommentBar
+    CommentBar
   },
   data() {
     return {
       navbar: ['资料', '目录', '留言'],
       navbarFixed: false, //控制navbar是否吸顶
       selected: 0,
-      currentVideoTime:0,
-      inputValue:'',
-      lockIcon:require('../../assets/images/onlinecourse_lock.jpg'),//未解锁
-      unlockIcon:require('../../assets/images/onlinecourse_unlock.jpg'),//已解锁
-      collectIcon:require('../../assets/images/onlinecourse_love_highlight.png'),//已收藏
-      unCollectIcon:require('../../assets/images/onlinecourse_love_normal.png'),//未搜藏
+      currentVideoTime: 0,
+      inputValue: '',
+      lockIcon: require('../../assets/images/onlinecourse_lock.jpg'), //未解锁
+      unlockIcon: require('../../assets/images/onlinecourse_unlock.jpg'), //已解锁
+      collectIcon: require('../../assets/images/onlinecourse_love_highlight.png'), //已收藏
+      unCollectIcon: require('../../assets/images/onlinecourse_love_normal.png'), //未搜藏
       //视频播放相关属性
-      timer:0,          //定时器
-      duration: 0, //视频时长
-      progress:0,
-      loaclPlayTotalTime:1,   //本地累计播放时长
-      localPlayTime:0,         //本地播放位置
-      isUnlockQuestion:false   //是否解锁自测题    
-    }
-  },
-  watch: {
-    loaclPlayTotalTime: function(loaclPlayTotalTime) {
-      if (!this.duration) {
-        return (this.progress = 0)
-      }
-      return (this.progress = (loaclPlayTotalTime / this.duration) * 100)
+      timer: 0, //定时器
+      progress: 0,
+      loaclPlayTotalTime: 0, //本地累计播放时长
+      localPlayTime: 0, //本地播放位置
+      playStartTime: null,
+      deblockQuestion: false //是否解锁自测题
     }
   },
   computed: {
-    ...mapState([          
-        'lessonList',              //目录课程
-        'radioShowPic',              //视频背景图
-        'audioUrl',              //音频地址
-        'videoUrl',             //视频地址
-        'courseId',              //专栏ID
-        'id',                    //单集ID
-        'singleComments',
-        'description',           //笔记
-        'totalTime',             //服务器返回的视频总长度
-        'isFree',
-        'isLike',
-        'questionBOList',        //自测题列表
-        'createTime',
-        'isAchieveCollect',           //是否完成收藏
-        'collectionId',          //收藏Id
-        'learnTime',            //服务器上次播放位置
-        'learnTotalTime',       //服务器累计播放时长  
-
+    ...mapState([
+      'lessonList', //目录课程
+      'radioShowPic', //视频背景图
+      'audioUrl', //音频地址
+      'videoUrl', //视频地址
+      'courseId', //专栏ID
+      'id', //单集ID
+      'singleComments',
+      'description', //笔记
+      'totalTime', //服务器返回的视频总长度
+      'isFree',
+      'isLike',
+      'questionBOList', //自测题列表
+      'createTime',
+      'isAchieveCollect', //是否完成收藏
+      'collectionId', //收藏Id
+      'learnTime', //服务器上次播放位置
+      'learnTotalTime' //服务器累计播放时长
     ]),
     ...mapGetters(['haveQuestionBOList'])
   },
   async mounted() {
     //监听滚动
-    await window.addEventListener('scroll', this.handleScroll)
+    await addEventListener('scroll', this.handleScroll)
     //视频播放器相关监听
     const vid = await this.$refs.videoitem
     //视频进度
     vid.addEventListener('timeupdate', this.getVideoProgress)
-    //视频开始播放
-    vid.addEventListener('play', this.getVideoPlay)
-    //视频暂停
-    vid.addEventListener('pause', this.getVideoPause)
-    //视频结束
-    vid.addEventListener('ended', this.getVideoEnd)
   },
   beforeDestroy() {
-    console.log('Vue实例销毁了,页面也销毁了')
     const vid = this.$refs.videoitem
     vid.removeEventListener('timeupdate', this.getVideoProgress)
-    vid.removeEventListener('play', this.getVideoPlay)
-    vid.removeEventListener('pause', this.getVideoPause)
   },
   destroyed() {
-    window.removeEventListener('scroll', this.handleScroll)
+    removeEventListener('scroll', this.handleScroll)
   },
   created() {
     //获取课程ID
     const lessonId = this.$route.params.lessonID
     this.getVideoCourseDetail({ lessonId })
     //获取目录课程数据
-    var courseId = this.courseId
+    const { courseId } = this
     this.getLessonListByCourse({
       courseId: courseId,
       currentPage: 1,
@@ -187,81 +167,50 @@ export default {
       'doCollectFavorite',
       'unCollectFavorite'
     ]),
-    openTimer(){
-      console.log('打开定时器')
-      // console.log(Math.round(parseInt(this.duration) * 0.7))
-      // console.log(parseInt(this.duration))
-      this.timer = setInterval(()=>{     
-        if(!this.isUnlockQuestion&&this.loaclPlayTotalTime >= Math.round(Math.round(this.duration) * 0.7)) {
-          this.isUnlockQuestion = true          
-          console.log('已经解锁自测题' + this.isUnlockQuestion)
-        }
-        // if(this.loaclPlayTotalTime > Math.round(parseInt(this.totalTime))) {
-        //   this.loaclPlayTotalTime = 0
-        //   this.clearTimer()
-        //   this.getVideoPause()
-        // }
-        this.loaclPlayTotalTime++     
-      },1000)
-    },
-    clearTimer() {
-      console.log('清空定时器')
-      clearInterval(this.timer)
-      this.loaclPlayTotalTime = 1
-    },
     //播放视频
     clickPlayVideoBtn() {
       const video = this.$refs.videoitem
-      video.play()
-      if (!this.duration) {
-        this.duration = video.duration
-      }
-    },
-    getVideoPlay() {
-      console.log('视频播放')
       //从本地获取历史播放位置
-      let videoData = JSON.parse(window.localStorage.getItem(this.id))
-      console.log(videoData)
-      console.log(this.duration)
-      let historyPlayPosition = videoData.historyPlayPosition
-      if(historyPlayPosition >= this.duration){
-        this.$refs.videoitem.currentTime = 0
-      }else{
-        this.$refs.videoitem.currentTime =historyPlayPosition
-      }     
-      //开启定时器记录视频累计播放时长
-      this.openTimer()
+      const videoData = JSON.parse(localStorage.getItem(this.id))
+      const { historyPlayPosition } = videoData
+      video.play()
+      video.currentTime =
+        historyPlayPosition >= video.duration ? 0 : historyPlayPosition
+
+      // 记录当前播放时间戳
+      this.playStartTime = new Date()
     },
-    getVideoPause() {
-      console.log('视频暂停')
-      let videoData = JSON.parse(window.localStorage.getItem(this.id))
-      let newTotalTime = this.loaclPlayTotalTime + Math.round(parseFloat(videoData.playTotalTime))
-      let newPlayTime = this.$refs.videoitem.currentTime
-      this.clearTimer()          
-      // console.log(newTotalTime)
-      // console.log(newPlayTime)
-      let obj = {
-        'playTotalTime': newTotalTime,
-        'historyPlayPosition': newPlayTime
+    getVideoProgress({ target }) {
+      const { currentTime, paused, duration } = target
+
+      //  播放累计时长大于视频的总时长，解锁
+      if (
+        !this.deblockQuestion &&
+        this.loaclPlayTotalTime >= Math.round(duration * 0.7)
+      ) {
+        this.deblockQuestion = true
       }
-      console.log(JSON.stringify(obj))
-      window.localStorage.setItem(this.id,JSON.stringify(obj))
-
-    },
-    getVideoEnd(){
-      console.log("视频结束")
-      // this.clearTimer()
-      // let obj = {
-      //   'playTotalTime': this.loaclPlayTotalTime,
-      //   'historyPlayPosition': 0
-      // }
-      // window.localStorage.setItem(this.id,JSON.stringify(obj))
-    },
-    getVideoProgress(){
-
+      if (paused) {
+        // 获取播放累计时长
+        const durationPlayingTime = (new Date() - this.playStartTime) / 1000
+        this.loaclPlayTotalTime += durationPlayingTime
+        this.playStartTime = null
+        const videoData = JSON.parse(localStorage.getItem(this.id))
+        const newTotalTime =
+          durationPlayingTime + Math.round(parseFloat(videoData.playTotalTime))
+        const obj = {
+          playTotalTime: newTotalTime,
+          historyPlayPosition: currentTime
+        }
+        localStorage.setItem(this.id, JSON.stringify(obj))
+          console.log(this.loaclPlayTotalTime)
+      }
+        // 进度条 未解锁就动态显示
+        if (!this.deblockQuestion)
+            this.progress = (this.loaclPlayTotalTime / duration) * 100
     },
     //显示键盘
-    showkeyboard(){
+    showkeyboard() {
       console.log('显示键盘')
     },
     //收藏
@@ -295,7 +244,7 @@ export default {
       // // Firefox
       document.documentElement.scrollTop = anchor.offsetTop - 50
       // Safari
-      window.pageYOffset = anchor.offsetTop - 50
+      pageYOffset = anchor.offsetTop - 50
     },
     async handleScroll() {
       //1.监听滚动
@@ -491,13 +440,10 @@ export default {
   }
 }
 .video-detail-input {
-  display:fixed;
-  bottom:0;
+  display: fixed;
+  bottom: 0;
   width: 100%;
   height: 60px;
   border-radius: 30px;
 }
 </style>
-
-
-
