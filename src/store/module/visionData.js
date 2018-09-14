@@ -10,9 +10,13 @@ const visionData = {
         pageSize:6,
         showTip:false,
         visionDetail:Object,
+        categoryList:[],
         commentList:[]
     },
     actions:{
+        reverse({commit,state}){
+            commit('setCategoryList',state.categoryList.slice().reverse());
+        },
       async  getVisionListData({commit,state}){
           let result = await getVisionList({currentPage:state.currentPage, pageSize:state.pageSize, type:1003})
           commit('setBannerPic', result.bannerPic)
@@ -29,6 +33,7 @@ const visionData = {
         async getVisionDetail({commit},courseId){
             let result = await getVisionDetail({'courseId':courseId})
             commit('setVisionDetail', result);
+            commit('setCategoryList',result.categoryList)
         },
         async getCommentList({commit},courseId){
             let result = await getCommentList({regionType:2201, regionId:courseId, currentPage:1, pageSize:11})
@@ -50,6 +55,9 @@ const visionData = {
         },
         setCommentList(state, commentList){
             state.commentList = commentList;
+        },
+        setCategoryList(state,categoryList){
+            state.categoryList = categoryList;
         }
     }
 }

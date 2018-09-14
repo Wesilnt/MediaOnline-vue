@@ -26,7 +26,7 @@
     </div>
     <!-- try -->
     <div id="try" ref="try" class="try bottomline">
-      <DetailHeader title="试看课程" subtitle="全部" link='visionCourseList' :params='{"courseList":visionDetail.categoryList}'/>
+      <DetailHeader title="试看课程" subtitle="全部" link='visionCourseList' />
       <SingleSetList :list='visionDetail.freeLessonList'></SingleSetList>
     </div>
     <!-- message -->
