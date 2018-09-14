@@ -101,7 +101,7 @@ export default {
   box-sizing: border-box;
 }
 .cl-list-title {
-  font-size: 28px;
+  font-size: 32px;
   color: rgb(51, 51, 51);
   text-align: left;
 }

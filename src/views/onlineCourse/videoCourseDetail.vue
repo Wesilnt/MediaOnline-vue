@@ -28,7 +28,11 @@
                 <img :src="lockIcon" class="video-test-question-img" alt="">
             </div>
             <div class="video-test-question-title">共3道自测题</div>
-            <!-- <mt-progress :value="20" :bar-height="4"/> -->
+            <van-progress
+                    pivot-text=""
+                    color="#FFA32F"
+                    :percentage="progress"
+            />
             <div class="video-test-question-warn">在学习n分钟可解锁自测题</div>
             <QuestionList  />
             <hr class="video-detail-line">
@@ -39,7 +43,7 @@
             <hr class="video-detail-line">
             <div id="leavemessage" ref="leavemessage" class="video-detail-sction-title">
                 <h4>留言</h4>
-                <div class="video-detail-leavemessage">
+                <div class="video-detail-leavemessage" @click="showkeyboard">
                     <img src="../../assets/images/onlinecourse_video_detail_ic_editor.png" alt="">
                     <span>我要留言</span>
                 </div>
@@ -47,9 +51,12 @@
             <!-- <video-comment v-for="item in singleComments" :key="item.id" :comment="item"/> -->
             <commentitem class="video-course-comment" v-for="item in singleComments" :key="item.id" :comment="item" :unindent="true" :regiontype="2202"/>
         </div>
+        <CommentBar />
 
         <!-- style="display:none" -->
         <video class="videoitem" ref="videoitem" :src="videoUrl" controls="controls" width="100%" height='100%' preload="auto"></video>
+        <!-- <van-field class="video-detail-input-" v-model="inputValue" placeholder="请输入用户名" /> -->
+
     </div>
 </template>
 
@@ -59,8 +66,14 @@ import playlist from './components/playlist.vue'
 import CommentItem from '../../components/CommentItem.vue'
 import videoComment from '../../components/video-comment.vue'
 import QuestionList from './QuestionList'
+import CommentBar from '../../components/CommentBar'
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions, mapMutations } = createNamespacedHelpers('videoCourseDetail')
+const {
+  mapState,
+  mapGetters,
+  mapActions,
+  mapMutations
+} = createNamespacedHelpers('videoCourseDetail')
 export default {
   name: 'VideoCourseDetail',
   components: {
@@ -68,7 +81,8 @@ export default {
     playlist: playlist,
     'video-comment': videoComment,
     commentitem: CommentItem,
-    QuestionList
+    QuestionList,
+      CommentBar
   },
   data() {
     return {
@@ -76,15 +90,26 @@ export default {
       navbarFixed: false, //控制navbar是否吸顶
       selected: 0,
       currentVideoTime:0,
+      inputValue:'',
       lockIcon:require('../../assets/images/onlinecourse_lock.jpg'),//未解锁
       unlockIcon:require('../../assets/images/onlinecourse_unlock.jpg'),//已解锁
       collectIcon:require('../../assets/images/onlinecourse_love_highlight.png'),//已收藏
       unCollectIcon:require('../../assets/images/onlinecourse_love_normal.png'),//未搜藏
       //视频播放相关属性
       timer:0,          //定时器
-      loaclPlayTotalTime:0,   //本地累计播放时长
+      duration: 0, //视频时长
+      progress:0,
+      loaclPlayTotalTime:1,   //本地累计播放时长
       localPlayTime:0,         //本地播放位置
       isUnlockQuestion:false   //是否解锁自测题    
+    }
+  },
+  watch: {
+    loaclPlayTotalTime: function(loaclPlayTotalTime) {
+      if (!this.duration) {
+        return (this.progress = 0)
+      }
+      return (this.progress = (loaclPlayTotalTime / this.duration) * 100)
     }
   },
   computed: {
@@ -94,6 +119,7 @@ export default {
         'audioUrl',              //音频地址
         'videoUrl',             //视频地址
         'courseId',              //专栏ID
+        'id',                    //单集ID
         'singleComments',
         'description',           //笔记
         'totalTime',             //服务器返回的视频总长度
@@ -107,29 +133,31 @@ export default {
         'learnTotalTime',       //服务器累计播放时长  
 
     ]),
+    ...mapGetters(['haveQuestionBOList'])
   },
-  mounted() {
+  async mounted() {
     //监听滚动
-    window.addEventListener('scroll', this.handleScroll)
+    await window.addEventListener('scroll', this.handleScroll)
     //视频播放器相关监听
-    const vid = this.$refs.videoitem
+    const vid = await this.$refs.videoitem
     //视频进度
     vid.addEventListener('timeupdate', this.getVideoProgress)
     //视频开始播放
     vid.addEventListener('play', this.getVideoPlay)
     //视频暂停
     vid.addEventListener('pause', this.getVideoPause)
+    //视频结束
+    vid.addEventListener('ended', this.getVideoEnd)
   },
   beforeDestroy() {
     console.log('Vue实例销毁了,页面也销毁了')
     const vid = this.$refs.videoitem
-    vid.removeEventListener('timeupdate',this.getVideoProgress)
-    vid.removeEventListener('play',this.getVideoPlay)
-    vid.removeEventListener('pause',this.getVideoPause)
+    vid.removeEventListener('timeupdate', this.getVideoProgress)
+    vid.removeEventListener('play', this.getVideoPlay)
+    vid.removeEventListener('pause', this.getVideoPause)
   },
   destroyed() {
     window.removeEventListener('scroll', this.handleScroll)
-
   },
   created() {
     //获取课程ID
@@ -151,9 +179,7 @@ export default {
     })
   },
   methods: {
-    ...mapMutations([
-      'updateLocalVideoData'
-    ]),
+    ...mapMutations(['updateLocalVideoData']),
     ...mapActions([
       'getVideoCourseDetail',
       'getLessonListByCourse',
@@ -162,57 +188,81 @@ export default {
       'unCollectFavorite'
     ]),
     openTimer(){
-      console.log(this.loaclPlayTotalTime)
-      console.log(Math.round(parseInt(this.totalTime) * 0.7))         
-      console.log(parseInt(this.totalTime))
-      this.timer = setInterval(()=>{      
-        if(this.loaclPlayTotalTime >= Math.round(parseInt(this.totalTime) * 0.7)) {
+      console.log('打开定时器')
+      // console.log(Math.round(parseInt(this.duration) * 0.7))
+      // console.log(parseInt(this.duration))
+      this.timer = setInterval(()=>{     
+        if(!this.isUnlockQuestion&&this.loaclPlayTotalTime >= Math.round(Math.round(this.duration) * 0.7)) {
           this.isUnlockQuestion = true          
           console.log('已经解锁自测题' + this.isUnlockQuestion)
         }
-        if(this.loaclPlayTotalTime > Math.round(parseInt(this.totalTime))) {
-          this.loaclPlayTotalTime = 0
-          this.clearTimer()
-          this.getVideoPause()
-        }
+        // if(this.loaclPlayTotalTime > Math.round(parseInt(this.totalTime))) {
+        //   this.loaclPlayTotalTime = 0
+        //   this.clearTimer()
+        //   this.getVideoPause()
+        // }
         this.loaclPlayTotalTime++     
       },1000)
     },
-    clearTimer(){
-       clearInterval(this.timer)
+    clearTimer() {
+      console.log('清空定时器')
+      clearInterval(this.timer)
+      this.loaclPlayTotalTime = 1
     },
     //播放视频
     clickPlayVideoBtn() {
-      this.$refs.videoitem.play()
+      const video = this.$refs.videoitem
+      video.play()
+      if (!this.duration) {
+        this.duration = video.duration
+      }
     },
-    getVideoPlay(){
+    getVideoPlay() {
       console.log('视频播放')
       //从本地获取历史播放位置
-      let historyPosition = window.localStorage.getItem('HistoryPlayPosition')
-      this.$refs.videoitem.currentTime = historyPosition || 0
+      let videoData = JSON.parse(window.localStorage.getItem(this.id))
+      console.log(videoData)
+      console.log(this.duration)
+      let historyPlayPosition = videoData.historyPlayPosition
+      if(historyPlayPosition >= this.duration){
+        this.$refs.videoitem.currentTime = 0
+      }else{
+        this.$refs.videoitem.currentTime =historyPlayPosition
+      }     
       //开启定时器记录视频累计播放时长
       this.openTimer()
     },
-    getVideoPause(){
+    getVideoPause() {
       console.log('视频暂停')
-      this.clearTimer()
-      let newTotalTime = this.loaclPlayTotalTime
+      let videoData = JSON.parse(window.localStorage.getItem(this.id))
+      let newTotalTime = this.loaclPlayTotalTime + Math.round(parseFloat(videoData.playTotalTime))
       let newPlayTime = this.$refs.videoitem.currentTime
-      console.log(newPlayTime)
-      window.localStorage.setItem('PlayTotalTime',newTotalTime)
-      window.localStorage.setItem('HistoryPlayPosition',newPlayTime)
+      this.clearTimer()          
+      // console.log(newTotalTime)
+      // console.log(newPlayTime)
+      let obj = {
+        'playTotalTime': newTotalTime,
+        'historyPlayPosition': newPlayTime
+      }
+      console.log(JSON.stringify(obj))
+      window.localStorage.setItem(this.id,JSON.stringify(obj))
+
+    },
+    getVideoEnd(){
+      console.log("视频结束")
+      // this.clearTimer()
+      // let obj = {
+      //   'playTotalTime': this.loaclPlayTotalTime,
+      //   'historyPlayPosition': 0
+      // }
+      // window.localStorage.setItem(this.id,JSON.stringify(obj))
     },
     getVideoProgress(){
-        // console.log(this.$refs.videoitem.currentTime)
-      //累计观看视频总长度*70%后解锁答题功能
 
-      //1.进入单集详情页面后,获取服务器播放时长和累计进度.拿服务器的累计进度和我本地的进度比较,如果我本地的记录大于服务器进度,就将我本地的进度提交给服务器,反之,如果我本地记录小与服务器的记录,就用服务器的记录更新我本地的记录
-      //2.点击播放按钮,进入播放器,
-      //3.监听play,开启定时器
-      //4.监听暂停状态,  获取当前播放进度,  获取计时器长度分别作为播放进度和累计时长,并存入本地
-      //5.情况一:不离开播放器页面.暂停时,获取本地存储的播放时长,加上计时器进度,更新本地记录的累计时长.销毁计时器.重新播放,开启定时器
-      //6.情况二:播放一段时间后,离开重新进入播放器页面.首先获取本地保存的视频播放记录,拿到累计时长和播放进度.根据本地播放进度回到历史进度
-      //7.情况三:关闭应用后,再回到播放器界面,根据本地播放记录回到历史记录
+    },
+    //显示键盘
+    showkeyboard(){
+      console.log('显示键盘')
     },
     //收藏
     onCollectFavorite() {
@@ -270,6 +320,7 @@ export default {
 <style lang="scss" scoped>
 .videocourse-detail-container {
   background-color: #fff;
+  font-size: 24px;
 }
 //header
 .video-detail-header {
@@ -334,7 +385,7 @@ export default {
 .video-detail-navbar {
   position: -webkit-sticky;
   position: sticky;
-  top: 0px;
+  top: 0;
   left: 0;
   right: 0;
   width: 100%;
@@ -380,6 +431,8 @@ export default {
 //content
 .video-detail-content {
   padding: 0 40px;
+  border: none;
+  border-bottom: 8px solid #f7f7f7;
 }
 .video-detail-sction-title {
   display: flex;
@@ -432,9 +485,19 @@ export default {
     margin: 16px 12px 16px 30px;
   }
 
-  span {
+  input {
     font-size: 32px;
     color: rgb(255, 163, 47);
   }
 }
+.video-detail-input {
+  display:fixed;
+  bottom:0;
+  width: 100%;
+  height: 60px;
+  border-radius: 30px;
+}
 </style>
+
+
+

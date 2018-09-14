@@ -93,7 +93,8 @@ export default {
         pageSize,
         currentPage,
         currentType: Types[currentType],
-        isPraise
+        isPraise,
+        loadType: 'querying'
       })
     },
     refreshing: function(refreshing) {

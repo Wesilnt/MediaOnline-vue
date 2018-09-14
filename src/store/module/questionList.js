@@ -6,25 +6,29 @@ const questionList = {
     answers: {},
     answersChecked: false,
     questionIndex: 0,
-    loading: false
+    loading: false,
+    newGrade: ''
   },
 
   getters: {
     questionList: (state, getters, { videoCourseDetail }) =>
       videoCourseDetail.questionBOList,
+    grade: (state, getters, { videoCourseDetail }) => videoCourseDetail.grade,
+    title: (state, getters, { videoCourseDetail }) => videoCourseDetail.title,
     questionInfo: ({ questionIndex, answers, text }, getters) => {
+
       const { questionList } = getters
       const queations = {
         question: ''
       }
-      const current =questionIndex+1
+      const current = questionIndex+1;
       const currentQuestion = { ...queations, ...questionList[questionIndex] }
       const { rightOpt, id } = currentQuestion
       const len = questionList.length
       const isLastQuestion = current === len
       const nextBtnText = isLastQuestion ? '立即查看结果' : '下一题'
       const footerBadge = `${current} /\ ${len}`
-      const userSelect = answers[id]
+      const userSelect =answers[id]
       const isCorrect = userSelect === `opt${rightOpt}`
       const headerTitle =
         userSelect === undefined
@@ -38,7 +42,7 @@ const questionList = {
         footerBadge,
         isLastQuestion,
         ...currentQuestion,
-        userSelect,
+        userSelect:userSelect?`opt${answers[id]}`:null,
         isCorrect
       }
     }
@@ -75,16 +79,18 @@ const questionList = {
       await commit('saveStatus', {
         loading: true
       })
+        const formatAnsmwer=answer[answer.length - 1];
       commit('saveAnswer', {
-        answers: { [id]: answer }
+        answers: { [id]: formatAnsmwer }
       })
       const response = await uploadAnswer({
-        answer: answer[answer.length - 1],
+        answer: formatAnsmwer,
         lessonId
       })
       if (!response) return
       await commit('saveStatus', {
-        loading: false
+        loading: false,
+          grade:response.data
       })
     },
     async handleNext({ dispatch, commit }, { nextIndex }) {
