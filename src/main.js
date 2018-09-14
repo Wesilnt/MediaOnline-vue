@@ -14,7 +14,7 @@ Vue.filter('formatDuring', formatDuring)
 Vue.config.productionTip = false
 
 //vant组件引入
-import { Popup, Toast } from 'vant'
+import { Popup, Toast, Field } from 'vant'
 import { SwipeCell, Dialog,List ,Cell} from 'vant'  
 Vue.use(Cell)
 Vue.use(Popup)
@@ -22,6 +22,7 @@ Vue.use(Toast)
 Vue.use(SwipeCell)
 Vue.use(Dialog)
 Vue.use(List)
+Vue.use(Field);
 
 new Vue({
   router,

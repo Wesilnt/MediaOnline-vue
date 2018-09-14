@@ -17,6 +17,7 @@ const videoCourseDetail = {
         audioUrl:'',              //音频地址
         videoUrl:'',              //视频地址
         courseId:0,               //专栏ID
+        id:0,                     //单集ID
         isFree:0,
         isLike:0,
         createTime:'',
@@ -47,6 +48,7 @@ const videoCourseDetail = {
             state.audioUrl = payload.audioUrl
             state.videoUrl = payload.videoUrl
             state.courseId = payload.courseId
+            state.id = payload.id
             state.isFree = payload.isFree
             state.isLike = payload.isLike
             state.totalTime = payload.totalTime
@@ -91,37 +93,42 @@ const videoCourseDetail = {
 
             //在这里判断是否提交本地的视频播放数据
             let storage = window.localStorage;
-            let loaclPlayTime = storage.getItem("PlayTotalTime")
-            let loaclPlayPosition = storage.getItem("HistoryPlayPosition")
-
-            let servicePlayTime = result.learnTotalTime || 0
+            //根据单集ID来存储视频播放数据对象
+            let videoData = JSON.parse(storage.getItem(result.id))
+            //服务器数据
+            let servicePlayTotalTime = result.learnTotalTime || 0
             let servicePlayPosition = result.learnTime
-            console.log('lessonId = ' + lessonId)
-            console.log('loaclPlayTime =')
-            console.log(loaclPlayTime)
-            console.log('loaclPlayPosition = ')
-            console.log(loaclPlayPosition)
-            console.log('servicePlayTime = ' + servicePlayTime)
-            console.log('servicePlayPosition = ' + servicePlayPosition)
-            if(loaclPlayTime > servicePlayTime) {
-                console.log('11111111111')
-                let payload = {
-                    'lessonId' : lessonId,
-                    'listenTime':Math.round(parseInt(loaclPlayTime)),
-                    'showTime' :Math.round(parseInt(loaclPlayPosition))
-                }
-                console.log('payload = ' )
-                console.log(payload)
-                //如果本地累计播放时长大于服务器记录的,就用本地的记录更新服务器的记录
-                dispatch('lessonListenForVedio',payload).then(()=>{
-                        console.log('更新服务器播放数据成功')
+            if(videoData != null) {
+                //本地数据
+                let loaclPlayTotalTime = videoData.playTotalTime || 0
+                let loaclPlayPosition = videoData.historyPlayPosition
+                if(loaclPlayTotalTime > servicePlayTotalTime) {
+                    let payload = {
+                        'lessonId' : lessonId,
+                        'listenTime':Math.round(parseFloat(loaclPlayPosition)),  //播放位置
+                        'showTime' :Math.round(parseFloat(loaclPlayTotalTime))   //累计时长
                     }
-                )
-            }else{
-                console.log('222222222222')
-                //如果本地时长小与服务器的记录(比如换手机,微信清缓存等异常情况),用服务器记录去更新我本地的播放记录
-                storage.setItem("PlayTotalTime",servicePlayTime)
-                storage.setItem("HistoryPlayPosition",servicePlayPosition)
+                    //如果本地累计播放时长大于服务器记录的,就用本地的记录更新服务器的记录
+                    dispatch('lessonListenForVedio',payload).then(()=>{
+                            console.log('更新服务器播放数据成功')
+                        }
+                    )
+                }else{
+                    //如果本地时长小与服务器的记录(比如换手机,微信清缓存等异常情况),用服务器记录去更新我本地的播放记录
+                    let obj = {
+                        'playTotalTime': servicePlayTotalTime,
+                        'historyPlayPosition' :servicePlayPosition
+                    }
+                    obj = JSON.stringify(obj)
+                    storage.setItem(result.id,obj)
+                }
+            }else {
+                let obj = {
+                    'playTotalTime': servicePlayTotalTime,
+                    'historyPlayPosition' :servicePlayPosition
+                }
+                obj = JSON.stringify(obj)
+                storage.setItem(result.id,obj)
             }
         },
 
@@ -164,8 +171,8 @@ const videoCourseDetail = {
 
         async lessonListenForVedio({commit},payload) {
             const result = await lessonListenForVedio({'lessonId' : payload.lessonId, 'listenTime' : payload.listenTime, 'showTime' : payload.showTime})
-            console.log("提交视频播放数据成功")
-            console.log(result)
+            // console.log("提交视频播放数据成功")
+            // console.log(result)
             commit('submitVideoPlayData')
         }
     },
