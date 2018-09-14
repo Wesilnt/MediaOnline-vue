@@ -3,7 +3,7 @@ import { getAudioDetail, postFavorite,postUnFavorite, getAudioDesc, getSingleSet
 export default {
     namespaced: true,
     state: {
-        isLike:{isLoad:true, like:false},
+        isLike:false,
         singleSetList:[],
         currentPage: 1,  //音频列表分页-页码
         pageSize:20,      //分页-记录条数
@@ -12,13 +12,12 @@ export default {
     },
     mutations: {
         bindAudioDetail(state, res) {
-            state.audioDetail = res 
-            console.log(res)
-            state.isLike ={isLoad:true,like:state.audioDetail.isLike}
+            state.audioDetail = res  
+            state.isLike = state.audioDetail.isLike
         },
         postFavorite(state, res) {
           state.audioDetail.isLike = !state.audioDetail.isLike
-          state.isLike ={isLoad:false,like:state.audioDetail.isLike}
+          state.isLike = state.audioDetail.isLike
         },
         getAudioDesc(state, res) {
 
@@ -55,6 +54,15 @@ export default {
         async seekTo({commit},progress){ 
           commit('seekTo', progress, { root: true })
         },
+        //下一集
+        async next({dispatch},params){ 
+          dispatch('playNext', params, { root: true })
+        },
+        //上一集
+        async pre({commit},params){ 
+          dispatch('playPre', params, { root: true })
+        },
+
         //音频单集详情
         async getAudioDetail({getters, commit,dispatch }, params) {
           dispatch('getAudioDetail', params, { root: true })
@@ -65,22 +73,17 @@ export default {
         },
         //音频收藏 我喜欢的
         async postFavorite({ commit }, params) {
-            const res = await postFavorite(params)
-            console.log("我喜欢的")
-            console.log(res)
+            const res = await postFavorite(params) 
             commit("postFavorite", res)
         },
         //音频取消 我喜欢的
         async postFavorite({ commit }, params) {
             const res = await postUnFavorite(params)
-            console.log("取消我喜欢的")
-            console.log(res)
             commit("postFavorite", res)
         },
         //音频单集文稿详情
         async getAudioDesc({ commit }, params) {
-            const res = await getAudioDesc(params)
-            console.log(res)
+            const res = await getAudioDesc(params) 
             commit("getAudioDesc", res)
         },
         //音频单集列表
@@ -93,7 +96,6 @@ export default {
         async getCommentList({ commit }, params) {
             params.currentPage = (params.currentPage|1)+1
             const res = await getCommentList(params)
-            console.log(res)
             commit("getCommentList", res)
         }
     },

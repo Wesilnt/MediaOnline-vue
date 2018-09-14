@@ -41,7 +41,7 @@
 </template>
 <script>
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions } = createNamespacedHelpers('videoColumnDetail')
+const { mapState, mapActions } = createNamespacedHelpers('comment')
 export default {
   filters: {
     dateFormat: function(value) {
@@ -78,8 +78,7 @@ export default {
     // console.log(this.comment)
     this.$nextTick(() => {
       let ref = this.$refs.reference
-      if (ref) {
-        console.log(ref.scrollHeight)
+      if (ref) { 
         this.canExpand = ref.scrollHeight > 22 * 3
       }
     })
@@ -88,12 +87,12 @@ export default {
 </script>
 <style lang='scss'>
 .comments-container{
-  width: 100%;
+  width: 100%; 
 }
 .comment-item {
   display: flex;
   flex-direction: row;
-  padding: 0px 40px 48px;
+  padding: 48px 40px 48px;
   .comment-header {
     width: 80px;
     height: 80px;
@@ -128,6 +127,7 @@ export default {
       margin: 0;
       font-size: 32px;
       line-height: 32px;
+      font-weight: 500;
       color: rgb(128, 128, 128);
     }
     h5 {
@@ -167,6 +167,7 @@ export default {
         margin: 0;
         font-size: 28px;
         line-height: 44px;
+        font-weight: 400;
       }
       span {
         font-size: 28px;

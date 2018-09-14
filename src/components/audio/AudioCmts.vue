@@ -1,11 +1,22 @@
 <template>
   <div class="comments-container">
     <!-- 全部留言 -->
-    <div class="commment-list">
-      <div v-for="item of commentList" :key="item.id" class="comment-item">
-         <comment-item :comment="item"/>
-      </div>
-    </div>
+    <!-- <div class="commment-list"> -->
+      <van-list
+          class="commment-list"
+          v-model="refreshing"
+          :finished="finished"
+          :immediate-check="false"
+          @load="scrollBottom"
+          @offset="10">
+      <!-- <div v-for="item of commentList" :key="item.id" class="comment-item"> -->
+           <van-cell  v-for="item of commentList" :key="item.id" class="comment-item" >
+                  <comment-item :comment="item"/>
+           </van-cell>
+      <!-- </div> -->
+      <!-- <div class="loadmore" v-scrollbottom="scrollBottom">加载更多</div> -->
+      </van-list>
+    <!-- </div> -->
     <!-- 评论按钮 -->
     <div class="comment-publish">
       <div class="comment-method" @click="onCommentMethod" v-if="false">
@@ -15,7 +26,7 @@
         <p v-if="isSpeak" class="speak-btn" @touchstart.prevent="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
           {{isSpeaking?'松开&nbsp;结束':'按住&nbsp;说话'}}
         </p>
-        <textarea v-else v-model="commentContent" rows="1" placeholder="写评论"/>
+        <textarea v-else v-model="commentContent" rows="1" placeholder="写评论" @keyup.enter="onKeyUp"/>
       </div>
       <div v-if="!isSpeak" class="comment-send" @click="onSendComment">
         <img :src="commentContent.length<=0?require('../../assets/cmt_send_unable.png'):require('../../assets/cmt_send_abled.png')">
@@ -25,73 +36,86 @@
 </template>
 <script>
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions, mapMutations } = createNamespacedHelpers(
-  'comment'
-)
+const { mapState, mapActions, mapMutations } = createNamespacedHelpers('comment')
 import CommentItem from '../CommentItem.vue'
 export default {
-  components: {
-    'comment-item': CommentItem
-  },
+  components: {'comment-item': CommentItem},
   data() {
     return {
       lessonId: this.$route.params.lessonid,
       isSpeak: false,
       isSpeaking: false,
-      commentContent: ''
+      commentContent: '',  
+      refreshing:false
     }
   },
-  computed: { ...mapState(['commentList']) },
-  created() {
-    this.setLessonId(this.lessonId)
-    this.getCommentList(false)
+  directives:{
+    'scrollbottom':(el,binding)=>{
+      // window.onscroll = ()=>{
+      //   // console.log(el.scrollTop)
+      //   // console.log(el.scrollHeight)
+      //   // console.log(el.offsetHeight)
+      //   // binding.value()
+      // }
+    }
   },
-  methods: {
-    ...mapMutations(['setLessonId']),
+  computed: { ...mapState(['commentList','finished','loading']) },
+  created() {
+    this.getCommentList({lessonId:this.lessonId,isLoadMore:false}) 
+  },
+  watch:{
+    loading:function(loading){
+      this.refreshing = loading
+    }
+  },
+  methods: { 
     ...mapActions(['getCommentList', 'postComment']),
+    //分页加载
+    scrollBottom(){ 
+      console.log("分页加载")
+      this.getCommentList({lessonId:this.lessonId,isLoadMore:true}) 
+    },
     //切换评论方式
     onCommentMethod() {
       this.isSpeak = !this.isSpeak
-    },
+    }, 
     //输入或者录入评论
     onInputeComment() {},
     //发送评论
-    onSendComment() {
-      console.log('fsdf')
+    onSendComment() {  
+       if(this.commentContent.trim().length<=0){
+           this.$toast('期待你宝贵的建议')
+           this.commentContent = ''
+         return
+       }
       this.postComment({
         regionId: this.lessonId, //单集id
         regionType: 2202, //目标类型（2201：专栏，2202：单集）
         commentType: 3301, //评论类型（3301:text,3302:voice,3303:text&voice)
         content: this.commentContent, //留言内容
         duration: '' //音频长度
-      })
-      // this.$toast('发布评论成功')
+      }) 
+      this.commentContent = ''
     },
     //点赞
     onPraise(index) {
       let isPraised = this.comments[index].isPraised
       this.comments[index].isPraised = !isPraised
-      Toast(isPraised ? '取消点赞' : '点赞成功')
+      this.$toast(isPraised ? '取消点赞' : '点赞成功')
     },
-    lookWhole() {},
-    handleTouchStart(e) {
-      console.log(e)
+    onKeyUp(key){ 
+      this.onSendComment(); 
     },
-    handleTouchMove(e) {
-      console.log(e)
-    },
-    handleTouchEnd(e) {
-      console.log(e)
-    }
+ 
   }
 }
 </script>
-<style lang='scss'>
+<style lang='scss' scoped>
 .commment-list {
   display: flex;
   flex-direction: column;
   padding-bottom: 160px;
-  padding-top: 40px;
+  padding-top: 10px;
 }
 
 .comment-publish {

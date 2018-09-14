@@ -41,8 +41,7 @@ export default {
     },
     getters: {
         //获取
-        getBookIntroduce:function(state) {
-          console.log(state)
+        getBookIntroduce:function(state) { 
             return {
                 name: state.bookDetail.name,                         //单集名称
                 coverPic: state.bookDetail.coverPic,                 //封面图
