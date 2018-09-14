@@ -21,18 +21,20 @@ const myPurchase = {
     async queryList({ dispatch, commit, state },{type, orderBy}) {
 
       const response = await getMyPurchase({type:type, orderBy:'lastBought', currentPage:1,pageSize:50})
+
       console.log(response.result)
-      if ( type === '1003' ){
+      if ( type === 1003 ){
         await commit({
           type: 'saveList',
           onLineVisionList: response.result
         })
-      } else if( type === '1005' ){
+        console.log("Purchase" + response.result.length)
+      } else if( type === 1005 ){
         await commit({
           type: 'saveList',
           onLineVideoList: response.result
         })
-      } else if( type === '1007') {
+      } else if( type === 1007) {
         await commit({
           type: 'saveList',
           onLineReadList: response.result

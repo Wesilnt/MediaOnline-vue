@@ -15,11 +15,13 @@ Vue.config.productionTip = false
 
 //vant组件引入
 import { Popup, Toast } from 'vant'
-import { SwipeCell, Dialog } from 'vant'
+import { SwipeCell, Dialog,List ,Cell} from 'vant'  
+Vue.use(Cell)
 Vue.use(Popup)
 Vue.use(Toast)
 Vue.use(SwipeCell)
 Vue.use(Dialog)
+Vue.use(List)
 
 new Vue({
   router,

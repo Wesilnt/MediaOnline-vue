@@ -21,6 +21,9 @@ import PageLoading from '../components/PageLoading'
 import PageInfo_From_Home from './router_home'
 import PageInfo_From_My from './router_my'
 import PageInfo_From_OnlineCourse from './router_onlineCourse'
+import PageInfo_From_Readings from './router_readings'
+import PageInfo_From_Audio from './router_audio'
+
 
 const Home = () => import(/* webpackChunkName: "home" */ '../views/Home')
 const My = () => import(/* webpackChunkName: "my" */ '../views/My')
@@ -68,56 +71,6 @@ export default new Router({
       name: 'FreeZone',
       component: FreeZone
     },
-    // {
-    //   path: '/home/visionList',
-    //   name: 'VisionList',
-    //   component: VisionList
-    // },
-    // {
-    //   path: '/home/visionDetail/:id',
-    //   name: 'VisionDetail',
-    //   component: VisionDetail,
-    //   props: true
-    // },
-    // {
-    //   path: '/home/videoList',
-    //   name: 'VideoList',
-    //   component: VideoList
-    // },
-    {
-      path: '/home/readings',
-      name: 'Readings',
-      component: Readings
-    },
-    {
-      path: '/home/readings/book',
-      name: 'BookDetail',
-      component: BookDetail
-    },
-    {
-      path: '/home/readings/summary',
-      name: 'BookSummary',
-      component: BookSummary
-    },
-    // { path:'/videoColumnDetail',
-    //   name:'videoColumn',
-    //   component:videoColumnDetail
-    // },
-    {
-      path: '/audio/audioplay',
-      name: 'AudioPlay',
-      component: AudioPlay
-    },
-    {
-      path: '/audio/audiocmts/:lessonid',
-      name: 'AudioCmts',
-      component: AudioCmts
-    },
-    {
-      path: '/audio/audiodraft/:lessonid',
-      name: 'AudioDraft',
-      component: AudioDraft
-    },
     {
       path: '/praise',
       name: 'Praise',
@@ -130,6 +83,8 @@ export default new Router({
     },
     ...PageInfo_From_Home,
     ...PageInfo_From_My,
-    ...PageInfo_From_OnlineCourse
+    ...PageInfo_From_OnlineCourse,
+    ...PageInfo_From_Readings,
+    ...PageInfo_From_Audio
   ]
 })

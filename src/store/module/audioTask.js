@@ -1,4 +1,4 @@
-import { getAudioDetail} from '../../services/audioApi'
+import { getAudioDetail,postLearnRate} from '../../services/audioApi'
 
 export default {
     state: {
@@ -7,7 +7,8 @@ export default {
         currentTime:0,    //
         maxTime: 0,       //
         playMode:'order', // order:顺序播放  single：单曲播放
-        isPlaying:false   //
+        isPlaying:false,   //
+        statusFunc:(commit,status)=>commit('statusUpdate', status)
     },
     mutations: { 
         //同步音频数据
@@ -34,6 +35,7 @@ export default {
         timeUpdate(state){
             state.currentTime = state._at.currentTime
             state.maxTime = state._at.duration
+             
         },
         //播放状态更新
         statusUpdate(state,status){
@@ -59,12 +61,15 @@ export default {
         },
         //音频播放异步方式
         async asyncPlay({state, commit,dispatch }, params) { 
+          if(params&&params.lessonId == state.audioDetail.id)
+          return state.audioDetail
           if(params){
             const res = await dispatch('getAudioDetail',params)   
             commit("syncPlay",{audioUrl:res.audioUrl})
             return res
           }else{
             commit(state.isPlaying?"syncPause":"syncPlay")
+            return state.audioDetail
           }
         },
         //音频暂停异步方式
@@ -114,6 +119,9 @@ export default {
           //网速失速
           state._at.addEventListener('stalled', () =>  commit('statusUpdate', 'stalled'))
         },
+        onDestroy(){
+
+        }
     },
     getters:{ 
       pageSize: state=> state.pageSize,

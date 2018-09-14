@@ -8,7 +8,7 @@
     <!-- 中间tabbar -->
     <div class="tab-container">
       <div class="tab-item" @click="onCollect">
-        <img :src="isLike.like?require('../../assets/audio_love_collect.png'):require('../../assets/audio_love_normal.png')">
+        <img :src="isLike?require('../../assets/audio_love_collect.png'):require('../../assets/audio_love_normal.png')">
       </div>
       <router-link :to="'/audio/audiodraft/'+lessonId" v-if="false" class="tab-item" tag="div">
         <img src="../../assets/audio_play_manuscripts.png">
@@ -104,6 +104,7 @@ export default {
   data() {
     return {
       lessonId: this.$route.query.id,
+      isInit:true,
       play: true,
       isSingle: false, //是否单个循环
       // isPlaying: false, //是否正在播放
@@ -124,8 +125,8 @@ export default {
     }
   },
   computed:{...mapState({isLike(state){ 
-    let like = state.isLike.like
-    if(!state.isLike.isLoad){
+    let like = state.isLike
+    if(!this.isInit){
       if(like)
       this.$toast.success({duration:2000,message: '已添加到我喜欢的'})
       else
@@ -136,10 +137,11 @@ export default {
   ...mapGetters(["audio",'currentTime','maxTime', 'playMode','status','playing']), 
   },
   created() {
+    this.isInit = true
     this.playAudio({lessonId:this.lessonId}) 
   },
   methods: {
-    ...mapActions(['getAudioDetail','postFavorite','playAudio','pauseAudio','setPlayMode','seekTo']),
+    ...mapActions(['getAudioDetail','postFavorite','playAudio','pauseAudio','setPlayMode','seekTo','pre','next']),
     //进度条拖动 OTAwOWY1ZjgtZTJiYy00Y2IwLTk4ZDktNzIxYjMyMTUzYzU2
     sliderChange(value) {
       console.log(value)
@@ -150,18 +152,12 @@ export default {
       this.progress = e.target.value  
     },
     handleTouchStart(e){
-      this.touching = true 
-      console.log(e)
+      this.touching = true  
     },
-    handleTouchMove(){
-
-    },
+    handleTouchMove(){},
     handleTouchEnd(e){ 
-        this.touching = false 
-      // this.audioTask.seekTo(parseInt(this.currentTime))
-      // this.touching = false
-      this.seekTo(this.progress)
-     
+      this.touching = false  
+      this.seekTo(this.progress) 
     },
     handleTouchCancel(){
       this.touching = false
@@ -184,17 +180,29 @@ export default {
       this.$toast(mode=='single' ? '单曲循环' : '列表循环') 
       this.setPlayMode(mode)
     },
+      //播放/暂停
+      onPlayPause() {
+        this.playAudio() 
+      },
     //上一首
     onPlayPrv() {
-      this.$toast.fail({ message: '这是第一条' })
-    },
-    //播放/暂停
-    onPlayPause() {
-      this.playAudio() 
+         if(!this.audio)return
+         let preId = this.audio.preLessonId
+         if(preId&&-1!=preId){
+           this.pre({lessonId:preId})
+         }else{
+             this.$toast.fail('这是第一条')
+         }
     },
     //下一首
     onPlayNext() {
-      this.$toast.fail('已经是最后一条')
+         if(!this.audio)return
+         let nextId = this.audio.nextLessonId
+         if(nextId&&-1!=nextId){
+           this.pre({lessonId:nextId})
+         }else{
+             this.$toast.fail('已经是最后一条')
+         } 
     },
     //音频进度监听
     // onTimeUpdate(currentTime, duration) {
@@ -242,7 +250,7 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 .audioplay-container {
   display: flex;
   flex-direction: column;
@@ -514,6 +522,7 @@ export default {
 .van-toast--default {
   min-height: 0;
   width: auto;
+  white-space: nowrap;
 }
 
 .first-icon,
