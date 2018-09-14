@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import 'amfe-flexible/index.min.js'
-import './publicUIConfig/mintUIComponentImport'
+import './publicUIConfig/UIUse'
 
 import App from './App.vue'
 import router from './router/router'

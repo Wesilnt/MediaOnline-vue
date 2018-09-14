@@ -6,18 +6,21 @@ const questionList = {
     answers: {},
     answersChecked: false,
     questionIndex: 0,
-    loading: false
+    loading: false,
+    newGrade: ''
   },
 
   getters: {
     questionList: (state, getters, { videoCourseDetail }) =>
       videoCourseDetail.questionBOList,
+    grade: (state, getters, { videoCourseDetail }) => videoCourseDetail.grade,
+    title: (state, getters, { videoCourseDetail }) => videoCourseDetail.title,
     questionInfo: ({ questionIndex, answers, text }, getters) => {
       const { questionList } = getters
       const queations = {
         question: ''
       }
-      const current =questionIndex+1
+      const current = questionIndex + 1
       const currentQuestion = { ...queations, ...questionList[questionIndex] }
       const { rightOpt, id } = currentQuestion
       const len = questionList.length

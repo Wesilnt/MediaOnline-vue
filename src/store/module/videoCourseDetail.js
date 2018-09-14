@@ -25,6 +25,8 @@ const videoCourseDetail = {
         learnTime:0,               //上次播放位置
         learnTotalTime:0,          //累计播放时长 
         questionBOList:[],        //自测题列表
+        title:'',                   //标题
+        grade:'',                 //称号
         //所有单集接口
         lessonList : [],              //目录课程
         //评论接口
@@ -45,7 +47,9 @@ const videoCourseDetail = {
             state.totalTime = payload.totalTime
             state.createTime = payload.createTime
             state.description = payload.description
+            state.title = payload.title
             state.questionBOList = payload.questionBOList
+            state.grade = payload.grade
             state.learnTotalTime = payload.learnTotalTime
             state.learnTime = payload.learnTime
         },

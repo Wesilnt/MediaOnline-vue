@@ -51,10 +51,10 @@
                 <strong class="answer-name">
                     XXX同学，你在
                 </strong>
-                <p>《伍老师说历史》</p>
+                <p>《{{title}}》</p>
                 <p>课程自测中获得</p>
                 <strong class="settlement-grade">
-                    超级大师
+                    {{newGrade?newGrade:grade}}
                 </strong>
                 <p>请继续加油</p>
                 <hr class="settlement-dashed-underline">
@@ -85,8 +85,14 @@ export default {
     }
   },
   computed: {
-    ...mapState(['questionIndex', 'answers', 'loading', 'answersChecked']),
-    ...mapGetters(['questionList', 'questionInfo'])
+    ...mapState([
+      'questionIndex',
+      'answers',
+      'loading',
+      'answersChecked',
+      'newGrade'
+    ]),
+    ...mapGetters(['questionList', 'questionInfo', 'grade','title'])
   },
   methods: {
     ...mapActions([
@@ -127,8 +133,8 @@ export default {
       }
       const nextIndex = questionIndex + 1
       if (nextIndex + 1 > questionList.length) {
-        const answersArr = Object.entries(answers)
-        const corrects = questionList.reduce((prev, item, index) => {
+        // const answersArr = Object.entries(answers)
+        /*const corrects = questionList.reduce((prev, item, index) => {
           const answerItem = answersArr[index]
           if (
             item.id === answerItem[0] &&
@@ -137,7 +143,7 @@ export default {
             prev.push(true)
           }
           return prev
-        }, [])
+        }, [])*/
         this.handlePopupHide('questionShow')
         this.handlePopupShow('settlementShow')
       } else {
@@ -152,7 +158,6 @@ export default {
     }
   },
   destroyed: function() {
-    console.log('销毁')
     this.resetQuestionList()
   }
 }

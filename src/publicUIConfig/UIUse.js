@@ -17,9 +17,11 @@ import {
   Popup,
   Lazyload,
   PullRefresh,
-    List
+  List,
+  Progress
 } from 'vant'
 
+Vue.use(Progress)
 Vue.use(Toast)
 Vue.use(Button)
 Vue.use(Tag)
@@ -27,9 +29,8 @@ Vue.use(Popup)
 Vue.use(Tab).use(Tabs)
 Vue.use(Swipe).use(SwipeItem)
 Vue.use(Lazyload, {
-  // preLoad: 1,
   error: loading,
   loading: loading
 })
 Vue.use(PullRefresh)
-Vue.use(List);
+Vue.use(List)
