@@ -1,6 +1,6 @@
 <template>
     <div class="reply">
-        <div v-for="item in messageList" :key="item.id">
+        <div v-for="item in messageList" :key="item.id" class="reply-list">
             <div class="reply-list-item">
                 <img src="item.content | jsonToData('fromAvatarUrl')" class="reply-list-item-avatar"/>
                 <div class="reply-list-item-content">
@@ -14,7 +14,7 @@
         </div>
 
         <div class="reply-read-more">
-            <p class="reply-read-more-text">查看更早的消息</p>
+            <p class="reply-read-more-text">查看更早的消息...</p>
         </div>
         <div class="reply-divider-line"></div>
 
@@ -88,62 +88,59 @@
         display: flex;
         flex-direction: column;
         font-size: 28px;
-        &-list-item {
-            width: 100%;
-            padding: 30px 36px 16px 20px;
-            display: flex;
-            flex-direction: row;
-            border-bottom: #ddd 1px solid ;
-            &-avatar {
-                width: 94px;
-                height: 94px;
-                background-color: #ff9521;
-                border-radius: 12px;
-                outline: none;
-            }
+        &-list {
+            padding: 0px 30px 0px 30px;
+            &-item {
+                width: 100%;
+                padding: 30px 0px 30px 0px;
+                display: flex;
+                flex-direction: row;
+                border-bottom: #ddd 1px solid;
+                &-avatar {
+                    width: 94px;
+                    height: 94px;
+                    background-color: #ff9521;
+                    border-radius: 12px;
+                    outline: none;
+                }
 
-            &-content-name {
-                padding: 0px 0px 0px 0px;
-                font-size: 28px;
-                color: #57668f;
-            }
-
-            &-content {
-                width: 70%;
-                float: right;
-                font-size: 26px;
-                padding: 6px 20px 0px 20px;
-            }
-
-            &content-time {
-                font-size: 26px;
-                color: #737373;
-                padding: 0px 0px 16px 0px;
-            }
-
-            &-parent-content {
-                width: 130px;
-                height: 120px;
-                font-size: 26px;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                display: -webkit-box;
-                -webkit-line-clamp: 3;
-                -webkit-box-orient: vertical;
+                &-content {
+                    width: 70%;
+                    float: right;
+                    font-size: 26px;
+                    padding: 6px 20px 0px 20px;
+                    &-name {
+                        padding: 0px 0px 20px 0px;
+                        font-size: 28px;
+                        color: #57668f;
+                    }
+                    &-detail {
+                        padding: 0px 0px 22px 0px;
+                        font-size: 28px;
+                        color: #57668f;
+                    }
+                    &-time {
+                        font-size: 26px;
+                        color: #737373;
+                    }
+                }
+                &-parent-content {
+                    width: 130px;
+                    height: 120px;
+                    font-size: 26px;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 3;
+                    -webkit-box-orient: vertical;
+                }
             }
         }
-
-        &-divider-line {
-            height: 1px;
-            background: #ddd;
-            text-align: center;
-            margin: 0px 30px 0px 30px;
-        }
-
         &-read-more {
             width: 100%;
             height: 118px;
             text-align: center;
+            border-bottom: #ddd 1px solid;
             &-text {
                 width: 100%;
                 height: 118px;

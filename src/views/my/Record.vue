@@ -11,18 +11,21 @@
             <div class="playRecord-head">
                 <img class="playRecord-head-left-icon" src="../../assets/images/my_record_play.png"/>
                 <p class="playRecord-head-record-text">最近播放</p>
-                <p class="playRecord-head-record-number">(共26条记录)</p>
+                <p class="playRecord-head-record-number">(共{{playRecordList.length}}条记录)</p>
                 <img class="playRecord-head-right-icon" src="../../assets/images/my_sys_menu.png">
             </div>
-            <div v-for="item in playRecordList" :key="item.id">
+            <div v-for="item in playRecordList" :key="item.id" class="playRecord-list">
                 <van-swipe-cell :right-width="150" :on-close="onClose(item.id)">
-                    <div class="playRecord-item">
-                        <img src="" class="like-item-avatar"/>
-                        <div class="playRecord-item-content">
-                            <p class="playRecord-item-content-name">{{item.title}}</p>
-                            <p class="playRecord-item-content-detail">{{item.subTitle}}</p>
+                    <div class="playRecord-list-item">
+                        <!--<img src="" class="like-item-avatar"/>-->
+                        <div class="playRecord-list-item-content">
+                            <p class="playRecord-list-item-content-name">{{item.title}}</p>
+                            <div>
+                                <p v-if="" class="playRecord-list-item-content-detail">{{item.courseName}} -
+                                    {{item.subTitle}} - {{item.learnTime}} / {{item.totalTime}}</p>
+                            </div>
                         </div>
-                        <img class="playRecord-item-img-more" src="../../assets/images/my_record_more.png"/>
+                        <img class="playRecord-list-item-img-more" src="../../assets/images/my_record_more.png"/>
                     </div>
                     <span slot="right">删除</span>
                 </van-swipe-cell>
@@ -85,72 +88,72 @@
             background: #fde3e3;
         }
         &-head {
-            padding: 20px;
+            padding: 40px 30px 40px 0px;
             display: flex;
             flex-direction: row;
-
+            margin-right: 30px;
+            margin-left: 30px;
+            border-bottom: 0.1px solid #ddd;
             &-left-icon {
-                width: 60px;
-                height: 60px;
-                margin: 20px 20px 20px 20px;
+                width: 40px;
+                height: 40px;
+                margin: 7px 20px 0px 0px;
             }
             &-record-text {
-                padding: 20px 8px 0px 0px;
+                padding: 3px 8px 0px 0px;
                 font-size: 36px;
                 color: #3e3e53;
             }
             &-record-number {
-                padding: 25px 0px 0px 0px;
+                padding: 6px 0px 0px 0px;
                 font-size: 28px;
                 color: #57668f;
             }
 
             &-right-icon {
-                width: 42px;
-                height: 39px;
-                margin: 30px 30px 0px 0px;
+                width: 28px;
+                height: 26px;
+                margin: 10px 0px 0px 0px;
                 position: absolute;
                 right: 30px;
             }
         }
+        &-list {
+            padding: 0px 30px 0px 30px;
 
-        &-item {
-            width: 100%;
-            height: 200px;
-            padding: 30px;
-            display: flex;
-            flex-direction: row;
-            border-top: 1px solid #ddd;
-            &-avatar {
-                width: 94px;
-                height: 94px;
-                background-color: #ff9521;
-                border-radius: 12px;
-                float: left;
-                margin: 30px 0px 0px 0px;
-            }
-
-            &-content {
-                flex-grow: 1;
-                padding: 20px;
-                &-name {
-                    padding: 6px 0px 0px 0px;
-                    font-size: 28px;
-                    color: #57668f;
+            &-item {
+                width: 100%;
+                display: flex;
+                flex-direction: row;
+                padding: 24px 0px 24px 63px;
+                border-bottom: 0.1px solid #ddd;
+                &-avatar {
+                    width: 94px;
+                    height: 94px;
+                    background-color: #ff9521;
+                    border-radius: 12px;
+                    margin: 30px 0px 0px 0px;
                 }
-                &-detail {
-                    font-size: 28px;
-                    color: #111111;
-                    padding: 20px 30px 22px 0px;
+                &-content {
+                    flex-grow: 1;
+                    &-name {
+                        padding: 6px 0px 0px 0px;
+                        font-size: 36px;
+                        color: #333030;
+                    }
+                    &-detail {
+                        font-size: 24px;
+                        color: #7d7d7e;
+                        padding: 16px 0px 0px 0px;
+                    }
                 }
-            }
-
-            &-img-more {
-                width: 34px;
-                height: 6px;
-                margin: 59px 30px 0px 0px;
-                /*position: absolute;*/
-                /*right: 30px;*/
+                &-img-more {
+                    width: 34px;
+                    height: 6px;
+                    margin: 59px 0px 0px 0px;
+                    /*position: absolute;*/
+                    /*right: 30px;*/
+                }
             }
         }
 
@@ -170,6 +173,7 @@
             }
         }
     }
+
     .van-swipe-cell span {
         width: 150px;
         height: 100%;

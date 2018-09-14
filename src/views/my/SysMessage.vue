@@ -6,35 +6,43 @@
             <a class="sysmessage-nodata-btn"></a>
         </div>
         <div v-else class="sysmessage-container">
-            <div class="sysmessage-head" justify-content="around">
-                <div class="sysmessage-head-left">
-                    <img class="sysmessage-head-left-img" src="../../assets/images/my_sys_notify.png">
-                    <div class="sysmessage-head-left-text">全部通知</div>
-                </div>
-                <div class="sysmessage-head-right">
-                    <img class="sysmessage-head-right-img" src="../../assets/images/my_sys_menu.png">
-                </div>
+            <div class="sysmessage-head">
+                <img class="sysmessage-head-left-icon" src="../../assets/images/my_record_play.png"/>
+                <p class="sysmessage-head-record-text">最近播放</p>
+                <img class="sysmessage-head-right-icon" src="../../assets/images/my_sys_menu.png">
             </div>
-            <div class="divider-line"></div>
+        </div>
+        <div>
             <div>
-                <div>
-                    <div v-for="item in messageList" :key="item.id">
-                        <van-swipe-cell :right-width="150" :on-close="onClose(item.id)">
-                            <div class="sysmessage-list-item">
+                <div v-for="item in messageList" :key="item.id" class="sysmessage-list">
+                    <div class="sysmessage-list-item">
+                        <!--<img src="" class="like-item-avatar"/>-->
+                        <div class="sysmessage-list-item-content">
+                            <div class="sysmessage-list-item-content">
                                 <div>
-                                    <div v-if="item.busiType===3102" class="sysmessage-list-item-title">留言入选通知</div>
-                                    <div v-if="item.busiType===3103" class="sysmessage-list-item-title">系统消息</div>
-                                    <div v-if="item.busiType===3105" class="sysmessage-list-item-title">留言升级通知</div>
-                                    <div v-if="item.busiType===3106" class="sysmessage-list-item-title">用户反馈通知</div>
-                                    <div class="sysmessage-list-item-time">{{item.createTime | formatDate }}</div>
+                                    <div v-if="item.busiType===3102" class="sysmessage-list-item-content-top-title">
+                                        留言入选通知
+                                    </div>
+                                    <div v-if="item.busiType===3103" class="sysmessage-list-item-content-top-title">
+                                        系统消息
+                                    </div>
+                                    <div v-if="item.busiType===3105" class="sysmessage-list-item-content-top-title">
+                                        留言升级通知
+                                    </div>
+                                    <div v-if="item.busiType===3106" class="sysmessage-list-item-content-top-title">
+                                        用户反馈通知
+                                    </div>
+                                    <div class="sysmessage-list-item-content-top-time">{{item.createTime | formatDate
+                                        }}
+                                    </div>
                                 </div>
-                                <div class="sysmessage-list-item-content">{{item.content}}</div>
+                                <div class="sysmessage-list-item-content-detail">{{item.content}}</div>
                             </div>
-                            <span slot="right">删除</span>
-                        </van-swipe-cell>
+                        </div>
+                        <img class="sysmessage-list-item-img-more" src="../../assets/images/my_record_more.png"/>
                     </div>
-                    <div/>
                 </div>
+                <div/>
             </div>
         </div>
     </section>
@@ -104,70 +112,70 @@
     .sysmessage {
         &-container {
         }
-
         &-head {
             display: flex;
-            justify-content: space-between;
-            padding: 54px 30px 34px 30px;
-        }
-
-        &-head-left {
-            align-items: center; /*垂直居中*/
-            justify-content: center; /*水平居中*/
-            display: flex;
             flex-direction: row;
-        }
-
-        &-head-left-text {
-            width: 300px;
-            padding-top: 5px;
-            font-size: 36px;
-        }
-
-        &-head-right {
-            display: none;
-        }
-
-        &-head-left-img {
-            width: 60px;
-            height: 60px;
-            margin-right: 20px;
-        }
-
-        &-head-right-img {
-            width: 42px;
-            height: 39px;
-        }
-
-        .divider-line {
-            height: 1px;
-            background: #ddd;
-            text-align: center;
+            padding: 34px 0px 34px 0px;
             margin: 0px 30px 0px 30px;
+            border-bottom: 0.1px solid #ddd;
+            &-left-icon {
+                width: 40px;
+                height: 40px;
+                margin: 7px 20px 0px 0px;
+            }
+            &-record-text {
+                padding: 3px 8px 0px 0px;
+                font-size: 36px;
+                color: #3e3e53;
+            }
+            &-right-icon {
+                width: 28px;
+                height: 26px;
+                margin: 10px 0px 0px 0px;
+                position: absolute;
+                right: 30px;
+            }
         }
+        &-list {
+            padding: 0px 30px 0px 30px;
 
-        &-list-item {
-            padding: 0px 32px 0px 32px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        &-list-item-title {
-            font-weight: bold;
-            font-size: 32px;
-            display: inline;
-            padding-right: 24px;
-        }
-
-        &-list-item-time {
-            font-size: 22px;
-            display: inline;
-            color: #9ba1b0;
-        }
-
-        &-list-item-content {
-            padding: 0px 32px 32px 70px;
-            font-size: 28px;
-            color: #808080;
+            &-item {
+                width: 100%;
+                display: flex;
+                flex-direction: row;
+                padding: 24px 0px 32px 0px;
+                border-bottom: 0.1px solid #ddd;
+                &-content {
+                    flex-grow: 1;
+                    &-top {
+                        display: flex;
+                        flex-direction: row;
+                        &-title {
+                            font-weight: bold;
+                            font-size: 32px;
+                            display: inline;
+                            padding-right: 24px;
+                        }
+                        &-time {
+                            font-size: 22px;
+                            display: inline;
+                            color: #9ba1b0;
+                        }
+                    }
+                    &-detail {
+                        padding: 32px 32px 0px 70px;
+                        font-size: 28px;
+                        color: #808080;
+                    }
+                }
+                &-img-more {
+                    width: 34px;
+                    height: 6px;
+                    margin: 59px 0px 0px 0px;
+                    /*position: absolute;*/
+                    /*right: 30px;*/
+                }
+            }
         }
         &-nodata {
             height: 100vh;
@@ -185,6 +193,7 @@
             }
         }
     }
+
     .van-swipe-cell span {
         width: 150px;
         height: 100%;

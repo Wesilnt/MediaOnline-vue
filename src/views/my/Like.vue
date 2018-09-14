@@ -10,20 +10,24 @@
             </div>
             <div class="like-head">
                 <img class="like-head-left-icon" src="../../assets/images/my_record_play.png"/>
-                <div class="like-head-record-text">最近播放</div>
+                <div class="like-head-record-text">播放全部</div>
                 <div class="like-head-record-number">(共26条记录)</div>
                 <img class="like-head-right-icon" src="../../assets/images/my_sys_menu.png">
             </div>
 
-            <div v-for="item in likeList" :key="item.id">
+            <div v-for="(item,index) in likeList" :key="item.id" class="like-list">
                 <van-swipe-cell :right-width="150" :on-close="onClose(item.id)">
-                    <div class="like-item">
-                        <img src="" class="like-item-avatar"/>
-                        <div class="like-item-content">
-                            <div class="like-item-content-name">{{item.title}}</div>
-                            <div class="like-item-content-detail">{{item.subTitle}}</div>
+                    <div class="like-list-item">
+                        <!--<img src="" class="like-item-avatar"/>-->
+                        <p class="like-list-item-order-number">{{index + 1}}</p>
+                        <div class="like-list-item-content">
+                            <p class="like-list-item-content-name">{{item.title}}</p>
+                            <div>
+                                <p v-if="" class="like-list-item-content-detail">{{item.courseName}} -
+                                    {{item.subTitle}} - {{item.learnTime}} / {{item.totalTime}}</p>
+                            </div>
                         </div>
-                        <img class="like-item-img-more" src="../../assets/images/my_record_more.png"/>
+                        <img class="like-list-item-img-more" src="../../assets/images/my_record_more.png"/>
                     </div>
                     <span slot="right">删除</span>
                 </van-swipe-cell>
@@ -68,6 +72,9 @@
           }
         }
       }
+    },
+    created() {
+      this.queryList()
     }
   }
 </script>
@@ -83,74 +90,80 @@
             background: #fde3e3;
         }
         &-head {
-            padding: 20px;
+            padding: 40px 30px 40px 0px;
             display: flex;
             flex-direction: row;
-
+            margin-right: 30px;
+            margin-left: 30px;
+            border-bottom: 0.1px solid #ddd;
             &-left-icon {
-                width: 60px;
-                height: 60px;
-                margin: 20px 20px 20px 20px;
+                width: 40px;
+                height: 40px;
+                margin: 7px 20px 0px 0px;
             }
             &-record-text {
-                padding: 20px 8px 0px 0px;
+                padding: 3px 8px 0px 0px;
                 font-size: 36px;
                 color: #3e3e53;
             }
             &-record-number {
-                padding: 25px 0px 0px 0px;
+                padding: 6px 0px 0px 0px;
                 font-size: 28px;
                 color: #57668f;
             }
 
             &-right-icon {
-                width: 42px;
-                height: 39px;
-                margin: 30px 30px 0px 0px;
+                width: 28px;
+                height: 26px;
+                margin: 10px 0px 0px 0px;
                 position: absolute;
                 right: 30px;
             }
         }
-
-        &-item {
-            width: 100%;
-            height: 200px;
-            padding: 30px;
-            display: flex;
-            flex-direction: row;
-            border-top: 1px solid #ddd;
-            &-avatar {
-                width: 94px;
-                height: 94px;
-                background-color: #ff9521;
-                border-radius: 12px;
-                float: left;
-                margin: 30px 0px 0px 0px;
-            }
-
-            &-content {
-                flex-grow: 1;
-                padding: 20px;
-                &-name {
-                    padding: 6px 0px 0px 0px;
-                    font-size: 28px;
-                    color: #57668f;
+        &-list {
+            padding: 0px 30px 0px 30px;
+            &-item {
+                width: 100%;
+                padding: 24px 0px 24px 10px;
+                display: flex;
+                flex-direction: row;
+                border-bottom: 0.1px solid #ddd;
+                &-order-number{
+                    font-size: 36px;
+                    color: #949aaa;
+                    padding: 24px 35px 24px 0px ;
                 }
-                &-detail {
-                    font-size: 28px;
-                    color: #111111;
-                    padding: 20px 30px 22px 0px;
+                &-avatar {
+                    width: 94px;
+                    height: 94px;
+                    background-color: #ff9521;
+                    border-radius: 12px;
+                    margin: 30px 0px 0px 0px;
                 }
-            }
-
-            &-img-more {
-                width: 34px;
-                height: 6px;
-                margin: 59px 30px 0px 0px;
-                /*position: absolute;*/
-                /*right: 30px;*/
+                &-content {
+                    flex-grow: 1;
+                    &-name {
+                        padding: 6px 0px 0px 0px;
+                        font-size: 36px;
+                        color: #333030;
+                    }
+                    &-detail {
+                        font-size: 24px;
+                        color: #7d7d7e;
+                        padding: 16px 0px 0px 0px;
+                    }
+                }
+                &-img-more {
+                    width: 34px;
+                    height: 6px;
+                    margin: 59px 0px 0px 0px;
+                    /*position: absolute;*/
+                    /*right: 30px;*/
+                }
             }
         }
+
+
 
         &-nodata {
             height: 100vh;
