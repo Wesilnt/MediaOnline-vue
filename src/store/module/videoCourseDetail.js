@@ -23,7 +23,7 @@ const videoCourseDetail = {
         totalTime:0,             //服务器返回的视频总长度
         description:'',           //笔记
         learnTime:0,               //上次播放位置
-        learnTotalTime:0,          //累计播放时长 
+        learnTotalTime:0,          //累计播放时长
         questionBOList:[],        //自测题列表
         title:'',                   //标题
         grade:'',                 //称号
@@ -33,8 +33,13 @@ const videoCourseDetail = {
         singleComments:[],         //单集评论数组
         isAchieveCollect:false,           //是否收藏成功
         collectionId:0,
-        
-   
+
+
+    },
+    getters:{
+        haveQuestionBOList:(state)=>{
+          return  state.questionBOList.length>0
+        }
     },
     mutations: {
         bindVideoCourseDetail(state,payload) {
@@ -68,7 +73,7 @@ const videoCourseDetail = {
         deleteCollection(state) {
             state.isLike = 0
         },
-        
+
         //提交播放数据
         submitVideoPlayData(state){
 
@@ -76,19 +81,19 @@ const videoCourseDetail = {
 
     },
     actions:{
-       async getVideoCourseDetail ({ commit,dispatch,state },{ lessonId }) {            
+       async getVideoCourseDetail ({ commit,dispatch,state },{ lessonId }) {
             //获取视频列表数据
             const result = await getVideoLessonDetail({ lessonId })
             console.log('视频单集详情接口')
             console.log("result = ",result)
             commit('bindVideoCourseDetail',result)
             if(result == null) return
-           
+
             //在这里判断是否提交本地的视频播放数据
             let storage = window.localStorage;
             let loaclPlayTime = storage.getItem("PlayTotalTime")
             let loaclPlayPosition = storage.getItem("HistoryPlayPosition")
-            
+
             let servicePlayTime = result.learnTotalTime || 0
             let servicePlayPosition = result.learnTime
             console.log('lessonId = ' + lessonId)

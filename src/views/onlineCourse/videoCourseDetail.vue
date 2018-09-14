@@ -65,9 +65,12 @@ import videoComment from '../../components/video-comment.vue'
 import QuestionList from './QuestionList'
 import { createNamespacedHelpers } from 'vuex'
 import { log } from '../../store/module/type'
-const { mapState, mapActions, mapMutations } = createNamespacedHelpers(
-  'videoCourseDetail'
-)
+const {
+  mapState,
+  mapGetters,
+  mapActions,
+  mapMutations
+} = createNamespacedHelpers('videoCourseDetail')
 export default {
   name: 'VideoCourseDetail',
   components: {
@@ -91,19 +94,19 @@ export default {
       timer: 0, //定时器
       loaclPlayTotalTime: 0, //本地累计播放时长
       duration: 0, //视频时长
-        progress:0,
+      progress: 0,
       localPlayTime: 0, //本地播放位置
       isUnlockQuestion: false //是否解锁自测题
     }
   },
-    watch:{
-        loaclPlayTotalTime:function(loaclPlayTotalTime) {
-            if (!this.duration) {
-                return this.progress =0
-            }
-            return this.progress= loaclPlayTotalTime / this.duration*100
-        }
-    },
+  watch: {
+    loaclPlayTotalTime: function(loaclPlayTotalTime) {
+      if (!this.duration) {
+        return (this.progress = 0)
+      }
+      return (this.progress = (loaclPlayTotalTime / this.duration) * 100)
+    }
+  },
   computed: {
     ...mapState([
       'lessonList', //目录课程
@@ -123,6 +126,7 @@ export default {
       'learnTime', //服务器上次播放位置
       'learnTotalTime' //服务器累计播放时长
     ]),
+    ...mapGetters(['haveQuestionBOList'])
   },
   async mounted() {
     //监听滚动
@@ -287,6 +291,7 @@ export default {
 <style lang="scss" scoped>
 .videocourse-detail-container {
   background-color: #fff;
+  font-size: 24px;
 }
 //header
 .video-detail-header {
@@ -397,6 +402,8 @@ export default {
 //content
 .video-detail-content {
   padding: 0 40px;
+  border: none;
+  border-bottom: 8px solid #f7f7f7;
 }
 .video-detail-sction-title {
   display: flex;

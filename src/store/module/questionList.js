@@ -78,11 +78,12 @@ const questionList = {
       await commit('saveStatus', {
         loading: true
       })
+        const formatAnsmwer=answer[answer.length - 1];
       commit('saveAnswer', {
-        answers: { [id]: answer }
+        answers: { [id]: formatAnsmwer }
       })
       const response = await uploadAnswer({
-        answer: answer[answer.length - 1],
+        answer: formatAnsmwer,
         lessonId
       })
       if (!response) return
