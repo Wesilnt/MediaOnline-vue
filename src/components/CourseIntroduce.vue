@@ -3,7 +3,9 @@
         <div :class=" isFold ? 'fold' : 'extend'" class="foldbase" @click="foldFn">
            <div v-html="courseinfo"></div>
         </div>
-        <div class="arrow-icon"><img :src="isFold ? imgUp: imgDown" @click="foldFn"></div>
+        <div class="arrow-container"  @click="foldFn">
+          <i class="qhht-icon arrow-icon-innner" :style="isFold ? imgUp : imgDown"></i>
+        </div>
     </div>
 </template>
 
@@ -14,8 +16,12 @@ export default {
   data() {
     return {
       isFold: true,
-      imgUp: require('../assets/images/onlinecourse_arrow_down.png'),
-      imgDown: require('../assets/images/onlinecourse_arrow_up.png')
+      imgDown: {
+        backgroundImage :  "url("+require('../assets/images/onlinecourse_arrow_down.png')+")",
+      },
+      imgUp: {
+        backgroundImage : "url("+require('../assets/images/onlinecourse_arrow_up.png')+")",       
+      }
     }
   },
   methods: {
@@ -51,10 +57,8 @@ export default {
   overflow: auto;
 }
 
-.arrow-icon {
-  position: relative;
-  width: 100%;
-  height: 120px;
+.arrow-container { 
+  text-align: center;
   background: linear-gradient(
     to bottom,
     rgba(255, 255, 255, 0.2) 10%,
@@ -65,12 +69,7 @@ export default {
   );
   margin-top: -40px;
 }
-.arrow-icon img {
-  position: absolute;
-  width: 50px;
-  height: 50px;
-  bottom: 20px;
-  left: 50%;
-  margin-left: -25px;
+.arrow-icon-innner{
+   margin-top: 50px;
 }
 </style>
