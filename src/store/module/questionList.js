@@ -11,8 +11,7 @@ const questionList = {
   },
 
   getters: {
-    questionList: (state, getters, { videoCourseDetail }) =>
-      videoCourseDetail.questionBOList,
+      questionList: (state, getters, { videoCourseDetail }) => videoCourseDetail.questionBOList,
     grade: (state, getters, { videoCourseDetail }) => videoCourseDetail.grade,
     title: (state, getters, { videoCourseDetail }) => videoCourseDetail.title,
     questionInfo: ({ questionIndex, answers, text }, getters) => {

@@ -29,44 +29,7 @@
       <div class="video-detail-sction-title">
           <h4>自测题</h4>
       </div>
-      <div class="video-detail-questions">
-          <img :src="deblockQuestion ? lockIcon : unlockIcon" class="video-test-question-img" alt="">
-      </div>
-      <div class="video-test-question-title">共3道自测题</div>
-      <div v-if="deblockQuestion">
-        <van-progress
-          pivot-text=""
-          color="#FFA32F"
-          :percentage="progress"
-        />
-      <div class="video-test-question-warn">在学习n分钟可解锁自测题</div>
-      </div>
-      <div v-else>
-         <QuestionList  />    
-      </div>
-      <div class="video-achieve-question">
-        <div class="video-achieve-question-top">
-          <div class="video-achieve-question-item">
-            <p>3</p>
-            <span>题数</span>    
-          </div>
-          <div class="video-achieve-question-item">
-            <p>3</p>
-            <span>答对</span>  
-          </div>
-          <div class="video-achieve-question-item">
-            <p>3</p>
-            <span>排行</span>
-          </div>
-        </div>
-
-        <div class="video-achieve-question-bottom">
-          <a class="qhht-blockButton quesbtn">回顾自测题</a>
-          <a class="qhht-blockButton quesbtn">
-            <QuestionList  >查看成绩单</QuestionList></a>
-        </div>
-      </div>    
-
+      <QuestionList :progress="progress" :deblock="deblockQuestion"/>
     </div>
     <!-- 目录 -->
     <div class="video-detail-base">
@@ -156,9 +119,6 @@ export default {
       'collectionId', //收藏Id
       'learnTime', //服务器上次播放位置
       'learnTotalTime', //服务器累计播放时长
-      'quesNum', //自测题个数
-      'rightNum', //自测题答对个数
-      'rankNum' //自测题排行
     ]),
     ...mapGetters(['haveQuestionBOList'])
   },
@@ -250,15 +210,10 @@ export default {
         localStorage.setItem(this.id, JSON.stringify(obj))
         // console.log(this.loaclPlayTotalTime)
       }
-      // console.log("duration = ",duration)
       // 进度条 未解锁就动态显示
       if (!this.deblockQuestion && duration) {
-        console.log('duration=' + duration)
         const percent = (this.loaclPlayTotalTime / duration) * 100
         this.progress = percent <= 100 ? percent : 100
-        // const videoData = JSON.parse(localStorage.getItem(this.id))
-        // const percent=(videoData.playTotalTime / duration) * 100
-        // this.progress = percent<=100?percent:100
       }
     },
     //显示键盘
@@ -447,74 +402,6 @@ export default {
     color: rgb(62, 62, 83);
   }
 }
-//自测题
-.video-detail-questions {
-  text-align: center;
-  width: 100%;
-  img {
-    width: 298px;
-    height: 252px;
-  }
-}
-.video-test-question-title {
-  margin-top: 30px;
-  margin-bottom: 88px;
-  text-align: center;
-}
-
-.video-test-question-warn {
-  margin: 15px auto 48px;
-  text-align: center;
-}
-//完成自测题样式
-.video-achieve-question {
-  width: 100%;
-
-  .video-achieve-question-top {
-    display: flex;
-    flex-direction: row;
-    flex: 1;
-    justify-content: space-around;
-    text-align: center;
-  }
-
-  .video-achieve-question-bottom {
-    display: flex;
-    flex-direction: row;
-    flex: 1;
-    justify-content: space-around;
-  }
-}
-
-.quesbtn {
-  width: 240px;
-  line-height: 80px;
-  background-color: white;
-  color: rgb(255, 163, 47);
-  border: 2px solid rgb(255, 163, 47);
-}
-
-.video-achieve-question-item {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-content: center;
-  border-right: 1px solid lightgray;
-  width: 33%;
-  margin: 48px 0 88px;
-  &:last-child {
-    border: none;
-  }
-  p {
-    font-size: 36px;
-    color: rgb(255, 163, 47);
-  }
-  span {
-    font-size: 24px;
-    color: rgb(102, 102, 102);
-  }
-}
-
 //我要留言
 .video-course-comment {
   margin-top: 56px;

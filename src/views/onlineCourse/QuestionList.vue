@@ -1,28 +1,55 @@
 <template>
-    <div>
-      <div @click="openQuestionAnswer">
-        <slot>
-         <button  class="qhht-blockButton question-btn">开始答题</button>
-         </slot>
-      </div>
-       
-        <van-popup v-model="questionShow" position="right" class="question-container" >
-            <div class="question-wrapper">
-                <div  class="question-btn-close">
+    <div class="question-container">
+        <div >
+            <img :src="deblock ?deblockIcon  : lockIcon" class="questions-state">
+            <p class="questions-length">共3道自测题</p>
+            <button v-if="deblock" @click="openQuestionAnswer"  class="qhht-blockButton question-btn">开始答题</button>
+            <div v-else>
+                <van-progress
+                        pivot-text=""
+                        color="#FFA32F"
+                        :percentage="progress"
+                />
+                <p class="questions-footer-text">再学习n分钟可解锁自测题</p>
+            </div>
+        </div>
+        <div v-if="false">
+            <div class="qhht-flex">
+                <div class="question-to-review-item">
+                    <p>3</p>
+                    <span>题数</span>
+                </div>
+                <div class="question-to-review-item">
+                    <p>3</p>
+                    <span>答对</span>
+                </div>
+                <div class="question-to-review-item">
+                    <p>3</p>
+                    <span>排行</span>
+                </div>
+            </div>
+            <div class="qhht-flex">
+                <a class="qhht-blockButton question-inner-btn">回顾自测题</a>
+                <a class="qhht-blockButton question-inner-btn" @click="openQuestionAnswer">查看成绩单</a>
+            </div>
+        </div>
+        <van-popup v-model="questionShow" position="right" class="answer-container" >
+            <div class="answer-wrapper">
+                <div  class="answer-btn-close">
                     <a @click="handlePopupHide('questionShow')">关闭</a>
                 </div>
 
-                <p class="question-title">
+                <p class="answer-title">
                     {{questionInfo.headerTitle}}
                 </p>
-                <p class="question-content">{{questionInfo.question}}</p>
+                <p class="answer-content">{{questionInfo.question}}</p>
                 <ol class="animated"  :class="warnClass">
                     <li v-for="opt in opts" :key="opt" :class="{
                     'hasSelect-answer':questionInfo.userSelect
                     }">
                         <a
                             @click="handleAnswerClick(opt)"
-                            class="qhht-flex question-btn-option"
+                            class="qhht-flex answer-btn-option"
                             :class="[
                                 {
                                     'option-selected':questionInfo.isCorrect,
@@ -32,20 +59,20 @@
                             ]"
                         >
                             <span>{{questionInfo[opt]}}</span>
-                            <!-- <span class="question-checked-percent">{{questionInfo.userSelect?questionInfo[`${opt}Pct`]+'%':''}}</span> -->
+                            <!-- <span class="answer-checked-percent">{{questionInfo.userSelect?questionInfo[`${opt}Pct`]+'%':''}}</span> -->
                             <!--<i  class="option-checked" :style="{width:questionInfo.userSelect?questionInfo[`${opt}Pct`]+'%':'0'}" ></i>-->
-                            <!-- <span class="question-checked-percent">{{questionInfo.userSelect?questionInfo[`${opt}Pct`]+'%':''}}</span> -->
+                            <!-- <span class="answer-checked-percent">{{questionInfo.userSelect?questionInfo[`${opt}Pct`]+'%':''}}</span> -->
                             <i  class="option-checked" :style="{width:opt===`opt${!questionInfo.userSelect?0:questionInfo.rightOpt}`?'100%':questionInfo.userSelect===opt?'100%':'0'}" ></i>
                         </a>
 
                     </li>
                 </ol>
-                <div class="question-footer">
+                <div class="answer-footer">
                     {{questionInfo.footerBadge}}
                 </div>
             </div>
 
-            <a  class="qhht-blockButton question-btn-next" @click="handleNextClick">
+            <a  class="qhht-blockButton answer-btn-next" @click="handleNextClick">
                 {{questionInfo.nextBtnText}}
             </a>
         </van-popup>
@@ -66,7 +93,7 @@
                 <i class="settlement-qr"></i>
                 <p>分享二维码，邀请好友一起试听</p>
             </div>
-            <a  class="qhht-blockButton question-btn-next" @click="handlePopupHide('settlementShow')">
+            <a  class="qhht-blockButton answer-btn-next" @click="handlePopupHide('settlementShow')">
                 保存图片
             </a>
         </van-popup>
@@ -81,12 +108,19 @@ const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
 let timeInter = ''
 export default {
   name: 'QuestionList',
+  props: {
+    progress: 0,
+    deblock: false
+  },
   data: function() {
     return {
+      lockIcon: require('../../assets/images/onlinecourse_lock.jpg'), //未解锁
+      deblockIcon: require('../../assets/images/onlinecourse_unlock.jpg'), //已解锁
+      opts: ['optA', 'optB', 'optC', 'optD'],
+      // 变量
       warnClass: '',
       questionShow: false,
-      settlementShow: false,
-      opts: ['optA', 'optB', 'optC', 'optD']
+      settlementShow: false
     }
   },
   computed: {
@@ -156,7 +190,11 @@ export default {
       }
     },
     handleAnswerClick(answer) {
-      if (this.questionIndex === Object.keys(this.answers).length && this.userSelect) return
+      if (
+        this.questionIndex === Object.keys(this.answers).length &&
+        this.userSelect
+      )
+        return
       this.uploadAnswer({
         lessonId: this.$route.params.lessonID,
         answer
@@ -171,26 +209,71 @@ export default {
 
 <style scoped lang="less">
 @active: #ffa32f;
+.question-container {
+  text-align: center;
+  margin: 48px auto;
+}
+.questions-state {
+  display: block;
+  margin: 0 auto;
+  width: 298px;
+  height: 252px;
+}
+.questions-length {
+  margin: 30px auto 56px;
+  font-size: 24px;
+  color: #666;
+}
+.questions-footer-text {
+  font-size: 30px;
+  font-weight: 700;
+  color: #333;
+  margin-top: 30px;
+}
 .question-btn {
   width: 600px;
 }
-.question-container {
+/*回顾自测题*/
+
+.question-to-review-item {
+  border-right: 1px solid lightgray;
+  flex-grow: 1;
+  margin-bottom: 56px;
+  font-size: 24px;
+  color: #6b6363;
+  &:last-child {
+    border: none;
+  }
+  p {
+    font-size: 36px;
+    color: @active;
+  }
+}
+.question-inner-btn {
+  width: 240px;
+  line-height: 80px;
+  background-color: white;
+  color: @active;
+  border: 2px solid @active;
+}
+/*回答问题*/
+.answer-container {
   width: 80%;
   margin: 0 10%;
   border-radius: 8px;
   font-size: 28px;
   overflow: hidden;
 }
-.question-wrapper {
+.answer-wrapper {
   padding: 40px 30px 52px;
 }
-.question-btn-close {
+.answer-btn-close {
   text-align: right;
   a {
     color: #333;
   }
 }
-.question-title {
+.answer-title {
   color: @active;
   font-size: 46px;
   text-align: center;
@@ -198,11 +281,11 @@ export default {
   font-weight: lighter;
   margin-bottom: 40px;
 }
-.question-content {
+.answer-content {
   padding: 0 18px 56px;
   text-align: center;
 }
-.question-btn-option {
+.answern-btn-option {
   position: relative;
   height: 94px;
   overflow: hidden;
@@ -244,17 +327,17 @@ export default {
     }
   }
 }
-.question-checked-percent {
+.answer-checked-percent {
   position: absolute;
   right: 18px;
   line-height: 94px;
   color: #b3b3b3;
 }
-.question-footer {
+.answer-footer {
   padding-top: 10px;
   color: #a6a6a6;
 }
-.question-btn-next {
+.answer-btn-next {
   height: 94px;
   line-height: 94px;
   border-radius: 0;
@@ -265,7 +348,7 @@ export default {
   background: transparent;
   font-size: 28px;
   letter-spacing: 2px;
-  .question-btn-next {
+  .answer-btn-next {
     position: absolute;
     font-size: 32px;
     font-weight: 600;
