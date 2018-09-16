@@ -59,14 +59,14 @@
             <span>排行</span>
           </div>
         </div>
+
         <div class="video-achieve-question-bottom">
           <a class="qhht-blockButton quesbtn">回顾自测题</a>
           <a class="qhht-blockButton quesbtn">
             <QuestionList  >查看成绩单</QuestionList></a>
-           
-        
         </div>
       </div>    
+
     </div>
     <!-- 目录 -->
     <div class="video-detail-base">
@@ -79,14 +79,14 @@
     <div class="video-detail-base">
       <div id="leavemessage" ref="leavemessage" class="video-detail-sction-title">
           <h4>留言</h4>
-          <div class="video-detail-leavemessage" @click="showkeyboard">
+          <div class="video-detail-leavemessage" @click="toggleKeyboard(true)">
               <img src="../../assets/images/onlinecourse_video_detail_ic_editor.png" alt="">
               <span>我要留言</span>
           </div>
       </div>
       <commentitem class="video-course-comment" v-for="item in singleComments" :key="item.id" :comment="item" :unindent="true" :regiontype="2202"/>      
     </div>
-    <CommentBar />
+      <CommentBar :show="commentBarShow" v-on:toggle="toggleKeyboard"/>
   </div>
 </template>
 
@@ -132,7 +132,9 @@ export default {
       localPlayTime: 0, //本地播放位置
       playStartTime: null,
       deblockQuestion: false, //是否解锁自测题
-      isAchieveQuestion:false //是否完成自测题
+      isAchieveQuestion: false, //是否完成自测题
+      // 我要留言显示
+      commentBarShow: false
     }
   },
   computed: {
@@ -154,9 +156,9 @@ export default {
       'collectionId', //收藏Id
       'learnTime', //服务器上次播放位置
       'learnTotalTime', //服务器累计播放时长
-      'quesNum',           //自测题个数
-      'rightNum',           //自测题答对个数
-      'rankNum'            //自测题排行
+      'quesNum', //自测题个数
+      'rightNum', //自测题答对个数
+      'rankNum' //自测题排行
     ]),
     ...mapGetters(['haveQuestionBOList'])
   },
@@ -167,7 +169,7 @@ export default {
     const vid = await this.$refs.videoitem
     //视频进度
     vid.addEventListener('timeupdate', this.getVideoProgress)
-     vid.addEventListener('play', this.clickPlayVideoBtn)
+    vid.addEventListener('play', this.clickPlayVideoBtn)
   },
   beforeDestroy() {
     const vid = this.$refs.videoitem
@@ -176,7 +178,6 @@ export default {
   },
   destroyed() {
     removeEventListener('scroll', this.handleScroll)
-   
   },
   created() {
     //获取课程ID
@@ -217,7 +218,6 @@ export default {
         historyPlayPosition >= video.duration ? 0 : historyPlayPosition
       // 记录当前播放时间戳
       this.playStartTime = new Date()
-
     },
     getVideoProgress({ target }) {
       const { currentTime, paused, duration } = target
@@ -232,7 +232,9 @@ export default {
       }
       if (paused) {
         // 获取播放累计时长
-        const durationPlayingTime =this.playStartTime? (new Date() - this.playStartTime) / 1000:0
+        const durationPlayingTime = this.playStartTime
+          ? (new Date() - this.playStartTime) / 1000
+          : 0
         this.loaclPlayTotalTime += durationPlayingTime
         this.playStartTime = null
         const videoData = JSON.parse(localStorage.getItem(this.id))
@@ -246,22 +248,25 @@ export default {
         // console.log('更新本地数据 obj = ')
         // console.log(obj)
         localStorage.setItem(this.id, JSON.stringify(obj))
-          // console.log(this.loaclPlayTotalTime)
+        // console.log(this.loaclPlayTotalTime)
       }
       // console.log("duration = ",duration)
-        // 进度条 未解锁就动态显示
-        if (!this.deblockQuestion&& duration){
-          console.log('duration='+duration)
-          const percent=(this.loaclPlayTotalTime / duration) * 100
-          this.progress = percent<=100?percent:100
-          // const videoData = JSON.parse(localStorage.getItem(this.id))
-          // const percent=(videoData.playTotalTime / duration) * 100
-          // this.progress = percent<=100?percent:100
-        }
+      // 进度条 未解锁就动态显示
+      if (!this.deblockQuestion && duration) {
+        console.log('duration=' + duration)
+        const percent = (this.loaclPlayTotalTime / duration) * 100
+        this.progress = percent <= 100 ? percent : 100
+        // const videoData = JSON.parse(localStorage.getItem(this.id))
+        // const percent=(videoData.playTotalTime / duration) * 100
+        // this.progress = percent<=100?percent:100
+      }
     },
     //显示键盘
-    showkeyboard() {
-      console.log('显示键盘')
+    toggleKeyboard(commentBarShow, inputer) {
+      this.commentBarShow = commentBarShow
+      if (inputer) {
+        console.log('留言内容为 ' + inputer)
+      }
     },
     //收藏
     onCollectFavorite() {
@@ -272,7 +277,7 @@ export default {
         this.doCollectFavorite(lessonId)
       }
     },
-    onShareAction(){
+    onShareAction() {
       console.log('点击分享')
     },
     clickFnc(index) {
@@ -477,12 +482,12 @@ export default {
     display: flex;
     flex-direction: row;
     flex: 1;
-    justify-content: space-around
+    justify-content: space-around;
   }
 }
 
-.quesbtn{
-  width:240px;
+.quesbtn {
+  width: 240px;
   line-height: 80px;
   background-color: white;
   color: rgb(255, 163, 47);
@@ -496,20 +501,19 @@ export default {
   align-content: center;
   border-right: 1px solid lightgray;
   width: 33%;
-  margin:48px 0 88px;
-  &:last-child{
-      border:none;
+  margin: 48px 0 88px;
+  &:last-child {
+    border: none;
   }
-  p{
+  p {
     font-size: 36px;
-    color:rgb(255, 163, 47);
+    color: rgb(255, 163, 47);
   }
-  span{
+  span {
     font-size: 24px;
-    color:rgb(102, 102, 102);
+    color: rgb(102, 102, 102);
   }
 }
-
 
 //我要留言
 .video-course-comment {
@@ -533,12 +537,5 @@ export default {
     font-size: 32px;
     color: rgb(255, 163, 47);
   }
-}
-.video-detail-input {
-  display: fixed;
-  bottom: 0;
-  width: 100%;
-  height: 60px;
-  border-radius: 30px;
 }
 </style>

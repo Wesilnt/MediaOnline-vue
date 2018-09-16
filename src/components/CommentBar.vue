@@ -1,40 +1,101 @@
 <template>
-    <div class="qhht-flex commentBar-wrapper" >
-        <a class="qhht-icon commentBar-btn" :style="{backgroundImage:`url('${iconLeft}')`}"></a>
-        <van-field class="commentBar-inputer" v-model="value" placeholder="请输入用户名" />
-        <a class="qhht-icon commentBar-btn"></a>
-    </div>
+    <van-popup
+            v-model="showPop"
+            position="bottom"
+            class="popup-comment"
+            overlay-class="popup-comment-modal"
+            @click-overlay="closePopup"
+            :lazy-render="false"
+    >
+        <div class="qhht-flex commentBar-wrapper" >
+            <a class="qhht-icon commentBar-btn" :style="{backgroundImage:`url('${iconLeft}')`}"></a>
+            <div class="commentBar-inputer">
+                <textarea v-focus ref="textarea"  class="commentBar-textarea"  placeholder="输入评论" autofocus></textarea>
+            </div>
+            <a class="qhht-icon commentBar-btn" :style="{backgroundImage:`url('${iconRight}')`}" @click="closePopup"></a>
+        </div>
+    </van-popup>
 </template>
 
 <script>
 import default_left_icon from '../assets/audio_cmt_speak.png'
+import default_right_icon from '../assets/audio_cmt_text.png'
+
 export default {
   name: 'CommentBar',
   props: {
+    show: {
+      default: false
+    },
     iconLeft: {
       default: default_left_icon
     },
     iconRight: {
-      default: default_left_icon
+      default: default_right_icon
     }
   },
   data: function() {
     return {
-      value: ''
+      value: '',
+      showPop: false
     }
   },
+  directives: {
+    focus: function(el) {
+      el.focus()
+    }
+  },
+  watch: {
+    show: function(show) {
+      this.showPop = show
+    }
+  },
+  methods: {
+    closePopup:async function() {
+      const { textarea } = this.$refs
+      const { value } = textarea
+      this.$emit('toggle', false, value ? value : undefined)
+      textarea.value = ''
+    }
+  }
 }
 </script>
 
-<style lang="less" scoped>
-.commentBar-wrapper {
+<style lang="less">
+.popup-comment {
   position: fixed;
-  left: 0;
-  right: 0;
+  left: 50%;
   bottom: 0;
   width: 100%;
+  background: transparent;
+}
+.popup-comment-modal {
+  background: transparent;
+}
+.commentBar-wrapper {
+  height: 100%;
+  width: 100%;
+  padding: 0 24px;
+  background-color: #fff;
+  border: none;
+  border-top: 1px solid #d4d4d4;
 }
 .commentBar-btn {
-    
+  width: 60px;
+  height: 60px;
+}
+.commentBar-inputer {
+  padding: 12px 24px;
+  flex-grow: 1;
+}
+.commentBar-textarea {
+  width: 100%;
+  border: none;
+  min-height: 32px;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: -12px;
+  font-size: 30px;
+  padding: 6px 12px;
+  /*background: #ddd;*/
 }
 </style>
