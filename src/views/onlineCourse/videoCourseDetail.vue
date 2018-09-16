@@ -1,61 +1,93 @@
 <template>
-    <div class="videocourse-detail-container" id="detailmain" ref="detailmain">
-        <div class="video-detail-header" :style="{ background : 'url('+radioShowPic+')' }">
-            <div class="video-detail-header-right-top" @click="onCollectFavorite">
-                <img :src="isLike?collectIcon:unCollectIcon" class="video-detail-collect" alt="">
-                <img :src="require('../../assets/images/onlinecourse-play_ic_share@2x.png')" class="video-detail-share" alt="">
-            </div>
-
-             <div class="video-detail-header-left-bottom" @click="clickPlayVideoBtn">
-                 <img :src="require('../../assets/images/onlinecourse-video-detail-header.jpg')" alt="" >
-                 <label>开始播放</label>   
-                 </div>
-             <!-- <img :src="require('../../assets/images/onlinecourse_video_ic_gift.png')" class="video-detail-header-gift" alt="">     -->
-        </div>
-        <video class="videoitem" ref="videoitem" :src="videoUrl" controls="controls" width="100%" height='100%' preload="auto"></video>
-            <div ref="navbar" :class="navbarFixed == true ? 'isFixed' : ''" class="video-detail-navbar">
-                <div v-for="(item,index) of navbar" :class="{'selected':selected == index }" :key="index" class="video-detail-navbar-item" @click="clickFnc(index)">{{item}}</div>
-            </div>
-        <div class="video-detail-content">
-            <div id="note" ref="note" class="video-detail-sction-title">
-                <h4>笔记</h4>
-           </div>
-           <course-introduce :courseinfo="description" />
-            <hr class="video-detail-line">
-            <div class="video-detail-sction-title">
-                <h4>自测题</h4>
-            </div>
-            <div class="video-detail-questions">
-                <img :src="lockIcon" class="video-test-question-img" alt="">
-            </div>
-            <div class="video-test-question-title">共3道自测题</div>
-            <van-progress
-                    pivot-text=""
-                    color="#FFA32F"
-                    :percentage="progress"
-            />
-            <div class="video-test-question-warn">在学习n分钟可解锁自测题</div>
-            <QuestionList  />
-            <hr class="video-detail-line">
-            <div id="catalog" ref="catalog" class="video-detail-sction-title">
-                <h4>目录</h4>
-            </div>
-            <playlist v-for="(item,index) of lessonList" :key="item.id" :iteminfo="item" :lastindex="index == (lessonList.length - 1)"/>
-            <hr class="video-detail-line">
-            <div id="leavemessage" ref="leavemessage" class="video-detail-sction-title">
-                <h4>留言</h4>
-                <div class="video-detail-leavemessage" @click="showkeyboard">
-                    <img src="../../assets/images/onlinecourse_video_detail_ic_editor.png" alt="">
-                    <span>我要留言</span>
-                </div>
-            </div>
-            <!-- <video-comment v-for="item in singleComments" :key="item.id" :comment="item"/> -->
-            <commentitem class="video-course-comment" v-for="item in singleComments" :key="item.id" :comment="item" :unindent="true" :regiontype="2202"/>
-        </div>
-        <CommentBar />
-        <!-- <van-field class="video-detail-input-" v-model="inputValue" placeholder="请输入用户名" /> -->
-
+  <div class="videocourse-detail-container" id="detailmain" ref="detailmain">
+      <!-- 播放器封面 -->
+    <div class="video-detail-header" :style="{ background : 'url('+radioShowPic+')' }">
+      <div class="video-detail-header-right-top" @click="onCollectFavorite">
+          <img :src="isLike?collectIcon:unCollectIcon" class="video-detail-collect" alt="">
+          <img :src="require('../../assets/images/onlinecourse-play_ic_share@2x.png')" class="video-detail-share" alt="" @click="onShareAction">
+      </div>
+      <div class="video-detail-header-left-bottom" @click="clickPlayVideoBtn">
+          <img :src="require('../../assets/images/onlinecourse-video-detail-header.jpg')" alt="" >
+          <label>开始播放</label>   
+      </div>
+          <!-- <img :src="require('../../assets/images/onlinecourse_video_ic_gift.png')" class="video-detail-header-gift" alt="">     -->
     </div>
+    <!-- 播放器 -->
+    <video class="videoitem" ref="videoitem" :src="videoUrl" controls="controls" width="100%" height='100%' preload="auto"></video>
+    <!-- Navbar -->
+    <div ref="navbar" :class="navbarFixed == true ? 'isFixed' : ''" class="video-detail-navbar">
+        <div v-for="(item,index) of navbar" :class="{'selected':selected == index }" :key="index" class="video-detail-navbar-item" @click="clickFnc(index)">{{item}}</div>
+    </div>
+    <!-- 资料 -->
+    <div class="video-detail-base">
+      <div id="note" ref="note" class="video-detail-sction-title">
+          <h4>笔记</h4>
+      </div>
+      <course-introduce :courseinfo="description" />
+    </div>
+    <div class="video-detail-base">
+      <div class="video-detail-sction-title">
+          <h4>自测题</h4>
+      </div>
+      <div class="video-detail-questions">
+          <img :src="deblockQuestion ? lockIcon : unlockIcon" class="video-test-question-img" alt="">
+      </div>
+      <div class="video-test-question-title">共3道自测题</div>
+      <div v-if="deblockQuestion">
+        <van-progress
+          pivot-text=""
+          color="#FFA32F"
+          :percentage="progress"
+        />
+      <div class="video-test-question-warn">在学习n分钟可解锁自测题</div>
+      </div>
+      <div v-else>
+         <QuestionList  />    
+      </div>
+      <div class="video-achieve-question">
+        <div class="video-achieve-question-top">
+          <div class="video-achieve-question-item">
+            <p>3</p>
+            <span>题数</span>    
+          </div>
+          <div class="video-achieve-question-item">
+            <p>3</p>
+            <span>答对</span>  
+          </div>
+          <div class="video-achieve-question-item">
+            <p>3</p>
+            <span>排行</span>
+          </div>
+        </div>
+        <div class="video-achieve-question-bottom">
+          <a class="qhht-blockButton quesbtn">回顾自测题</a>
+          <a class="qhht-blockButton quesbtn">
+            <QuestionList  >查看成绩单</QuestionList></a>
+           
+        
+        </div>
+      </div>    
+    </div>
+    <!-- 目录 -->
+    <div class="video-detail-base">
+      <div id="catalog" ref="catalog" class="video-detail-sction-title">
+          <h4>目录</h4>
+      </div>
+      <playlist v-for="(item,index) of lessonList" :key="item.id" :iteminfo="item" :lastindex="index == (lessonList.length - 1)"/>      
+    </div>
+    <!-- 留言 -->
+    <div class="video-detail-base">
+      <div id="leavemessage" ref="leavemessage" class="video-detail-sction-title">
+          <h4>留言</h4>
+          <div class="video-detail-leavemessage" @click="showkeyboard">
+              <img src="../../assets/images/onlinecourse_video_detail_ic_editor.png" alt="">
+              <span>我要留言</span>
+          </div>
+      </div>
+      <commentitem class="video-course-comment" v-for="item in singleComments" :key="item.id" :comment="item" :unindent="true" :regiontype="2202"/>      
+    </div>
+    <CommentBar />
+  </div>
 </template>
 
 <script>
@@ -99,7 +131,8 @@ export default {
       loaclPlayTotalTime: 0, //本地累计播放时长
       localPlayTime: 0, //本地播放位置
       playStartTime: null,
-      deblockQuestion: false //是否解锁自测题
+      deblockQuestion: false, //是否解锁自测题
+      isAchieveQuestion:false //是否完成自测题
     }
   },
   computed: {
@@ -120,7 +153,10 @@ export default {
       'isAchieveCollect', //是否完成收藏
       'collectionId', //收藏Id
       'learnTime', //服务器上次播放位置
-      'learnTotalTime' //服务器累计播放时长
+      'learnTotalTime', //服务器累计播放时长
+      'quesNum',           //自测题个数
+      'rightNum',           //自测题答对个数
+      'rankNum'            //自测题排行
     ]),
     ...mapGetters(['haveQuestionBOList'])
   },
@@ -131,13 +167,16 @@ export default {
     const vid = await this.$refs.videoitem
     //视频进度
     vid.addEventListener('timeupdate', this.getVideoProgress)
+     vid.addEventListener('play', this.clickPlayVideoBtn)
   },
   beforeDestroy() {
     const vid = this.$refs.videoitem
     vid.removeEventListener('timeupdate', this.getVideoProgress)
+    vid.removeEventListener('play', this.clickPlayVideoBtn)
   },
   destroyed() {
     removeEventListener('scroll', this.handleScroll)
+   
   },
   created() {
     //获取课程ID
@@ -176,38 +215,49 @@ export default {
       video.play()
       video.currentTime =
         historyPlayPosition >= video.duration ? 0 : historyPlayPosition
-
       // 记录当前播放时间戳
       this.playStartTime = new Date()
+
     },
     getVideoProgress({ target }) {
       const { currentTime, paused, duration } = target
 
       //  播放累计时长大于视频的总时长，解锁
+      const videoData = JSON.parse(localStorage.getItem(this.id))
       if (
         !this.deblockQuestion &&
-        this.loaclPlayTotalTime >= Math.round(duration * 0.7)
+        Math.round(videoData.playTotalTime) >= Math.round(duration * 0.7)
       ) {
         this.deblockQuestion = true
       }
       if (paused) {
         // 获取播放累计时长
-        const durationPlayingTime = (new Date() - this.playStartTime) / 1000
+        const durationPlayingTime =this.playStartTime? (new Date() - this.playStartTime) / 1000:0
         this.loaclPlayTotalTime += durationPlayingTime
         this.playStartTime = null
         const videoData = JSON.parse(localStorage.getItem(this.id))
         const newTotalTime =
           durationPlayingTime + Math.round(parseFloat(videoData.playTotalTime))
+        // console.log(this.loaclPlayTotalTime )
         const obj = {
           playTotalTime: newTotalTime,
           historyPlayPosition: currentTime
         }
+        // console.log('更新本地数据 obj = ')
+        // console.log(obj)
         localStorage.setItem(this.id, JSON.stringify(obj))
-          console.log(this.loaclPlayTotalTime)
+          // console.log(this.loaclPlayTotalTime)
       }
+      // console.log("duration = ",duration)
         // 进度条 未解锁就动态显示
-        if (!this.deblockQuestion)
-            this.progress = (this.loaclPlayTotalTime / duration) * 100
+        if (!this.deblockQuestion&& duration){
+          console.log('duration='+duration)
+          const percent=(this.loaclPlayTotalTime / duration) * 100
+          this.progress = percent<=100?percent:100
+          // const videoData = JSON.parse(localStorage.getItem(this.id))
+          // const percent=(videoData.playTotalTime / duration) * 100
+          // this.progress = percent<=100?percent:100
+        }
     },
     //显示键盘
     showkeyboard() {
@@ -221,6 +271,9 @@ export default {
       } else {
         this.doCollectFavorite(lessonId)
       }
+    },
+    onShareAction(){
+      console.log('点击分享')
     },
     clickFnc(index) {
       this.selected = index
@@ -330,7 +383,6 @@ export default {
   height: 60px;
 }
 //导航条
-
 .video-detail-navbar {
   position: -webkit-sticky;
   position: sticky;
@@ -369,20 +421,13 @@ export default {
   }
 }
 
-//分割线
-.video-detail-line {
-  margin-left: -40px;
-  width: 113%;
-  height: 8px;
-  background-color: rgb(247, 247, 247);
-  border: none;
+//资料
+.video-detail-base {
+  padding: 0 40px 24px;
+  background-color: #fff;
+  border-bottom: 8px solid rgb(247, 247, 247);
 }
-//content
-.video-detail-content {
-  padding: 0 40px;
-  border: none;
-  border-bottom: 8px solid #f7f7f7;
-}
+
 .video-detail-sction-title {
   display: flex;
   flex-direction: row;
@@ -416,6 +461,56 @@ export default {
   margin: 15px auto 48px;
   text-align: center;
 }
+//完成自测题样式
+.video-achieve-question {
+  width: 100%;
+
+  .video-achieve-question-top {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    justify-content: space-around;
+    text-align: center;
+  }
+
+  .video-achieve-question-bottom {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    justify-content: space-around
+  }
+}
+
+.quesbtn{
+  width:240px;
+  line-height: 80px;
+  background-color: white;
+  color: rgb(255, 163, 47);
+  border: 2px solid rgb(255, 163, 47);
+}
+
+.video-achieve-question-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-content: center;
+  border-right: 1px solid lightgray;
+  width: 33%;
+  margin:48px 0 88px;
+  &:last-child{
+      border:none;
+  }
+  p{
+    font-size: 36px;
+    color:rgb(255, 163, 47);
+  }
+  span{
+    font-size: 24px;
+    color:rgb(102, 102, 102);
+  }
+}
+
+
 //我要留言
 .video-course-comment {
   margin-top: 56px;

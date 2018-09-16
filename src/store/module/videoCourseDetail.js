@@ -34,7 +34,10 @@ const videoCourseDetail = {
         singleComments:[],         //单集评论数组
         isAchieveCollect:false,           //是否收藏成功
         collectionId:0,
-
+        //自测题
+        quesNum:0,            //自测题个数
+        rightNum:0,           //自测题答对个数
+        rankNum:3             //自测题排行
 
     },
     getters:{
@@ -59,6 +62,10 @@ const videoCourseDetail = {
             state.grade = payload.grade
             state.learnTotalTime = payload.learnTotalTime
             state.learnTime = payload.learnTime
+        },
+        bindQuestionBymyself(state,quesNum,rightNum) {
+            state.quesNum = quesNum
+            state.rightNum = rightNum
         },
         bindAllCourse(state,payload) {
             state.lessonList = payload.result
@@ -90,6 +97,17 @@ const videoCourseDetail = {
             console.log("result = ",result)
             commit('bindVideoCourseDetail',result)
             if(result == null) return
+            //判断是否已完成答题
+            //自测题个数
+            const quesNum = result.questionBOList.length
+            //自测题答对个数
+            let rightNum = 0; 
+            result.questionBOList.forEach(element => {
+                if(element.answer == element.rightOpt){
+                    rightNum++
+                }
+            });
+            commit('bindQuestionBymyself',quesNum,rightNum)
 
             //在这里判断是否提交本地的视频播放数据
             let storage = window.localStorage;
@@ -102,12 +120,16 @@ const videoCourseDetail = {
                 //本地数据
                 let loaclPlayTotalTime = videoData.playTotalTime || 0
                 let loaclPlayPosition = videoData.historyPlayPosition
+                console.log(videoData)
+                console.log("loaclPlayPosition"+loaclPlayPosition)
                 if(loaclPlayTotalTime > servicePlayTotalTime) {
                     let payload = {
                         'lessonId' : lessonId,
                         'listenTime':Math.round(parseFloat(loaclPlayPosition)),  //播放位置
                         'showTime' :Math.round(parseFloat(loaclPlayTotalTime))   //累计时长
                     }
+                    // console.log('更新服务器数据 payload = ')
+                    // console.log(payload)
                     //如果本地累计播放时长大于服务器记录的,就用本地的记录更新服务器的记录
                     dispatch('lessonListenForVedio',payload).then(()=>{
                             console.log('更新服务器播放数据成功')

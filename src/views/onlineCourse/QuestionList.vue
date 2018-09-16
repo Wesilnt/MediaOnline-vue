@@ -1,6 +1,11 @@
 <template>
     <div>
-        <button @click="openQuestionAnswer" class="qhht-blockButton question-btn"><slot>开始答题</slot></button>
+      <div @click="openQuestionAnswer">
+        <slot>
+         <button  class="qhht-blockButton question-btn">开始答题</button>
+         </slot>
+      </div>
+       
         <van-popup v-model="questionShow" position="right" class="question-container" >
             <div class="question-wrapper">
                 <div  class="question-btn-close">
