@@ -25,7 +25,7 @@
       </div>
       <course-introduce :courseinfo="description" />
     </div>
-    <div class="video-detail-base">
+    <div class="video-detail-base" v-if="haveQuestionBOList">
       <div class="video-detail-sction-title">
           <h4>自测题</h4>
       </div>
@@ -188,6 +188,7 @@ export default {
         !this.deblockQuestion &&
         Math.round(videoData.playTotalTime) >= Math.round(duration * 0.7)
       ) {
+          console.log(1)
         this.deblockQuestion = true
       }
       if (paused) {

@@ -193,8 +193,6 @@ const videoCourseDetail = {
 
         async lessonListenForVedio({commit},payload) {
             const result = await lessonListenForVedio({'lessonId' : payload.lessonId, 'listenTime' : payload.listenTime, 'showTime' : payload.showTime})
-            // console.log("提交视频播放数据成功")
-            // console.log(result)
             commit('submitVideoPlayData')
         }
     },
