@@ -67,6 +67,7 @@ export default {
 </script>
  <style lang="scss" scoped>
 .share-container {
+  top:0;
   position: fixed;
   z-index: 2004;
   width: 100%;

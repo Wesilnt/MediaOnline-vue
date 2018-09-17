@@ -1,12 +1,12 @@
 <template>
-    <div class="cl-playlist-container-father" @click="$emit('jumpEvent')">
+    <div class="cl-playlist-container-father" @click="onClick">
         <div class="cl-playlist-container">
-            <div class="cl-list-left"><img :class="{'cl-img-active' : iteminfo.isPlaying}" :src="iteminfo.isPlaying ? imgPlaying : imgPause"></div>
+            <div class="cl-list-left"><img :class="{'cl-img-active' : activeID == iteminfo.id}" :src="activeID == iteminfo.id ? imgPlaying : imgPause"></div>
             <div class="cl-list-right">
-                <div :class="{'cl-list-title' : true, 'cl-list-title-active' : iteminfo.isPlaying}">{{iteminfo.title}}</div>
+                <div :class="{'cl-list-title' : true, 'cl-list-title-active' : activeID == iteminfo.id}">{{iteminfo.title}}</div>
                 <div class="cl-list-info">{{iteminfo.subTitle}}</div>
                 <div class="cl-list-bottom">
-                    <input class="cl-bottom-btn" type="button" value="试听">
+                    <input v-if="iteminfo.isFree" class="cl-bottom-btn" type="button" value="试听">
                     <div class="cl-time">{{iteminfo.createTime | handleDate() }}</div>
                     <div class="cl-number">{{ studyProgress |getProgress(iteminfo.learnTime,iteminfo.totalTime) }}</div>
                 </div>
@@ -19,12 +19,13 @@
 
 <script>
 export default {
-  props: ['iteminfo', 'lastindex'],
+  props: ['iteminfo', 'lastindex','activeID'],
   data() {
     return {
       imgPlaying: require('../../../assets/images/onlinecourse_ic_playing.png'),
       imgPause: require('../../../assets/images//onlinecourse_play_ic_pause.png'),
-      studyProgress: '' //收听进度
+      studyProgress: '', //收听进度
+      isPlaying:false
     }
   },
   filters: {
@@ -43,7 +44,11 @@ export default {
       }
     }
   },
-  methods: {}
+  methods: {
+    onClick(){
+      this.$emit('jumpEvent',this.iteminfo.id)
+    }
+  }
 }
 </script>
 
@@ -130,12 +135,13 @@ export default {
     color: white;
     line-height: 41px;
     border: none;
+    margin-right: 20px;
   }
 
   .cl-time {
     font-size: 26px;
     color: rgb(102, 102, 102);
-    margin-left: 20px;
+    // margin-left: 20px;
 
     &:after {
       content: '|';

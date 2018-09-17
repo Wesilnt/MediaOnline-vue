@@ -2,8 +2,8 @@
   <div class="videocourse-detail-container" id="detailmain" ref="detailmain">
       <!-- 播放器封面 -->
     <div class="video-detail-header" :style="{ background : 'url('+radioShowPic+')' }">
-      <div class="video-detail-header-right-top" @click="onCollectFavorite">
-          <img :src="isLike?collectIcon:unCollectIcon" class="video-detail-collect" alt="">
+      <div class="video-detail-header-right-top">
+          <img :src="isLike?collectIcon:unCollectIcon" class="video-detail-collect" alt="" @click="onCollectFavorite">
           <img :src="require('../../assets/images/onlinecourse-play_ic_share@2x.png')" class="video-detail-share" alt="" @click="onShareAction">
       </div>
       <div class="video-detail-header-left-bottom" @click="clickPlayVideoBtn">
@@ -36,7 +36,7 @@
       <div id="catalog" ref="catalog" class="video-detail-sction-title">
           <h4>目录</h4>
       </div>
-      <playlist v-for="(item,index) of lessonList" :key="item.id" :iteminfo="item" :lastindex="index == (lessonList.length - 1)"/>      
+      <playlist v-for="(item,index) of lessonList" :key="item.id" :iteminfo="item" :activeID="activeID" :lastindex="index == (lessonList.length - 1)" @jumpEvent="beActive"/>      
     </div>
     <!-- 留言 -->
     <div class="video-detail-base">
@@ -50,6 +50,7 @@
       <commentitem class="video-course-comment" v-for="item in singleComments" :key="item.id" :comment="item" :unindent="true" :regiontype="2202"/>      
     </div>
       <CommentBar :show="commentBarShow" v-on:toggle="toggleKeyboard"/>
+      <Share :show="sharePageShow" :shareid="courseId" @close="cancelSharePage"></Share>
   </div>
 </template>
 
@@ -60,6 +61,7 @@ import CommentItem from '../../components/CommentItem.vue'
 import videoComment from '../../components/video-comment.vue'
 import QuestionList from './QuestionList'
 import CommentBar from '../../components/CommentBar'
+import Share from '../../components/share/Share.vue'
 import { createNamespacedHelpers } from 'vuex'
 const {
   mapState,
@@ -75,7 +77,8 @@ export default {
     'video-comment': videoComment,
     commentitem: CommentItem,
     QuestionList,
-    CommentBar
+    CommentBar,
+    Share
   },
   data() {
     return {
@@ -97,7 +100,12 @@ export default {
       deblockQuestion: false, //是否解锁自测题
       isAchieveQuestion: false, //是否完成自测题
       // 我要留言显示
-      commentBarShow: false
+      commentBarShow: false,
+      //分享页面显示
+      sharePageShow:false,
+      //控制目录当前播放的状态
+      isPlaying:false,
+      activeID:this.$route.params.lessonID            //当前选中单集ID
     }
   },
   computed: {
@@ -120,7 +128,7 @@ export default {
       'learnTime', //服务器上次播放位置
       'learnTotalTime', //服务器累计播放时长
     ]),
-    ...mapGetters(['haveQuestionBOList'])
+    ...mapGetters(['haveQuestionBOList','haveLessonlist'])
   },
   async mounted() {
     //监听滚动
@@ -144,11 +152,12 @@ export default {
     const lessonId = this.$route.params.lessonID
     this.getVideoCourseDetail({ lessonId })
     //获取目录课程数据
-    const { courseId } = this
+    // const { courseId } = this
+    console.log("courseId = " + this.courseId)
     this.getLessonListByCourse({
-      courseId: courseId,
-      currentPage: 1,
-      pageSize: 11
+      "courseId": this.courseId,
+      "currentPage": 1,
+      "pageSize": 10
     })
     //获取单集评论
     this.getCommentList({
@@ -165,7 +174,8 @@ export default {
       'getLessonListByCourse',
       'getCommentList',
       'doCollectFavorite',
-      'unCollectFavorite'
+      'unCollectFavorite',
+      'postComment'
     ]),
     //播放视频
     clickPlayVideoBtn() {
@@ -222,6 +232,14 @@ export default {
       this.commentBarShow = commentBarShow
       if (inputer) {
         console.log('留言内容为 ' + inputer)
+        const lessonId = this.$route.params.lessonID
+        const params = {
+          "regionId" : lessonId,
+          "regionType" : 2202,
+          "commentType" : 3301,
+          "content" : inputer,
+        }
+        this.postComment(params)
       }
     },
     //收藏
@@ -235,6 +253,17 @@ export default {
     },
     onShareAction() {
       console.log('点击分享')
+      this.sharePageShow = true
+    },
+    cancelSharePage(data){
+      console.log('关闭分享页面')
+      this.sharePageShow = false
+    },
+    //点击目录
+    beActive(lessonId){
+      this.activeID = lessonId
+      //刷新接口
+      this.getVideoCourseDetail({ "lessonId" : lessonId })
     },
     clickFnc(index) {
       this.selected = index

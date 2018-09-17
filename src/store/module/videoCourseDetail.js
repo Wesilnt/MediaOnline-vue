@@ -5,7 +5,7 @@ import {
   unFavorite,
   lessonListenForVedio
 } from '../../services/columns.js'
-import { getCommentList } from '../../services/comment.js'
+import { getCommentList,postComment } from '../../services/comment.js'
 import questionList from './questionList'
 
 const videoCourseDetail = {
@@ -37,7 +37,7 @@ const videoCourseDetail = {
         //自测题
         quesNum:0,            //自测题个数
         rightNum:0,           //自测题答对个数
-        rankNum:3             //自测题排行
+        rankNum:3,         //自测题排行
 
     },
     getters:{
@@ -154,47 +154,52 @@ const videoCourseDetail = {
             }
         },
 
-    async getLessonListByCourse(
-      { commit },
-      { courseId, currentPage, pageSize }
-    ) {
-      //获取目录课程数据
-      const result = await getLessonListByCourse({
-        courseId,
-        currentPage,
-        pageSize
-      })
-      commit('bindAllCourse', result)
-    },
+        async getLessonListByCourse(
+        { commit },params) {
+        //获取目录课程数据
+        const result = await getLessonListByCourse(params)
+        console.log('获取目录课程数据')
+        console.log(result)
+        commit('bindAllCourse', result)
+        },
 
-    async getCommentList(
-      { commit },
-      { regionType, regionId, commentId, currentPage, pageSize }
-    ) {
-      const result = await getCommentList({
-        regionType,
-        regionId,
-        commentId,
-        currentPage,
-        pageSize
-      })
-      commit('bindCommentList', result)
-    },
+        async getCommentList(
+        { commit },
+        { regionType, regionId, commentId, currentPage, pageSize }
+        ) {
+        const result = await getCommentList({
+            regionType,
+            regionId,
+            commentId,
+            currentPage,
+            pageSize
+        })
+        commit('bindCommentList', result)
+        },
 
-    async doCollectFavorite({ commit }, lessonId) {
-      const result = await doFavorite({ lessonId: lessonId })
-      commit('bindCollection', result)
-    },
+        async doCollectFavorite({ commit }, lessonId) {
+        const result = await doFavorite({ lessonId: lessonId })
+        commit('bindCollection', result)
+        },
 
-    async unCollectFavorite({ commit }, collectionId) {
-      const result = await unFavorite({ lessonId: collectionId })
-      commit('deleteCollection')
-    },
+        async unCollectFavorite({ commit }, collectionId) {
+        const result = await unFavorite({ lessonId: collectionId })
+        commit('deleteCollection')
+        },
 
         async lessonListenForVedio({commit},payload) {
             const result = await lessonListenForVedio({'lessonId' : payload.lessonId, 'listenTime' : payload.listenTime, 'showTime' : payload.showTime})
             commit('submitVideoPlayData')
-        }
+        },
+
+        //发布评论
+        async postComment({ state,commit,dispatch}, params) {
+            const res = await postComment(params)
+            console.log('发布评论成功')
+            console.log(res)
+            // commit("postComment", res)
+            // dispatch('getCommentList', {lessonId:params.regionId,isLoadMore:false})
+        },
     },
 
     modules:{
