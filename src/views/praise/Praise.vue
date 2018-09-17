@@ -15,7 +15,7 @@
       </div>
       <!-- 2.2 点赞/集赞 操作按钮 -->
       <div class="btn-container">
-        <priasebtn :state="state" @share="onShare"/>
+        <PraiseBtn :state="state" @share="onShare"/>
       </div>
       <!-- 2.3 集赞人数提示 -->
       <div class="number-container">
@@ -40,9 +40,9 @@
       <hr>
     </div>
     <!-- 集赞说明框 -->
-    <praise-explain v-if="showExplain" @close="closeExplain"/>
+    <PraiseExplain v-if="showExplain" @close="closeExplain"/>
     <!-- 分享框 -->
-    <share-pop :show="showShare" @close="closeShare"/>
+    <Share :show="showShare" @close="closeShare"/>
   </div>
 </template>
 <script>
@@ -50,10 +50,11 @@ import PraiseBtn from './PraiseBtns.vue'
 import PraiseExplain from './PraiseExplain.vue'
 import Share from '../../components/share/Share.vue'
 export default {
+  name: 'Praise',
   components: {
-    priasebtn: PraiseBtn,
-    'praise-explain': PraiseExplain,
-    'share-pop': Share
+    PraiseBtn,
+    PraiseExplain,
+    Share
   },
   data() {
     return {
@@ -61,42 +62,12 @@ export default {
       showExplain: false,
       state: 1, //按钮状态
       praiseDesc: '', //提示语
-      peoples: [
-        { userAvatar: '' },
-        { userAvatar: '' },
-        { userAvatar: '' },
-        { userAvatar: '' },
-        { userAvatar: '' },
-        { userAvatar: '' },
-        { userAvatar: '' },
-        { userAvatar: '' },
-        { userAvatar: '' },
-        { userAvatar: '' },
-        { userAvatar: '' },
-        { userAvatar: '' },
-        { userAvatar: '' },
-        { userAvatar: '' },
-        { userAvatar: '' },
-        { userAvatar: '' },
-        { userAvatar: '' },
-        { userAvatar: '' },
-        { userAvatar: '' },
-        { userAvatar: '' },
-        { userAvatar: '' },
-        { userAvatar: '' },
-        { userAvatar: '' },
-        { userAvatar: '' },
-        { userAvatar: '' },
-        { userAvatar: '' },
-        { userAvatar: '' },
-        { userAvatar: '' },
-        { userAvatar: '' },
-        { userAvatar: '' }
-      ]
+      peoples: []
     }
   },
   created: function() {
     this._setBtnAndTips({ status: 1202 }, false, true)
+    console.log(this.$route.params.courseId)
   },
   methods: {
     closeExplain() {

@@ -1,38 +1,36 @@
 <template>
   <div class="comments-container">
     <!-- 全部留言 -->
-    <div class="comment-item" :style="{padding:'0px '+unindent?0:40+'px 48px'}">
-      <div class="comment-header">
-        <img :src="comment.fromAvatarUrl">
-      </div>
+    <div class="qhht-flex comment-item" :style="{padding:'0px '+unindent?0:40+'px 48px'}">
+      <img :src="comment.fromAvatarUrl"  class="comment-avatar">
       <div class="comment-detail">
-        <div class="top-container">
-          <div class="username-date">
-            <h2>{{comment.fromNickName}}</h2>
-            <h5>{{comment.createTime | dateFormat("MM-mm")}}</h5>
-          </div>
-          <div class="thumb-container" @click="onPraise()">
-            <img :src="comment.userCommentLikeId?require('../assets/cmt_praise_selected.png'):require('../assets/cmt_praise_normal.png')">
-            <span>{{comment.likeCount}}</span>
+        <div class="qhht-flex comment-detail-header">
+          <p class="comment-detail-nickName">{{comment.fromNickName}}</p>
+          <p class="comment-detail-time">{{comment.createTime | dateFormat("MM-mm")}}</p>
+          <div class="comment-thumb" @click="onPraise(!!comment.userCommentLikeId)">
+            <i class="qhht-icon icon-praise" :style="{backgroundImage: `url(${comment.userCommentLikeId?praised:unPraise})`}"></i>
+            <span>{{comment.likeCount+comment.virtualLikeCount}}</span>
           </div>
         </div>
-        <div class="center-container">
-          <div v-if="comment.commentType==3301" class="text-container">
-            <p :class="{fold:!isExpand}" ref="cmtContent">{{comment.content | getSingleCourseName(0)}}</p>
-            <p  style="visibility:hidden;position:absolute;color:red;margin:0 40px 0 0" id="ref" ref="reference">{{comment.content | getSingleCourseName(0)}}</p>
-            <span v-if="!isExpand && canExpand" @click="isExpand=true">全文</span>
+        <div class="comment-detail-body">
+          <div ref="content" v-if="comment.commentType==3301" class="comment-detail-content" :class="{'content-expand':isExpand}">
+            <p ref="contentChild">{{comment.content | getSingleCourseName(0)}}</p>
           </div>
           <div v-else class="voice-container">
             <img src="../assets/cmt_voice_icon.png">
             <span>{{comment.audioTime}}"</span>
           </div>
+          <div v-if="!isExpand && needExpand" class="comment-expand-btn">
+            <a @click="handleExpand(comment.id)">全文</a>
+          </div>
+
         </div>
-        <div v-if="regiontype==2201" class="bottom-container">
+        <div v-if="regiontype==2201" class="comment-detail-footer">
           <!-- <font>{{comment.content | getSingleCourseName()}}</font> -->
           {{comment.content | getSingleCourseName(1)}}
         </div>
-        <div class="bottom-container" v-else-if="regiontype===2202">
-          <font>{{comment.childComment && comment.childComment.fromNickName}}回复{{comment && comment.fromNickName}}</font>
+        <div class="comment-detail-footer" v-else-if="regiontype===2202">
+          <span class="comment-replyer">{{comment.childComment && comment.childComment.fromNickName}}</span>回复<span class="comment-replyer">{{comment && comment.fromNickName}}：</span>
           {{comment.childComment && comment.childComment.content }}
         </div>
       </div>
@@ -40,15 +38,17 @@
   </div>
 </template>
 <script>
+import praised from '../assets/cmt_praise_selected.png'
+import unPraise from '../assets/cmt_praise_normal.png'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState, mapActions } = createNamespacedHelpers('comment')
 export default {
   filters: {
     dateFormat: function(value) {
-      var date = new Date(value)
-      var y = date.getFullYear()
-      var m = date.getMonth() + 1
-      var d = date.getDate()
+      const date = new Date(value)
+      const y = date.getFullYear()
+      const m = date.getMonth() + 1
+      const d = date.getDate()
       return y + '-' + (m < 10 ? '0' + m : m) + '-' + (d < 10 ? '0' + d : d)
     },
     getSingleCourseName: function(value, index) {
@@ -59,160 +59,98 @@ export default {
   props: ['comment', 'unindent', 'regiontype'],
   data() {
     return {
-      canExpand: true,
-      isExpand: false
+      needExpand: false,
+      isExpand: false,
+      unPraise,
+      praised
     }
   },
   methods: {
     ...mapActions(['likeComment']),
     //点赞
-    onPraise() {
+    onPraise(praised) {
+      if (praised) {
+        return this.$toast({
+          message: '您已点赞'
+        })
+      }
       this.likeComment(this.comment.id)
-      // this.comment.userCommentLikeId = null==this.comment.userCommentLikeId?0:1
-      // this.$toast({
-      //   message: !this.comment.userCommentLikeId ? '取消点赞' : '点赞成功'
-      // })
+    },
+    handleExpand() {
+      this.isExpand = true
     }
   },
   mounted() {
-    // console.log(this.comment)
-    this.$nextTick(() => {
-      let ref = this.$refs.reference
-      if (ref) { 
-        this.canExpand = ref.scrollHeight > 22 * 3
-      }
-    })
+    this.needExpand =
+      this.$refs.content.clientHeight < this.$refs.contentChild.clientHeight
   }
 }
 </script>
-<style lang='scss'>
-.comments-container{
-  width: 100%; 
+<style lang='less' scoped>
+.comments-container {
+  font-size: 28px;
+  color: #333;
 }
 .comment-item {
-  display: flex;
-  flex-direction: row;
   padding: 48px 40px 48px;
-  .comment-header {
-    width: 80px;
-    height: 80px;
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    img {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      align-self: center;
+}
+.comment-avatar {
+  width: 80px;
+  height: 80px;
+  align-self: start;
+  border-radius: 50%;
+}
+.comment-detail {
+  display: flex;
+  flex-direction: column;
+  margin-left: 32px;
+  flex: 1;
+  &-nickName {
+    font-size: 32px;
+    font-weight: 700;
+    color: #808080;
+    margin-right: 24px;
+  }
+  &-time {
+    flex-grow: 1;
+    font-size: 22px;
+    color: #b2b2b2;
+  }
+  &-body {
+  }
+  &-content {
+    max-height: 160px;
+    overflow: hidden;
+    transition: height 0.4s linear;
+    &.content-expand {
+      max-height: inherit;
+      overflow: visible;
     }
   }
-  .comment-detail {
-    display: flex;
-    flex-direction: column;
-    margin-left: 32px;
-    flex: 1;
-  }
-  .top-container {
-    display: inline-flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    .username-date {
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-end;
-      align-items: center;
-    }
-    h2 {
-      margin: 0;
-      font-size: 32px;
-      line-height: 32px;
-      font-weight: 500;
-      color: rgb(128, 128, 128);
-    }
-    h5 {
-      margin: 0 0 0 24px;
-      font-size: 22px;
-      line-height: 22px;
-      align-self: flex-end;
-      color: rgb(179, 179, 179);
-    }
-    .thumb-container {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      align-self: flex-end;
-    }
-    .thumb-container img {
-      width: 24px;
-      height: 24px;
-      margin-right: 12px;
-    }
-    .thumb-container span {
-      color: rgb(255, 163, 47);
-      font-size: 28px;
-      line-height: 28px;
-    }
-  }
-  .center-container {
+  &-footer {
+    padding: 20px;
+    background-color: #fbfbfb;
     margin-top: 24px;
-    .text-container {
-      font-size: 28px;
-      color: rgb(51, 51, 51);
-      line-height: 48px;
-      display: flex;
-      flex-direction: column;
-      letter-spacing: 1px; /*no*/
-      p {
-        margin: 0;
-        font-size: 28px;
-        line-height: 44px;
-        font-weight: 400;
-      }
-      span {
-        font-size: 28px;
-        color: rgb(255, 149, 33);
-        text-align: right;
-      }
-      .fold {
-        margin: 0;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-      }
-    }
-    .voice-container {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      background-color: rgb(255, 205, 126);
-      border-radius: 180px;
-      width: 180px;
-      height: 60px;
-      align-items: center;
-      padding: 20px;
-    }
-    .voice-container img {
-      width: 20px;
-      height: 30px;
-    }
-    .voice-container span {
-      color: white;
-      font-size: 30px;
-    }
+    border-radius: 16px;
   }
-  .bottom-container {
-    margin-top: 28px;
-    font-size: 28px;
-    letter-spacing: 1px; /*no*/
-    background-color: rgba(247, 247, 247, 0.5);
+}
+.comment-thumb {
+  color: #ffa32f;
+  font-weight: 700;
+}
+.icon-praise {
+  width: 32px;
+  height: 32px;
+  margin-right: 12px;
+}
+.comment-expand-btn {
+  text-align: right;
+  a {
+    color: #ffa32f;
   }
-  .bottom-container font {
-    color: rgb(179, 179, 179);
-    font-size: 36px;
-  }
+}
+.comment-replyer {
+  color: #868686;
 }
 .van-toast--text {
   width: auto;

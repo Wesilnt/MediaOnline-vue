@@ -9,8 +9,8 @@ export async function getCommentList(params) {
 }
 
 //留言接口
-export async function postComment(params) {
-  return request(`/comment/comment?${stringify(params)}`)
+export function postComment(params) {
+  return request.post(`/comment/comment`,params)
 }
 
 // 语音留言接口

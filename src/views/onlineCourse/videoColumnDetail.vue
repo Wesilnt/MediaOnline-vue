@@ -1,5 +1,6 @@
 <template>
   <div class="videocol-dec-container" id="detailmain" ref="detailmain">
+    <GroupHeader></GroupHeader>
     <!-- Header -->
     <div class="videocol-header" :style="{ background : 'url('+profilePic+')' }">
       <span class="videocol-header-bottom">{{buyCount}}人已购买</span>
@@ -66,6 +67,7 @@
 <script>
 import CourseIntroduce from '../../components/CourseIntroduce.vue'
 import playlist from './components/playlist.vue'
+import GroupHeader from './components/GroupHeader'
 import videoComment from '../../components/video-comment.vue'
 import CommentItem from '../../components/CommentItem.vue'
 import toolsNavbar from '../../components/toolsNavbar.vue'
@@ -81,7 +83,8 @@ export default {
     'video-comment': videoComment,
     'tools-navbar': toolsNavbar,
     'vue-bigimage': videoBigimage,
-    commentitem: CommentItem
+    commentitem: CommentItem,
+    GroupHeader
   },
   data() {
     return {
@@ -110,9 +113,9 @@ export default {
     allFunc() {
       console.log('点击全部')
     },
-    gotoVideoCourseDetailPage(lessonID) {
-      console.log('路由跳转 lessonID = ' + lessonID)
-      this.$router.push({ name: 'videoCourseDetail', params: { lessonID } })
+    gotoVideoCourseDetailPage(lessonId) {
+      console.log('路由跳转 lessonID = ' + lessonId)
+      this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
     },
     async handleScroll() {
       //1.监听滚动
@@ -161,6 +164,7 @@ export default {
     },
     routerToCollect() {
       console.log('跳转到集赞')
+      this.$router.push({ name: 'Praise', params: { "courseId" : this.$route.params.courseId } })
     }
   },
 

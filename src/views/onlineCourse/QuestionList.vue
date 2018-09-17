@@ -1,22 +1,9 @@
 <template>
     <div class="question-container">
-        <div >
-            <img :src="deblock ?deblockIcon  : lockIcon" class="questions-state">
-            <p class="questions-length">共3道自测题</p>
-            <button v-if="deblock" @click="openQuestionAnswer"  class="qhht-blockButton question-btn">开始答题</button>
-            <div v-else>
-                <van-progress
-                        pivot-text=""
-                        color="#FFA32F"
-                        :percentage="progress"
-                />
-                <p class="questions-footer-text">再学习n分钟可解锁自测题</p>
-            </div>
-        </div>
-        <div v-if="false">
+        <div v-if="grade">
             <div class="qhht-flex">
                 <div class="question-to-review-item">
-                    <p>3</p>
+                    <p>{{questionLength}}</p>
                     <span>题数</span>
                 </div>
                 <div class="question-to-review-item">
@@ -29,8 +16,21 @@
                 </div>
             </div>
             <div class="qhht-flex">
-                <a class="qhht-blockButton question-inner-btn">回顾自测题</a>
-                <a class="qhht-blockButton question-inner-btn" @click="openQuestionAnswer">查看成绩单</a>
+                <a class="qhht-blockButton question-inner-btn" @click="handlePopupShow('reviewShow')">回顾自测题</a>
+                <a class="qhht-blockButton question-inner-btn" @click="handlePopupShow('settlementShow')">查看成绩单</a>
+            </div>
+        </div>
+        <div v-else>
+            <img :src="deblock ?deblockIcon  : lockIcon" class="questions-state">
+            <p class="questions-length">共{{questionLength}}道自测题</p>
+            <button v-if="deblock" @click="openQuestionAnswer"  class="qhht-blockButton question-btn">开始答题</button>
+            <div v-else>
+                <van-progress
+                        pivot-text=""
+                        color="#FFA32F"
+                        :percentage="progress"
+                />
+                <p class="questions-footer-text">再学习{{remainTime}}秒可解锁自测题</p>
             </div>
         </div>
         <van-popup v-model="questionShow" position="right" class="answer-container" >
@@ -38,7 +38,6 @@
                 <div  class="answer-btn-close">
                     <a @click="handlePopupHide('questionShow')">关闭</a>
                 </div>
-
                 <p class="answer-title">
                     {{questionInfo.headerTitle}}
                 </p>
@@ -49,7 +48,7 @@
                     }">
                         <a
                             @click="handleAnswerClick(opt)"
-                            class="qhht-flex answer-btn-option"
+                            class="qhht-flex answern-btn-option"
                             :class="[
                                 {
                                     'option-selected':questionInfo.isCorrect,
@@ -74,6 +73,43 @@
 
             <a  class="qhht-blockButton answer-btn-next" @click="handleNextClick">
                 {{questionInfo.nextBtnText}}
+            </a>
+        </van-popup>
+        <van-popup v-model="reviewShow" position="left" class="answer-container" >
+            <div class="answer-wrapper">
+                <div  class="answer-btn-close">
+                    <a @click="handlePopupHide('reviewShow')">关闭</a>
+                </div>
+
+                <van-swipe :loop="false" class="review-swipe" :show-indicators="false">
+                    <van-swipe-item v-for="questionItem in questionList" :key="questionItem.id">
+                        <p class="answer-title">
+                            {{questionItem.answer===questionItem.rightOpt?'您答对啦':'您答错啦'}}
+                        </p>
+                        <p class="answer-content">{{questionItem.question}}</p>
+                        <div v-for="opt in opts" :key="opt" class="hasSelect-answer">
+                            <div
+                                    class="qhht-flex answern-btn-option option-selected "
+                                    :class="[
+                                {
+                                    'error-anwser':questionItem.answer!==questionItem.rightOpt &&  `opt${questionItem.answer}`===opt,
+                                    'correct-anwser':opt===`opt${questionItem.rightOpt}`
+                                }
+                            ]"
+                            >
+                                <span>{{questionItem[opt]}}</span>
+                                <!-- <span class="answer-checked-percent">{{questionInfo.userSelect?questionInfo[`${opt}Pct`]+'%':''}}</span> -->
+                                <!--<i  class="option-checked" :style="{width:questionInfo.userSelect?questionInfo[`${opt}Pct`]+'%':'0'}" ></i>-->
+                                <!-- <span class="answer-checked-percent">{{questionInfo.userSelect?questionInfo[`${opt}Pct`]+'%':''}}</span> -->
+                                <i  class="option-checked" :style="{width:opt===`opt${questionItem.answer}` ||opt===`opt${questionItem.rightOpt}` ?'100%':'0'}" ></i>
+                            </div>
+                        </div>
+                    </van-swipe-item>
+                </van-swipe>
+            </div>
+
+            <a  class="qhht-blockButton answer-btn-next" @click="handlePopupShow('settlementShow')">
+                查看成绩单
             </a>
         </van-popup>
         <van-popup v-model="settlementShow" position="bottom" class="settlement-container" @click="handlePopupHide('settlementShow')">
@@ -119,8 +155,10 @@ export default {
       opts: ['optA', 'optB', 'optC', 'optD'],
       // 变量
       warnClass: '',
+      reviewShow: false,
       questionShow: false,
-      settlementShow: false
+      settlementShow: false,
+      remainTime: 0
     }
   },
   computed: {
@@ -131,7 +169,24 @@ export default {
       'answersChecked',
       'newGrade'
     ]),
-    ...mapGetters(['questionList', 'questionInfo', 'grade', 'title'])
+    ...mapGetters([
+      'questionList',
+      'questionLength',
+      'videoTime',
+      'delockTime',
+      'questionInfo',
+      'grade',
+      'title'
+    ])
+  },
+  watch: {
+    progress: function(progress) {
+      console.log(progress)
+      console.log(this.delockTime)
+      this.remainTime = Math.round(
+        this.delockTime - (this.videoTime * progress) / 100
+      )
+    }
   },
   methods: {
     ...mapActions([
@@ -155,6 +210,7 @@ export default {
       }
     },
     handlePopupShow(popup) {
+      if (this.reviewShow) this.reviewShow = false
       this[popup] = true
     },
     handlePopupHide(popup) {
@@ -195,8 +251,9 @@ export default {
         this.userSelect
       )
         return
+        const {lessonId}=this.$route.params
       this.uploadAnswer({
-        lessonId: this.$route.params.lessonID,
+        lessonId,
         answer
       })
     }
@@ -415,5 +472,11 @@ export default {
   width: 152px;
   height: 152px;
   background-color: #20c997;
+}
+/*回顾自测题*/
+.review-swipe {
+  .hasSelect-answer {
+    padding: 0 18px;
+  }
 }
 </style>
