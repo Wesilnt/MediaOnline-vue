@@ -161,6 +161,7 @@ export default {
     },
     routerToCollect() {
       console.log('跳转到集赞')
+      this.$router.push({ name: 'Praise', params: { "courseId" : this.$route.params.courseId } })
     }
   },
 

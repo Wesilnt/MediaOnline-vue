@@ -1,5 +1,6 @@
 import videoColumnDetail from  '../views/onlineCourse/videoColumnDetail'
 import videoCourseDetail from  '../views/onlineCourse/videoCourseDetail'
+import Praise from '../views/praise/Praise'
 
 const PageInfo_From_onlineCourse = [
   {
@@ -11,6 +12,11 @@ const PageInfo_From_onlineCourse = [
     path: '/videoCourseDetail/:lessonID',
     name: 'videoCourseDetail',
     component: videoCourseDetail
+  },
+  {
+    path: '/Praise/:courseId',
+    name: 'Praise',
+    component:Praise
   }
 ]
 

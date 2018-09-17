@@ -226,6 +226,7 @@ export default {
         const percent = (this.loaclPlayTotalTime / duration) * 100
         this.progress = percent <= 100 ? percent : 100
       }else{
+        //第一次进入单集详情页面时,答题进度用服务器保存的视频长度
         const percent = (this.loaclPlayTotalTime / totalTime) * 100
         this.progress = percent <= 100 ? percent : 100
       }
