@@ -50,6 +50,7 @@ import PraiseBtn from './PraiseBtns.vue'
 import PraiseExplain from './PraiseExplain.vue'
 import Share from '../../components/share/Share.vue'
 export default {
+  name:'Praise',
   components: {
     priasebtn: PraiseBtn,
     'praise-explain': PraiseExplain,
@@ -97,6 +98,7 @@ export default {
   },
   created: function() {
     this._setBtnAndTips({ status: 1202 }, false, true)
+    console.log(this.$route.params.courseId)
   },
   methods: {
     closeExplain() {
