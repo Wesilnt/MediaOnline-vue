@@ -225,6 +225,9 @@ export default {
       if (!this.deblockQuestion && duration) {
         const percent = (this.loaclPlayTotalTime / duration) * 100
         this.progress = percent <= 100 ? percent : 100
+      }else{
+        const percent = (this.loaclPlayTotalTime / totalTime) * 100
+        this.progress = percent <= 100 ? percent : 100
       }
     },
     //显示键盘
