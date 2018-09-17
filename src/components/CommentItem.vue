@@ -9,7 +9,7 @@
           <p class="comment-detail-time">{{comment.createTime | dateFormat("MM-mm")}}</p>
           <div class="comment-thumb" @click="onPraise(!!comment.userCommentLikeId)">
             <i class="qhht-icon icon-praise" :style="{backgroundImage: `url(${comment.userCommentLikeId?praised:unPraise})`}"></i>
-            <span>{{comment.likeCount}}</span>
+            <span>{{comment.likeCount+comment.virtualLikeCount}}</span>
           </div>
         </div>
         <div class="comment-detail-body">
@@ -30,9 +30,7 @@
           {{comment.content | getSingleCourseName(1)}}
         </div>
         <div class="comment-detail-footer" v-else-if="regiontype===2202">
-          <span class="comment-replyer">{{comment.childComment && comment.childComment.fromNickName}}</span>
-          回复
-          <span class="comment-replyer">{{comment && comment.fromNickName}}</span>
+          <span class="comment-replyer">{{comment.childComment && comment.childComment.fromNickName}}</span>回复<span class="comment-replyer">{{comment && comment.fromNickName}}：</span>
           {{comment.childComment && comment.childComment.content }}
         </div>
       </div>
