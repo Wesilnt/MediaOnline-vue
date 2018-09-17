@@ -1,5 +1,6 @@
 <template>
   <div class="videocol-dec-container" id="detailmain" ref="detailmain">
+    <GroupHeader></GroupHeader>
     <!-- Header -->
     <div class="videocol-header" :style="{ background : 'url('+profilePic+')' }">
       <span class="videocol-header-bottom">{{buyCount}}人已购买</span>
@@ -66,6 +67,7 @@
 <script>
 import CourseIntroduce from '../../components/CourseIntroduce.vue'
 import playlist from './components/playlist.vue'
+import GroupHeader from './components/GroupHeader'
 import videoComment from '../../components/video-comment.vue'
 import CommentItem from '../../components/CommentItem.vue'
 import toolsNavbar from '../../components/toolsNavbar.vue'
@@ -81,7 +83,8 @@ export default {
     'video-comment': videoComment,
     'tools-navbar': toolsNavbar,
     'vue-bigimage': videoBigimage,
-    commentitem: CommentItem
+    commentitem: CommentItem,
+    GroupHeader
   },
   data() {
     return {
