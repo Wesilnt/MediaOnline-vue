@@ -149,7 +149,7 @@ export default {
   },
   created() {
     //获取课程ID
-    const lessonId = this.$route.params.lessonID
+    const {lessonId }= this.$route.params
     this.getVideoCourseDetail({ lessonId })
     //获取目录课程数据
     // const { courseId } = this
@@ -248,7 +248,7 @@ export default {
     },
     //收藏
     onCollectFavorite() {
-      const lessonId = this.$route.params.lessonID
+      const {lessonId }= this.$route.params
       if (this.isLike) {
         this.unCollectFavorite(lessonId)
       } else {

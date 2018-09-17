@@ -108,7 +108,7 @@
                 </van-swipe>
             </div>
 
-            <a  class="qhht-blockButton answer-btn-next" @click="handlePopupHide('settlementShow')">
+            <a  class="qhht-blockButton answer-btn-next" @click="handlePopupShow('settlementShow')">
                 查看成绩单
             </a>
         </van-popup>
@@ -210,6 +210,7 @@ export default {
       }
     },
     handlePopupShow(popup) {
+      if (this.reviewShow) this.reviewShow = false
       this[popup] = true
     },
     handlePopupHide(popup) {
@@ -250,8 +251,9 @@ export default {
         this.userSelect
       )
         return
+        const {lessonId}=this.$route.params
       this.uploadAnswer({
-        lessonId: this.$route.params.lessonID,
+        lessonId,
         answer
       })
     }

@@ -110,9 +110,9 @@ export default {
     allFunc() {
       console.log('点击全部')
     },
-    gotoVideoCourseDetailPage(lessonID) {
-      console.log('路由跳转 lessonID = ' + lessonID)
-      this.$router.push({ name: 'videoCourseDetail', params: { lessonID } })
+    gotoVideoCourseDetailPage(lessonId) {
+      console.log('路由跳转 lessonID = ' + lessonId)
+      this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
     },
     async handleScroll() {
       //1.监听滚动

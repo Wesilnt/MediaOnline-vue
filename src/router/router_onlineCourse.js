@@ -9,7 +9,7 @@ const PageInfo_From_onlineCourse = [
     component: videoColumnDetail
   },
   {
-    path: '/videoCourseDetail/:lessonID',
+    path: '/videoCourseDetail/:lessonId',
     name: 'videoCourseDetail',
     component: videoCourseDetail
   },
