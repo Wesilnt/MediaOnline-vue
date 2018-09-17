@@ -10,9 +10,10 @@ const { NODE_ENV } = process.env
 /*参考地址 https://github.com/typicode/jsonplaceholder#how-to*/
 
 let api = 'https://xcx.test.shbaoyuantech.com:30000'
-//  api = "https://jsonplaceholder.typicode.com";
-
-if (NODE_ENV === 'production') {
+if (build_env === 'test') {
+  api = 'https://xcx.test.shbaoyuantech.com:30000'
+}
+if (build_env === 'prod') {
   api = 'https://xcx.shbaoyuantech.com'
 }
 export default api
