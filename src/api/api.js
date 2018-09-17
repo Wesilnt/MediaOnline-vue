@@ -13,6 +13,7 @@ let api = 'https://xcx.test.shbaoyuantech.com:30000'
 //  api = "https://jsonplaceholder.typicode.com";
 
 if (NODE_ENV === 'production') {
-  api = 'https://xcx.shbaoyuantech.com'
+  //api = 'https://xcx.shbaoyuantech.com'
+  api = 'https://xcx.test.shbaoyuantech.com:30000'
 }
 export default api
