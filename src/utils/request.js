@@ -72,7 +72,8 @@ const checkResponseCode = (url, response) => {
   throw error
 }
 function GetRequestCode() {
-  var url = window.location.search; //获取url中"?"符后的字符串
+  var url = location.search; //获取url中"?"符后的字符串
+  console.log(url)
   var theRequest = new Object();
   if (url.indexOf("?") != -1) {
     var str = url.substr(1);
