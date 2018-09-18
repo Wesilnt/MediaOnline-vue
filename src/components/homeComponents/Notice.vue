@@ -1,6 +1,6 @@
 <template>
     <div v-if="messageCount>0" class="noticebg">
-        <div class="notice">
+        <div class="notice" @click="enterMessage">
             <img class="messageicon" >
             <span class="message">{{messageCount}}条新消息</span>
             <img class="arrow" src="../../assets/home_notice_arrow.png" >
@@ -11,7 +11,12 @@
 
 <script>
 export default {
-  props: ['messageCount']
+  props: ['messageCount'],
+  methods:{
+    enterMessage(){
+      this.$router.push("/my/Reply")
+    }
+  }
 }
 </script>
 
