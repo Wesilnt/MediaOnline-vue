@@ -1,19 +1,11 @@
 const { NODE_ENV } = process.env
 
-// mock数据网站 可测试接口
-// /posts       100条
-// /comments    500条
-// /albums      100条
-// /photos      5000条
-// /todos       200条
-// users        10条
-/*参考地址 https://github.com/typicode/jsonplaceholder#how-to*/
-
 let api = 'https://xcx.test.shbaoyuantech.com:30000'
-if (NODE_ENV === 'test') {
+if (NODE_ENV === 'development') {
   api = 'https://xcx.test.shbaoyuantech.com:30000'
-}
-if (NODE_ENV === 'prod') {
-  api = 'https://xcx.shbaoyuantech.com'
+}else if (NODE_ENV === 'production') {
+  // api = 'https://xcx.shbaoyuantech.com'
+}else{
+  throw new Error('域名地址既不是测试环境也不是正式环境')
 }
 export default api
