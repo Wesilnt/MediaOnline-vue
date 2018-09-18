@@ -72,7 +72,7 @@ const checkResponseCode = (url, response) => {
   throw error
 }
 function GetRequestCode() {
-  var url = location.search; //获取url中"?"符后的字符串
+  var url = window.location.search; //获取url中"?"符后的字符串
   var theRequest = new Object();
   if (url.indexOf("?") != -1) {
     var str = url.substr(1);
@@ -90,31 +90,32 @@ async function getToken() {
     return token;
   } else {
     console.log('没有token')
+    console.log(GetRequestCode())
     let localToken = getAccessToken()
-    if (localToken.length > 0) {
-      token = localToken;
-      let expire = getExpireTime()
-      var timestamp = Date.parse(new Date());
-      if (expire < timestamp) {
-        return token
-      } else {
-        let refreshToken = getRefreshToken()
-        let result = await request.post('/auth/wechat/refreshToken', { 'accessToken': token, 'refreshToken': refreshToken })
-        token = result.data.accessToken;
-        console.log(result)
-        setUserInfo(result.data)
-        return token
-      }
-    } else {
-      console.log('没有code')
-      console.log(GetRequestCode())
-      let code = GetRequestCode()
-      let result = await request.post(`auth/wechat/login${stringify({ 'code': code })}`, false)
-      token = result.data.accessToken;
-      console.log(token)
-      setUserInfo(result.data)
-      return token
-    }
+    // if (localToken.length > 0) {
+    //   token = localToken;
+    //   let expire = getExpireTime()
+    //   var timestamp = Date.parse(new Date());
+    //   if (expire < timestamp) {
+    //     return token
+    //   } else {
+    //     let refreshToken = getRefreshToken()
+    //     // let result = await request.post('/auth/wechat/refreshToken', { 'accessToken': token, 'refreshToken': refreshToken })
+    //     token = result.data.accessToken;
+    //     console.log(result)
+    //     setUserInfo(result.data)
+    //     return token
+    //   }
+    // } else {
+    //   console.log('没有code')
+    //   let code = GetRequestCode()
+    //   console.log(code)
+    //   // let result = await request.post(`auth/wechat/login${stringify({ 'code': code })}`, false)
+    //   token = result.data.accessToken;
+    //   console.log(token)
+    //   setUserInfo(result.data)
+    //   return token
+    // }
   }
 }
 /**
