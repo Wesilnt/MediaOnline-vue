@@ -92,7 +92,8 @@ async function getToken() {
     console.log('没有token')
     let code = GetRequestCode().code;
     let localToken = getAccessToken()
-    let result = await request.post(`auth/wechat/login${stringify({ 'code': code })}`, false)
+    let result = await request(`auth/wechat/login${stringify({ 'code': code })}`, false, false)
+    console.log(result);
     // if (localToken.length > 0) {
     //   token = localToken;
     //   let expire = getExpireTime()
@@ -126,7 +127,7 @@ async function getToken() {
  * @param  {object} [options] The options we want to pass to "fetch"
  * @return {object}           An object containing either "data" or "err"
  */
-function request(url, options) {
+function request(url, options, needToken=true) {
   // const accessToken = getAccessToken();
   // const accessToken = '9009f5f8-e2bc-4cb0-98d9-721b32153c56'
   const token = getToken()
