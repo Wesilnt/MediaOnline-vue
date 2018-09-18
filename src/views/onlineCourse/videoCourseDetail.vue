@@ -130,11 +130,11 @@ export default {
     ]),
     ...mapGetters(['haveQuestionBOList', 'haveLessonlist'])
   },
-  async mounted() {
+    mounted() {
     //监听滚动
-    await addEventListener('scroll', this.handleScroll)
+     addEventListener('scroll', this.handleScroll)
     //视频播放器相关监听
-    const vid = await this.$refs.videoitem
+    const vid =  this.$refs.videoitem
     //视频进度
     vid.addEventListener('timeupdate', this.getVideoProgress)
     vid.addEventListener('play', this.clickPlayVideoBtn)
@@ -190,7 +190,6 @@ export default {
     },
     getVideoProgress({ target }) {
       const { currentTime, paused, duration } = target
-
       //  播放累计时长大于视频的总时长，解锁
       const videoData = JSON.parse(localStorage.getItem(this.id))
       if (

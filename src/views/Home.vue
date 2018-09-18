@@ -61,7 +61,7 @@ export default {
       'getBookList'
     ])
   },
-  created() {
+    created () {
     this.getBannerList()
     this.getNewMessageCount()
     this.getFreeList()

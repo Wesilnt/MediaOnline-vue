@@ -113,7 +113,7 @@
             </a>
         </van-popup>
         <van-popup v-model="settlementShow" position="bottom" class="settlement-container" @click="handlePopupHide('settlementShow')">
-            <div class="settlement-wrapper">
+            <div class="settlement-wrapper" ref="settlement">
                 <div class="settlement-title">成绩单</div>
                 <hr class="settlement-title-underline">
                 <strong class="answer-name">
@@ -129,7 +129,7 @@
                 <i class="settlement-qr"></i>
                 <p>分享二维码，邀请好友一起试听</p>
             </div>
-            <a  class="qhht-blockButton answer-btn-next" @click="handlePopupHide('settlementShow')">
+            <a  class="qhht-blockButton answer-btn-next" @click="handleSettlementSave">
                 保存图片
             </a>
         </van-popup>
@@ -137,11 +137,14 @@
 </template>
 
 <script>
+import html2canvas from  'html2canvas';
 import { createNamespacedHelpers } from 'vuex'
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
   'videoCourseDetail/questionList'
 )
-let timeInter = ''
+let timeInter = '',
+  cvs = null,
+  ctx = null
 export default {
   name: 'QuestionList',
   props: {
@@ -157,7 +160,7 @@ export default {
       warnClass: '',
       reviewShow: false,
       questionShow: false,
-      settlementShow: false,
+      settlementShow: true,
       remainTime: 0
     }
   },
@@ -251,11 +254,18 @@ export default {
         this.userSelect
       )
         return
-        const {lessonId}=this.$route.params
+      const { lessonId } = this.$route.params
       this.uploadAnswer({
         lessonId,
         answer
       })
+    },
+    handleSettlementSave(){
+        html2canvas( this.$refs.settlement).then(canvas => {
+            console.log(canvas);
+            document.body.appendChild(canvas)
+        });
+        this.handlePopupHide('settlementShow')
     }
   },
   destroyed: function() {

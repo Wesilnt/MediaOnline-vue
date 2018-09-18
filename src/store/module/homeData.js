@@ -33,7 +33,7 @@ const homeData = {
         async getBookList({ commit }) {
             let result = await getBookList()
             commit('setBookList', result)
-        }
+        },
     },
     mutations: {
         setBannerList(state, bannerList) {

@@ -45,5 +45,8 @@ export default new Vuex.Store({
     freezone,
     audiotask,
     share
-  },   
+  },
+    actions:{
+    reshed(){}
+    }
 })
