@@ -1,5 +1,6 @@
 import { getVideoColumnDetail } from '../../services/columns.js'
-import { getCommentList,likeComment } from '../../services/comment.js'
+
+import groupContent from './groupContent'
 
 const videoColumnDetail = {
     namespaced: true, // 设置命名空间 ，保持数据独立性
@@ -8,16 +9,20 @@ const videoColumnDetail = {
         profilePic:'',                 //头图
         description:'',           //专栏介绍
         outlinePic:'',           //课程列表下面的大图展示
-        videoColumnComments:[],       //视频专栏的留言
+        // videoColumnComments:[],       //视频专栏的留言
         buyIntro:'',               //购买须知
         lessonCount:0,                 //专栏课集总数
         commentCount:0,              //留言条数
         buyCount:0,             //购买数量
+        courseId:0              //专栏ID
     },
     getters: {
 
     },
     mutations: {
+        initDatas(state,courseId) {
+            state.courseId = courseId
+        },
         bindVideoColumnDetail(state,payload) {
             state.freeLessonList = payload.freeLessonList
             state.profilePic = payload.profilePic
@@ -27,18 +32,8 @@ const videoColumnDetail = {
             state.lessonCount = payload.lessonCount
             state.commentCount = payload.commentCount
             state.buyCount = payload.buyCount
-        },
-        bindCommentList(state,payload) {
-            state.videoColumnComments = payload.result
-        },
-        //更新播放列表是否点赞字段
-        updateUserCommentLikeId(state,payload) {
-            state.videoColumnComments.forEach(element => {
-                if(element.id == payload){
-                    element.userCommentLikeId = '1'
-                }
-            });
         }
+
     },
     actions:{
        async getVideoColumnDetail ({ commit },{ courseId }) {            
@@ -48,23 +43,11 @@ const videoColumnDetail = {
             // console.log('视频专栏接口数据:')
             // console.log(result)
             commit('bindVideoColumnDetail',result)
-        },
-        async getCommentList ({commit},{ regionType, regionId, commentId, currentPage, pageSize}) {
-            const result = await getCommentList({regionType, regionId, commentId, currentPage, pageSize})
-            // console.log('视频专栏留言数据:')
-            // console.log(result)
-            commit('bindCommentList',result)
-        },
-        async likeComment ({commit,state},commentId) {
-
-           const result = await likeComment({'commentId':commentId})
-        //    console.log(commentId)
-           console.log('点赞结果')
-           console.log(result)
-           if(!result) return
-           commit('updateUserCommentLikeId',result.commentId)
-  
         }
+
+    },
+    modules:{
+        groupContent
     }
 }
 export default videoColumnDetail;
