@@ -1,7 +1,7 @@
 <template>
     <section>
-        <div class="userinfo-identity">
-            <p class="userinfo-identity-title">填写孩子的资料 </p>
+        <p class="userinfo-title">填写孩子的资料 </p>
+        <div v-if='showIdentity' class="userinfo-identity">
             <p class="userinfo-identity-sub-title">你的身份</p>
             <div class="userinfo-identity-container">
                 <van-radio-group v-model="radio">
@@ -23,8 +23,30 @@
                 </van-radio-group>
             </div>
         </div>
-        <div class="userinfo-grade">
-            <van-area :area-list="gradeList" />
+        <div v-if='showSex' class="userinfo-identity">
+            <p class="userinfo-identity-sub-title">你的性别</p>
+            <div class="userinfo-identity-container">
+                <van-radio-group v-model="radio">
+                    <div class="userinfo-identity-container-item">
+                        <div class="userinfo-identity-container-item-content">
+                            <div class="userinfo-identity-container-item-content-circle"/>
+                            <p class="userinfo-identity-container-item-content-text">我是男生</p>
+                        </div>
+
+                        <van-radio name="1"/>
+                    </div>
+                    <div class="userinfo-identity-container-item">
+                        <div class="userinfo-identity-container-item-content">
+                            <div class="userinfo-identity-container-item-content-circle"/>
+                            <p class="userinfo-identity-container-item-content-text">我是女生</p>
+                        </div>
+                        <van-radio name="2"/>
+                    </div>
+                </van-radio-group>
+            </div>
+        </div>
+        <div v-if='showGrade' class="userinfo-grade">
+            <van-picker :column="columns" @change="onChange" />
         </div>
         <div class="userinfo-submit-area">
             <button class="userinfo-submit-area-button" @click="handleNext">
@@ -45,15 +67,18 @@
     data: function () {
       return {
         radio: '',
-        gradeList: {
-          110000: '北京市',
-          120000: '天津市'
-        }
+        showIdentity:true,
+        showGrade:true,
+        showSex:false,
+        columns: ['杭州', '宁波', '温州', '嘉兴', '湖州']
       }
     },
     methods: {
       handleNext: function () {
         console.log("Next")
+      },
+      onChange(picker, value, index) {
+        console.log(value + index)
       }
     }
   }
@@ -61,13 +86,14 @@
 
 <style scoped lang="less">
     .userinfo {
+        &-title {
+            padding: 104px 0px 60px 60px;
+            font-size: 54px;
+            color: #ffa32f;
+        }
         &-identity {
             font-size: 28px;
-            &-title {
-                padding: 104px 0px 60px 60px;
-                font-size: 54px;
-                color: #ffa32f;
-            }
+
             &-sub-title {
                 padding: 0px 0px 32px 60px;
                 font-size: 28px;
@@ -149,5 +175,9 @@
         margin: -15px 0px 0px 0px;
 
     }
+    .van-picker {
+        height: 150px;
+    }
+
 
 </style>

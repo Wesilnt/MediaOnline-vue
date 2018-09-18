@@ -16,8 +16,8 @@ Vue.config.productionTip = false
 
 //vant组件引入
 import { SwipeCell, Dialog,List ,Cell} from 'vant'
-import { RadioGroup,Radio, Area } from 'vant'
 import { Popup, Toast, Field,Loading } from 'vant'
+import { RadioGroup,Radio, Picker } from 'vant'
 Vue.use(Cell)
 Vue.use(Popup)
 Vue.use(Toast)
@@ -29,6 +29,8 @@ Vue.use(RadioGroup)
 Vue.use(Radio)
 Vue.use(Area)
 Vue.use(Loading);
+Vue.use(Picker)
+
 
 new Vue({
   router,
