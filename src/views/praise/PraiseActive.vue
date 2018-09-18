@@ -4,25 +4,32 @@
             <img :src="item.url">
         </div>
         <div class="help-btn" @click="toHelp">
-            为TA助力，免费领取某某课程
+            为TA助力，免费领取{{courseName}}
         </div>
     </div>
 </template>
 <script>
+import { createNamespacedHelpers } from 'vuex'
+const { mapState, mapActions ,mapGetters} = createNamespacedHelpers('praise') 
 export default {
   data() {
     return {
+      courseId:this.$route.params.courseId,
+      collectLikeId:this.$route.params.collectLikeId,
       actives: [
-        { url: require('../../assets/praise_head_bg.png') },
-        { url: require('../../assets/praise_head_bg.png') },
-        { url: require('../../assets/praise_head_bg.png') },
-        { url: require('../../assets/praise_head_bg.png') }
+        { url: require('../../assets/praise_bg.png') },
+        { url: require('../../assets/praise_bg.png') }, 
       ]
     }
   },
+  computed:{...mapState(['picList','courseName'])},
+  created(){
+    this.checkStatus({collectLikeId:this.collectLikeId})
+  },
   methods: {
+    ...mapActions(['checkStatus']),
     toHelp() {
-      this.$router.push({ path: '/praise' })
+      this.$router.push({ name: 'Praise', params: { "courseId" : this.courseId ,collectLikeId:this.collectLikeId} })
     }
   }
 }

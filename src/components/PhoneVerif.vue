@@ -2,13 +2,13 @@
   <div class="mobile-validate">
     <div class="validate-container">
       <div class="number-container">
-        <span>手机号：</span>
+        <p>手机号:</p>
         <input v-model="mobileNumber" placeholder="手机号" type="number">
       </div>
       <div class="code-container">
-        <span>验证码：</span>
+        <p>验证码:</p>
         <input v-model="validateCode" type="text" placeholder="验证码">
-        <a @click.prevent="sendCode">发送短信</a>
+        <a @click.prevent="sendCode">{{remainTime}} <van-loading v-show="sending"/></a>
       </div>
       <a class="validate-confirm" @click.prevent="onConfirm">确认</a>
     </div>
@@ -16,6 +16,8 @@
   </div>
 </template>
 <script>
+import { createNamespacedHelpers } from 'vuex'
+const { mapState, mapActions ,mapGetters} = createNamespacedHelpers('mobile') 
 export default {
   data() {
     return {
@@ -23,19 +25,33 @@ export default {
       validateCode: ''
     }
   },
+  computed:{
+  ...mapState(['remainTime','clickable','sending','validate']), 
+  }, 
+  created(){
+
+  },
+  watch:{
+    validate:function(res){
+       if(res) this.$emit('callback')
+    }
+  },
   methods: {
+    ...mapActions(['init','sendMobileCode','validateMobileCode']),
     sendCode() {
+      if(!this.clickable) return
       if (this.mobileNumber === '') {
-        Toast('请输入手机号')
+         this.$toast('请输入手机号')
         return
       }
+      this.sendMobileCode({mobileNo:this.mobileNumber})
     },
     onConfirm() {
       if (this.validateCode === '') {
-        Toast('请输入正确的验证码')
+        this.$toast('请输入正确的验证码')
         return
-      }
-      this.$emit('callback')
+      } 
+      this.validateMobileCode({code:this.validateCode})
     }
   }
 }
@@ -54,10 +70,10 @@ export default {
   left: 0;
 }
 .validate-container {
-  height: 235px;
-  width: 335;
+  height: 470px;
+  width: 670px;
   background-color: white;
-  border-radius: 10px;
+  border-radius: 20px;
   display: flex;
   flex-direction: column;
 }
@@ -65,17 +81,19 @@ export default {
   display: flex;
   flex-direction: row;
   margin: 80px 40px 0;
-  span {
+  p {
     color: rgb(28, 28, 28);
     font-size: 30px;
     line-height: 30px;
     align-self: flex-end;
+    border-bottom: 1px solid #00000000; /*no*/
   }
   input {
     margin-left: 24px;
     color: rgb(28, 28, 28);
     font-size: 30px;
-    width: 205px;
+    width: 250px;
+    line-height: 30px;
     border: none;
     border-bottom: 1px solid rgb(204, 204, 204); /*no*/
     outline: none;
@@ -85,11 +103,12 @@ export default {
   display: flex;
   flex-direction: row;
   margin: 64px 40px 0;
-  span {
+  p {
     color: rgb(28, 28, 28);
     font-size: 30px;
     align-self: flex-end;
     line-height: 30px;
+    border-bottom: 1px solid #00000000; 
   }
   input {
     border: none;
@@ -97,8 +116,10 @@ export default {
     align-self: flex-end;
     color: rgb(28, 28, 28);
     font-size: 30px;
-    width: 210px;
+    width: 0px;
+    flex: 1;
     outline: none;
+    line-height: 30px;
     border-bottom: 1px solid rgb(204, 204, 204); /*no*/
   }
   a {
@@ -108,18 +129,21 @@ export default {
     color: black;
     text-align: center;
     line-height: 88px;
+    font-size: 28px;
     border-radius: 88px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }
 .validate-confirm {
-  margin: 40px;
+  margin:67px 40px 0;
   color: white;
   border-radius: 90px;
   text-align: center;
   line-height: 90px;
-  height: 90px;
-  margin-top: 68px;
-  margin-bottom: 40px;
+  font-size: 34px;
+  height: 90px;  
   background-color: rgb(255, 163, 47);
 }
 </style>

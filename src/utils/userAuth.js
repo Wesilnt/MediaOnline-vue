@@ -22,15 +22,25 @@ export const setUSERID = (userId = '') => {
   return localStorage.setItem('BY-USERID', userId)
 }
 
+export const getExpireTime = () => {
+  return localStorage.getItem('BY-EXPIRETIME') || ''
+}
+
+export const setExpireTime = (expireTime = '') => {
+  return localStorage.setItem('BY-BY-EXPIRETIME', expireTime)
+}
+
 export const getUserInfo = () => ({
   accessToken: getAccessToken(),
   refreshToken: getRefreshToken(),
-  userId: getUserId()
+  userId: getUserId(),
+  expireTime: getExpireTime()
 })
 
 export const setUserInfo = info => {
-  const { accessToken, refreshToken, userId } = info
+  const { accessToken, refreshToken, userId, expireTime } = info
   setAccessToken(accessToken)
   setRefreshToken(refreshToken)
-  setUSERID(userId)
+  setUSERID(userId),
+  setExpireTime(expireTime)
 }

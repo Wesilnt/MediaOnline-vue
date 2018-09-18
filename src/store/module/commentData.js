@@ -18,11 +18,10 @@ export default {
       state.lessonId = lessonId;
     },
     setCommentList(state, res) { 
-      console.log(res)
       state.currentPage = res.page
       state.finished = res.list.length<state.pageSize 
       state.loading = false
-      if(1==res.page)state.commentList=[]  
+      if(1 == res.page)state.commentList=[]  
       res.list.forEach(element => {
         state.commentList.push(element)
       });
@@ -59,16 +58,14 @@ export default {
     },
     //发布评论
     async postComment({ state,commit,dispatch}, params) {
-      const res = await postComment(params)
-      console.log(res)
+      const res = await postComment(params) 
       // commit("postComment", res)
-      // dispatch('getCommentList', {lessonId:params.regionId,isLoadMore:false})
+      dispatch('getCommentList', {lessonId:params.regionId,isLoadMore:false})
     },
     async likeComment({commit,state}, commentId) {
       const result = await likeComment({'commentId': commentId})
       if (!result) return
-      commit('updateUserCommentLikeId', result.commentId)
-
+      commit('updateUserCommentLikeId', result.commentId) 
     }
   }
 }

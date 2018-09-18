@@ -13,7 +13,7 @@
           </h4>
           <div class="bottom-container">
             <span v-if="item.isAudition">试听</span> 
-            <p>{{item.totalTime | formatDuring}} | {{item.learnTime |learntimeFormat(item.totalTime)}}</p> 
+            <p>{{item.totalTime | formatDuring}} | {{item.learnTime | learntimeFormat(item.totalTime,item.id)}}</p> 
           </div>
         </div>
       </div>
@@ -22,13 +22,7 @@
 </template>
 
 <script>
-export default {
-  filters: {
-    learntimeFormat: function(value, totaltime) {
-      if (value <= 1) return '未收听'
-      return '已收听' + parseInt((value * 100) / totaltime) + '%'
-    }
-  },
+export default { 
   //singleset 单集  playing是否正在播放
   props: ['item', 'playing'],
   methods: {

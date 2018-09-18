@@ -14,56 +14,57 @@
       </span>
     </div>
     <mobile-validate v-if="show" @callback="validateCallback"/>
-   
   </div>
 </template>
 <script>
+import { createNamespacedHelpers } from 'vuex'
 import MobileVali from '../../components/PhoneVerif.vue'
+const { mapState, mapActions ,mapGetters} = createNamespacedHelpers('praise') 
 let buttonDatas = [
   {
-    isSingle: false, //单按钮还是双按钮
+    isSingle: false, //单按钮还是双按钮  0
     leftText: '分享给好友',
     rightText: '分享海报'
   },
-  {
-    isSingle: true, //单按钮还是双按钮
+  { 
+    isSingle: true, //单按钮还是双按钮   1
     singleStyle: 'solid-large', //按钮样式
     singleText: '为TA点赞，免费领取伍老师历史课程'
   },
   {
-    isSingle: false, //单按钮还是双按钮
+    isSingle: false, //单按钮还是双按钮  2
     leftText: '帮TA分享',
     rightText: '我也要集赞'
   },
   {
-    isSingle: true, //单按钮还是双按钮
+    isSingle: true, //单按钮还是双按钮   3
     singleStyle: 'hollow-small', //按钮样式
     singleText: '现在去领取'
   },
   {
-    isSingle: true, //单按钮还是双按钮
+    isSingle: true, //单按钮还是双按钮   4
     singleStyle: 'hollow-small', //按钮样式
     singleText: '马上去学习'
   },
   {
-    isSingle: true, //单按钮还是双按钮
+    isSingle: true, //单按钮还是双按钮   5
     singleStyle: 'solid-small', //按钮样式
     singleText: '我也要集赞'
   },
   {
-    isSingle: true, //单按钮还是双按钮
+    isSingle: true, //单按钮还是双按钮    6
     singleStyle: 'hollow-small', //按钮样式
     singleText: '活动已结束'
   },
   {
-    isSingle: true, //单按钮还是双按钮
+    isSingle: true, //单按钮还是双按钮   7
     singleStyle: 'solid-small', //按钮样式
     singleText: '重新发起集赞'
   }
 ]
 export default {
   components: { 'mobile-validate': MobileVali },
-  props: ['state'],
+  props: ['state','courseid','collectlikeid'],
   data() {
     return {
       show: false,
@@ -77,20 +78,23 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['joinCollectLike']),
     onSingle() {
       if (1 == this.state) {
-        //TODO 发起集赞
-      }
-      if (this.state == 5) {
-        this.show = true
-      }
+        //TODO  参与集赞
+        if(true) //手机号检验
+          this.show =true
+       else
+          this.joinCollectLike({collectLikeId:this.collectlikeid})
+      } 
       if (
         3 == this.state || //集赞完成未领取（发起人）
         4 == this.state || //集赞完成已领取（发起人）
         5 == this.state || //集赞完成（好友）
         7 == this.state
-      ) {
+      ) { 
         //TODO专栏详情
+        this.$router.push({name:'videoColumnDetail',params:{courseId:this.courseid}})
         return
       }
     },
@@ -100,15 +104,19 @@ export default {
     },
     onRight() {
       if (0 == this.state) {
+        console.log(this.collectlikeid)
+        let params = {id:this.collectlikeid}
         //分享海报
-        this.$router.push({ path: '/save-poster' })
+        this.$router.push({ name: 'SharePoster',params,query:{sharetype:'praise'}})
       }
       if (2 == this.state) {
         //我也要集赞
+        this.$router.push({name:'videoColumnDetail',params:{courseId:this.courseid}})
       }
     },
     validateCallback() {
       this.show = false
+      this.joinCollectLike({collectLikeId:this.collectlikeid})
     }
   }
 }
