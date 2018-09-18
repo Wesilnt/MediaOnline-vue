@@ -6,7 +6,7 @@ const myPuzzle_Praise = () =>
   import(/* webpackChunkName: "myPuzzle_Praise" */ '../views/my/MyPuzzle_Praise')
 const sysMessage = () => import("../views/my/SysMessage")
 const help = () => import("../views/my/Help")
-
+const editUserInfo = () => import ("../views/my/EditUserInfo")
 const PageInfo_From_My = [
   {
     path: '/my/Purchase',
@@ -49,6 +49,11 @@ const PageInfo_From_My = [
     path: '/my/Help',
     // name: "BookList",
     component: help
+  },
+  {
+    path: '/my/EditUserInfo',
+    // name: "BookList",
+    component: editUserInfo
   }
 ]
 

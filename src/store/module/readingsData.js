@@ -50,6 +50,7 @@ export default {
                 radioIntro:state.bookDetail.commentatorIntro,        //播讲者介绍  
                 description:state.bookDetail.description,            //内容介绍
             }
-        }
+        },
+      playingId:(state,getters,rootState)=>rootState.audiotask.audioDetail.id
     }
 }

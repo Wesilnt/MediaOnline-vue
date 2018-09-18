@@ -13,8 +13,9 @@ const videoColumnDetail = {
         buyIntro:'',               //购买须知
         lessonCount:0,                 //专栏课集总数
         commentCount:0,              //留言条数
-        buyCount:0,             //购买数量
-        courseId:0              //专栏ID
+        buyCount:0,             //购买数量 
+        courseId:0,              //专栏ID 
+        collectLikeId:0,        //集赞ID 
     },
     getters: {
 
@@ -31,7 +32,19 @@ const videoColumnDetail = {
             state.buyIntro = payload.buyIntro
             state.lessonCount = payload.lessonCount
             state.commentCount = payload.commentCount
-            state.buyCount = payload.buyCount
+            state.buyCount = payload.buyCount 
+            state.collectLikeId = payload.collectLikeId
+        },
+        bindCommentList(state,payload) {
+            state.videoColumnComments = payload.result
+        },
+        //更新播放列表是否点赞字段
+        updateUserCommentLikeId(state,payload) {
+            state.videoColumnComments.forEach(element => {
+                if(element.id == payload){
+                    element.userCommentLikeId = '1'
+                }
+            }); 
         }
 
     },

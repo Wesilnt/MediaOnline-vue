@@ -8,7 +8,6 @@ import NavBar from '../components/NavBar'
 // import VisionDetail from '../views/VisionDetail'
 // import videoColumnDetail from '../views/onlineCourse/videoColumnDetail.vue'
 import FreeZone from '../views/freezone/FreeZone.vue' //首页-免费专区 
-import Praise from '../views/praise/Praise.vue' //集赞
 import SharePoster from '../components/share/SharePoster.vue' //分享海报
 import PageLoading from '../components/PageLoading'
 
@@ -17,6 +16,7 @@ import PageInfo_From_My from './router_my'
 import PageInfo_From_OnlineCourse from './router_onlineCourse'
 import PageInfo_From_Readings from './router_readings'
 import PageInfo_From_Audio from './router_audio'
+import PageInfo_From_Praise from './router_praise'
 
 
 const Home = () => import(/* webpackChunkName: "home" */ '../views/Home')
@@ -66,11 +66,6 @@ export default new Router({
       component: FreeZone
     },
     {
-      path: '/praise',
-      name: 'Praise',
-      component: Praise
-    },
-    {
       path: '/share/poster/:id',
       name: 'SharePoster',
       component: SharePoster
@@ -79,6 +74,7 @@ export default new Router({
     ...PageInfo_From_My,
     ...PageInfo_From_OnlineCourse,
     ...PageInfo_From_Readings,
-    ...PageInfo_From_Audio
+    ...PageInfo_From_Audio,
+    ...PageInfo_From_Praise
   ]
 })

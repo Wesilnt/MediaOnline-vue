@@ -75,7 +75,6 @@ export default {
     ...mapActions(['getCommentList', 'postComment']),
     //分页加载
     scrollBottom(){ 
-      console.log("分页加载")
       this.getCommentList({lessonId:this.lessonId,isLoadMore:true}) 
     },
     //切换评论方式

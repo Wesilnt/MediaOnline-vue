@@ -4,40 +4,44 @@ import { Toast } from 'vant';
 
 export default {
     state: {
-        status:"default",  //
-        audioDetail: {},   //
-        currentTime:0,     //
-        maxTime: 0,        //
+        status:"default",  //播放状态
+        audioDetail: {},   //音频数据
+        audioId: 0,        //播放音频ID
+        audioUrl: "",      //播放音频地址
+        currentTime:0,     //播放进度
+        maxTime: 0,        //音频总时长
         playMode:'order',  // order:顺序播放  single：单曲播放
-        isPlaying:false,   //
-        statusFunc:(commit,status)=>commit('statusUpdate', status),
+        isPlaying:false,   //是否正在播放
         throttle:null,
+        statusFunc:(commit,status)=>commit('statusUpdate', status),
         saveProgress:(id,currentTime,maxTime)=>{
-          localStorage.setItem(id,JSON.stringify({currentTime,maxTime}))
+          localStorage.setItem("learntime-"+ id,JSON.stringify({currentTime,maxTime}))
         },
     },
     mutations: { 
       initThrottle(state){
           state.throttle = throttle(state.saveProgress,1000)
-        },
+      },
         //同步音频数据
-        bindAudioDetail(state,res){
-          state.audioDetail = res
-        },
-        //音频播放同步方法
-        syncPlay(state, params) {
-          if(params){
-            state._at.src = params.audioUrl
-          }
-          let localCache = localStorage.getItem(state.audioDetail.id)
-          if(localCache){ 
-            let currentTime =  JSON.parse(localCache).currentTime
-            if(currentTime>=state._at.duration)currentTime = 0 
-            state.currentTime = state._at.currentTime =  parseFloat(currentTime)
-            state.maxTime = JSON.parse(localCache).maxTime
-          }
-          state._at.play()
-        },
+    bindAudioDetail(state,res){
+      state.audioDetail = res
+      state.audioUrl = res.audioUrl
+      state.audioId = res.id
+    },
+    //音频播放同步方法
+    syncPlay(state, params) {
+      if(params){
+        state._at.src = params.audioUrl
+      }
+      let localCache = localStorage.getItem("learntime-" + state.audioDetail.id)
+      if(localCache){ 
+        let currentTime =  JSON.parse(localCache).currentTime
+        if(!currentTime||currentTime>=state._at.duration)currentTime = 0 
+        state.currentTime = state._at.currentTime =  parseFloat(currentTime)
+        state.maxTime = JSON.parse(localCache).maxTime
+      }
+      state._at.play()
+      },
         //音频播放同步方法
         syncPause(state) { 
           state._at.pause()
@@ -68,7 +72,7 @@ export default {
         //音频单集详情
         async getAudioDetail({getters, commit,dispatch }, params) {
             const res = await getAudioDetail(params)   
-            let localCache = localStorage.getItem(res.id)
+            let localCache = localStorage.getItem("learntime-" + res.id)
             if(localCache){  //提交本地缓存
               let data =  JSON.parse(localCache)
               let listenTime = parseInt(data.currentTime)
@@ -76,7 +80,7 @@ export default {
               dispatch('postLearnRate',{lessonId,listenTime})
             }else{           //更新本地缓存
               let data = JSON.stringify({currentTIme:res.learnTime,maxTime:res.totalTime})
-              localStorage.setItem(res.id,data)      
+              localStorage.setItem("learntime-" + res.id,data)      
             } 
             commit("bindAudioDetail", res) 
             return res
@@ -152,7 +156,7 @@ export default {
             commit('statusUpdate', 'ended')
             if (state.playMode == "single") {
               let data = JSON.stringify({currentTime:0,maxTime:state.duration})
-              localStorage.setItem(state.audioDetail.id,data)
+              localStorage.setItem("learntime-"+state.audioDetail.id,data)
               commit("syncPlay",{audioUrl:state.audioDetail.audioUrl})
             }
             if (state.playMode == 'order') {

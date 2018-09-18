@@ -1,7 +1,7 @@
 <template>
   <div class="my">
       <div justify-content="center">
-          <div class="user-info">
+          <div class="user-info" @click="editUserInfo">
               <img :src="avatarUrl" class="user-info-avatar">
               <span class="user-info-nickname">{{nickName}}</span>
               <div class="edit-info">编辑个人资料</div>
@@ -85,7 +85,11 @@ export default {
       ]
     }
   },
-  methods: {}
+  methods: {
+    editUserInfo:function () {
+      this.$router.push({ path: './my/EditUserInfo'})
+    }
+  }
 }
 </script>
 <style lang="less" scoped>

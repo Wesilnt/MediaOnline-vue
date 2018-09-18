@@ -1,31 +1,35 @@
 <template>
   <div class="praise-container">
     <!-- 1. 头部封面图 -->
-    <!-- <div class="praise-header">
-            <img src="../../images/praise_head_bg.png">
-        </div> -->
+    <div class="praise-header">
+            <!-- <img src="../../images/praise_head_bg.png"> -->
+    </div>
     <!-- 2. 点赞信息 -->
     <div class="thumbs-detail">
       <!-- 2.1 集赞人提示 -->
       <div class="people-container">
-        <img src="../../assets/cmt_item_header.png" alt="">
-        <div class="help-tip">
-          <span>{{praiseDesc}}</span>
-        </div>
+        <img :src="praiseDetail.starterAvatarUrl" alt="">
+        <!-- <div class="help-tip"> -->
+          <transition-group name="roller" class="help-tip">
+            <span v-show="rollerFlag" :key="'tip'">{{praiseData.praiseDesc}}</span>
+            <span v-show="!rollerFlag" :key="'time'">{{remainTime}}</span>
+          </transition-group>
+        <!-- </div> -->
       </div>
       <!-- 2.2 点赞/集赞 操作按钮 -->
-      <div class="btn-container">
-        <PraiseBtn :state="state" @share="onShare"/>
+      <div class="btn-container">  
+        <priasebtn :state="praiseData.btnState" :courseid="courseId" :collectlikeid="collectLikeId" @share="onShare"/> 
       </div>
       <!-- 2.3 集赞人数提示 -->
       <div class="number-container">
-        暂时没人为你点赞，快去分享吧～
+        <span v-if="praiseData.isCurrentUser && praiseData.alreadyCount<=0">暂时没人为你点赞，快去分享吧～</span>
+        <span v-else>已有{{praiseData.alreadyCount}}人帮{{praiseData.isCurrentUser?'你':'TA'}}点赞</span>
       </div>
       <hr>
       <!-- 2.4 点赞人列表 -->
       <div class="people-list">
-        <div v-for="(item, index) in peoples" :key="index" class="people-item">
-          <img class="icon" src="../../assets/praise_header_bg.png">
+        <div v-for="(item, index) in praiseData.praiseUsers" :key="index" class="people-item">
+          <img class="icon" :src="item">
         </div>
       </div>
       <!-- 2.5 集赞有礼 -->
@@ -41,35 +45,45 @@
     </div>
     <!-- 集赞说明框 -->
     <PraiseExplain v-if="showExplain" @close="closeExplain"/>
-    <!-- 分享框 -->
-    <Share :show="showShare" @close="closeShare"/>
+    <!-- 分享框 --> 
+    <share-pop :show="showShare" @close="closeShare" :sharetype="'praise'" :shareid="collectLikeId"/> 
   </div>
 </template>
 <script>
 import PraiseBtn from './PraiseBtns.vue'
 import PraiseExplain from './PraiseExplain.vue'
 import Share from '../../components/share/Share.vue'
-export default {
-  name: 'Praise',
+import { createNamespacedHelpers } from 'vuex'
+const { mapState, mapMutations,mapActions ,mapGetters} = createNamespacedHelpers('praise') 
+export default { 
+  name:'Praise',
+  data() {
+    return {
+      interval:null, 
+      courseId:this.$route.params.courseId,
+      collectLikeId:this.$route.params.collectLikeId,
+      showShare: false, //显示分享框
+      showExplain: false, 
+    }
+  }, 
   components: {
     PraiseBtn,
     PraiseExplain,
     Share
-  },
-  data() {
-    return {
-      showShare: false, //显示分享框
-      showExplain: false,
-      state: 1, //按钮状态
-      praiseDesc: '', //提示语
-      peoples: []
-    }
+  }, 
+  computed:{
+    ...mapState(['praiseDetail','rollerFlag','remainTime']),
+    ...mapGetters(['praiseData']) 
   },
   created: function() {
     this._setBtnAndTips({ status: 1202 }, false, true)
-    console.log(this.$route.params.courseId)
+    // this.startCollectLike({courseId:this.courseId})
+    this.getUserByToken() 
+    this.getCollectDetail({collectLikeId:this.collectLikeId})  
   },
   methods: {
+    ...mapActions(['getUserByToken','startCollectLike','joinCollectLike','getCollectDetail']),
+    ...mapMutations(['destroyInterval']),
     closeExplain() {
       //关闭集赞说明框
       this.showExplain = false
@@ -143,7 +157,8 @@ export default {
         btnState = 5
         praiseDesc = '呜呜呜...很遗憾，活动结束'
       }
-      //10. 集赞失败：好友 未点赞  btnState:5
+      //11. 集赞失败：好友 未点赞  btnState:5
+
       if (status == 1204 && code == 1005 && !isCurrentUser && !isPraised) {
         btnState = 5
         praiseDesc = '呜呜呜...很遗憾，活动结束'
@@ -151,29 +166,39 @@ export default {
       this.state = btnState
       this.praiseDesc = praiseDesc
     }
-  }
+  },
+   beforeDestroy(){ 
+     this.destroyInterval()
+   }
 }
 </script>
 <style lang="scss" scoped>
 .praise-container {
   display: flex;
   flex-direction: column;
-  background: url(../../assets/praise_bg.png) no-repeat;
-  background-size: 100%;
-  background-position-y: -20%;
-  background-origin: 0;
-  background-repeat: repeat-y;
   height: 100%;
   //1. 头部封面
-  .praise-header img {
-    height: 456px;
-    width: 700px;
+  .praise-header {
+    position: absolute;
+    z-index: -99;
+    width: 100%;
+    top: -12vh;
+    bottom: -118px;
+    background: url(../../assets/praise_bg.png) no-repeat;
+    background-size: 100%;
+    background-position-y: 20%;
+    background-origin: 0;
+    background-repeat: repeat-y;
+    height: 112vh;
   }
   //2. 中间点赞详情 2.66666667%  = 20px/750px
   .thumbs-detail {
     background-color: white;
     border-radius: 24px;
     margin: 290px 2.66666667% 0;
+    min-height: 812px;
+    display: flex;
+    flex-direction: column;
     // 2.1 集赞人提示  4.22535211% = 30px/710px
     .people-container {
       margin: 4.22535211% 4.22535211% 0;
@@ -194,12 +219,15 @@ export default {
       width: 100%;
       background-color: rgb(255, 251, 236);
       display: flex;
-      flex-direction: row;
-      align-items: center;
+      flex-direction: column;
+       justify-content: center;
       border-radius: 80px;
+      overflow: hidden;
     }
     .help-tip span {
-      font-size: 30px;
+      position: absolute;
+      font-size: 28px; 
+      line-height: 80px;
       color: rgb(85, 86, 87);
     }
     // 2.2 点赞/集赞 操作按钮 4.22535211% = 30px/710px
@@ -231,6 +259,7 @@ export default {
       display: flex;
       flex-direction: row;
       flex-wrap: wrap;
+      flex: 1;
       .people-item {
         position: relative;
         width: 10.17307692%;
@@ -268,6 +297,15 @@ export default {
       font-size: 30px;
       color: white;
     }
+  }
+  .roller-enter{
+    transform: translateY(100%)
+  }
+  .roller-leave-to{
+     transform: translateY(-100%)
+  }
+  .roller-enter-active,.roller-leave-active{
+     transition: all 1s linear
   }
 }
 </style>

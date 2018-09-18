@@ -22,12 +22,44 @@ import toolsNavbar from '../../components/toolsNavbar.vue'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState,mapMutations,mapActions } = createNamespacedHelpers('videoColumnDetail')
 
-export default {
+export default { 
     name: 'VideoColumnDetail',
     components: {
       'tools-navbar': toolsNavbar,
       GroupHeader,
-      GroupContent
+      GroupContent ,
+  },
+  data() {
+    return {
+      navbar: ['介绍', '试看', '留言'],
+      selected: 0,
+      navbarFixed: false, //控制navbar是否吸顶
+      dataList: []
+    }
+  },
+  watch: {},
+  computed: {
+    ...mapState([
+      'freeLessonList', //试看课程数组
+      'profilePic', //头图
+      'description', //专栏介绍
+      'outlinePic', //课程列表下面的大图展示
+      'videoColumnComments', //视频专栏的留言
+      'buyIntro', //购买须知
+      'lessonCount', //专栏课集总数
+      'commentCount', //留言总条数
+      'buyCount',
+      'collectLikeId' //集赞ID
+    ])
+  },
+  methods: {
+    ...mapActions(['getVideoColumnDetail', 'getCommentList']),
+    allFunc() {
+      console.log('点击全部')
+    },
+    gotoVideoCourseDetailPage(lessonID) {
+      console.log('路由跳转 lessonID = ' + lessonID)
+      this.$router.push({ name: 'videoCourseDetail', params: { lessonID } }) 
     },
     data() {
       return {
@@ -58,15 +90,17 @@ export default {
       },
       routerToCollect() {
         console.log('跳转到集赞')
-        this.$router.push({ name: 'Praise', params: { "courseId" : this.$route.params.courseId } })
+        // this.$router.push({ name: 'Praise', params: { "courseId" : this.$route.params.courseId ,collectLikeId:this.collectLikeId} })
+        this.$router.push({ name: 'PraiseActive',params: { courseId : this.$route.params.courseId ,collectLikeId:this.collectLikeId} }) 
       }
-    },
+    }, 
     created() {
       //获取专栏Id
       const courseId = this.$route.params.courseId
       this.initDatas(courseId)
-      this.getVideoColumnDetail({ "courseId": courseId })
+      this.getVideoColumnDetail({ "courseId": courseId }) 
     }
+  }
 
 }
 </script>

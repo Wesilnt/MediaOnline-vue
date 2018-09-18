@@ -102,3 +102,40 @@ ol {
   -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
 }
+/**toast公共样式*/
+  .van-icon-success {
+    background-image: url('../src/assets/audio_love_collect.png');
+    background-size: 28px;
+    background-repeat: no-repeat;
+    margin: 1px auto 12px;
+    height: 28px;
+    width: 28px;
+  }
+  .van-icon-success::before {
+    content: none;
+  }
+  .van-toast--text {
+    max-width: 80%;
+    white-space: nowrap;
+  }
+  
+  .van-icon-fail::before {
+    content: none;
+  }
+  .van-toast--default .van-toast__text {
+    padding-top: 0;
+  }
+  .van-toast--default {
+    min-height: 0;
+    width: auto;
+    white-space: nowrap;
+  }
+  
+  .van-icon-fail{
+    background-image: url('../src/assets/audio_play_tip.png');
+    background-size: 28px;
+    background-repeat: no-repeat;
+    margin: 1px auto 12px;
+    height: 28px;
+    width: 28px;
+  }
