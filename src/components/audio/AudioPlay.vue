@@ -91,29 +91,22 @@
   </div>
 </template>
 <script>
+import SharePop from '../share/Share.vue'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers('audio')
 
-import SharePop from '../share/Share.vue'
-import AudioTask from '../../utils/AudioTask.js'
-
 export default {
-  components: {
-    'share-pop': SharePop
-  },
+  components: {'share-pop': SharePop},
   data() {
-    return {
+    return { 
       lessonId: this.$route.query.id,
       hiddenDraft:this.$route.query.hiddenDraft,
       isInit:true,
       play: true,
       isSingle: false, //是否单个循环
-      // isPlaying: false, //是否正在播放
       popupVisible: false, //是否显示音频列表弹框
       playIndex: 0, //播放第几首
       showShare: false, //是否显示分享框
-      // currentTime: '0', //播放音频进度
-      // duration: 100, //播放音频最大时长
       touching: false, //slider触摸
       progress:0,
       rangeValue: 0,
@@ -121,12 +114,11 @@ export default {
       progressColor: '#ff0000',
       background: 12,
       display: false,
-      touchStart: 0,
-      audioTask:AudioTask.getInstance()  //音频播放任务管理
+      touchStart: 0, 
     }
   },
   computed:{...mapState({isLike(state){ 
-    let like = state.isLike
+    let like = state.isLike 
     if(!this.isInit){
       if(like)
       this.$toast.success({duration:2000,message: '已添加到我喜欢的'})
@@ -135,14 +127,17 @@ export default {
     }
     return state.isLike
   },'singleSetList':'singleSetList'}),
-  ...mapGetters(["audio",'currentTime','maxTime', 'playMode','status','playing']), 
+  ...mapGetters(["audio",'audioId','currentTime','maxTime', 'playMode','status','playing']),  
   },
   created() {
-    this.isInit = true
-    this.playAudio({lessonId:this.lessonId}) 
+    this.isInit = true 
+    this.playAudio({lessonId: this.lessonId }) 
+  },
+  watch:{
+    audioId:function(id){ this.lessonId = id}
   },
   methods: {
-    ...mapActions(['getAudioDetail','postFavorite','playAudio','pauseAudio','setPlayMode','seekTo','pre','next']),
+    ...mapActions(['getAudioDetail','postFavorite','postUnFavorite','playAudio','pauseAudio','setPlayMode','seekTo','pre','next']),
     //进度条拖动 OTAwOWY1ZjgtZTJiYy00Y2IwLTk4ZDktNzIxYjMyMTUzYzU2
     sliderChange(value) {
       console.log(value)
@@ -165,7 +160,12 @@ export default {
     },
     //收藏
     onCollect() {
-      this.postFavorite({ lessonId: this.lessonId })
+       this.isInit = false
+      if(this.isLike){
+        this.postUnFavorite({ lessonId: this.lessonId })
+      }else{
+        this.postFavorite({ lessonId: this.lessonId })
+      }
     },
     //分享
     onShare() {
@@ -181,15 +181,15 @@ export default {
       this.$toast(mode=='single' ? '单曲循环' : '列表循环') 
       this.setPlayMode(mode)
     },
-      //播放/暂停
-      onPlayPause() {
-        this.playAudio() 
-      },
+    //播放/暂停
+    onPlayPause() {
+      this.playAudio() 
+    },
     //上一首
     onPlayPrv() {
       if(!this.audio)return
       let preId = this.audio.preLessonId
-      if(preId&&-1!=preId){
+      if(preId && -1 != preId){
         this.pre({lessonId:preId})
       }else{
           this.$toast.fail('这是第一条')
@@ -197,13 +197,13 @@ export default {
     },
     //下一首
     onPlayNext() {
-         if(!this.audio)return
-         let nextId = this.audio.nextLessonId
-         if(nextId&&-1!=nextId){
-           this.pre({lessonId:nextId})
-         }else{
-             this.$toast.fail('已经是最后一条')
-         } 
+      if(!this.audio)return
+      let nextId = this.audio.nextLessonId
+      if(nextId && -1 != nextId){
+        this.pre({lessonId:nextId})
+      }else{
+        this.$toast.fail('已经是最后一条')
+      } 
     },
     //音频进度监听
     // onTimeUpdate(currentTime, duration) {
@@ -238,15 +238,15 @@ export default {
     onCloseList() {
       this.popupVisible = false
     },
-    //列表Item点击事件
-
-    onItemClick(audio) { 
-      if(audio.isFree){
-         this.playAudio({lessonId:this.lessonId})  
+    //列表Item点击事件 
+    onItemClick(audio) {   
+      this.isInit = true
+      this.popupVisible = false
+      if(audio.isFree){ 
+         this.playAudio({lessonId:audio.id})  
       }else{
           this.$toast({duration:2000,message:'你还未购买该专栏,请购买之后收听!!!'})
       } 
-      this.popupVisible = false
     }
   }
 }

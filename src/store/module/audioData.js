@@ -9,7 +9,7 @@ export default {
         currentPage: 1,    //音频列表分页-页码
         pageSize:20,       //分页-记录条数
         commentList:[],    //评论列表  
-        draftContent:{}
+        draftContent:{manuscript:''}
 
     },
     mutations: {
@@ -17,17 +17,14 @@ export default {
             state.audioDetail = res  
             state.isLike = state.audioDetail.isLike
         },
-        postFavorite(state, res) {
+        bindFavorite(state, res) {
           state.audioDetail.isLike = !state.audioDetail.isLike
           state.isLike = state.audioDetail.isLike
-        },
-        getAudioDesc(state, res) {
-
-        },
+        }, 
         bindSingleSetList(state, res) { 
          state.singleSetList = res.result
         },
-        getCommentList(state, res) {
+        bindCommentList(state, res) {
          state.commentList = res.result
         },
         bindDraftContnet(state,res){
@@ -36,10 +33,10 @@ export default {
     },
     actions: { 
         //播放音频
-        async playAudio({getters, commit,dispatch }, params){ 
-          if(params&&params.lessonId){
+        async playAudio({getters, commit,dispatch }, params){  
+          if(params && params.lessonId){
             dispatch('asyncPlay', params, { root: true })
-            .then(res=>{
+            .then(res=>{ 
               dispatch('getSingleSetList',{courseId:res.courseId,pageSize:getters.pageSize})
               commit('bindAudioDetail',res)
             }) 
@@ -77,26 +74,20 @@ export default {
           })  
         },
         //音频收藏 我喜欢的
-        async postFavorite({ commit }, params) {
+        async postFavorite({ commit }, params) { 
             const res = await postFavorite(params) 
-            if(res) commit("postFavorite", res) 
+            if(res) commit("bindFavorite", res) 
         },
         //音频取消 我喜欢的
-        async postFavorite({ commit }, params) {
+        async postUnFavorite({ commit }, params) {
             const res = await postUnFavorite(params)
-            if(res)commit("postFavorite", res) 
+            if(res)commit("bindFavorite", res) 
         },
         //音频单集文稿详情
         async getAudioDesc({ state,commit,dispatch },lessonId) {
           let params = {lessonId: lessonId}
           const res = await getAudioDesc(params) 
-            console.log(res)
-          commit('bindDraftContnet',res)
-          //     if(state.audioDetail){
-          //   commit("getAudioDesc", res)
-          // }else{
-          //   dispatch('getAudioDetail', {lessonId}, { root: true })
-          // }
+          commit('bindDraftContnet',res) 
         },
         //音频单集列表
         async getSingleSetList({ commit }, params) {
@@ -108,11 +99,12 @@ export default {
         async getCommentList({ commit }, params) {
             params.currentPage = (params.currentPage|1)+1
             const res = await getCommentList(params)
-            commit("getCommentList", res)
+            commit("bindCommentList", res)
         }
     },
     getters:{ 
       audio: (state, getters, rootState)=>  rootState.audiotask.audioDetail ,
+      audioId: (state, getters, rootState)=> rootState.audiotask.audioId ,
       currentTime: (state, getters, rootState)=>  (touching,progress)=> touching?progress:rootState.audiotask.currentTime ,
       maxTime: (state, getters, rootState)=> rootState.audiotask.maxTime ,
       playMode: (state, getters, rootState)=> rootState.audiotask.playMode ,

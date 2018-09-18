@@ -27,6 +27,18 @@ export const formatDuring = mss => {
     seconds = seconds < 10 ? '0' + seconds : seconds
     return minutes + ':' + seconds
 }
+//学习进度百分比格式化
+export const learntimeFormat = (learntime, totaltime, id) => {
+  let progressCache = localStorage.getItem("learntime-" + id)
+  let curTime = learntime
+  if(progressCache){
+    let learnJson = JSON.parse(progressCache) 
+    curTime = learnJson.currentTime
+  }
+  if (!curTime||curTime <= 1) return '未收听'
+  let percent =  parseInt((curTime * 100) / totaltime)
+  return '已收听' + (percent<1?1:percent) + '%'
+}
 
 export function debounce(func, wait, immediate) {
   // immediate默认为false

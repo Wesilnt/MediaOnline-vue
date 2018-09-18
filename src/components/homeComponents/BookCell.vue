@@ -2,10 +2,10 @@
   <div class="cell" @click="onItemClick">
     <img :src="book.coverPic" class="cover" alt="">
 
-    <div class="play-button">
+    <div class="play-button" @click.stop="onPlayClick">
       <img class="bookPlayTringle" src="../../assets/home_video_play.jpg" alt="">
     </div>
-    <img v-if="book.isNew" :src='null' alt="">
+    <img v-if="book.isNew" :src='null'>
     <p class="title">{{book.name}}</p>
     <p class="price">¥{{book.price}}</p>
   </div>
@@ -15,6 +15,9 @@ export default {
   props: ['book'],
   methods:{
     onItemClick(){
+       this.$router.push({path:'/home/readings/book',query:{id:this.book.id,hiddenDraft:true}})
+    },
+    onPlayClick(){
        this.$router.push({path:'/audio/audioplay',query:{id:this.book.freeLessonList[0].id,hiddenDraft:true}})
     }
   }

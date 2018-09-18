@@ -6,7 +6,7 @@
           此网页由www.shbaoyuantech.com提供
         </div>
         <div class="share-list">
-          <router-link class="share-item" :to="'/share/poster/'+shareid" tag="div">
+          <router-link class="share-item" :to="'/share/poster/'+shareid+'?sharetype='+sharetype" tag="div">
             <div class="share-icon">
               <img src="../../assets/share_poster.png">
             </div>
@@ -34,9 +34,11 @@
 </template>
  <script>
 export default {
-  props: ['show','shareid'],
+  props: ['show','sharetype','shareid'],
   data() {
-    return { isOpen: false }
+    return {  
+        isOpen: false,
+      }
   },
   watch: {
     show(value) {

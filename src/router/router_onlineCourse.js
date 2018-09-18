@@ -13,11 +13,6 @@ const PageInfo_From_onlineCourse = [
     name: 'videoCourseDetail',
     component: videoCourseDetail
   },
-  {
-    path: '/Praise/:courseId',
-    name: 'Praise',
-    component:Praise
-  }
 ]
 
 export default PageInfo_From_onlineCourse

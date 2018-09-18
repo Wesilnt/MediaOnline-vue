@@ -2,22 +2,30 @@
     <div class="books-container">
         <hr>
         <div class="book-list">
-            <router-link v-for="item of bookList" :key="item.id" to="/audio/audioplay">
+       <van-list
+          class="commment-list"
+          v-model="refreshing"
+          :finished="finished"
+          :immediate-check="false"
+          @load="scrollBottom"
+          @offset="10">
+            <router-link v-for="item of freeZoneList" :key="item.id" :to="'/audio/audioplay?id='+item.id">
                 <div class="book-item">
-                    <img :src="item.isPlaying?playingIcon:pauseIcon" >
+                    <img :src="playingId==item.id?playingIcon:pauseIcon" >
                     <div class="book-content">
-                        <p :class="{'book-title-playing':item.isPlaying}">
-                            文学| 为什么抱怨科技没有食堂?
+                        <p :class="{'book-title-playing':playingId == item.id}">
+                           {{ item.title}}
                         </p>
                         <div class="book-bottom">
-                            <span :class="{'book-datetime':item.isPlaying}">{{item.isPlaying?'最新':'2018/08/11'}}</span>
-                            <span class="book-state">时长02:11 | 未学习</span>
+                            <span :class="{'book-datetime':isNewest(item.createTime,timeLen)}">{{item.createTime| createtimeFormat(timeLen)}}</span>
+                            <span class="book-state">时长{{item.totalTime | formatDuring}} | {{item.learnTime |learntimeFormat(item.totalTime,item.id)}}</span>
                         </div>
                     </div>
                 </div>
                 <hr>
             </router-link> 
-                <button :class="{subscribe:isSubscribe}" @click="isSubscribe = !isSubscribe">订阅</button> 
+            </van-list>
+           <button :class="{subscribe:isSubscribe}" @click="subscribe">{{isSubscribe?'已订阅':'订阅'}}</button> 
         </div>
     </div>
 </template> 
@@ -25,30 +33,52 @@
 import { createNamespacedHelpers } from 'vuex'
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers('freezone')
 export default {
+  filters: {
+    createtimeFormat:function(value,timeLen){
+      let createDate = new Date(value)
+      let isNewest = Date.now() - createDate.getTime()<timeLen
+      if(isNewest) {
+       return '最新'
+      }else{
+        let year = createDate.getFullYear()
+        let month = createDate.getMonth()+1
+        let m =  month < 10 ? "0"+ month : month
+        let date = createDate.getDate()
+        let d =  date < 10 ? "0"+ date:date
+        return year + "/" + m + "/"+ d
+      }
+    }
+  },
   data() {
     return {
+      timeLen : 30*24*60*60*1000,
       playingIcon: require('../../assets/freezone_playing.png'),
-      pauseIcon: require('../../assets/freezone_pause.png'),
-      bookList: [
-        { id: 1, isPlaying: true },
-        { id: 2, isPlaying: false },
-        { id: 3, isPlaying: false },
-        { id: 4, isPlaying: false },
-        { id: 5, isPlaying: false },
-        { id: 6, isPlaying: false },
-        { id: 7, isPlaying: false },
-        { id: 8, isPlaying: false },
-        { id: 9, isPlaying: false },
-        { id: 10, isPlaying: false },
-        { id: 11, isPlaying: false }
-      ],
-      isSubscribe: false
+      pauseIcon: require('../../assets/freezone_pause.png'), 
+      refreshing:false
+    }
+  },
+  computed:{...mapState(['freeZoneList','loading','finished','isSubscribe']),...mapGetters(['playingId'])},
+  created(){
+      this.getFreezoneList(1);
+      this.getUserByToken();
+  },
+   watch:{
+    loading:function(loading){ 
+      this.refreshing = loading
     }
   },
   methods: {
-    subscribe() {
-      //TODO 订阅代码
-      Toast('订阅')
+    ...mapActions(["getFreezoneList",'doFreeLesson','getUserByToken']),
+    //分页加载
+    scrollBottom(){ 
+      this.getFreezoneList() 
+    },
+    isNewest(createTime, timeLen){
+      let createDate = new Date(createTime)
+      return Date.now() - createDate.getTime()<timeLen
+    },
+    subscribe() {  
+      this.doFreeLesson()  
     }
   }
 }
@@ -60,6 +90,7 @@ export default {
     height: 1px; /*no*/
     background: rgb(227, 227, 227);
     border: 0;
+    margin: 0;
   }
   .book-list {
     display: flex;

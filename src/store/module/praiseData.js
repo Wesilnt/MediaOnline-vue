@@ -1,0 +1,198 @@
+import {
+  getUserByToken,
+  checkStatus,
+  getCollectDetail,
+  getCollectLike,
+  getPoster,
+  startCollectLike,
+  joinCollectLike, 
+} from '../../services/praiseApi'
+
+export default {
+  namespaced: true,
+  state: {
+    userId:0,
+    rollerFlag:true,
+    praiseDetail:{},
+    seconds:0,                 //倒计时总时长(秒)
+    remainTime:null,           //倒计时提示文案
+    rollerInterval:null,       //倒计时滚动定时器
+    timerInterval:null,        //倒计时定时器
+    picList:[],
+    courseName:'',
+  },
+  mutations: {
+   bindPraiseDetail(state,res){
+     state.praiseDetail = res 
+   
+   },
+   bindUserInfo(state,res){
+     state.userId = res.id
+   },
+   //设置滚动提示定时器
+   setRollerInterval(state){
+    state.rollerFlag = ! state.rollerFlag
+   },
+   //设置时间提示定时器
+   setTimerInterval(state,{timerInterval,rollerInterval,isEnded,remainTime}){
+     if(isEnded){
+       clearInterval(state.timerInterval)
+       clearInterval(state.rollerInterval)
+      state.remainTime = "很遗憾,活动已结束..."
+     }else{
+       state.timerInterval =timerInterval
+       state.rollerInterval = rollerInterval
+       state.remainTime = remainTime
+     }
+   },
+   //绑定集赞状态
+   bindPraiseStatus(state,res){
+     state.picList =res.picList
+     state.courseName = res.courseName
+   },
+   //销毁定时器
+   destroyInterval(state){
+    if(state.timerInterval)
+        clearInterval(state.timerInterval)
+    if(state.rollerInterval)
+       clearInterval(state.rollerInterval)
+   }
+  },
+  actions: {
+    //积攒状态检查
+    async checkStatus({commit},params) {
+      const res = await checkStatus(params)
+      console.log(res)
+      if(res) commit('bindPraiseStatus',res)
+    },
+    //集赞详情
+    async getCollectDetail({state,commit},params) {
+      const res = await getCollectDetail(params)
+      console.log(res)
+      commit('bindPraiseDetail',res) 
+      /////
+      if(res.status != 1202) return
+      let rollerInterval = setInterval(()=> commit('setRollerInterval'), 7000)
+      let  totalTime= res.duration * 3600 - res.sysTime / 1000 + res.createTime / 1000
+      let timerInterval = setInterval(()=>{  
+        var hours = parseInt(totalTime / (60 * 60))
+        var minutes = parseInt((totalTime % (60 * 60)) / (60));
+        var seconds = (totalTime % 60);
+        hours = parseInt(hours)
+        minutes = parseInt(minutes)
+        seconds = parseInt(seconds)
+        hours = hours < 10 ? "0" + hours : hours;
+        minutes = minutes < 10 ? "0" + minutes : minutes;
+        seconds = seconds < 10 ? "0" + seconds : seconds;
+        let remainTime = '距离结束还有:'+hours + "时" + minutes + "分" + seconds+"秒"
+        totalTime -= 1 
+        commit('setTimerInterval',{timerInterval,rollerInterval,isEnded:totalTime<=0, remainTime})  
+      }, 1000)
+      /////
+    },
+    //领取集赞
+    async getCollectLike({commit},params) {
+      const res = await getCollectLike(params)
+      console.log(res)
+    },
+    //集赞海报页
+    async getPoster({commit},params) {
+      const res = await getPoster(params)
+      console.log(res)
+    },
+    //发起集赞
+    async startCollectLike({commit},params) {
+      const res = await startCollectLike(params)
+      console.log(res)
+    },
+    //参与集赞
+    async joinCollectLike({commit},params) {
+      const res = await joinCollectLike(params)
+      console.log(res)
+    },
+    //获取用户信息是否订阅免费专区
+    async getUserByToken({commit},params) {     
+      const res = await getUserByToken(params)
+      if(!res)return 
+      commit('bindUserInfo', res)
+    },
+  },
+  getters:{
+    praiseData:state=>{ 
+      let btnState = 0                                    //按钮状态
+      let isCurrentUser = false                           //当前用户是否是发起集赞者
+      let praised = false                                 //当前用户是否点赞
+      let alreadyCount = 0                                //已点赞人数
+      let praiseDesc = '帮我点赞免费领取，求助攻'           //集赞提示信息
+      let userList = state.praiseDetail.userList          //点赞用户列表
+      if(!userList) return {praiseUsers:[], praised,btnState,praiseDesc,isCurrentUser,alreadyCount}  
+      let totalNums = new Array(state.praiseDetail.personCount)
+      .fill(require('../../assets/praise_header_bg.png')) 
+      userList.map((item,index)=>{
+          totalNums[index] = item.avatarUrl
+          praised = !praised && item.id == userId  
+      }) 
+      isCurrentUser = state.userId == state.praiseDetail.starterUid
+      alreadyCount = state.praiseDetail.alreadyCount
+      let code = state.praiseDetail.code ? parseInt(state.praiseDetail.code) : 0
+      let status = state.praiseDetail.status ? parseInt(state.praiseDetail.status) : 0 
+      // isCurrentUser = false
+      //1. 集赞中：发起人         btnState:0
+      if (status == 1202 && isCurrentUser) { 
+        btnState = 0
+        praiseDesc = '我想免费领取课程,来帮我点赞吧'
+      }
+      //2. 集赞中：好友 未点赞   btnState:1
+      if (status == 1202 && !isCurrentUser && !praised) {
+        btnState = 1
+        praiseDesc = '帮我点赞免费领取，求助攻'
+      }
+      //3. 集赞中：好友 已点赞   btnState:2
+      if (status == 1202 && !isCurrentUser && praised) {
+        btnState = 2
+        praiseDesc = '感谢你帮我点赞'
+      }
+      //4. 集赞完成：发起人 未领取  btnState:3
+      if (status == 1203 && isCurrentUser) {
+        btnState = 3
+        praiseDesc = '集赞完成，感谢大家帮我点赞'
+      }
+      //5. 集赞完成：发起人 已领取  btnState:4
+      if (status == 1205 && isCurrentUser) {
+        btnState = 4
+        praiseDesc = '集赞完成，感谢大家帮我点赞'
+      }
+      //6. 集赞失败：发起人     btnState:4
+      if (status == 1204 && isCurrentUser) {
+        btnState = 7
+        praiseDesc = '呜呜呜...很遗憾，活动结束'
+      }
+      //7. 集赞完成未领取/已领取：好友 已点赞  btnState:5
+      if ((status == 1203 || status == 1205) && !isCurrentUser && praised) {
+        btnState = 5
+        praiseDesc = '集赞完成，感谢您帮我点赞'
+      }
+      //8. 集赞完成未领取/已领取：好友 未点赞  btnState:5
+      if ((status == 1203 || status == 1205) && !isCurrentUser && !praised) {
+        btnState = 5
+        praiseDesc = '集赞完成，感谢大家帮我点赞'
+      }
+      //9. 集赞失败：好友 已点赞  btnState:5
+      if (status == 1204 && !isCurrentUser && praised) {
+        btnState = 5
+        praiseDesc = '活动结束，感谢你帮我点赞'
+      }
+      //10. 集赞失败：好友 未点赞  btnState:5
+      if (status == 1204 && !isCurrentUser && !praised) {
+        btnState = 5
+        praiseDesc = '呜呜呜...很遗憾，活动结束'
+      }
+      //10. 集赞失败：好友 未点赞  btnState:5
+      if (status == 1204 && code == 1005 && !isCurrentUser && !praised) {
+        btnState = 5
+        praiseDesc = '呜呜呜...很遗憾，活动结束'
+      }  
+      return {praiseUsers:totalNums, praised,btnState,praiseDesc,isCurrentUser,alreadyCount}  
+    }
+  }
+}

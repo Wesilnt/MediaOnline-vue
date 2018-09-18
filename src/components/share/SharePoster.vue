@@ -18,8 +18,10 @@
 import { createNamespacedHelpers } from 'vuex'
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers('share')
 export default {
+   name:"shareposter",
   data() {
     return {
+      type:this.$route.query.sharetype,
       id:this.$route.params.id,
       centerX: 355 / 2, //canvas中心X坐标
       canvasW: 750, //canvas宽度
@@ -47,13 +49,21 @@ export default {
     this.ctx.webkitImageSmoothingEnabled = false
     this.ctx.msImageSmoothingEnabled = false
     this.ctx.imageSmoothingEnabled = false
-    this.getPosterInfo({busId:this.id,pageUrl:"http://localhost:8080/#/audio/audioplay"})
-    .then(res=>{
-       this.drawBottomMap()
-    })
+    console.log(this.type)
+    if(this.type=='praise'){
+      this.getPosterforPraise({collectLikeId:this.id})
+      .then(res=>{
+        this.drawBottomMap()
+      })
+    }else{
+      this.getPosterInfo({busId:this.id,pageUrl:"http://localhost:8080/#/audio/audioplay"})
+      .then(res=>{
+        this.drawBottomMap()
+      })
+    }
   },
   methods: {
-    ...mapActions(['getPosterInfo']),
+    ...mapActions(['getPosterInfo','getPosterforPraise']),
     //将canvas生成的二维码保存为图片
     saveImg() {
       this.$refs.download.href = this.canvasData.toDataURL('images/png')
@@ -120,10 +130,13 @@ export default {
     },
     //绘制二维码
     drawQrcode() {  
-      let temp = "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=676587443,820607910&fm=111&gp=0.jpg";
+      let temp = this.poster.qrCodeUrl //"https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=676587443,820607910&fm=111&gp=0.jpg";
+        if(this.type=='praise'){
+          temp = this.poster.xcxUrl
+        }
       var qrcode = new Image()
       qrcode.setAttribute('crossOrigin', 'anonymous')
-      qrcode.src = temp +"?timeStamp="+Date.now() //this.poster.qrCodeUrl+"?timeStamp="+Date.now()
+      qrcode.src = temp +"?timeStamp="+Date.now()  
       qrcode.onload =  () => { 
         this.ctx.drawImage(qrcode, 440, 880, 200, 200)
         this.$refs.saveimage.src = this.canvasData.toDataURL('images/png')

@@ -69,7 +69,7 @@
     </div>
     <hr>
     <!-- 5. 作品单集/章集 播放列表 -->
-    <singleset-list :list="singleSetList" :play-id="playLessonId"/>
+    <singleset-list :list="singleSetList" :play-id="playingId"/>
     <!-- 6. 分页布局 -->
     <div class="load-more-container">
       <span>没有更多了，不要再拉啦～</span>
@@ -78,26 +78,24 @@
   </div>
 </template>
 <script>
-import SingleSetList from '../../components/SingleSetList.vue'
-import AudioTask from '../../utils/AudioTask.js'
+import SingleSetList from '../../components/SingleSetList.vue' 
 import { createNamespacedHelpers } from 'vuex'
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers('readings') 
 export default {
   components: { 'singleset-list': SingleSetList },
   data() {
     return {
-      courseId:this.$route.query.id,
-      playLessonId:0,
+      courseId:this.$route.query.id, 
       currentPage:1,
       pageSize:20, 
     }
   },
 
   computed: {
-    ...mapState(['bookDetail', 'singleSetList'])
+    ...mapState(['bookDetail', 'singleSetList']),
+    ...mapGetters(['playingId'])
   },
-  created() {
-    this.playLessonId = AudioTask.getInstance().getId()
+  created() { 
     this.getBookDetail({courseId:this.courseId})
     this.getSingleSetList({courseId:this.courseId,currentPage:this.currentPage,pageSize:this.pageSize})
   },

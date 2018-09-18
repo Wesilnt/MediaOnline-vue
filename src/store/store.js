@@ -20,6 +20,8 @@ import comment from './module/commentData'
 import freezone from './module/freezoneData'
 import audiotask from './module/audioTask'
 import share from './module/shareData'
+import praise from './module/praiseData'
+import mobile from './module/mobileData'
 
 Vue.use(Vuex)
 export default new Vuex.Store({
@@ -44,6 +46,8 @@ export default new Vuex.Store({
     comment,
     freezone,
     audiotask,
-    share
+    share,
+    praise,
+    mobile
   },   
 })
