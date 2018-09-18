@@ -27,7 +27,6 @@ Vue.use(List)
 Vue.use(Field)
 Vue.use(RadioGroup)
 Vue.use(Radio)
-Vue.use(Area)
 Vue.use(Loading);
 Vue.use(Picker)
 
