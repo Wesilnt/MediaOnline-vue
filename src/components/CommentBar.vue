@@ -10,7 +10,7 @@
         <div class="qhht-flex commentBar-wrapper" >
             <a class="qhht-icon commentBar-btn" :style="{backgroundImage:`url('${iconLeft}')`}"></a>
             <div class="commentBar-inputer">
-                <textarea v-focus ref="textarea"  class="commentBar-textarea"  placeholder="输入评论" autofocus></textarea>
+                <textarea v-focus ref="textarea" @input="checkRows" :rows="rows" class="commentBar-textarea"  placeholder="输入评论" autofocus></textarea>
             </div>
             <a class="qhht-icon commentBar-btn" :style="{backgroundImage:`url('${iconRight}')`}" @click="closePopup"></a>
         </div>
@@ -37,7 +37,8 @@ export default {
   data: function() {
     return {
       value: '',
-      showPop: false
+      showPop: false,
+      rows: 1
     }
   },
   directives: {
@@ -51,7 +52,21 @@ export default {
     }
   },
   methods: {
-    closePopup:async function() {
+    checkRows: function(el) {
+      const { target } = el
+      let inpuerWidth = 0
+      for (let codePoint of target.value) {
+        const code = codePoint.codePointAt()
+        if (code >= 19968 && code <= 40869) {
+          inpuerWidth += 2
+        } else {
+          inpuerWidth += 1
+        }
+      }
+      if (this.rows !== 3 && inpuerWidth >= 31) this.rows = 3
+      if (this.rows !== 1 && inpuerWidth < 31) this.rows = 1
+    },
+    closePopup: async function() {
       const { textarea } = this.$refs
       const { value } = textarea
       this.$emit('toggle', false, value ? value : undefined)
