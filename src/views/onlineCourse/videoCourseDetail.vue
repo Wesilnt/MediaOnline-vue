@@ -152,8 +152,7 @@ export default {
     const { lessonId } = this.$route.params
     this.getVideoCourseDetail({ lessonId })
     //获取目录课程数据
-    // const { courseId } = this
-    console.log('courseId = ' + this.courseId)
+    console.log("courseId = " + this.courseId)
     this.getLessonListByCourse({
       courseId: this.courseId,
       currentPage: 1,
