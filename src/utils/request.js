@@ -77,7 +77,6 @@ function GetRequestCode() {
   if (url.indexOf("?") != -1) {
     var str = url.substr(1);
     str = str.split("&");
-    console.log(str)
     for (var i = 0; i < str.length; i++) {
       theRequest[str[i].split("=")[0]] = (str[i].split("=")[1]);
     }
@@ -91,8 +90,9 @@ async function getToken() {
     return token;
   } else {
     console.log('没有token')
-    console.log(GetRequestCode())
+    let code = GetRequestCode().code;
     let localToken = getAccessToken()
+    let result = await request.post(`auth/wechat/login${stringify({ 'code': code })}`, false)
     // if (localToken.length > 0) {
     //   token = localToken;
     //   let expire = getExpireTime()
@@ -111,7 +111,7 @@ async function getToken() {
     //   console.log('没有code')
     //   let code = GetRequestCode()
     //   console.log(code)
-    //   // let result = await request.post(`auth/wechat/login${stringify({ 'code': code })}`, false)
+    // let result = await request.post(`auth/wechat/login${stringify({ 'code': code })}`, false)
     //   token = result.data.accessToken;
     //   console.log(token)
     //   setUserInfo(result.data)
