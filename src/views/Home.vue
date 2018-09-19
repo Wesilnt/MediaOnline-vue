@@ -61,13 +61,18 @@ export default {
       'getBookList'
     ])
   },
-    created () {
+  mounted(){
+    console.log('网络请求')
     this.getBannerList()
     this.getNewMessageCount()
     this.getFreeList()
     this.getVisionList()
     this.getVideoList()
     this.getBookList()
+  },
+
+    created () {
+    
   }
 }
 </script>
