@@ -130,7 +130,10 @@ async function getToken() {
 function request(url, options, needToken=true) {
   // const accessToken = getAccessToken();
   // const accessToken = '9009f5f8-e2bc-4cb0-98d9-721b32153c56'
-  const token = getToken()
+  const token
+  if(needToken){
+     token = getToken()
+  }
   // const refreshToken = getRefreshToken()
   const baseURI = isUrl(url) ? '' : api
   const defaultOptions = {
@@ -139,7 +142,8 @@ function request(url, options, needToken=true) {
     // formData: false,
     headers: {
       Authorization: `Bearer ${btoa(token)}`
-    }
+
+  }
   }
   const newOptions = { ...defaultOptions, ...options }
   if (newOptions.method === 'POST' || newOptions.method === 'PUT') {
