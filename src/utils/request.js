@@ -96,6 +96,9 @@ export async function getToken() {
     const bodyData = json2formData({code:code})
     let result = await request(`/auth/wechat/login`,{ method: 'POST', body: bodyData }, false)
     console.log(result);
+    setUserInfo(result)
+    var uInfo = getUserInfo();
+    console.log(uInfo)
     // if (localToken.length > 0) {
     //   token = localToken;
     //   let expire = getExpireTime()
