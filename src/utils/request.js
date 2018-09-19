@@ -93,7 +93,8 @@ export async function getToken() {
     console.log('没有token')
     let code = GetRequestCode().code;
     let localToken = getAccessToken()
-    let result = await request(`auth/wechat/login${stringify({ 'code': code })}`, {}, false)
+    const bodyData = json2formData({code:code})
+    let result = await request(`/auth/wechat/login`,{ method: 'POST', body: bodyData }, false)
     console.log(result);
     // if (localToken.length > 0) {
     //   token = localToken;
