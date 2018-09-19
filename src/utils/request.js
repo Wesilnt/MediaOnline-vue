@@ -129,11 +129,7 @@ async function getToken() {
  */
 function request(url, options, needToken=true) {
   // const accessToken = getAccessToken();
-  // const accessToken = '9009f5f8-e2bc-4cb0-98d9-721b32153c56'
-  var token
-  if(needToken){
-     token = getToken()
-  }
+  const accessToken = '9009f5f8-e2bc-4cb0-98d9-721b32153c56'
   // const refreshToken = getRefreshToken()
   const baseURI = isUrl(url) ? '' : api
   const defaultOptions = {
@@ -141,7 +137,7 @@ function request(url, options, needToken=true) {
     // mode: 'no-cors',
     // formData: false,
     headers: {
-      Authorization: `Bearer ${btoa(token)}`
+      Authorization: `Bearer ${btoa(accessToken)}`
   }
   }
   const newOptions = { ...defaultOptions, ...options }
@@ -175,7 +171,7 @@ function request(url, options, needToken=true) {
         // dispatch({ type: "login/logout" });
       }
       if (status === 401) {
-        if (!token) {
+        if (!accessToken) {
           Toast.fail('no accessToken')
           /*dispatch({
                       type: "login/logout"
