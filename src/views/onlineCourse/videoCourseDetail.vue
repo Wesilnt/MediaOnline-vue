@@ -151,13 +151,6 @@ export default {
     //获取课程ID
     const { lessonId } = this.$route.params
     this.getVideoCourseDetail({ lessonId })
-    //获取目录课程数据
-    console.log("courseId = " + this.courseId)
-    this.getLessonListByCourse({
-      courseId: this.courseId,
-      currentPage: 1,
-      pageSize: 10
-    })
     //获取单集评论
     this.getCommentList({
       regionType: 2202,

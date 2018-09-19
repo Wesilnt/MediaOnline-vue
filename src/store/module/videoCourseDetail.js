@@ -50,6 +50,7 @@ const videoCourseDetail = {
       state.audioUrl = payload.audioUrl
       state.videoUrl = payload.videoUrl
       state.courseId = payload.courseId
+      console.log("------ + courseID =", payload.courseId)
       state.id = payload.id
       state.isFree = payload.isFree
       state.isLike = payload.isLike
@@ -91,7 +92,14 @@ const videoCourseDetail = {
       console.log('视频单集详情接口')
       console.log('result = ', result)
       commit('bindVideoCourseDetail', result)
+      //获取目录列表数据
       if (result == null) return
+      let params = {
+        courseId: result.courseId,
+        currentPage: 1,
+        pageSize: 10
+      }
+      dispatch('getLessonListByCourse',params)
       //判断是否已完成答题
       //自测题个数
       const quesNum = result.questionBOList.length

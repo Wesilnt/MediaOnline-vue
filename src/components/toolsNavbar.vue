@@ -86,10 +86,10 @@ export default {
     
     clickCollectBtn(){
       let params = {}
-      console.log('+++++++++++++++++++++')
-      console.log(this.userAccessStatus)
+      console.log('userAccessStatus = ',this.userAccessStatus)
       switch(this.userAccessStatus){
         case 1007:
+        console.log("2131")
         //集赞成功未领取
           params = {
             "collectLikeId" : this.praiseData.collectLikeId
@@ -111,8 +111,6 @@ export default {
           params = {
             "courseId" : this.courseId
           }
-          console.log("+++++++909090++++++++++++++")
-          console.log(params)
           this.startCollectLike(params)
         break
       }

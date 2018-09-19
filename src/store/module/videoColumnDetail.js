@@ -56,7 +56,6 @@ const videoColumnDetail = {
     actions:{
         async getVideoColumnDetail ({ commit,state },{ courseId }) {            
             //获取视频列表数据
-            // console.log('******courseID =' + courseId)
             const result = await getVideoColumnDetail({ courseId })
             console.log('视频专栏接口数据:')
             console.log(result)
@@ -72,7 +71,7 @@ const videoColumnDetail = {
                 "groupBuyDuration" : result.groupBuyDuration || 0,
                 "groupBuyPersonCount" : result.groupBuyPersonCount || 0,
                 "groupBuyPrice" : result.groupBuyPrice || 0,
-                // "groupBuyId": result.groupBuyId || 0,
+                "groupBuyId": result.groupBuyId || 0,
                 "groupBuyTemplateId" : result.groupBuyTemplateId || ""
             }
 
