@@ -1,38 +1,50 @@
 <template>
     <div class="groupBuy-container">
-        <div class="groupBuy-usericon">
-            <div class="qhht-flex groupBuy-usericon-top">
-                <div class="groupBuy-usericon-item">
-                    <div class="groupBuy-usericon-manager">团长</div>
+        <div v-show="isShowGroupBuy">
+            <div class="groupBuy-usericon">
+                <div class="qhht-flex groupBuy-usericon-top">
+                    <div class="groupBuy-usericon-item">
+                        <div class="groupBuy-usericon-manager">团长</div>
+                    </div>
+                    <div class="groupBuy-usericon-item"></div>
                 </div>
-                <div class="groupBuy-usericon-item"></div>
+                <div class="qhht-flex groupBuy-usericon-bot">
+                    <div class="groupBuy-usericon-item"></div>
+                    <div class="groupBuy-usericon-item"></div>
+                    <div class="groupBuy-usericon-item"></div>
+                    <div class="groupBuy-usericon-item"></div>
+                </div>
             </div>
-            <div class="qhht-flex groupBuy-usericon-bot">
-                <div class="groupBuy-usericon-item"></div>
-                <div class="groupBuy-usericon-item"></div>
-                <div class="groupBuy-usericon-item"></div>
-                <div class="groupBuy-usericon-item"></div>
+            <div class="groupBuy-info">剩余<span>2</span>个名额</div>
+            <div class="groupBuy-countDown-container">
+                <CountDown></CountDown>
             </div>
+            <div class="groupBuy-deadline">距离截止时间</div>
+            <div class="groupBuy-circleline"></div>
         </div>
-        <div class="groupBuy-info">剩余<span>2</span>个名额</div>
-        <div class="groupBuy-countDown-container">
-            <CountDown></CountDown>
-        </div>
-        <div class="groupBuy-deadline">距离截止时间</div>
-        <div class="groupBuy-circleline"></div>
-        <div class="groupBuy-banner">
-            <div class="groupBuy-circleline" v-show="true"></div>
+        <div class="groupBuy-banner" :style="{ background : 'url('+profilePic+')' }">
+            <!-- <div class="groupBuy-circleline" v-show="true"></div> -->
             <span class="groupBuy-banner-bottom">99人已购买</span>
         </div>
     </div>
 </template>
 
 <script>
+import { createNamespacedHelpers } from 'vuex'
+const { mapState,mapGetters,mapActions } = createNamespacedHelpers('videoColumnDetail/groupManager')
 import CountDown from '../../../components/CountDown'
 export default {
     name:'GroupHeader',
+    data(){
+        return{
+            isShowGroupBuy:false
+        }
+    },
     components:{
         CountDown
+    },
+    computed:{
+        ...mapGetters(['profilePic'])
     }
 }
 </script>
@@ -131,6 +143,7 @@ export default {
     background-color: white;
     margin-top: -16px;
     margin-left: -6%;
+    z-index: 99;
 }
 
 </style>
