@@ -30,7 +30,9 @@ export default {
     //点击具体的一个视频专栏
     jumpToVideoDetail(courseId) {
       console.log('路由跳转 courseID = ' + courseId)
-      this.$router.push({ name: 'videoColumnDetail', params: { courseId } })
+      let obj = { name: 'videoColumnDetail', params: { courseId }}
+      console.log(obj)
+      this.$router.push(obj)
     }
   }
 }

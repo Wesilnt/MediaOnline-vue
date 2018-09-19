@@ -1,7 +1,7 @@
 <template>
     <div class="read-container">
         <!-- 1. 头部信息 -->
-        <div class="header-container" :style="{background:'url('+bannerPic+')'}">
+        <div class="header-container" :style="{background:'url('+bannerPic+')','background-size':'100% 100%'}">
             <!-- <h5 class="title">
                 有声书
             </h5>
@@ -16,10 +16,10 @@
                 全部书籍
             </p>
         </div>
-        <!-- 3. 读书会列表 -->
-        <div class="read-list-container">
+        <!-- 3. 读书会列表 --> 
+           <div  class="read-list-container">
             <router-link v-for="item of bookList" :key="item.id"   :to="'/home/readings/book?id='+item.id" class="list-item" tag="div">
-                <div class="top-container" :style="{background:'url('+item.coverPic+')'}">
+                <div class="top-container" :style="{background:'url('+item.coverPic+')','background-size':'100% 100%'}">
                     <span>上新</span>
                     <img src="../../assets/readings_item_play.png">
                 </div>
@@ -28,9 +28,9 @@
                     <span>¥ {{item.price}}</span>
                 </div>
             </router-link>
-        </div>
+           </div>
         <!-- 分页加载 -->
-        <div class="load-more-container">
+        <div class="load-more-container" v-if="finished" v-scrollbottom="{scrollBottom,finished,refreshing}">
             <span>没有更多了，不要再拉啦～</span>
         </div>
     </div>
@@ -38,18 +38,70 @@
 <script>
 import { createNamespacedHelpers } from 'vuex'
 const { mapState, mapActions } = createNamespacedHelpers('readings')
+
 export default {
   data() {
-    return {}
+    return {
+      refreshing:false
+    }
+  },
+  directives:{
+   'scrollbottom':function(el,binding){ 
+     let top = 0
+     window.onscroll= function(){ 
+          var scrollTop = 0, bodyScrollTop = 0, documentScrollTop = 0;
+          if (document.body) {
+              bodyScrollTop = document.body.scrollTop;
+          }
+          if (document.documentElement) {
+              documentScrollTop = document.documentElement.scrollTop;
+          }
+          scrollTop = (bodyScrollTop - documentScrollTop > 0) ? bodyScrollTop : documentScrollTop; 
+
+          var windowHeight = 0;
+          if (document.compatMode == "CSS1Compat") {
+              windowHeight = document.documentElement.clientHeight;
+          } else {
+              windowHeight = document.body.clientHeight;
+          }
+          
+          // console.log(windowHeight)
+          var scrollHeight = 0, bodyScrollHeight = 0, documentScrollHeight = 0;
+          if (document.body) {
+              bodyScrollHeight = document.body.scrollHeight;
+          }
+          if (document.documentElement) {
+              documentScrollHeight = document.documentElement.scrollHeight;
+          }
+          scrollHeight = (bodyScrollHeight - documentScrollHeight > 0) ? bodyScrollHeight : documentScrollHeight; 
+          // console.log(scrollHeight) 
+          if(scrollTop -top >0
+             &&scrollTop+windowHeight>=scrollHeight - 10
+             &&!binding.value.finished
+             &&!refreshing){
+             binding.value.scrollBottom()
+          }
+          top = scrollTop
+     } 
+   }
   },
   computed: {
-    ...mapState(['bannerPic', 'bookList'])
+    ...mapState(['bannerPic', 'bookList','finished']),
+  },
+  watch:{
+    loading:function(state){
+      this.refreshing = state.loading
+    }
   },
   created() {
-    this.getReadingsList()
+    this.getReadingsList(true)
   },
   methods: {
-    ...mapActions(['getReadingsList'])
+    ...mapActions(['getReadingsList']),
+    scrollBottom(){ 
+      console.log('分页')
+    //  this.getReadingsList(true)
+    }
   }
 }
 </script>
@@ -65,7 +117,8 @@ export default {
     background-color: #f6c26b;
     color: white;
     padding: 40px;
-    height: 372px;
+    height: 372px; 
+    background-size:100% 100%;
     h5 {
       font-size: 48px;
       line-height: 56px;

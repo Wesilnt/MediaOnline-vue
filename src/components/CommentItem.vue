@@ -110,16 +110,21 @@ export default {
     font-weight: 700;
     color: #808080;
     margin-right: 24px;
+    line-height: 32px;
+    align-self:  flex-end;
   }
   &-time {
     flex-grow: 1;
     font-size: 22px;
-    color: #b2b2b2;
+    line-height: 22px;
+    color: #b2b2b2; 
+    align-self: flex-end;
   }
   &-body {
+    padding-top: 20px;
   }
   &-content {
-    max-height: 160px;
+    max-height: 150px;
     overflow: hidden;
     transition: height 0.4s linear;
     &.content-expand {
@@ -137,11 +142,19 @@ export default {
 .comment-thumb {
   color: #ffa32f;
   font-weight: 700;
+   align-self: flex-end;
+   display: flex;
+  > span{
+    align-self: flex-end;
+    line-height: 28px;
+    font-size: 28px;
+  }
 }
 .icon-praise {
   width: 32px;
   height: 32px;
   margin-right: 12px;
+  align-self: flex-end;
 }
 .comment-expand-btn {
   text-align: right;

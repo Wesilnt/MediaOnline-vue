@@ -1,5 +1,5 @@
 <template>
-  <div class="videocol-dec-container" id="detailmain" ref="detailmain">
+  <div class="videocol-dec-container">
     <GroupHeader></GroupHeader>
     <GroupContent></GroupContent>
     <!-- 底部工具条 -->
@@ -8,7 +8,8 @@
         v-on:router-to-collage="routerToCollage"
         v-on:router-to-collect="routerToCollect"
         :price="['100','10']"
-        collageText="拼团拼团"
+        collageText="拼团"
+        collectText="集赞"
         :collect='true'
         :collage='true'
     />
@@ -52,33 +53,6 @@ export default {
       'collectLikeId' //集赞ID
     ])
   },
-  methods: {
-    ...mapActions(['getVideoColumnDetail', 'getCommentList']),
-    allFunc() {
-      console.log('点击全部')
-    },
-    gotoVideoCourseDetailPage(lessonID) {
-      console.log('路由跳转 lessonID = ' + lessonID)
-      this.$router.push({ name: 'videoCourseDetail', params: { lessonID } }) 
-    },
-    data() {
-      return {
-        dataList: []
-      }
-    },
-    watch: {},
-    computed: {
-      ...mapState([
-        'freeLessonList', //试看课程数组
-        'profilePic', //头图
-        'description', //专栏介绍
-        'outlinePic', //课程列表下面的大图展示
-        'buyIntro', //购买须知
-        'lessonCount', //专栏课集总数
-        'commentCount', //留言总条数
-        'buyCount'
-      ])
-    },
     methods: {
       ...mapMutations(['initDatas']),
       ...mapActions(['getVideoColumnDetail']),
@@ -90,8 +64,11 @@ export default {
       },
       routerToCollect() {
         console.log('跳转到集赞')
-        // this.$router.push({ name: 'Praise', params: { "courseId" : this.$route.params.courseId ,collectLikeId:this.collectLikeId} })
-        this.$router.push({ name: 'PraiseActive',params: { courseId : this.$route.params.courseId ,collectLikeId:this.collectLikeId} }) 
+        // this.$router.push({ name: 'PraiseActive',params: { courseId : this.$route.params.courseId ,collectLikeId:this.collectLikeId} }) 
+      },
+      //刷新页面数据
+      updateData(){
+
       }
     }, 
     created() {
@@ -100,8 +77,6 @@ export default {
       this.initDatas(courseId)
       this.getVideoColumnDetail({ "courseId": courseId }) 
     }
-  }
-
 }
 </script>
 

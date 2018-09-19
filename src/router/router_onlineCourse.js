@@ -1,4 +1,4 @@
-import videoColumnDetail from  '../views/onlineCourse/videoColumnDetail'
+import videoColumnDetail from  '../views/onlineCourse/videoColumnDetail.vue'
 import videoCourseDetail from  '../views/onlineCourse/videoCourseDetail'
 import Praise from '../views/praise/Praise'
 

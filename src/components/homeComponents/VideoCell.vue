@@ -1,5 +1,5 @@
 <template>
-  <div :style="{backgroundImage: 'url(' + video.coverPic + ')' }" class="cell">
+  <div :style="{backgroundImage: 'url(' + video.coverPic + ')' }" @click="onItemClick" class="cell">
     <div class="videoPlay">
       <img class="videoPlayTringle" src="../../assets/home_video_play.jpg" alt="">
     </div>
@@ -17,7 +17,13 @@
 
 <script>
 export default {
-  props: ['video']
+  props: ['video'],
+  methods:{
+    onItemClick(){ 
+      console.log(this.video.id)
+       this.$router.push({name:'videoColumnDetail',params:{courseId:this.video.id}})
+    }
+  }
 }
 </script>
 

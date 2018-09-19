@@ -131,7 +131,9 @@ export async function getToken() {
  */
 function request(url, options, needToken=true) {
   // const accessToken = getAccessToken();
+
   var accessToken;
+
   // const refreshToken = getRefreshToken()
   const baseURI = isUrl(url) ? '' : api
   var defaultOptions;
