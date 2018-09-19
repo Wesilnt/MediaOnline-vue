@@ -92,7 +92,7 @@ async function getToken() {
     console.log('没有token')
     let code = GetRequestCode().code;
     let localToken = getAccessToken()
-    let result = await request(`auth/wechat/login${stringify({ 'code': code })}`, false, false)
+    let result = await request(`auth/wechat/login${stringify({ 'code': code })}`, {}, false)
     console.log(result);
     // if (localToken.length > 0) {
     //   token = localToken;
@@ -129,16 +129,30 @@ async function getToken() {
  */
 function request(url, options, needToken=true) {
   // const accessToken = getAccessToken();
-  const accessToken = '9009f5f8-e2bc-4cb0-98d9-721b32153c56'
+  var accessToken;
   // const refreshToken = getRefreshToken()
   const baseURI = isUrl(url) ? '' : api
-  const defaultOptions = {
-    // credentials: 'include',
-    // mode: 'no-cors',
-    // formData: false,
-    headers: {
-      Authorization: `Bearer ${btoa(accessToken)}`
-  }
+  var defaultOptions;
+  if(needToken){
+    accessToken = '9009f5f8-e2bc-4cb0-98d9-721b32153c56'
+    defaultOptions = {
+      // credentials: 'include',
+      // mode: 'no-cors',
+      // formData: false,
+      headers: {
+        Authorization: `Bearer ${btoa(accessToken)}`
+    }
+    }
+  }else{
+    console.log('走了没token')
+    defaultOptions = {
+      // credentials: 'include',
+      // mode: 'no-cors',
+      // formData: false,
+    //   headers: {
+    //     Authorization: `Bearer ${btoa(accessToken)}`
+    // }
+    }
   }
   const newOptions = { ...defaultOptions, ...options }
   if (newOptions.method === 'POST' || newOptions.method === 'PUT') {
