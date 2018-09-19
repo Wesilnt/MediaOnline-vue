@@ -16,6 +16,7 @@ import myReply from './module/myReply'
 import myLike from './module/myLike'
 import myPlayRecord from './module/myPlayRecord'
 import myPurchase from './module/myPurchase'
+import userInfo from './module/userInfo'
 import comment from './module/commentData'
 import freezone from './module/freezoneData'
 import audiotask from './module/audioTask'
@@ -40,6 +41,7 @@ export default new Vuex.Store({
     myLike,
     myPlayRecord,
     myPurchase,
+    userInfo,
     visionData,
     readings,
     audio,
@@ -49,5 +51,5 @@ export default new Vuex.Store({
     share,
     praise,
     mobile
-  }, 
+  },
 })

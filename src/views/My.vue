@@ -87,7 +87,7 @@ export default {
   },
   methods: {
     editUserInfo:function () {
-      this.$router.push({ path: './my/EditUserInfo'})
+      this.$router.push({ path: './my/DisplayUserInfo'})
     }
   }
 }
