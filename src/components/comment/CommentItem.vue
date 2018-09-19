@@ -17,7 +17,7 @@
             <p ref="contentChild">{{comment.content | getSingleCourseName(0)}}</p>
           </div>
           <div v-else class="voice-container">
-            <img src="../assets/cmt_voice_icon.png">
+            <img src="../../assets/cmt_voice_icon.png">
             <span>{{comment.audioTime}}"</span>
           </div>
           <div v-if="!isExpand && needExpand" class="comment-expand-btn">
@@ -38,8 +38,8 @@
   </div>
 </template>
 <script>
-import praised from '../assets/cmt_praise_selected.png'
-import unPraise from '../assets/cmt_praise_normal.png'
+import praised from '../../assets/cmt_praise_selected.png'
+import unPraise from '../../assets/cmt_praise_normal.png'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState, mapActions } = createNamespacedHelpers('comment')
 export default {
@@ -56,7 +56,7 @@ export default {
       return arr[index]
     }
   },
-  props: ['comment', 'unindent', 'regiontype'],
+  props: ['comment', 'unindent', 'regiontype','lastindex'],
   data() {
     return {
       needExpand: false,

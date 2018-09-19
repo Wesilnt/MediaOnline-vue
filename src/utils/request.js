@@ -125,8 +125,8 @@ function request(url, options, needToken = true) {
   var defaultOptions;
   if (needToken) {
     console.log('走了token')
-    // accessToken = '9009f5f8-e2bc-4cb0-98d9-721b32153c56'
-    accessToken = getAccessToken()
+    accessToken = '9009f5f8-e2bc-4cb0-98d9-721b32153c56'
+    // accessToken = getAccessToken()
     defaultOptions = {
       // credentials: 'include',
       // mode: 'no-cors',

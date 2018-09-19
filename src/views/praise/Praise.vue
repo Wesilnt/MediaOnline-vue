@@ -67,9 +67,9 @@ export default {
     }
   }, 
   components: {
-    PraiseBtn,
+    'priasebtn':PraiseBtn,
     PraiseExplain,
-    Share
+    'share-pop':Share
   }, 
   computed:{
     ...mapState(['praiseDetail','rollerFlag','remainTime']),

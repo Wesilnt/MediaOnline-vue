@@ -20,7 +20,7 @@
         <div class="videocol-base">
             <div class="videocol-sction-title" id="tryCourse" ref="tryCourse">
                 <h4>试看课程</h4>
-                <div class="videocol-all" @click="allFunc">
+                <div class="videocol-all" @click="allFunc()">
                 <span class="videocol-allbtn">全部</span>
                 <img :src="require('../../../assets/images/onlinecourse_arrow_right.png')" class="videocol-allbtn-icon">
                 </div>
@@ -54,7 +54,7 @@
 import CourseIntroduce from '../../../components/CourseIntroduce.vue'
 import playlist from './playlist.vue'
 import videoComment from '../../../components/video-comment.vue'
-import CommentItem from '../../../components/CommentItem.vue'
+import CommentItem from '../../../components/comment/CommentItem.vue'
 import videoBigimage from '../../../components/videoBigimage.vue'
 
 import { createNamespacedHelpers } from 'vuex'
@@ -96,7 +96,7 @@ export default {
             'likeComment'
         ]),
         allFunc() {
-            console.log('点击全部')
+            this.$router.push({name:'videoCourseCmts',params:{courseId:this.courseId}})
         },
         gotoVideoCourseDetailPage(lessonId) {
             console.log('路由跳转 lessonId = ' + lessonId)

@@ -5,9 +5,9 @@ export default {
     pageSize:20,
     currentPage:1,
     freeZoneList:[],
-    loading:true,
+    loading:false,
     finished:false,
-    isSubscribe:false
+    isSubscribe:true
   },
   mutations: {
      bindFreezoneList(state,{freeZoneList,page}){ 
@@ -25,8 +25,8 @@ export default {
      }
   },
   actions: {
-     async getFreezoneList({state,dispatch,commit},currentPage){
-       if(state.finished)return
+     async getFreezoneList({state,dispatch,commit},currentPage){ 
+       if(state.finished || state.loading)return
       await commit('toggleLoading', {loading: true}) 
       let page = currentPage || state.currentPage + 1
       const res = await getFreezoneList({
@@ -34,6 +34,7 @@ export default {
         pageSize:state.pageSize,
         currentPage:page
       })  
+      console.log(res)
       commit('bindFreezoneList',{freeZoneList:res.result,page:page})
       //上传最新学习进度
       res.result.map(item=>{ 

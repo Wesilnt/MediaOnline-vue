@@ -57,7 +57,7 @@
 <script>
 import CourseIntroduce from '../../components/CourseIntroduce.vue'
 import playlist from './components/playlist.vue'
-import CommentItem from '../../components/CommentItem.vue'
+import CommentItem from '../../components/comment/CommentItem.vue'
 import videoComment from '../../components/video-comment.vue'
 import QuestionList from './QuestionList'
 import CommentBar from '../../components/CommentBar'
