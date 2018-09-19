@@ -86,12 +86,12 @@ function GetRequestCode() {
 }
 
 var token;
-async function getToken() {
+export async function getToken() {
   if (token) {
     return token;
   } else {
     console.log('没有token')
-    let code = GetRequestCode().code;
+    let code = '001v3iD01iXbeZ1PKaD01wt3D01v3iDa';
     let localToken = getAccessToken()
     let result = await request(`auth/wechat/login${stringify({ 'code': code })}`, {}, false)
     console.log(result);
@@ -130,12 +130,12 @@ async function getToken() {
  */
 function request(url, options, needToken=true) {
   // const accessToken = getAccessToken();
-  getToken();
   var accessToken;
   // const refreshToken = getRefreshToken()
   const baseURI = isUrl(url) ? '' : api
   var defaultOptions;
   if(needToken){
+    console.log('走了token')
     accessToken = '9009f5f8-e2bc-4cb0-98d9-721b32153c56'
     defaultOptions = {
       // credentials: 'include',
