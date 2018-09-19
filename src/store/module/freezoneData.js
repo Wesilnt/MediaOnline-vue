@@ -62,7 +62,7 @@ export default {
         const res = await getUserByToken(params)
         if(!res)return
         console.log(res)
-        commit('subscribeSuccess', res.sub)
+        commit('subscribeSuccess', res.subscribe)
     },
   },
   getters:{

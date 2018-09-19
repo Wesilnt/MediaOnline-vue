@@ -3,10 +3,12 @@ import {getPosterInfo,getPosterforPraise} from "../../services/shareApi"
 export default {
   namespaced:true,
   state:{
-     poster:{}
+     poster:{},
+     loading:true
   },
   mutations:{
     bindPosterInfo(state, res){
+      state.loading = false
       state.poster = res
     }
 

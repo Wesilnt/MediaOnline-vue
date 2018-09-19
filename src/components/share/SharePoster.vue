@@ -12,15 +12,17 @@
     </div> -->
     <!-- <img ref="saveimage" :src='null'> -->
     <a v-show="false" ref="download"  download="poster"/>
+    <loading-dialog v-if="loading"></loading-dialog>
   </div>
 </template> 
 <script>
+import LoadingDialog from '../LoadingDialog.vue'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers('share')
 export default {
    name:"shareposter",
   data() {
-    return {
+    return { 
       type:this.$route.query.sharetype,
       id:this.$route.params.id,
       centerX: 355 / 2, //canvas中心X坐标
@@ -34,13 +36,9 @@ export default {
       canvasData: null,
       posterData: {}
     }
-  },
-  created(){
-    this.$nextTick( () =>{
-     
-    })
-  },
-  computed:{...mapState(['poster'])},
+  }, 
+  components:{'loading-dialog':LoadingDialog},
+  computed:{...mapState(['loading','poster'])}, 
   mounted: function() {
     var canvasData = this.$refs.canvasId
     this.canvasData = canvasData
