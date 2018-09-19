@@ -27,7 +27,7 @@ export const getExpireTime = () => {
 }
 
 export const setExpireTime = (expireTime = '') => {
-  return localStorage.setItem('BY-BY-EXPIRETIME', expireTime)
+  return localStorage.setItem('BY-EXPIRETIME', expireTime)
 }
 
 export const getUserInfo = () => ({

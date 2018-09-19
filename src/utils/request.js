@@ -87,43 +87,26 @@ function GetRequestCode() {
 
 var token;
 export async function getToken() {
-  if (token) {
-    return token;
+  let localToken = getAccessToken()
+  if (localToken.length > 0) {
+    let expire = getExpireTime()
+    var timestamp = Date.parse(new Date());
+    if (expire - timestamp < 24 * 60 * 60 * 100) {
+      let refreshToken = getRefreshToken()
+      let result = await request.post('/auth/wechat/refreshToken', { 'accessToken': token, 'refreshToken': refreshToken })
+      console.log(result);
+      console.log(result);
+      setUserInfo(result)
+    }
   } else {
     console.log('没有token')
     let code = GetRequestCode().code;
-    let localToken = getAccessToken()
-    const bodyData = json2formData({code:code})
-    let result = await request(`/auth/wechat/login`,{ method: 'POST', body: bodyData }, false)
+    const bodyData = json2formData({ code: code })
+    let result = await request(`/auth/wechat/login`, { method: 'POST', body: bodyData }, false)
     console.log(result);
     setUserInfo(result)
-    var uInfo = getUserInfo();
-    console.log(uInfo)
-    // if (localToken.length > 0) {
-    //   token = localToken;
-    //   let expire = getExpireTime()
-    //   var timestamp = Date.parse(new Date());
-    //   if (expire < timestamp) {
-    //     return token
-    //   } else {
-    //     let refreshToken = getRefreshToken()
-    //     // let result = await request.post('/auth/wechat/refreshToken', { 'accessToken': token, 'refreshToken': refreshToken })
-    //     token = result.data.accessToken;
-    //     console.log(result)
-    //     setUserInfo(result.data)
-    //     return token
-    //   }
-    // } else {
-    //   console.log('没有code')
-    //   let code = GetRequestCode()
-    //   console.log(code)
-    // let result = await request.post(`auth/wechat/login${stringify({ 'code': code })}`, false)
-    //   token = result.data.accessToken;
-    //   console.log(token)
-    //   setUserInfo(result.data)
-    //   return token
-    // }
   }
+ 
 }
 /**
  * Requests a URL, returning a promise.
@@ -132,7 +115,7 @@ export async function getToken() {
  * @param  {object} [options] The options we want to pass to "fetch"
  * @return {object}           An object containing either "data" or "err"
  */
-function request(url, options, needToken=true) {
+function request(url, options, needToken = true) {
   // const accessToken = getAccessToken();
 
   var accessToken;
@@ -140,26 +123,27 @@ function request(url, options, needToken=true) {
   // const refreshToken = getRefreshToken()
   const baseURI = isUrl(url) ? '' : api
   var defaultOptions;
-  if(needToken){
+  if (needToken) {
     console.log('走了token')
-    accessToken = '9009f5f8-e2bc-4cb0-98d9-721b32153c56'
+    // accessToken = '9009f5f8-e2bc-4cb0-98d9-721b32153c56'
+    accessToken = getAccessToken()
     defaultOptions = {
       // credentials: 'include',
       // mode: 'no-cors',
       // formData: false,
       headers: {
         Authorization: `Bearer ${btoa(accessToken)}`
+      }
     }
-    }
-  }else{
+  } else {
     console.log('走了没token')
     defaultOptions = {
       // credentials: 'include',
       // mode: 'no-cors',
       // formData: false,
-    //   headers: {
-    //     Authorization: `Bearer ${btoa(accessToken)}`
-    // }
+      //   headers: {
+      //     Authorization: `Bearer ${btoa(accessToken)}`
+      // }
     }
   }
   const newOptions = { ...defaultOptions, ...options }
