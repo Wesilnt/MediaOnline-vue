@@ -16,10 +16,17 @@ const videoColumnDetail = {
         commentCount:0,              //留言条数
         buyCount:0,             //购买数量
         courseId:0,              //专栏ID
-        groupData:null,          //拼团数据
-        praiseData:null,         //集赞数据
-        headerType:0,          //100倒计时 101拼团成功  102拼团失败  103拼团已满
-        isShowGroupBuy:false,             //是否显示拼团购买   
+        userAccessStatus:0,      //订单状态
+        //集赞
+        praiseData:{},         //集赞数据        
+        //拼团
+        groupData:{},          //拼团数据
+
+        isShowGroupBuy:false,             //是否显示拼团购买
+        headerType:0,       // 100倒计时  101拼团成功  102拼团失败  103拼团已满   
+        //工具条对象
+        toolsObject:{}    
+
     },
     getters: {
 
@@ -28,7 +35,7 @@ const videoColumnDetail = {
         initDatas(state,courseId) {
             state.courseId = courseId
         },
-        bindVideoColumnDetail(state,{result,praiseData,groupData}) {
+        bindVideoColumnDetail(state,{result,praiseData,groupData,isShowGroupBuy,toolsObject,headerType}) {
             state.freeLessonList = result.freeLessonList
             state.profilePic = result.profilePic
             state.description = result.description
@@ -39,13 +46,17 @@ const videoColumnDetail = {
             state.buyCount = result.buyCount
             state.groupData = groupData
             state.praiseData = praiseData
+            state.isShowGroupBuy = isShowGroupBuy
+            state.toolsObject = toolsObject
+            state.headerType = headerType
+            state.userAccessStatus = result.userAccessStatus
         }
 
     },
     actions:{
-       async getVideoColumnDetail ({ commit,state },{ courseId }) {            
+        async getVideoColumnDetail ({ commit,state },{ courseId }) {            
             //获取视频列表数据
-            // console.log('courseID =' + courseId)
+            // console.log('******courseID =' + courseId)
             const result = await getVideoColumnDetail({ courseId })
             console.log('视频专栏接口数据:')
             console.log(result)
@@ -61,8 +72,111 @@ const videoColumnDetail = {
                 "groupBuyDuration" : result.groupBuyDuration || 0,
                 "groupBuyPersonCount" : result.groupBuyPersonCount || 0,
                 "groupBuyPrice" : result.groupBuyPrice || 0,
+                // "groupBuyId": result.groupBuyId || 0,
                 "groupBuyTemplateId" : result.groupBuyTemplateId || ""
             }
+
+            //页面状态
+            const userAccessStatus = result.userAccessStatus
+            let isShowGroupBuy;
+            let toolsObject;
+            let headerType;
+
+            const personStr = result.groupBuyPersonCount > 3 ? "六人拼团" : "三人拼团"
+            switch(userAccessStatus) {
+                case 0:
+                    isShowGroupBuy = false
+                    //工具条状态
+                    toolsObject = {
+                        "originPrice":result.price || 0,
+                        "groupPrice":result.groupBuyPrice || 0,
+                        "collageText":personStr,
+                        "collectText":"集赞换",
+                        "collect":true,
+                        "collage":true
+                    }
+                break
+                case 1001:
+                    console.log('单购成功')
+                break
+                case 1003:
+                    console.log('拼团成功')
+                    isShowGroupBuy = true
+                    headerType = 101
+                    toolsObject = {
+                        "originPrice":'',
+                        "groupPrice":'',
+                        "collageText":"我要学习",
+                        "collectText":"",
+                        "collect":false,
+                        "collage":true
+                    }
+                break
+                case 1005:
+                    console.log('拼团中')
+                    isShowGroupBuy = true
+                    headerType = 100
+                    toolsObject = {
+                        "originPrice":'',
+                        "groupPrice":'',
+                        "collageText":"邀请好友拼团",
+                        "collectText":"",
+                        "collect":false,
+                        "collage":true
+                    }
+                break
+                case 1007:
+                    console.log('集赞成功未领取')
+                    isShowGroupBuy = false
+                    headerType = 0
+                    toolsObject = {
+                        "originPrice":'',
+                        "groupPrice":'',
+                        "collageText":"",
+                        "collectText":"集赞成功未领取",
+                        "collect":true,
+                        "collage":false
+                    }
+                break
+                case 1008:
+                    console.log('集赞成功已领取')
+                    isShowGroupBuy = false
+                    headerType = 0
+                    toolsObject = {
+                        "originPrice":'',
+                        "groupPrice":'',
+                        "collageText":"",
+                        "collectText":"集赞成功已领取",
+                        "collect":true,
+                        "collage":false
+                    }                
+                break
+                case 1009:
+                    console.log('集赞中')
+                    isShowGroupBuy = false
+                    headerType = 0
+                    toolsObject = {
+                        "originPrice":'',
+                        "groupPrice":'',
+                        "collageText":"",
+                        "collectText":"集赞中",
+                        "collect":true,
+                        "collage":false
+                    }                 
+                break
+            }
+
+            commit('bindVideoColumnDetail',{result,praiseData,groupData,isShowGroupBuy,toolsObject,headerType})
+        }
+
+    },
+    modules:{
+        groupContent,
+        groupManager
+    }
+}
+export default videoColumnDetail;
+
 
 
             /*
@@ -103,15 +217,3 @@ const videoColumnDetail = {
 
 
             */
-
-
-            commit('bindVideoColumnDetail',{result,praiseData,groupData})
-        }
-
-    },
-    modules:{
-        groupContent,
-        groupManager
-    }
-}
-export default videoColumnDetail;

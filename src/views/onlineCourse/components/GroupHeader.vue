@@ -37,14 +37,14 @@ export default {
     name:'GroupHeader',
     data(){
         return{
-            isShowGroupBuy:false
+            // isShowGroupBuy:false
         }
     },
     components:{
         CountDown
     },
     computed:{
-        ...mapGetters(['profilePic'])
+        ...mapGetters(['profilePic','isShowGroupBuy','headerType'])
     }
 }
 </script>

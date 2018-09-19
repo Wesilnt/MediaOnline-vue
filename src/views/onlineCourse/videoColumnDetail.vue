@@ -1,5 +1,5 @@
 <template>
-  <div class="videocol-dec-container">
+  <div class="videocol-dec-container" @updateData="updatePageData">
     <GroupHeader></GroupHeader>
     <GroupContent></GroupContent>
     <!-- 底部工具条 -->
@@ -7,7 +7,8 @@
         v-on:router-to-audition="routerToAudition"
         v-on:router-to-collage="routerToCollage"
         v-on:router-to-collect="routerToCollect"
-        :price="['100','10']"
+        :originPrice="'100'"
+        :groupPrice="'10'"
         collageText="拼团"
         collectText="集赞"
         :collect='true'
@@ -67,8 +68,7 @@ export default {
         // this.$router.push({ name: 'PraiseActive',params: { courseId : this.$route.params.courseId ,collectLikeId:this.collectLikeId} }) 
       },
       //刷新页面数据
-      updateData(){
-
+      updatePageData(){
       }
     }, 
     created() {
