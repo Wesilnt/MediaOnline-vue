@@ -91,7 +91,7 @@ export async function getToken() {
     return token;
   } else {
     console.log('没有token')
-    let code = '001v3iD01iXbeZ1PKaD01wt3D01v3iDa';
+    let code = GetRequestCode().code;
     let localToken = getAccessToken()
     let result = await request(`auth/wechat/login${stringify({ 'code': code })}`, {}, false)
     console.log(result);
