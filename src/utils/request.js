@@ -4,6 +4,7 @@ import api from '../api/api'
 import { isUrl, json2formData } from './utils'
 import { getAccessToken, getRefreshToken, setAccessToken, getExpireTime, setExpireTime, getUserInfo, setUserInfo } from './userAuth'
 import { stringify } from 'querystring';
+import { get } from 'https';
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -129,6 +130,7 @@ async function getToken() {
  */
 function request(url, options, needToken=true) {
   // const accessToken = getAccessToken();
+  getToken();
   var accessToken;
   // const refreshToken = getRefreshToken()
   const baseURI = isUrl(url) ? '' : api
