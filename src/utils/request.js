@@ -129,8 +129,8 @@ function request(url, options, needToken = true) {
   if (needToken) {
     console.log('走了token')
     // accessToken = '9009f5f8-e2bc-4cb0-98d9-721b32153c56'
-    accessToken = getAccessToken()
-    // accessToken = getCookie('COOKIE_TOKEN_KEY_CNONLINE')
+    // accessToken = getAccessToken()
+    accessToken = getCookie('COOKIE_TOKEN_KEY_CNONLINE')
     console.log(accessToken)
     defaultOptions = {
       // credentials: 'include',
