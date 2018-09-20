@@ -72,29 +72,14 @@ const checkResponseCode = (url, response) => {
   console.error('接口名称  ' + url)
   throw error
 }
-function GetRequestCode() {
-  var url = location.search; //获取url中"?"符后的字符串
-  var theRequest = new Object();
-  if (url.indexOf("?") != -1) {
-    var str = url.substr(1);
-    str = str.split("&");
-    for (var i = 0; i < str.length; i++) {
-      theRequest[str[i].split("=")[0]] = (str[i].split("=")[1]);
-    }
-  }
-  return theRequest;
-}
 
 
 export async function getToken() {
-
+if(getCookie('COOKIE_TOKEN_KEY_CNONLINE') != null){
+  // todo 缓存
+}else{
   const bodyData = json2formData({ 'originUrl': 'http://t.shbaoyuantech.com/' })
   let result = await request('/auth/wechat/get-wechat-auth-link', { method: 'POST', body: bodyData }, false)
-  console.log(result)
-if(getCookie('COOKIE_TOKEN_KEY_CNONLINE') != null){
-  console.log(getCookie('COOKIE_TOKEN_KEY_CNONLINE'))
-  setAccessToken(getCookie('COOKIE_TOKEN_KEY_CNONLINE'))
-}else{
   window.location.href = result.wechatAuthUrl;
 }
 
@@ -126,11 +111,9 @@ function request(url, options, needToken = true) {
   const baseURI = isUrl(url) ? '' : api
   var defaultOptions;
   if (needToken) {
-    console.log('走了token')
     // accessToken = '9009f5f8-e2bc-4cb0-98d9-721b32153c56'
     // accessToken = getAccessToken()
     accessToken = getCookie('COOKIE_TOKEN_KEY_CNONLINE')
-    console.log(accessToken)
     defaultOptions = {
       // credentials: 'include',
       // mode: 'no-cors',
@@ -140,7 +123,6 @@ function request(url, options, needToken = true) {
       }
     }
   } else {
-    console.log('走了没token')
     defaultOptions = {
     }
   }
@@ -157,8 +139,6 @@ function request(url, options, needToken = true) {
       // }
     }
   }
-  console.log(newOptions);
-  debugger
   return fetch(`${baseURI}${url}`, newOptions)
     .then(checkStatus.bind(this, url))
     .then(response => {
