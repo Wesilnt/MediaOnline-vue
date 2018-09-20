@@ -1,13 +1,16 @@
 <template>
   <!-- <div v-infinite-scroll="loadMore" class="myScroll" infinite-scroll-disabled="loading" infinite-scroll-distance="30"> -->
-    <div>
+  <div>
     <img :src="bannerPic" class="head" alt="">
     <div class="middle" />
-    <div v-for="(item, index) in visionList" :key="index" class="list">
-      <VisionCell :vision="item" class="cell" />
-      <div class="sep" />
-    </div>
-    <div class="bottomtip">没有更多了，不要再拉了</div>
+    <van-list v-model="refreshing" :finished="finished" @load="loadMore" @offset="10">
+      <div v-for="(item, index) in visionList" :key="index" class="list">
+        <VisionCell :vision="item" class="cell" />
+        <div class="sep" />
+      </div>
+    
+    <div v-if="finished" class="bottomtip">没有更多了，不要再拉了</div>
+    </van-list>
   </div>
 </template>
 
@@ -16,14 +19,26 @@ import VisionCell from '../../components/homeComponents/VisionCell.vue'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState, mapActions } = createNamespacedHelpers('visionData')
 export default {
+  data() {
+    return {
+      refreshing: false
+    }
+  },
+  watch: {
+    isLoading: function(isLoading) {
+      this.refreshing = isLoading
+    }
+  },
   components: {
     VisionCell
   },
-  computed: mapState(['bannerPic', 'visionList']),
+  computed: mapState(['bannerPic', 'visionList', 'finished','isLoading']),
   methods: {
     ...mapActions(['getVisionListData', 'getMoreData']),
     loadMore() {
+      console.log('执行了loadmore')
       this.getMoreData()
+      console.log(this.visionList)
     }
   },
   created() {
