@@ -49,4 +49,7 @@ export async function getMyUserInfo() {
 export async function postUserInfo(params) {
   return request.post('/feedback/updateUserInfo', params)
 }
-
+//获取用户通知
+export function getNewMessageCount(params) {
+  return request(`/user/getUserMsgCountByBusiTypes?${stringify(params)}`);
+};

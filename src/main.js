@@ -18,6 +18,7 @@ Vue.config.productionTip = false
 import { SwipeCell, Dialog,List ,Cell} from 'vant'
 import { Popup, Toast, Field,Loading } from 'vant'
 import { RadioGroup,Radio, Picker } from 'vant'
+import { Lazyload } from 'vant';
 Vue.use(Cell)
 Vue.use(Popup)
 Vue.use(Toast)
@@ -29,6 +30,7 @@ Vue.use(RadioGroup)
 Vue.use(Radio)
 Vue.use(Loading);
 Vue.use(Picker)
+Vue.use(Lazyload)
 
 
 new Vue({
