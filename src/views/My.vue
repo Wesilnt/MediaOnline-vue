@@ -2,9 +2,9 @@
     <div class="my">
         <div class="my-user-info" @click="editUserInfo">
             <lazy-component>
-                <img v-lazy="avatarUrl" class="my-user-info-avatar">
+                <img v-lazy="userInfo.avatarUrl" class="my-user-info-avatar">
             </lazy-component>
-            <span class="my-user-info-nickname">{{ nickName }}</span>
+            <span class="my-user-info-nickname">{{ userInfo.nickName }}</span>
             <div class="my-user-info-edit">编辑个人资料</div>
         </div>
 
@@ -94,12 +94,16 @@
       }
     },
     computed: {
-      ...mapState(['newReplyMessageCount','newSysMessageCount'])
+      ...mapState(['newReplyMessageCount','newSysMessageCount','userInfo'])
     },
     methods: {
-      ...mapActions(['queryNewMessageCount']),
+      ...mapActions(['queryNewMessageCount','getMyUserInfo']),
       editUserInfo: function () {
-        this.$router.push({path: './my/DisplayUserInfo'})
+        if (this.userInfo.gender && this.userInfo.grade && this.userInfo.role) {
+          this.$router.push({path: './my/DisplayUserInfo'})
+        } else {
+          this.$router.push({path: './my/EditUserInfo'})
+        }
       },
       itemClick: function (name) {
         this.$router.push({path: name})
@@ -107,6 +111,7 @@
     },
     created() {
       this.queryNewMessageCount()
+      this.getMyUserInfo()
     }
   }
 </script>

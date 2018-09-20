@@ -1,15 +1,20 @@
-import { getNewMessageCount } from '../../services/my'
+import {getMyUserInfo, getNewMessageCount} from '../../services/my'
 const myData= {
   namespaced: true, // 设置命名空间 ，保持数据独立性
   state: {
     newReplyMessageCount:0,
     newSysMessageCount:0,
+    userInfo:[],
     loading: false
   },
   mutations: {
-    setNewMessageCount(state, payload) {
+    save(state, payload) {
       console.log(payload)
       Object.assign(state, payload)
+    },
+    saveUserInfo(state, payload) {
+      console.log(payload)
+      state.userInfo = payload
     },
     toggleLoading(state, { loading }) {
       state.loading = loading
@@ -19,15 +24,19 @@ const myData= {
     async queryNewMessageCount({ dispatch, commit, state }) {
       let replyResult = await getNewMessageCount({ busiTypes: 3101 })
       if (replyResult) {
-        commit('setNewMessageCount', replyResult.data)
+        commit('save', replyResult.data)
       }
 
       let sysResult = await getNewMessageCount({ busiTypes: 3103 })
       if(sysResult){
-        commit('setNewMessageCount', sysResult.data)
+        commit('save', sysResult.data)
       }
-
-    }
+    },
+    async getMyUserInfo({ dispatch, commit, state }) {
+      let response = await getMyUserInfo()
+      console.log(response)
+      commit('saveUserInfo', response)
+    },
   }
 }
 export default myData
