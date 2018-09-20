@@ -26,7 +26,7 @@ const { mapState,mapMutations,mapActions } = createNamespacedHelpers('videoColum
 
 export default { 
     name: 'VideoColumnDetail',
-    components: {
+    components: {       
       'tools-navbar': toolsNavbar,
       GroupHeader,
       GroupContent ,

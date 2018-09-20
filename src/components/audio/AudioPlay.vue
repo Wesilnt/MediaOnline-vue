@@ -75,12 +75,12 @@
         </div>
         <hr>
         <div class="list-container">
-          <div v-for="item of singleSetList" :key="item.id" class="list-item">
+          <div v-for="(item,index) of singleSetList" :key="item.id" class="list-item">
             <div class="list-content" @click="onItemClick(item)">
               <img v-if="lessonId==item.id" src="../../assets/audio_list_playing.png">
               <p :class="{'p-playing':lessonId==item.id}">{{item.title}}</p>
             </div>
-            <hr>
+            <hr v-show="singleSetList.length-1 != index">
           </div>
         </div>
         <div class="list-close" @click="onCloseList">关闭</div>

@@ -1,6 +1,6 @@
 <template>
     <div class="descrip-container">
-        <div class="descrip-header" :style="{background:'url('+getBookIntroduce.coverPic+')'}"/>
+        <div class="descrip-header" :style="{background:'url('+getBookIntroduce.coverPic+') no-repeat;','background-size':'100%'}"/>
         <div class="course-name">
            {{getBookIntroduce.name}}
         </div>
