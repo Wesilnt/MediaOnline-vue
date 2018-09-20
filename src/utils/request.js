@@ -155,7 +155,8 @@ function request(url, options, needToken = true) {
       // }
     }
   }
-
+  console.log(newOptions);
+  debugger
   return fetch(`${baseURI}${url}`, newOptions)
     .then(checkStatus.bind(this, url))
     .then(response => {
