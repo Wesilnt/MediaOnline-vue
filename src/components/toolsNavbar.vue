@@ -1,5 +1,5 @@
 <template>
-    <div class="purchase-toolbar">
+    <div class="purchase-toolbar" v-show="isShow">
         <div class="toolbar-audition" @click="$emit('router-to-audition')">
             <i class="qhht-icon audition-icon"></i>
             <p class="under-text">试听</p>
@@ -19,15 +19,22 @@
                 <div>{{toolsObject.collectText}}</div>
             </div>
         </div>
+        <Share :show="sharePageShow" :shareid="courseId" @close="cancelSharePage"></Share>
     </div>
    
 </template>
 
 <script>
+import Share from './share/Share'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState,mapGetters,mapActions } = createNamespacedHelpers('videoColumnDetail/groupManager')
 export default {
   name: 'ToolsNavbar',
+  data(){
+    return {
+      sharePageShow:false
+    }
+  },
   props: {
     originPrice: {
       type: String,
@@ -51,6 +58,13 @@ export default {
     collectText: {
       default: '发起集赞'
     },
+    isShow: {
+      type: Boolean,
+      default:true
+    }
+  },
+  components:{
+    Share
   },
   watch:{
     'collectLikeId':function(newVal){
@@ -71,17 +85,32 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['startGroupBuy','getCollectLike','startCollectLike']),
+    ...mapActions(['startGroupBuy','getCollectLike','startCollectLike','updateFatherData']),
     buyByOriginPrice(price) {
       console.log('买' + price)
       console.log(this.collect)
     },
     clickCollageBtn(){
-      let params = {
-        "courseId" : this.courseId
-      }
-      this.startGroupBuy(params)
+
       this.$emit('router-to-collage')
+      let params = {
+            "courseId" : this.courseId
+          }
+      switch(this.userAccessStatus) {
+        //没有购买和集赞行为
+        case 0:
+          this.startGroupBuy(params)
+        break
+        case 1003:
+        //拼团成功
+        this.updateFatherData(params)
+        break
+        case 1005:
+        //拼团中
+          console.log('邀请好友拼团'),
+          this.sharePageShow = true
+        break
+      }
     },
     
     clickCollectBtn(){
@@ -116,7 +145,11 @@ export default {
       }
 
  
-    }   
+    },
+    //邀请好友拼团
+    cancelSharePage(){
+      this.sharePageShow = false
+    }
   }
 }
 </script>
