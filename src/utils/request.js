@@ -91,7 +91,10 @@ export async function getToken() {
   const bodyData = json2formData({ 'originUrl': 'http://t.shbaoyuantech.com/' })
   let result = await request('/auth/wechat/get-wechat-auth-link', { method: 'POST', body: bodyData }, false)
   console.log(result)
-if(getCookie('COOKIE_TOKEN_KEY_CNONLINE').length>0){}else{
+if(getCookie('COOKIE_TOKEN_KEY_CNONLINE') != null){
+  console.log(getCookie('COOKIE_TOKEN_KEY_CNONLINE'))
+
+}else{
   window.location.href = result.wechatAuthUrl;
 }
 
