@@ -48,7 +48,7 @@ const checkResponseCode = (url, response) => {
   if (typeof response.code === 'undefined') {
     return response
   }
-  if (response.code === 0) {
+  if (response.code == 0) {
     return response.data || response
   }
 
@@ -85,28 +85,25 @@ function GetRequestCode() {
   return theRequest;
 }
 
-var token;
+
 export async function getToken() {
-  let localToken = getAccessToken()
-  if (localToken.length > 0) {
-    let expire = getExpireTime()
-    var timestamp = Date.parse(new Date());
-    if (expire - timestamp < 24 * 60 * 60 * 100) {
-      let refreshToken = getRefreshToken()
-      let result = await request.post('/auth/wechat/refreshToken', { 'accessToken': token, 'refreshToken': refreshToken })
-      console.log(result);
-      console.log(result);
-      setUserInfo(result)
-    }
-  } else {
-    console.log('没有token')
-    let code = GetRequestCode().code;
-    const bodyData = json2formData({ code: code })
-    let result = await request(`/auth/wechat/login`, { method: 'POST', body: bodyData }, false)
-    console.log(result);
-    setUserInfo(result)
-  }
+
+  const bodyData = json2formData({ 'originUrl': 'http://t.shbaoyuantech.com/' })
+  let result = await request('/auth/wechat/get-wechat-auth-link', { method: 'POST', body: bodyData }, false)
+  console.log(result)
+
+  window.location.href = result.wechatAuthUrl;
+
+}
+function getCookie(name)
+{          //匹配字段
+    var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+         
+    if(arr=document.cookie.match(reg))
  
+        return (arr[2]);
+    else
+        return null;
 }
 /**
  * Requests a URL, returning a promise.
@@ -126,7 +123,9 @@ function request(url, options, needToken = true) {
   if (needToken) {
     console.log('走了token')
     // accessToken = '9009f5f8-e2bc-4cb0-98d9-721b32153c56'
-    accessToken = getAccessToken()
+    // accessToken = getAccessToken()
+    accessToken = getCookie('COOKIE_TOKEN_KEY_CNONLINE')
+    console.log(accessToken)
     defaultOptions = {
       // credentials: 'include',
       // mode: 'no-cors',
@@ -138,12 +137,6 @@ function request(url, options, needToken = true) {
   } else {
     console.log('走了没token')
     defaultOptions = {
-      // credentials: 'include',
-      // mode: 'no-cors',
-      // formData: false,
-      //   headers: {
-      //     Authorization: `Bearer ${btoa(accessToken)}`
-      // }
     }
   }
   const newOptions = { ...defaultOptions, ...options }
