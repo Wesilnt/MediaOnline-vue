@@ -103,10 +103,10 @@ function getCookie(name)
 {          //匹配字段
     var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
     
-   
+    var regMark = new RegExp( '\"' , "g" )
     if(arr=document.cookie.match(reg))
- 
-        return (arr[2]).replace("\"","");
+    
+        return (arr[2]).replace(regMark,"");
     else
         return null;
 }
