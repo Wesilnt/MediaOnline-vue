@@ -98,7 +98,9 @@ export async function getToken() {
 function getCookie(name)
 {          //匹配字段
     var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
-         
+    
+    console.log('cookie', document.cookie);
+    debugger
     if(arr=document.cookie.match(reg))
  
         return (arr[2]);
