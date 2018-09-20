@@ -48,7 +48,7 @@ const checkResponseCode = (url, response) => {
   if (typeof response.code === 'undefined') {
     return response
   }
-  if (response.code === 0) {
+  if (response.code == 0) {
     return response.data || response
   }
 
@@ -72,41 +72,28 @@ const checkResponseCode = (url, response) => {
   console.error('接口名称  ' + url)
   throw error
 }
-function GetRequestCode() {
-  var url = location.search; //获取url中"?"符后的字符串
-  var theRequest = new Object();
-  if (url.indexOf("?") != -1) {
-    var str = url.substr(1);
-    str = str.split("&");
-    for (var i = 0; i < str.length; i++) {
-      theRequest[str[i].split("=")[0]] = (str[i].split("=")[1]);
-    }
-  }
-  return theRequest;
+
+
+export async function getToken() {
+if(getCookie('COOKIE_TOKEN_KEY_CNONLINE') != null){
+  // todo 缓存
+}else{
+  const bodyData = json2formData({ 'originUrl': 'http://t.shbaoyuantech.com/' })
+  let result = await request('/auth/wechat/get-wechat-auth-link', { method: 'POST', body: bodyData }, false)
+  window.location.href = result.wechatAuthUrl;
 }
 
-var token;
-export async function getToken() {
-  let localToken = getAccessToken()
-  if (localToken.length > 0) {
-    let expire = getExpireTime()
-    var timestamp = Date.parse(new Date());
-    if (expire - timestamp < 24 * 60 * 60 * 100) {
-      let refreshToken = getRefreshToken()
-      let result = await request.post('/auth/wechat/refreshToken', { 'accessToken': token, 'refreshToken': refreshToken })
-      console.log(result);
-      console.log(result);
-      setUserInfo(result)
-    }
-  } else {
-    console.log('没有token')
-    let code = GetRequestCode().code;
-    const bodyData = json2formData({ code: code })
-    let result = await request(`/auth/wechat/login`, { method: 'POST', body: bodyData }, false)
-    console.log(result);
-    setUserInfo(result)
-  }
- 
+}
+function getCookie(name)
+{          //匹配字段
+    var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
+    
+    var regMark = new RegExp( '\"' , "g" )
+    if(arr=document.cookie.match(reg))
+    
+        return (arr[2]).replace(regMark,"");
+    else
+        return null;
 }
 /**
  * Requests a URL, returning a promise.
@@ -124,9 +111,9 @@ function request(url, options, needToken = true) {
   const baseURI = isUrl(url) ? '' : api
   var defaultOptions;
   if (needToken) {
-    console.log('走了token')
-    accessToken = '9009f5f8-e2bc-4cb0-98d9-721b32153c56'
+    // accessToken = '9009f5f8-e2bc-4cb0-98d9-721b32153c56'
     // accessToken = getAccessToken()
+    accessToken = getCookie('COOKIE_TOKEN_KEY_CNONLINE')
     defaultOptions = {
       // credentials: 'include',
       // mode: 'no-cors',
@@ -136,14 +123,7 @@ function request(url, options, needToken = true) {
       }
     }
   } else {
-    console.log('走了没token')
     defaultOptions = {
-      // credentials: 'include',
-      // mode: 'no-cors',
-      // formData: false,
-      //   headers: {
-      //     Authorization: `Bearer ${btoa(accessToken)}`
-      // }
     }
   }
   const newOptions = { ...defaultOptions, ...options }
@@ -159,7 +139,6 @@ function request(url, options, needToken = true) {
       // }
     }
   }
-
   return fetch(`${baseURI}${url}`, newOptions)
     .then(checkStatus.bind(this, url))
     .then(response => {

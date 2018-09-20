@@ -1,8 +1,8 @@
 const { NODE_ENV } = process.env
 
-let api = 'http://xcx.test.shbaoyuantech.com:30000'
+let api = 'https://xcx.test.shbaoyuantech.com:30000'
 if (NODE_ENV === 'development') {
-  api = 'http://xcx.test.shbaoyuantech.com:30000'
+  api = 'https://xcx.test.shbaoyuantech.com:30000'
 }else if (NODE_ENV === 'production') {
   // api = 'https://xcx.shbaoyuantech.com'
 }else{
