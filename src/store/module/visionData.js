@@ -6,12 +6,14 @@ const visionData = {
         bannerPic:'',
         visionList:[],
         currentPage:1,
-        totalPage:0,
+        totalCount:0,
         pageSize:6,
         showTip:false,
         visionDetail:Object,
         categoryList:[],
-        commentList:[]
+        commentList:[],
+        finished:false,
+        isLoading:false
     },
     actions:{
         reverse({commit,state}){
@@ -21,14 +23,17 @@ const visionData = {
           let result = await getVisionList({currentPage:state.currentPage, pageSize:state.pageSize, type:1003})
           commit('setBannerPic', result.bannerPic)
           commit('setVisionList', result.courseInfo.result)
+          commit('setTotalCount',result.courseInfo.totalCount)
         },
         async getMoreData({commit, state}){
-            if(state.currentPage>= totalPage){
-
-            }
+            commit('setIsLoading',true);
             commit('setCurrentPage', state.currentPage + 1);
             let result = await getVisionList({currentPage:state.currentPage, pageSize:state.pageSize, type:1003})
-            commit('setVisionList', state.visionList.concat(result.courseInfo.result))
+            let newList =state.visionList.concat(result.courseInfo.result);
+            await commit('setFinished',newList.length>= state.totalCount);
+            commit('setVisionList', newList)
+            console.log(state.visionList)
+            commit('setIsLoading',false);
         },
         async getVisionDetail({commit},courseId){
             let result = await getVisionDetail({'courseId':courseId})
@@ -58,6 +63,15 @@ const visionData = {
         },
         setCategoryList(state,categoryList){
             state.categoryList = categoryList;
+        },
+        setFinished(state,finished){
+            state.finished = finished;
+        },
+        setTotalCount(state,totalCount){
+            state.totalCount = totalCount;
+        },
+        setIsLoading(state,isLoading){
+            state.isLoading = isLoading;
         }
     }
 }

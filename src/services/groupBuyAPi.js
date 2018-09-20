@@ -2,7 +2,7 @@ import {stringify} from 'qs'
 import request from '../utils/request'
 
 //拼团详情
-export async function getgroupBuyDetail(params) {
+export async function getGroupBuyDetail(params) {
     return request(`/groupBuy/detail?${stringify(params)}`);
   }
   

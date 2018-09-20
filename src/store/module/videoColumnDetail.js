@@ -54,11 +54,12 @@ const videoColumnDetail = {
 
     },
     actions:{
-        async getVideoColumnDetail ({ commit,state },{ courseId }) {            
+        async getVideoColumnDetail ({ commit,dispatch },{ courseId }) {            
             //获取视频列表数据
             const result = await getVideoColumnDetail({ courseId })
             console.log('视频专栏接口数据:')
             console.log(result)
+            console.log('-=-=-=-=-='+courseId)
 
             const praiseData = {
                 "collectLikeDuration" : result.collectLikeDuration || 0,
@@ -84,7 +85,7 @@ const videoColumnDetail = {
             const personStr = result.groupBuyPersonCount > 3 ? "六人拼团" : "三人拼团"
             switch(userAccessStatus) {
                 case 0:
-                    isShowGroupBuy = false
+                    isShowGroupBuy = true
                     //工具条状态
                     toolsObject = {
                         "originPrice":result.price || 0,
@@ -92,11 +93,25 @@ const videoColumnDetail = {
                         "collageText":personStr,
                         "collectText":"集赞换",
                         "collect":true,
-                        "collage":true
+                        "collage":true,
+                        "isShow":true
                     }
+                    console.log("groupData.groupBuyId = "+groupData.groupBuyId)
+                    dispatch("groupManager/getGroupBuyDetail",groupData.groupBuyId)
                 break
                 case 1001:
                     console.log('单购成功')
+                    isShowGroupBuy = false
+                    headerType = 0
+                    toolsObject = {
+                        "originPrice":'',
+                        "groupPrice":'',
+                        "collageText":"",
+                        "collectText":"",
+                        "collect":true,
+                        "collage":false,
+                        "isShow":true
+                    }  
                 break
                 case 1003:
                     console.log('拼团成功')
@@ -108,7 +123,8 @@ const videoColumnDetail = {
                         "collageText":"我要学习",
                         "collectText":"",
                         "collect":false,
-                        "collage":true
+                        "collage":true,
+                        "isShow":true
                     }
                 break
                 case 1005:
@@ -121,8 +137,12 @@ const videoColumnDetail = {
                         "collageText":"邀请好友拼团",
                         "collectText":"",
                         "collect":false,
-                        "collage":true
+                        "collage":true,
+                        "isShow":true
                     }
+                    console.log("groupData.groupBuyId = "+groupData.groupBuyId)
+                    dispatch("getGroupBuyDetail",groupData.groupBuyId)
+
                 break
                 case 1007:
                     console.log('集赞成功未领取')
@@ -134,7 +154,8 @@ const videoColumnDetail = {
                         "collageText":"",
                         "collectText":"集赞成功未领取",
                         "collect":true,
-                        "collage":false
+                        "collage":false,
+                        "isShow":true
                     }
                 break
                 case 1008:
@@ -147,7 +168,8 @@ const videoColumnDetail = {
                         "collageText":"",
                         "collectText":"集赞成功已领取",
                         "collect":true,
-                        "collage":false
+                        "collage":false,
+                        "isShow":true
                     }                
                 break
                 case 1009:
@@ -160,7 +182,8 @@ const videoColumnDetail = {
                         "collageText":"",
                         "collectText":"集赞中",
                         "collect":true,
-                        "collage":false
+                        "collage":false,
+                        "isShow":true
                     }                 
                 break
             }

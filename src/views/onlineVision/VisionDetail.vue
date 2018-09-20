@@ -30,8 +30,8 @@
       <SingleSetList :list='visionDetail.freeLessonList'></SingleSetList>
     </div>
     <!-- message -->
-    <div id="message" ref="message" class="message bottomline">
-      <DetailHeader title="精选留言" :subtitle="visionDetail.commentCount + '条'" />
+    <div id="message" ref="message" class="message bottomline" >
+      <DetailHeader title="精选留言" link='videoCourseCmts' :params='{"courseId":id}' :subtitle="visionDetail.commentCount + '条'" />
       <div v-for="item of commentList" :key="item.id" class="comment-item">
         <comment-item :comment="item" />
       </div>
