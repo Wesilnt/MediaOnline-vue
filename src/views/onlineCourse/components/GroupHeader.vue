@@ -15,7 +15,7 @@
                     <div class="groupBuy-usericon-item"></div>
                 </div>
             </div>
-            <div class="groupBuy-info">剩余<span>2</span>个名额</div>
+            <div class="groupBuy-info">剩余<span>{{leavePerson}}</span>个名额</div>
             <div class="groupBuy-countDown-container">
                 <CountDown></CountDown>
             </div>
@@ -44,6 +44,7 @@ export default {
         CountDown
     },
     computed:{
+        ...mapState(['leavePerson','countDownTime','userList']),
         ...mapGetters(['profilePic','isShowGroupBuy','headerType'])
     }
 }

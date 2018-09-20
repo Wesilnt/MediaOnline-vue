@@ -16,19 +16,19 @@
                 全部书籍
             </p>
         </div>
-        <!-- 3. 读书会列表 --> 
-           <div  class="read-list-container">
-            <router-link v-for="item of bookList" :key="item.id"   :to="'/home/readings/book?id='+item.id" class="list-item" tag="div">
-                <div class="top-container" :style="{background:'url('+item.coverPic+')','background-size':'100% 100%'}">
-                    <span>上新</span>
-                    <img src="../../assets/readings_item_play.png">
-                </div>
-                <div class="bottom-container">
-                    <p>{{item.name}}</p>
-                    <span>¥ {{item.price}}</span>
-                </div>
-            </router-link>
-           </div>
+        <!-- 3. 读书会列表 -->  
+              <div  class="read-list-container">
+                <router-link v-for="item of bookList" :key="item.id"   :to="'/home/readings/book?id='+item.id" class="list-item" tag="div">
+                    <div class="top-container" :style="{background:'url('+item.coverPic+')','background-size':'100% 100%'}">
+                        <span>上新</span>
+                        <img src="../../assets/readings_item_play.png">
+                    </div>
+                    <div class="bottom-container">
+                        <p>{{item.name}}</p>
+                        <span>¥ {{item.price}}</span>
+                    </div>
+                </router-link> 
+              </div> 
         <!-- 分页加载 -->
         <div class="load-more-container" v-if="finished" v-scrollbottom="{scrollBottom,finished,refreshing}">
             <span>没有更多了，不要再拉啦～</span>
@@ -86,7 +86,7 @@ export default {
    }
   },
   computed: {
-    ...mapState(['bannerPic', 'bookList','finished']),
+    ...mapState(['bannerPic', 'bookList','loading','finished']),
   },
   watch:{
     loading:function(state){
@@ -100,7 +100,7 @@ export default {
     ...mapActions(['getReadingsList']),
     scrollBottom(){ 
       console.log('分页')
-    //  this.getReadingsList(true)
+     this.getReadingsList(true)
     }
   }
 }

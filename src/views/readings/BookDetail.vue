@@ -69,41 +69,68 @@
     </div>
     <hr>
     <!-- 5. 作品单集/章集 播放列表 -->
-    <singleset-list :list="singleSetList" :play-id="playingId"/>
+    <van-list 
+      v-model="refreshing"
+      :finished="singleFinished"
+      :immediate-check="false"
+      @load="scrollBottom"
+      @offset="10">
+         <singleset-list :list="singleSetList" :play-id="playingId"/>
+    </van-list>
     <!-- 6. 分页布局 -->
-    <div class="load-more-container">
+    <div class="load-more-container" v-if="singleFinished">
       <span>没有更多了，不要再拉啦～</span>
     </div>
+    <!-- 7. 底部工具条 -->
+    <tools-navbar 
+      :originPrice="'100'"
+      :groupPrice="'10'"
+      collageText="拼团"
+      collectText="集赞"
+      :collect='true'
+      :collage='true'/>
 
   </div>
 </template>
 <script>
+import toolsNavbar from '../../components/toolsNavbar.vue'
 import SingleSetList from '../../components/SingleSetList.vue' 
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions, mapGetters } = createNamespacedHelpers('readings') 
-export default {
-  components: { 'singleset-list': SingleSetList },
+const { mapState,mapMutations, mapActions, mapGetters } = createNamespacedHelpers('readings') 
+export default { 
   data() {
     return {
       courseId:this.$route.query.id, 
       currentPage:1,
       pageSize:20, 
+      refreshing:false
     }
-  },
-
+  }, 
+  components:{'singleset-list': SingleSetList,'tools-navbar':toolsNavbar},
   computed: {
-    ...mapState(['bookDetail', 'singleSetList']),
+    ...mapState(['bookDetail','singleLoaing','singleFinished', 'singleSetList']),
     ...mapGetters(['playingId'])
   },
   created() { 
+    this.initData(this.courseId)
     this.getBookDetail({courseId:this.courseId})
-    this.getSingleSetList({courseId:this.courseId,currentPage:this.currentPage,pageSize:this.pageSize})
+    this.getSingleSetList(true)
+  },
+  watch:{
+    singleLoaing:function(loading){ 
+      this.refreshing = loading
+    }
   },
   methods: {
+    ...mapMutations(['initData']),
     ...mapActions(['getBookDetail', 'getSingleSetList']),
     toLookWhole() {
       this.$router.push({ path: '/home/readings/summary' }) 
-    }
+    },
+       //分页加载
+    scrollBottom(){ 
+      this.getSingleSetList() 
+    },
   }
 }
 </script>
@@ -255,7 +282,7 @@ export default {
     text-align: center;
     height: 64px;
     font-size: 24px;
-    padding: 96px 0;
+    padding: 96px 0 216px;
     color: rgb(200, 200, 200);
   }
 }

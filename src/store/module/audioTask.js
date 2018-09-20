@@ -154,14 +154,18 @@ export default {
           state._at.addEventListener('progress', () =>  commit('statusUpdate', 'progress'))
           state._at.addEventListener('ended', () => {
             commit('statusUpdate', 'ended')
+            let currentTime = 0
+            let maxTime = state._at.duration
+            let data = {currentTime,maxTime}
             if (state.playMode == "single") {
-              let data = JSON.stringify({currentTime:0,maxTime:state.duration})
-              localStorage.setItem("learntime-"+state.audioDetail.id,data)
+              data.currentTime = 0
               commit("syncPlay",{audioUrl:state.audioDetail.audioUrl})
             }
             if (state.playMode == 'order') {
+              data.currentTime = state._at.duration
               dispatch('playNext')      //播放下一集
-            }
+            } 
+            localStorage.setItem("learntime-"+state.audioDetail.id,JSON.stringify(data))
           })
           //可以播放，但中途可能因为加载而暂停
           state._at.addEventListener('canplay', () =>  commit('statusUpdate', 'canplay'))

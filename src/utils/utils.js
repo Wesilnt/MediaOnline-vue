@@ -40,6 +40,22 @@ export const learntimeFormat = (learntime, totaltime, id) => {
   return '已收听' + (percent<1?1:percent) + '%'
 }
 
+//倒计时函数
+export const startCountDown = (duration,callback)=>{
+  return setInterval(()=>{
+    var hours = parseInt(duration / (60 * 60))
+    var minutes = parseInt((duration % (60 * 60)) / (60));
+    var seconds = (duration % 60);
+    hours = parseInt(hours)
+    minutes = parseInt(minutes)
+    seconds = parseInt(seconds)
+    hours = hours < 10 ? "0" + hours : hours;
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+    seconds = seconds < 10 ? "0" + seconds : seconds;
+    callback([hours,minutes,seconds])
+  },1000) 
+}
+
 export function debounce(func, wait, immediate) {
   // immediate默认为false
   var timeout, args, context, timestamp, result;

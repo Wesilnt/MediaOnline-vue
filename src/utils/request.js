@@ -113,7 +113,9 @@ function request(url, options, needToken = true) {
   if (needToken) {
     // accessToken = '9009f5f8-e2bc-4cb0-98d9-721b32153c56'
     // accessToken = getAccessToken()
-    accessToken = getCookie('COOKIE_TOKEN_KEY_CNONLINE')
+    // accessToken = getCookie('COOKIE_TOKEN_KEY_CNONLINE')
+    accessToken = "ab9ac6d5-efc0-416e-85fb-f5dd54d0adb3"
+    console.log(accessToken)
     defaultOptions = {
       // credentials: 'include',
       // mode: 'no-cors',

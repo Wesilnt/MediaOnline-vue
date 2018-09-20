@@ -1,16 +1,32 @@
 <template>
     <div class="qhht-flex countDown-container">
-        <span class="time-number">23</span>
+        <span class="time-number">{{times[0]}}</span>
         <span class="time-symbol">:</span>
-        <span class="time-number">27</span>
+        <span class="time-number">{{times[1]}}</span>
         <span class="time-symbol">:</span>
-        <span class="time-number">05</span>
+        <span class="time-number">{{times[2]}}</span>
     </div>
 </template>
 
 <script>
+import {startCountDown} from '../utils/utils'
 export default {
-    name:'CountDown'
+    name:'CountDown',
+    props:['duration'],
+    data(){
+     return{ 
+       countdown:null,
+       times:['00','00','00'],}
+    },
+    created(){
+     this.countdown=  startCountDown(this.duration,times=> this.times = times)
+    },
+    methods:{
+      
+    },
+    beforeDestroy(){
+      if(this.countdown) clearInterval(this.countdown)
+    }
 }
 </script>
 
