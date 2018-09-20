@@ -41,3 +41,12 @@ export async function postDelMessage(params) {
 export async function postFeedback(params) {
   return request.post('/feedback/feedbackContent', params)
 }
+//获取用户信息
+export async function getMyUserInfo() {
+  return request(`/user/getUserByToken`)
+}
+//修改用户信息
+export async function postUserInfo(params) {
+  return request.post('/feedback/updateUserInfo', params)
+}
+

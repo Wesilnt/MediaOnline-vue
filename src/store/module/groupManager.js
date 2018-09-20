@@ -3,7 +3,8 @@ import { getgroupBuyDetail,startGroupBuy,joinGroupBuy,startCollectLike,getCollec
 const groupManager = {
     namespaced: true,
     state:{
-        userList:[]
+        userList:[],
+        collectLikeId:0
     },
     getters:{
         //专栏头图
@@ -12,11 +13,30 @@ const groupManager = {
         },
         //专栏ID
         courseId(state,getters,{ videoColumnDetail }) {
+            // console.log("==========****=====")
+            // console.log(videoColumnDetail.courseId)
             return videoColumnDetail.courseId
+        },
+        toolsObject(state,getters,{ videoColumnDetail }) {
+            return videoColumnDetail.toolsObject
+        },
+        isShowGroupBuy(state,getters,{ videoColumnDetail }) {
+            return videoColumnDetail.isShowGroupBuy
+        },
+        headerType(state,getters,{ videoColumnDetail }){
+            return videoColumnDetail.headerType
+        },
+        praiseData(state,getters,{ videoColumnDetail }){
+            return videoColumnDetail.praiseData
+        },
+        userAccessStatus(state,getters,{ videoColumnDetail }){
+            return videoColumnDetail.userAccessStatus
         }
     },
     mutations:{
-
+        bindCollectLikeId(state,collectLikeId) {
+            state.collectLikeId = collectLikeId
+        }
     },
     actions:{
         //获取拼团详情
@@ -48,10 +68,13 @@ const groupManager = {
             console.log(result)
         },
         //发起集赞
-        async startCollectLike({commit},payload) {
+        async startCollectLike({commit,state,dispatch,getters},payload) {
             const result = await startCollectLike(payload)
             console.log('发起集赞成功')
-            console.log(result)
+            if (result == null) return
+            //从新获取专栏详情接口,刷新父组件显示
+            dispatch('videoColumnDetail/getVideoColumnDetail',{"courseId" : getters.courseId},{root:true})
+            commit('bindCollectLikeId',result.id)
         },
         //领取集赞
         async getCollectLike({commit},payload) {

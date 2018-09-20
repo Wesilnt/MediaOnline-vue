@@ -10,6 +10,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .loading-container{
+  width: 100vw;
+  height: 100vh;
   position: absolute;
   top: 0;
   z-index: 9999;

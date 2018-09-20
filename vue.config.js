@@ -17,5 +17,13 @@ module.exports = {
       }
     }
   },*/
-  lintOnSave: undefined
+  lintOnSave: undefined,
+  // devServe: {
+  //   proxy: {
+  //     '*': {
+  //       target: 'http://192.168.1.143:32100',
+  //       changeOrigin: true,
+  //     }
+  //   }
+  // }
 }

@@ -5,18 +5,18 @@
             <p class="under-text">试听</p>
         </div>
         <hr class="vertical-line"/>
-        <div v-show="price[0]" :class="collage==false&&collect==false ?'toolbar-price-active' :'toolbar-price'"  @click="buyByOriginPrice(originPrice)">
-            <p class="toolbar-price-num">￥{{price[0] | formatPrice}}</p>
+        <div v-show="toolsObject.originPrice" :class="toolsObject.collage==false&&toolsObject.collect==false ?'toolbar-price-active' :'toolbar-price'"  @click="buyByOriginPrice(toolsObject.originPrice)">
+            <p class="toolbar-price-num">￥{{toolsObject.originPrice | formatPrice}}</p>
             <span class="under-text">原价购买</span>
         </div>
-        <div v-show=" collage || collect" class="toolbar-btnGroup">
-            <div v-show="collage" class="toolbar-btn toolbar-btn-left" @click="clickCollageBtn">
-                <div v-show="price[1]"  class="toolbar-btn-price">￥{{price[1] | formatPrice}}</div>
-                <div>{{collageText}}</div>
+        <div v-show=" toolsObject.collage || toolsObject.collect" class="toolbar-btnGroup">
+            <div v-show="toolsObject.collage" class="toolbar-btn toolbar-btn-left" @click="clickCollageBtn">
+                <div v-show="toolsObject.groupPrice"  class="toolbar-btn-price">￥{{toolsObject.groupPrice | formatPrice}}</div>
+                <div>{{toolsObject.collageText}}</div>
             </div>
-            <div v-show="collect" class="toolbar-btn toolbar-btn-right" @click="clickCollectBtn">
-                <div v-show="price[0]" class="toolbar-btn-price">￥0.00</div>
-                <div>{{collectText}}</div>
+            <div v-show="toolsObject.collect" class="toolbar-btn toolbar-btn-right" @click="clickCollectBtn">
+                <div v-show="toolsObject.originPrice" class="toolbar-btn-price">￥0.00</div>
+                <div>{{toolsObject.collectText}}</div>
             </div>
         </div>
     </div>
@@ -41,9 +41,9 @@ export default {
       type: Boolean,
       default: false
     },
-    price: {
-      type: Array,
-      default: ['', '']
+    groupPrice: {
+      type: String,
+      default: '0'
     },
     collageText: {
       default: '拼团购买'
@@ -52,18 +52,26 @@ export default {
       default: '发起集赞'
     },
   },
+  watch:{
+    'collectLikeId':function(newVal){
+            if(newVal != 0) {
+              this.$router.push({ name: 'Praise',params: { courseId : this.$route.params.courseId ,collectLikeId:newVal} })
+            }
+    }
+  },
   computed:{
-    ...mapGetters(['courseId'])
+    ...mapState(['userList','collectLikeId']),
+    ...mapGetters(['courseId','toolsObject','praiseData','userAccessStatus']),
   },
   filters: {
     formatPrice: function(price) {
       if (!price) return ''
-      if (price.includes('.')) return price
+      if (price.toString().indexOf('.')!=-1) return price
       else return price + '.00'
     }
   },
   methods: {
-    ...mapActions(['startGroupBuy']),
+    ...mapActions(['startGroupBuy','getCollectLike','startCollectLike']),
     buyByOriginPrice(price) {
       console.log('买' + price)
       console.log(this.collect)
@@ -75,12 +83,39 @@ export default {
       this.startGroupBuy(params)
       this.$emit('router-to-collage')
     },
+    
     clickCollectBtn(){
-      let params = {
-        "courseId" : this.courseId
+      let params = {}
+      console.log('userAccessStatus = ',this.userAccessStatus)
+      switch(this.userAccessStatus){
+        case 1007:
+        console.log("2131")
+        //集赞成功未领取
+          params = {
+            "collectLikeId" : this.praiseData.collectLikeId
+          }
+
+          this.getCollectLike(params)
+        break
+        case 1008:
+        //集赞成功已领取  解锁专栏
+ 
+        break
+        case 1009:
+          //集赞中
+          this.$router.push({ name: 'Praise',params: { courseId : this.$route.params.courseId ,collectLikeId:this.praiseData.collectLikeId} })
+ 
+        break
+        case 0:
+        //没有购买和集赞行为
+          params = {
+            "courseId" : this.courseId
+          }
+          this.startCollectLike(params)
+        break
       }
-      this.startCollectLike(params)
-      $emit('router-to-collect') 
+
+ 
     }   
   }
 }

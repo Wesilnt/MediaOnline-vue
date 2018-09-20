@@ -117,6 +117,7 @@ ol {
   .van-toast--text {
     max-width: 80%;
     white-space: nowrap;
+    min-width: inherit;
   }
   
   .van-icon-fail::before {
@@ -139,3 +140,6 @@ ol {
     height: 28px;
     width: 28px;
   }
+.van-list__loading{
+  width: 100vw;
+}

@@ -7,6 +7,7 @@ const myPuzzle_Praise = () =>
 const sysMessage = () => import("../views/my/SysMessage")
 const help = () => import("../views/my/Help")
 const editUserInfo = () => import ("../views/my/EditUserInfo")
+const displayUserInfo = () => import ("../views/my/DisplayUserInfo")
 const PageInfo_From_My = [
   {
     path: '/my/Purchase',
@@ -54,6 +55,11 @@ const PageInfo_From_My = [
     path: '/my/EditUserInfo',
     // name: "BookList",
     component: editUserInfo
+  },
+  {
+    path: '/my/DisplayUserInfo',
+    // name: "BookList",
+    component: displayUserInfo
   }
 ]
 

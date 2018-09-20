@@ -1,25 +1,7 @@
 <template>
   <div class="comments-container">
     <!-- 全部留言 -->
-    <!-- <div class="commment-list"> -->
-      <div v-if="commentList.length<=0" class="nodata-container">
-          还没有评论，快来评论吧!
-      </div>
-      <van-list
-          class="commment-list"
-          v-model="refreshing"
-          :finished="finished"
-          :immediate-check="false"
-          @load="scrollBottom"
-          @offset="10">
-      <!-- <div v-for="item of commentList" :key="item.id" class="comment-item"> -->
-           <van-cell  v-for="item of commentList" :key="item.id" class="comment-item" >
-                  <comment-item :comment="item"/>
-           </van-cell>
-      <!-- </div> -->
-      <!-- <div class="loadmore" v-scrollbottom="scrollBottom">加载更多</div> -->
-      </van-list>
-    <!-- </div> -->
+      <comment-list  :regionid="lessonId" :regiontype="2202"></comment-list>
     <!-- 评论按钮 -->
     <div class="comment-publish">
       <div class="comment-method" @click="onCommentMethod" v-if="false">
@@ -38,45 +20,21 @@
   </div>
 </template>
 <script>
+import CommentList from '../comment/CommentList.vue'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState, mapActions, mapMutations } = createNamespacedHelpers('comment')
-import CommentItem from '../CommentItem.vue'
 export default {
-  components: {'comment-item': CommentItem},
+  components: {'comment-list': CommentList},
   data() {
     return {
       lessonId: this.$route.params.lessonid,
       isSpeak: false,
       isSpeaking: false,
       commentContent: '',  
-      refreshing:false
     }
-  },
-  directives:{
-    'scrollbottom':(el,binding)=>{
-      // window.onscroll = ()=>{
-      //   // console.log(el.scrollTop)
-      //   // console.log(el.scrollHeight)
-      //   // console.log(el.offsetHeight)
-      //   // binding.value()
-      // }
-    }
-  },
-  computed: { ...mapState(['commentList','finished','loading']) },
-  created() {
-    this.getCommentList({lessonId:this.lessonId,isLoadMore:false}) 
-  },
-  watch:{
-    loading:function(loading){
-      this.refreshing = loading
-    }
-  },
+  }, 
   methods: { 
-    ...mapActions(['getCommentList', 'postComment']),
-    //分页加载
-    scrollBottom(){ 
-      this.getCommentList({lessonId:this.lessonId,isLoadMore:true}) 
-    },
+    ...mapActions(['postComment']),
     //切换评论方式
     onCommentMethod() {
       this.isSpeak = !this.isSpeak
@@ -107,25 +65,11 @@ export default {
     },
     onKeyUp(key){ 
       this.onSendComment(); 
-    },
- 
+    }, 
   }
 }
 </script>
-<style lang='scss' scoped>
-.commment-list {
-  display: flex;
-  flex-direction: column;
-  padding-bottom: 160px;
-  padding-top: 10px;
-}
-.nodata-container{
-  height: 100vh;
-  width: 100%;
-  text-align: center;
-  line-height: 80vh;
-  font-size: 20px;
-}
+<style lang='scss' scoped> 
 .comment-publish {
   position: fixed;
   bottom: 0;

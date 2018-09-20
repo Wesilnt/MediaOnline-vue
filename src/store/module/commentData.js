@@ -9,7 +9,7 @@ export default {
   state: {
     commentList: [],
     currentPage: 1,
-    pageSize:10,
+    pageSize:20,
     finished:false, 
     loading:false
   },
@@ -18,14 +18,12 @@ export default {
       state.lessonId = lessonId;
     },
     setCommentList(state, res) { 
-      state.currentPage = res.page
-      state.finished = res.list.length<state.pageSize 
+      state.currentPage = res.currentPage
+      state.finished = res.list.length<state.pageSize  
       state.loading = false
-      if(1 == res.page)state.commentList=[]  
-      res.list.forEach(element => {
-        state.commentList.push(element)
-      });
-      // state.commentList = state.commentList.concat(res.list)
+      console.log(res)
+      if(1 == res.currentPage)state.commentList=[]   
+      state.commentList = state.commentList.concat(res.list)
     },
     postComment(state, res) {},
     //更新播放列表是否点赞字段
@@ -44,23 +42,22 @@ export default {
   },
   actions: {
     //获取评论列表
-    async getCommentList({state, commit}, {lessonId,isLoadMore}) {
+    async getCommentList({state, commit}, {regionId,regionType,isLoadMore}) {
+      if(state.finished || state.loading)return
       await commit('toggleLoading', {loading: true})
-      let page = isLoadMore ? state.currentPage + 1 : 1 
-      let res = await getCommentList({
-        regionType: 2202, //留言位置（2201:专栏,2202:单集)
-        regionId: lessonId, //位置id
-        currentPage: page, //当前页码 
-        pageSize: state.pageSize //每页显示条数
-      })   
-      if(null==res.result)return
-      commit('setCommentList', {list:res.result,page:page})
+      let currentPage = isLoadMore ? state.currentPage + 1 : 1  
+      let params = { regionType:regionType||2202,regionId,currentPage, pageSize: state.pageSize} 
+      console.log(params)
+      let res = await getCommentList(params)     
+      if(null==res.result) return
+      commit('setCommentList', {list:res.result,currentPage})
     },
     //发布评论
     async postComment({ state,commit,dispatch}, params) {
-      const res = await postComment(params) 
-      // commit("postComment", res)
-      dispatch('getCommentList', {lessonId:params.regionId,isLoadMore:false})
+      const res = await postComment(params)  
+      console.log("发布评论："+res)
+      if(null==res)return
+      dispatch('getCommentList', {regionId:params.regionId,regionType:2202,isLoadMore:false})
     },
     async likeComment({commit,state}, commentId) {
       const result = await likeComment({'commentId': commentId})

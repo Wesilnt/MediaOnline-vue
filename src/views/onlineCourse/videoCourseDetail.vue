@@ -57,7 +57,7 @@
 <script>
 import CourseIntroduce from '../../components/CourseIntroduce.vue'
 import playlist from './components/playlist.vue'
-import CommentItem from '../../components/CommentItem.vue'
+import CommentItem from '../../components/comment/CommentItem.vue'
 import videoComment from '../../components/video-comment.vue'
 import QuestionList from './QuestionList'
 import CommentBar from '../../components/CommentBar'
@@ -151,13 +151,6 @@ export default {
     //获取课程ID
     const { lessonId } = this.$route.params
     this.getVideoCourseDetail({ lessonId })
-    //获取目录课程数据
-    console.log("courseId = " + this.courseId)
-    this.getLessonListByCourse({
-      courseId: this.courseId,
-      currentPage: 1,
-      pageSize: 10
-    })
     //获取单集评论
     this.getCommentList({
       regionType: 2202,

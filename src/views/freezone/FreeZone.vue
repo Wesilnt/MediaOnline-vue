@@ -9,7 +9,7 @@
           :immediate-check="false"
           @load="scrollBottom"
           @offset="10">
-            <router-link v-for="item of freeZoneList" :key="item.id" :to="'/audio/audioplay?id='+item.id">
+            <router-link v-for="(item,index) of freeZoneList" :key="item.id" :to="'/audio/audioplay?id='+item.id">
                 <div class="book-item">
                     <img :src="playingId==item.id?playingIcon:pauseIcon" >
                     <div class="book-content">
@@ -22,7 +22,7 @@
                         </div>
                     </div>
                 </div>
-                <hr>
+                <hr v-show="freeZoneList.length-1!=index">
             </router-link> 
             </van-list>
            <button :class="{subscribe:isSubscribe}" @click="subscribe">{{isSubscribe?'已订阅':'订阅'}}</button> 
@@ -77,8 +77,12 @@ export default {
       let createDate = new Date(createTime)
       return Date.now() - createDate.getTime()<timeLen
     },
-    subscribe() {  
-      this.doFreeLesson()  
+    subscribe() { 
+      if(this.isSubscribe){
+        this.$toast('已订阅')
+      } else{
+        this.doFreeLesson()  
+      }
     }
   }
 }
