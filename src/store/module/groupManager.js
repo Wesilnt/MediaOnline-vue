@@ -285,9 +285,17 @@ const groupManager = {
         //调起微信支付
         async getPayment({commit,dispatch},result){
            //微信网页开发支付接口
-           let result111= await wxConfig({'url' : window.location.href})
+           let result0= await wxConfig({'url' : window.location.href})
            console.log("嫩不能走到这里")
-           console.log(result111)
+           console.log(result0)
+           wx.config({
+                debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                appId: result0.appid, // 必填，企业号的唯一标识，此处填写企业号corpid
+                timestamp:result0.timestamp , // 必填，生成签名的时间戳
+                nonceStr: result0.nonceStr, // 必填，生成签名的随机串
+                signature: result0.signature,// 必填，签名，见附录1
+                jsApiList: ['chooseWXPay'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2 
+           })
             wx.ready(function(){
                 console.log('走到这里了~~~')
                 console.log(result)
@@ -318,8 +326,8 @@ const groupManager = {
         
         //从新获取专栏详情接口,刷新父组件显示
         async updateFatherData({commit,dispatch,getters}){
-            // dispatch('videoColumnDetail/getVideoColumnDetail',{"courseId" : getters.courseId},{root:true})
-            // commit('bindCollectLikeId',result.id)
+            dispatch('videoColumnDetail/getVideoColumnDetail',{"courseId" : getters.courseId},{root:true})
+            commit('bindCollectLikeId',result.id)
         }
     }
 }
