@@ -14,10 +14,10 @@ export async function getToken() {
     }
   } else {
     const result = await request.post('/auth/wechat/get-wechat-auth-link', {
-      originUrl: 'http://localhost:8080/ '
+      originUrl: 'http://t.shbaoyuantech.com/#/'
     })
       console.log(result)
-    // window.location.href = result.wechatAuthUrl
+    window.location.href = result.wechatAuthUrl
     return result
   }
 }

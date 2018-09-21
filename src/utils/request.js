@@ -1,6 +1,5 @@
 import 'whatwg-fetch'
 import { Toast } from 'vant'
-import store from '../store/store'
 import api from '../api/api'
 import { isUrl, json2formData } from './utils'
 import {
@@ -13,12 +12,9 @@ import {
   setUserInfo,
     getCookie
 } from './userAuth'
-import Vue from 'vue';
 // import { stringify } from 'querystring';
 // import { get } from 'https';
-console.dir(Vue);
 
-store.dispatch('getAccessToken')
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
   201: '新建或修改数据成功。',
