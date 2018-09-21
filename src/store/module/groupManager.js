@@ -285,7 +285,9 @@ const groupManager = {
         //调起微信支付
         async getPayment({commit,dispatch},result){
            //微信网页开发支付接口
-            await wxConfig({'url' : window.location.href})
+           let result111= await wxConfig({'url' : window.location.href})
+           console.log("嫩不能走到这里")
+           console.log(result111)
             wx.ready(function(){
                 console.log('走到这里了~~~')
                 console.log(result)
