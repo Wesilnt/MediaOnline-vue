@@ -10,6 +10,8 @@
 
 <script>
 import {startCountDown} from '../utils/utils'
+import { createNamespacedHelpers } from 'vuex'
+const { mapState,mapGetters,mapActions } = createNamespacedHelpers('videoColumnDetail/groupManager')
 export default {
     name:'CountDown',
     props:['duration'],
@@ -19,13 +21,25 @@ export default {
        times:['00','00','00'],}
     },
     created(){
-     this.countdown=  startCountDown(this.duration,times=> this.times = times)
+    //  this.countdown=  startCountDown(this.duration,times=> this.times = times)
+    },
+    watch:{
+       "duration" : function(newVal){
+           if(newVal > 0){
+               this.countdown=  startCountDown(this.countDownTime,times=> this.times = times)
+           }else {
+                if(this.countdown) clearInterval(this.countdown)
+           }
+       }
     },
     methods:{
       
     },
     beforeDestroy(){
       if(this.countdown) clearInterval(this.countdown)
+    },
+    computed:{
+        ...mapState(["countDownTime"])
     }
 }
 </script>

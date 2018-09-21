@@ -53,6 +53,7 @@ export const startCountDown = (duration,callback)=>{
     minutes = minutes < 10 ? "0" + minutes : minutes;
     seconds = seconds < 10 ? "0" + seconds : seconds;
     callback([hours,minutes,seconds])
+    duration--
   },1000) 
 }
 
