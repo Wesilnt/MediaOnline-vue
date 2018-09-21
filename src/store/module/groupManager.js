@@ -257,7 +257,7 @@ const groupManager = {
             console.log(result)
             //支付
             if(result == null) return
-            dispatch("getPayment")
+            dispatch("getPayment",result)
 
             //拼团详情
             // dispatch('getGroupBuyDetail',result.groupBuyId)
@@ -283,10 +283,12 @@ const groupManager = {
             console.log(result)
         },
         //调起微信支付
-        async getPayment({commit,dispatch}){
+        async getPayment({commit,dispatch},result){
            //微信网页开发支付接口
             await wxConfig({'url' : window.location.href})
             wx.ready(function(){
+                console.log('走到这里了~~~')
+                console.log(result)
                     wx.chooseWXPay({
                         timestamp: result.timestamp,
                         nonceStr: result.nonceStr, // 支付签名随机串，不长于 32 位
