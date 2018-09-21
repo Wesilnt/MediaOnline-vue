@@ -8,7 +8,7 @@ export const wxConfig = () => {
     data: { url: encodeURIComponent(location.href.split('#')[0]) }
   }
   request(wxConfigURI, params).then(res => {
-    const configs = res.data.js_config
+    const configs = res.js_config
     wx.config({
       debug: false,
       appId: configs.appid,
