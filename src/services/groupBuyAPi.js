@@ -27,5 +27,5 @@ export function getCollectLike(params) {
 }
 
 export function wxConfig(params) {
-    return(`http://tencent.test.shbaoyuantech.com/wechat-js-config/xcx?${stringify(params)}`)
+    return request(`http://tencent.test.shbaoyuantech.com/wechat-js-config/xcx?${stringify(params)}`)
 }
