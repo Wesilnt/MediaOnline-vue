@@ -25,3 +25,7 @@ export function startCollectLike(params) {
 export function getCollectLike(params) {
     return request.post(`/collectLike/getCollectLike`,params)
 }
+
+// export function wxConfig(params) {
+//     return(`http://tencent.test.shbaoyuantech.com/wechat-js-config/xcx?${stringify(params)}`)
+// }

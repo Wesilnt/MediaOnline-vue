@@ -31,7 +31,6 @@ export default {
     jumpToVideoDetail(courseId) {
       console.log('路由跳转 courseID = ' + courseId)
       let obj = { name: 'videoColumnDetail', params: { courseId }}
-      console.log(obj)
       this.$router.push(obj)
     }
   }

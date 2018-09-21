@@ -7,12 +7,6 @@
         v-on:router-to-audition="routerToAudition"
         v-on:router-to-collage="routerToCollage"
         v-on:router-to-collect="routerToCollect"
-        :originPrice="'100'"
-        :price="'100'"
-        collageText="拼团"
-        collectText="集赞"
-        :collect='true'
-        :collage='true'
     />
   </div>
 </template>
@@ -67,8 +61,8 @@ export default {
     }, 
     created() {
       //获取专栏Id
-      // const courseId = this.$route.params.courseId
-      const courseId = '58214339802300416'
+      const courseId = this.$route.params.courseId
+
       this.initDatas(courseId)
       this.getVideoColumnDetail({ "courseId": courseId }) 
     }

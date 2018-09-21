@@ -3,12 +3,9 @@
         <div v-show="isShowGroupBuy">
             <div class="groupBuy-usericon" v-if="isSixGroup == true" >
                 <div class="qhht-flex groupBuy-usericon-top">
-                    <div v-for="(item,index) in userListTop" :key="index">
-                        <div class="groupBuy-usericon-item" :style="{ background : 'url('+item.avatarUrl+')' }">
-                            <div class="groupBuy-usericon-manager">团长</div>
-                            {{item.avatarUrl}}
+                        <div class="groupBuy-usericon-item" v-for="(item,index) in userListTop" :key="index" :style="item.avatarUrl==null?{}:{ background : 'url('+item.avatarUrl+')' }">
+                            <div class="groupBuy-usericon-manager" v-show="item.isStarter">团长</div>            
                         </div>
-                    </div>   
                 </div>
                 <div class="qhht-flex groupBuy-usericon-bot">
                     <div class="groupBuy-usericon-item"></div>
@@ -19,7 +16,7 @@
             </div>
             <div class="groupBuy-usericon" v-else>
                 <div class="qhht-flex groupBuy-usericon-top-three">
-                    <div class="groupBuy-usericon-item" v-for="(item,index) in userListTop" :key="index" :style="item=={}?{background: 'none'}:{ background : 'url('+item.avatarUrl+')' }">
+                    <div class="groupBuy-usericon-item" v-for="(item,index) in userListTop" :key="index" :style="item.avatarUrl==null?{}:{ background : 'url('+item.avatarUrl+')' }">
                         <div class="groupBuy-usericon-manager" v-show="item.isStarter">团长</div>
                     </div>
                 </div>
