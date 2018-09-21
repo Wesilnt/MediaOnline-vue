@@ -39,12 +39,13 @@ export default new Vuex.Store({
     },
       async checkToken({dispatch}){
           if (getCookie('COOKIE_TOKEN_KEY_CNONLINE') != null) {
+              // dispatch('getAccessToken')
               // todo 缓存
-              const expireTime = getCookie('COOKIE_TOKEN_KEY_EXPIRE_TIME')
-              const timestamp = new Date().getTime()
-              if (expireTime < timestamp) {
-                  dispatch('getAccessToken')
-              }
+              // const expireTime = getCookie('COOKIE_TOKEN_KEY_EXPIRE_TIME')
+              // const timestamp = new Date().getTime()
+              // if (expireTime < timestamp) {
+              //     dispatch('getAccessToken')
+              // }
           } else{
               dispatch('getAccessToken')
           }
