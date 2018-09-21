@@ -94,10 +94,10 @@ if(getCookie('COOKIE_TOKEN_KEY_CNONLINE') != null){
 function getCookie(name)
 {          //匹配字段
     var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
-    
+
     var regMark = new RegExp( '\"' , "g" )
     if(arr=document.cookie.match(reg))
-    
+
         return (arr[2]).replace(regMark,"");
     else
         return null;
@@ -120,8 +120,8 @@ function request(url, options, needToken = true) {
   if (needToken) {
     // accessToken = '9009f5f8-e2bc-4cb0-98d9-721b32153c56'
     // accessToken = getAccessToken()
-    accessToken = getCookie('COOKIE_TOKEN_KEY_CNONLINE')
-    // accessToken = "ab9ac6d5-efc0-416e-85fb-f5dd54d0adb3"
+    //accessToken = getCookie('COOKIE_TOKEN_KEY_CNONLINE')
+    accessToken = "ab9ac6d5-efc0-416e-85fb-f5dd54d0adb3"
     console.log(accessToken)
     defaultOptions = {
       // credentials: 'include',
@@ -199,8 +199,10 @@ function request(url, options, needToken = true) {
     })
 }
 
-request.post = (url, body) => {
-  const bodyData = json2formData(body)
+request.post = (url, body,queryType=false) => {
+  // queryType 参数为 false（默认）参数传递方式为 formData
+  // queryType 参数为 true 参数传递方式为  JsonBody
+  const bodyData =queryType?JSON.stringify(body): json2formData(body)
   return request(url, { method: 'POST', body: bodyData })
 }
 

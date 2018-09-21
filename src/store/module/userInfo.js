@@ -29,10 +29,12 @@ const userInfo = {
         loading: false
       })
     },
-    async updateUserInfo({ dispatch, commit, state },{ identiy,grade,sex }) {
+    async updateUserInfo({ dispatch, commit, state },{ role, gender, grade }) {
       //更新用户信息
-      const response = await postUserInfo({ role: identiy,grade:grade, gender:sex})
+      console.log(role + '\t' + gender + '\t' + grade)
+      const response = await postUserInfo({ role: role, gender:gender, grade:grade})
       if (!response)return
+      console.log(response)
 
     }
   }

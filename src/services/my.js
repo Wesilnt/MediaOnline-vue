@@ -47,7 +47,7 @@ export async function getMyUserInfo() {
 }
 //修改用户信息
 export async function postUserInfo(params) {
-  return request.post('/feedback/updateUserInfo', params)
+  return request.post('/user/updateUserInfo', params,true)
 }
 //获取用户通知
 export function getNewMessageCount(params) {
