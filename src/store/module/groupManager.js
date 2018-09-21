@@ -3,14 +3,17 @@ import { wxConfig,getGroupBuyDetail,startGroupBuy,joinGroupBuy,startCollectLike,
 const groupManager = {
     namespaced: true,
     state:{
-        userList:[],     //拼团成员列表
+        userListTop:[],     //拼团成员列表第一排
+        userListBot:[],     //拼团成员列表第二排
         leavePerson:0,   //拼团剩余名额
         countDownTime:0, //倒计时剩余时长
-        collectLikeId:0  //集赞ID
+        collectLikeId:0,  //集赞ID
+        isSixGroup:false  //是否是六人团
     },
     getters:{
         //专栏头图
         profilePic(state,getters,{ videoColumnDetail }) {
+            console.log('profilePic =' + videoColumnDetail.profilePic)
             return videoColumnDetail.profilePic
         },
         //专栏ID
@@ -40,7 +43,8 @@ const groupManager = {
             state.collectLikeId = collectLikeId
         },
         bindGroupHeaderData(state,payload){
-            state.userList = payload.userList
+            state.userListTop = payload.userListTop
+            state.userListBot = payload.userListBot
             state.leavePerson = payload.leavePerson
             state.countDownTime = payload.countDownTime
         },
@@ -77,11 +81,38 @@ const groupManager = {
                 if (currentValue.id == currentUserId) { isGroupCurrent = 1, currUserStatus = currentValue.status}
             });
             //8.计算倒计时
-            const countTime = result.createTime + result.duration * 60 * 60 * 1000 - result.sysTime;
+            const countTime = result.sysTime - (result.createTime + result.duration * 60 * 60 * 1000);
+            //9.整理拼团用户数组
+            let topList = []
+            let botList = []
+            let userList = result.userList
+            if(result.personCount > 3) {
+                for(let i = 0; i < 6; i++) {
+                    if(userList[i] == null) {
+                        userList.push({})
+                    } 
+                }
+                userList.forEach(element=>{
+                    if(element.isStarter == 1){
+                        topList.push(element)
+                    }else{
+                        botList.push(element)
+                    }
+                })
+            }else{
+               
+                for(let i = 0; i < 3; i++) {
+                   if(userList[i] == null) {
+                    userList.push({})
+                   } 
+                }
+                topList = userList
+            }
             commit('bindGroupHeaderData',{
                 "leavePerson" : personNum,
                 "countDownTime" : countTime,
-                "userList" : result.userList
+                "userListTop" : topList,
+                "userListBot" : botList || []
             }) 
         },
         //发起拼团
@@ -93,7 +124,6 @@ const groupManager = {
             //支付
             //拼团详情
             dispatch('getGroupBuyDetail',result.groupBuyId)
-
         },
         //参与拼团
         async joinGroupBuy({dispatch},payload) {

@@ -1,12 +1,14 @@
 <template>
     <div class="groupBuy-container">
         <div v-show="isShowGroupBuy">
-            <div class="groupBuy-usericon">
+            <div class="groupBuy-usericon" v-if="isSixGroup == true" >
                 <div class="qhht-flex groupBuy-usericon-top">
-                    <div class="groupBuy-usericon-item">
-                        <div class="groupBuy-usericon-manager">团长</div>
-                    </div>
-                    <div class="groupBuy-usericon-item"></div>
+                    <div v-for="(item,index) in userListTop" :key="index">
+                        <div class="groupBuy-usericon-item" :style="{ background : 'url('+item.avatarUrl+')' }">
+                            <div class="groupBuy-usericon-manager">团长</div>
+                            {{item.avatarUrl}}
+                        </div>
+                    </div>   
                 </div>
                 <div class="qhht-flex groupBuy-usericon-bot">
                     <div class="groupBuy-usericon-item"></div>
@@ -15,16 +17,23 @@
                     <div class="groupBuy-usericon-item"></div>
                 </div>
             </div>
+            <div class="groupBuy-usericon" v-else>
+                <div class="qhht-flex groupBuy-usericon-top-three">
+                    <div class="groupBuy-usericon-item" v-for="(item,index) in userListTop" :key="index" :style="item=={}?{background: 'none'}:{ background : 'url('+item.avatarUrl+')' }">
+                        <div class="groupBuy-usericon-manager" v-show="item.isStarter">团长</div>
+                    </div>
+                </div>
+            </div>
             <div class="groupBuy-info">剩余<span>{{leavePerson}}</span>个名额</div>
             <div class="groupBuy-countDown-container">
-                <CountDown></CountDown>
+                <CountDown :duration="countDownTime"></CountDown>
             </div>
             <div class="groupBuy-deadline">距离截止时间</div>
             <div class="groupBuy-circleline"></div>
         </div>
         <div class="groupBuy-banner" :style="{ background : 'url('+profilePic+')' }">
             <!-- <div class="groupBuy-circleline" v-show="true"></div> -->
-            <span class="groupBuy-banner-bottom">99人已购买</span>
+            <span class="groupBuy-banner-bottom">99人已购买+{{profilePic}}</span>
         </div>
     </div>
 </template>
@@ -44,7 +53,7 @@ export default {
         CountDown
     },
     computed:{
-        ...mapState(['leavePerson','countDownTime','userList']),
+        ...mapState(['leavePerson','countDownTime','userListTop','userListBot','isSixGroup']),
         ...mapGetters(['profilePic','isShowGroupBuy','headerType'])
     }
 }
@@ -77,7 +86,17 @@ export default {
     // background-color:green;
     padding: 30px 231px 40px;
     justify-content: center;
-    box-sizing: border-box;
+    // box-sizing: border-box;
+    .groupBuy-usericon-item{
+        &:not(:last-child){
+            margin-right: 48px
+        }
+    }
+}
+.groupBuy-usericon-top-three {
+    padding: 30px 76px 40px;
+    justify-content: center;
+    // box-sizing: border-box;
     .groupBuy-usericon-item{
         &:not(:last-child){
             margin-right: 48px
