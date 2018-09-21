@@ -14,7 +14,7 @@ export async function getToken() {
     }
   } else {
     const result = await request.post('/auth/wechat/get-wechat-auth-link', {
-      originUrl: 'http://t.shbaoyuantech.com/#/'
+      originUrl: 'http://t.shbaoyuantech.com'
     })
       console.log(result)
     window.location.href = result.wechatAuthUrl
