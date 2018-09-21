@@ -2,7 +2,7 @@
    <div class="display-user-info">
        <div class="display-user-info-column" @click="handleUpdateUserInfo('gender')">
            <p class="display-user-info-column-label">性别</p>
-           <p class="display-user-info-column-content">男</p>
+           <p class="display-user-info-column-content">{{userInfo.gender === '0' ? '男': '女'}}</p>
            <img class="display-user-info-column-image-arraw" src="../../assets/images/onlinecourse_arrow_right.png"/>
        </div>
        <div class="display-user-info-column" @click="handleUpdateUserInfo('grade')">
@@ -43,7 +43,7 @@
       ...mapState(['userInfo', 'loading'])
     },
     methods: {
-      ...mapActions(['getMyUserInfo', 'updateUserInfo']),
+      ...mapActions(['getMyUserInfo', 'updateUserInfo','updateUserInfoGender','updateUserInfoGrade']),
       handleUpdateUserInfo:function (type) {
         if (type === 'gender') {
             this.whichPicker = 'gender'
@@ -59,11 +59,51 @@
         console.log(value);
         if(this.genders.indexOf(value) != -1 ) {
           if (!( value === this.userInfo.gender)) {
-            this.updateUserInfo(value)
+            let gender = value === '男' ? '0':'1'
+            this.updateUserInfoGender({ gender })
           }
         } else if(this.grades.indexOf(value) != -1){
           if (!( value === this.userInfo.grade)) {
-            this.updateUserInfo(value)
+            let grade = -1
+            switch (value) {
+              case '未上学':
+               grade = -1
+                break
+              case '幼儿园':
+                grade = 0
+                break
+              case '一年级':
+                grade = 1
+                break
+              case '二年级':
+                grade = 2
+                break
+              case '三年级':
+                grade = 3
+                break
+              case '四年级':
+                grade = 4
+                break
+              case '五年级':
+                grade = 5
+                break
+              case '六年级':
+                grade = 6
+                break
+              case '初一':
+                grade = 7
+                break
+              case '初二':
+                grade = 8
+                break
+              case '初三':
+                grade = 9
+                break
+              case '初三以上':
+                grade = 10
+                break
+            }
+            this.updateUserInfoGrade({ grade })
           }
         }
       },

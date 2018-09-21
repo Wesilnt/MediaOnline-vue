@@ -89,7 +89,6 @@
           } else if (this.grade === '') {
             Toast.fail('请选择年级')
           }else if (this.showNext === true) {
-            console.log('identity' + this.identity)
             this.updateUserInfo({role:this.identity,gender:this.sex,grade:this.grade})
           }
         }
