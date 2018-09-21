@@ -4,7 +4,7 @@ import groupContent from './groupContent'
 import groupManager from './groupManager'
 
 const videoColumnDetail = {
-    namespaced: true, // 设置命名空间 ，保持数据独立性
+    namespaced: true,
     state: {
         freeLessonList : [],              //试看课程数组
         profilePic:'',                 //头图

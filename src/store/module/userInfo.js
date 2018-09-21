@@ -1,7 +1,7 @@
 import { getMyUserInfo } from '../../services/my'
 import { postUserInfo } from '../../services/my'
 const userInfo = {
-  namespaced: true, // 设置命名空间 ，保持数据独立性
+  namespaced: true,
   state: {
     userInfo:[],
     loading: false

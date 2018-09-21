@@ -9,7 +9,7 @@ import { getCommentList, postComment } from '../../services/comment.js'
 import questionList from './questionList'
 
 const videoCourseDetail = {
-  namespaced: true, // 设置命名空间 ，保持数据独立性
+  namespaced: true,
   state: {
     //单集详情接口
     radioShowPic: '', //视频背景图
