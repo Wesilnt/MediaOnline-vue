@@ -8,7 +8,7 @@ export default {
   name: 'App',
   beforeCreate() {
     console.log(this.$store)
-    this.$store.dispatch('getAccessToken')
+    this.$store.dispatch('checkToken')
   },
   created() {
     this.initAudio()

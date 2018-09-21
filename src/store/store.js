@@ -24,6 +24,7 @@ import praise from './module/praiseData'
 import mobile from './module/mobileData'
 
 import { getToken } from '../services/accessToken'
+import { getCookie } from '../utils/userAuth';
 
 Vue.use(Vuex)
 export default new Vuex.Store({
@@ -36,6 +37,18 @@ export default new Vuex.Store({
       const response = await getToken()
       console.log(response)
     },
+      async checkToken({dispatch}){
+          if (getCookie('COOKIE_TOKEN_KEY_CNONLINE') != null) {
+              // todo 缓存
+              const expireTime = getCookie('COOKIE_TOKEN_KEY_EXPIRE_TIME')
+              const timestamp = new Date().getTime()
+              if (expireTime < timestamp) {
+                  dispatch('getAccessToken')
+              }
+          } else{
+              dispatch('getAccessToken')
+          }
+      },
     async refreshAccessToken() {}
   },
   modules: {

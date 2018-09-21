@@ -10,10 +10,9 @@ import {
   setExpireTime,
   getUserInfo,
   setUserInfo,
-    getCookie
+  getCookie
 } from './userAuth'
-// import { stringify } from 'querystring';
-// import { get } from 'https';
+import store from '../store/store'
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -141,22 +140,7 @@ function request(url, options, needToken = true) {
         // dispatch({ type: "login/logout" });
       }
       if (status === 401) {
-        if (!accessToken) {
-          Toast.fail('no accessToken')
-          /*dispatch({
-                      type: "login/logout"
-                    });
-                    return;*/
-        }
-
-        /* dispatch({
-                  type: "login/refreshToken",
-                  payload: {
-                    refreshToken,
-                    accessToken
-                  }
-                });*/
-        return
+        return store.dispatch('getAccessToken')
       }
       if (status === 403) {
         Toast.fail('403')
@@ -175,10 +159,10 @@ function request(url, options, needToken = true) {
     })
 }
 
-request.post = (url, body,queryType=false) => {
+request.post = (url, body, queryType = false) => {
   // queryType 参数为 false（默认）参数传递方式为 formData
   // queryType 参数为 true 参数传递方式为  JsonBody
-  const bodyData =queryType?JSON.stringify(body): json2formData(body)
+  const bodyData = queryType ? JSON.stringify(body) : json2formData(body)
   return request(url, { method: 'POST', body: bodyData })
 }
 
