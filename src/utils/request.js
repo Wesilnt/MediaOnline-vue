@@ -74,16 +74,23 @@ const checkResponseCode = (url, response) => {
 }
 
 
-// export async function getToken() {
-// if(getCookie('COOKIE_TOKEN_KEY_CNONLINE') != null){
-//   // todo 缓存
-// }else{
-//   const bodyData = json2formData({ 'originUrl': 'http://t.shbaoyuantech.com/' })
-//   let result = await request('/auth/wechat/get-wechat-auth-link', { method: 'POST', body: bodyData }, false)
-//   window.location.href = result.wechatAuthUrl;
-// }
+export async function getToken() {
+if(getCookie('COOKIE_TOKEN_KEY_CNONLINE') != null){
+  // todo 缓存
+  let expireTime = getCookie('COOKIE_TOKEN_KEY_EXPIRE_TIME');
+  let timestamp = new Date().getTime();
+  if(expireTime < timestamp){
+    // const bodyData = json2formData({ 'originUrl': 'http://t.shbaoyuantech.com/' })
+    // let result = await request('/auth/wechat/get-wechat-auth-link', { method: 'POST', body: bodyData }, false)
+    // window.location.href = result.wechatAuthUrl;
+  }
+}else{
+  const bodyData = json2formData({ 'originUrl': 'http://t.shbaoyuantech.com/' })
+  let result = await request('/auth/wechat/get-wechat-auth-link', { method: 'POST', body: bodyData }, false)
+  window.location.href = result.wechatAuthUrl;
+}
 
-// }
+}
 function getCookie(name)
 {          //匹配字段
     var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
@@ -113,8 +120,8 @@ function request(url, options, needToken = true) {
   if (needToken) {
     // accessToken = '9009f5f8-e2bc-4cb0-98d9-721b32153c56'
     // accessToken = getAccessToken()
-    // accessToken = getCookie('COOKIE_TOKEN_KEY_CNONLINE')
-    accessToken = "ab9ac6d5-efc0-416e-85fb-f5dd54d0adb3"
+    accessToken = getCookie('COOKIE_TOKEN_KEY_CNONLINE')
+    // accessToken = "ab9ac6d5-efc0-416e-85fb-f5dd54d0adb3"
     console.log(accessToken)
     defaultOptions = {
       // credentials: 'include',
