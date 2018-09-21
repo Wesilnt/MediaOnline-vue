@@ -2,17 +2,18 @@
       <router-view/>
 </template>
 <script>
-import { mapActions} from 'vuex'
-import {getToken} from './utils/request.js'
+import { mapActions } from 'vuex'
+import { getToken } from './utils/request.js'
 export default {
   name: 'App',
-  beforeCreate(){ 
-   getToken()
+  beforeCreate() {
+    console.log(this.$store)
   },
-  created(){
-     this.initAudio() 
+  created() {
+    this.initAudio()
   },
-  methods: {...mapActions(["initAudio"])
+  methods: {
+    ...mapActions(['initAudio'])
   }
 }
 </script>

@@ -53,27 +53,12 @@ export default {
   ]),
   methods: {
     ...mapActions([
-      'getBannerList',
-      'getNewMessageCount',
-      'getFreeList',
-      'getVisionList',
-      'getVideoList',
-      'getBookList'
+        'getIndexPageData',
     ])
   },
   mounted(){
-    console.log('网络请求')
-    this.getBannerList()
-    this.getNewMessageCount()
-    this.getFreeList()
-    this.getVisionList()
-    this.getVideoList()
-    this.getBookList()
+    this.getIndexPageData()
   },
-
-    created () {
-    
-  }
 }
 </script>
 

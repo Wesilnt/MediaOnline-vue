@@ -5,9 +5,6 @@ import './publicUIConfig/UIUse'
 import App from './App.vue'
 import router from './router/router'
 import store from './store/store'
-// import { Range, Popup } from 'mint-ui'
-// Vue.component(Popup.name, Popup)
-// Vue.component(Range.name, Range)
 //导入全局时间过滤器，时间秒(s)格式化=> 00:00
 import { formatDuring,learntimeFormat} from './utils/utils.js'
 Vue.filter('formatDuring', formatDuring)
@@ -31,7 +28,6 @@ Vue.use(Radio)
 Vue.use(Loading);
 Vue.use(Picker)
 Vue.use(Lazyload)
-
 
 new Vue({
   router,

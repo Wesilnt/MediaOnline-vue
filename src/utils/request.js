@@ -1,11 +1,24 @@
 import 'whatwg-fetch'
 import { Toast } from 'vant'
+import store from '../store/store'
 import api from '../api/api'
 import { isUrl, json2formData } from './utils'
-import { getAccessToken, getRefreshToken, setAccessToken, getExpireTime, setExpireTime, getUserInfo, setUserInfo } from './userAuth'
-import { stringify } from 'querystring';
-import { get } from 'https';
+import {
+  getAccessToken,
+  getRefreshToken,
+  setAccessToken,
+  getExpireTime,
+  setExpireTime,
+  getUserInfo,
+  setUserInfo,
+    getCookie
+} from './userAuth'
+import Vue from 'vue';
+// import { stringify } from 'querystring';
+// import { get } from 'https';
+console.dir(Vue);
 
+store.dispatch('getAccessToken')
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
   201: '新建或修改数据成功。',
@@ -72,6 +85,7 @@ const checkResponseCode = (url, response) => {
   console.error('接口名称  ' + url)
   throw error
 }
+<<<<<<< Updated upstream
 
 
 export async function getToken() {
@@ -103,6 +117,8 @@ function getCookie(name)
     else
         return null;
 }
+=======
+>>>>>>> Stashed changes
 /**
  * Requests a URL, returning a promise.
  *
@@ -113,11 +129,11 @@ function getCookie(name)
 function request(url, options, needToken = true) {
   // const accessToken = getAccessToken();
 
-  var accessToken;
+  let accessToken
 
   // const refreshToken = getRefreshToken()
   const baseURI = isUrl(url) ? '' : api
-  var defaultOptions;
+  let defaultOptions
   if (needToken) {
     accessToken = getCookie('COOKIE_TOKEN_KEY_CNONLINE')
     //accessToken = "ab9ac6d5-efc0-416e-85fb-f5dd54d0adb3"
@@ -131,8 +147,7 @@ function request(url, options, needToken = true) {
       }
     }
   } else {
-    defaultOptions = {
-    }
+    defaultOptions = {}
   }
   const newOptions = { ...defaultOptions, ...options }
   if (newOptions.method === 'POST' || newOptions.method === 'PUT') {

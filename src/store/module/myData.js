@@ -1,6 +1,6 @@
 import {getMyUserInfo, getNewMessageCount} from '../../services/my'
 const myData= {
-  namespaced: true, // 设置命名空间 ，保持数据独立性
+  namespaced: true,
   state: {
     newReplyMessageCount:0,
     newSysMessageCount:0,
@@ -13,7 +13,7 @@ const myData= {
       Object.assign(state, payload)
     },
     saveUserInfo(state, payload) {
-      console.log(payload)
+      // console.log(payload)
       state.userInfo = payload
     },
     toggleLoading(state, { loading }) {
@@ -34,7 +34,7 @@ const myData= {
     },
     async getMyUserInfo({ dispatch, commit, state }) {
       let response = await getMyUserInfo()
-      console.log(response)
+      // console.log(response)
       commit('saveUserInfo', response)
     },
   }

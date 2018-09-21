@@ -1,7 +1,7 @@
 import { getColumns } from '../../services/columns.js'
 
 const columnInfo = {
-    namespaced: true, // 设置命名空间 ，保持数据独立性
+    namespaced: true,
     state: {
         columnHeaderImage : '',       //专栏头图
         columns : [],                 //专栏数组

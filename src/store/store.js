@@ -1,7 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import counter from './module/counter'
-// import mocker from './module/mock'
 import myPuzzle_Praise from './module/myPuzzle_Praise'
 import columnInfo from './module/columnInfo'
 import homeData from './module/homeData'
@@ -25,17 +23,27 @@ import share from './module/shareData'
 import praise from './module/praiseData'
 import mobile from './module/mobileData'
 
+import { getToken } from '../services/accessToken'
+
 Vue.use(Vuex)
 export default new Vuex.Store({
   strict: process.env.NODE_ENV !== 'production',
+  state: {
+    taken: ''
+  },
+  actions: {
+    async getAccessToken() {
+      const response = await getToken()
+      console.log(response)
+    },
+    async refreshAccessToken() {}
+  },
   modules: {
-    counter,
-    // mocker,
     myPuzzle_Praise,
     homeData,
     columnInfo,
     videoColumnDetail,
-    videoCourseDetail,
+    videoCourseDetail, // 内建 问题列表modul
     myData,
     myFeedback,
     mySysMessage,
@@ -53,5 +61,5 @@ export default new Vuex.Store({
     share,
     praise,
     mobile
-  },
+  }
 })

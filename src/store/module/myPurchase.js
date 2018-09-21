@@ -1,6 +1,6 @@
 import { getMyPurchase } from '../../services/my'
 const myPurchase = {
-  namespaced: true, // 设置命名空间 ，保持数据独立性
+  namespaced: true,
   state: {
     onLineVisionList: [],
     onLineVideoList:[],

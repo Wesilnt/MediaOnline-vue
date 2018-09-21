@@ -2,7 +2,7 @@ import { postFeedback } from '../../services/my'
 import { Toast } from 'vant'
 
 const myFeedback = {
-  namespaced: true, // 设置命名空间 ，保持数据独立性
+  namespaced: true,
   state: {
     content: '',
     loading: false //http

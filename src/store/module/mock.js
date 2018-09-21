@@ -2,7 +2,7 @@ import { decrement, increment, log } from './type'
 import { queryAlbums, queryPhotos, queryPosts } from '../../services/mock'
 
 const mocker = {
-  namespaced: true, // 设置命名空间 ，保持数据独立性
+  namespaced: true,
   state: {
     postList: [],
     albumList: [],

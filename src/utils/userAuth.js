@@ -30,7 +30,7 @@ export const setExpireTime = (expireTime = '') => {
   return localStorage.setItem('BY-EXPIRETIME', expireTime)
 }
 
-export const  getUserInfo = () => ({
+export const getUserInfo = () => ({
   accessToken: getAccessToken(),
   refreshToken: getRefreshToken(),
   userId: getUserId(),
@@ -41,6 +41,14 @@ export const setUserInfo = info => {
   const { accessToken, refreshToken, userId, expireTime } = info
   setAccessToken(accessToken)
   setRefreshToken(refreshToken)
-  setUSERID(userId),
-  setExpireTime(expireTime)
+  setUSERID(userId), setExpireTime(expireTime)
+}
+
+export const getCookie = name => {
+  //匹配字段
+  let arr
+  const reg = new RegExp('(^| )' + name + '=([^;]*)(;|$)')
+  const regMark = new RegExp('"', 'g')
+  if ((arr = document.cookie.match(reg))) return arr[2].replace(regMark, '')
+  return null
 }
