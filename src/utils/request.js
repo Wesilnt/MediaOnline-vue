@@ -85,40 +85,6 @@ const checkResponseCode = (url, response) => {
   console.error('接口名称  ' + url)
   throw error
 }
-<<<<<<< Updated upstream
-
-
-export async function getToken() {
-if(getCookie('COOKIE_TOKEN_KEY_CNONLINE') != null){
-  // todo 缓存
-  let expireTime = getCookie('COOKIE_TOKEN_KEY_EXPIRE_TIME');
-  let timestamp = new Date().getTime();
-  if(expireTime < timestamp){
-    // const bodyData = json2formData({ 'originUrl': 'http://t.shbaoyuantech.com/' })
-    // let result = await request('/auth/wechat/get-wechat-auth-link', { method: 'POST', body: bodyData }, false)
-    // window.location.href = result.wechatAuthUrl;
-  }
-
-}else{
-  const bodyData = json2formData({ 'originUrl': 'http://t.shbaoyuantech.com/' })
-  let result = await request('/auth/wechat/get-wechat-auth-link', { method: 'POST', body: bodyData }, false)
-  window.location.href = result.wechatAuthUrl;
-}
-
-}
-function getCookie(name)
-{          //匹配字段
-    var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)");
-
-    var regMark = new RegExp( '\"' , "g" )
-    if(arr=document.cookie.match(reg))
-
-        return (arr[2]).replace(regMark,"");
-    else
-        return null;
-}
-=======
->>>>>>> Stashed changes
 /**
  * Requests a URL, returning a promise.
  *
