@@ -93,7 +93,7 @@
   }
 </script>
 
-<style scoped lang="less">
+<style lang="less">
     .userinfo {
         &-title {
             padding: 104px 0px 60px 60px;

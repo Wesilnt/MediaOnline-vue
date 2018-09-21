@@ -1,9 +1,7 @@
 <template>
     <div class="my">
         <div class="my-user-info" @click="editUserInfo">
-            <lazy-component>
                 <img v-lazy="userInfo.avatarUrl" class="my-user-info-avatar">
-            </lazy-component>
             <span class="my-user-info-nickname">{{ userInfo.nickName }}</span>
             <div class="my-user-info-edit">编辑个人资料</div>
         </div>
@@ -13,9 +11,7 @@
                 <div v-if="(newReplyMessageCount !== 0 && item.name ==='/my/Reply') || (newSysMessageCount !== 0 && item.name ==='/my/SysMessage') " class="my-grid-item-badge">
                     {{ item.name === '/my/Reply' ? newReplyMessageCount : newSysMessageCount }}
                 </div>
-                <lazy-component>
                     <img v-lazy="item.image" class="my-grid-item-img">
-                </lazy-component>
                 <span class="my-grid-item-title">{{item.title}}</span>
             </div>
         </div>
