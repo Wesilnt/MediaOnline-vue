@@ -5,16 +5,22 @@
             <p class="userinfo-identity-sub-title">你的身份</p>
             <div class="userinfo-identity-container">
                 <van-radio-group v-model="identity">
-                <div class="userinfo-identity-container-item" @click="identityChoice('0')">
-                    <div class="userinfo-identity-container-item-circle"/>
-                    <p class="userinfo-identity-container-item-text">我是家长</p>
-                    <van-radio v-if="identity === '0'" name="0"/>
-                </div>
-                    <div class="userinfo-identity-container-item" @click="identityChoice('1')">
-                    <div class="userinfo-identity-container-item-circle" />
-                    <p class="userinfo-identity-container-item-text">我是学生</p>
-                    <van-radio v-if="identity === '1'" name="1"/>
-                </div>
+                    <div class="userinfo-identity-container-item"
+                         :class="{'userinfo-identity-container-item-selected':identity === '0'}" @click="identityChoice('0')">
+                        <div class="userinfo-identity-container-item-circle"
+                             :class="{'userinfo-identity-container-item-selected-circle':identity === '0'}"/>
+                        <p class="userinfo-identity-container-item-text"
+                           :class="{'userinfo-identity-container-item-selected-text':identity === '0'}">我是家长</p>
+                        <van-radio v-if="identity === '0'" name="0"/>
+                    </div>
+                    <div class="userinfo-identity-container-item"
+                         :class="{'userinfo-identity-container-item-selected':identity === '1'}" @click="identityChoice('1')">
+                        <div class="userinfo-identity-container-item-circle"
+                             :class="{'userinfo-identity-container-item-selected-circle':identity === '1'}"/>
+                        <p class="userinfo-identity-container-item-text"
+                           :class="{'userinfo-identity-container-item-selected-text':identity === '1'}">我是学生</p>
+                        <van-radio v-if="identity === '1'" name="1"/>
+                    </div>
                 </van-radio-group>
             </div>
         </div>
@@ -22,14 +28,20 @@
             <p class="userinfo-identity-sub-title">{{identity === '1'? '您孩子的性别' : '你的性别'}}</p>
             <div class="userinfo-identity-container">
                 <van-radio-group v-model="gender">
-                    <div class="userinfo-identity-container-item" @click="genderChoice('0')">
-                        <div class="userinfo-identity-container-item-circle"/>
-                        <p class="userinfo-identity-container-item-text">我是男生</p>
+                    <div class="userinfo-identity-container-item"
+                         :class="{'userinfo-identity-container-item-selected':identity !== ''}" @click="genderChoice('0')">
+                        <div class="userinfo-identity-container-item-circle"
+                             :class="{'userinfo-identity-container-item-selected-circle':identity !== ''}"/>
+                        <p class="userinfo-identity-container-item-text"
+                           :class="{'userinfo-identity-container-item-selected-text':identity !== ''}">我是男生</p>
                         <van-radio v-if="gender === '0'" name="0"/>
                     </div>
-                    <div class="userinfo-identity-container-item">
-                        <div class="userinfo-identity-container-item-circle" @onclick="genderChoice('1')"/>
-                        <p class="userinfo-identity-container-item-text">我是女生</p>
+                    <div class="userinfo-identity-container-item"
+                         :class="{'userinfo-identity-container-item-selected':identity !== ''}" @click="genderChoice('1')">
+                        <div class="userinfo-identity-container-item-circle"
+                             :class="{'userinfo-identity-container-item-selected-circle':identity !== ''}"/>
+                        <p class="userinfo-identity-container-item-text"
+                           :class="{'userinfo-identity-container-item-selected-text':identity !== ''}">我是女神</p>
                         <van-radio v-if="gender === '1'" name="1"/>
                     </div>
                 </van-radio-group>
@@ -178,6 +190,7 @@
                     margin: 0px 15px 0px 15px;
                     border-radius: 20px;
                     box-shadow: #f4f4f4 5px 5px 5px 5px ;//边框阴影
+                    background-color: white;
                     &-text {
                         line-height: 200px;
                         font-size: 28px;
@@ -193,16 +206,18 @@
 
                     }
                 }
-            }
-            &-item-selected {
-                background-color:#86befb;
-                &-text {
-                    color: white;
+                &-item-selected {
+                    background-color:#86befb;
+                    &-text {
+                        color: white;
+                    }
+                    &-circle {
+                        background-color: #418ee0;
+                        box-shadow: #418ee0 5px 5px 5px 5px
+                    }
                 }
-                &-circle {
-                    background-color: #418ee0;
-                }
             }
+
         }
         &-grade-container{
             margin-top: -100px;
