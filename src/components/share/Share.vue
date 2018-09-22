@@ -81,6 +81,7 @@ export default {
           desc: '秦汉胡同国学，让我们的孩子成为一个有涵养的人',
           imgUrl: ''
         }
+        console.log(link)
         wx.ready(function(shareOption) {
           wx.updateAppMessageShareData({
             title: shareOption.title,
