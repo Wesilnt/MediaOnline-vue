@@ -33,7 +33,7 @@
   </div>
 </template>
  <script>
-import { wxConfig, wechatShare } from '../../utils/wxConfig.js'
+import { wxConfig } from '../../services/groupBuyAPi.js'
 export default {
   props: ['show', 'sharetype', 'shareid'],
   data() {
@@ -79,7 +79,7 @@ export default {
           title: `${nickname}邀请您一起上课啦！`,
           friendtitle: `${nickname}邀请您一起上课啦！`,
           desc: '秦汉胡同国学，让我们的孩子成为一个有涵养的人',
-          imgUrl: 'http://qiniu.shbaoyuantech.com/yueke_share.jpeg'
+          imgUrl: ''
         }
         wx.ready(function(shareOption) {
           wx.onMenuShareAppMessage({
