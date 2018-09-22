@@ -82,7 +82,7 @@ export default {
           imgUrl: ''
         }
         wx.ready(function(shareOption) {
-          wx.onMenuShareAppMessage({
+          wx.updateAppMessageShareData({
             title: shareOption.title,
             desc: shareOption.desc,
             link: shareOption.link,
