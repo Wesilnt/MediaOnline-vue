@@ -33,7 +33,7 @@
   </div>
 </template>
  <script>
-import { wxConfig, wechatShare } from '../../utils/wxConfig.js'
+import { wxConfig } from '../../services/groupBuyAPi.js'
 export default {
   props: ['show', 'sharetype', 'shareid'],
   data() {
@@ -46,7 +46,26 @@ export default {
       this.isOpen = value
     }
   },
+      mounted() {
+        this.config();
+       
+    },
   methods: {
+    async config(){
+  let result0= await wxConfig({'url' : window.location.href})
+ console.log('config' +result0);
+        let config = result0.js_config
+        console.log('嫩不能走到这里')
+        console.log(result0)
+        wx.config({
+          debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+          appId: config.appid, // 必填，企业号的唯一标识，此处填写企业号corpid
+          timestamp: config.timestamp, // 必填，生成签名的时间戳
+          nonceStr: config.nonceStr, // 必填，生成签名的随机串
+          signature: config.signature, // 必填，签名，见附录1
+          jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+        })
+    },
     onShareItem(shareScore) {
       this.isOpen = false
       if (shareScore == 'poster') {
@@ -60,14 +79,15 @@ export default {
           title: `${nickname}邀请您一起上课啦！`,
           friendtitle: `${nickname}邀请您一起上课啦！`,
           desc: '秦汉胡同国学，让我们的孩子成为一个有涵养的人',
-          imgUrl: 'http://qiniu.shbaoyuantech.com/yueke_share.jpeg'
+          imgUrl: ''
         }
+        console.log(link)
         wx.ready(function(shareOption) {
-          wx.onMenuShareAppMessage({
-            title: option.title,
-            desc: option.desc,
-            link: option.link,
-            imgUrl: option.imgUrl,
+          wx.updateAppMessageShareData({
+            title: shareOption.title,
+            desc: shareOption.desc,
+            link: shareOption.link,
+            imgUrl: shareOption.imgUrl,
             success: function(res) {
               // 用户确认分享后执行的回调函数
               successCB(res)
@@ -82,20 +102,7 @@ export default {
         this.$toast('分享到朋友圈')
       }
     },
-    mounted() {
-          let result0 = wxConfig({ url: window.location.href })
-        let config = result0.js_config
-        console.log('嫩不能走到这里')
-        console.log(result0)
-        wx.config({
-          debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-          appId: config.appid, // 必填，企业号的唯一标识，此处填写企业号corpid
-          timestamp: config.timestamp, // 必填，生成签名的时间戳
-          nonceStr: config.nonceStr, // 必填，生成签名的随机串
-          signature: config.signature, // 必填，签名，见附录1
-          jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-        })
-    },
+
     onCancel() {
       this.isOpen = false
     },

@@ -21,16 +21,27 @@
                     </div>
                 </div>
             </div>
-            <div class="groupBuy-info">剩余<span>{{leavePerson}}</span>个名额</div>
-            <div class="groupBuy-countDown-container">
-                <CountDown :duration="countDownTime"></CountDown>
+            <div v-if="headerType==100">
+                <div class="groupBuy-info">剩余<span>{{leavePerson}}</span>个名额</div>
+                <div class="groupBuy-countDown-container">
+                    <CountDown :duration="countDownTime"></CountDown>
+                </div>
+                <div class="groupBuy-deadline">距离截止时间</div>               
             </div>
-            <div class="groupBuy-deadline">距离截止时间</div>
+            <div v-else-if="headerType==101">
+                <div class="groupBuy-info">拼团成功</div>
+            </div>
+            <div v-else-if="headerType==102">
+                <div class="groupBuy-info">拼团失败</div>
+            </div>
+            <div v-else-if="headerType==103">
+                <div class="groupBuy-info">拼团已满</div>
+            </div>
             <div class="groupBuy-circleline"></div>
         </div>
         <div class="groupBuy-banner" :style="{ background : 'url('+profilePic+')' }">
             <!-- <div class="groupBuy-circleline" v-show="true"></div> -->
-            <span class="groupBuy-banner-bottom">99人已购买+{{profilePic}}</span>
+            <span class="groupBuy-banner-bottom">99人已购买</span>
         </div>
     </div>
 </template>
@@ -50,8 +61,8 @@ export default {
         CountDown
     },
     computed:{
-        ...mapState(['leavePerson','countDownTime','userListTop','userListBot','isSixGroup']),
-        ...mapGetters(['profilePic','isShowGroupBuy','headerType'])
+        ...mapState(['leavePerson','countDownTime','userListTop','userListBot','isSixGroup','headerType']),
+        ...mapGetters(['profilePic','isShowGroupBuy'])
     }
 }
 </script>

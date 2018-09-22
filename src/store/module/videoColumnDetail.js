@@ -126,13 +126,13 @@ const videoColumnDetail = {
                     console.log('拼团中')
                     isShowGroupBuy = true
                     // headerType = 100
-                    dispatch("getGroupBuyDetail",groupData.groupBuyId)
+                    dispatch("groupManager/getGroupBuyDetail",groupData.groupBuyId)
 
                 break
                 case 1007:
                     console.log('集赞成功未领取')
                     isShowGroupBuy = false
-                    headerType = 0
+                    // headerType = 0
                     toolsObject = {
                         "originPrice":'',
                         "groupPrice":'',
@@ -146,7 +146,7 @@ const videoColumnDetail = {
                 case 1008:
                     console.log('集赞成功已领取')
                     isShowGroupBuy = false
-                    headerType = 0
+                    // headerType = 0
                     toolsObject = {
                         "originPrice":'',
                         "groupPrice":'',
@@ -160,7 +160,7 @@ const videoColumnDetail = {
                 case 1009:
                     console.log('集赞中')
                     isShowGroupBuy = false
-                    headerType = 0
+                    // headerType = 0
                     toolsObject = {
                         "originPrice":'',
                         "groupPrice":'',
