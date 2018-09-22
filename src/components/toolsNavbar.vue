@@ -5,18 +5,18 @@
             <p class="under-text">试听</p>
         </div>
         <hr class="vertical-line"/>
-        <div v-show="toolsObject.originPrice" :class="toolsObject.collage==false&&toolsObject.collect==false ?'toolbar-price-active' :'toolbar-price'"  @click="buyByOriginPrice(toolsObject.originPrice)">
-            <p class="toolbar-price-num">￥{{toolsObject.originPrice | formatPrice}}</p>
+        <div v-show="toolsObject&&toolsObject.originPrice" :class="toolsObject&&toolsObject.collage==false&&toolsObject.collect==false ?'toolbar-price-active' :'toolbar-price'"  @click="buyByOriginPrice(toolsObject&&toolsObject.originPrice)">
+            <p class="toolbar-price-num">￥{{toolsObject&&toolsObject.originPrice | formatPrice}}</p>
             <span class="under-text">原价购买</span>
         </div>
-        <div v-show=" toolsObject.collage || toolsObject.collect" class="toolbar-btnGroup">
-            <div v-show="toolsObject.collage" class="toolbar-btn toolbar-btn-left" @click="clickCollageBtn">
-                <div v-show="toolsObject.groupPrice"  class="toolbar-btn-price">￥{{toolsObject.groupPrice | formatPrice}}</div>
-                <div>{{toolsObject.collageText}}</div>
+        <div v-show="toolsObject&&(toolsObject.collage || toolsObject.collect)" class="toolbar-btnGroup">
+            <div v-show="toolsObject&&toolsObject.collage" class="toolbar-btn toolbar-btn-left" @click="clickCollageBtn">
+                <div v-show="toolsObject&&toolsObject.groupPrice"  class="toolbar-btn-price">￥{{toolsObject&&toolsObject.groupPrice | formatPrice}}</div>
+                <div>{{toolsObject&&toolsObject.collageText}}</div>
             </div>
-            <div v-show="toolsObject.collect" class="toolbar-btn toolbar-btn-right" @click="clickCollectBtn">
-                <div v-show="toolsObject.originPrice" class="toolbar-btn-price">￥0.00</div>
-                <div>{{toolsObject.collectText}}</div>
+            <div v-show="toolsObject&&toolsObject.collect" class="toolbar-btn toolbar-btn-right" @click="clickCollectBtn">
+                <div v-show="toolsObject&&toolsObject.originPrice" class="toolbar-btn-price">￥0.00</div>
+                <div>{{toolsObject&&toolsObject.collectText}}</div>
             </div>
         </div>
         <Share :show="sharePageShow" :shareid="courseId" @close="cancelSharePage"></Share>
@@ -85,13 +85,15 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['startGroupBuy','getCollectLike','startCollectLike','updateFatherData']),
+    ...mapActions(['startGroupBuy','getCollectLike','startCollectLike','updateFatherData','unlockCourse']),
     buyByOriginPrice(price) {
-      console.log('买' + price)
-      console.log(this.collect)
+      let params = {
+        "courseId" : this.courseId
+      }
+      this.unlockCourse()
     },
     clickCollageBtn(){
-
+      console.log('代码能不能走到这里' + this.courseId)
       this.$emit('router-to-collage')
       let params = {
             "courseId" : this.courseId
@@ -169,7 +171,7 @@ export default {
   border-top: 2px solid #efefef;
   text-align: center;
   background-color: #fff;
-  z-index: 10;
+  z-index: 3000;
 }
 .toolbar-audition {
   margin: 0 16px;

@@ -26,6 +26,11 @@ export function getCollectLike(params) {
     return request.post(`/collectLike/getCollectLike`,params)
 }
 
+//解锁课程
+export function unlockCourse(params) {
+    return request.post(`/user/unlockCourse`,params)
+}
+
 export function wxConfig(params) {
     return request(`http://tencent.test.shbaoyuantech.com/wechat-js-config/xcx?${stringify(params)}`)
 }
