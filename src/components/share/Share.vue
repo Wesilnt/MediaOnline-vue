@@ -83,10 +83,10 @@ export default {
         }
         wx.ready(function(shareOption) {
           wx.onMenuShareAppMessage({
-            title: option.title,
-            desc: option.desc,
-            link: option.link,
-            imgUrl: option.imgUrl,
+            title: shareOption.title,
+            desc: shareOption.desc,
+            link: shareOption.link,
+            imgUrl: shareOption.imgUrl,
             success: function(res) {
               // 用户确认分享后执行的回调函数
               successCB(res)
