@@ -84,6 +84,11 @@ const videoColumnDetail = {
             let toolsObject;
             const personStr = result.groupBuyPersonCount > 3 ? "六人拼团" : "三人拼团"
             switch(userAccessStatus) {
+                case -3:
+                    //拼团失败
+                    isShowGroupBuy = true
+                    dispatch("groupManager/getGroupBuyDetail",groupData.groupBuyId)
+                break
                 case 0:
                     isShowGroupBuy = false
                     //工具条状态
@@ -96,8 +101,6 @@ const videoColumnDetail = {
                         "collage":true,
                         "isShow":true
                     }
-                    //测试,调起拼团详情接口
-                    // dispatch("groupManager/getGroupBuyDetail",groupData.groupBuyId)
                 break
                 case 1001:
                     console.log('单购成功')

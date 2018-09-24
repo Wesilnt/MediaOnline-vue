@@ -97,7 +97,7 @@ function request(url, options, needToken = true) {
   let defaultOptions
   if (needToken) {
     accessToken = getCookie('COOKIE_TOKEN_KEY_CNONLINE')
-    // accessToken = "2b9aa7cc-10d3-420a-8b8f-05c71e2c26da"
+    // accessToken = "61d5ac16-acfe-4c05-af75-25e66054f208"
     console.log(accessToken)
     defaultOptions = {
       // credentials: 'include',

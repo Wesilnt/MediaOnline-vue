@@ -63,6 +63,7 @@ const groupManager = {
     actions:{
         //获取拼团详情
         async getGroupBuyDetail({commit,dispatch},groupBuyId) {
+            
             const result = await getGroupBuyDetail({'groupBuyId':groupBuyId})
             console.log('获取拼团详情成功')
             console.log(result)
