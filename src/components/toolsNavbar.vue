@@ -1,11 +1,11 @@
 <template>
     <div class="purchase-toolbar" v-show="isShow">
-        <div class="toolbar-audition" @click="$emit('router-to-audition')">
+        <div class="toolbar-audition" @click="clickAuditionBtn">
             <i class="qhht-icon audition-icon"></i>
             <p class="under-text">试听</p>
         </div>
         <hr class="vertical-line"/>
-        <div v-show="toolsObject&&toolsObject.originPrice" :class="toolsObject&&toolsObject.collage==false&&toolsObject.collect==false ?'toolbar-price-active' :'toolbar-price'"  @click="buyByOriginPrice(toolsObject&&toolsObject.originPrice)">
+        <div v-show="toolsObject&&toolsObject.originPrice" :class="toolsObject&&toolsObject.collage==false&&toolsObject.collect==false ?'toolbar-price-active' :'toolbar-price'"  @click="clickOriginPriceBtn">
             <p class="toolbar-price-num">￥{{toolsObject&&toolsObject.originPrice | formatPrice}}</p>
             <span class="under-text">原价购买</span>
         </div>
@@ -65,17 +65,24 @@ export default {
   },
   components:{
     Share
-  },
+  }, 
   watch:{
     'collectLikeId':function(newVal){
-            if(newVal != 0) {
-              this.$router.push({ name: 'Praise',params: { courseId : this.$route.params.courseId ,collectLikeId:newVal} })
-            }
+      if(newVal != 0) {
+        this.$router.push({ name: 'Praise',params: { courseId : this.$route.params.courseId ,collectLikeId:newVal} })
+      }
+    },
+    'achieveOriginBuy':function(newVal){
+      if(newVal == true){
+        //原价购买完成跳转到单集详情页
+        const lessonId = this.freeLessonList[0].id
+        this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
+      }
     }
   },
   computed:{
-    ...mapState(['userList','collectLikeId']),
-    ...mapGetters(['courseId','toolsObject','praiseData','userAccessStatus']),
+    ...mapState(['userList','collectLikeId','isOwner']),
+    ...mapGetters(['courseId','toolsObject','praiseData','userAccessStatus','freeLessonList']),
   },
   filters: {
     formatPrice: function(price) {
@@ -85,68 +92,84 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['startGroupBuy','getCollectLike','startCollectLike','updateFatherData','unlockCourse']),
-    buyByOriginPrice(price) {
-      let params = {
-        "courseId" : this.courseId
-      }
-      this.unlockCourse()
+    ...mapActions(['startGroupBuy','getCollectLike','startCollectLike','updateFatherData','unlockCourse','checkoutAuthorrization']),
+    //点击试听按钮 跳转
+    clickAuditionBtn(){
+      const lessonId = this.freeLessonList[0].id
+      this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
     },
-    clickCollageBtn(){
-      console.log('代码能不能走到这里' + this.courseId)
-      this.$emit('router-to-collage')
+    //点击原价购买按钮
+    clickOriginPriceBtn() {
       let params = {
-            "courseId" : this.courseId
-          }
+        "courseId" : this.courseId,
+        'payType' : 0
+      }
+      this.checkoutAuthorrization(params)
+    },
+    //点击拼团按钮
+    clickCollageBtn(){
+      let params = null
+      if(this.isOwner){
+        //发起拼团
+        params = {
+          "courseId" : this.courseId,
+          'payType' : 1
+        }
+      }else{
+        //参与拼团
+        params = {
+          "courseId" : this.courseId,
+          'payType' : 2
+        }
+      }
       switch(this.userAccessStatus) {
-        //没有购买和集赞行为
+        case -3:
+          //拼团失败,重新发起拼团
+          this.checkoutAuthorrization(params)
+        break
+          //没有购买和集赞行为
         case 0:
-          this.startGroupBuy(params)
+          this.checkoutAuthorrization(params)
         break
         case 1003:
-        //拼团成功
-        this.updateFatherData(params)
+          //拼团成功.解锁专栏,跳转到单集详情页
+          const lessonId = this.freeLessonList[0].id
+          this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
         break
         case 1005:
-        //拼团中
-          console.log('邀请好友拼团'),
+          //拼团中
           this.sharePageShow = true
         break
       }
     },
-    
+    //点击集赞按钮
     clickCollectBtn(){
-      let params = {}
-      console.log('userAccessStatus = ',this.userAccessStatus)
+      let params = null
       switch(this.userAccessStatus){
         case 1007:
-        console.log("2131")
-        //集赞成功未领取
+          //集赞成功未领取
           params = {
             "collectLikeId" : this.praiseData.collectLikeId
           }
-
           this.getCollectLike(params)
         break
         case 1008:
-        //集赞成功已领取  解锁专栏
- 
+          //集赞成功已领取  解锁专栏 跳转到单集详情页
+          const lessonId = this.freeLessonList[0].id
+          this.$router.push({ name: 'videoCourseDetail', params: { lessonId } }) 
         break
         case 1009:
           //集赞中
-          this.$router.push({ name: 'Praise',params: { courseId : this.$route.params.courseId ,collectLikeId:this.praiseData.collectLikeId} })
- 
+          this.$router.push({ name: 'Praise',params: { courseId : this.$route.params.courseId ,collectLikeId:this.praiseData.collectLikeId} }) 
         break
         case 0:
-        //没有购买和集赞行为
+          //没有购买和集赞行为
           params = {
             "courseId" : this.courseId
           }
           this.startCollectLike(params)
         break
       }
-
- 
     },
     //邀请好友拼团
     cancelSharePage(){

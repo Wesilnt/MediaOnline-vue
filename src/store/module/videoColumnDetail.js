@@ -82,12 +82,10 @@ const videoColumnDetail = {
             const userAccessStatus = result.userAccessStatus
             let isShowGroupBuy;
             let toolsObject;
-            // let headerType;
-            console.log('userAccessStatus =',userAccessStatus)
             const personStr = result.groupBuyPersonCount > 3 ? "六人拼团" : "三人拼团"
             switch(userAccessStatus) {
                 case 0:
-                    isShowGroupBuy = true
+                    isShowGroupBuy = false
                     //工具条状态
                     toolsObject = {
                         "originPrice":result.price || 0,
@@ -98,14 +96,12 @@ const videoColumnDetail = {
                         "collage":true,
                         "isShow":true
                     }
-                    console.log('代码走到这里')
                     //测试,调起拼团详情接口
                     // dispatch("groupManager/getGroupBuyDetail",groupData.groupBuyId)
                 break
                 case 1001:
                     console.log('单购成功')
                     isShowGroupBuy = false
-                    headerType = 0
                     toolsObject = {
                         "originPrice":'',
                         "groupPrice":'',
@@ -113,26 +109,23 @@ const videoColumnDetail = {
                         "collectText":"",
                         "collect":true,
                         "collage":false,
-                        "isShow":true
+                        "isShow":false
                     }  
                 break
                 case 1003:
                     console.log('拼团成功')
                     isShowGroupBuy = true
-                    // headerType = 101
                     dispatch("groupManager/getGroupBuyDetail",groupData.groupBuyId)
                 break
                 case 1005:
                     console.log('拼团中')
                     isShowGroupBuy = true
-                    // headerType = 100
                     dispatch("groupManager/getGroupBuyDetail",groupData.groupBuyId)
 
                 break
                 case 1007:
                     console.log('集赞成功未领取')
                     isShowGroupBuy = false
-                    // headerType = 0
                     toolsObject = {
                         "originPrice":'',
                         "groupPrice":'',
@@ -146,7 +139,6 @@ const videoColumnDetail = {
                 case 1008:
                     console.log('集赞成功已领取')
                     isShowGroupBuy = false
-                    // headerType = 0
                     toolsObject = {
                         "originPrice":'',
                         "groupPrice":'',
@@ -160,7 +152,6 @@ const videoColumnDetail = {
                 case 1009:
                     console.log('集赞中')
                     isShowGroupBuy = false
-                    // headerType = 0
                     toolsObject = {
                         "originPrice":'',
                         "groupPrice":'',
