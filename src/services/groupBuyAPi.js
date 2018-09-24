@@ -31,6 +31,12 @@ export function unlockCourse(params) {
     return request.post(`/user/unlockCourse`,params)
 }
 
+//判断用户是否关注公众号
+export async function wechatSubscribed() {
+    return request(`/auth/wechat/subscribed?`)
+}
+
+//微信JDK授权
 export function wxConfig(params) {
     return request(`http://tencent.test.shbaoyuantech.com/wechat-js-config/xcx?${stringify(params)}`)
 }

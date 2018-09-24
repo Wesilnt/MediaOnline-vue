@@ -3,11 +3,7 @@
     <GroupHeader></GroupHeader>
     <GroupContent></GroupContent>
     <!-- 底部工具条 -->
-    <tools-navbar
-        v-on:router-to-audition="routerToAudition"
-        v-on:router-to-collage="routerToCollage"
-        v-on:router-to-collect="routerToCollect"
-    />
+    <tools-navbar/>
   </div>
 </template>
 
@@ -48,16 +44,6 @@ export default {
     methods: {
       ...mapMutations(['initDatas']),
       ...mapActions(['getVideoColumnDetail']),
-      routerToAudition() {
-        console.log('跳转到试听')
-      },
-      routerToCollage() {
-        console.log('跳转到拼团')
-      },
-      routerToCollect() {
-        console.log('跳转到集赞')
-        // this.$router.push({ name: 'PraiseActive',params: { courseId : this.$route.params.courseId ,collectLikeId:this.collectLikeId} }) 
-      }
     }, 
     created() {
       //获取专栏Id
