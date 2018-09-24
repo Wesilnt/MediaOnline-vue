@@ -25,23 +25,23 @@
             </div>
         </div>
         <div v-if='showNext' class="userinfo-identity">
-            <p class="userinfo-identity-sub-title">{{identity === '1'? '您孩子的性别' : '你的性别'}}</p>
+            <p class="userinfo-identity-sub-title">{{identity === '0'? '您孩子的性别' : '你的性别'}}</p>
             <div class="userinfo-identity-container">
                 <van-radio-group v-model="gender">
                     <div class="userinfo-identity-container-item"
-                         :class="{'userinfo-identity-container-item-selected':identity !== ''}" @click="genderChoice('0')">
+                         :class="{'userinfo-identity-container-item-selected':gender === '0'}" @click="genderChoice('0')">
                         <div class="userinfo-identity-container-item-circle"
-                             :class="{'userinfo-identity-container-item-selected-circle':identity !== ''}"/>
+                             :class="{'userinfo-identity-container-item-selected-circle':gender === '0'}"/>
                         <p class="userinfo-identity-container-item-text"
-                           :class="{'userinfo-identity-container-item-selected-text':identity !== ''}">我是男生</p>
+                           :class="{'userinfo-identity-container-item-selected-text':gender === '0'}">我是男生</p>
                         <van-radio v-if="gender === '0'" name="0"/>
                     </div>
                     <div class="userinfo-identity-container-item"
-                         :class="{'userinfo-identity-container-item-selected':identity !== ''}" @click="genderChoice('1')">
+                         :class="{'userinfo-identity-container-item-selected':gender === '1'}" @click="genderChoice('1')">
                         <div class="userinfo-identity-container-item-circle"
-                             :class="{'userinfo-identity-container-item-selected-circle':identity !== ''}"/>
+                             :class="{'userinfo-identity-container-item-selected-circle':gender === '1'}"/>
                         <p class="userinfo-identity-container-item-text"
-                           :class="{'userinfo-identity-container-item-selected-text':identity !== ''}">我是女神</p>
+                           :class="{'userinfo-identity-container-item-selected-text':gender === '1'}">我是女生</p>
                         <van-radio v-if="gender === '1'" name="1"/>
                     </div>
                 </van-radio-group>
@@ -113,7 +113,7 @@
       genderChoice:function(type) {
         console.log("AAA")
         console.log(type)
-        this.grade = type
+        this.gender = type
       },
       onChange(picker, value, index) {
         console.log(value)
