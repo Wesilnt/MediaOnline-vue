@@ -92,7 +92,6 @@ const groupManager = {
             });
             //8.计算倒计时
             const countTime = result.createTime + result.duration * 60 * 60 * 1000 - result.sysTime;
-            console.log('代码走都这里le')
             console.log('orderStatus = '+orderStatus)
             console.log('currentUserId = '+currentUserId)
             console.log('isOwner = '+isOwner)
@@ -280,7 +279,7 @@ const groupManager = {
         //验证是否完成了公众号授权
         async checkoutAuthorrization({dispatch},payload){
             const result = await wechatSubscribed()
-            if(result && result.data=='1'){
+            if(result && result==1){
                 dispatch('checkoutShowTeleDialog',payload)
             }
         },
