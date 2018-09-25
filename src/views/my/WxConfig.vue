@@ -15,7 +15,7 @@ export default {
     wxConfig: () => {
       wxConfig()
     },
-    wxShare: () => {
+    wxShare: function() {
       wxShare(
         {
           title: '这是配置页的分享',
@@ -23,7 +23,7 @@ export default {
           link: window.href,
           imgUrl: require('../../assets/share_poster.png')
         },
-        res => {
+        function(res) {
           console.log(res)
         }
       )
