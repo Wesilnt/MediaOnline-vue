@@ -3,7 +3,7 @@
         <div v-show="isShowGroupBuy">
             <div class="groupBuy-usericon" v-if="isSixGroup == true" >
                 <div class="qhht-flex groupBuy-usericon-top">
-                        <div class="groupBuy-usericon-item" v-for="(item,index) in userListTop" :key="index" :style="item.avatarUrl==null?{}:{ background : 'url('+item.avatarUrl+')' }">
+                        <div class="groupBuy-usericon-item" v-for="(item,index) in userListTop" :key="index" :style="item.avatarUrl==null?{}:{ background : 'url('+item.avatarUrl+')', 'background-size' : '120px'}">
                             <div class="groupBuy-usericon-manager" v-show="item.isStarter">团长</div>            
                         </div>
                 </div>
@@ -24,7 +24,7 @@
             <div v-if="headerType==100">
                 <div class="groupBuy-info">剩余<span>{{leavePerson}}</span>个名额</div>
                 <div class="groupBuy-countDown-container">
-                    <CountDown :duration="countDownTime"></CountDown>
+                    <CountDown :duration="countDownTime">{{countDownTime}}</CountDown>
                 </div>
                 <div class="groupBuy-deadline">距离截止时间</div>               
             </div>

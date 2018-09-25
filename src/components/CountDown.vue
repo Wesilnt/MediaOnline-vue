@@ -5,6 +5,7 @@
         <span class="time-number">{{times[1]}}</span>
         <span class="time-symbol">:</span>
         <span class="time-number">{{times[2]}}</span>
+        <span>{{duration}}</span>
     </div>
 </template>
 
