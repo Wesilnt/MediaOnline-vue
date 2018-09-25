@@ -16,7 +16,8 @@ export default {
       wxConfig()
     },
     wxShare: function() {
-      wxShare(
+      console.log('wxShare')
+      wx.updateAppMessageShareData(
         {
           title: '这是配置页的分享',
           desc: 'Vue 我又更新npm了',
@@ -24,6 +25,7 @@ export default {
           imgUrl: require('../../assets/share_poster.png')
         },
         function(res) {
+          // 用户确认分享后执行的回调函数
           console.log(res)
         }
       )

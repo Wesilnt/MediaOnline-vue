@@ -40,33 +40,31 @@ export const wxConfig = () => {
 export const wxShare = (option, successCB) => {
   wx.ready(() => {
     // 分享给朋友
-    wx.updateAppMessageShareData({
-      title: option.title,
-      desc: option.desc,
-      link: option.link,
-      imgUrl: option.imgUrl,
-      success: function(res) {
+    wx.updateAppMessageShareData(
+      {
+        title: option.title,
+        desc: option.desc,
+        link: option.link,
+        imgUrl: option.imgUrl
+      },
+      function(res) {
         // 用户确认分享后执行的回调函数
         successCB(res)
-      },
-      cancel: function() {
-        // 用户取消分享后执行的回调函数
       }
-    })
+    )
 
     // 分享到朋友圈
-    wx.updateTimelineShareData({
-      title: option.friendtitle || option.title, // 标题
-      desc: option.desc,
-      link: option.link, // 链接
-      imgUrl: option.imgUrl, // 分享图标
-      success: function(res) {
-        successCB(res)
+    wx.updateTimelineShareData(
+      {
+        title: option.friendtitle || option.title, // 标题
+        desc: option.desc,
+        link: option.link, // 链接
+        imgUrl: option.imgUrl // 分享图标
       },
-      cancel: function() {
-        // 用户取消分享后执行的回调函数
+      function(res) {
+        successCB(res)
       }
-    })
+    )
   })
 }
 
