@@ -1,23 +1,28 @@
 import request from './request'
 import { stringify } from 'qs'
-import wxConfigURI from '../api/wxConfig'
+
+const { NODE_ENV } = process.env
+
+let wxConfigUrl = 'http://tencent.test.shbaoyuantech.com/wechat-js-config/xcx'
+if (NODE_ENV === 'development') {
+  wxConfigUrl = 'http://tencent.test.shbaoyuantech.com/wechat-js-config/xcx'
+}
 
 /** 注入配置信息 */
 export const wxConfig = () => {
   const params = {
     url: encodeURIComponent(location.href.split('#')[0])
   }
-  request(`${wxConfigURI}?${stringify(params)}`).then(res => {
-    const configs = res.js_config
+  request(`${wxConfigUrl}?${stringify(params)}`).then(res => {
+    console.log(res)
+    const { appid: appId, nonceStr, timestamp, signature } = res.js_config
     wx.config({
-      debug: false,
-      appId: configs.appid,
-      nonceStr: configs.nonceStr,
-      timestamp: configs.timestamp,
-      signature: configs.signature,
-      jsApiList: [
-        'updateAppMessageShareData','updateTimelineShareData'
-      ]
+      debug: true,
+      appId,
+      nonceStr,
+      timestamp,
+      signature,
+      jsApiList: ['updateAppMessageShareData', 'updateTimelineShareData']
     })
   })
 }

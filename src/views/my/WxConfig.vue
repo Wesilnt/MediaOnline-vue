@@ -15,8 +15,8 @@ export default {
     wxConfig: () => {
       wxConfig()
     },
-    wxShare: function() {
-      console.log(this.$route)
+    wxShare: ()=> {
+      console.log(this)
       wx.ready(function() {
         wx.updateAppMessageShareData(
           {
