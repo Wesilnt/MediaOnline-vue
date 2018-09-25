@@ -67,7 +67,7 @@ const groupManager = {
     actions:{
         //获取拼团详情
         async getGroupBuyDetail({commit,dispatch},groupBuyId) {
-            
+            console.log('groupBuyId =',groupBuyId)
             const result = await getGroupBuyDetail({'groupBuyId':groupBuyId})
             console.log('获取拼团详情成功')
             console.log(result)
@@ -343,7 +343,7 @@ const groupManager = {
             console.log('发起拼团成功')
             console.log(result)
             if(result == null) return
-            dispatch("getPayment",result,1)
+            dispatch("getPayment",{result,payType:1})
         },
         //参与拼团
         async joinGroupBuy({dispatch},payload) {
@@ -351,7 +351,7 @@ const groupManager = {
             console.log('参与拼团成功')
             console.log(result)
             if(result == null) return
-            dispatch('getPayment',result,2)
+            dispatch('getPayment',{result,payType:2})
         },
         //发起集赞
         async startCollectLike({dispatch},payload) {
@@ -367,7 +367,7 @@ const groupManager = {
             console.log(result)
         },
         //调起微信支付
-        async getPayment({commit,dispatch},result,payType){
+        async getPayment({commit,dispatch},{result,payType}){
            //微信网页开发支付接口
            let result0= await wxConfig({'url' : window.location.href})
            let config = result0.js_config
@@ -391,18 +391,19 @@ const groupManager = {
                         success: function (res) {
                             // 支付成功后的回调函数
                             console.log("支付成功"); 
+                            console.log(payType)
                             switch(payType){
                                 case 0:
-                                    console.log('原价购买支付成功')
+                                    console.log('原价购买支付成功~~~')
                                     commit('bindAchieveOriginBuy',true)
                                 break
                                 case 1:
-                                    console.log('发起拼团支付成功')
+                                    console.log('发起拼团支付成功~~~')
                                     //调起拼团详情
                                     dispatch('getGroupBuyDetail',result.groupBuyId)
                                 break
                                 case 2:
-                                    console.log('参与拼团支付成功')
+                                    console.log('参与拼团支付成功~~~')
                                     //调起拼团详情
                                     dispatch('getGroupBuyDetail',result.groupBuyId)
                                 break
