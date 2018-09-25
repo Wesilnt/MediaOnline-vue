@@ -4,7 +4,7 @@
                 show-toolbar
                 :columns="columns"
                 @confirm="onConfirm"
-                @cancel="isShow=false"
+                @cancel="onCancel"
         />
     </van-popup>
 </template>
@@ -29,14 +29,19 @@
     },
     methods: {
       onConfirm(value, index) {
-        this.isShow = false
         this.$emit('toggle', value)
       },
+      onCancel() {
+        this.$emit('changePicker', false)
+      }
     }
   }
 </script>
 
 <style lang="less">
+    .van-picker {
+        height: 250px;
+    }
     .van-picker-column__item {
         width: 100vw
 

@@ -1,29 +1,33 @@
 <template>
-   <div class="display-user-info">
-       <div class="display-user-info-column" @click="handleUpdateUserInfo('gender')">
-           <p class="display-user-info-column-label">性别</p>
-           <p class="display-user-info-column-content">{{userInfo.gender === '0' ? '男': '女'}}</p>
-           <img class="display-user-info-column-image-arraw" src="../../assets/images/onlinecourse_arrow_right.png"/>
-       </div>
-       <div class="display-user-info-column" @click="handleUpdateUserInfo('grade')">
-           <p class="display-user-info-column-label">年级</p>
-           <p class="display-user-info-column-content">三年级</p>
-           <img class="display-user-info-column-image-arraw" src="../../assets/images/onlinecourse_arrow_right.png"/>
-       </div>
-       <div class="display-user-info-column" @click="handleUpdateUserInfo('phone')">
-           <p class="display-user-info-column-label">手机号码</p>
-           <p class="display-user-info-column-content">151****5465</p>
-           <img class="display-user-info-column-image-lock" src="../../assets/images/my_userinfo_lock.png"/>
-       </div>
-       <Picker :columns="whichPicker ==='gender' ? genders : grades" :isShow="isShow" v-on:toggle="toggleConfirm"/>
-   </div>
+    <div class="display-user-info">
+        <div class="display-user-info-column" @click="handleUpdateUserInfo('gender')">
+            <p class="display-user-info-column-label">性别</p>
+            <p class="display-user-info-column-content">{{userInfo.gender === '0' ? '男': '女'}}</p>
+            <img class="display-user-info-column-image-arraw" src="../../assets/images/onlinecourse_arrow_right.png"/>
+        </div>
+        <div class="display-user-info-column" @click="handleUpdateUserInfo('grade')">
+            <p class="display-user-info-column-label">年级</p>
+            <p class="display-user-info-column-content">{{userInfo.grade|gradeFilter}}</p>
+            <img class="display-user-info-column-image-arraw" src="../../assets/images/onlinecourse_arrow_right.png"/>
+        </div>
+        <div class="display-user-info-column" @click="handleUpdateUserInfo('phone')">
+            <p class="display-user-info-column-label">手机号码</p>
+            <p class="display-user-info-column-content">{{ userInfo.mobileNo }}</p>
+            <img class="display-user-info-column-image-lock" src="../../assets/images/my_userinfo_lock.png"/>
+        </div>
+        <Picker :columns="whichPicker ==='gender' ? genders : grades" :isShow="isShow" v-on:toggle="toggleConfirm"
+                v-on:click="changePicker"/>
+    </div>
 </template>
 
 <script>
-  import { createNamespacedHelpers } from 'vuex'
+  import {createNamespacedHelpers} from 'vuex'
   import Picker from '../../components/Picker'
-  import { Toast } from 'vant'
-  const { mapState, mapActions } = createNamespacedHelpers(
+  import {getGradeStr, getGradeNum} from './MyUtil'
+  import {Toast} from 'vant'
+
+
+  const {mapState, mapActions} = createNamespacedHelpers(
     'userInfo'
   )
   export default {
@@ -31,82 +35,54 @@
     components: {
       Picker
     },
-    data: function() {
+    data: function () {
       return {
-        whichPicker:'',
-        isShow:false,
-        genders:['男','女'],
-        grades: ['未上学', '幼儿园', '一年级', '二年级', '三年级','四年级','五年级','六年级','初一','初二','初三','初三以上']
+        whichPicker: '',
+        isShow: false,
+        genders: ['男', '女'],
+        grades: ['未上学', '幼儿园', '一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '初一', '初二', '初三', '初三以上']
       }
     },
     computed: {
       ...mapState(['userInfo', 'loading'])
     },
     methods: {
-      ...mapActions(['getMyUserInfo', 'updateUserInfo','updateUserInfoGender','updateUserInfoGrade']),
-      handleUpdateUserInfo:function (type) {
+      ...mapActions(['getMyUserInfo', 'updateUserInfo', 'updateUserInfoGender', 'updateUserInfoGrade']),
+      handleUpdateUserInfo: function (type) {
         if (type === 'gender') {
-            this.whichPicker = 'gender'
-            this.isShow = true
-        } else if ( type === 'grade') {
-            this.whichPicker = 'grade'
-            this.isShow = true
-        } else if( type === 'phone') {
+          this.whichPicker = 'gender'
+          this.isShow = true
+        } else if (type === 'grade') {
+          this.whichPicker = 'grade'
+          this.isShow = true
+        } else if (type === 'phone') {
           Toast.fail('电话号码无法编辑')
         }
       },
-      toggleConfirm:function(value) {
-        console.log(value);
-        if(this.genders.indexOf(value) != -1 ) {
-          if (!( value === this.userInfo.gender)) {
-            let gender = value === '男' ? '0':'1'
-            this.updateUserInfoGender({ gender })
+      changePicker: function (value) {
+        this.isShow = false
+      },
+      toggleConfirm: function (value) {
+        console.log(value)
+        this.isShow = false
+        if (this.genders.indexOf(value) != -1) {
+          if (!(value === this.userInfo.gender)) {
+            let gender = value === '男' ? '0' : '1'
+            this.updateUserInfoGender( {gender})
           }
-        } else if(this.grades.indexOf(value) != -1){
-          if (!( value === this.userInfo.grade)) {
+        } else if (this.grades.indexOf(value) != -1) {
+          if (!(value === this.userInfo.grade)) {
             let grade = -1
-            switch (value) {
-              case '未上学':
-               grade = -1
-                break
-              case '幼儿园':
-                grade = 0
-                break
-              case '一年级':
-                grade = 1
-                break
-              case '二年级':
-                grade = 2
-                break
-              case '三年级':
-                grade = 3
-                break
-              case '四年级':
-                grade = 4
-                break
-              case '五年级':
-                grade = 5
-                break
-              case '六年级':
-                grade = 6
-                break
-              case '初一':
-                grade = 7
-                break
-              case '初二':
-                grade = 8
-                break
-              case '初三':
-                grade = 9
-                break
-              case '初三以上':
-                grade = 10
-                break
-            }
-            this.updateUserInfoGrade({ grade })
+            grade = getGradeNum(value)
+            this.updateUserInfoGrade({grade})
           }
         }
       },
+    },
+    filters: {
+      gradeFilter: function (type) {
+        return getGradeStr(type)
+      }
     },
 
     created() {
@@ -116,7 +92,7 @@
 </script>
 
 <style scoped lang="less">
-    .display-user-info{
+    .display-user-info {
         font-size: 28px;
         padding: 0px 40px 0px 40px;
         &-column {
@@ -125,7 +101,7 @@
             padding: 46px 0px 46px 0px;
             border-bottom: 0.1px solid #ddd;
             &-label {
-                color:#3e3e53;
+                color: #3e3e53;
             }
             &-content {
                 position: absolute;

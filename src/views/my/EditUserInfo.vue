@@ -6,7 +6,8 @@
             <div class="userinfo-identity-container">
                 <van-radio-group v-model="identity">
                     <div class="userinfo-identity-container-item"
-                         :class="{'userinfo-identity-container-item-selected':identity === '0'}" @click="identityChoice('0')">
+                         :class="{'userinfo-identity-container-item-selected':identity === '0'}"
+                         @click="identityChoice('0')">
                         <div class="userinfo-identity-container-item-circle"
                              :class="{'userinfo-identity-container-item-selected-circle':identity === '0'}"/>
                         <p class="userinfo-identity-container-item-text"
@@ -14,7 +15,8 @@
                         <van-radio v-if="identity === '0'" name="0"/>
                     </div>
                     <div class="userinfo-identity-container-item"
-                         :class="{'userinfo-identity-container-item-selected':identity === '1'}" @click="identityChoice('1')">
+                         :class="{'userinfo-identity-container-item-selected':identity === '1'}"
+                         @click="identityChoice('1')">
                         <div class="userinfo-identity-container-item-circle"
                              :class="{'userinfo-identity-container-item-selected-circle':identity === '1'}"/>
                         <p class="userinfo-identity-container-item-text"
@@ -29,7 +31,8 @@
             <div class="userinfo-identity-container">
                 <van-radio-group v-model="gender">
                     <div class="userinfo-identity-container-item"
-                         :class="{'userinfo-identity-container-item-selected':gender === '0'}" @click="genderChoice('0')">
+                         :class="{'userinfo-identity-container-item-selected':gender === '0'}"
+                         @click="genderChoice('0')">
                         <div class="userinfo-identity-container-item-circle"
                              :class="{'userinfo-identity-container-item-selected-circle':gender === '0'}"/>
                         <p class="userinfo-identity-container-item-text"
@@ -37,7 +40,8 @@
                         <van-radio v-if="gender === '0'" name="0"/>
                     </div>
                     <div class="userinfo-identity-container-item"
-                         :class="{'userinfo-identity-container-item-selected':gender === '1'}" @click="genderChoice('1')">
+                         :class="{'userinfo-identity-container-item-selected':gender === '1'}"
+                         @click="genderChoice('1')">
                         <div class="userinfo-identity-container-item-circle"
                              :class="{'userinfo-identity-container-item-selected-circle':gender === '1'}"/>
                         <p class="userinfo-identity-container-item-text"
@@ -47,10 +51,10 @@
                 </van-radio-group>
             </div>
         </div>
-         <div  v-if="showNext" class="userinfo-grade-container">
-             <p class="userinfo-identity-sub-title">{{identity === '1'? '您孩子的年级' : '你的年级'}}</p>
-            <van-picker :columns="columns" @change="onChange"  />
-         </div>
+        <div v-if="showNext" class="userinfo-grade-container">
+            <p class="userinfo-identity-sub-title">{{identity === '1'? '您孩子的年级' : '你的年级'}}</p>
+            <van-picker :columns="columns" @change="onChange"/>
+        </div>
         <div class="userinfo-submit-area">
             <button class="userinfo-submit-area-button" @click="handleNext">
                 {{showNext === true? '确认' : '下一步'}}
@@ -65,9 +69,11 @@
 </template>
 
 <script>
-  import { createNamespacedHelpers } from 'vuex'
-  import { Toast } from 'vant'
-  const { mapState, mapActions } = createNamespacedHelpers(
+  import {createNamespacedHelpers} from 'vuex'
+  import {Toast} from 'vant'
+  import {getGradeNum} from './MyUtil'
+
+  const {mapState, mapActions} = createNamespacedHelpers(
     'userInfo'
   )
   export default {
@@ -75,86 +81,68 @@
     data: function () {
       return {
         identity: '',
-        gender:'',
-        grade:-1,
+        gender: '',
+        grade: -1,
         showIdentity: true,
-        showNext:false,
-        columns: ['未上学', '幼儿园', '一年级', '二年级', '三年级','四年级','五年级','六年级','初一','初二','初三','初三以上']
+        showNext: false,
+        columns: ['未上学', '幼儿园', '一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '初一', '初二', '初三', '初三以上']
       }
     },
     computed: {
       ...mapState(['userInfo', 'loading'])
     },
+    watch: {
+      loading: function (loading) {
+        let num = 3
+        let that = this
+        if (loading === true) {
+          console.log("back")
+          var timer = setInterval(function () {
+            num--
+            console.log("backaa")
+            if (num === 0) {
+              that.$router.back(-1)
+              console.log("back")
+              clearInterval(timer)
+            }
+
+          }, 1000)
+        }
+      }
+    },
     methods: {
       ...mapActions(['getMyUserInfo', 'updateUserInfo']),
       handleNext: function () {
-        if (this.showNext === false){
+        if (this.showNext === false) {
           if (this.identity === '') {
             Toast.fail('请先选择身份')
           } else {
             this.showNext = true
             this.showIdentity = false
           }
-      } else {
+        } else {
           if (this.sex === '') {
             Toast.fail('请选择性别')
           } else if (this.grade === '') {
             Toast.fail('请选择年级')
-          }else if (this.showNext === true) {
-            this.updateUserInfo({role:this.identity,gender:this.sex,grade:this.grade})
+          } else if (this.showNext === true) {
+            this.updateUserInfo({role: this.identity, gender: this.sex, grade: this.grade})
           }
         }
       },
-      identityChoice:function(type) {
+      identityChoice: function (type) {
         console.log("AAA")
         console.log(type)
         this.identity = type
       },
-      genderChoice:function(type) {
+      genderChoice: function (type) {
         console.log("AAA")
         console.log(type)
         this.gender = type
       },
       onChange(picker, value, index) {
         console.log(value)
-        switch (value) {
-          case '未上学':
-            this.grade = -1
-            break
-          case '幼儿园':
-            this.grade = 0
-            break
-          case '一年级':
-            this.grade = 1
-            break
-          case '二年级':
-            this.grade = 2
-            break
-          case '三年级':
-            this.grade = 3
-            break
-          case '四年级':
-            this.grade = 4
-            break
-          case '五年级':
-            this.grade = 5
-            break
-          case '六年级':
-            this.grade = 6
-            break
-          case '初一':
-            this.grade = 7
-            break
-          case '初二':
-            this.grade = 8
-            break
-          case '初三':
-            this.grade = 9
-            break
-          case '初三以上':
-            this.grade = 10
-            break
-        }
+        this.grade = getGradeNum(value)
       },
     }
   }
@@ -182,14 +170,14 @@
                 &-item {
                     display: flex;
                     flex-direction: row;
-                    position:relative;
+                    position: relative;
                     width: 300px;
                     height: 200px;
                     padding-bottom: 56px;
                     border: 1px #000;
                     margin: 0px 15px 0px 15px;
                     border-radius: 20px;
-                    box-shadow: #f4f4f4 5px 5px 5px 5px ;//边框阴影
+                    box-shadow: #f4f4f4 5px 5px 5px 5px; //边框阴影
                     background-color: white;
                     &-text {
                         line-height: 200px;
@@ -207,7 +195,7 @@
                     }
                 }
                 &-item-selected {
-                    background-color:#86befb;
+                    background-color: #86befb;
                     &-text {
                         color: white;
                     }
@@ -219,7 +207,7 @@
             }
 
         }
-        &-grade-container{
+        &-grade-container {
             margin-top: -100px;
         }
         &-submit-area {
@@ -253,26 +241,31 @@
             }
         }
     }
+
     .van-radio-group {
         display: flex;
         flex-direction: row;
     }
+
     .van-radio {
         width: 40px;
         height: 40px;
-        position:absolute;
-        right:0px;
-        bottom:-25px;
+        position: absolute;
+        right: 0px;
+        bottom: -25px;
 
     }
-    .van-picker{
+
+    .van-picker {
         height: 150px;
     }
+
     .van-picker-column__item {
         width: 100vw
 
     }
-    .van-picker-column{
+
+    .van-picker-column {
         overflow: visible;
     }
 
