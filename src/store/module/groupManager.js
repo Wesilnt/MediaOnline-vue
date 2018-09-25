@@ -283,6 +283,8 @@ const groupManager = {
 
         //验证是否完成了公众号授权
         async checkoutAuthorrization({dispatch},payload){
+            console.log('代码你他妈走到哪了')
+            console.log(payload)
             const result = await wechatSubscribed()
             console.log('是否关注公众号')
             console.log(result)
