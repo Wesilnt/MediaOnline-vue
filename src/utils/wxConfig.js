@@ -12,7 +12,8 @@ if (NODE_ENV === 'development') {
 /** 注入配置信息 */
 export const wxConfig = async () => {
   const params = {
-    url: encodeURIComponent(location.href.split('#')[0])
+    // url: encodeURIComponent(location.href.split('#')[0])
+    url: location.href.split('#')[0]
   }
   let result = await wxConfigApi(params)
   const { appid: appId, nonceStr, timestamp, signature } = result.js_config
