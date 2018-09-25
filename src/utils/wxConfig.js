@@ -18,7 +18,7 @@ export const wxConfig = async () => {
   let result = await wxConfigApi(params)
   const { appid: appId, nonceStr, timestamp, signature } = result.js_config
   wx.config({
-    debug: false,
+    debug: true,
     appId,
     nonceStr,
     timestamp,
