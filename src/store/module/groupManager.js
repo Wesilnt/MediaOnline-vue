@@ -287,7 +287,7 @@ const groupManager = {
             if(result && result==1){
                 dispatch('checkoutShowTeleDialog',payload)
             }else{
-
+                alert('请关注公众号')
             }
         },
 
