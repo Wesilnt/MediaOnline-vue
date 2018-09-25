@@ -19,6 +19,7 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
+import { wxConfig } from '../../utils/wxConfig'
 
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
   'myFeedback'
@@ -36,6 +37,9 @@ export default {
   },
   methods: {
     ...mapActions(['handleFeedback', 'handleInput'])
+  },
+  mounted() {
+    wxConfig()
   }
 }
 </script>
