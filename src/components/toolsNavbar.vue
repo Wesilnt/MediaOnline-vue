@@ -129,7 +129,7 @@ export default {
           'payType' : 2
         }
       }
-      console.log('userAccessStatus =',userAccessStatus)
+      console.log('userAccessStatus =',this.userAccessStatus)
       switch(this.userAccessStatus) {
         case -3:
           //拼团失败,重新发起拼团
