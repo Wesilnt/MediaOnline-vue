@@ -15,19 +15,34 @@ import {
   Swipe,
   SwipeItem,
   Popup,
-  Lazyload,
   PullRefresh,
-  List,
   Progress,
-  Field
+  Lazyload,
+  SwipeCell,
+  Dialog,
+  List,
+  Cell,
+  Field,
+  Loading,
+  RadioGroup,
+  Radio,
+  Picker
 } from 'vant'
 
-Vue.use(Progress)
+Vue.use(Cell)
+Vue.use(Popup)
+Vue.use(SwipeCell)
+Vue.use(Dialog)
+Vue.use(List)
 Vue.use(Field)
+Vue.use(RadioGroup)
+Vue.use(Radio)
+Vue.use(Loading)
+Vue.use(Picker)
+Vue.use(Progress)
 Vue.use(Toast)
 Vue.use(Button)
 Vue.use(Tag)
-Vue.use(Popup)
 Vue.use(Tab).use(Tabs)
 Vue.use(Swipe).use(SwipeItem)
 Vue.use(Lazyload, {
@@ -35,4 +50,3 @@ Vue.use(Lazyload, {
   loading: loading
 })
 Vue.use(PullRefresh)
-Vue.use(List)

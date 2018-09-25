@@ -52,3 +52,5 @@ export const getCookie = name => {
   if ((arr = document.cookie.match(reg))) return arr[2].replace(regMark, '')
   return null
 }
+export const noAccessToken = () =>
+  getCookie('COOKIE_TOKEN_KEY_CNONLINE') === null
