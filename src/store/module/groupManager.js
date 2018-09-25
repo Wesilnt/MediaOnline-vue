@@ -316,6 +316,7 @@ const groupManager = {
             let params = {
                 "courseId" : payload.courseId
               }
+            console.log('当前用户支付类型 payload = ',payload)
             switch(payload.payType){
                 case 0:
                     dispatch('unlockCourse',params)
