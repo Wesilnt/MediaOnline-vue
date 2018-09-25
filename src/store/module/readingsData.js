@@ -33,12 +33,12 @@ export default {
         bindBookDetail(state, res) {
             state.bookDetail = res
         },
-        bindSingleSetList(state, {res,page}) { 
-            state.singlePage = page
-            state.singleFinished = res.result.length <state.pageSize
-            state.singleLoaing = false
-            if(1==page) state.singleSetList = []
-            state.singleSetList = state.singleSetList.concat(res.result)
+        bindSingleSetList(state, {res,page,totalCount}) { 
+          if(1==page) state.singleSetList = []
+          state.singlePage = page
+          state.singleLoaing = false
+          state.singleSetList = state.singleSetList.concat(res.result)
+          state.singleFinished = state.singleSetList.length < totalCount
         },
         toggleLoading(state, isLoading){
            state.loading = isLoading
@@ -55,7 +55,8 @@ export default {
             let page  = refresh ? 1 : state.currentPage + 1
             const res = await getReadingsList({ type: 1007, currentPage: page, pageSize: state.pageSize })
             console.log(res)
-            commit("bindReadingsList", {res, page})
+            let totalCount = res.totalCount
+            commit("bindReadingsList", {res, page,totalCount})
         },
         //书详情
         async getBookDetail({ commit }, params) {

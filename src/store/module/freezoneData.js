@@ -10,11 +10,11 @@ export default {
     isSubscribe:true
   },
   mutations: {
-     bindFreezoneList(state,{freeZoneList,page}){ 
+     bindFreezoneList(state,{freeZoneList,page,totalCount}){ 
        state.currentPage = page
        if(1 == state.currentPage)state.freeZoneList=[]  
        state.freeZoneList = state.freeZoneList.concat(freeZoneList)
-       state.finished = freeZoneList.length<state.pageSize 
+       state.finished =  state.freeZoneList.length>=totalCount
        state.loading = false
      },
      toggleLoading(state,params){
@@ -35,7 +35,8 @@ export default {
         currentPage:page
       })  
       console.log(res)
-      commit('bindFreezoneList',{freeZoneList:res.result,page:page})
+      let totalCount = res.totalCount
+      commit('bindFreezoneList',{freeZoneList:res.result,page,totalCount})
       //上传最新学习进度
       res.result.map(item=>{ 
         let localCache = localStorage.getItem('learntime-'+item.id)
