@@ -92,8 +92,8 @@ function request(url, options, needToken = true) {
   const baseURI = isUrl(url) ? '' : api
   let defaultOptions
   if (needToken) {
-    accessToken = "841f798c-6a26-4d9e-80b6-52393c9742c3"
-    // accessToken = getCookie('COOKIE_TOKEN_KEY_CNONLINE')
+    // accessToken = "841f798c-6a26-4d9e-80b6-52393c9742c3"
+    accessToken = getCookie('COOKIE_TOKEN_KEY_CNONLINE')
     defaultOptions = {
       // credentials: 'include',
       // mode: 'no-cors',
