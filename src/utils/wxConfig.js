@@ -1,5 +1,6 @@
 import request from './request'
 import { stringify } from 'qs'
+import { wxConfig as wxConfigApi } from '../services/groupBuyAPi.js'
 
 const { NODE_ENV } = process.env
 
@@ -9,21 +10,19 @@ if (NODE_ENV === 'development') {
 }
 
 /** 注入配置信息 */
-export const wxConfig = () => {
+export const wxConfig = async () => {
   const params = {
-    // url: encodeURIComponent(location.href.split('#')[0])
-    url: encodeURIComponent('http://t.shbaoyuantech.com/')
+    url: encodeURIComponent(location.href.split('#')[0])
   }
-  request(`${wxConfigUrl}?${stringify(params)}`).then(res => {
-    const { appid: appId, nonceStr, timestamp, signature } = res.js_config
-    wx.config({
-      debug: true,
-      appId,
-      nonceStr,
-      timestamp,
-      signature,
-      jsApiList: ['updateAppMessageShareData', 'updateTimelineShareData']
-    })
+  let result = await wxConfigApi(params)
+  const { appid: appId, nonceStr, timestamp, signature } = result.js_config
+  wx.config({
+    debug: true,
+    appId,
+    nonceStr,
+    timestamp,
+    signature,
+    jsApiList: ['updateAppMessageShareData', 'updateTimelineShareData']
   })
 }
 
