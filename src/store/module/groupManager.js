@@ -286,7 +286,7 @@ const groupManager = {
             if(result && result==1){
                 dispatch('checkoutShowTeleDialog',payload)
             }else{
-                
+
             }
         },
 
@@ -409,7 +409,8 @@ const groupManager = {
                            
                         },
                         fail : function (errmsg) {
-
+                            console.log('代码到这里了')
+                            console.log(errmsg)
                         },
                         complete : function (res) {
                             if(res.errMsg == "chooseWXPay:cancel" ) {
