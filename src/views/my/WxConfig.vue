@@ -16,7 +16,7 @@ export default {
       wxConfig()
     },
     wxShare: function() {
-      console.log('wxShare')
+      console.log(this.$router)
       wx.updateAppMessageShareData(
         {
           title: '这是配置页的分享',
