@@ -55,7 +55,6 @@ export default {
   let result0= await wxConfig({'url' : window.location.href})
  console.log('config' +result0);
         let config = result0.js_config
-        console.log('嫩不能走到这里')
         console.log(result0)
         wx.config({
           debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。

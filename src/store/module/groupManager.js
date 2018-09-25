@@ -67,7 +67,7 @@ const groupManager = {
     actions:{
         //获取拼团详情
         async getGroupBuyDetail({commit,dispatch},groupBuyId) {
-            
+            console.log('groupBuyId =',groupBuyId)
             const result = await getGroupBuyDetail({'groupBuyId':groupBuyId})
             console.log('获取拼团详情成功')
             console.log(result)
@@ -391,18 +391,19 @@ const groupManager = {
                         success: function (res) {
                             // 支付成功后的回调函数
                             console.log("支付成功"); 
+                            console.log(payType)
                             switch(payType){
                                 case 0:
-                                    console.log('原价购买支付成功')
+                                    console.log('原价购买支付成功~~~')
                                     commit('bindAchieveOriginBuy',true)
                                 break
                                 case 1:
-                                    console.log('发起拼团支付成功')
+                                    console.log('发起拼团支付成功~~~')
                                     //调起拼团详情
                                     dispatch('getGroupBuyDetail',result.groupBuyId)
                                 break
                                 case 2:
-                                    console.log('参与拼团支付成功')
+                                    console.log('参与拼团支付成功~~~')
                                     //调起拼团详情
                                     dispatch('getGroupBuyDetail',result.groupBuyId)
                                 break
