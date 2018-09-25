@@ -12,7 +12,7 @@ if (NODE_ENV === 'development') {
 export const wxConfig = () => {
   const params = {
     // url: encodeURIComponent(location.href.split('#')[0])
-    url: 'http://t.shbaoyuantech.com'
+    url: encodeURIComponent('http://t.shbaoyuantech.com/')
   }
   request(`${wxConfigUrl}?${stringify(params)}`).then(res => {
     const { appid: appId, nonceStr, timestamp, signature } = res.js_config
