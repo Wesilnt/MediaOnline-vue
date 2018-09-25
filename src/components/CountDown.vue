@@ -25,7 +25,9 @@ export default {
     //  this.countdown=  startCountDown(this.duration,times=> this.times = times)
     },
     watch:{
-       "duration" : (newVal)=>{
+       "duration" : (newVal,oldVal)=>{
+           console.log('代码走到这里newVal = ',newVal)
+           console.log('代码走到这里oldVal = ',oldVal)
            if(newVal > 0){
                this.countdown=  startCountDown(this.countDownTime,times=> {console.log(times),this.times = times})
            }else {

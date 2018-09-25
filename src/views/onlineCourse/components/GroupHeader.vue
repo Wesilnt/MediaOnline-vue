@@ -24,7 +24,7 @@
             <div v-if="headerType==100">
                 <div class="groupBuy-info">剩余<span>{{leavePerson}}</span>个名额</div>
                 <div class="groupBuy-countDown-container">
-                    <CountDown :duration="countDownTime">{{countDownTime}}</CountDown>
+                    <CountDown :duration="countDownTime"></CountDown>
                 </div>
                 <div class="groupBuy-deadline">距离截止时间</div>               
             </div>
