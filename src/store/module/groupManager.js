@@ -283,15 +283,14 @@ const groupManager = {
 
         //验证是否完成了公众号授权
         async checkoutAuthorrization({dispatch},payload){
-            console.log('代码你他妈走到哪了')
-            console.log(payload)
             const result = await wechatSubscribed()
             console.log('是否关注公众号')
             console.log(result)
-            if(result && result.data==1){
+            if(result && result==1){
                 dispatch('checkoutShowTeleDialog',payload)
             }else{
-                alert('请关注公众号')
+                //跳转去关注公众号
+                window.location.href = "https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzA4Mzg3NjE2Mg==&scene=126#wechat_redirect"
             }
         },
 
@@ -416,12 +415,9 @@ const groupManager = {
                            
                         },
                         fail : function (errmsg) {
-                            console.log('代码到这里了')
                             console.log(errmsg)
                         },
                         complete : function (res) {
-                            console.log('代码难道这里')
-                            console.log(res)
                             if(res.errMsg == "chooseWXPay:cancel" ) {
                                 console.log('支付取消')
                             } 
