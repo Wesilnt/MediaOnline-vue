@@ -11,10 +11,10 @@ if (NODE_ENV === 'development') {
 /** 注入配置信息 */
 export const wxConfig = () => {
   const params = {
-    url: encodeURIComponent(location.href.split('#')[0])
+    // url: encodeURIComponent(location.href.split('#')[0])
+    url: 'http://t.shbaoyuantech.com'
   }
   request(`${wxConfigUrl}?${stringify(params)}`).then(res => {
-    console.log(res)
     const { appid: appId, nonceStr, timestamp, signature } = res.js_config
     wx.config({
       debug: true,
@@ -119,7 +119,7 @@ export const wechatShare = async (option = {}, successCB = () => {}) => {
 
     ...option
   }
-  wxConfig()
+  // wxConfig()
   wxShare(shareOption, successCB)
 }
 
