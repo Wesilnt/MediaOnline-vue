@@ -159,7 +159,7 @@ export default {
           this.$router.push({ name: 'videoCourseDetail', params: { lessonId } }) 
         break
         case 1009:
-          //集赞中
+          //集赞中 
           this.$router.push({ name: 'Praise',params: { courseId : this.$route.params.courseId ,collectLikeId:this.praiseData.collectLikeId} }) 
         break
         case 0:

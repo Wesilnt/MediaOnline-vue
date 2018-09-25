@@ -99,7 +99,7 @@ export default {
   components: {'share-pop': SharePop},
   data() {
     return { 
-      lessonId: this.$route.query.id,
+      lessonId: this.$route.params.id,
       hiddenDraft:this.$route.query.hiddenDraft,
       isInit:true,
       play: true,
@@ -243,7 +243,8 @@ export default {
       this.isInit = true
       this.popupVisible = false
       if(audio.isFree){ 
-         this.playAudio({lessonId:audio.id})  
+        this.$router.replace({ name: 'AudioPlay', params:{ id: audio.id},   query: {hiddenDraft:this.hiddenDraft } }) 
+        this.playAudio({lessonId: audio.id })
       }else{
           this.$toast({duration:2000,message:'你还未购买该专栏,请购买之后收听!!!'})
       } 

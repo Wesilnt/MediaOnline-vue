@@ -35,8 +35,8 @@ export default {
         return;
       }
       this.$router.push({
-        path: '/audio/audioplay',
-        query: { id: this.vision.freeLessonList[0].id }
+        name: 'AudioPlay',
+        params:{id:this.book.freeLessonList[0].id,}, 
       })
     }
   }

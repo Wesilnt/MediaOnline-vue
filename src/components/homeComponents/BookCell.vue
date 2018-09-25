@@ -18,7 +18,7 @@ export default {
        this.$router.push({path:'/home/readings/book',query:{id:this.book.id,hiddenDraft:true}})
     },
     onPlayClick(){
-       this.$router.push({path:'/audio/audioplay',query:{id:this.book.freeLessonList[0].id,hiddenDraft:true}})
+       this.$router.push({name:'AudioPlay',params:{id:this.book.freeLessonList[0].id,},query:{hiddenDraft:1}})
     }
   }
 }

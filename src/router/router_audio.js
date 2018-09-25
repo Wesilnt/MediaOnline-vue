@@ -3,7 +3,7 @@ import AudioCmts from '../components/audio/AudioCmts.vue' //音频-评论
 import AudioDraft from '../components/audio/AudioDraft.vue' //音频-文稿
 export default[
   {
-    path: '/audio/audioplay',
+    path: '/audio/audioplay/:id',
     name: 'AudioPlay',
     component: AudioPlay
   },

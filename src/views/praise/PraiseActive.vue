@@ -1,7 +1,7 @@
 <template>
     <div class="praise-active">
-        <div v-for="(item,i) of actives" :key="i" class="active-item">
-            <img :src="item.url">
+        <div v-for="(item,i) of picList" :key="i" class="active-item">
+            <img :src="item">
         </div>
         <div class="help-btn" @click="toHelp">
             为TA助力，免费领取{{courseName}}
@@ -15,11 +15,7 @@ export default {
   data() {
     return {
       courseId:this.$route.params.courseId,
-      collectLikeId:this.$route.params.collectLikeId,
-      actives: [
-        { url: require('../../assets/praise_bg.png') },
-        { url: require('../../assets/praise_bg.png') }, 
-      ]
+      collectLikeId:this.$route.params.collectLikeId, 
     }
   },
   computed:{...mapState(['picList','courseName'])},

@@ -27,7 +27,7 @@ export default {
   props: ['item', 'playing'],
   methods: {
     onItemClick(id) {
-      this.$router.push({ path: '/audio/audioplay', query: { id, hiddenDraft:true } })
+      this.$router.push({ name: 'AudioPlay', params:{id}, query: {hiddenDraft:1 } })
     }
   }
 }
