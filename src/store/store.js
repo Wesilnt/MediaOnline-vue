@@ -34,7 +34,7 @@ export default new Vuex.Store({
   },
   actions: {
     async getAccessToken() {
-      // const response = await getToken()
+      await getToken()
     },
     async checkToken({ dispatch }) {
       noAccessToken() && dispatch('getAccessToken')
