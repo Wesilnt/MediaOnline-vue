@@ -36,13 +36,16 @@ export default {
 }
 .video-bigimage-container {
   display: inline-block;
+  width: 100%;
+  // height: 800px;
+  // overflow: hidden;
   .imageExtend {
     position: fixed;
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
-    z-index: 2345;
+    z-index: 3500;
     overflow: scroll;
     top: 0;
   }

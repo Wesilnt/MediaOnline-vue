@@ -3,7 +3,7 @@
         <div v-show="isShowGroupBuy">
             <div class="groupBuy-usericon" v-if="isSixGroup == true" >
                 <div class="qhht-flex groupBuy-usericon-top">
-                        <div class="groupBuy-usericon-item" v-for="(item,index) in userListTop" :key="index" :style="item.avatarUrl==null?{}:{ background : 'url('+item.avatarUrl+')', 'background-size' : '120px'}">
+                        <div class="groupBuy-usericon-item" v-for="(item,index) in userListTop" :key="index" :style="item.avatarUrl==null?{}:{ background : 'url('+item.avatarUrl+')', 'background-size' : '100%'}">
                             <div class="groupBuy-usericon-manager" v-show="item.isStarter">团长</div>            
                         </div>
                 </div>
@@ -16,7 +16,7 @@
             </div>
             <div class="groupBuy-usericon" v-else>
                 <div class="qhht-flex groupBuy-usericon-top-three">
-                    <div class="groupBuy-usericon-item" v-for="(item,index) in userListTop" :key="index" :style="item.avatarUrl==null?{}:{ background : 'url('+item.avatarUrl+')' }">
+                    <div class="groupBuy-usericon-item" v-for="(item,index) in userListTop" :key="index" :style="item.avatarUrl==null?{}:{ background : 'url('+item.avatarUrl+')','background-size' : '100%' }">
                         <div class="groupBuy-usericon-manager" v-show="item.isStarter">团长</div>
                     </div>
                 </div>
@@ -39,7 +39,7 @@
             </div>
             <div class="groupBuy-circleline"></div>
         </div>
-        <div class="groupBuy-banner" :style="{ background : 'url('+profilePic+')' }">
+        <div class="groupBuy-banner" :style="{ background : 'url('+profilePic+')','background-size' : '100%' }">
             <!-- <div class="groupBuy-circleline" v-show="true"></div> -->
             <span class="groupBuy-banner-bottom">99人已购买</span>
         </div>

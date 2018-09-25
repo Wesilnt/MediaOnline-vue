@@ -208,12 +208,13 @@ export default {
 //大图浏览
 .videocol-bigimage {
   position: relative;
-  padding: 0 40px;
+  padding: 0 40px 40px;
   width: 100%;
-  height: 800px;
-  margin: 40px 0;
+  height: 950px;
+//   margin: 40px 0;
   background-color: #fff;
   border-bottom: 8px solid rgb(247, 247, 247);
+  overflow: hidden;
 }
 
 .videocol-bigimage-bg {

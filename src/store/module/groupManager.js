@@ -233,7 +233,7 @@ const groupManager = {
                 }
                 break
             }
-            console.log('更新qi + =',toolsObject)
+            console.log('更新状态条 + =',toolsObject)
             //更新工具条状态
             commit('videoColumnDetail/updateToolsObject',toolsObject,{root:true})
 

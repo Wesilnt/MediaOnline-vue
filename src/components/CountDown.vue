@@ -5,7 +5,7 @@
         <span class="time-number">{{times[1]}}</span>
         <span class="time-symbol">:</span>
         <span class="time-number">{{times[2]}}</span>
-        <span>{{duration}}</span>
+        <span v-show="false">{{doDuration}}</span>
     </div>
 </template>
 
@@ -22,27 +22,24 @@ export default {
        times:['00','00','00'],}
     },
     created(){
-    //  this.countdown=  startCountDown(this.duration,times=> this.times = times)
     },
-    watch:{
-       "duration" : (newVal,oldVal)=>{
-           console.log('代码走到这里newVal = ',newVal)
-           console.log('代码走到这里oldVal = ',oldVal)
-           if(newVal > 0){
-               this.countdown=  startCountDown(this.countDownTime,times=> {console.log(times),this.times = times})
-           }else {
-                if(this.countdown) clearInterval(this.countdown)
-           }
-       }
-    },
-    methods:{
-      
+    methods:{     
     },
     beforeDestroy(){
+        console.log('zoudaozheli@@@@@')
       if(this.countdown) clearInterval(this.countdown)
     },
     computed:{
-        ...mapState(["countDownTime"])
+        ...mapState(["countDownTime"]),
+        doDuration:function(){
+            let tempDuration = this.duration
+            if(tempDuration > 0){
+                this.countdown=  startCountDown(this.duration,times=> {console.log(times),this.times = times})
+            }else {
+                if(this.countdown) clearInterval(this.countdown)
+            }
+            return tempDuration
+        }
     }
 }
 </script>
