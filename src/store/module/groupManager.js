@@ -284,6 +284,8 @@ const groupManager = {
         //验证是否完成了公众号授权
         async checkoutAuthorrization({dispatch},payload){
             const result = await wechatSubscribed()
+            console.log('是否关注公众号')
+            console.log(result)
             if(result && result==1){
                 dispatch('checkoutShowTeleDialog',payload)
             }else{
