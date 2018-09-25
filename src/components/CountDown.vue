@@ -24,9 +24,9 @@ export default {
     //  this.countdown=  startCountDown(this.duration,times=> this.times = times)
     },
     watch:{
-       "duration" : function(newVal){
+       "duration" : (newVal)=>{
            if(newVal > 0){
-               this.countdown=  startCountDown(this.countDownTime,times=> this.times = times)
+               this.countdown=  startCountDown(this.countDownTime,times=> {console.log(times),this.times = times})
            }else {
                 if(this.countdown) clearInterval(this.countdown)
            }
