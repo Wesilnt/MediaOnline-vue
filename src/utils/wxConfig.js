@@ -16,18 +16,7 @@ export const wxConfig = () => {
       timestamp: configs.timestamp,
       signature: configs.signature,
       jsApiList: [
-        'hideMenuItems',
-        'previewImage',
-        'checkJsApi',
-        'chooseWXPay',
-        'onMenuShareTimeline',
-        'onMenuShareAppMessage',
-        'onMenuShareQQ',
-        'onMenuShareWeibo',
-        'onMenuShareQZone',
-        'getLocation',
-        'openLocation',
-        'translateVoice'
+        'updateAppMessageShareData','updateTimelineShareData'
       ]
     })
   })
