@@ -13,7 +13,8 @@ const groupManager = {
         isSixGroup:false,  //是否是六人团
         headerType:0,       // 100倒计时  101拼团成功  102拼团失败  103拼团已满  
         isOwner:true,    //是不是开团人 
-        achieveOriginBuy:false //是否完成原价购买
+        achieveOriginBuy:false, //是否完成原价购买
+        isShowMobileDialog:false //是否弹出手机号收集框
     },
     getters:{
         //专栏头图
@@ -57,6 +58,9 @@ const groupManager = {
         },
         bindAchieveOriginBuy(state,achieveOriginBuy){
             state.achieveOriginBuy = achieveOriginBuy
+        },
+        bindIsShowMobileDialog(state,isShowMobileDialog){
+            state.isShowMobileDialog = isShowMobileDialog
         }
 
     },
@@ -281,11 +285,13 @@ const groupManager = {
             const result = await wechatSubscribed()
             if(result && result==1){
                 dispatch('checkoutShowTeleDialog',payload)
+            }else{
+                
             }
         },
 
         //验证是否弹出手机号输入框
-        async checkoutShowTeleDialog({dispatch},payload){
+        async checkoutShowTeleDialog({dispatch,commit},payload){
             let telephone = window.localStorage.getItem('telephone')
             if(telephone == ''){
                 const result = await getMyUserInfo()
@@ -297,6 +303,7 @@ const groupManager = {
                  
                 }else{
                     console.log('弹出手机号收集框')
+                    commit('bindIsShowMobileDialog',true)
                 }
             }else {
                 dispatch('beginPayment',payload)
