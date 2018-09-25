@@ -16,7 +16,7 @@ export default {
       wxConfig()
     },
     wxShare: () => {
-      wxShare()
+      wxShare({ title:'VUe', desc:'VUEVUEVUE', link:'www.baidu.com', imgUrl:require('../../assets/poster_header_bg.jpg') })
     }
   }
 }
