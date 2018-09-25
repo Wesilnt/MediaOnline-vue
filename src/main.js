@@ -18,7 +18,7 @@ new Vue({
   router,
   store,
   render: h => {
-    if (noAccessToken()) {
+    /*if (noAccessToken()) {
       store.dispatch('getAccessToken')
       return h(Skeleton, {
         props: {
@@ -26,7 +26,7 @@ new Vue({
           active: true
         }
       })
-    }
+    }*/
     return h(App)
   }
 }).$mount('#app')

@@ -34,13 +34,11 @@ export default new Vuex.Store({
   },
   actions: {
     async getAccessToken() {
-      const response = await getToken()
-      console.log(response)
+      // const response = await getToken()
     },
     async checkToken({ dispatch }) {
-      noAccessToken() &&  dispatch('getAccessToken')
-
-    },
+      noAccessToken() && dispatch('getAccessToken')
+    }
   },
   modules: {
     myPuzzle_Praise,

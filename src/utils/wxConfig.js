@@ -1,4 +1,5 @@
 import request from './request'
+import { stringify } from 'qs'
 import wxConfigURI from '../api/wxConfig'
 
 /** 注入配置信息 */
@@ -6,7 +7,7 @@ export const wxConfig = () => {
   const params = {
    url: encodeURIComponent(location.href.split('#')[0])
   }
-  request(wxConfigURI, params).then(res => {
+  request(wxConfigURI, stringify(params)).then(res => {
     const configs = res.js_config
     wx.config({
       debug: false,
