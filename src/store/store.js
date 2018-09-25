@@ -24,7 +24,7 @@ import praise from './module/praiseData'
 import mobile from './module/mobileData'
 
 import { getToken } from '../services/accessToken'
-import { getCookie,noAccessToken } from '../utils/userAuth'
+import { noAccessToken } from '../utils/userAuth'
 
 Vue.use(Vuex)
 export default new Vuex.Store({

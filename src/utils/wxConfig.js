@@ -4,8 +4,7 @@ import wxConfigURI from '../api/wxConfig'
 /** 注入配置信息 */
 export const wxConfig = () => {
   const params = {
-    resetURI: true,
-    data: { url: encodeURIComponent(location.href.split('#')[0]) }
+   url: encodeURIComponent(location.href.split('#')[0])
   }
   request(wxConfigURI, params).then(res => {
     const configs = res.js_config
