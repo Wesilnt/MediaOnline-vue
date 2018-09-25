@@ -233,6 +233,7 @@ const groupManager = {
                 }
                 break
             }
+            console.log('更新qi + =',toolsObject)
             //更新工具条状态
             commit('videoColumnDetail/updateToolsObject',toolsObject,{root:true})
 
@@ -413,6 +414,8 @@ const groupManager = {
                             console.log(errmsg)
                         },
                         complete : function (res) {
+                            console.log('代码难道这里')
+                            console.log(res)
                             if(res.errMsg == "chooseWXPay:cancel" ) {
                                 console.log('支付取消')
                             } 
