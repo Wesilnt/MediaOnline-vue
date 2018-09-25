@@ -40,7 +40,7 @@ export const wxConfig = () => {
 export const wxShare = (option, successCB) => {
   wx.ready(() => {
     // 分享给朋友
-    wx.onMenuShareAppMessage({
+    wx.updateAppMessageShareData({
       title: option.title,
       desc: option.desc,
       link: option.link,
@@ -55,7 +55,7 @@ export const wxShare = (option, successCB) => {
     })
 
     // 分享到朋友圈
-    wx.onMenuShareTimeline({
+    wx.updateTimelineShareData({
       title: option.friendtitle || option.title, // 标题
       desc: option.desc,
       link: option.link, // 链接
