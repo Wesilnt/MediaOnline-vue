@@ -15,22 +15,8 @@ export default {
     wxConfig: () => {
       wxConfig()
     },
-    wxShare: ()=> {
-      console.log(this)
-      wx.ready(function() {
-        wx.updateAppMessageShareData(
-          {
-            title: '这是配置页的分享',
-            desc: 'Vue 我又更新npm了',
-            link: 'http://t.shbaoyuantech.com',
-            imgUrl: require('../../assets/share_poster.png')
-          },
-          function(res) {
-            // 用户确认分享后执行的回调函数
-            console.log(res)
-          }
-        )
-      })
+    wxShare: () => {
+      wxShare()
     }
   }
 }
