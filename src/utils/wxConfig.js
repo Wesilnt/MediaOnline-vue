@@ -23,7 +23,7 @@ export const wxConfig = async () => {
     nonceStr,
     timestamp,
     signature,
-    jsApiList: ['updateAppMessageShareData', 'updateTimelineShareData']
+    jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline']
   })
 }
 
@@ -31,34 +31,29 @@ export const wxConfig = async () => {
  * wxShare 分享
  * @param option
  */
-export const wxShare = (option, successCB) => {
+export const wxShare = ({ title, desc, link, imgUrl }, successCB) => {
   wx.ready(() => {
     // 分享给朋友
-    wx.updateAppMessageShareData(
-      {
-        title: option.title,
-        desc: option.desc,
-        link: option.link,
-        imgUrl: option.imgUrl
-      },
-      function(res) {
-        // 用户确认分享后执行的回调函数
+    wx.onMenuShareAppMessage({
+      title,
+      desc,
+      link,
+      imgUrl,
+      success: function(res) {
         successCB(res)
       }
-    )
+    })
 
     // 分享到朋友圈
-    wx.updateTimelineShareData(
-      {
-        title: option.friendtitle || option.title, // 标题
-        desc: option.desc,
-        link: option.link, // 链接
-        imgUrl: option.imgUrl // 分享图标
-      },
-      function(res) {
+    wx.onMenuShareTimeline({
+      title, // 标题
+      desc,
+      link, // 链接
+      imgUrl, // 分享图标
+      success: function(res) {
         successCB(res)
       }
-    )
+    })
   })
 }
 
