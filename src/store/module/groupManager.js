@@ -13,7 +13,8 @@ const groupManager = {
         isSixGroup:false,  //是否是六人团
         headerType:0,       // 100倒计时  101拼团成功  102拼团失败  103拼团已满  
         isOwner:true,    //是不是开团人 
-        achieveOriginBuy:false //是否完成原价购买
+        achieveOriginBuy:false, //是否完成原价购买
+        isShowMobileDialog:false //是否弹出手机号收集框
     },
     getters:{
         //专栏头图
@@ -57,13 +58,16 @@ const groupManager = {
         },
         bindAchieveOriginBuy(state,achieveOriginBuy){
             state.achieveOriginBuy = achieveOriginBuy
+        },
+        bindIsShowMobileDialog(state,isShowMobileDialog){
+            state.isShowMobileDialog = isShowMobileDialog
         }
 
     },
     actions:{
         //获取拼团详情
         async getGroupBuyDetail({commit,dispatch},groupBuyId) {
-            
+            console.log('groupBuyId =',groupBuyId)
             const result = await getGroupBuyDetail({'groupBuyId':groupBuyId})
             console.log('获取拼团详情成功')
             console.log(result)
@@ -229,6 +233,7 @@ const groupManager = {
                 }
                 break
             }
+            console.log('更新qi + =',toolsObject)
             //更新工具条状态
             commit('videoColumnDetail/updateToolsObject',toolsObject,{root:true})
 
@@ -281,11 +286,13 @@ const groupManager = {
             const result = await wechatSubscribed()
             if(result && result==1){
                 dispatch('checkoutShowTeleDialog',payload)
+            }else{
+
             }
         },
 
         //验证是否弹出手机号输入框
-        async checkoutShowTeleDialog({dispatch},payload){
+        async checkoutShowTeleDialog({dispatch,commit},payload){
             let telephone = window.localStorage.getItem('telephone')
             if(telephone == ''){
                 const result = await getMyUserInfo()
@@ -297,6 +304,7 @@ const groupManager = {
                  
                 }else{
                     console.log('弹出手机号收集框')
+                    commit('bindIsShowMobileDialog',true)
                 }
             }else {
                 dispatch('beginPayment',payload)
@@ -335,7 +343,7 @@ const groupManager = {
             console.log('发起拼团成功')
             console.log(result)
             if(result == null) return
-            dispatch("getPayment",result,1)
+            dispatch("getPayment",{result,payType:1})
         },
         //参与拼团
         async joinGroupBuy({dispatch},payload) {
@@ -343,7 +351,7 @@ const groupManager = {
             console.log('参与拼团成功')
             console.log(result)
             if(result == null) return
-            dispatch('getPayment',result,2)
+            dispatch('getPayment',{result,payType:2})
         },
         //发起集赞
         async startCollectLike({dispatch},payload) {
@@ -359,7 +367,7 @@ const groupManager = {
             console.log(result)
         },
         //调起微信支付
-        async getPayment({commit,dispatch},result,payType){
+        async getPayment({commit,dispatch},{result,payType}){
            //微信网页开发支付接口
            let result0= await wxConfig({'url' : window.location.href})
            let config = result0.js_config
@@ -383,18 +391,19 @@ const groupManager = {
                         success: function (res) {
                             // 支付成功后的回调函数
                             console.log("支付成功"); 
+                            console.log(payType)
                             switch(payType){
                                 case 0:
-                                    console.log('原价购买支付成功')
+                                    console.log('原价购买支付成功~~~')
                                     commit('bindAchieveOriginBuy',true)
                                 break
                                 case 1:
-                                    console.log('发起拼团支付成功')
+                                    console.log('发起拼团支付成功~~~')
                                     //调起拼团详情
                                     dispatch('getGroupBuyDetail',result.groupBuyId)
                                 break
                                 case 2:
-                                    console.log('参与拼团支付成功')
+                                    console.log('参与拼团支付成功~~~')
                                     //调起拼团详情
                                     dispatch('getGroupBuyDetail',result.groupBuyId)
                                 break
@@ -402,9 +411,12 @@ const groupManager = {
                            
                         },
                         fail : function (errmsg) {
-
+                            console.log('代码到这里了')
+                            console.log(errmsg)
                         },
                         complete : function (res) {
+                            console.log('代码难道这里')
+                            console.log(res)
                             if(res.errMsg == "chooseWXPay:cancel" ) {
                                 console.log('支付取消')
                             } 

@@ -3,7 +3,7 @@
         <div v-show="isShowGroupBuy">
             <div class="groupBuy-usericon" v-if="isSixGroup == true" >
                 <div class="qhht-flex groupBuy-usericon-top">
-                        <div class="groupBuy-usericon-item" v-for="(item,index) in userListTop" :key="index" :style="item.avatarUrl==null?{}:{ background : 'url('+item.avatarUrl+')' }">
+                        <div class="groupBuy-usericon-item" v-for="(item,index) in userListTop" :key="index" :style="item.avatarUrl==null?{}:{ background : 'url('+item.avatarUrl+')', 'background-size' : '120px'}">
                             <div class="groupBuy-usericon-manager" v-show="item.isStarter">团长</div>            
                         </div>
                 </div>

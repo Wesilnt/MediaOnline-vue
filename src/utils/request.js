@@ -88,17 +88,11 @@ const checkResponseCode = (url, response) => {
  * @return {object}           An object containing either "data" or "err"
  */
 function request(url, options, needToken = true) {
-  // const accessToken = getAccessToken();
-
-  let accessToken
-
-  // const refreshToken = getRefreshToken()
+  let accessToken = ''
   const baseURI = isUrl(url) ? '' : api
   let defaultOptions
   if (needToken) {
     accessToken = getCookie('COOKIE_TOKEN_KEY_CNONLINE')
-    // accessToken = "61d5ac16-acfe-4c05-af75-25e66054f208"
-    console.log(accessToken)
     defaultOptions = {
       // credentials: 'include',
       // mode: 'no-cors',
@@ -133,14 +127,13 @@ function request(url, options, needToken = true) {
     })
     .then(checkResponseCode.bind(this, url))
     .catch(e => {
-      // const { dispatch } = store;
+      const { dispatch } = store;
       const status = e.name
       if (status === '401-logout') {
-        Toast.fail('401-logout')
-        // dispatch({ type: "login/logout" });
+          return dispatch('getAccessToken')
       }
       if (status === 401) {
-        return store.dispatch('getAccessToken')
+        return dispatch('getAccessToken')
       }
       if (status === 403) {
         Toast.fail('403')

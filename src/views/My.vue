@@ -85,7 +85,12 @@
             name: '/my/Help',
             image: help,
             title: '意见反馈'
-          }
+          },
+            {
+                name: '/my/wx-config',
+                image: praise,
+                title: '微信接口'
+            },
         ]
       }
     },

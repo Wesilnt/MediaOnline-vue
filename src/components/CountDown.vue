@@ -5,6 +5,7 @@
         <span class="time-number">{{times[1]}}</span>
         <span class="time-symbol">:</span>
         <span class="time-number">{{times[2]}}</span>
+        <span>{{duration}}</span>
     </div>
 </template>
 
@@ -24,9 +25,11 @@ export default {
     //  this.countdown=  startCountDown(this.duration,times=> this.times = times)
     },
     watch:{
-       "duration" : function(newVal){
+       "duration" : (newVal,oldVal)=>{
+           console.log('代码走到这里newVal = ',newVal)
+           console.log('代码走到这里oldVal = ',oldVal)
            if(newVal > 0){
-               this.countdown=  startCountDown(this.countDownTime,times=> this.times = times)
+               this.countdown=  startCountDown(this.countDownTime,times=> {console.log(times),this.times = times})
            }else {
                 if(this.countdown) clearInterval(this.countdown)
            }

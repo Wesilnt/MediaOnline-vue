@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     ...mapActions(['handleFeedback', 'handleInput'])
-  }
+  },
 }
 </script>
 

@@ -13,6 +13,11 @@ module.exports = {
       },
       prefix: '$'
     }),
+    require('precss')(),
+    require('postcss-calc')(),
+    require('autoprefixer')({
+      browsers: ['Android >= 4.0', 'iOS >= 7']
+    }),
     require('postcss-px-to-viewport')({
       viewportWidth: 750, // (Number) The width of the viewport.
       viewportHeight: 1334, // (Number) The height of the viewport.
@@ -20,10 +25,7 @@ module.exports = {
       viewportUnit: 'vw', // (String) Expected units.
       selectorBlackList: ['.van'], // (Array) The selectors to ignore and leave as px.
       minPixelValue: 1, // (Number) Set the minimum pixel value to replace.
-      ediaQuery: false // (Boolean) Allow px to be converted in media queries.
-    }),
-    require('autoprefixer')({
-      browsers: ['Android >= 4.0', 'iOS >= 7']
+      mediaQuery: false // (Boolean) Allow px to be converted in media queries.
     })
   ]
 }

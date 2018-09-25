@@ -14,7 +14,6 @@
             </div>
         </div>
     </section>
-
 </template>
 <script>
 /*展位图 无数据或者加载数据时使用 */

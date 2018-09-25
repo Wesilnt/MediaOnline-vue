@@ -20,14 +20,16 @@
             </div>
         </div>
         <Share :show="sharePageShow" :shareid="courseId" @close="cancelSharePage"></Share>
+        <PhoneVerif v-if="isShowMobileDialog" :callback="cancelDialog"></PhoneVerif>
     </div>
    
 </template>
 
 <script>
 import Share from './share/Share'
+import PhoneVerif from './PhoneVerif'
 import { createNamespacedHelpers } from 'vuex'
-const { mapState,mapGetters,mapActions } = createNamespacedHelpers('videoColumnDetail/groupManager')
+const { mapState,mapGetters,mapActions,mapMutations } = createNamespacedHelpers('videoColumnDetail/groupManager')
 export default {
   name: 'ToolsNavbar',
   data(){
@@ -64,7 +66,8 @@ export default {
     }
   },
   components:{
-    Share
+    Share,
+    PhoneVerif
   }, 
   watch:{
     'collectLikeId':function(newVal){
@@ -78,10 +81,13 @@ export default {
         const lessonId = this.freeLessonList[0].id
         this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
       }
+    },
+    'isShowMobileDialog':function(newVal){
+
     }
   },
   computed:{
-    ...mapState(['userList','collectLikeId','isOwner']),
+    ...mapState(['userList','collectLikeId','isOwner','isShowMobileDialog']),
     ...mapGetters(['courseId','toolsObject','praiseData','userAccessStatus','freeLessonList']),
   },
   filters: {
@@ -92,6 +98,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['bindIsShowMobileDialog']),
     ...mapActions(['startGroupBuy','getCollectLike','startCollectLike','updateFatherData','unlockCourse','checkoutAuthorrization']),
     //点击试听按钮 跳转
     clickAuditionBtn(){
@@ -174,6 +181,10 @@ export default {
     //邀请好友拼团
     cancelSharePage(){
       this.sharePageShow = false
+    },
+    //关闭手机号收集框
+    cancelDialog(){
+      this.bindIsShowMobileDialog(false)
     }
   }
 }

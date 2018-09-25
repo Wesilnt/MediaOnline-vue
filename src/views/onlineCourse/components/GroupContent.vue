@@ -143,7 +143,6 @@ export default {
         }
     },
     created() {
-        console.log('-=-=-=-=--=-')
         //获取专栏评论列表
         this.getCommentList({
             regionType: 2201,
@@ -287,6 +286,7 @@ export default {
 }
 .videocol-purchase-tip-fatherView {
   width: 100%;
+  margin-bottom: 100px;
 }
 .videocol-purchase-tip-fatherView :last-child {
   margin-bottom: 60px;
