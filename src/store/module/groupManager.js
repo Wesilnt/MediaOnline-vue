@@ -288,7 +288,7 @@ const groupManager = {
             const result = await wechatSubscribed()
             console.log('是否关注公众号')
             console.log(result)
-            if(result && result==1){
+            if(result && result.data==1){
                 dispatch('checkoutShowTeleDialog',payload)
             }else{
                 alert('请关注公众号')
