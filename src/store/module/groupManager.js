@@ -14,7 +14,11 @@ const groupManager = {
         headerType:0,       // 100倒计时  101拼团成功  102拼团失败  103拼团已满  
         isOwner:true,    //是不是开团人 
         achieveOriginBuy:false, //是否完成原价购买
-        isShowMobileDialog:false //是否弹出手机号收集框
+        isShowMobileDialog:false, //是否弹出手机号收集框
+        //工具条对象
+        toolsObject:{},
+        //是否显示拼团UI
+        isShowGroupBuy:false  
     },
     getters:{
         //专栏头图
@@ -61,10 +65,169 @@ const groupManager = {
         },
         bindIsShowMobileDialog(state,isShowMobileDialog){
             state.isShowMobileDialog = isShowMobileDialog
+        },
+        bindToolsObject(state,toolsObject){
+            state.toolsObject = toolsObject
         }
 
     },
     actions:{
+        //初始化工具条
+        initToolsBar(toolsData){
+            //集赞状态
+            const praiseData = {
+                "collectLikeDuration" : toolsData.collectLikeDuration || 0,
+                "collectLikeId" : toolsData.collectLikeId || "",
+                "collectLikePersonCount" : toolsData.collectLikePersonCount || 0,
+                "collectLikeTemplateId" : toolsData.collectLikeTemplateId || ""
+            }
+            //拼团状态
+            const groupData = {
+                "groupBuyDuration" : toolsData.groupBuyDuration || 0,
+                "groupBuyPersonCount" : toolsData.groupBuyPersonCount || 0,
+                "groupBuyPrice" : toolsData.groupBuyPrice || 0,
+                "groupBuyId": toolsData.groupBuyId,
+                "groupBuyTemplateId" : toolsData.groupBuyTemplateId || ""
+            }
+
+            //订单状态
+            const userAccessStatus = toolsData.userAccessStatus
+            let isShowGroupBuy;
+            let toolsObject;
+            const personStr = groupData.groupBuyPersonCount > 3 ? "六人拼团" : "三人拼团"
+            switch(userAccessStatus) {
+                case -3:
+                    //拼团失败
+                    isShowGroupBuy = true
+                    dispatch("groupManager/getGroupBuyDetail",groupData.groupBuyId)
+                break
+                case 0:
+                    isShowGroupBuy = false
+                    if(praiseData.collectLikeTemplateId && groupData.groupBuyTemplateId){
+                        toolsObject = {
+                            "originPrice":result.price || 0,
+                            "groupPrice":result.groupBuyPrice || 0,
+                            "collageText":personStr,
+                            "collectText":"集赞换",
+                            "collect":true,
+                            "collage":true,
+                            "isShow":true
+                        }
+                    }else if(praiseData.collectLikeTemplateId == "" && groupData.groupBuyTemplateId){
+                        toolsObject = {
+                            "originPrice":result.price || 0,
+                            "groupPrice":result.groupBuyPrice || 0,
+                            "collageText":personStr,
+                            "collectText":"集赞换",
+                            "collect":false,
+                            "collage":true,
+                            "isShow":true
+                        }
+                    }else if(praiseData.collectLikeTemplateId && groupData.groupBuyTemplateId == ""){
+                        toolsObject = {
+                            "originPrice":result.price || 0,
+                            "groupPrice":result.groupBuyPrice || 0,
+                            "collageText":personStr,
+                            "collectText":"集赞换",
+                            "collect":true,
+                            "collage":false,
+                            "isShow":true
+                        }
+                    }else if(praiseData.collectLikeTemplateId == "" && groupData.groupBuyTemplateId ==""){
+                        toolsObject = {
+                            "originPrice":result.price || 0,
+                            "groupPrice":result.groupBuyPrice || 0,
+                            "collageText":personStr,
+                            "collectText":"集赞换",
+                            "collect":false,
+                            "collage":false,
+                            "isShow":true
+                        }
+                    }
+                break
+                case 1001:
+                    console.log('单购成功')
+                    isShowGroupBuy = false
+                    toolsObject = {
+                        "originPrice":'',
+                        "groupPrice":'',
+                        "collageText":"",
+                        "collectText":"",
+                        "collect":true,
+                        "collage":false,
+                        "isShow":false
+                    }  
+                break
+                case 1003:
+                    console.log('拼团成功')
+                    isShowGroupBuy = true
+                    // dispatch("groupManager/getGroupBuyDetail",groupData.groupBuyId)
+                    toolsObject = {
+                        "originPrice":'',
+                        "groupPrice":'',
+                        "collageText":"我要学习",
+                        "collectText":"",
+                        "collect":false,
+                        "collage":true,
+                        "isShow":true
+                    }
+                break
+                case 1005:
+                    console.log('拼团中')
+                    isShowGroupBuy = true
+                    // dispatch("groupManager/getGroupBuyDetail",groupData.groupBuyId)
+                    toolsObject = {
+                        "originPrice":'',
+                        "groupPrice":'',
+                        "collageText":"立即邀请好友拼团",
+                        "collectText":"",
+                        "collect":false,
+                        "collage":true,
+                        "isShow":true
+                    }
+                break
+                case 1007:
+                    console.log('集赞成功未领取')
+                    isShowGroupBuy = false
+                    toolsObject = {
+                        "originPrice":'',
+                        "groupPrice":'',
+                        "collageText":"",
+                        "collectText":"集赞成功未领取",
+                        "collect":true,
+                        "collage":false,
+                        "isShow":true
+                    }
+                break
+                case 1008:
+                    console.log('集赞成功已领取')
+                    isShowGroupBuy = false
+                    toolsObject = {
+                        "originPrice":'',
+                        "groupPrice":'',
+                        "collageText":"",
+                        "collectText":"集赞成功已领取",
+                        "collect":true,
+                        "collage":false,
+                        "isShow":true
+                    }                
+                break
+                case 1009:
+                    console.log('集赞中')
+                    isShowGroupBuy = false
+                    toolsObject = {
+                        "originPrice":'',
+                        "groupPrice":'',
+                        "collageText":"",
+                        "collectText":"集赞中",
+                        "collect":true,
+                        "collage":false,
+                        "isShow":true
+                    }                 
+                break
+            }
+
+        },
         //获取拼团详情
         async getGroupBuyDetail({commit,dispatch},groupBuyId) {
             console.log('groupBuyId =',groupBuyId)
@@ -235,7 +398,7 @@ const groupManager = {
             }
             console.log('更新状态条 + =',toolsObject)
             //更新工具条状态
-            commit('videoColumnDetail/updateToolsObject',toolsObject,{root:true})
+            commit('bindToolsObject',toolsObject)
 
             //9.整理拼团用户数组
             let topList = []
@@ -277,7 +440,8 @@ const groupManager = {
                 "userListTop" : topList,
                 "userListBot" : botList || [],
                 "headerType" :headerType,
-                'isOwner':isOwner
+                'isOwner':isOwner,
+                'isShowGroupBuy':isShowGroupBuy
             }) 
         },
 
