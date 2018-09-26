@@ -1,6 +1,6 @@
 <template>
     <div class="btn-wrapper">
-        <van-button type="default" size="large" @click="registerWxConfig">config</van-button>
+        <van-button type="default" size="large" @click="handleRegisterWxConfig">config</van-button>
         <van-button type="primary" size="large"  @click="handleWxShare">分享按钮</van-button>
         <van-button type="warning" size="large">警告按钮</van-button>
         <van-button type="danger" size="large">危险按钮</van-button>
@@ -8,18 +8,20 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapActions } from 'vuex'
 export default {
   name: 'wxConfig',
-  mounted() {
-    this.registerWxConfig({
-      fullPath,
-      jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline']
-    })
-  },
+
   methods: {
     ...mapActions(['registerWxConfig', 'setWxShareFriend', 'setWxShareZone']),
-    handleWxShare: () => {
+    handleRegisterWxConfig: function() {
+      const { fullPath } = this.$route
+      this.registerWxConfig({
+        fullPath,
+        jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline']
+      })
+    },
+    handleWxShare: function() {
       const options = {
         title: '分享',
         desc: '测试分享',

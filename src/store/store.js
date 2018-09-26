@@ -54,13 +54,12 @@ export default new Vuex.Store({
       noAccessToken() && dispatch('getAccessToken')
     },
     /** 注入配置信息 */
-    async registerWxConfig({ state, commit }, { fullPath, jsApiList }) {
+    async registerWxConfig({ state, commit }, { fullPath, jsApiList=[] }) {
       const { url, wxRegisterPath } = state
-      if (!jsApiList || jsApiList.length === 0) {
-        throw new Error('jsApiList need')
+      if (!Array.isArray(jsApiList)  || jsApiList.length === 0) {
+        throw new Error('[array] jsApiList need')
         return
       }
-      console.log(wxRegisterPath, fullPath)
       if (wxRegisterPath === fullPath) {
         console.log('微信config已启用成功')
         return
