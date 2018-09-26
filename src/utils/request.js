@@ -92,7 +92,7 @@ function request(url, options, needToken = true) {
   const baseURI = isUrl(url) ? '' : api
   let defaultOptions
   if (needToken) {
-    // accessToken = '3efc6f60-19fe-4a09-b93e-251ae815aa6d'
+    // accessToken = "3efc6f60-19fe-4a09-b93e-251ae815aa6d"
     accessToken = getCookie('COOKIE_TOKEN_KEY_CNONLINE')
     defaultOptions = {
       // credentials: 'include',

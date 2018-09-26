@@ -282,7 +282,9 @@ const groupManager = {
             let headerType = 0
             let isShowGroupBuy = true
             switch(orderStatus){
-                case -3:
+                case 1201:
+                break
+                case 1204:
                     //拼团失败
                     //显示原价购买和我要开团
                     headerType = 102
@@ -296,7 +298,7 @@ const groupManager = {
                         "isShow":true
                     }
                 break
-                case 1003:
+                case 1203:
                     //拼团成功
                     //显示我要学习
                     headerType = 101
@@ -310,7 +312,7 @@ const groupManager = {
                         "isShow":true
                     }
                 break
-                case 1005:
+                case 1202:
                 //拼团中&&开团人  显示  邀请好友拼团
                
                     if(isOwner){
