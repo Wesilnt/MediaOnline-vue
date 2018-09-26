@@ -404,7 +404,7 @@ const groupManager = {
             }
             console.log('更新状态条 + =',toolsObject)
             //更新工具条状态
-            commit('bindToolsObject',toolsObject)
+            commit('bindToolsObject',{toolsObject,groupBuyId})
 
             //9.整理拼团用户数组
             let topList = []
@@ -509,7 +509,7 @@ const groupManager = {
             console.log('原价购买成功')
             console.log(result)
             if(result == null) return
-            dispatch("getPayment",result,0)
+            dispatch("getPayment",{result,payType:0})
         },
         //发起拼团
         async startGroupBuy({dispatch},payload) {
