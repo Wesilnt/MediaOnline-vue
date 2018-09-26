@@ -33,9 +33,9 @@
   </div>
 </template>
  <script>
-import {  mapActions } from 'vuex'
+import {  mapActions,mapState } from 'vuex'
 export default {
-  props: ['show', 'sharetype', 'shareid'],
+  props: ['show', 'sharetype', 'shareid' ,'shareInfo'],
   data() {
     return {
       isOpen: false
@@ -53,15 +53,18 @@ export default {
       }
     }
   },
+  computed:{
+    ...mapState(['url'])
+  },
   methods: {
     ...mapActions(['registerWxConfig', 'setWxShareFriend', 'setWxShareZone']),
     onShareItem(shareScore) {
       this.isOpen = false
       const shareOption = {
-        link: location.href.split('#')[0],
-        title: `${nickname}邀请您一起上课啦！`,
-        desc: '秦汉胡同国学，让我们的孩子成为一个有涵养的人',
-        imgUrl: '',
+        link:this.url + this.shareInfo.link || '/#/home',
+        title: this.shareInfo.title || `${nickname}邀请您一起上课啦！`,
+        desc:this.shareInfo.desc || '秦汉胡同国学，让我们的孩子成为一个有涵养的人',
+        imgUrl:this.shareInfo.imgUrl || '',
         successCB: () => {
           this.$toast('分享回调成功')
         },
@@ -69,6 +72,8 @@ export default {
           this.$toast('分享回调失败')
         }
       }
+      console.log('当前分享option:')
+      console.log(shareOption)
       if (shareScore === 'poster') {
         this.$toast('分享海报')
       }

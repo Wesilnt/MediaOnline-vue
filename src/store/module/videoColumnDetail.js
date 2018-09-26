@@ -16,7 +16,7 @@ const videoColumnDetail = {
         commentCount:0,              //留言条数
         buyCount:0,             //购买数量
         courseId:0,              //专栏ID
-        // userAccessStatus:0,      //订单状态
+        userAccessStatus:0,      //订单状态
         // //集赞
         // praiseData:{},         //集赞数据        
         // //拼团
@@ -40,6 +40,7 @@ const videoColumnDetail = {
             state.lessonCount = result.lessonCount
             state.commentCount = result.commentCount
             state.buyCount = result.buyCount
+            state.userAccessStatus = result.userAccessStatus
         }
 
 
@@ -63,7 +64,8 @@ const videoColumnDetail = {
                 "groupBuyPrice" : result.groupBuyPrice,
                 "groupBuyId": groupBuyId || result.groupBuyId,
                 "groupBuyTemplateId" : result.groupBuyTemplateId,
-                "userAccessStatus" : result.userAccessStatus
+                "userAccessStatus" : result.userAccessStatus,
+                'price' : result.price
             }
 
             dispatch('groupManager/initToolsBar',toolsData)

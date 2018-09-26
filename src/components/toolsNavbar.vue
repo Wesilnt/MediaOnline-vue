@@ -19,7 +19,7 @@
                 <div>{{toolsObject&&toolsObject.collectText}}</div>
             </div>
         </div>
-        <Share :show="sharePageShow" :shareid="courseId" @close="cancelSharePage"></Share>
+        <Share :show="sharePageShow" :shareid="courseId" :shareInfo="shareData" @close="cancelSharePage"></Share>
         <PhoneVerif v-if="isShowMobileDialog" :callback="cancelDialog"></PhoneVerif>
     </div>
    
@@ -34,7 +34,10 @@ export default {
   name: 'ToolsNavbar',
   data(){
     return {
-      sharePageShow:false
+      //是否显示分享
+      sharePageShow:false,
+      //分享内容
+      shareData:null
     }
   },
   props: {
@@ -87,8 +90,8 @@ export default {
     }
   },
   computed:{
-    ...mapState(['userList','collectLikeId','isOwner','isShowMobileDialog']),
-    ...mapGetters(['courseId','toolsObject','praiseData','userAccessStatus','freeLessonList']),
+    ...mapState(['userList','collectLikeId','isOwner','isShowMobileDialog','groupBuyId','toolsObject']),
+    ...mapGetters(['courseId','praiseData','userAccessStatus','freeLessonList']),
   },
   filters: {
     formatPrice: function(price) {
@@ -147,6 +150,14 @@ export default {
         case 1005:
           //拼团中
           this.sharePageShow = true
+          //拼装分享内容
+          const shareData = {
+            'link' : `/#/videoColumnDetail/:${this.courseId}/:${this.groupBuyId}`,
+            'title' : '视频分享',
+            'desc' : '这是一个神奇的视频',
+            'imgUrl' : ''
+          }
+          this.shareData = shareData
         break
       }
     },

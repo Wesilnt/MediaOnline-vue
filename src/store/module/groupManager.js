@@ -15,8 +15,9 @@ const groupManager = {
         isOwner:true,    //是不是开团人 
         achieveOriginBuy:false, //是否完成原价购买
         isShowMobileDialog:false, //是否弹出手机号收集框
+        groupBuyId:0,//拼团ID
         //工具条对象
-        toolsObject:{},
+        toolsObject:null,
         //是否显示拼团UI
         isShowGroupBuy:false  
     },
@@ -66,14 +67,16 @@ const groupManager = {
         bindIsShowMobileDialog(state,isShowMobileDialog){
             state.isShowMobileDialog = isShowMobileDialog
         },
-        bindToolsObject(state,toolsObject){
+        bindToolsObject(state,{toolsObject,groupBuyId,isShowGroupBuy}){
             state.toolsObject = toolsObject
+            state.groupBuyId = groupBuyId
+            state.isShowGroupBuy = isShowGroupBuy
         }
 
     },
     actions:{
         //初始化工具条
-        initToolsBar(toolsData){
+        initToolsBar({commit},toolsData){
             //集赞状态
             const praiseData = {
                 "collectLikeDuration" : toolsData.collectLikeDuration || 0,
@@ -86,7 +89,7 @@ const groupManager = {
                 "groupBuyDuration" : toolsData.groupBuyDuration || 0,
                 "groupBuyPersonCount" : toolsData.groupBuyPersonCount || 0,
                 "groupBuyPrice" : toolsData.groupBuyPrice || 0,
-                "groupBuyId": toolsData.groupBuyId,
+                "groupBuyId": toolsData.groupBuyId || "",
                 "groupBuyTemplateId" : toolsData.groupBuyTemplateId || ""
             }
 
@@ -105,18 +108,18 @@ const groupManager = {
                     isShowGroupBuy = false
                     if(praiseData.collectLikeTemplateId && groupData.groupBuyTemplateId){
                         toolsObject = {
-                            "originPrice":result.price || 0,
-                            "groupPrice":result.groupBuyPrice || 0,
+                            "originPrice":toolsData.price || 0,
+                            "groupPrice":toolsData.groupBuyPrice || 0,
                             "collageText":personStr,
                             "collectText":"集赞换",
                             "collect":true,
                             "collage":true,
                             "isShow":true
                         }
-                    }else if(praiseData.collectLikeTemplateId == "" && groupData.groupBuyTemplateId){
+                    }else if(praiseData.collectLikeTemplateId == "" && groupData.groupBuyTemplateId != ""){
                         toolsObject = {
-                            "originPrice":result.price || 0,
-                            "groupPrice":result.groupBuyPrice || 0,
+                            "originPrice":toolsData.price || 0,
+                            "groupPrice":toolsData.groupBuyPrice || 0,
                             "collageText":personStr,
                             "collectText":"集赞换",
                             "collect":false,
@@ -125,8 +128,8 @@ const groupManager = {
                         }
                     }else if(praiseData.collectLikeTemplateId && groupData.groupBuyTemplateId == ""){
                         toolsObject = {
-                            "originPrice":result.price || 0,
-                            "groupPrice":result.groupBuyPrice || 0,
+                            "originPrice":toolsData.price || 0,
+                            "groupPrice":toolsData.groupBuyPrice || 0,
                             "collageText":personStr,
                             "collectText":"集赞换",
                             "collect":true,
@@ -135,8 +138,8 @@ const groupManager = {
                         }
                     }else if(praiseData.collectLikeTemplateId == "" && groupData.groupBuyTemplateId ==""){
                         toolsObject = {
-                            "originPrice":result.price || 0,
-                            "groupPrice":result.groupBuyPrice || 0,
+                            "originPrice":toolsData.price || 0,
+                            "groupPrice":toolsData.groupBuyPrice || 0,
                             "collageText":personStr,
                             "collectText":"集赞换",
                             "collect":false,
@@ -161,30 +164,30 @@ const groupManager = {
                 case 1003:
                     console.log('拼团成功')
                     isShowGroupBuy = true
-                    // dispatch("groupManager/getGroupBuyDetail",groupData.groupBuyId)
-                    toolsObject = {
-                        "originPrice":'',
-                        "groupPrice":'',
-                        "collageText":"我要学习",
-                        "collectText":"",
-                        "collect":false,
-                        "collage":true,
-                        "isShow":true
-                    }
+                    dispatch("getGroupBuyDetail",groupData.groupBuyId)
+                    // toolsObject = {
+                    //     "originPrice":'',
+                    //     "groupPrice":'',
+                    //     "collageText":"我要学习",
+                    //     "collectText":"",
+                    //     "collect":false,
+                    //     "collage":true,
+                    //     "isShow":true
+                    // }
                 break
                 case 1005:
                     console.log('拼团中')
                     isShowGroupBuy = true
-                    // dispatch("groupManager/getGroupBuyDetail",groupData.groupBuyId)
-                    toolsObject = {
-                        "originPrice":'',
-                        "groupPrice":'',
-                        "collageText":"立即邀请好友拼团",
-                        "collectText":"",
-                        "collect":false,
-                        "collage":true,
-                        "isShow":true
-                    }
+                    dispatch("getGroupBuyDetail",groupData.groupBuyId)
+                    // toolsObject = {
+                    //     "originPrice":'',
+                    //     "groupPrice":'',
+                    //     "collageText":"立即邀请好友拼团",
+                    //     "collectText":"",
+                    //     "collect":false,
+                    //     "collage":true,
+                    //     "isShow":true
+                    // }
                 break
                 case 1007:
                     console.log('集赞成功未领取')
@@ -226,6 +229,9 @@ const groupManager = {
                     }                 
                 break
             }
+
+            const groupBuyId = groupData.groupBuyId
+            commit('bindToolsObject',{toolsObject,groupBuyId,isShowGroupBuy})
 
         },
         //获取拼团详情
