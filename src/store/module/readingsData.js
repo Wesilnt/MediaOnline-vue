@@ -39,8 +39,7 @@ export default {
           if(1==page) state.singleSetList = []
           state.singlePage = page
           state.singleLoaing = false
-          state.singleSetList = state.singleSetList.concat(res.result)
-          console.log('totalCount:'+totalCount)
+          state.singleSetList = state.singleSetList.concat(res.result) 
           state.singleFinished = state.singleSetList.length >= totalCount
         },
         toggleLoading(state, isLoading){
@@ -62,9 +61,8 @@ export default {
             commit("bindReadingsList", {res, page,totalCount})
         },
         //书详情
-        async getBookDetail({ commit }, params) {
-            const res = await getBookDetail(params)
-            console.log(res)
+        async getBookDetail({dispatch, commit }, params) {
+            const res = await getBookDetail(params) 
             commit("bindBookDetail", res)
 
           //设置底部购买工具栏
@@ -76,7 +74,7 @@ export default {
               "groupBuyDuration" : res.groupBuyDuration,
               "groupBuyPersonCount" : res.groupBuyPersonCount,
               "groupBuyPrice" : res.groupBuyPrice,
-              "groupBuyId": groupBuyId || res.groupBuyId,
+              "groupBuyId": params.groupBuyId || res.groupBuyId,
               "groupBuyTemplateId" : res.groupBuyTemplateId,
               "userAccessStatus" : res.userAccessStatus
           }
@@ -92,11 +90,9 @@ export default {
               courseId:state.courseId,
               currentPage:page,
               pageSize:state.pageSize
-            }
-            console.log(params)
+            } 
             const res = await getSingleSetList(params)
-            if(null == res) return
-            console.log(res)
+            if(null == res) return 
             let totalCount = res.totalCount
             commit("bindSingleSetList", {res,page,totalCount})
         }

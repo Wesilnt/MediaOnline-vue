@@ -108,14 +108,14 @@ export default {
       refreshing:false
     }
   }, 
-  components:{'singleset-list': SingleSetList,'tools-navbar':toolsNavbar},
+  components:{'singleset-list': SingleSetList,'tools-navbar':toolsNavbar,GroupHeader},
   computed: {
     ...mapState(['bookDetail','singleLoaing','singleFinished', 'singleSetList']),
     ...mapGetters(['playingId'])
   },
   created() { 
     this.initData(this.courseId)
-    this.getBookDetail({courseId:this.courseId})
+    this.getBookDetail({courseId:this.courseId,groupBuyId:this.$route.query.groupBuyId})
     this.getSingleSetList(true)
   },
   watch:{
