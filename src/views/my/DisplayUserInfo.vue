@@ -12,7 +12,7 @@
         </div>
         <div class="display-user-info-column" @click="handleUpdateUserInfo('phone')">
             <p class="display-user-info-column-label">手机号码</p>
-            <p class="display-user-info-column-content">{{ userInfo.mobileNo }}</p>
+            <p class="display-user-info-column-content">{{ userInfo.mobileNo === null ? '没有手机号码' : userInfo.mobileNo }}</p>
             <img class="display-user-info-column-image-lock" src="../../assets/images/my_userinfo_lock.png"/>
         </div>
         <Picker :columns="whichPicker ==='gender' ? genders : grades" :isShow="isShow" v-on:toggle="toggleConfirm"
