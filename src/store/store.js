@@ -54,9 +54,9 @@ export default new Vuex.Store({
       noAccessToken() && dispatch('getAccessToken')
     },
     /** 注入配置信息 */
-    async registerWxConfig({ state, commit }, { fullPath, jsApiList=[] }) {
+    async registerWxConfig({ state, commit }, { fullPath, jsApiList = [] }) {
       const { url, wxRegisterPath } = state
-      if (!Array.isArray(jsApiList)  || jsApiList.length === 0) {
+      if (!Array.isArray(jsApiList) || jsApiList.length === 0) {
         throw new Error('[array] jsApiList need')
         return
       }
@@ -143,6 +143,17 @@ export default new Vuex.Store({
         // 分享到微博
         wx.onMenuShareWeibo(shareOptions)
       })
+    },
+    async wxChooseImage({ current = '', urls = [] }) {
+        wx.chooseImage({
+            count: 1, // 默认9
+            sizeType: ['original'], // 可以指定是原图还是压缩图，默认二者都有
+            sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+            success: function (res) {
+                console.log(res);
+                const localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+            }
+        });
     }
   },
   modules: {

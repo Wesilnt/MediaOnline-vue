@@ -7,7 +7,7 @@
                     <span>题数</span>
                 </div>
                 <div class="question-to-review-item">
-                    <p>3</p>
+                    <p>{{correct}}</p>
                     <span>答对</span>
                 </div>
                 <div class="question-to-review-item">
@@ -77,10 +77,6 @@
         </van-popup>
         <van-popup v-model="reviewShow" position="left" class="answer-container" >
             <div class="answer-wrapper">
-                <div  class="answer-btn-close">
-                    <a @click="handlePopupHide('reviewShow')">关闭</a>
-                </div>
-
                 <van-swipe :loop="false" class="review-swipe" :show-indicators="false">
                     <van-swipe-item v-for="questionItem in questionList" :key="questionItem.id">
                         <p class="answer-title">
@@ -107,13 +103,15 @@
                     </van-swipe-item>
                 </van-swipe>
             </div>
-
-            <a  class="qhht-blockButton answer-btn-next" @click="handlePopupShow('settlementShow')">
-                查看成绩单
+            <a  class="qhht-blockButton answer-btn-next" @click="handlePopupHide('reviewShow')">
+                关闭回顾
             </a>
         </van-popup>
-        <van-popup v-model="settlementShow" position="bottom" class="settlement-container" @click="handlePopupHide('settlementShow')">
+        <van-popup  v-model="settlementShow" position="bottom" class="settlement-container" @click="handlePopupHide('settlementShow')">
             <div class="settlement-wrapper" ref="settlement">
+                <div  class="answer-btn-close">
+                    <a @click="handlePopupHide('settlementShow')">关闭</a>
+                </div>
                 <div class="settlement-title">成绩单</div>
                 <hr class="settlement-title-underline">
                 <strong class="answer-name">
@@ -137,14 +135,13 @@
 </template>
 
 <script>
-import html2canvas from  'html2canvas';
+import html2canvas from 'html2canvas'
 import { createNamespacedHelpers } from 'vuex'
+import { mapActions as mapMainActions } from 'vuex'
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
   'videoCourseDetail/questionList'
 )
-let timeInter = '',
-  cvs = null,
-  ctx = null
+let timeInter = ''
 export default {
   name: 'QuestionList',
   props: {
@@ -160,7 +157,7 @@ export default {
       warnClass: '',
       reviewShow: false,
       questionShow: false,
-      settlementShow: true,
+      settlementShow: false,
       remainTime: 0
     }
   },
@@ -175,6 +172,7 @@ export default {
     ...mapGetters([
       'questionList',
       'questionLength',
+      'correct',
       'videoTime',
       'delockTime',
       'questionInfo',
@@ -184,20 +182,15 @@ export default {
   },
   watch: {
     progress: function(progress) {
-      console.log(progress)
-      console.log(this.delockTime)
+      console.log(this.deblock)
       this.remainTime = Math.round(
         this.delockTime - (this.videoTime * progress) / 100
       )
     }
   },
   methods: {
-    ...mapActions([
-      'renderAnswers',
-      'handleNext',
-      'uploadAnswer',
-      'resetQuestionList'
-    ]),
+    ...mapMainActions(['registerWxConfig', 'wxChooseImage']),
+    ...mapActions(['renderAnswers', 'handleNext', 'uploadAnswer']),
     async openQuestionAnswer() {
       if (!this.answersChecked) {
         await this.renderAnswers()
@@ -213,8 +206,10 @@ export default {
       }
     },
     handlePopupShow(popup) {
-      if (this.reviewShow) this.reviewShow = false
-      this[popup] = true
+      const array = ['reviewShow', 'questionShow', 'settlementShow']
+      array.forEach(item => {
+        this[item] = popup === item
+      })
     },
     handlePopupHide(popup) {
       this[popup] = false
@@ -231,17 +226,6 @@ export default {
       }
       const nextIndex = questionIndex + 1
       if (nextIndex + 1 > questionList.length) {
-        // const answersArr = Object.entries(answers)
-        /*const corrects = questionList.reduce((prev, item, index) => {
-          const answerItem = answersArr[index]
-          if (
-            item.id === answerItem[0] &&
-            `opt${item.rightOpt}` === answerItem[1]
-          ) {
-            prev.push(true)
-          }
-          return prev
-        }, [])*/
         this.handlePopupHide('questionShow')
         this.handlePopupShow('settlementShow')
       } else {
@@ -260,16 +244,34 @@ export default {
         answer
       })
     },
-    handleSettlementSave(){
-        html2canvas( this.$refs.settlement).then(canvas => {
-            console.log(canvas);
-            document.body.appendChild(canvas)
-        });
-        this.handlePopupHide('settlementShow')
+    handleSettlementSave() {
+      html2canvas(this.$refs.settlement, {
+        // scale:2,
+        backgroundColor: '#4C4C4C',
+        allowTaint: true,
+        width: window.innerWidth,
+        height:  window.innerHeight,
+        x: 0,
+        y: 0,
+        scrollX: 0,
+        scrollY: 0
+      }).then(canvas => {
+        const { fullPath } = this.$route
+        this.registerWxConfig({
+          fullPath,
+          jsApiList: ['chooseImage']
+        })
+        const image = new Image()
+        image.src = canvas.toDataURL('image/png')
+          image.style.width='100%'
+        image.onload = () => {
+          document.body.appendChild(image)
+        }
+      })
+      this.wxChooseImage()
+
+      this.handlePopupHide('settlementShow')
     }
-  },
-  destroyed: function() {
-    this.resetQuestionList()
   }
 }
 </script>
@@ -429,15 +431,15 @@ export default {
   top: 46%;
   left: 50%;
   width: 702px;
-  padding-bottom: 60px;
   transform: translate(-50%, -50%);
-  border-radius: 8px;
+  /*border-radius: 8px;*/
+  padding: 20px 32px 60px;
   background-color: #fff;
   text-align: center;
   color: #818181;
 }
 .settlement-title {
-  margin-top: 64px;
+  margin-top: 44px;
   font-size: 90px;
   font-weight: 600;
   color: #8297ea;
