@@ -30,18 +30,18 @@ const groupManager = {
         courseId(state,getters,{ videoColumnDetail }) {
             return videoColumnDetail.courseId
         },
-        toolsObject(state,getters,{ videoColumnDetail }) {
-            return videoColumnDetail.toolsObject
-        },
-        isShowGroupBuy(state,getters,{ videoColumnDetail }) {
-            return videoColumnDetail.isShowGroupBuy
-        },
-        headerType(state,getters,{ videoColumnDetail }){
-            return videoColumnDetail.headerType
-        },
-        praiseData(state,getters,{ videoColumnDetail }){
-            return videoColumnDetail.praiseData
-        },
+        // toolsObject(state,getters,{ videoColumnDetail }) {
+        //     return videoColumnDetail.toolsObject
+        // },
+        // isShowGroupBuy(state,getters,{ videoColumnDetail }) {
+        //     return videoColumnDetail.isShowGroupBuy
+        // },
+        // headerType(state,getters,{ videoColumnDetail }){
+        //     return videoColumnDetail.headerType
+        // },
+        // praiseData(state,getters,{ videoColumnDetail }){
+        //     return videoColumnDetail.praiseData
+        // },
         userAccessStatus(state,getters,{ videoColumnDetail }){
             return videoColumnDetail.userAccessStatus
         },
@@ -444,8 +444,7 @@ const groupManager = {
                 "userListTop" : topList,
                 "userListBot" : botList || [],
                 "headerType" :headerType,
-                'isOwner':isOwner,
-                'isShowGroupBuy':isShowGroupBuy
+                'isOwner':isOwner
             }) 
         },
 
