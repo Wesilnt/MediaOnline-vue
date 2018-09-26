@@ -185,7 +185,7 @@ export default {
       const { currentTime, paused, duration } = target
       //  播放累计时长大于视频的总时长，解锁
       const videoData = JSON.parse(localStorage.getItem(this.id))
-      if (
+        if (
         !this.deblockQuestion &&
         Math.round(videoData.playTotalTime) >= Math.round(duration * 0.7)
       ) {

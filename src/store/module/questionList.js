@@ -2,22 +2,29 @@ import { uploadAnswer } from '../../services/columns'
 
 const questionList = {
   namespaced: true,
-  state: {
-    answers: {},
-    answersChecked: false,
-    questionIndex: 0,
-    loading: false,
-    newGrade: ''
+  state() {
+    return {
+      answers: {},
+      answersChecked: false,
+      questionIndex: 0,
+      loading: false,
+      newGrade: ''
+    }
   },
   getters: {
     questionList: (state, getters, { videoCourseDetail }) =>
       videoCourseDetail.questionBOList,
-      questionLength: (state, getters) =>
-          getters.questionList.length,
-      videoTime: (state, getters,{ videoCourseDetail }) =>
-          videoCourseDetail.totalTime,
-      delockTime: (state, getters) =>
-          getters.videoTime*0.7,
+    questionLength: (state, getters) => getters.questionList.length,
+    correct: (state, getters) => {
+      const { questionList } = getters
+      return questionList.reduce((prev, item) => {
+        if (item.answer === item.rightOpt) prev++
+        return prev
+      }, 0)
+    },
+    videoTime: (state, getters, { videoCourseDetail }) =>
+      videoCourseDetail.totalTime,
+    delockTime: (state, getters) => getters.videoTime * 0.7,
     grade: (state, getters, { videoCourseDetail }) => videoCourseDetail.grade,
     title: (state, getters, { videoCourseDetail }) => videoCourseDetail.title,
     questionInfo: ({ questionIndex, answers, text }, getters) => {
@@ -33,7 +40,7 @@ const questionList = {
       const nextBtnText = isLastQuestion ? '立即查看结果' : '下一题'
       const footerBadge = `${current} /\ ${len}`
       const userSelect = answers[id]
-      const isCorrect = userSelect === `opt${rightOpt}`
+      const isCorrect = userSelect === `${rightOpt}`
       const headerTitle =
         userSelect === undefined
           ? '请回答'
@@ -94,20 +101,12 @@ const questionList = {
       if (!response) return
       await commit('saveStatus', {
         loading: false,
-        grade: response.data
+        newGrade: response.data
       })
     },
     async handleNext({ dispatch, commit }, { nextIndex }) {
       await commit('saveStatus', {
         questionIndex: nextIndex
-      })
-    },
-    async resetQuestionList({ commit }) {
-      await commit('saveStatus', {
-        answers: {},
-        answersChecked: false,
-        questionIndex: 0,
-        loading: false
       })
     }
   }

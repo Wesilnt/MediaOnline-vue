@@ -33,7 +33,7 @@
   </div>
 </template>
  <script>
-import {  mapActions } from 'vuex'
+import { mapActions } from 'vuex'
 export default {
   props: ['show', 'sharetype', 'shareid'],
   data() {
@@ -45,6 +45,7 @@ export default {
     show(value) {
       this.isOpen = value
       if (value) {
+
         const { fullPath } = this.$route
         this.registerWxConfig({
           fullPath,
@@ -57,6 +58,7 @@ export default {
     ...mapActions(['registerWxConfig', 'setWxShareFriend', 'setWxShareZone']),
     onShareItem(shareScore) {
       this.isOpen = false
+      const nickname = 'nihao'
       const shareOption = {
         link: location.href.split('#')[0],
         title: `${nickname}邀请您一起上课啦！`,
@@ -74,8 +76,6 @@ export default {
       }
       if (shareScore === 'friends') {
         this.$toast('分享给朋友')
-        let nickname = 'nihao'
-
         this.setWxShareFriend(shareOption)
       }
       if (shareScore == 'circle') {
