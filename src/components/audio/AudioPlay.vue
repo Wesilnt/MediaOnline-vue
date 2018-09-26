@@ -1,74 +1,62 @@
 <template>
-  <div class="audioplay-container">
+  <div class="audioplay-container" :style="{backgroundImage:'url('+audio.coverPic+')'}">
     <!-- 封面 -->
-    <img :src="audio.coverPic" class="cover">
-    <!-- 主，副标题 -->
-    <h3> {{audio.title}}</h3>
-    <h4> {{audio.subTitle}}</h4>
-    <!-- 中间tabbar -->
-    <div class="tab-container">
-      <div class="tab-item" @click="onCollect">
-        <img :src="isLike?require('../../assets/audio_love_collect.png'):require('../../assets/audio_love_normal.png')">
+    <div class="controller-container">
+      <!-- 主，副标题 -->
+      <h3> {{audio.title}}</h3>
+      <h4> {{audio.subTitle}}</h4>
+      <!-- 中间tabbar -->
+      <div class="tab-container">
+        <div class="tab-container-collect" @click="onCollect"
+         :style="{backgroundImage:isLike 
+         ? 'url('+require('../../assets/audio_love_collect.png')+')'
+         : 'url('+require('../../assets/audio_love_normal.png')+')'}"> 
+        </div>
+        <div v-if="!hiddenDraft" class="tab-container-draft" @click="onDraft"/>
+        <div  class="tab-container-comment" @click="toComment">
+          <span>{{audio.commentCount}}</span> 
+        </div>
+        <div class="tab-container-share" @click="onShare"/>
       </div>
-      <router-link :to="'/audio/audiodraft/'+lessonId" v-if="!hiddenDraft" class="tab-item" tag="div">
-        <img src="../../assets/audio_play_manuscripts.png">
-      </router-link>
-      <router-link :to="'/audio/audiocmts/'+lessonId" class="tab-item" tag="div">
-        <span>{{audio.commentCount}}</span>
-        <img src="../../assets/audio_play_comments.png">
-      </router-link>
-      <div class="tab-item" @click="onShare">
-        <img src="../../assets/audio_play_share.jpg">
-      </div>
-    </div>
-    <!-- 进度条 -->
-    <div class="slider-container">
-      <div slot="start">{{parseInt(touching?progress:currentTime(touching,progress)) | formatDuring}}</div>
-      <!-- <mt-range ref="mtrange" v-model="currentTime" :min="0" :max="duration" :step="100/duration" :bar-height="2"/> 
-       let percent = parseInt(e.target.value * 100 / e.target.max)
-      e.target.style =  'background: linear-gradient(to right,#FFCD7D ' + percent + '%,  #E5E5E5 1%, #E5E5E5'
-      -->
-    <input type="range" 
-       @input="onInputChange" 
-       :value="touching?progress:currentTime(touching,progress)" 
-       :min="0" 
-       :max="maxTime" 
-       :style="{background:touching
-       ?'linear-gradient(to right,#FFCD7D ' + parseInt(progress * 100 / maxTime) + '%,  #E5E5E5 1%, #E5E5E5'
-       : 'linear-gradient(to right,#FFCD7D ' + parseInt(currentTime(touching,progress) * 100 / maxTime) + '%,  #E5E5E5 1%, #E5E5E5'}"
-       @touchstart="handleTouchStart" 
-       @touchcancel="handleTouchCancel" 
-       @touchmove="handleTouchMove"
-       @touchend="handleTouchEnd"/>
-      <div slot="end">{{ maxTime | formatDuring}}</div>
-    </div>
-    <!-- <vue-slider></vue-slider> -->
-    <!-- <div class="play-slider">
-      <span>05:32</span>
-      <mu-slider :display-value="display" @change="sliderChange" class="demo-slider" v-model="background"></mu-slider>
-      <span>06:23</span>
-    </div> -->
-    <!-- 播放按钮 -->
-    <div class="play-btns">
-      <div class="btn-item" @click="onPlayMode">
-        <img :src="'single'==playMode?require('../../assets/audio_play_single.png'):require('../../assets/audio_play_sort.png')">
-      </div>
-      <div class="btn-item" @click="onPlayPrv">
-        <img src="../../assets/audio_play_prv.png">
-      </div>
-      <div :class="{'play-btn-active':playing}" class="btn-item" @click="onPlayPause">
-        <img :src="playing?require('../../assets/audio_play_play.png'):require('../../assets/audio_play_pause.png')">
-      </div>
-      <div class="btn-item" @click="onPlayNext">
-        <img src="../../assets/audio_play_next.png">
-      </div>
-      <div class="btn-item" @click="onPlayList">
-        <img src="../../assets/audio_play_list.png">
+      <!-- 进度条 -->
+      <div class="slider-container">
+        <div slot="start">{{parseInt(touching?progress:currentTime(touching,progress)) | formatDuring}}</div> 
+      <input type="range" 
+        @input="onInputChange" 
+        :value="touching?progress:currentTime(touching,progress)" 
+        :min="0" 
+        :max="maxTime" 
+        :style="{background:touching
+        ?'linear-gradient(to right,#FFCD7D ' + parseInt(progress * 100 / maxTime) + '%,  #E5E5E5 1%, #E5E5E5'
+        : 'linear-gradient(to right,#FFCD7D ' + parseInt(currentTime(touching,progress) * 100 / maxTime) + '%,  #E5E5E5 1%, #E5E5E5'}"
+        @touchstart="handleTouchStart" 
+        @touchcancel="handleTouchCancel" 
+        @touchmove="handleTouchMove"
+        @touchend="handleTouchEnd"/>
+        <div slot="end">{{ maxTime | formatDuring}}</div>
+      </div> 
+      <!-- 播放按钮 -->
+      <div class="play-btns">
+        <div class="btn-item" @click="onPlayMode">
+          <img :src="'single'==playMode?require('../../assets/audio_play_single.png'):require('../../assets/audio_play_sort.png')">
+        </div>
+        <div class="btn-item" @click="onPlayPrv">
+          <img src="../../assets/audio_play_prv.png">
+        </div>
+        <div :class="{'play-btn-active':playing}" class="btn-item" @click="onPlayPause">
+          <img :src="playing?require('../../assets/audio_play_play.png'):require('../../assets/audio_play_pause.png')">
+        </div>
+        <div class="btn-item" @click="onPlayNext">
+          <img src="../../assets/audio_play_next.png">
+        </div>
+        <div class="btn-item" @click="onPlayList">
+          <img src="../../assets/audio_play_list.png">
+        </div>
       </div>
     </div>
     <!-- 音频列表弹框 -->
 
-    <van-popup v-model="popupVisible" position="bottom"  close-on-click-overlay>
+    <van-popup v-model="popupVisible" position="bottom"  close-on-click-overlay >
       <div class="play-list-container">
         <div class="list-header">
           <h3>播放列表</h3>
@@ -96,76 +84,113 @@ import { createNamespacedHelpers } from 'vuex'
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers('audio')
 
 export default {
-  components: {'share-pop': SharePop},
+  components: { 'share-pop': SharePop },
   data() {
-    return { 
+    return {
       lessonId: this.$route.params.id,
-      hiddenDraft:this.$route.query.hiddenDraft,
-      isInit:true,
+      hiddenDraft: this.$route.query.hiddenDraft,
+      isInit: true,
       play: true,
       isSingle: false, //是否单个循环
       popupVisible: false, //是否显示音频列表弹框
       playIndex: 0, //播放第几首
       showShare: false, //是否显示分享框
       touching: false, //slider触摸
-      progress:0,
+      progress: 0,
       rangeValue: 0,
       cover: '',
       progressColor: '#ff0000',
       background: 12,
       display: false,
-      touchStart: 0, 
+      touchStart: 0
     }
   },
-  computed:{...mapState({isLike(state){ 
-    let like = state.isLike 
-    if(!this.isInit){
-      if(like)
-      this.$toast.success({duration:2000,message: '已添加到我喜欢的'})
-      else
-      this.$toast.fail({duration:2000,message:'已取消喜欢'})
-    }
-    return state.isLike
-  },'singleSetList':'singleSetList'}),
-  ...mapGetters(["audio",'audioId','currentTime','maxTime', 'playMode','status','playing']),  
+  computed: {
+    ...mapState({
+      isLike(state) {
+        let like = state.isLike
+        if (!this.isInit) {
+          if (like)
+            this.$toast.success({ duration: 2000, message: '已添加到我喜欢的' })
+          else this.$toast.fail({ duration: 2000, message: '已取消喜欢' })
+        }
+        return state.isLike
+      },
+      singleSetList: 'singleSetList'
+    }),
+    ...mapGetters([
+      'audio',
+      'audioId',
+      'currentTime',
+      'maxTime',
+      'playMode',
+      'status',
+      'playing'
+    ])
   },
   created() {
-    this.isInit = true 
-    this.playAudio({lessonId: this.lessonId }) 
+    this.isInit = true
+    this.playAudio({ lessonId: this.lessonId })
   },
-  watch:{
-    audioId:function(id){ this.lessonId = id}
+  watch: {
+    audioId: function(id) {
+      this.lessonId = id
+    }
   },
   methods: {
-    ...mapActions(['getAudioDetail','postFavorite','postUnFavorite','playAudio','pauseAudio','setPlayMode','seekTo','pre','next']),
+    ...mapActions([
+      'getAudioDetail',
+      'postFavorite',
+      'postUnFavorite',
+      'playAudio',
+      'pauseAudio',
+      'setPlayMode',
+      'seekTo',
+      'pre',
+      'next'
+    ]),
     //进度条拖动 OTAwOWY1ZjgtZTJiYy00Y2IwLTk4ZDktNzIxYjMyMTUzYzU2
     sliderChange(value) {
       console.log(value)
       console.log(this.$refs.content)
-    }, 
+    },
     //拖动进度改变进度
     onInputChange(e) {
-      this.progress = e.target.value  
+      this.progress = e.target.value
     },
-    handleTouchStart(e){
-      this.touching = true  
+    handleTouchStart(e) {
+      this.touching = true
     },
-    handleTouchMove(){},
-    handleTouchEnd(e){ 
-      this.touching = false  
-      this.seekTo(this.progress) 
+    handleTouchMove() {},
+    handleTouchEnd(e) {
+      this.touching = false
+      this.seekTo(this.progress)
     },
-    handleTouchCancel(){
+    handleTouchCancel() {
       this.touching = false
     },
     //收藏
     onCollect() {
-       this.isInit = false
-      if(this.isLike){
+      this.isInit = false
+      if (this.isLike) {
         this.postUnFavorite({ lessonId: this.lessonId })
-      }else{
+      } else {
         this.postFavorite({ lessonId: this.lessonId })
       }
+    },
+    //查看文稿
+    onDraft() {
+      this.$route.push({
+        name: 'AudioDraft',
+        params: { lessonid: this.lessonId }
+      })
+    },
+    //评论
+    toComment() {
+      this.$route.push({
+        name: 'AudioCmts',
+        params: { lessonid: this.lessonId }
+      })
     },
     //分享
     onShare() {
@@ -177,59 +202,34 @@ export default {
     },
     //切换播放模式
     onPlayMode() {
-      let mode = this.playMode == "single"?'order':'single'
-      this.$toast(mode=='single' ? '单曲循环' : '列表循环') 
+      let mode = this.playMode == 'single' ? 'order' : 'single'
+      this.$toast(mode == 'single' ? '单曲循环' : '列表循环')
       this.setPlayMode(mode)
     },
     //播放/暂停
     onPlayPause() {
-      this.playAudio() 
+      this.playAudio()
     },
     //上一首
     onPlayPrv() {
-      if(!this.audio)return
+      if (!this.audio) return
       let preId = this.audio.preLessonId
-      if(preId && -1 != preId){
-        this.pre({lessonId:preId})
-      }else{
-          this.$toast.fail('这是第一条')
+      if (preId && -1 != preId) {
+        this.pre({ lessonId: preId })
+      } else {
+        this.$toast.fail('这是第一条')
       }
     },
     //下一首
     onPlayNext() {
-      if(!this.audio)return
+      if (!this.audio) return
       let nextId = this.audio.nextLessonId
-      if(nextId && -1 != nextId){
-        this.pre({lessonId:nextId})
-      }else{
+      if (nextId && -1 != nextId) {
+        this.pre({ lessonId: nextId })
+      } else {
         this.$toast.fail('已经是最后一条')
-      } 
+      }
     },
-    //音频进度监听
-    // onTimeUpdate(currentTime, duration) {
-    //   if (this.touching) return
-    //   this.currentTime = currentTime
-    //   this.duration = duration
-    //   this.$nextTick(() => {
-    //     let percent = parseInt(Math.ceil(currentTime * 100 / duration))
-    //     this.$refs.range.style =
-    //       'background: linear-gradient(to right,#FFCD7D ' +
-    //       percent +
-    //       '%, #E5E5E5 1%, #E5E5E5'
-    //   })
-    // },
-    //播放状态监听
-    // onStateUpdate(status) { 
-    //   if (status == 'canplaythrough') {
-    //     this.duration = AudioTask.getInstance().getDuration()
-    //   }
-    //   if (status == 'ended') {
-    //     this.isPlaying = false
-    //   }
-    //   if (status == 'play') {
-    //     this.isPlaying = true
-    //   }
-    // },
     //音频列表
     onPlayList() {
       this.popupVisible = true
@@ -238,30 +238,47 @@ export default {
     onCloseList() {
       this.popupVisible = false
     },
-    //列表Item点击事件 
-    onItemClick(audio) {   
+    //列表Item点击事件
+    onItemClick(audio) {
       this.isInit = true
       this.popupVisible = false
-      if(audio.isFree){ 
-        this.$router.replace({ name: 'AudioPlay', params:{ id: audio.id},   query: {hiddenDraft:this.hiddenDraft } }) 
-        this.playAudio({lessonId: audio.id })
-      }else{
-          this.$toast({duration:2000,message:'你还未购买该专栏,请购买之后收听!!!'})
-      } 
+      if (audio.isFree) {
+        this.$router.replace({
+          name: 'AudioPlay',
+          params: { id: audio.id },
+          query: { hiddenDraft: this.hiddenDraft }
+        })
+        this.playAudio({ lessonId: audio.id })
+      } else {
+        this.$toast({
+          duration: 2000,
+          message: '你还未购买该专栏,请购买之后收听!!!'
+        })
+      }
     }
   }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss" >
 .audioplay-container {
   display: flex;
   flex-direction: column;
+  background-repeat: no-repeat;
+  background-size: 100vw 100vw;
+  height: 100vh;
   .cover {
     height: 750px;
     width: 100%;
     background-color: #d5d8de;
   }
+  .controller-container {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: white;
+  }
   h3 {
+    line-height: 32px;
     font-size: 32px;
     color: rgb(38, 38, 38);
     text-align: center;
@@ -269,38 +286,50 @@ export default {
   }
   h4 {
     font-size: 24px;
+    line-height: 24px;
     color: rgb(118, 118, 118);
     text-align: center;
     margin: 18px 0 0 0;
   }
   .tab-container {
-    position: relative;
     display: flex;
     justify-content: space-between;
     flex-direction: row;
-    margin: 64px 120px 0;
-    span {
-      position: relative;
-      left: 48px;
-      top: -20px;
-      font-size: 20px;
-      color: rgb(146, 145, 150);
-    }
-    > :nth-child(1) img {
+    margin: 60px 120px 0;
+    &-collect {
       width: 48px;
       height: 41px;
+      background-repeat: no-repeat;
+      background-size: 48px 41px;
     }
-    > :nth-child(2) img {
+    &-draft {
       width: 37px;
       height: 45px;
+      background-repeat: no-repeat;
+      background-size: 37px 45px;
+      background-image: url('../../assets/audio_play_manuscripts.png');
     }
-    > :nth-child(3) img {
+    &-comment {
+      position: relative;
       width: 41px;
       height: 41px;
+      background-repeat: no-repeat;
+      background-size: 41px 41px;
+      background-image: url('../../assets/audio_play_comments.png');
+      span {
+        left: 30px;
+        top: -10px;
+        position: absolute;
+        font-size: 20px;
+        color: rgb(146, 145, 150);
+      }
     }
-    > :nth-child(4) img {
+    &-share {
       width: 42px;
       height: 40px;
+      background-repeat: no-repeat;
+      background-size: 41px 41px;
+      background-image: url('../../assets/audio_play_share.jpg');
     }
   }
 
@@ -352,47 +381,12 @@ export default {
     }
   }
 
-  // .play-slider {
-  //   padding: 0 24px;
-  //   margin-top: 32px;
-  //   display: flex;
-  //   flex-direction: row;
-  //   justify-content: space-between;
-  //   align-items: center;
-  //   span {
-  //     color: rgb(189, 192, 199);
-  //     font-size: 20px;
-  //   }
-  //   .mu-slider {
-  //     margin: 0 20px;
-  //     .mu-slider-track {
-  //       background-color: rgb(229, 229, 229);
-  //     }
-  //     .mu-slider-fill {
-  //       background-color: rgb(255, 205, 126);
-  //     }
-  //     .mu-slider-thumb {
-  //       background-image: url(../../assets/audio_play_slider.png);
-  //       background-size: 32px;
-  //       height: 32px;
-  //       background-color: transparent;
-  //       width: 32px;
-  //       max-width: 32px;
-  //       max-height: 32px;
-  //       border: none;
-  //     }
-  //     .zero .mu-slider-thumb {
-  //       border: none;
-  //     }
-  //   }
-  // }
-
   .play-btns {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     margin-top: 58px;
-    padding: 0 36px 22px;
+    padding: 0 36px 70px;
     box-sizing: content-box;
     .btn-item {
       display: flex;
@@ -498,42 +492,50 @@ export default {
     background-color: rgb(245, 245, 245);
   }
 }
-/**收藏提示ICON*/
-.van-icon-success {
-  background-image: url(../../assets/audio_love_collect.png);
+
+.van-toast {
+  .van-icon-success {
+    background-image: url('../../assets/audio_love_collect.png');
+    background-size: 28px;
+    background-repeat: no-repeat;
+    margin: 1px auto 12px;
+    height: 28px;
+    width: 28px;
+  }
+  .van-icon-success::before {
+    content: none;
+  }
+  .van-toast--text {
+    max-width: 80%;
+    white-space: nowrap;
+    min-width: inherit;
+    width: auto;
+  }
+
+  .van-icon-fail::before {
+    content: none;
+  }
+  .van-toast__text {
+    padding-top: 0;
+    width: auto;
+  }
+
+  .van-list__loading {
+    width: 100vw;
+  }
+}
+.van-toast.van-toast--default {
+  min-height: 0;
+  width: auto;
+  min-width: inherit;
+  white-space: nowrap;
+}
+.van-toast.van-icon-fail {
+  background-image: url('../../assets/audio_play_tip.png');
   background-size: 28px;
   background-repeat: no-repeat;
   margin: 1px auto 12px;
   height: 28px;
   width: 28px;
-}
-.van-icon-success::before {
-  content: none;
-}
-.van-toast--text {
-  max-width: 80%;
-  white-space: nowrap;
-}
-
-.van-icon-fail::before {
-  content: none;
-}
-.van-toast--default .van-toast__text {
-  padding-top: 0;
-}
-.van-toast--default {
-  min-height: 0;
-  width: auto;
-  white-space: nowrap;
-}
-
-.first-icon,
-.last-icon {
-  background-image: url(../../assets/audio_play_tip.png);
-  background-size: 56px;
-  background-repeat: no-repeat;
-  margin: 0 auto;
-  height: 56px;
-  width: 56px;
 }
 </style>

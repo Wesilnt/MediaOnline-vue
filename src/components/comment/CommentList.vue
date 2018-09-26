@@ -22,7 +22,9 @@
 <script>
 import CommentItem from './CommentItem.vue'
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions, mapMutations } = createNamespacedHelpers('comment')
+const { mapState, mapActions, mapMutations } = createNamespacedHelpers(
+  'comment'
+)
 export default {
   data() {
     return {
@@ -53,7 +55,7 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped> 
+<style lang="scss" scoped>
 .commment-list {
   display: flex;
   flex-direction: column;

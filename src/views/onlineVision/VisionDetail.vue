@@ -1,5 +1,6 @@
 <template>
   <div id="detailmain" ref="detailmain">
+     <GroupHeader></GroupHeader>
     <img :src="visionDetail.coverPic" class="head" alt="">
 
     <div class="navbar">
@@ -65,6 +66,7 @@ import arrowDown from '../../assets/vision_arrow_down.png'
 import SingleSetList from '../../components/SingleSetList.vue'
 import CommentItem from '../../components/comment/CommentItem.vue'
 import toolsNavbar from '../../components/toolsNavbar.vue'
+import GroupHeader from '../onlineCourse/components/GroupHeader'
 import videoBigimage from '../../components/videoBigimage.vue'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState, mapActions } = createNamespacedHelpers('visionData')
@@ -74,7 +76,8 @@ export default {
     videoBigimage,
     SingleSetList,
     CommentItem,
-    toolsNavbar
+    toolsNavbar,
+    GroupHeader
   },
   props: ['id'],
   data() {
@@ -88,7 +91,7 @@ export default {
     }
   },
   created() {
-    this.getVisionDetail(this.id)
+    this.getVisionDetail({courseId:this.id, groupBuyId: this.$route.query.groupById})
     this.getCommentList(this.id)
   },
   mounted() {
@@ -140,7 +143,7 @@ export default {
         this.currentNav = 2
       }
     },
-     routerToAudition() {
+    routerToAudition() {
       console.log('跳转到试听')
     },
     routerToCollage() {

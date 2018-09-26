@@ -4,12 +4,10 @@
   </div>
 </template>
 <script>
-export default {
-  
-}
+export default {}
 </script>
 <style lang="scss" scoped>
-.loading-container{
+.loading-container {
   width: 100vw;
   height: 100vh;
   position: absolute;
@@ -18,6 +16,6 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.5)
+  background-color: rgba(0, 0, 0, 0.5);
 }
 </style>

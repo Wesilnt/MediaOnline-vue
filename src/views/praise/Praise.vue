@@ -54,35 +54,45 @@ import PraiseBtn from './PraiseBtns.vue'
 import PraiseExplain from './PraiseExplain.vue'
 import Share from '../../components/share/Share.vue'
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapMutations,mapActions ,mapGetters} = createNamespacedHelpers('praise') 
-export default { 
-  name:'Praise',
+const {
+  mapState,
+  mapMutations,
+  mapActions,
+  mapGetters
+} = createNamespacedHelpers('praise')
+export default {
+  name: 'Praise',
   data() {
     return {
-      interval:null, 
-      courseId:this.$route.params.courseId,
-      collectLikeId:this.$route.params.collectLikeId,
+      interval: null,
+      courseId: this.$route.params.courseId,
+      collectLikeId: this.$route.params.collectLikeId,
       showShare: false, //显示分享框
-      showExplain: false, 
+      showExplain: false
     }
-  }, 
+  },
   components: {
-    'priasebtn':PraiseBtn,
+    priasebtn: PraiseBtn,
     PraiseExplain,
-    'share-pop':Share
-  }, 
-  computed:{
-    ...mapState(['praiseDetail','rollerFlag','remainTime']),
-    ...mapGetters(['praiseData']) 
+    'share-pop': Share
+  },
+  computed: {
+    ...mapState(['praiseDetail', 'rollerFlag', 'remainTime']),
+    ...mapGetters(['praiseData'])
   },
   created: function() {
     this._setBtnAndTips({ status: 1202 }, false, true)
     // this.startCollectLike({courseId:this.courseId})
-    this.getUserByToken() 
-    this.getCollectDetail({collectLikeId:this.collectLikeId})  
+    this.getUserByToken()
+    this.getCollectDetail({ collectLikeId: this.collectLikeId })
   },
   methods: {
-    ...mapActions(['getUserByToken','startCollectLike','joinCollectLike','getCollectDetail']),
+    ...mapActions([
+      'getUserByToken',
+      'startCollectLike',
+      'joinCollectLike',
+      'getCollectDetail'
+    ]),
     ...mapMutations(['destroyInterval']),
     closeExplain() {
       //关闭集赞说明框
@@ -167,9 +177,9 @@ export default {
       this.praiseDesc = praiseDesc
     }
   },
-   beforeDestroy(){ 
-     this.destroyInterval()
-   }
+  beforeDestroy() {
+    this.destroyInterval()
+  }
 }
 </script>
 <style lang="scss" scoped>
@@ -220,13 +230,13 @@ export default {
       background-color: rgb(255, 251, 236);
       display: flex;
       flex-direction: column;
-       justify-content: center;
+      justify-content: center;
       border-radius: 80px;
       overflow: hidden;
     }
     .help-tip span {
       position: absolute;
-      font-size: 28px; 
+      font-size: 28px;
       line-height: 80px;
       color: rgb(85, 86, 87);
     }
@@ -298,14 +308,15 @@ export default {
       color: white;
     }
   }
-  .roller-enter{
-    transform: translateY(100%)
+  .roller-enter {
+    transform: translateY(100%);
   }
-  .roller-leave-to{
-     transform: translateY(-100%)
+  .roller-leave-to {
+    transform: translateY(-100%);
   }
-  .roller-enter-active,.roller-leave-active{
-     transition: all 1s linear
+  .roller-enter-active,
+  .roller-leave-active {
+    transition: all 1s linear;
   }
 }
 </style>

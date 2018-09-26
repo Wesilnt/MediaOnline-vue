@@ -50,7 +50,7 @@ const videoCourseDetail = {
       state.audioUrl = payload.audioUrl
       state.videoUrl = payload.videoUrl
       state.courseId = payload.courseId
-      console.log("------ + courseID =", payload.courseId)
+      console.log('------ + courseID =', payload.courseId)
       state.id = payload.id
       state.isFree = payload.isFree
       state.isLike = payload.isLike
@@ -99,7 +99,7 @@ const videoCourseDetail = {
         currentPage: 1,
         pageSize: 10
       }
-      dispatch('getLessonListByCourse',params)
+      dispatch('getLessonListByCourse', params)
       //判断是否已完成答题
       //自测题个数
       const quesNum = result.questionBOList.length

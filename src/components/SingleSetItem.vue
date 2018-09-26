@@ -1,5 +1,5 @@
 <template> 
-    <div class="singleset-item-container" tag="div" @click="onItemClick(item.id)">
+    <div class="singleset-item-container" tag="div" @click="onItemClick(item)">
       <div class="item-content">
         <div :class="{'icon-playing':playing}" class="item-icon">
           <img :src="playing?require('../assets/readings_detail_play.png'):require('../assets/readings_detail_pause.png')">
@@ -22,12 +22,20 @@
 </template>
 
 <script>
-export default { 
+export default {
   //singleset 单集  playing是否正在播放
   props: ['item', 'playing'],
   methods: {
-    onItemClick(id) {
-      this.$router.push({ name: 'AudioPlay', params:{id}, query: {hiddenDraft:1 } })
+    onItemClick(audio) {
+      if (audio.isFree) {
+        this.$router.push({
+          name: 'AudioPlay',
+          params: { id: audio.id },
+          query: { hiddenDraft: 1 }
+        })
+      } else {
+        this.$toast.fail('您还未购买该专栏')
+      }
     }
   }
 }

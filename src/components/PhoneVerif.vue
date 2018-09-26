@@ -17,7 +17,7 @@
 </template>
 <script>
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions ,mapGetters} = createNamespacedHelpers('mobile') 
+const { mapState, mapActions, mapGetters } = createNamespacedHelpers('mobile')
 export default {
   data() {
     return {
@@ -25,33 +25,31 @@ export default {
       validateCode: ''
     }
   },
-  computed:{
-  ...mapState(['remainTime','clickable','sending','validate']), 
-  }, 
-  created(){
-
+  computed: {
+    ...mapState(['remainTime', 'clickable', 'sending', 'validate'])
   },
-  watch:{
-    validate:function(res){
-       if(res) this.$emit('callback')
+  created() {},
+  watch: {
+    validate: function(res) {
+      if (res) this.$emit('callback')
     }
   },
   methods: {
-    ...mapActions(['init','sendMobileCode','validateMobileCode']),
+    ...mapActions(['init', 'sendMobileCode', 'validateMobileCode']),
     sendCode() {
-      if(!this.clickable) return
+      if (!this.clickable) return
       if (this.mobileNumber === '') {
-         this.$toast('请输入手机号')
+        this.$toast('请输入手机号')
         return
       }
-      this.sendMobileCode({mobileNo:this.mobileNumber})
+      this.sendMobileCode({ mobileNo: this.mobileNumber })
     },
     onConfirm() {
       if (this.validateCode === '') {
         this.$toast('请输入正确的验证码')
         return
-      } 
-      this.validateMobileCode({code:this.validateCode})
+      }
+      this.validateMobileCode({ code: this.validateCode })
     }
   }
 }
@@ -108,7 +106,7 @@ export default {
     font-size: 30px;
     align-self: flex-end;
     line-height: 30px;
-    border-bottom: 1px solid #00000000; 
+    border-bottom: 1px solid #00000000;
   }
   input {
     border: none;
@@ -137,13 +135,13 @@ export default {
   }
 }
 .validate-confirm {
-  margin:67px 40px 0;
+  margin: 67px 40px 0;
   color: white;
   border-radius: 90px;
   text-align: center;
   line-height: 90px;
   font-size: 34px;
-  height: 90px;  
+  height: 90px;
   background-color: rgb(255, 163, 47);
 }
 </style>

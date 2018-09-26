@@ -14,7 +14,12 @@ const groupManager = {
         headerType:0,       // 100倒计时  101拼团成功  102拼团失败  103拼团已满  
         isOwner:true,    //是不是开团人 
         achieveOriginBuy:false, //是否完成原价购买
-        isShowMobileDialog:false //是否弹出手机号收集框
+        isShowMobileDialog:false, //是否弹出手机号收集框
+        groupBuyId:0,//拼团ID
+        //工具条对象
+        toolsObject:null,
+        //是否显示拼团UI
+        isShowGroupBuy:false  
     },
     getters:{
         //专栏头图
@@ -25,18 +30,18 @@ const groupManager = {
         courseId(state,getters,{ videoColumnDetail }) {
             return videoColumnDetail.courseId
         },
-        toolsObject(state,getters,{ videoColumnDetail }) {
-            return videoColumnDetail.toolsObject
-        },
-        isShowGroupBuy(state,getters,{ videoColumnDetail }) {
-            return videoColumnDetail.isShowGroupBuy
-        },
-        headerType(state,getters,{ videoColumnDetail }){
-            return videoColumnDetail.headerType
-        },
-        praiseData(state,getters,{ videoColumnDetail }){
-            return videoColumnDetail.praiseData
-        },
+        // toolsObject(state,getters,{ videoColumnDetail }) {
+        //     return videoColumnDetail.toolsObject
+        // },
+        // isShowGroupBuy(state,getters,{ videoColumnDetail }) {
+        //     return videoColumnDetail.isShowGroupBuy
+        // },
+        // headerType(state,getters,{ videoColumnDetail }){
+        //     return videoColumnDetail.headerType
+        // },
+        // praiseData(state,getters,{ videoColumnDetail }){
+        //     return videoColumnDetail.praiseData
+        // },
         userAccessStatus(state,getters,{ videoColumnDetail }){
             return videoColumnDetail.userAccessStatus
         },
@@ -49,6 +54,7 @@ const groupManager = {
             state.collectLikeId = collectLikeId
         },
         bindGroupHeaderData(state,payload){
+         
             state.userListTop = payload.userListTop
             state.userListBot = payload.userListBot
             state.leavePerson = payload.leavePerson
@@ -61,10 +67,175 @@ const groupManager = {
         },
         bindIsShowMobileDialog(state,isShowMobileDialog){
             state.isShowMobileDialog = isShowMobileDialog
-        }
+        },
+        bindToolsObject(state,{toolsObject,groupBuyId,isShowGroupBuy}){    
+            console.log('代码到这里了isShowGroupBuy = '+ isShowGroupBuy)      
+            state.toolsObject = toolsObject
+            state.groupBuyId = groupBuyId
+            state.isShowGroupBuy = isShowGroupBuy
+        },
 
     },
     actions:{
+        //初始化工具条
+        initToolsBar({commit,dispatch},toolsData){
+            //集赞状态
+            const praiseData = {
+                "collectLikeDuration" : toolsData.collectLikeDuration || 0,
+                "collectLikeId" : toolsData.collectLikeId || "",
+                "collectLikePersonCount" : toolsData.collectLikePersonCount || 0,
+                "collectLikeTemplateId" : toolsData.collectLikeTemplateId || ""
+            }
+            //拼团状态
+            const groupData = {
+                "groupBuyDuration" : toolsData.groupBuyDuration || 0,
+                "groupBuyPersonCount" : toolsData.groupBuyPersonCount || 0,
+                "groupBuyPrice" : toolsData.groupBuyPrice || 0,
+                "groupBuyId": toolsData.groupBuyId || "",
+                "groupBuyTemplateId" : toolsData.groupBuyTemplateId || ""
+            }
+
+            //订单状态
+            const userAccessStatus = toolsData.userAccessStatus
+            let isShowGroupBuy;
+            let toolsObject;
+            const personStr = groupData.groupBuyPersonCount > 3 ? "六人拼团" : "三人拼团"
+            switch(userAccessStatus) {
+                case -3:
+                    //拼团失败
+                    isShowGroupBuy = true
+                    dispatch("getGroupBuyDetail",groupData.groupBuyId)
+                break
+                case 0:
+                    isShowGroupBuy = false
+                    if(praiseData.collectLikeTemplateId && groupData.groupBuyTemplateId){
+                        toolsObject = {
+                            "originPrice":toolsData.price || 0,
+                            "groupPrice":toolsData.groupBuyPrice || 0,
+                            "collageText":personStr,
+                            "collectText":"集赞换",
+                            "collect":true,
+                            "collage":true,
+                            "isShow":true
+                        }
+                    }else if(praiseData.collectLikeTemplateId == "" && groupData.groupBuyTemplateId != ""){
+                        toolsObject = {
+                            "originPrice":toolsData.price || 0,
+                            "groupPrice":toolsData.groupBuyPrice || 0,
+                            "collageText":personStr,
+                            "collectText":"集赞换",
+                            "collect":false,
+                            "collage":true,
+                            "isShow":true
+                        }
+                    }else if(praiseData.collectLikeTemplateId && groupData.groupBuyTemplateId == ""){
+                        toolsObject = {
+                            "originPrice":toolsData.price || 0,
+                            "groupPrice":toolsData.groupBuyPrice || 0,
+                            "collageText":personStr,
+                            "collectText":"集赞换",
+                            "collect":true,
+                            "collage":false,
+                            "isShow":true
+                        }
+                    }else if(praiseData.collectLikeTemplateId == "" && groupData.groupBuyTemplateId ==""){
+                        toolsObject = {
+                            "originPrice":toolsData.price || 0,
+                            "groupPrice":toolsData.groupBuyPrice || 0,
+                            "collageText":personStr,
+                            "collectText":"集赞换",
+                            "collect":false,
+                            "collage":false,
+                            "isShow":true
+                        }
+                    }
+                break
+                case 1001:
+                    console.log('单购成功')
+                    isShowGroupBuy = false
+                    toolsObject = {
+                        "originPrice":'',
+                        "groupPrice":'',
+                        "collageText":"",
+                        "collectText":"",
+                        "collect":true,
+                        "collage":false,
+                        "isShow":false
+                    }  
+                break
+                case 1003:
+                    console.log('拼团成功')
+                    isShowGroupBuy = true
+                    dispatch("getGroupBuyDetail",groupData.groupBuyId)
+                    // toolsObject = {
+                    //     "originPrice":'',
+                    //     "groupPrice":'',
+                    //     "collageText":"我要学习",
+                    //     "collectText":"",
+                    //     "collect":false,
+                    //     "collage":true,
+                    //     "isShow":true
+                    // }
+                break
+                case 1005:
+                    console.log('拼团中')
+                    isShowGroupBuy = true
+                    dispatch("getGroupBuyDetail",groupData.groupBuyId)
+                    // toolsObject = {
+                    //     "originPrice":'',
+                    //     "groupPrice":'',
+                    //     "collageText":"立即邀请好友拼团",
+                    //     "collectText":"",
+                    //     "collect":false,
+                    //     "collage":true,
+                    //     "isShow":true
+                    // }
+                break
+                case 1007:
+                    console.log('集赞成功未领取')
+                    isShowGroupBuy = false
+                    toolsObject = {
+                        "originPrice":'',
+                        "groupPrice":'',
+                        "collageText":"",
+                        "collectText":"集赞成功未领取",
+                        "collect":true,
+                        "collage":false,
+                        "isShow":true
+                    }
+                break
+                case 1008:
+                    console.log('集赞成功已领取')
+                    isShowGroupBuy = false
+                    toolsObject = {
+                        "originPrice":'',
+                        "groupPrice":'',
+                        "collageText":"",
+                        "collectText":"集赞成功已领取",
+                        "collect":true,
+                        "collage":false,
+                        "isShow":true
+                    }                
+                break
+                case 1009:
+                    console.log('集赞中')
+                    isShowGroupBuy = false
+                    toolsObject = {
+                        "originPrice":'',
+                        "groupPrice":'',
+                        "collageText":"",
+                        "collectText":"集赞中",
+                        "collect":true,
+                        "collage":false,
+                        "isShow":true
+                    }                 
+                break
+            }
+            console.log('isShowGroupBuy = '+ isShowGroupBuy)
+            const groupBuyId = groupData.groupBuyId
+            commit('bindToolsObject',{toolsObject,groupBuyId,isShowGroupBuy})
+
+        },
         //获取拼团详情
         async getGroupBuyDetail({commit,dispatch},groupBuyId) {
             console.log('groupBuyId =',groupBuyId)
@@ -73,7 +244,7 @@ const groupManager = {
             console.log(result)
             if(result == null) return
             //1.获取当前订单状态
-            let orderStatus = result.userAccessStatus;
+            let orderStatus = result.status;
             //2.判断是开团人还是参团人
             let currentUserId = result.userId;//拿到当前用户ID
             let isOwner = currentUserId == result.starterUid;           
@@ -109,8 +280,11 @@ const groupManager = {
             console.log("上面都是状态指标")
             let toolsObject = null
             let headerType = 0
+            let isShowGroupBuy = true
             switch(orderStatus){
-                case -3:
+                case 1201:
+                break
+                case 1204:
                     //拼团失败
                     //显示原价购买和我要开团
                     headerType = 102
@@ -124,7 +298,7 @@ const groupManager = {
                         "isShow":true
                     }
                 break
-                case 1003:
+                case 1203:
                     //拼团成功
                     //显示我要学习
                     headerType = 101
@@ -138,7 +312,7 @@ const groupManager = {
                         "isShow":true
                     }
                 break
-                case 1005:
+                case 1202:
                 //拼团中&&开团人  显示  邀请好友拼团
                
                     if(isOwner){
@@ -233,9 +407,9 @@ const groupManager = {
                 }
                 break
             }
-            console.log('更新qi + =',toolsObject)
+            console.log('更新状态条 + =',toolsObject)
             //更新工具条状态
-            commit('videoColumnDetail/updateToolsObject',toolsObject,{root:true})
+            commit('bindToolsObject',{toolsObject,groupBuyId,isShowGroupBuy})
 
             //9.整理拼团用户数组
             let topList = []
@@ -284,10 +458,13 @@ const groupManager = {
         //验证是否完成了公众号授权
         async checkoutAuthorrization({dispatch},payload){
             const result = await wechatSubscribed()
+            console.log('是否关注公众号')
+            console.log(result)
             if(result && result==1){
                 dispatch('checkoutShowTeleDialog',payload)
             }else{
-
+                //跳转去关注公众号
+                window.location.href = "https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzA4Mzg3NjE2Mg==&scene=126#wechat_redirect"
             }
         },
 
@@ -316,6 +493,7 @@ const groupManager = {
             let params = {
                 "courseId" : payload.courseId
               }
+            console.log('当前用户支付类型 payload = ',payload)
             switch(payload.payType){
                 case 0:
                     dispatch('unlockCourse',params)
@@ -335,7 +513,7 @@ const groupManager = {
             console.log('原价购买成功')
             console.log(result)
             if(result == null) return
-            dispatch("getPayment",result,0)
+            dispatch("getPayment",{result,payType:0})
         },
         //发起拼团
         async startGroupBuy({dispatch},payload) {
@@ -411,12 +589,9 @@ const groupManager = {
                            
                         },
                         fail : function (errmsg) {
-                            console.log('代码到这里了')
                             console.log(errmsg)
                         },
                         complete : function (res) {
-                            console.log('代码难道这里')
-                            console.log(res)
                             if(res.errMsg == "chooseWXPay:cancel" ) {
                                 console.log('支付取消')
                             } 

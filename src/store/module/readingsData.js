@@ -1,4 +1,6 @@
 import { getReadingsList, getBookDetail, getSingleSetList } from '../../services/readingsApi'
+import groupManager from './groupManager'
+
 export default {
     namespaced: true,
     state: {
@@ -33,12 +35,12 @@ export default {
         bindBookDetail(state, res) {
             state.bookDetail = res
         },
-        bindSingleSetList(state, {res,page}) { 
-            state.singlePage = page
-            state.singleFinished = res.result.length <state.pageSize
-            state.singleLoaing = false
-            if(1==page) state.singleSetList = []
-            state.singleSetList = state.singleSetList.concat(res.result)
+        bindSingleSetList(state, {res,page,totalCount}) { 
+          if(1==page) state.singleSetList = []
+          state.singlePage = page
+          state.singleLoaing = false
+          state.singleSetList = state.singleSetList.concat(res.result) 
+          state.singleFinished = state.singleSetList.length >= totalCount
         },
         toggleLoading(state, isLoading){
            state.loading = isLoading
@@ -55,13 +57,30 @@ export default {
             let page  = refresh ? 1 : state.currentPage + 1
             const res = await getReadingsList({ type: 1007, currentPage: page, pageSize: state.pageSize })
             console.log(res)
-            commit("bindReadingsList", {res, page})
+            let totalCount = res.totalCount
+            commit("bindReadingsList", {res, page,totalCount})
         },
         //书详情
-        async getBookDetail({ commit }, params) {
-            const res = await getBookDetail(params)
+        async getBookDetail({dispatch, commit }, params) {
+            const res = await getBookDetail(params) 
             console.log(res)
             commit("bindBookDetail", res)
+
+          //设置底部购买工具栏
+            const toolsData = {
+              "collectLikeDuration" : res.collectLikeDuration,
+              "collectLikeId" : res.collectLikeId,
+              "collectLikePersonCount" : res.collectLikePersonCount,
+              "collectLikeTemplateId" : res.collectLikeTemplateId,
+              "groupBuyDuration" : res.groupBuyDuration,
+              "groupBuyPersonCount" : res.groupBuyPersonCount,
+              "groupBuyPrice" : res.groupBuyPrice,
+              "groupBuyId": params.groupBuyId || res.groupBuyId,
+              "groupBuyTemplateId" : res.groupBuyTemplateId,
+              "userAccessStatus" : res.userAccessStatus
+          }
+          dispatch('groupManager/initToolsBar',toolsData)
+
         },
         //书单集列表
         async getSingleSetList({state, commit }, refresh) {
@@ -72,12 +91,12 @@ export default {
               courseId:state.courseId,
               currentPage:page,
               pageSize:state.pageSize
-            }
-            console.log(params)
+            } 
             const res = await getSingleSetList(params)
-            if(null == res) return
+            if(null == res) return 
             console.log(res)
-            commit("bindSingleSetList", {res,page})
+            let totalCount = res.totalCount
+            commit("bindSingleSetList", {res,page,totalCount})
         }
     },
     getters: {
@@ -93,5 +112,8 @@ export default {
             }
         },
       playingId:(state,getters,rootState)=>rootState.audiotask.audioDetail.id
+    },
+    modules:{
+      groupManager
     }
 }

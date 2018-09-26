@@ -1,5 +1,5 @@
 <template>
-  <div v-show="show" class="share-container">
+  <div v-show="show" class="share-container" @click.self="onCancel">
     <transition @after-leave="afterLeave">
       <div v-show="isOpen" class="share-content">
         <div class="share-src">
@@ -33,9 +33,9 @@
   </div>
 </template>
  <script>
-import { wxConfig } from '../../services/groupBuyAPi.js'
+import { mapActions, mapState } from 'vuex'
 export default {
-  props: ['show', 'sharetype', 'shareid'],
+  props: ['show', 'sharetype', 'shareid', 'shareInfo'],
   data() {
     return {
       isOpen: false
@@ -44,61 +44,48 @@ export default {
   watch: {
     show(value) {
       this.isOpen = value
+      if (value) {
+        const { fullPath } = this.$route
+        this.registerWxConfig({
+          fullPath,
+          jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline']
+        })
+      }
     }
   },
-      mounted() {
-        this.config();
-       
-    },
+  computed: {
+    ...mapState(['url'])
+  },
   methods: {
-    async config(){
-  let result0= await wxConfig({'url' : window.location.href})
- console.log('config' +result0);
-        let config = result0.js_config
-        console.log(result0)
-        wx.config({
-          debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-          appId: config.appid, // 必填，企业号的唯一标识，此处填写企业号corpid
-          timestamp: config.timestamp, // 必填，生成签名的时间戳
-          nonceStr: config.nonceStr, // 必填，生成签名的随机串
-          signature: config.signature, // 必填，签名，见附录1
-          jsApiList: ['onMenuShareTimeline', 'onMenuShareAppMessage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-        })
-    },
+    ...mapActions(['registerWxConfig', 'setWxShareFriend', 'setWxShareZone']),
     onShareItem(shareScore) {
       this.isOpen = false
-      if (shareScore == 'poster') {
+      const nickname = 'nihao'
+      const shareOption = {
+        link: this.url + this.shareInfo.link || '/#/home',
+        title: this.shareInfo.title || `${nickname}邀请您一起上课啦！`,
+        desc:
+          this.shareInfo.desc || '秦汉胡同国学，让我们的孩子成为一个有涵养的人',
+        imgUrl: this.shareInfo.imgUrl || '',
+        successCB: () => {
+          this.$toast('分享回调成功')
+        },
+        cancelCB: () => {
+          this.$toast('分享回调失败')
+        }
+      }
+      console.log('当前分享option:')
+      console.log(shareOption)
+      if (shareScore === 'poster') {
         this.$toast('分享海报')
       }
-      if (shareScore == 'friends') {
+      if (shareScore === 'friends') {
         this.$toast('分享给朋友')
-        let nickname = 'nihao'
-        const shareOption = {
-          link: location.href.split('#')[0],
-          title: `${nickname}邀请您一起上课啦！`,
-          friendtitle: `${nickname}邀请您一起上课啦！`,
-          desc: '秦汉胡同国学，让我们的孩子成为一个有涵养的人',
-          imgUrl: ''
-        }
-        console.log(link)
-        wx.ready(function(shareOption) {
-          wx.updateAppMessageShareData({
-            title: shareOption.title,
-            desc: shareOption.desc,
-            link: shareOption.link,
-            imgUrl: shareOption.imgUrl,
-            success: function(res) {
-              // 用户确认分享后执行的回调函数
-              successCB(res)
-            },
-            cancel: function() {
-              // 用户取消分享后执行的回调函数
-            }
-          })
-        })
+        this.setWxShareFriend(shareOption)
       }
       if (shareScore == 'circle') {
         this.$toast('分享到朋友圈')
+        this.setWxShareZone(shareOption)
       }
     },
 
@@ -126,7 +113,7 @@ export default {
     bottom: 0;
     display: flex;
     flex-direction: column;
-    transition: all 0.5s ease;
+    transition: all 0.2s ease;
     .share-src {
       font-size: 24px;
       color: rgb(82, 82, 77);
@@ -187,6 +174,6 @@ export default {
 }
 .v-enter-active,
 .v-leave-active {
-  transition: all 0.3s ease;
+  transition: all 0.1s ease;
 }
 </style>

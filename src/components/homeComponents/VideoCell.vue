@@ -18,10 +18,13 @@
 <script>
 export default {
   props: ['video'],
-  methods:{
-    onItemClick(){ 
+  methods: {
+    onItemClick() {
       console.log(this.video.id)
-       this.$router.push({name:'videoColumnDetail',params:{courseId:this.video.id}})
+      this.$router.push({
+        name: 'videoColumnDetail',
+        params: { courseId: this.video.id }
+      })
     }
   }
 }

@@ -19,13 +19,13 @@
 
 <script>
 export default {
-  props: ['iteminfo', 'lastindex','activeID'],
+  props: ['iteminfo', 'lastindex', 'activeID'],
   data() {
     return {
       imgPlaying: require('../../../assets/images/onlinecourse_ic_playing.png'),
       imgPause: require('../../../assets/images//onlinecourse_play_ic_pause.png'),
       studyProgress: '', //收听进度
-      isPlaying:false
+      isPlaying: false
     }
   },
   filters: {
@@ -45,8 +45,8 @@ export default {
     }
   },
   methods: {
-    onClick(){
-      this.$emit('jumpEvent',this.iteminfo.id)
+    onClick() {
+      this.$emit('jumpEvent', this.iteminfo.id)
     }
   }
 }

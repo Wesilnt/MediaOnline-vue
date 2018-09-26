@@ -62,106 +62,106 @@ const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
   'videoColumnDetail/groupContent'
 )
 export default {
-    name:'GroupContent',
-    data(){
-        return {
-            navbar: ['介绍', '试看', '留言'],
-            selected: 0,
-            navbarFixed: false, //控制navbar是否吸顶
-        }
-    },
-    components:{
-        CourseIntroduce,
-        playlist,
-        videoComment,
-        CommentItem,
-        videoBigimage
-    },
-    computed:{
-        ...mapGetters([
-            'description',
-            'lessonCount',
-            'outlinePic',
-            'buyIntro',
-            'commentCount',
-            'buyCount',
-            'freeLessonList',
-            'commentsList',
-            'courseId'
-        ])
-    },
-    methods:{
-        ...mapActions([
-            'getCommentList',
-            'likeComment'
-        ]),
-        allFunc() {
-            this.$router.push({name:'videoCourseCmts',params:{courseId:this.courseId}})
-        },
-        gotoVideoCourseDetailPage(lessonId) {
-            console.log('路由跳转 lessonId = ' + lessonId)
-            this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
-        },
-        async handleScroll() {
-            //1.监听滚动
-            let scrollTop = Math.abs(
-                this.$refs.detailmain.getBoundingClientRect().top
-            )
-            let tryCourseH = this.$el.querySelector('#tryCourse').offsetTop - 50
-            let messageH = this.$el.querySelector('#leavemessage').offsetTop - 50
-            if (scrollTop < tryCourseH) {
-                this.selected = 0
-            } else if (scrollTop < messageH && scrollTop > tryCourseH) {
-                this.selected = 1
-            } else if (scrollTop > messageH) {
-                this.selected = 2
-            }
-        },
-        clickFnc(index) {
-            this.selected = index
-            let positionId
-            switch (index) {
-                case 0:
-                positionId = '#desc'
-                break
-                case 1:
-                positionId = '#tryCourse'
-                break
-                case 2:
-                positionId = '#leavemessage'
-                break
-                default:
-                break
-            }
-
-            let anchor = this.$el.querySelector(positionId)
-            document.body.scrollTop = anchor.offsetHeight - 50
-            // // Firefox
-            document.documentElement.scrollTop = anchor.offsetTop - 50
-            // Safari
-            window.pageYOffset = anchor.offsetTop - 50
-        }
-    },
-    created() {
-        //获取专栏评论列表
-        this.getCommentList({
-            regionType: 2201,
-            regionId: this.courseId,
-            currentPage: 1,
-            pageSize: 11
-        })
-    },
-    mounted() {
-        window.addEventListener('scroll', this.handleScroll)
-    },
-    destroyed() {
-        window.removeEventListener('scroll', this.handleScroll)
+  name: 'GroupContent',
+  data() {
+    return {
+      navbar: ['介绍', '试看', '留言'],
+      selected: 0,
+      navbarFixed: false //控制navbar是否吸顶
     }
+  },
+  components: {
+    CourseIntroduce,
+    playlist,
+    videoComment,
+    CommentItem,
+    videoBigimage
+  },
+  computed: {
+    ...mapGetters([
+      'description',
+      'lessonCount',
+      'outlinePic',
+      'buyIntro',
+      'commentCount',
+      'buyCount',
+      'freeLessonList',
+      'commentsList',
+      'courseId'
+    ])
+  },
+  methods: {
+    ...mapActions(['getCommentList', 'likeComment']),
+    allFunc() {
+      this.$router.push({
+        name: 'videoCourseCmts',
+        params: { courseId: this.courseId }
+      })
+    },
+    gotoVideoCourseDetailPage(lessonId) {
+      console.log('路由跳转 lessonId = ' + lessonId)
+      this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
+    },
+    async handleScroll() {
+      //1.监听滚动
+      let scrollTop = Math.abs(
+        this.$refs.detailmain.getBoundingClientRect().top
+      )
+      let tryCourseH = this.$el.querySelector('#tryCourse').offsetTop - 50
+      let messageH = this.$el.querySelector('#leavemessage').offsetTop - 50
+      if (scrollTop < tryCourseH) {
+        this.selected = 0
+      } else if (scrollTop < messageH && scrollTop > tryCourseH) {
+        this.selected = 1
+      } else if (scrollTop > messageH) {
+        this.selected = 2
+      }
+    },
+    clickFnc(index) {
+      this.selected = index
+      let positionId
+      switch (index) {
+        case 0:
+          positionId = '#desc'
+          break
+        case 1:
+          positionId = '#tryCourse'
+          break
+        case 2:
+          positionId = '#leavemessage'
+          break
+        default:
+          break
+      }
+
+      let anchor = this.$el.querySelector(positionId)
+      document.body.scrollTop = anchor.offsetHeight - 50
+      // // Firefox
+      document.documentElement.scrollTop = anchor.offsetTop - 50
+      // Safari
+      window.pageYOffset = anchor.offsetTop - 50
+    }
+  },
+  created() {
+    //获取专栏评论列表
+    this.getCommentList({
+      regionType: 2201,
+      regionId: this.courseId,
+      currentPage: 1,
+      pageSize: 11
+    })
+  },
+  mounted() {
+    window.addEventListener('scroll', this.handleScroll)
+  },
+  destroyed() {
+    window.removeEventListener('scroll', this.handleScroll)
+  }
 }
 </script>
 
 <style lang="scss" scoped>
-.group-content-container{
+.group-content-container {
   margin: 0;
   padding: 0;
   background-color: #fff;
@@ -208,12 +208,13 @@ export default {
 //大图浏览
 .videocol-bigimage {
   position: relative;
-  padding: 0 40px;
+  padding: 0 40px 40px;
   width: 100%;
-  height: 800px;
-  margin: 40px 0;
+  height: 950px;
+  //   margin: 40px 0;
   background-color: #fff;
   border-bottom: 8px solid rgb(247, 247, 247);
+  overflow: hidden;
 }
 
 .videocol-bigimage-bg {
@@ -292,5 +293,3 @@ export default {
   margin-bottom: 60px;
 }
 </style>
-
-

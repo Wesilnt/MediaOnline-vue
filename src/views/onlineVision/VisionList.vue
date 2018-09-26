@@ -32,7 +32,7 @@ export default {
   components: {
     VisionCell
   },
-  computed: mapState(['bannerPic', 'visionList', 'finished','isLoading']),
+  computed: mapState(['bannerPic', 'visionList', 'finished', 'isLoading']),
   methods: {
     ...mapActions(['getVisionListData', 'getMoreData']),
     loadMore() {

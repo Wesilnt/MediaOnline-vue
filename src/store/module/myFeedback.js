@@ -19,7 +19,7 @@ const myFeedback = {
     async handleInput({ commit }, payload) {
       const content = payload.target.value
       if (content.length > 200) {
-       return  Toast.fail('您的字数超出限制')
+        return Toast.fail('您的字数超出限制')
       }
       await commit('updateStatus', {
         content

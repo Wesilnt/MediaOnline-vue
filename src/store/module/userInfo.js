@@ -3,7 +3,7 @@ import { postUserInfo } from '../../services/my'
 const userInfo = {
   namespaced: true,
   state: {
-    userInfo:[],
+    userInfo: [],
     loading: false
   },
   mutations: {
@@ -35,7 +35,7 @@ const userInfo = {
         loading: false
       })
     },
-    async updateUserInfo({ dispatch, commit, state },{ role, gender, grade }) {
+    async updateUserInfo({ dispatch, commit, state }, { role, gender, grade }) {
       //更新用户信息
       await commit('toggleLoading', {
         loading: true
@@ -46,19 +46,19 @@ const userInfo = {
         loading: false
       })
     },
-    async updateUserInfoGender({ dispatch, commit, state },{ gender }) {
+    async updateUserInfoGender({ dispatch, commit, state }, { gender }) {
       //更新性别
-      console.log(gender)
       const response = await postUserInfo({ gender:gender })
       if (!response)return
       commit('updateGender', {
         gender: gender
       })
+
     },
-    async updateUserInfoGrade({ dispatch, commit, state },{ grade }) {
+    async updateUserInfoGrade({ dispatch, commit, state }, { grade }) {
       //更新年级
-      const response = await postUserInfo({ grade:grade })
-      if (!response)return
+      const response = await postUserInfo({ grade: grade })
+      if (!response) return
       this.getMyUserInfo({ dispatch, commit, state })
       commit('updateGrade', {
         grade: grade

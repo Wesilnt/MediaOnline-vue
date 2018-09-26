@@ -20,20 +20,20 @@ const myReply = {
       await commit('toggleLoading', {
         loading: true
       })
-      const response = await getMessage({ busiTypes: '3101'})
-      if(!response)return
+      const response = await getMessage({ busiTypes: '3101' })
+      if (!response) return
       await commit({
         type: 'saveList',
         messageList: response
-      }) ``
+      })``
       commit('toggleLoading', {
         loading: false
       })
     },
-    async delMessage({ dispatch, commit, state },{ msgId }) {
+    async delMessage({ dispatch, commit, state }, { msgId }) {
       //删除服务器上的消息
-      const response = await postDelMessage({ id: msgId})
-      if (!response)return
+      const response = await postDelMessage({ id: msgId })
+      if (!response) return
       //删除本地的消息
       await commit('modifyMessageList', {
         id: msgId

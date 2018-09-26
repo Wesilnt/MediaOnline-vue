@@ -19,7 +19,7 @@
                 <div>{{toolsObject&&toolsObject.collectText}}</div>
             </div>
         </div>
-        <Share :show="sharePageShow" :shareid="courseId" @close="cancelSharePage"></Share>
+        <Share :show="sharePageShow" :shareid="courseId" :shareInfo="shareData" @close="cancelSharePage"></Share>
         <PhoneVerif v-if="isShowMobileDialog" :callback="cancelDialog"></PhoneVerif>
     </div>
    
@@ -29,12 +29,20 @@
 import Share from './share/Share'
 import PhoneVerif from './PhoneVerif'
 import { createNamespacedHelpers } from 'vuex'
-const { mapState,mapGetters,mapActions,mapMutations } = createNamespacedHelpers('videoColumnDetail/groupManager')
+const {
+  mapState,
+  mapGetters,
+  mapActions,
+  mapMutations
+} = createNamespacedHelpers('videoColumnDetail/groupManager')
 export default {
   name: 'ToolsNavbar',
-  data(){
+  data() {
     return {
-      sharePageShow:false
+      //是否显示分享
+      sharePageShow: false,
+      //分享内容
+      shareData: null
     }
   },
   props: {
@@ -62,128 +70,168 @@ export default {
     },
     isShow: {
       type: Boolean,
-      default:true
+      default: true
     }
   },
-  components:{
+  components: {
     Share,
     PhoneVerif
-  }, 
-  watch:{
-    'collectLikeId':function(newVal){
-      if(newVal != 0) {
-        this.$router.push({ name: 'Praise',params: { courseId : this.$route.params.courseId ,collectLikeId:newVal} })
+  },
+  watch: {
+    collectLikeId: function(newVal) {
+      if (newVal != 0) {
+        this.$router.push({
+          name: 'Praise',
+          params: {
+            courseId: this.$route.params.courseId,
+            collectLikeId: newVal
+          }
+        })
       }
     },
-    'achieveOriginBuy':function(newVal){
-      if(newVal == true){
+    achieveOriginBuy: function(newVal) {
+      if (newVal == true) {
         //原价购买完成跳转到单集详情页
         const lessonId = this.freeLessonList[0].id
         this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
       }
     },
-    'isShowMobileDialog':function(newVal){
-
-    }
+    isShowMobileDialog: function(newVal) {}
   },
-  computed:{
-    ...mapState(['userList','collectLikeId','isOwner','isShowMobileDialog']),
-    ...mapGetters(['courseId','toolsObject','praiseData','userAccessStatus','freeLessonList']),
+  computed: {
+    ...mapState([
+      'userList',
+      'collectLikeId',
+      'isOwner',
+      'isShowMobileDialog',
+      'groupBuyId',
+      'toolsObject'
+    ]),
+    ...mapGetters([
+      'courseId',
+      'praiseData',
+      'userAccessStatus',
+      'freeLessonList'
+    ])
   },
   filters: {
     formatPrice: function(price) {
       if (!price) return ''
-      if (price.toString().indexOf('.')!=-1) return price
+      if (price.toString().indexOf('.') != -1) return price
       else return price + '.00'
     }
   },
   methods: {
     ...mapMutations(['bindIsShowMobileDialog']),
-    ...mapActions(['startGroupBuy','getCollectLike','startCollectLike','updateFatherData','unlockCourse','checkoutAuthorrization']),
+    ...mapActions([
+      'startGroupBuy',
+      'getCollectLike',
+      'startCollectLike',
+      'updateFatherData',
+      'unlockCourse',
+      'checkoutAuthorrization'
+    ]),
     //点击试听按钮 跳转
-    clickAuditionBtn(){
+    clickAuditionBtn() {
       const lessonId = this.freeLessonList[0].id
       this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
     },
     //点击原价购买按钮
     clickOriginPriceBtn() {
       let params = {
-        "courseId" : this.courseId,
-        'payType' : 0
+        courseId: this.courseId,
+        payType: 0
       }
       this.checkoutAuthorrization(params)
     },
     //点击拼团按钮
-    clickCollageBtn(){
+    clickCollageBtn() {
       let params = null
-      if(this.isOwner){
+      if (this.isOwner) {
         //发起拼团
         params = {
-          "courseId" : this.courseId,
-          'payType' : 1
+          courseId: this.courseId,
+          payType: 1
         }
-      }else{
+      } else {
         //参与拼团
         params = {
-          "courseId" : this.courseId,
-          'payType' : 2
+          courseId: this.courseId,
+          payType: 2
         }
       }
-      switch(this.userAccessStatus) {
+      console.log('userAccessStatus =', this.userAccessStatus)
+      switch (this.userAccessStatus) {
         case -3:
           //拼团失败,重新发起拼团
           this.checkoutAuthorrization(params)
-        break
-          //没有购买和集赞行为
+          break
+        //没有购买和集赞行为
         case 0:
           this.checkoutAuthorrization(params)
-        break
+          break
         case 1003:
           //拼团成功.解锁专栏,跳转到单集详情页
           const lessonId = this.freeLessonList[0].id
           this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
-        break
+          break
         case 1005:
           //拼团中
           this.sharePageShow = true
-        break
+          //拼装分享内容
+          const shareData = {
+            link: `/#/videoColumnDetail/${this.courseId}?groupBuyId=${
+              this.groupBuyId
+            }`,
+            title: '视频分享',
+            desc: '这是一个神奇的视频',
+            imgUrl: ''
+          }
+          this.shareData = shareData
+          break
       }
     },
     //点击集赞按钮
-    clickCollectBtn(){
+    clickCollectBtn() {
       let params = null
-      switch(this.userAccessStatus){
+      switch (this.userAccessStatus) {
         case 1007:
           //集赞成功未领取
           params = {
-            "collectLikeId" : this.praiseData.collectLikeId
+            collectLikeId: this.praiseData.collectLikeId
           }
           this.getCollectLike(params)
-        break
+          break
         case 1008:
           //集赞成功已领取  解锁专栏 跳转到单集详情页
           const lessonId = this.freeLessonList[0].id
-          this.$router.push({ name: 'videoCourseDetail', params: { lessonId } }) 
-        break
+          this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
+          break
         case 1009:
-          //集赞中 
-          this.$router.push({ name: 'Praise',params: { courseId : this.$route.params.courseId ,collectLikeId:this.praiseData.collectLikeId} }) 
-        break
+          //集赞中
+          this.$router.push({
+            name: 'Praise',
+            params: {
+              courseId: this.$route.params.courseId,
+              collectLikeId: this.praiseData.collectLikeId
+            }
+          })
+          break
         case 0:
           //没有购买和集赞行为
           params = {
-            "courseId" : this.courseId
+            courseId: this.courseId
           }
           this.startCollectLike(params)
-        break
+          break
       }
     },
     //邀请好友拼团
-    cancelSharePage(){
+    cancelSharePage() {
       this.sharePageShow = false
     },
     //关闭手机号收集框
-    cancelDialog(){
+    cancelDialog() {
       this.bindIsShowMobileDialog(false)
     }
   }
@@ -226,7 +274,7 @@ export default {
   height: 70px;
   width: 2px;
   border: none;
-  margin-right:28px;
+  margin-right: 28px;
   background-color: #efefef;
 }
 .toolbar-price {
@@ -234,7 +282,7 @@ export default {
   margin-right: 28px;
   line-height: 32px;
 }
-.toolbar-price-active{
+.toolbar-price-active {
   // margin-left: 28px;
   flex-grow: 1;
   margin-right: 28px;

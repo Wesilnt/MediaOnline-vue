@@ -1,5 +1,6 @@
 <template>
   <div class="book-detail-container">
+     <GroupHeader></GroupHeader>
     <!-- 1. 头部 -->
     <div class="book-header-container">
       <div class="book-cover" :style="{background:'url('+bookDetail.coverPic+')','background-size':'100%'}">
@@ -10,45 +11,33 @@
     <div class="book-persons-container">
       <div class="person-item">
         <div class="person-label">
-          <font>作</font>
-          <font>者:</font>
+          <span>作</span>
+          <span>者:</span>
         </div>
-        <font>{{bookDetail.authorName}}</font>
+        <span>{{bookDetail.authorName}}</span>
       </div>
       <hr>
       <div class="person-item">
         <div class="person-label">
-          <font>演</font>
-          <font>讲</font>
-          <font>者:</font>
+          <span>演</span>
+          <span>讲</span>
+          <span>者:</span>
         </div>
-        <font>{{bookDetail.commentator}}</font>
+        <span>{{bookDetail.commentator}}</span>
       </div>
       <hr>
       <div class="person-item">
         <div class="person-label">
-          <font>系</font>
-          <font>列:</font>
+          <span>系</span>
+          <span>列:</span>
         </div>
-        <font>{{bookDetail.series}}</font>
+        <span>{{bookDetail.series}}</span>
       </div>
       <hr>
     </div>
     <!-- 3. 作品属性 -->
     <div class="book-properties-container">
-      <p>{{bookDetail.radioIntro}}</p>
-      <!-- <div class="property-item">
-        <img src="../../assets/readings_detail_star.png">
-        <p> 教育部新课必读书目 </p>
-      </div>
-      <div class="property-item">
-        <img src="../../assets/readings_detail_star.png">
-        <p> 民国四大才子宅王鹏代表作</p>
-      </div>
-      <div class="property-item">
-        <img src="../../assets/readings_detail_star.png">
-        <p>现代诗性小说大师之作</p>
-      </div> -->
+      <p>{{bookDetail.radioIntro}}</p> 
     </div>
     <hr>
 
@@ -94,30 +83,48 @@
 </template>
 <script>
 import toolsNavbar from '../../components/toolsNavbar.vue'
-import SingleSetList from '../../components/SingleSetList.vue' 
+import GroupHeader from '../onlineCourse/components/GroupHeader'
+import SingleSetList from '../../components/SingleSetList.vue'
 import { createNamespacedHelpers } from 'vuex'
-const { mapState,mapMutations, mapActions, mapGetters } = createNamespacedHelpers('readings') 
-export default { 
+const {
+  mapState,
+  mapMutations,
+  mapActions,
+  mapGetters
+} = createNamespacedHelpers('readings')
+export default {
   data() {
     return {
-      courseId:this.$route.query.id, 
-      currentPage:1,
-      pageSize:20, 
-      refreshing:false
+      courseId: this.$route.query.id,
+      currentPage: 1,
+      pageSize: 20,
+      refreshing: false
     }
-  }, 
-  components:{'singleset-list': SingleSetList,'tools-navbar':toolsNavbar},
+  },
+  components: {
+    'singleset-list': SingleSetList,
+    'tools-navbar': toolsNavbar,
+    GroupHeader
+  },
   computed: {
-    ...mapState(['bookDetail','singleLoaing','singleFinished', 'singleSetList']),
+    ...mapState([
+      'bookDetail',
+      'singleLoaing',
+      'singleFinished',
+      'singleSetList'
+    ]),
     ...mapGetters(['playingId'])
   },
-  created() { 
+  created() {
     this.initData(this.courseId)
-    this.getBookDetail({courseId:this.courseId})
+    this.getBookDetail({
+      courseId: this.courseId,
+      groupBuyId: this.$route.query.groupBuyId
+    })
     this.getSingleSetList(true)
   },
-  watch:{
-    singleLoaing:function(loading){ 
+  watch: {
+    singleLoaing: function(loading) {
       this.refreshing = loading
     }
   },
@@ -125,17 +132,19 @@ export default {
     ...mapMutations(['initData']),
     ...mapActions(['getBookDetail', 'getSingleSetList']),
     toLookWhole() {
-      this.$router.push({ path: '/home/readings/summary' }) 
+      this.$router.push({ path: '/home/readings/summary' })
     },
-       //分页加载
-    scrollBottom(){ 
-      this.getSingleSetList() 
-    },
+    //分页加载
+    scrollBottom() {
+      this.getSingleSetList()
+    }
   }
 }
 </script>
 <style lang="scss" scoped>
 .book-detail-container {
+  display: flex;
+  flex-direction: column;
   background-color: white;
   hr {
     height: 2px;
@@ -188,7 +197,7 @@ export default {
       width: 124px;
       margin-right: 20px;
     }
-    .person-label > font {
+    .person-label > span {
       color: rgb(170, 175, 188);
       font-size: 28px;
     }
@@ -201,23 +210,7 @@ export default {
   .book-properties-container {
     padding: 40px 40px;
     display: flex;
-    flex-direction: column;
-    // .property-item {
-    //   display: flex;
-    //   flex-direction: row;
-    //   margin: 8px 0px;
-    //   align-items: center;
-    // }
-    // .property-item img {
-    //   width: 28px;
-    //   height: 28px;
-    // }
-    // .property-item p {
-    //   color: rgb(22, 35, 60);
-    //   font-size: 28px;
-    //   line-height: 28px;
-    //   margin: 0;
-    // }
+    flex-direction: column; 
     p {
       color: rgb(22, 35, 60);
       font-size: 28px;

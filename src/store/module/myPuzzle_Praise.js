@@ -60,8 +60,8 @@ const myPuzzle_Praise = {
       }
     },
     async toggleCurrentType({ dispatch, commit }, payload) {
-        console.log(payload.loadType);
-        await commit('saveStatus', {
+      console.log(payload.loadType)
+      await commit('saveStatus', {
         [payload.loadType]: true
       })
       await dispatch({ type: 'queryList', ...payload })

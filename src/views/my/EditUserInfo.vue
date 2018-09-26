@@ -69,204 +69,213 @@
 </template>
 
 <script>
-  import {createNamespacedHelpers} from 'vuex'
-  import {Toast} from 'vant'
-  import {getGradeNum} from './MyUtil'
+import { createNamespacedHelpers } from 'vuex'
+import { Toast } from 'vant'
+import { getGradeNum } from './MyUtil'
 
-  const {mapState, mapActions} = createNamespacedHelpers(
-    'userInfo'
-  )
-  export default {
-    name: "EditUserInfo",
-    data: function () {
-      return {
-        identity: '',
-        gender: '',
-        grade: -1,
-        showIdentity: true,
-        showNext: false,
-        columns: ['未上学', '幼儿园', '一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '初一', '初二', '初三', '初三以上']
-      }
-    },
-    computed: {
-      ...mapState(['userInfo', 'loading'])
-    },
-    watch: {
-      loading: function (loading) {
-        let num = 3
-        let that = this
-        if (loading === true) {
-          console.log("back")
-          var timer = setInterval(function () {
-            num--
-            console.log("backaa")
-            if (num === 0) {
-              that.$router.back(-1)
-              console.log("back")
-              clearInterval(timer)
-            }
-
-          }, 1000)
-        }
-      }
-    },
-    methods: {
-      ...mapActions(['getMyUserInfo', 'updateUserInfo']),
-      handleNext: function () {
-        if (this.showNext === false) {
-          if (this.identity === '') {
-            Toast.fail('请先选择身份')
-          } else {
-            this.showNext = true
-            this.showIdentity = false
+const { mapState, mapActions } = createNamespacedHelpers('userInfo')
+export default {
+  name: 'EditUserInfo',
+  data: function() {
+    return {
+      identity: '',
+      gender: '',
+      grade: -1,
+      showIdentity: true,
+      showNext: false,
+      columns: [
+        '未上学',
+        '幼儿园',
+        '一年级',
+        '二年级',
+        '三年级',
+        '四年级',
+        '五年级',
+        '六年级',
+        '初一',
+        '初二',
+        '初三',
+        '初三以上'
+      ]
+    }
+  },
+  computed: {
+    ...mapState(['userInfo', 'loading'])
+  },
+  watch: {
+    loading: function(loading) {
+      let num = 3
+      let that = this
+      if (loading === true) {
+        console.log('back')
+        var timer = setInterval(function() {
+          num--
+          console.log('backaa')
+          if (num === 0) {
+            that.$router.back(-1)
+            console.log('back')
+            clearInterval(timer)
           }
+        }, 1000)
+      }
+    }
+  },
+  methods: {
+    ...mapActions(['getMyUserInfo', 'updateUserInfo']),
+    handleNext: function() {
+      if (this.showNext === false) {
+        if (this.identity === '') {
+          Toast.fail('请先选择身份')
         } else {
-          if (this.sex === '') {
-            Toast.fail('请选择性别')
-          } else if (this.grade === '') {
-            Toast.fail('请选择年级')
-          } else if (this.showNext === true) {
-            this.updateUserInfo({role: this.identity, gender: this.sex, grade: this.grade})
-          }
+          this.showNext = true
+          this.showIdentity = false
         }
-      },
-      identityChoice: function (type) {
-        console.log("AAA")
-        console.log(type)
-        this.identity = type
-      },
-      genderChoice: function (type) {
-        console.log("AAA")
-        console.log(type)
-        this.gender = type
-      },
-      onChange(picker, value, index) {
-        console.log(value)
-        this.grade = getGradeNum(value)
-      },
+      } else {
+        if (this.sex === '') {
+          Toast.fail('请选择性别')
+        } else if (this.grade === '') {
+          Toast.fail('请选择年级')
+        } else if (this.showNext === true) {
+          this.updateUserInfo({
+            role: this.identity,
+            gender: this.sex,
+            grade: this.grade
+          })
+        }
+      }
+    },
+    identityChoice: function(type) {
+      console.log('AAA')
+      console.log(type)
+      this.identity = type
+    },
+    genderChoice: function(type) {
+      console.log('AAA')
+      console.log(type)
+      this.gender = type
+    },
+    onChange(picker, value, index) {
+      console.log(value)
+      this.grade = getGradeNum(value)
     }
   }
+}
 </script>
 
 <style lang="less">
-    .userinfo {
-        &-title {
-            padding: 104px 0px 60px 60px;
-            font-size: 54px;
-            color: #ffa32f;
-        }
-        &-identity {
-            font-size: 28px;
+.userinfo {
+  &-title {
+    padding: 104px 0px 60px 60px;
+    font-size: 54px;
+    color: #ffa32f;
+  }
+  &-identity {
+    font-size: 28px;
 
-            &-sub-title {
-                padding: 0px 0px 32px 60px;
-                font-size: 28px;
-                color: #a3a8b6;
-            }
-            &-container {
-                display: flex;
-                flex-direction: row;
-                padding: 0px 45px 198px 45px;
-                &-item {
-                    display: flex;
-                    flex-direction: row;
-                    position: relative;
-                    width: 300px;
-                    height: 200px;
-                    padding-bottom: 56px;
-                    border: 1px #000;
-                    margin: 0px 15px 0px 15px;
-                    border-radius: 20px;
-                    box-shadow: #f4f4f4 5px 5px 5px 5px; //边框阴影
-                    background-color: white;
-                    &-text {
-                        line-height: 200px;
-                        font-size: 28px;
-                        padding: 0px 0px 0px 30px;
-                        color: #d2d0d6;
-                    }
-                    &-circle {
-                        width: 120px;
-                        height: 120px;
-                        margin: 40px 0px 40px 20px;
-                        border-radius: 50%;
-                        box-shadow: #f4f4f4 5px 5px 5px 5px
-
-                    }
-                }
-                &-item-selected {
-                    background-color: #86befb;
-                    &-text {
-                        color: white;
-                    }
-                    &-circle {
-                        background-color: #418ee0;
-                        box-shadow: #418ee0 5px 5px 5px 5px
-                    }
-                }
-            }
-
-        }
-        &-grade-container {
-            margin-top: -100px;
-        }
-        &-submit-area {
-            margin: 72px 55px 0;
-            &-button {
-                width: 100%;
-                height: 90px;
-                margin: 24px auto 80px;
-                font-size: 32px;
-                display: block;
-                text-align: center;
-                border-radius: 50px;
-                border: 1px solid #d4d3d7;
-                color: #b5b5b5;
-                outline: none;
-                background: #ffa32f;
-                color: white;
-                border: none;
-                box-shadow: 0 0 10px #ffaa3f;
-                transition: background, color, border, box-shadow 0.4s linear;
-            }
-
-            &-agreement-label {
-                color: #ffa32f;
-                font-size: 24px;
-                text-align: center; //文字居中
-            }
-            &-agreement-text {
-                color: #acacb4;
-                padding-bottom: 30px;
-            }
-        }
+    &-sub-title {
+      padding: 0px 0px 32px 60px;
+      font-size: 28px;
+      color: #a3a8b6;
     }
-
-    .van-radio-group {
+    &-container {
+      display: flex;
+      flex-direction: row;
+      padding: 0px 45px 198px 45px;
+      &-item {
         display: flex;
         flex-direction: row;
+        position: relative;
+        width: 300px;
+        height: 200px;
+        padding-bottom: 56px;
+        border: 1px #000;
+        margin: 0px 15px 0px 15px;
+        border-radius: 20px;
+        box-shadow: #f4f4f4 5px 5px 5px 5px; //边框阴影
+        background-color: white;
+        &-text {
+          line-height: 200px;
+          font-size: 28px;
+          padding: 0px 0px 0px 30px;
+          color: #d2d0d6;
+        }
+        &-circle {
+          width: 120px;
+          height: 120px;
+          margin: 40px 0px 40px 20px;
+          border-radius: 50%;
+          box-shadow: #f4f4f4 5px 5px 5px 5px;
+        }
+      }
+      &-item-selected {
+        background-color: #86befb;
+        &-text {
+          color: white;
+        }
+        &-circle {
+          background-color: #418ee0;
+          box-shadow: #418ee0 5px 5px 5px 5px;
+        }
+      }
+    }
+  }
+  &-grade-container {
+    margin-top: -100px;
+  }
+  &-submit-area {
+    margin: 72px 55px 0;
+    &-button {
+      width: 100%;
+      height: 90px;
+      margin: 24px auto 80px;
+      font-size: 32px;
+      display: block;
+      text-align: center;
+      border-radius: 50px;
+      border: 1px solid #d4d3d7;
+      color: #b5b5b5;
+      outline: none;
+      background: #ffa32f;
+      color: white;
+      border: none;
+      box-shadow: 0 0 10px #ffaa3f;
+      transition: background, color, border, box-shadow 0.4s linear;
     }
 
-    .van-radio {
-        width: 40px;
-        height: 40px;
-        position: absolute;
-        right: 0px;
-        bottom: -25px;
-
+    &-agreement-label {
+      color: #ffa32f;
+      font-size: 24px;
+      text-align: center; //文字居中
     }
-
-    .van-picker {
-        height: 150px;
+    &-agreement-text {
+      color: #acacb4;
+      padding-bottom: 30px;
     }
+  }
+}
 
-    .van-picker-column__item {
-        width: 100vw
+.van-radio-group {
+  display: flex;
+  flex-direction: row;
+}
 
-    }
+.van-radio {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  right: 0px;
+  bottom: -25px;
+}
 
-    .van-picker-column {
-        overflow: visible;
-    }
+.van-picker {
+  height: 150px;
+}
 
+.van-picker-column__item {
+  width: 100vw;
+}
+
+.van-picker-column {
+  overflow: visible;
+}
 </style>

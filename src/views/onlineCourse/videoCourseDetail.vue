@@ -130,11 +130,11 @@ export default {
     ]),
     ...mapGetters(['haveQuestionBOList', 'haveLessonlist'])
   },
-    mounted() {
+  mounted() {
     //监听滚动
-     addEventListener('scroll', this.handleScroll)
+    addEventListener('scroll', this.handleScroll)
     //视频播放器相关监听
-    const vid =  this.$refs.videoitem
+    const vid = this.$refs.videoitem
     //视频进度
     vid.addEventListener('timeupdate', this.getVideoProgress)
     vid.addEventListener('play', this.clickPlayVideoBtn)
