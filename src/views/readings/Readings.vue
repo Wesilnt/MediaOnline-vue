@@ -18,7 +18,7 @@
         </div>
         <!-- 3. 读书会列表 -->  
               <div  class="read-list-container">
-                <router-link v-for="item of bookList" :key="item.id"   :to="'/home/readings/book?id='+item.id" class="list-item" tag="div">
+                <div v-for="item of bookList" :key="item.id"  @click="toPlay(item)" class="list-item">
                     <div class="top-container" :style="{background:'url('+item.coverPic+')','background-size':'100% 100%'}">
                         <span>上新</span>
                         <img src="../../assets/readings_item_play.png">
@@ -27,7 +27,7 @@
                         <p>{{item.name}}</p>
                         <span>¥ {{item.price}}</span>
                     </div>
-                </router-link> 
+                </div> 
               </div> 
         <!-- 分页加载 -->
         <div class="load-more-container" v-if="finished" v-scrollbottom="{scrollBottom,finished,refreshing}">
@@ -101,6 +101,14 @@ export default {
     scrollBottom(){ 
       console.log('分页')
      this.getReadingsList(true)
+    },
+    //音频播放
+    toPlay(audio){ 
+      if(audio.isFree){
+        this.$router.push({path:"/home/readings/book",query:{id:audio.id}})   
+      }else{
+        this.$toast.fail("您还未购买该专栏")
+      }
     }
   }
 }

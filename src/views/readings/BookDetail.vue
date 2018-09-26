@@ -1,5 +1,6 @@
 <template>
   <div class="book-detail-container">
+     <GroupHeader></GroupHeader>
     <!-- 1. 头部 -->
     <div class="book-header-container">
       <div class="book-cover" :style="{background:'url('+bookDetail.coverPic+')','background-size':'100%'}">
@@ -94,6 +95,7 @@
 </template>
 <script>
 import toolsNavbar from '../../components/toolsNavbar.vue'
+import GroupHeader from '../onlineCourse/components/GroupHeader'
 import SingleSetList from '../../components/SingleSetList.vue' 
 import { createNamespacedHelpers } from 'vuex'
 const { mapState,mapMutations, mapActions, mapGetters } = createNamespacedHelpers('readings') 
@@ -106,14 +108,14 @@ export default {
       refreshing:false
     }
   }, 
-  components:{'singleset-list': SingleSetList,'tools-navbar':toolsNavbar},
+  components:{'singleset-list': SingleSetList,'tools-navbar':toolsNavbar,GroupHeader},
   computed: {
     ...mapState(['bookDetail','singleLoaing','singleFinished', 'singleSetList']),
     ...mapGetters(['playingId'])
   },
   created() { 
     this.initData(this.courseId)
-    this.getBookDetail({courseId:this.courseId})
+    this.getBookDetail({courseId:this.courseId,groupBuyId:this.$route.query.groupBuyId})
     this.getSingleSetList(true)
   },
   watch:{
@@ -136,6 +138,8 @@ export default {
 </script>
 <style lang="scss" scoped>
 .book-detail-container {
+  display: flex;
+  flex-direction: column;
   background-color: white;
   hr {
     height: 2px;

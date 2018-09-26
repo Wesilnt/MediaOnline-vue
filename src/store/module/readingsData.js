@@ -1,4 +1,6 @@
 import { getReadingsList, getBookDetail, getSingleSetList } from '../../services/readingsApi'
+import groupManager from './groupManager'
+
 export default {
     namespaced: true,
     state: {
@@ -37,8 +39,8 @@ export default {
           if(1==page) state.singleSetList = []
           state.singlePage = page
           state.singleLoaing = false
-          state.singleSetList = state.singleSetList.concat(res.result)
-          state.singleFinished = state.singleSetList.length < totalCount
+          state.singleSetList = state.singleSetList.concat(res.result) 
+          state.singleFinished = state.singleSetList.length >= totalCount
         },
         toggleLoading(state, isLoading){
            state.loading = isLoading
@@ -59,10 +61,25 @@ export default {
             commit("bindReadingsList", {res, page,totalCount})
         },
         //书详情
-        async getBookDetail({ commit }, params) {
-            const res = await getBookDetail(params)
-            console.log(res)
+        async getBookDetail({dispatch, commit }, params) {
+            const res = await getBookDetail(params) 
             commit("bindBookDetail", res)
+
+          //设置底部购买工具栏
+            const toolsData = {
+              "collectLikeDuration" : res.collectLikeDuration,
+              "collectLikeId" : res.collectLikeId,
+              "collectLikePersonCount" : res.collectLikePersonCount,
+              "collectLikeTemplateId" : res.collectLikeTemplateId,
+              "groupBuyDuration" : res.groupBuyDuration,
+              "groupBuyPersonCount" : res.groupBuyPersonCount,
+              "groupBuyPrice" : res.groupBuyPrice,
+              "groupBuyId": params.groupBuyId || res.groupBuyId,
+              "groupBuyTemplateId" : res.groupBuyTemplateId,
+              "userAccessStatus" : res.userAccessStatus
+          }
+          dispatch('groupManager/initToolsBar',toolsData)
+
         },
         //书单集列表
         async getSingleSetList({state, commit }, refresh) {
@@ -73,12 +90,11 @@ export default {
               courseId:state.courseId,
               currentPage:page,
               pageSize:state.pageSize
-            }
-            console.log(params)
+            } 
             const res = await getSingleSetList(params)
-            if(null == res) return
-            console.log(res)
-            commit("bindSingleSetList", {res,page})
+            if(null == res) return 
+            let totalCount = res.totalCount
+            commit("bindSingleSetList", {res,page,totalCount})
         }
     },
     getters: {
@@ -94,5 +110,8 @@ export default {
             }
         },
       playingId:(state,getters,rootState)=>rootState.audiotask.audioDetail.id
+    },
+    modules:{
+      groupManager
     }
 }

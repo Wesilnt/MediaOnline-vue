@@ -41,7 +41,7 @@
         </div>
         <div class="groupBuy-banner" :style="{ background : 'url('+profilePic+')','background-size' : '100%' }">
             <!-- <div class="groupBuy-circleline" v-show="true"></div> -->
-            <span class="groupBuy-banner-bottom">99人已购买</span>
+            <span class="groupBuy-banner-bottom">99人已购买{{isShowGroupBuy}}</span>
         </div>
     </div>
 </template>
@@ -61,8 +61,8 @@ export default {
         CountDown
     },
     computed:{
-        ...mapState(['leavePerson','countDownTime','userListTop','userListBot','isSixGroup','headerType']),
-        ...mapGetters(['profilePic','isShowGroupBuy'])
+        ...mapState(['leavePerson','countDownTime','userListTop','userListBot','isSixGroup','headerType','isShowGroupBuy']),
+        ...mapGetters(['profilePic'])
     }
 }
 </script>
