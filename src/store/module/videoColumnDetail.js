@@ -54,21 +54,28 @@ const videoColumnDetail = {
 
             commit('bindVideoColumnDetail',result)
 
-            const toolsData = {
-                "collectLikeDuration" : result.collectLikeDuration,
-                "collectLikeId" : result.collectLikeId,
-                "collectLikePersonCount" : result.collectLikePersonCount,
-                "collectLikeTemplateId" : result.collectLikeTemplateId,
-                "groupBuyDuration" : result.groupBuyDuration,
-                "groupBuyPersonCount" : result.groupBuyPersonCount,
-                "groupBuyPrice" : result.groupBuyPrice,
-                "groupBuyId": groupBuyId || result.groupBuyId,
-                "groupBuyTemplateId" : result.groupBuyTemplateId,
-                "userAccessStatus" : result.userAccessStatus,
-                'price' : result.price
+            if(groupBuyId){
+                dispatch('groupManager/getGroupBuyDetail',groupBuyId)
+            }else {
+                const toolsData = {
+                    "collectLikeDuration" : result.collectLikeDuration,
+                    "collectLikeId" : result.collectLikeId,
+                    "collectLikePersonCount" : result.collectLikePersonCount,
+                    "collectLikeTemplateId" : result.collectLikeTemplateId,
+                    "groupBuyDuration" : result.groupBuyDuration,
+                    "groupBuyPersonCount" : result.groupBuyPersonCount,
+                    "groupBuyPrice" : result.groupBuyPrice,
+                    "groupBuyId": result.groupBuyId,
+                    "groupBuyTemplateId" : result.groupBuyTemplateId,
+                    "userAccessStatus" : result.userAccessStatus,
+                    'price' : result.price
+                }
+    
+                dispatch('groupManager/initToolsBar',toolsData)
             }
 
-            dispatch('groupManager/initToolsBar',toolsData)
+
+
         }
 
     },
