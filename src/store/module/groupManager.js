@@ -76,7 +76,7 @@ const groupManager = {
     },
     actions:{
         //初始化工具条
-        initToolsBar({commit},toolsData){
+        initToolsBar({commit,dispatch},toolsData){
             //集赞状态
             const praiseData = {
                 "collectLikeDuration" : toolsData.collectLikeDuration || 0,
@@ -163,7 +163,6 @@ const groupManager = {
                 break
                 case 1003:
                     console.log('拼团成功')
-                    isShowGroupBuy = true
                     dispatch("getGroupBuyDetail",groupData.groupBuyId)
                     // toolsObject = {
                     //     "originPrice":'',
@@ -177,7 +176,6 @@ const groupManager = {
                 break
                 case 1005:
                     console.log('拼团中')
-                    isShowGroupBuy = true
                     dispatch("getGroupBuyDetail",groupData.groupBuyId)
                     // toolsObject = {
                     //     "originPrice":'',
