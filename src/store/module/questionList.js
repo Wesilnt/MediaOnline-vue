@@ -1,4 +1,5 @@
 import { uploadAnswer } from '../../services/columns'
+import { getPosterInfo } from '../../services/shareApi'
 
 const questionList = {
   namespaced: true,
@@ -108,6 +109,9 @@ const questionList = {
       await commit('saveStatus', {
         questionIndex: nextIndex
       })
+    },
+    async getQrcode(_, payload) {
+      return await getPosterInfo(payload)
     }
   }
 }

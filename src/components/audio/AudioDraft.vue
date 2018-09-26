@@ -34,11 +34,11 @@ export default {
     word-break: break-all;
     word-wrap: break-word;
     word-spacing: 2px; /*no*/
-    letter-spacing: 2px; /*no*/ 
+    letter-spacing: 2px; /*no*/
     margin: 60px 0;
     box-sizing: content-box;
   }
-  img { 
+  img {
     width: 100%;
     margin: 40px 0;
   }

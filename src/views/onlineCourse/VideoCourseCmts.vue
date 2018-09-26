@@ -7,16 +7,16 @@
 <script>
 import CommentList from '../../components/comment/CommentList.vue'
 export default {
-   data(){
-     return{
-       courseId:this.$route.params.courseId
-     }
-   },
-    components: {'comment-list': CommentList},
+  data() {
+    return {
+      courseId: this.$route.params.courseId
+    }
+  },
+  components: { 'comment-list': CommentList }
 }
 </script>
 <style lang="scss" scoped>
-.video-comments-container{
+.video-comments-container {
   display: flex;
 }
 </style>

@@ -56,7 +56,7 @@ export default {
       return arr[index]
     }
   },
-  props: ['comment', 'unindent', 'regiontype','lastindex'],
+  props: ['comment', 'unindent', 'regiontype', 'lastindex'],
   data() {
     return {
       needExpand: false,
@@ -111,13 +111,13 @@ export default {
     color: #808080;
     margin-right: 24px;
     line-height: 32px;
-    align-self:  flex-end;
+    align-self: flex-end;
   }
   &-time {
     flex-grow: 1;
     font-size: 22px;
     line-height: 22px;
-    color: #b2b2b2; 
+    color: #b2b2b2;
     align-self: flex-end;
   }
   &-body {
@@ -142,9 +142,9 @@ export default {
 .comment-thumb {
   color: #ffa32f;
   font-weight: 700;
-   align-self: flex-end;
-   display: flex;
-  > span{
+  align-self: flex-end;
+  display: flex;
+  > span {
     align-self: flex-end;
     line-height: 28px;
     font-size: 28px;

@@ -84,7 +84,7 @@ export default {
       this.queryList({ type: 1007, orderBy: orderBy }) //  获取读书会
     },
     toPlayAudio: function(id) {
-      this.$router.push({ name: 'AudioPlay', params:{id}})
+      this.$router.push({ name: 'AudioPlay', params: { id } })
     },
     toPlayVideo: function(id) {
       console.log(id)

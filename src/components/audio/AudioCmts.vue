@@ -22,39 +22,41 @@
 <script>
 import CommentList from '../comment/CommentList.vue'
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions, mapMutations } = createNamespacedHelpers('comment')
+const { mapState, mapActions, mapMutations } = createNamespacedHelpers(
+  'comment'
+)
 export default {
-  components: {'comment-list': CommentList},
+  components: { 'comment-list': CommentList },
   data() {
     return {
       lessonId: this.$route.params.lessonid,
       isSpeak: false,
       isSpeaking: false,
-      commentContent: '',  
+      commentContent: ''
     }
-  }, 
-  methods: { 
+  },
+  methods: {
     ...mapActions(['postComment']),
     //切换评论方式
     onCommentMethod() {
       this.isSpeak = !this.isSpeak
-    }, 
+    },
     //输入或者录入评论
     onInputeComment() {},
     //发送评论
-    onSendComment() {  
-       if(this.commentContent.trim().length<=0){
-           this.$toast('期待你宝贵的建议')
-           this.commentContent = ''
-         return
-       }
+    onSendComment() {
+      if (this.commentContent.trim().length <= 0) {
+        this.$toast('期待你宝贵的建议')
+        this.commentContent = ''
+        return
+      }
       this.postComment({
         regionId: this.lessonId, //单集id
         regionType: 2202, //目标类型（2201：专栏，2202：单集）
         commentType: 3301, //评论类型（3301:text,3302:voice,3303:text&voice)
         content: this.commentContent, //留言内容
         duration: '' //音频长度
-      }) 
+      })
       this.commentContent = ''
     },
     //点赞
@@ -63,13 +65,13 @@ export default {
       this.comments[index].isPraised = !isPraised
       this.$toast(isPraised ? '取消点赞' : '点赞成功')
     },
-    onKeyUp(key){ 
-      this.onSendComment(); 
-    }, 
+    onKeyUp(key) {
+      this.onSendComment()
+    }
   }
 }
 </script>
-<style lang='scss' scoped> 
+<style lang='scss' scoped>
 .comment-publish {
   position: fixed;
   bottom: 0;

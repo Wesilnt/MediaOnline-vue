@@ -34,54 +34,57 @@ import { createNamespacedHelpers } from 'vuex'
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers('freezone')
 export default {
   filters: {
-    createtimeFormat:function(value,timeLen){
+    createtimeFormat: function(value, timeLen) {
       let createDate = new Date(value)
-      let isNewest = Date.now() - createDate.getTime()<timeLen
-      if(isNewest) {
-       return '最新'
-      }else{
+      let isNewest = Date.now() - createDate.getTime() < timeLen
+      if (isNewest) {
+        return '最新'
+      } else {
         let year = createDate.getFullYear()
-        let month = createDate.getMonth()+1
-        let m =  month < 10 ? "0"+ month : month
+        let month = createDate.getMonth() + 1
+        let m = month < 10 ? '0' + month : month
         let date = createDate.getDate()
-        let d =  date < 10 ? "0"+ date:date
-        return year + "/" + m + "/"+ d
+        let d = date < 10 ? '0' + date : date
+        return year + '/' + m + '/' + d
       }
     }
   },
   data() {
     return {
-      timeLen : 30*24*60*60*1000,
+      timeLen: 30 * 24 * 60 * 60 * 1000,
       playingIcon: require('../../assets/freezone_playing.png'),
-      pauseIcon: require('../../assets/freezone_pause.png'), 
-      refreshing:false
+      pauseIcon: require('../../assets/freezone_pause.png'),
+      refreshing: false
     }
   },
-  computed:{...mapState(['freeZoneList','loading','finished','isSubscribe']),...mapGetters(['playingId'])},
-  created(){
-      this.getFreezoneList(1);
-      this.getUserByToken();
+  computed: {
+    ...mapState(['freeZoneList', 'loading', 'finished', 'isSubscribe']),
+    ...mapGetters(['playingId'])
   },
-   watch:{
-    loading:function(loading){ 
+  created() {
+    this.getFreezoneList(1)
+    this.getUserByToken()
+  },
+  watch: {
+    loading: function(loading) {
       this.refreshing = loading
     }
   },
   methods: {
-    ...mapActions(["getFreezoneList",'doFreeLesson','getUserByToken']),
+    ...mapActions(['getFreezoneList', 'doFreeLesson', 'getUserByToken']),
     //分页加载
-    scrollBottom(){ 
-      this.getFreezoneList() 
+    scrollBottom() {
+      this.getFreezoneList()
     },
-    isNewest(createTime, timeLen){
+    isNewest(createTime, timeLen) {
       let createDate = new Date(createTime)
-      return Date.now() - createDate.getTime()<timeLen
+      return Date.now() - createDate.getTime() < timeLen
     },
-    subscribe() { 
-      if(this.isSubscribe){
+    subscribe() {
+      if (this.isSubscribe) {
         this.$toast('已订阅')
-      } else{
-        this.doFreeLesson()  
+      } else {
+        this.doFreeLesson()
       }
     }
   }

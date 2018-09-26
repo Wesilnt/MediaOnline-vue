@@ -17,10 +17,12 @@ export default {
     return {
       isFold: false,
       imgDown: {
-        backgroundImage :  "url("+require('../assets/images/onlinecourse_arrow_down.png')+")",
+        backgroundImage:
+          'url(' + require('../assets/images/onlinecourse_arrow_down.png') + ')'
       },
       imgUp: {
-        backgroundImage : "url("+require('../assets/images/onlinecourse_arrow_up.png')+")",       
+        backgroundImage:
+          'url(' + require('../assets/images/onlinecourse_arrow_up.png') + ')'
       }
     }
   },
@@ -58,15 +60,12 @@ export default {
   overflow: auto;
 }
 
-.arrow-container { 
+.arrow-container {
   position: absolute;
   width: 100%;
   bottom: 0;
   text-align: center;
-    background: linear-gradient(
-    to bottom,
-    rgba(255, 255, 255, 0.8), #ffffff
-  );
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.8), #ffffff);
   // background: linear-gradient(
   //   to bottom,
   //   rgba(255, 255, 255, 0.2) 10%,
@@ -77,7 +76,7 @@ export default {
   // );
   // margin-top: -70px;
 }
-.arrow-icon-innner{
-   margin-top: 50px;
+.arrow-icon-innner {
+  margin-top: 50px;
 }
 </style>

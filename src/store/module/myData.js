@@ -1,10 +1,10 @@
-import {getMyUserInfo, getNewMessageCount} from '../../services/my'
-const myData= {
+import { getMyUserInfo, getNewMessageCount } from '../../services/my'
+const myData = {
   namespaced: true,
   state: {
-    newReplyMessageCount:0,
-    newSysMessageCount:0,
-    userInfo:[],
+    newReplyMessageCount: 0,
+    newSysMessageCount: 0,
+    userInfo: [],
     loading: false
   },
   mutations: {
@@ -18,7 +18,7 @@ const myData= {
     },
     toggleLoading(state, { loading }) {
       state.loading = loading
-    },
+    }
   },
   actions: {
     async queryNewMessageCount({ dispatch, commit, state }) {
@@ -28,7 +28,7 @@ const myData= {
       }
 
       let sysResult = await getNewMessageCount({ busiTypes: 3103 })
-      if(sysResult){
+      if (sysResult) {
         commit('save', sysResult.data)
       }
     },
@@ -36,7 +36,7 @@ const myData= {
       let response = await getMyUserInfo()
       // console.log(response)
       commit('saveUserInfo', response)
-    },
+    }
   }
 }
 export default myData

@@ -25,17 +25,17 @@ export async function getLessonListByCourse(params) {
 }
 //收藏接口
 export async function doFavorite(params) {
-  return request.post('/favorite/doFavorite',params)
+  return request.post('/favorite/doFavorite', params)
 }
 //取消收藏接口
 export async function unFavorite(params) {
-  return request.post('/favorite/unFavorite',params)
+  return request.post('/favorite/unFavorite', params)
 }
 //提交视频课节收听进度
 export async function lessonListenForVedio(params) {
-  return request.post('/lesson/lessonListenForVedio',params)
+  return request.post('/lesson/lessonListenForVedio', params)
 }
 //提交视频课节收听进度
 export async function uploadAnswer(params) {
-  return request.post('/lesson/doAnswer',params)
+  return request.post('/lesson/doAnswer', params)
 }

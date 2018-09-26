@@ -52,13 +52,11 @@ export default {
     'bookList'
   ]),
   methods: {
-    ...mapActions([
-        'getIndexPageData',
-    ])
+    ...mapActions(['getIndexPageData'])
   },
-  mounted(){
+  mounted() {
     this.getIndexPageData()
-  },
+  }
 }
 </script>
 

@@ -14,10 +14,9 @@ const mySysMessage = {
     toggleLoading(state, { loading }) {
       state.loading = loading
     },
-    modifyMessageList(state,{id}){
+    modifyMessageList(state, { id }) {
       for (var i = 0; i < state.messageList.length; i++) {
-        if (state.messageList[i].id === id)
-          state.messageList.splice(i,1)
+        if (state.messageList[i].id === id) state.messageList.splice(i, 1)
       }
     }
   },
@@ -26,7 +25,7 @@ const mySysMessage = {
       await commit('toggleLoading', {
         loading: true
       })
-      const response = await getMessage({ busiTypes: '3102,3103,3105,3106'})
+      const response = await getMessage({ busiTypes: '3102,3103,3105,3106' })
       await commit({
         type: 'saveList',
         messageList: response
@@ -35,10 +34,10 @@ const mySysMessage = {
         loading: false
       })
     },
-    async delSysMessage({ dispatch, commit, state },{ msgId }) {
+    async delSysMessage({ dispatch, commit, state }, { msgId }) {
       //删除服务器上的消息
-      const response = await postDelMessage({ id: msgId})
-      if (!response)return
+      const response = await postDelMessage({ id: msgId })
+      if (!response) return
       //删除本地的消息
       await commit('modifyMessageList', {
         id: msgId

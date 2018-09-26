@@ -33,9 +33,9 @@
   </div>
 </template>
  <script>
-import {  mapActions,mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 export default {
-  props: ['show', 'sharetype', 'shareid' ,'shareInfo'],
+  props: ['show', 'sharetype', 'shareid', 'shareInfo'],
   data() {
     return {
       isOpen: false
@@ -45,7 +45,6 @@ export default {
     show(value) {
       this.isOpen = value
       if (value) {
-
         const { fullPath } = this.$route
         this.registerWxConfig({
           fullPath,
@@ -54,7 +53,7 @@ export default {
       }
     }
   },
-  computed:{
+  computed: {
     ...mapState(['url'])
   },
   methods: {
@@ -63,10 +62,11 @@ export default {
       this.isOpen = false
       const nickname = 'nihao'
       const shareOption = {
-        link:this.url + this.shareInfo.link || '/#/home',
+        link: this.url + this.shareInfo.link || '/#/home',
         title: this.shareInfo.title || `${nickname}邀请您一起上课啦！`,
-        desc:this.shareInfo.desc || '秦汉胡同国学，让我们的孩子成为一个有涵养的人',
-        imgUrl:this.shareInfo.imgUrl || '',
+        desc:
+          this.shareInfo.desc || '秦汉胡同国学，让我们的孩子成为一个有涵养的人',
+        imgUrl: this.shareInfo.imgUrl || '',
         successCB: () => {
           this.$toast('分享回调成功')
         },

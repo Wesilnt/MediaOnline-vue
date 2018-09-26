@@ -13,12 +13,19 @@
 <script>
 export default {
   props: ['book'],
-  methods:{
-    onItemClick(){
-       this.$router.push({path:'/home/readings/book',query:{id:this.book.id,hiddenDraft:true}})
+  methods: {
+    onItemClick() {
+      this.$router.push({
+        path: '/home/readings/book',
+        query: { id: this.book.id, hiddenDraft: true }
+      })
     },
-    onPlayClick(){
-       this.$router.push({name:'AudioPlay',params:{id:this.book.freeLessonList[0].id,},query:{hiddenDraft:1}})
+    onPlayClick() {
+      this.$router.push({
+        name: 'AudioPlay',
+        params: { id: this.book.freeLessonList[0].id },
+        query: { hiddenDraft: 1 }
+      })
     }
   }
 }

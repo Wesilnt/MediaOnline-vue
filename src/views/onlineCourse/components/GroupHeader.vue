@@ -48,132 +48,139 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
-const { mapState,mapGetters,mapActions } = createNamespacedHelpers('videoColumnDetail/groupManager')
+const { mapState, mapGetters, mapActions } = createNamespacedHelpers(
+  'videoColumnDetail/groupManager'
+)
 import CountDown from '../../../components/CountDown'
 export default {
-    name:'GroupHeader',
-    data(){
-        return{
-            // isShowGroupBuy:false
-        }
-    },
-    components:{
-        CountDown
-    },
-    computed:{
-        ...mapState(['leavePerson','countDownTime','userListTop','userListBot','isSixGroup','headerType','isShowGroupBuy']),
-        ...mapGetters(['profilePic'])
+  name: 'GroupHeader',
+  data() {
+    return {
+      // isShowGroupBuy:false
     }
+  },
+  components: {
+    CountDown
+  },
+  computed: {
+    ...mapState([
+      'leavePerson',
+      'countDownTime',
+      'userListTop',
+      'userListBot',
+      'isSixGroup',
+      'headerType',
+      'isShowGroupBuy'
+    ]),
+    ...mapGetters(['profilePic'])
+  }
 }
 </script>
 
 
 <style lang="scss" scoped>
 .groupBuy-container {
-    background-color: white;
-    text-align: center;
+  background-color: white;
+  text-align: center;
 }
 //头像部分
 .groupBuy-usericon {
-    width:100%;
+  width: 100%;
 }
 .groupBuy-usericon-manager {
-    margin-left: 60px;
-    width: 64px;
-    height: 36px;
-    text-align: center;
-    line-height: 32px;
-    color: white;
-    font-size: 20px;
-    border-radius: 18px;
-    border:2px solid white;
-    background-color: rgb(236, 93, 76);
-    box-sizing: border-box;
+  margin-left: 60px;
+  width: 64px;
+  height: 36px;
+  text-align: center;
+  line-height: 32px;
+  color: white;
+  font-size: 20px;
+  border-radius: 18px;
+  border: 2px solid white;
+  background-color: rgb(236, 93, 76);
+  box-sizing: border-box;
 }
 .groupBuy-usericon-top {
-    // background-color:green;
-    padding: 30px 231px 40px;
-    justify-content: center;
-    // box-sizing: border-box;
-    .groupBuy-usericon-item{
-        &:not(:last-child){
-            margin-right: 48px
-        }
+  // background-color:green;
+  padding: 30px 231px 40px;
+  justify-content: center;
+  // box-sizing: border-box;
+  .groupBuy-usericon-item {
+    &:not(:last-child) {
+      margin-right: 48px;
     }
+  }
 }
 .groupBuy-usericon-top-three {
-    padding: 30px 76px 40px;
-    justify-content: center;
-    // box-sizing: border-box;
-    .groupBuy-usericon-item{
-        &:not(:last-child){
-            margin-right: 48px
-        }
+  padding: 30px 76px 40px;
+  justify-content: center;
+  // box-sizing: border-box;
+  .groupBuy-usericon-item {
+    &:not(:last-child) {
+      margin-right: 48px;
     }
+  }
 }
 .groupBuy-usericon-bot {
-    // background-color: red;
-    justify-content: center;
-    padding:0 63px;
-    .groupBuy-usericon-item{
-        &:not(:last-child){
-            margin-right: 48px
-        }
+  // background-color: red;
+  justify-content: center;
+  padding: 0 63px;
+  .groupBuy-usericon-item {
+    &:not(:last-child) {
+      margin-right: 48px;
     }
+  }
 }
 .groupBuy-usericon-item {
-    width: 120px;
-    height: 120px;
-    background-color: rgb(250, 219, 162);
-    border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  background-color: rgb(250, 219, 162);
+  border-radius: 50%;
 }
 .groupBuy-info {
-    font-size: 32px;
-    color: rgb(77, 77, 77); 
-    margin: 30px 0 40px;
-    span {
-       font-size: 40px;
-       color: rgb(255, 163, 47);
-    }
+  font-size: 32px;
+  color: rgb(77, 77, 77);
+  margin: 30px 0 40px;
+  span {
+    font-size: 40px;
+    color: rgb(255, 163, 47);
+  }
 }
 .groupBuy-countDown-container {
-    // background-color: cyan;
-    width: 100%;
-    height: 48px;
+  // background-color: cyan;
+  width: 100%;
+  height: 48px;
 }
 .groupBuy-deadline {
-    font-size: 24px;
-    color: rgb(204, 204, 204);
-    margin:16px 0 10px;
+  font-size: 24px;
+  color: rgb(204, 204, 204);
+  margin: 16px 0 10px;
 }
 .groupBuy-banner {
-    width: 100%;
-    height: 300px;
-    background-color: rgb(198, 72, 172);
-    padding: 0 40px;
-    box-sizing: border-box;
-    text-align: left;
-    position: relative;
+  width: 100%;
+  height: 300px;
+  background-color: rgb(198, 72, 172);
+  padding: 0 40px;
+  box-sizing: border-box;
+  text-align: left;
+  position: relative;
 
-    span {
-        position: absolute;
-        bottom: 20px;
-        right: 40px;
-        font-size: 28px;
-        color: red;
-    }
+  span {
+    position: absolute;
+    bottom: 20px;
+    right: 40px;
+    font-size: 28px;
+    color: red;
+  }
 }
 .groupBuy-circleline {
-    position: absolute;
-    width: 112%;
-    height: 40px;
-    border-radius: 0 0 50% 50%;
-    background-color: white;
-    margin-top: -16px;
-    margin-left: -6%;
-    z-index: 99;
+  position: absolute;
+  width: 112%;
+  height: 40px;
+  border-radius: 0 0 50% 50%;
+  background-color: white;
+  margin-top: -16px;
+  margin-left: -6%;
+  z-index: 99;
 }
-
 </style>
-
-

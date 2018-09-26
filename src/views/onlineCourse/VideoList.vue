@@ -26,32 +26,38 @@ export default {
   name: 'VideoList',
   data() {
     return {
-      refreshing:false
+      refreshing: false
     }
   },
-  watch:{
-    loading:function(loading){ 
+  watch: {
+    loading: function(loading) {
       this.refreshing = loading
     }
   },
   computed: {
-    ...mapState(['columnHeaderImage', 'columns', 'columnOriginData','finished','loading'])
+    ...mapState([
+      'columnHeaderImage',
+      'columns',
+      'columnOriginData',
+      'finished',
+      'loading'
+    ])
   },
   components: {
     videolistitem: videoListItem
   },
   created() {
-    this.getColumnList({ type: 1005, pageSize: 10,currentPage:1 })
+    this.getColumnList({ type: 1005, pageSize: 10, currentPage: 1 })
   },
   methods: {
     ...mapActions(['getColumnList']),
     //点击具体的一个视频专栏
     jumpToVideoDetail(courseId) {
       console.log('路由跳转 courseID = ' + courseId)
-      let obj = { name: 'videoColumnDetail', params: { courseId }}
+      let obj = { name: 'videoColumnDetail', params: { courseId } }
       this.$router.push(obj)
     },
-    scrollBottom(){
+    scrollBottom() {
       this.getColumnList({ type: 1005, pageSize: 10 })
     }
   }

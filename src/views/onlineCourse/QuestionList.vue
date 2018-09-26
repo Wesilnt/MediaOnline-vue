@@ -108,7 +108,14 @@
             </a>
         </van-popup>
         <van-popup  v-model="settlementShow" position="bottom" class="settlement-container" @click="handlePopupHide('settlementShow')">
-            <div class="settlement-wrapper" ref="settlement">
+            <div class="settlement-wrapper">
+                <div v-show="cvsRenderLoading" class="loading-wrapper">
+                    <van-loading />
+                    <p>正在生成分享图片</p>
+                </div>
+                <img class="share-img" v-show="!cvsRenderLoading" :src="shareImg" alt="">
+            </div>
+            <div class="settlement-canvas" ref="settlement">
                 <div  class="answer-btn-close">
                     <a @click="handlePopupHide('settlementShow')">关闭</a>
                 </div>
@@ -126,10 +133,9 @@
                 <hr class="settlement-dashed-underline">
                 <i class="settlement-qr"></i>
                 <p>分享二维码，邀请好友一起试听</p>
+                <br>
+                <p>长按保存图片</p>
             </div>
-            <a  class="qhht-blockButton answer-btn-next" @click="handleSettlementSave">
-                保存图片
-            </a>
         </van-popup>
     </div>
 </template>
@@ -158,7 +164,9 @@ export default {
       reviewShow: false,
       questionShow: false,
       settlementShow: false,
-      remainTime: 0
+      remainTime: 0,
+      shareImg: null,
+      cvsRenderLoading: false
     }
   },
   computed: {
@@ -190,7 +198,7 @@ export default {
   },
   methods: {
     ...mapMainActions(['registerWxConfig', 'wxChooseImage']),
-    ...mapActions(['renderAnswers', 'handleNext', 'uploadAnswer']),
+    ...mapActions(['renderAnswers', 'handleNext', 'uploadAnswer', 'getQrcode']),
     async openQuestionAnswer() {
       if (!this.answersChecked) {
         await this.renderAnswers()
@@ -210,12 +218,40 @@ export default {
       array.forEach(item => {
         this[item] = popup === item
       })
+      if (popup === 'settlementShow') {
+        this.cvsRenderLoading = true
+        setTimeout(() => {
+          html2canvas(this.$refs.settlement, {
+            backgroundColor: '#4C4C4C',
+            allowTaint: true,
+            width: window.innerWidth,
+            height: window.innerHeight,
+            x: 0,
+            y: 0,
+            scrollX: 0,
+            scrollY: 0
+          }).then(async canvas => {
+            const qrcode = await this.getQrcode({
+              busId: '1654646',
+              pageUrl: window.location.href
+            })
+            console.log(qrcode)
+            const image = new Image()
+            const canvasImg = canvas.toDataURL('image/png')
+            image.src = canvasImg
+            image.onload = () => {
+              this.shareImg = canvasImg
+              this.cvsRenderLoading = false
+            }
+          })
+        }, 300)
+      }
     },
     handlePopupHide(popup) {
       this[popup] = false
     },
     handleNextClick() {
-      const { questionIndex, questionList, answers, questionInfo } = this
+      const { questionIndex, questionList, questionInfo } = this
       const { userSelect } = questionInfo
       if (!userSelect) {
         clearTimeout(timeInter)
@@ -243,34 +279,6 @@ export default {
         lessonId,
         answer
       })
-    },
-    handleSettlementSave() {
-      html2canvas(this.$refs.settlement, {
-        // scale:2,
-        backgroundColor: '#4C4C4C',
-        allowTaint: true,
-        width: window.innerWidth,
-        height:  window.innerHeight,
-        x: 0,
-        y: 0,
-        scrollX: 0,
-        scrollY: 0
-      }).then(canvas => {
-        const { fullPath } = this.$route
-        this.registerWxConfig({
-          fullPath,
-          jsApiList: ['chooseImage']
-        })
-        const image = new Image()
-        image.src = canvas.toDataURL('image/png')
-          image.style.width='100%'
-        image.onload = () => {
-          document.body.appendChild(image)
-        }
-      })
-      this.wxChooseImage()
-
-      this.handlePopupHide('settlementShow')
     }
   }
 }
@@ -428,11 +436,23 @@ export default {
 }
 .settlement-wrapper {
   position: absolute;
-  top: 46%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #7f7f7f;
+  z-index: 10;
+}
+.share-img {
+  width: 100%;
+}
+.settlement-canvas {
+  position: absolute;
+  top: 50%;
   left: 50%;
   width: 702px;
   transform: translate(-50%, -50%);
-  /*border-radius: 8px;*/
+  border-radius: 8px;
   padding: 20px 32px 60px;
   background-color: #fff;
   text-align: center;
@@ -484,6 +504,16 @@ export default {
   width: 152px;
   height: 152px;
   background-color: #20c997;
+}
+.loading-wrapper {
+  margin: 47% auto 0;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  line-height: 6;
+  color: #d6d6d6;
 }
 /*回顾自测题*/
 .review-swipe {

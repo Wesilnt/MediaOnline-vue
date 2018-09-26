@@ -10,22 +10,25 @@
 </template>
 <script>
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions ,mapGetters} = createNamespacedHelpers('praise') 
+const { mapState, mapActions, mapGetters } = createNamespacedHelpers('praise')
 export default {
   data() {
     return {
-      courseId:this.$route.params.courseId,
-      collectLikeId:this.$route.params.collectLikeId, 
+      courseId: this.$route.params.courseId,
+      collectLikeId: this.$route.params.collectLikeId
     }
   },
-  computed:{...mapState(['picList','courseName'])},
-  created(){
-    this.checkStatus({collectLikeId:this.collectLikeId})
+  computed: { ...mapState(['picList', 'courseName']) },
+  created() {
+    this.checkStatus({ collectLikeId: this.collectLikeId })
   },
   methods: {
     ...mapActions(['checkStatus']),
     toHelp() {
-      this.$router.push({ name: 'Praise', params: { "courseId" : this.courseId ,collectLikeId:this.collectLikeId} })
+      this.$router.push({
+        name: 'Praise',
+        params: { courseId: this.courseId, collectLikeId: this.collectLikeId }
+      })
     }
   }
 }

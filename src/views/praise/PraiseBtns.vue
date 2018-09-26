@@ -19,14 +19,14 @@
 <script>
 import { createNamespacedHelpers } from 'vuex'
 import MobileVali from '../../components/PhoneVerif.vue'
-const { mapState, mapActions ,mapGetters} = createNamespacedHelpers('praise') 
+const { mapState, mapActions, mapGetters } = createNamespacedHelpers('praise')
 let buttonDatas = [
   {
     isSingle: false, //单按钮还是双按钮  0
     leftText: '分享给好友',
     rightText: '分享海报'
   },
-  { 
+  {
     isSingle: true, //单按钮还是双按钮   1
     singleStyle: 'solid-large', //按钮样式
     singleText: '为TA点赞，免费领取伍老师历史课程'
@@ -64,7 +64,7 @@ let buttonDatas = [
 ]
 export default {
   components: { 'mobile-validate': MobileVali },
-  props: ['state','courseid','collectlikeid'],
+  props: ['state', 'courseid', 'collectlikeid'],
   data() {
     return {
       show: false,
@@ -82,19 +82,22 @@ export default {
     onSingle() {
       if (1 == this.state) {
         //TODO  参与集赞
-        if(true) //手机号检验
-          this.show =true
-       else
-          this.joinCollectLike({collectLikeId:this.collectlikeid})
-      } 
+        if (true)
+          //手机号检验
+          this.show = true
+        else this.joinCollectLike({ collectLikeId: this.collectlikeid })
+      }
       if (
         3 == this.state || //集赞完成未领取（发起人）
         4 == this.state || //集赞完成已领取（发起人）
         5 == this.state || //集赞完成（好友）
         7 == this.state
-      ) { 
+      ) {
         //TODO专栏详情
-        this.$router.push({name:'videoColumnDetail',params:{courseId:this.courseid}})
+        this.$router.push({
+          name: 'videoColumnDetail',
+          params: { courseId: this.courseid }
+        })
         return
       }
     },
@@ -105,18 +108,25 @@ export default {
     onRight() {
       if (0 == this.state) {
         console.log(this.collectlikeid)
-        let params = {id:this.collectlikeid}
+        let params = { id: this.collectlikeid }
         //分享海报
-        this.$router.push({ name: 'SharePoster',params,query:{sharetype:'praise'}})
+        this.$router.push({
+          name: 'SharePoster',
+          params,
+          query: { sharetype: 'praise' }
+        })
       }
       if (2 == this.state) {
         //我也要集赞
-        this.$router.push({name:'videoColumnDetail',params:{courseId:this.courseid}})
+        this.$router.push({
+          name: 'videoColumnDetail',
+          params: { courseId: this.courseid }
+        })
       }
     },
     validateCallback() {
       this.show = false
-      this.joinCollectLike({collectLikeId:this.collectlikeid})
+      this.joinCollectLike({ collectLikeId: this.collectlikeid })
     }
   }
 }

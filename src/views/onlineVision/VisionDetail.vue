@@ -143,7 +143,7 @@ export default {
         this.currentNav = 2
       }
     },
-     routerToAudition() {
+    routerToAudition() {
       console.log('跳转到试听')
     },
     routerToCollage() {

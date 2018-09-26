@@ -12,9 +12,9 @@
 <script>
 export default {
   props: ['messageCount'],
-  methods:{
-    enterMessage(){
-      this.$router.push("/my/Reply")
+  methods: {
+    enterMessage() {
+      this.$router.push('/my/Reply')
     }
   }
 }

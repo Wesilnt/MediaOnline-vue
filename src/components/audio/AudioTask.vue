@@ -3,17 +3,15 @@
 </template>
 
 <script>
-import {createNamespacedHelpers} from 'vuex'
-const {mapState,mapActions,mapGetters}  = createNamespacedHelpers('audio')
+import { createNamespacedHelpers } from 'vuex'
+const { mapState, mapActions, mapGetters } = createNamespacedHelpers('audio')
 export default {
   data() {
     return {}
   },
-  props:[],
-  computed:{},
-  created() {
-    
-  },
+  props: [],
+  computed: {},
+  created() {},
   methods: {
     play() {
       this._at.play()
@@ -23,4 +21,4 @@ export default {
     }
   }
 }
-</script> 
+</script>
