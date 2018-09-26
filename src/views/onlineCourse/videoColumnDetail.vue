@@ -50,7 +50,7 @@ export default {
       console.log('专栏页面路由对象')
       console.log(this.$route)
       const courseId = this.$route.params.courseId
-      const groupBuyId = this.$route.params.groupBuyId
+      const groupBuyId = this.$route.query.groupBuyId
       this.initDatas(courseId)
       this.getVideoColumnDetail({ "courseId": courseId, 'groupBuyId' : groupBuyId}) 
     }

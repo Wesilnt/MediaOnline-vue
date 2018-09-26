@@ -152,7 +152,7 @@ export default {
           this.sharePageShow = true
           //拼装分享内容
           const shareData = {
-            'link' : `/#/videoColumnDetail/:${this.courseId}/:${this.groupBuyId}`,
+            'link' : `/#/videoColumnDetail/${this.courseId}?groupBuyId=${this.groupBuyId}`,
             'title' : '视频分享',
             'desc' : '这是一个神奇的视频',
             'imgUrl' : ''

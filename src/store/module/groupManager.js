@@ -54,6 +54,7 @@ const groupManager = {
             state.collectLikeId = collectLikeId
         },
         bindGroupHeaderData(state,payload){
+         
             state.userListTop = payload.userListTop
             state.userListBot = payload.userListBot
             state.leavePerson = payload.leavePerson
@@ -67,11 +68,12 @@ const groupManager = {
         bindIsShowMobileDialog(state,isShowMobileDialog){
             state.isShowMobileDialog = isShowMobileDialog
         },
-        bindToolsObject(state,{toolsObject,groupBuyId,isShowGroupBuy}){
+        bindToolsObject(state,{toolsObject,groupBuyId,isShowGroupBuy}){    
+            console.log('代码到这里了isShowGroupBuy = '+ isShowGroupBuy)      
             state.toolsObject = toolsObject
             state.groupBuyId = groupBuyId
             state.isShowGroupBuy = isShowGroupBuy
-        }
+        },
 
     },
     actions:{
@@ -102,7 +104,7 @@ const groupManager = {
                 case -3:
                     //拼团失败
                     isShowGroupBuy = true
-                    dispatch("groupManager/getGroupBuyDetail",groupData.groupBuyId)
+                    dispatch("getGroupBuyDetail",groupData.groupBuyId)
                 break
                 case 0:
                     isShowGroupBuy = false
@@ -163,6 +165,7 @@ const groupManager = {
                 break
                 case 1003:
                     console.log('拼团成功')
+                    isShowGroupBuy = true
                     dispatch("getGroupBuyDetail",groupData.groupBuyId)
                     // toolsObject = {
                     //     "originPrice":'',
@@ -176,6 +179,7 @@ const groupManager = {
                 break
                 case 1005:
                     console.log('拼团中')
+                    isShowGroupBuy = true
                     dispatch("getGroupBuyDetail",groupData.groupBuyId)
                     // toolsObject = {
                     //     "originPrice":'',
@@ -227,7 +231,7 @@ const groupManager = {
                     }                 
                 break
             }
-
+            console.log('isShowGroupBuy = '+ isShowGroupBuy)
             const groupBuyId = groupData.groupBuyId
             commit('bindToolsObject',{toolsObject,groupBuyId,isShowGroupBuy})
 
@@ -276,6 +280,7 @@ const groupManager = {
             console.log("上面都是状态指标")
             let toolsObject = null
             let headerType = 0
+            let isShowGroupBuy = true
             switch(orderStatus){
                 case -3:
                     //拼团失败
@@ -402,7 +407,7 @@ const groupManager = {
             }
             console.log('更新状态条 + =',toolsObject)
             //更新工具条状态
-            commit('bindToolsObject',{toolsObject,groupBuyId})
+            commit('bindToolsObject',{toolsObject,groupBuyId,isShowGroupBuy})
 
             //9.整理拼团用户数组
             let topList = []
