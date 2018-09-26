@@ -47,10 +47,12 @@ export default {
     }, 
     created() {
       //获取专栏Id
+      console.log('专栏页面路由对象')
+      console.log(this.$route)
       const courseId = this.$route.params.courseId
-
+      const groupBuyId = this.$route.params.groupBuyId
       this.initDatas(courseId)
-      this.getVideoColumnDetail({ "courseId": courseId }) 
+      this.getVideoColumnDetail({ "courseId": courseId, 'groupBuyId' : groupBuyId}) 
     }
 }
 </script>

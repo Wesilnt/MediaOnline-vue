@@ -57,7 +57,7 @@ const videoColumnDetail = {
 
     },
     actions:{
-        async getVideoColumnDetail ({ commit,dispatch },{ courseId }) {            
+        async getVideoColumnDetail ({ commit,dispatch },{ courseId,groupBuyId }) {            
             //获取视频列表数据
             const result = await getVideoColumnDetail({ courseId })
             console.log('视频专栏接口数据:')
@@ -74,7 +74,7 @@ const videoColumnDetail = {
                 "groupBuyDuration" : result.groupBuyDuration || 0,
                 "groupBuyPersonCount" : result.groupBuyPersonCount || 0,
                 "groupBuyPrice" : result.groupBuyPrice || 0,
-                "groupBuyId": result.groupBuyId || 0,
+                "groupBuyId": groupBuyId || result.groupBuyId,
                 "groupBuyTemplateId" : result.groupBuyTemplateId || ""
             }
 
@@ -91,15 +91,46 @@ const videoColumnDetail = {
                 break
                 case 0:
                     isShowGroupBuy = false
-                    //工具条状态
-                    toolsObject = {
-                        "originPrice":result.price || 0,
-                        "groupPrice":result.groupBuyPrice || 0,
-                        "collageText":personStr,
-                        "collectText":"集赞换",
-                        "collect":true,
-                        "collage":true,
-                        "isShow":true
+                    if(praiseData.collectLikeTemplateId && groupData.groupBuyTemplateId){
+                        toolsObject = {
+                            "originPrice":result.price || 0,
+                            "groupPrice":result.groupBuyPrice || 0,
+                            "collageText":personStr,
+                            "collectText":"集赞换",
+                            "collect":true,
+                            "collage":true,
+                            "isShow":true
+                        }
+                    }else if(praiseData.collectLikeTemplateId == "" && groupData.groupBuyTemplateId){
+                        toolsObject = {
+                            "originPrice":result.price || 0,
+                            "groupPrice":result.groupBuyPrice || 0,
+                            "collageText":personStr,
+                            "collectText":"集赞换",
+                            "collect":false,
+                            "collage":true,
+                            "isShow":true
+                        }
+                    }else if(praiseData.collectLikeTemplateId && groupData.groupBuyTemplateId == ""){
+                        toolsObject = {
+                            "originPrice":result.price || 0,
+                            "groupPrice":result.groupBuyPrice || 0,
+                            "collageText":personStr,
+                            "collectText":"集赞换",
+                            "collect":true,
+                            "collage":false,
+                            "isShow":true
+                        }
+                    }else if(praiseData.collectLikeTemplateId == "" && groupData.groupBuyTemplateId ==""){
+                        toolsObject = {
+                            "originPrice":result.price || 0,
+                            "groupPrice":result.groupBuyPrice || 0,
+                            "collageText":personStr,
+                            "collectText":"集赞换",
+                            "collect":false,
+                            "collage":false,
+                            "isShow":true
+                        }
                     }
                 break
                 case 1001:
