@@ -74,9 +74,32 @@ export default {
       }
       if (shareScore === 'friends') {
         this.$toast('分享给朋友')
-        let nickname = 'nihao'
+        let nickname = 'nihao' 
 
-        this.setWxShareFriend(shareOption)
+        this.setWxShareFriend(shareOption) 
+        const shareOption = {
+          link: location.href.split('#')[0],
+          title: `${nickname}邀请您一起上课啦！`,
+          friendtitle: `${nickname}邀请您一起上课啦！`,
+          desc: '秦汉胡同国学，让我们的孩子成为一个有涵养的人',
+          imgUrl: ''
+        }
+        // console.log(link)
+        wx.ready(function(shareOption) {
+          wx.updateAppMessageShareData({
+            title: shareOption.title,
+            desc: shareOption.desc,
+            link: shareOption.link,
+            imgUrl: shareOption.imgUrl,
+            success: function(res) {
+              // 用户确认分享后执行的回调函数
+              successCB(res)
+            },
+            cancel: function() {
+              // 用户取消分享后执行的回调函数
+            }
+          })
+        }) 
       }
       if (shareScore == 'circle') {
         this.$toast('分享到朋友圈')

@@ -1,4 +1,6 @@
 import { getReadingsList, getBookDetail, getSingleSetList } from '../../services/readingsApi'
+import groupManager from './groupManager'
+
 export default {
     namespaced: true,
     state: {
@@ -38,7 +40,8 @@ export default {
           state.singlePage = page
           state.singleLoaing = false
           state.singleSetList = state.singleSetList.concat(res.result)
-          state.singleFinished = state.singleSetList.length < totalCount
+          console.log('totalCount:'+totalCount)
+          state.singleFinished = state.singleSetList.length >= totalCount
         },
         toggleLoading(state, isLoading){
            state.loading = isLoading
@@ -63,6 +66,22 @@ export default {
             const res = await getBookDetail(params)
             console.log(res)
             commit("bindBookDetail", res)
+
+          //设置底部购买工具栏
+            const toolsData = {
+              "collectLikeDuration" : res.collectLikeDuration,
+              "collectLikeId" : res.collectLikeId,
+              "collectLikePersonCount" : res.collectLikePersonCount,
+              "collectLikeTemplateId" : res.collectLikeTemplateId,
+              "groupBuyDuration" : res.groupBuyDuration,
+              "groupBuyPersonCount" : res.groupBuyPersonCount,
+              "groupBuyPrice" : res.groupBuyPrice,
+              "groupBuyId": groupBuyId || res.groupBuyId,
+              "groupBuyTemplateId" : res.groupBuyTemplateId,
+              "userAccessStatus" : res.userAccessStatus
+          }
+          dispatch('groupManager/initToolsBar',toolsData)
+
         },
         //书单集列表
         async getSingleSetList({state, commit }, refresh) {
@@ -78,7 +97,8 @@ export default {
             const res = await getSingleSetList(params)
             if(null == res) return
             console.log(res)
-            commit("bindSingleSetList", {res,page})
+            let totalCount = res.totalCount
+            commit("bindSingleSetList", {res,page,totalCount})
         }
     },
     getters: {
@@ -94,5 +114,8 @@ export default {
             }
         },
       playingId:(state,getters,rootState)=>rootState.audiotask.audioDetail.id
+    },
+    modules:{
+      groupManager
     }
 }
