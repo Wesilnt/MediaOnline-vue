@@ -1,24 +1,35 @@
 <template>
     <div class="btn-wrapper">
-        <van-button type="default" size="large" @click="wxConfig">config</van-button>
-        <van-button type="primary" size="large"  @click="wxShare">分享按钮</van-button>
+        <van-button type="default" size="large" @click="registerWxConfig">config</van-button>
+        <van-button type="primary" size="large"  @click="handleWxShare">分享按钮</van-button>
         <van-button type="warning" size="large">警告按钮</van-button>
         <van-button type="danger" size="large">危险按钮</van-button>
     </div>
 </template>
 
 <script>
-import { wxConfig, wxShare } from '../../utils/wxConfig'
+import { mapState, mapActions } from 'vuex'
 export default {
   name: 'wxConfig',
+  mounted() {
+    this.registerWxConfig({
+      fullPath,
+      jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline']
+    })
+  },
   methods: {
-    wxConfig: () => {
-      wxConfig()
-    },
-    wxShare: () => {
-      wxShare({ title:'VUe', desc:'VUEVUEVUE', link:window.location.href, imgUrl:require('../../assets/poster_header_bg.jpg') },(res)=>{
-          console.log(res);
-      })
+    ...mapActions(['registerWxConfig', 'setWxShareFriend', 'setWxShareZone']),
+    handleWxShare: () => {
+      const options = {
+        title: '分享',
+        desc: '测试分享',
+        link: window.location.href,
+        imgUrl: require('../../assets/poster_header_bg.jpg'),
+        successCB: res => console.log(res),
+        cancelCB: res => console.log(res)
+      }
+      this.setWxShareFriend(options)
+      this.setWxShareZone(options)
     }
   }
 }
