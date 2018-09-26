@@ -244,7 +244,7 @@ const groupManager = {
             console.log(result)
             if(result == null) return
             //1.获取当前订单状态
-            let orderStatus = result.userAccessStatus;
+            let orderStatus = result.status;
             //2.判断是开团人还是参团人
             let currentUserId = result.userId;//拿到当前用户ID
             let isOwner = currentUserId == result.starterUid;           
