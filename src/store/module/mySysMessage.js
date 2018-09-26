@@ -44,6 +44,7 @@ const mySysMessage = {
     async queryList({ dispatch, commit, state }) {
 
       const response = await getMessage({ busiTypes: '3102,3103,3105,3106' })
+      if(response.data.length === 0)return
       await commit({
         type: 'saveList',
         messageList: response

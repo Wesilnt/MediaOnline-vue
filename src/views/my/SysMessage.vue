@@ -296,6 +296,7 @@
     .van-popup {
         height: 60px;
         text-align: center;
+        background-color: white;
         border-top: 0.1px solid #ddd;
     }
 
