@@ -113,7 +113,7 @@ export default {
     bottom: 0;
     display: flex;
     flex-direction: column;
-    transition: all 0.5s ease;
+    transition: all 0.2s ease;
     .share-src {
       font-size: 24px;
       color: rgb(82, 82, 77);
@@ -174,6 +174,6 @@ export default {
 }
 .v-enter-active,
 .v-leave-active {
-  transition: all 0.3s ease;
+  transition: all 0.1s ease;
 }
 </style>

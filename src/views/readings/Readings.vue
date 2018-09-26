@@ -1,15 +1,7 @@
 <template>
     <div class="read-container">
         <!-- 1. 头部信息 -->
-        <div class="header-container" :style="{background:'url('+bannerPic+')','background-size':'100% 100%'}">
-            <!-- <h5 class="title">
-                有声书
-            </h5>
-            <hr>
-            <p class="desc">
-                联合各领域名师大家精心打造课程专栏，提升中国少年的综合素养，建立光靠做题无法培养的竞争力。
-            </p> -->
-        </div>
+        <div class="header-container" :style="{background:'url('+bannerPic+')','background-size':'100% 100%'}"/>
         <!-- 2. 全部书籍按钮 -->
         <div class="read-btn">
             <p>
@@ -17,18 +9,18 @@
             </p>
         </div>
         <!-- 3. 读书会列表 -->  
-              <div  class="read-list-container">
-                <div v-for="item of bookList" :key="item.id"  @click="toPlay(item)" class="list-item">
-                    <div class="top-container" :style="{background:'url('+item.coverPic+')','background-size':'100% 100%'}">
-                        <span>上新</span>
-                        <img src="../../assets/readings_item_play.png">
-                    </div>
-                    <div class="bottom-container">
-                        <p>{{item.name}}</p>
-                        <span>¥ {{item.price}}</span>
-                    </div>
-                </div> 
-              </div> 
+          <div  class="read-list-container">
+            <div v-for="item of bookList" :key="item.id"  @click="toDetail(item.id)" class="list-item">
+                <div class="top-container" :style="{background:'url('+item.coverPic+')','background-size':'100% 100%'}">
+                    <span>上新</span>
+                    <img src="../../assets/readings_item_play.png">
+                </div>
+                <div class="bottom-container">
+                    <p>{{item.name}}</p>
+                    <span>¥ {{item.price}}</span>
+                </div>
+            </div> 
+          </div> 
         <!-- 分页加载 -->
         <div class="load-more-container" v-if="finished" v-scrollbottom="{scrollBottom,finished,refreshing}">
             <span>没有更多了，不要再拉啦～</span>
@@ -103,12 +95,8 @@ export default {
      this.getReadingsList(true)
     },
     //音频播放
-    toPlay(audio){ 
-      if(audio.isFree){
-        this.$router.push({path:"/home/readings/book",query:{id:audio.id}})   
-      }else{
-        this.$toast.fail("您还未购买该专栏")
-      }
+    toDetail(id){  
+      this.$router.push({path:"/home/readings/book",query:{id}})    
     }
   }
 }

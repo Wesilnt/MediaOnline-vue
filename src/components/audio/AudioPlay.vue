@@ -7,19 +7,16 @@
       <h4> {{audio.subTitle}}</h4>
       <!-- 中间tabbar -->
       <div class="tab-container">
-        <div class="tab-item" @click="onCollect">
-          <img :src="isLike?require('../../assets/audio_love_collect.png'):require('../../assets/audio_love_normal.png')">
+        <div class="tab-container-collect" @click="onCollect"
+         :style="{backgroundImage:isLike 
+         ? 'url('+require('../../assets/audio_love_collect.png')+')'
+         : 'url('+require('../../assets/audio_love_normal.png')+')'}"> 
         </div>
-        <router-link :to="'/audio/audiodraft/'+lessonId" v-if="!hiddenDraft" class="tab-item" tag="div">
-          <img src="../../assets/audio_play_manuscripts.png">
-        </router-link>
-        <router-link :to="'/audio/audiocmts/'+lessonId" class="tab-item" tag="div">
-          <span>{{audio.commentCount}}</span>
-          <img src="../../assets/audio_play_comments.png">
-        </router-link>
-        <div class="tab-item" @click="onShare">
-          <img src="../../assets/audio_play_share.jpg">
+        <div v-if="!hiddenDraft" class="tab-container-draft" @click="onDraft"/>
+        <div  class="tab-container-comment" @click="toComment">
+          <span>{{audio.commentCount}}</span> 
         </div>
+        <div class="tab-container-share" @click="onShare"/>
       </div>
       <!-- 进度条 -->
       <div class="slider-container">
@@ -181,6 +178,20 @@ export default {
         this.postFavorite({ lessonId: this.lessonId })
       }
     },
+    //查看文稿
+    onDraft() {
+      this.$route.push({
+        name: 'AudioDraft',
+        params: { lessonid: this.lessonId }
+      })
+    },
+    //评论
+    toComment() {
+      this.$route.push({
+        name: 'AudioCmts',
+        params: { lessonid: this.lessonId }
+      })
+    },
     //分享
     onShare() {
       this.showShare = true
@@ -281,33 +292,44 @@ export default {
     margin: 18px 0 0 0;
   }
   .tab-container {
-    position: relative;
     display: flex;
     justify-content: space-between;
     flex-direction: row;
     margin: 60px 120px 0;
-    span {
-      position: relative;
-      left: 48px;
-      top: -20px;
-      font-size: 20px;
-      color: rgb(146, 145, 150);
-    }
-    > :nth-child(1) img {
+    &-collect {
       width: 48px;
       height: 41px;
+      background-repeat: no-repeat;
+      background-size: 48px 41px;
     }
-    > :nth-child(2) img {
+    &-draft {
       width: 37px;
       height: 45px;
+      background-repeat: no-repeat;
+      background-size: 37px 45px;
+      background-image: url('../../assets/audio_play_manuscripts.png');
     }
-    > :nth-child(3) img {
+    &-comment {
+      position: relative;
       width: 41px;
       height: 41px;
+      background-repeat: no-repeat;
+      background-size: 41px 41px;
+      background-image: url('../../assets/audio_play_comments.png');
+      span {
+        left: 30px;
+        top: -10px;
+        position: absolute;
+        font-size: 20px;
+        color: rgb(146, 145, 150);
+      }
     }
-    > :nth-child(4) img {
+    &-share {
       width: 42px;
       height: 40px;
+      background-repeat: no-repeat;
+      background-size: 41px 41px;
+      background-image: url('../../assets/audio_play_share.jpg');
     }
   }
 
@@ -316,7 +338,7 @@ export default {
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-top: 28px;
+    margin-top: 32px;
 
     > :nth-child(1) {
       margin-right: 20px;

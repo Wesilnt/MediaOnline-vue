@@ -54,8 +54,9 @@ export default {
         this.drawBottomMap()
       })
     }else{
-      this.getPosterInfo({busId:this.id,pageUrl:"http://localhost:8080/#/audio/audioplay"})
+      this.getPosterInfo({busId:this.id,pageUrl:"http://t.shbaoyuantech.com/#/audio/audioplay"})
       .then(res=>{
+                console.log("海报信息：", this.poster)
         this.drawBottomMap()
       })
     }
@@ -156,7 +157,7 @@ export default {
 .poster-container {
   .poster-pic-container {
     position: relative;
-    height: 1334px;
+    height: 100vh;
     width: 100%;
     canvas {
       height: 100%;

@@ -18,15 +18,15 @@ new Vue({
   router,
   store,
   render: h => {
-    if (noAccessToken()) {
-      store.dispatch('getAccessToken')
-      return h(Skeleton, {
-        props: {
-          loading: true,
-          active: true
-        }
-      })
-    }
+    // if (noAccessToken()) {
+    //   store.dispatch('getAccessToken')
+    //   return h(Skeleton, {
+    //     props: {
+    //       loading: true,
+    //       active: true
+    //     }
+    //   })
+    // }
     return h(App)
   }
 }).$mount('#app')

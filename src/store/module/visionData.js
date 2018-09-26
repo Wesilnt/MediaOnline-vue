@@ -1,5 +1,5 @@
 import { getVisionList,getVisionDetail, getCommentList } from '../../services/visionService'
-
+import groupManager from './groupManager'
 const visionData = {
     namespaced: true,
     state: {
@@ -35,10 +35,25 @@ const visionData = {
             console.log(state.visionList)
             commit('setIsLoading',false);
         },
-        async getVisionDetail({commit},courseId){
+        async getVisionDetail({dispatch,commit},{courseId,groupBuyId}){
             let result = await getVisionDetail({'courseId':courseId})
             commit('setVisionDetail', result);
             commit('setCategoryList',result.categoryList)
+
+            //设置底部购买工具栏
+            const toolsData = {
+              "collectLikeDuration" : result.collectLikeDuration,
+              "collectLikeId" : result.collectLikeId,
+              "collectLikePersonCount" : result.collectLikePersonCount,
+              "collectLikeTemplateId" : result.collectLikeTemplateId,
+              "groupBuyDuration" : result.groupBuyDuration,
+              "groupBuyPersonCount" : result.groupBuyPersonCount,
+              "groupBuyPrice" : result.groupBuyPrice,
+              "groupBuyId":  groupBuyId || result.groupBuyId,
+              "groupBuyTemplateId" : result.groupBuyTemplateId,
+              "userAccessStatus" : result.userAccessStatus
+            }
+            dispatch('groupManager/initToolsBar',toolsData)
         },
         async getCommentList({commit},courseId){
             let result = await getCommentList({regionType:2201, regionId:courseId, currentPage:1, pageSize:11})
@@ -73,6 +88,9 @@ const visionData = {
         setIsLoading(state,isLoading){
             state.isLoading = isLoading;
         }
+    },
+    modules:{
+      groupManager
     }
 }
 

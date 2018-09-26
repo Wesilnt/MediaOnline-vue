@@ -63,6 +63,7 @@ export default {
         //书详情
         async getBookDetail({dispatch, commit }, params) {
             const res = await getBookDetail(params) 
+            console.log(res)
             commit("bindBookDetail", res)
 
           //设置底部购买工具栏
@@ -93,6 +94,7 @@ export default {
             } 
             const res = await getSingleSetList(params)
             if(null == res) return 
+            console.log(res)
             let totalCount = res.totalCount
             commit("bindSingleSetList", {res,page,totalCount})
         }
