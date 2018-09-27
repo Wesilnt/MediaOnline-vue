@@ -172,8 +172,13 @@ export default {
           break
         case 1003:
           //拼团成功.解锁专栏,跳转到单集详情页
-          const lessonId = this.freeLessonList[0].id
-          this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
+          if(this.freeLessonList[0]){
+            const lessonId = this.freeLessonList[0].id
+            this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
+          }else
+          {
+            console.log('没有试听课程')
+          }
           break
         case 1005:
           //拼团中
