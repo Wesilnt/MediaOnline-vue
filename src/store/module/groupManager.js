@@ -237,6 +237,7 @@ const groupManager = {
             console.log('isShowGroupBuy = '+ isShowGroupBuy)
             const groupBuyId = groupData.groupBuyId
             commit('bindOrderObject',{toolsObject,groupBuyId,isShowGroupBuy,userAccessStatus})
+            commit('bindCollectLikeId',praiseData.collectLikeId)
 
         },
         //获取拼团详情
@@ -469,7 +470,8 @@ const groupManager = {
                 dispatch('checkoutShowTeleDialog',payload)
             }else{
                 //跳转去关注公众号
-                window.location.href = "https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzA4Mzg3NjE2Mg==&scene=126#wechat_redirect"
+                console.log('跳转去关注公众号')
+                // window.location.href = "https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzA4Mzg3NjE2Mg==&scene=126#wechat_redirect"
             }
         },
 
@@ -482,7 +484,15 @@ const groupManager = {
                 let phoneNum = result.data.data.mobileNo
                 if(phoneNum){
                     window.localStorage.setItem('telephone',phoneNum) 
-                    dispatch('beginPayment',payload)
+                    if(payload.payType == 3){
+                        //发起集赞
+                        params = {
+                            courseId: payload.courseId
+                        }
+                        this.startCollectLike(params)
+                    }else{
+                        dispatch('beginPayment',payload)
+                    }                   
                  
                 }else{
                     console.log('弹出手机号收集框')
@@ -549,6 +559,7 @@ const groupManager = {
             console.log('发起集赞成功')
             if (result == null) return
             dispatch('updateFatherData')
+  
         },
         //领取集赞
         async getCollectLike({commit},payload) {

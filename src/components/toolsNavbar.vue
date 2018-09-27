@@ -110,7 +110,6 @@ export default {
     ]),
     ...mapGetters([
       'courseId',
-      'praiseData',
       'freeLessonList'
     ])
   },
@@ -203,7 +202,7 @@ export default {
         case 1007:
           //集赞成功未领取
           params = {
-            collectLikeId: this.praiseData.collectLikeId
+            collectLikeId: this.collectLikeId
           }
           this.getCollectLike(params)
           break
@@ -218,16 +217,21 @@ export default {
             name: 'Praise',
             params: {
               courseId: this.$route.params.courseId,
-              collectLikeId: this.praiseData.collectLikeId
+              collectLikeId: this.collectLikeId
             }
           })
           break
         case 0:
           //没有购买和集赞行为
-          params = {
-            courseId: this.courseId
+          // params = {
+          //   courseId: this.courseId
+          // }
+          // this.startCollectLike(params)
+          let params = {
+            courseId: this.courseId,
+            payType: 3
           }
-          this.startCollectLike(params)
+          this.checkoutAuthorrization(params)
           break
       }
     },
