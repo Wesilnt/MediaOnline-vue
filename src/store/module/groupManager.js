@@ -495,18 +495,25 @@ const groupManager = {
         
         //payType 0:原价购买  1:拼团购买  2:参与购买
         beginPayment({dispatch},payload){
-            let params = {
-                "courseId" : payload.courseId
-              }
+            let params = null
             console.log('当前用户支付类型 payload = ',payload)
             switch(payload.payType){
                 case 0:
+                    params = {
+                        "courseId" : payload.courseId
+                    }
                     dispatch('unlockCourse',params)
                 break
                 case 1:
+                    params = {
+                        "courseId" : payload.courseId
+                    }
                     dispatch('startGroupBuy',params)
                 break
                 case 2:
+                    params = {
+                        "groupBuyId" : payload.groupBuyId
+                    }
                     dispatch('joinGroupBuy',params)
                 break
             }
