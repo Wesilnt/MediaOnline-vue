@@ -51,7 +51,8 @@ const visionData = {
               "groupBuyPrice" : result.groupBuyPrice,
               "groupBuyId":  groupBuyId || result.groupBuyId,
               "groupBuyTemplateId" : result.groupBuyTemplateId,
-              "userAccessStatus" : result.userAccessStatus
+              "userAccessStatus" : result.userAccessStatus,
+              'price': result.price
             }
             dispatch('groupManager/initToolsBar',toolsData)
         },

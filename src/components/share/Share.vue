@@ -6,12 +6,12 @@
           此网页由www.shbaoyuantech.com提供
         </div>
         <div class="share-list">
-          <router-link class="share-item" :to="'/share/poster/'+shareid+'?sharetype='+sharetype" tag="div">
+          <div class="share-item" @click="toPoster">
             <div class="share-icon">
               <img src="../../assets/share_poster.png">
             </div>
             <span class="share-label">生成海报</span>
-          </router-link>
+          </div>
           <div class="share-item" @click="onShareItem('friends')">
             <div class="share-icon">
               <img src="../../assets/share_friends.png">
@@ -65,8 +65,7 @@ export default {
       const shareOption = {
         link: this.url + this.shareInfo.link || '/#/home',
         title: this.shareInfo.title || `${nickname}邀请您一起上课啦！`,
-        desc:
-          this.shareInfo.desc || '秦汉胡同国学，让我们的孩子成为一个有涵养的人',
+        desc: this.shareInfo.desc || '秦汉胡同国学，让我们的孩子成为一个有涵养的人',
         imgUrl: this.shareInfo.imgUrl || '',
         successCB: () => {
           this.$toast('分享回调成功')
@@ -89,7 +88,9 @@ export default {
         this.setWxShareZone(shareOption)
       }
     },
-
+    toPoster(){
+     this.$router.push({path:'/share/poster',query:{shareUrl: this.url + this.shareInfo.link || '/#/home'}})
+    },
     onCancel() {
       this.isOpen = false
     },

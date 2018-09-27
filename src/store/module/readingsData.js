@@ -66,19 +66,21 @@ export default {
             console.log(res)
             commit("bindBookDetail", res)
 
-          //设置底部购买工具栏
-            const toolsData = {
-              "collectLikeDuration" : res.collectLikeDuration,
-              "collectLikeId" : res.collectLikeId,
-              "collectLikePersonCount" : res.collectLikePersonCount,
-              "collectLikeTemplateId" : res.collectLikeTemplateId,
-              "groupBuyDuration" : res.groupBuyDuration,
-              "groupBuyPersonCount" : res.groupBuyPersonCount,
-              "groupBuyPrice" : res.groupBuyPrice,
-              "groupBuyId": params.groupBuyId || res.groupBuyId,
-              "groupBuyTemplateId" : res.groupBuyTemplateId,
-              "userAccessStatus" : res.userAccessStatus
+          //设置底部购买工具栏 
+          const toolsData = {
+            "collectLikeDuration" : res.collectLikeDuration,
+            "collectLikeId" : res.collectLikeId,
+            "collectLikePersonCount" : res.collectLikePersonCount,
+            "collectLikeTemplateId" : res.collectLikeTemplateId,
+            "groupBuyDuration" : res.groupBuyDuration,
+            "groupBuyPersonCount" : res.groupBuyPersonCount,
+            "groupBuyPrice" : res.groupBuyPrice,
+            "groupBuyId": params.groupBuyId || res.groupBuyId,
+            "groupBuyTemplateId" : res.groupBuyTemplateId,
+            "userAccessStatus" : res.userAccessStatus,
+            'price': res.price
           }
+          console.log(toolsData)
           dispatch('groupManager/initToolsBar',toolsData)
 
         },

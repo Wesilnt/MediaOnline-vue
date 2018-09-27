@@ -6,25 +6,25 @@
         <img ref="saveimage"/>
         <p>长按分享图片</p>
       </div>
-    </div>
-    <!-- <div class="poster-save-btn">
-      <button @click="saveImg">保存图片</button>
-    </div> -->
-    <!-- <img ref="saveimage" :src='null'> -->
+    </div> 
     <a v-show="false" ref="download"  download="poster"/>
     <loading-dialog v-if="loading"></loading-dialog>
+    <qrcode :style="{display:'none',}" v-if="showQrcode" :value="shareUrl" tag="img"></qrcode>
   </div>
 </template> 
 <script>
 import LoadingDialog from '../LoadingDialog.vue'
+import Qrcode from '@xkeshi/vue-qrcode'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers('share')
 export default {
-   name:"shareposter",
+  name: 'shareposter', 
   data() {
-    return { 
-      type:this.$route.query.sharetype,
-      id:this.$route.params.id,
+    return {
+      showQrcode:true,
+      shareUrl: this.$route.query.shareUrl,
+      type: this.$route.query.sharetype,
+      id: this.$route.params.id,
       centerX: 355 / 2, //canvas中心X坐标
       canvasW: 750, //canvas宽度
       canvasH: 1334, //canvas高度
@@ -36,9 +36,13 @@ export default {
       canvasData: null,
       posterData: {}
     }
-  }, 
-  components:{'loading-dialog':LoadingDialog},
-  computed:{...mapState(['loading','poster'])}, 
+  },
+  components: { 'loading-dialog': LoadingDialog },
+  computed: { ...mapState(['loading', 'user','poster']) },
+  created(){
+    this.getUserInfo()
+    console.log("fdas")
+  },
   mounted: function() {
     var canvasData = this.$refs.canvasId
     this.canvasData = canvasData
@@ -48,21 +52,22 @@ export default {
     this.ctx.msImageSmoothingEnabled = false
     this.ctx.imageSmoothingEnabled = false
     console.log(this.type)
-    if(this.type=='praise'){
-      this.getPosterforPraise({collectLikeId:this.id})
-      .then(res=>{
+    if (this.type == 'praise') {
+      this.getPosterforPraise({ collectLikeId: this.id }).then(res => {
         this.drawBottomMap()
       })
-    }else{
-      this.getPosterInfo({busId:this.id,pageUrl:"http://t.shbaoyuantech.com/#/audio/audioplay"})
-      .then(res=>{
-                console.log("海报信息：", this.poster)
+    } else {
+      // this.getPosterInfo({
+      //   busId: this.id,
+      //   pageUrl: 'http://t.shbaoyuantech.com/#/audio/audioplay'
+      // }).then(res => {
+      //   console.log('海报信息：', this.poster)
+      // })
         this.drawBottomMap()
-      })
     }
   },
   methods: {
-    ...mapActions(['getPosterInfo','getPosterforPraise']),
+    ...mapActions(['getUserInfo','getPosterInfo', 'getPosterforPraise']),
     //将canvas生成的二维码保存为图片
     saveImg() {
       this.$refs.download.href = this.canvasData.toDataURL('images/png')
@@ -95,9 +100,9 @@ export default {
     //绘制头像
     drawHeadImage() {
       var header = new Image()
-      console.log( this.poster.avatarUrl)
-      header.setAttribute('crossOrigin', 'anonymous');
-      header.src =  this.poster.avatarUrl+"?timeStamp="+Date.now()
+      console.log(this.user.avatarUrl)
+      header.setAttribute('crossOrigin', 'anonymous')
+      header.src = this.user.avatarUrl + '?timeStamp=' + Date.now()
       header.onload = () => {
         let radius = this.headImageW
         let x = 102
@@ -120,7 +125,7 @@ export default {
     },
     //绘制名字
     drawUserName() {
-      let username =  this.poster.nickName
+      let username = this.user.nickName
       this.ctx.fillStyle = '#262626'
       this.ctx.font = '30px Georgia'
       let textWidth = this.ctx.measureText(username).width
@@ -128,18 +133,24 @@ export default {
       this.$refs.saveimage.src = this.canvasData.toDataURL('images/png')
     },
     //绘制二维码
-    drawQrcode() {  
-      let temp = this.poster.qrCodeUrl //"https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=676587443,820607910&fm=111&gp=0.jpg";
-        if(this.type=='praise'){
-          temp = this.poster.xcxUrl
-        }
-      var qrcode = new Image()
-      qrcode.setAttribute('crossOrigin', 'anonymous')
-      qrcode.src = temp +"?timeStamp="+Date.now()  
-      qrcode.onload =  () => { 
-        this.ctx.drawImage(qrcode, 440, 880, 200, 200)
-        this.$refs.saveimage.src = this.canvasData.toDataURL('images/png')
-      }
+    drawQrcode() {
+      // let temp = this.poster.qrCodeUrl //"https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=676587443,820607910&fm=111&gp=0.jpg";
+      //   if(this.type=='praise'){
+      //     temp = this.poster.xcxUrl
+      //   }
+      // var qrcode = new Image()
+      // qrcode.setAttribute('crossOrigin', 'anonymous')
+      // qrcode.src = temp +"?timeStamp="+Date.now()
+      // qrcode.onload =  () => {
+      //   this.ctx.drawImage(qrcode, 440, 880, 200, 200)
+      //   this.$refs.saveimage.src = this.canvasData.toDataURL('images/png')
+      // } 
+      this.ctx.drawImage(this.$children[0].$el,440, 880, 200, 200) 
+      // this.showQrcode = false
+      // Qrcode.toCanvas(this.ctx, 'http://www.baidu.com', function(error) {
+      //   if (error) console.error(error)
+      //   console.log('success!')
+      // })
     },
     //底部描述
     drawBottomText() {

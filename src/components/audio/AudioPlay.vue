@@ -100,8 +100,7 @@ export default {
       progress: 0,
       rangeValue: 0,
       cover: '',
-      progressColor: '#ff0000',
-      background: 12,
+      progressColor: '#ff0000', 
       display: false,
       touchStart: 0
     }
