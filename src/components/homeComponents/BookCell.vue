@@ -1,14 +1,15 @@
 <template>
-  <div class="cell" @click="onItemClick">
-    <img :src="book.coverPic" class="cover" alt="">
-
-    <div class="play-button" @click.stop="onPlayClick">
-      <img class="bookPlayTringle" src="../../assets/home_video_play.jpg" alt="">
+  <div class="cell">
+    <div class="cell-header" @click="onItemClick" :style="{backgroundImage: `url(${book.coverPic})`}" >
+      <span v-if="book.isNew" class="cell-isNew">上新</span>
+      <i class="qhht-icon bookPlayTringle" @click.stop="onPlayClick" />
     </div>
-    <img v-if="book.isNew" :src='null'>
-    <p class="title">{{book.name}}</p>
-    <p class="price">¥{{book.price}}</p>
+    <div class="cell-footer">
+      <p class="van-ellipsis title">{{book.name}}</p>
+      <p class="price">¥{{book.price}}</p>
+    </div>
   </div>
+
 </template>
 <script>
 export default {
@@ -31,53 +32,47 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-p {
-  margin: 0;
-  padding: 0;
-}
 .cell {
-  position: relative;
-  width: 196px;
-  display: inline-block;
-  margin-left: 40px;
-  padding-bottom: 64px;
-
-  .cover {
-    display: block;
+  margin-bottom: 64px;
+  .cell-isNew {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    border-radius: 0 20px 0 12px;
+    padding: 0 10px;
+    color: #fff;
+    background: #e93323;
+  }
+  .cell-header {
+    position: relative;
     width: 196px;
     height: 257px;
     border-radius: 12px;
-  }
-  .play-button {
-    position: absolute;
-    right: 10px;
-    top: 197px;
-    width: 50px;
-    height: 50px;
-    background: #fff;
-    border-radius: 50%;
-    -webkit-box-shadow: 0 0 8px 1px #e5dacf;
-    -moz-box-shadow: 0 0 8px 1px #e5dacf;
-    box-shadow: 0 0 8px 1px #e5dacf;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    background: #fff center no-repeat;
+    background-size: 100%;
   }
   .bookPlayTringle {
-    width: 16px;
-    height: 18px;
-    margin-left: 2px;
+    position: absolute;
+    right: 16px;
+    bottom: 16px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    box-shadow: 0 0 8px 1px #e5dacf;
+    background-color: #fff;
+    background-image: url('../../assets/home_video_play.jpg');
+    background-size: 18px;
+  }
+  .cell-footer {
+    margin-top: 14px;
+    padding-left: 10px;
   }
   .title {
-    margin-top: 14px;
-    margin-left: 10px;
-    font-size: 24px;
+    max-width: 196px;
     color: rgb(51, 51, 51);
   }
   .price {
     margin-top: 4px;
-    font-size: 24px;
-    margin-left: 10px;
     color: rgb(255, 163, 47);
   }
 }

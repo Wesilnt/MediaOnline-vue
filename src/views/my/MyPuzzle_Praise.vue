@@ -3,7 +3,7 @@
         <div v-show="allNoData" class="my-puzzle-nodata">
             <i class="qhht-icon my-puzzle-nodata-icon"></i>
             <p class="my-puzzle-nodata-warn">暂无{{pageName}}信息</p>
-            <a class="my-puzzle-nodata-btn">我要{{pageName}}</a>
+            <a class="my-puzzle-nodata-btn" @click="routerToHome">我要{{pageName}}</a>
         </div>
         <div  v-show="!allNoData" class="my-puzzle-container">
             <van-tabs v-model="selected" color="#ffa32f" :line-width='60'>
@@ -127,6 +127,9 @@ export default {
         isPraise,
         loadType
       })
+    },
+    routerToHome() {
+      this.$router.push({ path: '/home' })
     }
   },
   components: {

@@ -1,25 +1,20 @@
 <template>
-  <div class="cell" @click="enterVisionDetail(vision.id)">
-    <div>
+  <div class="qhht-flex cell" @click="enterVisionDetail(vision.id)">
       <img :src="vision.coverPic" class="visionicon" alt="">
-    </div>
-    <div class="detailContent">
-      <p class="visionTitle">{{vision.name}}</p>
-      <p class="visionDetail">{{vision.briefIntro}}</p>
-      <p class="visionDetail">{{vision.authorName}}</p>
-      <p class="visionDetail footText">
+    <ul class="detailContent">
+      <li class="visionTitle">{{vision.name}}</li>
+      <li>{{vision.briefIntro}}</li>
+      <li>{{vision.authorName}}</li>
+      <li class="footText">
         <span class="price">¥{{vision.price}}</span>/共{{vision.lessonCount}}讲
-      </p>
-    </div>
-    <div>
-      <div class="fit">{{vision.fitFor}}岁</div>
+      </li>
+    </ul>
+    <div class="cell-footer">
+      <p class="fit">{{vision.fitFor}}岁</p>
       <div class="visionPlay" @click.stop="enterVisionPlay">
-        <div class="visionPlayContent">
-          <img class="palyTringle" src="../../assets/home_vision_play.jpg" alt="">试听
-        </div>
+        <i class="qhht-icon palyTringle" />试听
       </div>
     </div>
-
   </div>
 </template>
 
@@ -31,7 +26,7 @@ export default {
       this.$router.push({ path: '/home/visionDetail/' + id })
     },
     enterVisionPlay() {
-      if (this.vision.freeLessonList.length == 0) {
+      if (this.vision.freeLessonList.length === 0) {
         return
       }
       this.$router.push({
@@ -45,15 +40,22 @@ export default {
 
 <style lang="less" scoped>
 .cell {
-  width: 694px;
-  margin-left: 28px;
-  display: flex;
   flex-wrap: nowrap;
-  justify-content: space-between;
+  height: 240px;
+  align-items: center;
+  margin-bottom: 36px;
 }
 .detailContent {
   flex: 2;
   margin-left: 20px;
+  /deep/ li {
+    color: #949aaa;
+  }
+  .visionTitle {
+    font-size: 32px;
+    color: rgb(68, 78, 98);
+    font-weight: bolder;
+  }
 }
 
 .visionicon {
@@ -62,57 +64,38 @@ export default {
   background-color: rgb(253, 231, 231);
   border-radius: 12px;
 }
-.visionTitle {
-  margin-top: 18px;
-  font-size: 32px;
-  color: rgb(68, 78, 98);
-  font-weight: bolder;
-}
-.visionDetail {
-  margin-top: 12px;
-  font-size: 24px;
-  color: rgb(148, 154, 170);
-}
+
 .price {
   color: rgb(255, 163, 47);
 }
 .footText {
   margin-top: 30px;
 }
-
+.cell-footer {
+  text-align: center;
+}
 .fit {
-  padding-left: 5px;
-  padding-right: 5px;
-  margin-top: 28px;
-  border: rgb(218, 221, 226) 2px solid;
+  border: 2px #dadde2 solid;
   border-radius: 20px;
   font-size: 20px;
-  color: rgb(170, 175, 188);
   height: 40px;
-  text-align: center;
+  padding: 0 5px;
   line-height: 40px;
 }
 .palyTringle {
   width: 16px;
   height: 20px;
   margin-right: 8px;
+  background-image: url('../../assets/home_vision_play.jpg');
 }
 .visionPlay {
   width: 132px;
   height: 60px;
+  margin-top: 96px;
+  line-height: 60px;
   border-radius: 30px;
   background-color: #ffa32f;
-  margin-top: 96px;
   color: #fff;
-  font-size: 24px;
-  text-align: center;
-  -webkit-box-shadow: 0 0 15px 2px #e5dacf;
-  -moz-box-shadow: 0 0 15px 2px #e5dacf;
   box-shadow: 0 0 15px 2px #e5dacf;
-}
-.visionPlayContent {
-  display: inline-block;
-  vertical-align: middle;
-  line-height: 60px;
 }
 </style>

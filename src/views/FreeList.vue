@@ -21,10 +21,10 @@ export default {
 
 <style lang="less" scoped>
 .free {
-  width: 694px;
   background-color: rgba(245, 245, 245, 0.5);
   border-radius: 14px;
   height: 177px;
+  margin-bottom: 28px;
 }
 .free-cell {
   height: 88px;

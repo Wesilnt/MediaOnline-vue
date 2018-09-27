@@ -1,21 +1,17 @@
 <template>
-  <div>
+  <div class="index">
     <Swiper :images="bannerList"/>
     <Notice :message-count="newMessageCount"/>
-    <Header :link="'/home/freezone'" title="免费专区" subtitle="探索更多"/>
-    <FreeList :free-list="freeList"/>
-    <div class="sepline"/>
-
-    <Header :link="'/home/visionList'" title="少年视野" subtitle="探索更多" />
-    <DisCoverVisionList :vision-list="visionList"/>
-    <div class="sepline"/>
-    <Header :link="'/home/videoList'" title="少年必修" subtitle="探索更多"/>
-    <DisCoverVideoList :video-list="videoList"/>
-    <div class="sepline" />
-    <Header :link="'/home/readings'" title="中国少年读书会" subtitle="探索更多"/>
-    <BookList :book-list="bookList"/>
-    <div class="homePosition"/>
-
+    <div class="index-container">
+      <Header :link="'/home/freezone'" title="免费专区" subtitle="探索更多"/>
+      <FreeList :free-list="freeList"/>
+      <Header :link="'/home/visionList'" title="少年视野" subtitle="探索更多" />
+      <DisCoverVisionList :vision-list="visionList"/>
+      <Header :link="'/home/videoList'" title="少年必修" subtitle="探索更多"/>
+      <DisCoverVideoList :video-list="videoList"/>
+      <Header :link="'/home/readings'" title="中国少年读书会" subtitle="探索更多"/>
+      <BookList :book-list="bookList"/>
+    </div>
   </div>
 </template>
 
@@ -61,14 +57,12 @@ export default {
 </script>
 
 <style lang='less' scoped>
-.sepline {
-  width: 694px;
-  height: 2px;
-  background-color: rgb(238, 238, 238);
-  margin-top: 28px;
-  margin-left: 28px;
+.index {
+  font-size: 24px;
+  color: #3E3E53;
+  margin-bottom: 100px;
 }
-.homePosition {
-  height: 100px;
+.index-container {
+  padding: 0 28px;
 }
 </style>

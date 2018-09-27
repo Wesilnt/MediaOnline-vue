@@ -1,10 +1,7 @@
 <template>
     <div>
-        <div v-for="(item, index) in videoList" :key="index" class="list">
-            <VideoCell :video="item"/>
-        </div>
+        <VideoCell :video="item"  v-for="(item, index) in videoList" :key="index" />
     </div>
-
 </template>
 
 <script>
@@ -17,9 +14,3 @@ export default {
   props: ['videoList']
 }
 </script>
-
-<style lang="less" scoped>
-.list {
-  padding-bottom: 20px;
-}
-</style>

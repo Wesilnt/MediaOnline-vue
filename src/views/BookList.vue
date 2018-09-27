@@ -1,7 +1,6 @@
 <template>
-  <div class="list">
-    <div v-for="(book,index) in bookList" :key="index">
-      <BookCell :book="book"/></div>
+  <div class="qhht-flex list">
+      <BookCell :book="book" v-for="(book,index) in bookList" :key="index"/>
   </div>
 </template>
 
@@ -17,9 +16,6 @@ export default {
 
 <style lang="less" scoped>
 .list {
-  width: 100%;
-  display: flex;
-  display: -webkit-flex;
   flex-wrap: wrap;
 }
 </style>
