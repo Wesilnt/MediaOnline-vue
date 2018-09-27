@@ -64,18 +64,20 @@
                 《秦汉胡同使用协议》
             </p>
         </div>
-
+        <loading-dialog v-if="showLoading"></loading-dialog>
     </section>
 </template>
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
 import { Toast } from 'vant'
+import LoadingDialog from '../../components/LoadingDialog'
 import { getGradeNum } from './MyUtil'
 
 const { mapState, mapActions } = createNamespacedHelpers('userInfo')
 export default {
   name: 'EditUserInfo',
+  components: { 'loading-dialog': LoadingDialog },
   data: function() {
     return {
       identity: '',
@@ -83,6 +85,7 @@ export default {
       grade: -1,
       showIdentity: true,
       showNext: false,
+      showLoading:false,
       columns: [
         '未上学',
         '幼儿园',
@@ -107,6 +110,7 @@ export default {
       let num = 1
       let that = this
       if (loading === true) {
+        this.showLoading = true
         var timer = setInterval(function() {
           num--
           if (num === 0) {
@@ -114,6 +118,8 @@ export default {
             clearInterval(timer)
           }
         }, 1000)
+      } else {
+        this.showLoading = false
       }
     }
   },
@@ -260,16 +266,16 @@ export default {
   right: 0px;
   bottom: -25px;
 }
-
 .van-picker {
-  height: 150px;
+    height: 130px;
 }
-
-.van-picker-column__item {
-  width: 100vw;
+.van-picker__columns {
+    overflow: hidden;
 }
-
 .van-picker-column {
-  overflow: visible;
+    overflow: visible;
+}
+.van-picker-column__item {
+    width: 100vw;
 }
 </style>
