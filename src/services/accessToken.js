@@ -6,7 +6,7 @@ export async function getToken() {
     const originHref=window.location.href.split('#')[1]
     // debugger
   const result = await request.post('/auth/wechat/get-wechat-auth-link', {
-    originUrl:'http://t.shbaoyuantech.com' +originHref
+    originUrl:'http://t.shbaoyuantech.com/#' +originHref
   })
   if (ISONLINE) window.location.href = result.wechatAuthUrl
   return result

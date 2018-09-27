@@ -1,5 +1,5 @@
 import { uploadAnswer } from '../../services/columns'
-import { getUserByToken } from '../../services/freezoneApi'
+import { getMyUserInfo } from '../../services/my'
 
 const questionList = {
   namespaced: true,
@@ -112,7 +112,7 @@ const questionList = {
       })
     },
     async getUser() {
-      const response=await getUserByToken()
+      const response=await getMyUserInfo()
         console.log(response);
         return {nickName:'五类'};
     }

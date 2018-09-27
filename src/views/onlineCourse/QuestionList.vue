@@ -523,6 +523,9 @@ export default {
   width: 200px;
   height: 200px;
   background-color: #c8d3ff;
+   /deep/ img{
+        width: 100%;
+    }
 }
 .loading-wrapper {
   margin: 47% auto 0;
