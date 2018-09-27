@@ -106,11 +106,9 @@ export default {
       'isShowMobileDialog',
       'groupBuyId',
       'toolsObject',
-      'userAccessStatus'
-    ]),
-    ...mapGetters([
-      'courseId',
-      'freeLessonList'
+      'userAccessStatus',
+      'freeLesson',  //试听对象
+      'courseId',    //专栏ID
     ])
   },
   filters: {
@@ -132,8 +130,15 @@ export default {
     ]),
     //点击试听按钮 跳转
     clickAuditionBtn() {
-      const lessonId = this.freeLessonList[0].id
-      this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
+      if(this.freeLesson.freeLessonList && this.freeLesson.freeLessonList.length > 0) {
+        if(this.freeLesson.type == "video"){
+          const lessonId = this.freeLessonList[0].id
+          this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
+        }else {
+          const id = this.freeLessonList[0].id
+          this.$router.push({ name: 'AudioPlay', params: { id } })       
+        }
+      }
     },
     //点击原价购买按钮
     clickOriginPriceBtn() {

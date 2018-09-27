@@ -16,6 +16,10 @@ const groupManager = {
         achieveOriginBuy:false, //是否完成原价购买
         isShowMobileDialog:false, //是否弹出手机号收集框
 
+        profilePic:'',//专栏头图
+        courseId:0,//专栏ID
+        freeLesson,//试听对象  type字段用来区分点击试听按钮跳往哪里  freeLessonList是当前专栏的免费试听课程数组
+
         userAccessStatus:0,
         groupBuyId:0,//拼团ID
         //工具条对象
@@ -24,32 +28,17 @@ const groupManager = {
         isShowGroupBuy:false  
     },
     getters:{
-        //专栏头图
-        profilePic(state,getters,{ videoColumnDetail }) {
-            return videoColumnDetail.profilePic
-        },
-        //专栏ID
-        courseId(state,getters,{ videoColumnDetail }) {
-            return videoColumnDetail.courseId
-        },
-        // toolsObject(state,getters,{ videoColumnDetail }) {
-        //     return videoColumnDetail.toolsObject
+        // //专栏头图
+        // profilePic(state,getters,{ videoColumnDetail }) {
+        //     return videoColumnDetail.profilePic
         // },
-        // isShowGroupBuy(state,getters,{ videoColumnDetail }) {
-        //     return videoColumnDetail.isShowGroupBuy
+        // //专栏ID
+        // courseId(state,getters,{ videoColumnDetail }) {
+        //     return videoColumnDetail.courseId
         // },
-        // headerType(state,getters,{ videoColumnDetail }){
-        //     return videoColumnDetail.headerType
-        // },
-        // praiseData(state,getters,{ videoColumnDetail }){
-        //     return videoColumnDetail.praiseData
-        // },
-        // userAccessStatus(state,getters,{ videoColumnDetail }){
-        //     return videoColumnDetail.userAccessStatus
-        // },
-        freeLessonList(state,getters,{ videoColumnDetail }){
-            return videoColumnDetail.freeLessonList
-        }
+        // freeLessonList(state,getters,{ videoColumnDetail }){
+        //     return videoColumnDetail.freeLessonList
+        // }
     },
     mutations:{
         bindCollectLikeId(state,collectLikeId) {
@@ -78,8 +67,18 @@ const groupManager = {
             state.userAccessStatus = userAccessStatus
         },
 
+        deleteCountTime(state) {
+            state.countDownTime = 0
+        },
+
+        bindColunmnInfo(state,{profilePic,courseId,freeLesson}){
+            state.profilePic = profilePic
+            state.courseId = courseId
+            state.freeLesson = freeLesson
+        }
     },
     actions:{
+
         //初始化工具条
         initToolsBar({commit,dispatch},toolsData){
             //集赞状态
@@ -270,7 +269,7 @@ const groupManager = {
                 if (currentValue.id == currentUserId) { isGroupCurrent = 1, currUserStatus = currentValue.status}
             });
             //8.计算倒计时
-            const countTime = result.createTime + result.duration * 60 * 60 * 1000 - result.sysTime;
+            const countTime = (result.createTime + result.duration * 60 * 60 * 1000 - result.sysTime)/1000;
             console.log('orderStatus = '+orderStatus)
             console.log('currentUserId = '+currentUserId)
             console.log('isOwner = '+isOwner)
@@ -476,20 +475,38 @@ const groupManager = {
         //验证是否弹出手机号输入框
         async checkoutShowTeleDialog({dispatch,commit},payload){
             let telephone = window.localStorage.getItem('telephone')
-            if(telephone == ''){
+            console.log('本地存储的手机号 = ',telephone)
+            if(!telephone){
                 const result = await getMyUserInfo()
                 if(result==null) return
-                let phoneNum = result.data.data.mobileNo
+                let phoneNum = result.data.mobileNo
                 if(phoneNum){
                     window.localStorage.setItem('telephone',phoneNum) 
-                    dispatch('beginPayment',payload)
+                    if(payload.payType == 3){
+                        //发起集赞
+                        params = {
+                            courseId: payload.courseId
+                        }
+                        this.startCollectLike(params)
+                    }else{
+                        dispatch('beginPayment',payload)
+                    }                   
                  
                 }else{
                     console.log('弹出手机号收集框')
                     commit('bindIsShowMobileDialog',true)
                 }
             }else {
-                dispatch('beginPayment',payload)
+                if(payload.payType == 3){
+                    //发起集赞
+                    params = {
+                        courseId: payload.courseId
+                    }
+                    this.startCollectLike(params)
+                }else{
+                    dispatch('beginPayment',payload)
+                }
+                
             }
         },
         

@@ -10,18 +10,11 @@ const videoColumnDetail = {
     profilePic: '', //头图
     description: '', //专栏介绍
     outlinePic: '', //课程列表下面的大图展示
-    // videoColumnComments:[],       //视频专栏的留言
     buyIntro: '', //购买须知
     lessonCount: 0, //专栏课集总数
     commentCount: 0, //留言条数
     buyCount: 0, //购买数量
     courseId: 0, //专栏ID
-    // userAccessStatus: 0 //订单状态
-    // //集赞
-    // praiseData:{},         //集赞数据
-    // //拼团
-    // groupData:{},          //拼团数据
-    // isShowGroupBuy:false,             //是否显示拼团购买
   },
   getters: {},
   mutations: {
@@ -30,14 +23,13 @@ const videoColumnDetail = {
     },
     bindVideoColumnDetail(state, result) {
       state.freeLessonList = result.freeLessonList
-      state.profilePic = result.profilePic
       state.description = result.description
       state.outlinePic = result.outlinePic
       state.buyIntro = result.buyIntro
       state.lessonCount = result.lessonCount
       state.commentCount = result.commentCount
       state.buyCount = result.buyCount
-    //   state.userAccessStatus = result.userAccessStatus
+
     }
   },
   actions: {
@@ -47,11 +39,18 @@ const videoColumnDetail = {
       console.log('视频专栏接口数据:')
       console.log(result)
 
+      //绑定专栏详情内容
       commit('bindVideoColumnDetail', result)
+      const profilePic = result.profilePic
+      const freeLessonList = result.freeLessonList
+      //绑定与拼团相关的内容
+      commit('groupManager/bindColunmnInfo',{courseId,profilePic,'freeLesson':{freeLessonList,type:'video'}})
 
       if (groupBuyId) {
+          //这里是分享链接进来的
         dispatch('groupManager/getGroupBuyDetail', groupBuyId)
       } else {
+          //这里是正常途径进来的
         const toolsData = {
           collectLikeDuration: result.collectLikeDuration,
           collectLikeId: result.collectLikeId,

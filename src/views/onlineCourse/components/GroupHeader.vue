@@ -69,9 +69,11 @@ export default {
       'userListBot',
       'isSixGroup',
       'headerType',
-      'isShowGroupBuy'
-    ]),
-    ...mapGetters(['profilePic'])
+      'isShowGroupBuy',
+      'profilePic'
+   
+    ])
+
   }
 }
 </script>

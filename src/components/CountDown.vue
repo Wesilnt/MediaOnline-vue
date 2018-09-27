@@ -12,7 +12,7 @@
 <script>
 import { startCountDown } from '../utils/utils'
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapGetters, mapActions } = createNamespacedHelpers(
+const { mapState, mapMutations, mapGetters, mapActions } = createNamespacedHelpers(
   'videoColumnDetail/groupManager'
 )
 export default {
@@ -25,22 +25,29 @@ export default {
     }
   },
   created() {},
-  methods: {},
+  methods: {
+    ...mapMutations(['deleteCountTime'])
+  },
   beforeDestroy() {
     console.log('zoudaozheli@@@@@')
-    if (this.countdown) clearInterval(this.countdown)
+    if (this.countdown) {
+      clearInterval(this.countdown)
+      this.countdown = null
+      //清空仓库中保存的倒计时
+      this.deleteCountTime()
+    }
   },
   computed: {
     ...mapState(['countDownTime']),
     doDuration: function() {
       let tempDuration = this.duration
+      console.log('tempDuration =',tempDuration)
+      if (this.countdown) clearInterval(this.countdown)
       if (tempDuration > 0) {
         this.countdown = startCountDown(this.duration, times => {
-          console.log(times), (this.times = times)
+          (this.times = times),console.log(times)
         })
-      } else {
-        if (this.countdown) clearInterval(this.countdown)
-      }
+      } 
       return tempDuration
     }
   }
