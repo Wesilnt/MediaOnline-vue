@@ -63,6 +63,7 @@ const groupManager = {
             state.countDownTime = payload.countDownTime
             state.headerType = payload.headerType
             state.isOwner = payload.isOwner
+            state.isSixGroup = payload.isSixGroup
         },
         bindAchieveOriginBuy(state,achieveOriginBuy){
             state.achieveOriginBuy = achieveOriginBuy
@@ -421,8 +422,9 @@ const groupManager = {
             let topList = []
             let botList = []            
             let userList = result.userList
-            
+            let isSixGroup = false
             if(result.personCount > 3) {
+                isSixGroup = true
                 let tempList = []
                 for(let i = 0; i < 6; i++) {
                     if(userList[i] == null) {
@@ -438,7 +440,7 @@ const groupManager = {
                    topList=tempList.slice(0,2)
                    botList=tempList.slice(2,6)
             }else{
-               
+                isSixGroup = false
                 for(let i = 0; i < 3; i++) {
                    if(userList[i] == null) {
                     topList.push({})
@@ -457,7 +459,8 @@ const groupManager = {
                 "userListTop" : topList,
                 "userListBot" : botList || [],
                 "headerType" :headerType,
-                'isOwner':isOwner
+                'isOwner':isOwner,
+                'isSixGroup':isSixGroup
             }) 
         },
 
