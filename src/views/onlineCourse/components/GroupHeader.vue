@@ -8,10 +8,9 @@
                         </div>
                 </div>
                 <div class="qhht-flex groupBuy-usericon-bot">
-                    <div class="groupBuy-usericon-item"></div>
-                    <div class="groupBuy-usericon-item"></div>
-                    <div class="groupBuy-usericon-item"></div>
-                    <div class="groupBuy-usericon-item"></div>
+                        <div class="groupBuy-usericon-item" v-for="(item,index) in userListBot" :key="index" :style="item.avatarUrl==null?{}:{ background : 'url('+item.avatarUrl+')', 'background-size' : '100%'}">
+                            <div class="groupBuy-usericon-manager" v-show="item.isStarter">团长</div>            
+                        </div>
                 </div>
             </div>
             <div class="groupBuy-usericon" v-else>
@@ -41,7 +40,7 @@
         </div>
         <div class="groupBuy-banner" :style="{ background : 'url('+profilePic+')','background-size' : '100%' }">
             <!-- <div class="groupBuy-circleline" v-show="true"></div> -->
-            <span class="groupBuy-banner-bottom">99人已购买{{isShowGroupBuy}}</span>
+            <span class="groupBuy-banner-bottom">99人已购买</span>
         </div>
     </div>
 </template>
