@@ -10,7 +10,7 @@ import VueQrcode from '@xkeshi/vue-qrcode'
 import Skeleton from './components/Skeleton'
 //导入全局时间过滤器，时间秒(s)格式化=> 00:00
 import { formatDuring, learntimeFormat } from './utils/utils.js'
-import { ENV } from './utils/config'
+import { ISONLINE } from './utils/config'
 import { noAccessToken } from './utils/userAuth'
 Vue.filter('formatDuring', formatDuring)
 Vue.filter('learntimeFormat', learntimeFormat)
@@ -21,7 +21,7 @@ new Vue({
   router,
   store,
   render: h => {
-    if (noAccessToken() && ENV === 'online') {
+    if (noAccessToken() && ISONLINE) {
       store.dispatch('getAccessToken')
       return h(Skeleton, {
         props: {

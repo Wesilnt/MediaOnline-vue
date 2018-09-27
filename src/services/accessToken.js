@@ -1,5 +1,5 @@
 import request from '../utils/request'
-import { ENV } from '../utils/config'
+import { ISONLINE } from '../utils/config'
 
 export async function getToken() {
   console.log(window.location.href)
@@ -7,6 +7,6 @@ export async function getToken() {
     originUrl: window.location.href
   })
   console.log(result)
-  if (ENV === 'online') window.location.href = result.wechatAuthUrl
+  if (ISONLINE) window.location.href = result.wechatAuthUrl
   return result
 }

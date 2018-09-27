@@ -13,7 +13,7 @@ import {
   getCookie
 } from './userAuth'
 import store from '../store/store'
-import { ENV } from './config'
+import { ISONLINE } from './config'
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -94,7 +94,7 @@ function request(url, options, needToken = true) {
   let defaultOptions
   if (needToken) {
     accessToken =
-      ENV === 'online'
+        ISONLINE
         ? getCookie('COOKIE_TOKEN_KEY_CNONLINE')
         : '3efc6f60-19fe-4a09-b93e-251ae815aa6d'
     defaultOptions = {
