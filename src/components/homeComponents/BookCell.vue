@@ -21,12 +21,16 @@ export default {
         query: { id: this.book.id, hiddenDraft: true }
       })
     },
-    onPlayClick() {
-      this.$router.push({
-        name: 'AudioPlay',
-        params: { id: this.book.freeLessonList[0].id },
-        query: { hiddenDraft: 1 }
-      })
+    onPlayClick() { 
+      if(this.book.freeLessonList&&this.book.freeLessonList.length>0){
+        this.$router.push({
+          name: 'AudioPlay',
+          params: { id: this.book.freeLessonList[0].id },
+          query: { hiddenDraft: 1 }
+        })
+      }else{
+        this.$toast('本书籍暂时不支持试听')
+      }
     }
   }
 }

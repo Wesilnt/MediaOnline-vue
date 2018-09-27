@@ -147,7 +147,7 @@ export default {
   flex-direction: column;
   background-color: white;
   hr {
-    height: 2px;
+    height:1px;/*no*/
     border: none;
     margin: 0 20px;
     background-color: rgb(237, 237, 237);

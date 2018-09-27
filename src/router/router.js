@@ -65,7 +65,7 @@ export default new Router({
       component: FreeZone
     },
     {
-      path: '/share/poster/:id',
+      path: '/share/poster',
       name: 'SharePoster',
       component: SharePoster
     },

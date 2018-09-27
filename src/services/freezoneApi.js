@@ -1,15 +1,15 @@
 import { stringify } from 'qs'
 import request from '../utils/request'
 
-export function getFreezoneList(params) {
+export async function getFreezoneList(params) {
   return request(`/lesson/getLessonListByCourse?${stringify(params)}`)
 }
-export function postLearnRate(params) {
+export async function postLearnRate(params) {
   return request.post(`/lesson/lessonListenRs`, params)
 }
-export function doFreeLesson(params) {
+export async function doFreeLesson(params) {
   return request.post(`/lesson/doFreeLesson`, params)
-}
-export  function getUserByToken() {
+} 
+export async function getUserByToken() { 
   return request('user/getUserByToken')
 }

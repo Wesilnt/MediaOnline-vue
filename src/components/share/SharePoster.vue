@@ -39,8 +39,7 @@ export default {
   components: { 'loading-dialog': LoadingDialog },
   computed: { ...mapState(['loading', 'user','poster']) },
   created(){
-    this.getUserInfo()
-    console.log("fdas")
+    // this.getUserInfo() 
   },
   mounted: function() {
     var canvasData = this.$refs.canvasId
@@ -51,19 +50,22 @@ export default {
     this.ctx.msImageSmoothingEnabled = false
     this.ctx.imageSmoothingEnabled = false
     console.log(this.type)
-    if (this.type == 'praise') {
-      this.getPosterforPraise({ collectLikeId: this.id }).then(res => {
-        this.drawBottomMap()
-      })
-    } else {
+     this.getUserInfo().then(()=>{
+            this.drawBottomMap()
+     })
+    // if (this.type == 'praise') {
+    //   this.getPosterforPraise({ collectLikeId: this.id }).then(res => {
+    //     this.drawBottomMap()
+    //   })
+    // } else {
       // this.getPosterInfo({
       //   busId: this.id,
       //   pageUrl: 'http://t.shbaoyuantech.com/#/audio/audioplay'
       // }).then(res => {
       //   console.log('海报信息：', this.poster)
       // })
-        this.drawBottomMap()
-    }
+    //     this.drawBottomMap()
+    // }
   },
   methods: {
     ...mapActions(['getUserInfo','getPosterInfo', 'getPosterforPraise']),
@@ -144,7 +146,8 @@ export default {
       //   this.ctx.drawImage(qrcode, 440, 880, 200, 200)
       //   this.$refs.saveimage.src = this.canvasData.toDataURL('images/png')
       // } 
-      this.ctx.drawImage(this.$children[0].$el,440, 880, 200, 200) 
+      console.log(this.$children[0].$el.children[1])
+      this.ctx.drawImage(this.$children[0].$el.children[1],440, 880, 200, 200) 
       // this.showQrcode = false
       // Qrcode.toCanvas(this.ctx, 'http://www.baidu.com', function(error) {
       //   if (error) console.error(error)
