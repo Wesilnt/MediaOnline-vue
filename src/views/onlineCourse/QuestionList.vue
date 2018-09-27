@@ -131,7 +131,7 @@
                 </strong>
                 <p>请继续加油</p>
                 <hr class="settlement-dashed-underline">
-                <qrcode  class="settlement-qr" :value="qrCode"  tag="img" :options="{level:'M'}"/>
+                <qr-code  class="settlement-qr" :text="qrCode" error-level="Q" />
                 <p>分享二维码，邀请好友一起试听</p>
             </div>
         </van-popup>

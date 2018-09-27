@@ -6,7 +6,7 @@ import router from './router/router'
 import store from './store/store'
 
 import App from './App.vue'
-import VueQrcode from '@xkeshi/vue-qrcode'
+import VueQRCodeComponent from 'vue-qrcode-component'
 import Skeleton from './components/Skeleton'
 //导入全局时间过滤器，时间秒(s)格式化=> 00:00
 import { formatDuring, learntimeFormat } from './utils/utils.js'
@@ -15,7 +15,7 @@ import { noAccessToken } from './utils/userAuth'
 Vue.filter('formatDuring', formatDuring)
 Vue.filter('learntimeFormat', learntimeFormat)
 Vue.config.productionTip = false
-Vue.component(VueQrcode.name, VueQrcode)
+Vue.component('qr-code', VueQRCodeComponent)
 
 new Vue({
   router,
