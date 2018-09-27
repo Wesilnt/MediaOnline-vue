@@ -15,6 +15,8 @@ const groupManager = {
         isOwner:true,    //是不是开团人 
         achieveOriginBuy:false, //是否完成原价购买
         isShowMobileDialog:false, //是否弹出手机号收集框
+
+        userAccessStatus:0,
         groupBuyId:0,//拼团ID
         //工具条对象
         toolsObject:null,
@@ -42,9 +44,9 @@ const groupManager = {
         // praiseData(state,getters,{ videoColumnDetail }){
         //     return videoColumnDetail.praiseData
         // },
-        userAccessStatus(state,getters,{ videoColumnDetail }){
-            return videoColumnDetail.userAccessStatus
-        },
+        // userAccessStatus(state,getters,{ videoColumnDetail }){
+        //     return videoColumnDetail.userAccessStatus
+        // },
         freeLessonList(state,getters,{ videoColumnDetail }){
             return videoColumnDetail.freeLessonList
         }
@@ -68,11 +70,12 @@ const groupManager = {
         bindIsShowMobileDialog(state,isShowMobileDialog){
             state.isShowMobileDialog = isShowMobileDialog
         },
-        bindToolsObject(state,{toolsObject,groupBuyId,isShowGroupBuy}){    
-            console.log('代码到这里了isShowGroupBuy = '+ isShowGroupBuy)      
+
+        bindOrderObject(state,{toolsObject,groupBuyId,isShowGroupBuy,userAccessStatus}){         
             state.toolsObject = toolsObject
             state.groupBuyId = groupBuyId
             state.isShowGroupBuy = isShowGroupBuy
+            state.userAccessStatus = userAccessStatus
         },
 
     },
@@ -233,7 +236,7 @@ const groupManager = {
             }
             console.log('isShowGroupBuy = '+ isShowGroupBuy)
             const groupBuyId = groupData.groupBuyId
-            commit('bindToolsObject',{toolsObject,groupBuyId,isShowGroupBuy})
+            commit('bindOrderObject',{toolsObject,groupBuyId,isShowGroupBuy,userAccessStatus})
 
         },
         //获取拼团详情
@@ -245,6 +248,7 @@ const groupManager = {
             if(result == null) return
             //1.获取当前订单状态
             let orderStatus = result.status;
+            let userAccessStatus = result.userAccessStatus
             //2.判断是开团人还是参团人
             let currentUserId = result.userId;//拿到当前用户ID
             let isOwner = currentUserId == result.starterUid;           
@@ -408,8 +412,9 @@ const groupManager = {
                 break
             }
             console.log('更新状态条 + =',toolsObject)
+           
             //更新工具条状态
-            commit('bindToolsObject',{toolsObject,groupBuyId,isShowGroupBuy})
+            commit('bindOrderObject',{toolsObject,groupBuyId,isShowGroupBuy,userAccessStatus})
 
             //9.整理拼团用户数组
             let topList = []

@@ -105,12 +105,12 @@ export default {
       'isOwner',
       'isShowMobileDialog',
       'groupBuyId',
-      'toolsObject'
+      'toolsObject',
+      'userAccessStatus'
     ]),
     ...mapGetters([
       'courseId',
       'praiseData',
-      'userAccessStatus',
       'freeLessonList'
     ])
   },
