@@ -75,7 +75,7 @@
       </div>
     </van-popup>
     <!-- 分享框 -->
-    <share-pop :show="showShare" @close="closeShare" :shareid="audio.courseId"/>
+    <share-pop :show="showShare" @close="closeShare" :shareInfo="shareData"/>
   </div>
 </template>
 <script>
@@ -87,6 +87,7 @@ export default {
   components: { 'share-pop': SharePop },
   data() {
     return {
+      shareData:null,  //分享数据
       lessonId: this.$route.params.id,
       hiddenDraft: this.$route.query.hiddenDraft,
       isInit: true,
@@ -194,6 +195,12 @@ export default {
     },
     //分享
     onShare() {
+      this.shareData = {
+        link: `/#/audio/audioplay/${this.lessonId}`,
+        title: '音频分享',
+        desc: '音频',
+        imgUrl: ''
+      }
       this.showShare = true
     },
     //分享框关闭

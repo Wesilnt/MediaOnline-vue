@@ -61,6 +61,7 @@ export default {
     onShareItem(shareScore) {
       this.isOpen = false
       const nickname = 'nihao'
+      console.log(this.shareScore)
       const shareOption = {
         link: this.url + this.shareInfo.link || '/#/home',
         title: this.shareInfo.title || `${nickname}邀请您一起上课啦！`,

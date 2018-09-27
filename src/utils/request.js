@@ -13,6 +13,7 @@ import {
   getCookie
 } from './userAuth'
 import store from '../store/store'
+import { ISONLINE } from './config'
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -92,10 +93,11 @@ function request(url, options, needToken = true) {
   const baseURI = isUrl(url) ? '' : api
   let defaultOptions
   if (needToken) {
-    // accessToken = getCookie('COOKIE_TOKEN_KEY_CNONLINE')
-    // accessToken = "8065558b-f53f-4554-b35a-f247924c905b"
-    accessToken = "8065558b-f53f-4554-b35a-f247924c905b"
 
+    accessToken =
+        ISONLINE
+        ? getCookie('COOKIE_TOKEN_KEY_CNONLINE')
+        : '3efc6f60-19fe-4a09-b93e-251ae815aa6d'
     defaultOptions = {
       // credentials: 'include',
       // mode: 'no-cors',
@@ -130,10 +132,10 @@ function request(url, options, needToken = true) {
     })
     .then(checkResponseCode.bind(this, url))
     .catch(e => {
-      const { dispatch } = store;
+      const { dispatch } = store
       const status = e.name
       if (status === '401-logout') {
-          return dispatch('getAccessToken')
+        return dispatch('getAccessToken')
       }
       if (status === 401) {
         return dispatch('getAccessToken')

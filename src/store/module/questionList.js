@@ -1,5 +1,5 @@
 import { uploadAnswer } from '../../services/columns'
-import { getPosterInfo } from '../../services/shareApi'
+import { getUserByToken } from '../../services/freezoneApi'
 
 const questionList = {
   namespaced: true,
@@ -100,7 +100,8 @@ const questionList = {
         lessonId
       })
       if (!response) return
-      await commit('saveStatus', {
+        console.log(response);
+        await commit('saveStatus', {
         loading: false,
         newGrade: response.data
       })
@@ -110,8 +111,10 @@ const questionList = {
         questionIndex: nextIndex
       })
     },
-    async getQrcode(_, payload) {
-      return await getPosterInfo(payload)
+    async getUser() {
+      const response=await getUserByToken()
+        console.log(response);
+        return {nickName:'五类'};
     }
   }
 }
