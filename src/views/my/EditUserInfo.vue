@@ -104,16 +104,13 @@ export default {
   },
   watch: {
     loading: function(loading) {
-      let num = 3
+      let num = 1
       let that = this
       if (loading === true) {
-        console.log('back')
         var timer = setInterval(function() {
           num--
-          console.log('backaa')
           if (num === 0) {
             that.$router.back(-1)
-            console.log('back')
             clearInterval(timer)
           }
         }, 1000)
@@ -145,12 +142,10 @@ export default {
       }
     },
     identityChoice: function(type) {
-      console.log('AAA')
       console.log(type)
       this.identity = type
     },
     genderChoice: function(type) {
-      console.log('AAA')
       console.log(type)
       this.gender = type
     },

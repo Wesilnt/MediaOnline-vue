@@ -8,14 +8,13 @@ const userInfo = {
   },
   mutations: {
     saveUserInfo(state, payload) {
-      console.log(payload)
       Object.assign(state, payload)
     },
-    updateGrade(state,grade) {
-      state.userInfo.grade = grade
+    updateGrade(state,payload) {
+      Object.assign(state.userInfo,payload)
     },
-    updateGender(state,gender) {
-      state.userInfo.gender = gender
+    updateGender(state,payload) {
+      Object.assign(state.userInfo,payload)
     },
     toggleLoading(state, { loading }) {
       state.loading = loading
@@ -57,9 +56,9 @@ const userInfo = {
     },
     async updateUserInfoGrade({ dispatch, commit, state }, { grade }) {
       //更新年级
+      console.log("grade" + grade)
       const response = await postUserInfo({ grade: grade })
       if (!response) return
-      this.getMyUserInfo({ dispatch, commit, state })
       commit('updateGrade', {
         grade: grade
       })

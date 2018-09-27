@@ -31,6 +31,7 @@ export default {
       this.$emit('toggle', value)
     },
     onCancel() {
+      console.log("cancel")
       this.$emit('changePicker', false)
     }
   }
@@ -41,10 +42,32 @@ export default {
 .van-picker {
   height: 250px;
 }
-.van-picker-column__item {
-  width: 100vw;
+.van-hairline--top-bottom van-picker__toolbar {
+    padding-bottom: 10px;
+}
+.van-picker__cancel {
+    margin: 5px 10px 0px 10px;
+    border-radius: 5px;
+    background-color: white;
+    color:#ffa32f;
+    border: 0.3px solid #ffa32f;
+}
+.van-picker__confirm {
+    background-color: #ffa32f;
+    margin: 5px 10px 0px 0px;
+    padding-bottom: 5px;
+    border-radius: 5px;
+    border-radius: 5px;
+    color:white;
+
+}
+.van-picker__columns {
+    overflow: hidden;
 }
 .van-picker-column {
-  overflow: visible;
+    overflow: visible;
+}
+.van-picker-column__item {
+  width: 100vw;
 }
 </style>
