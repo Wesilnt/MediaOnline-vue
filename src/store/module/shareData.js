@@ -1,15 +1,19 @@
-import { getPosterInfo, getPosterforPraise } from '../../services/shareApi'
+import { getPosterInfo,getUserInfo, getPosterforPraise } from '../../services/shareApi'
 
 export default {
   namespaced: true,
   state: {
     poster: {},
-    loading: true
+    user:{},
+    loading: false
   },
   mutations: {
     bindPosterInfo(state, res) {
       state.loading = false
       state.poster = res
+    },
+    bindUserInfo(state, res) { 
+      state.user = res
     }
   },
   actions: {
@@ -20,6 +24,12 @@ export default {
       commit('bindPosterInfo', res)
     },
     //获取海报信息
+    async getUserInfo({ commit }, params) {
+      const res = await getUserInfo(params)
+      console.log(res)
+      commit('bindUserInfo', res)
+    },
+    //集贊获取海报信息
     async getPosterforPraise({ commit }, params) {
       const res = await getPosterforPraise(params)
       console.log(res)
