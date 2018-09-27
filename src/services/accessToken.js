@@ -1,10 +1,12 @@
 import request from '../utils/request'
+import { ENV } from '../utils/config'
 
 export async function getToken() {
-    console.log(window.location.href);
-    const result = await request.post('/auth/wechat/get-wechat-auth-link', {
+  console.log(window.location.href)
+  const result = await request.post('/auth/wechat/get-wechat-auth-link', {
     originUrl: window.location.href
   })
-  window.location.href = result.wechatAuthUrl
+  console.log(result)
+  if (ENV === 'online') window.location.href = result.wechatAuthUrl
   return result
 }

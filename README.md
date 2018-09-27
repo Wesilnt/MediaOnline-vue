@@ -14,6 +14,11 @@ ___
 [UI 库 vant](https://youzan.github.io/vant/#/zh-CN/intro)
 
 [UI 设计文档访问地址](...)
+
+
+[二维码说明文档](https://xkeshi.github.io/vue-qrcode/)
+
+
 ___
 
 

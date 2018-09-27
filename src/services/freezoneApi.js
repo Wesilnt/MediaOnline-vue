@@ -10,6 +10,6 @@ export function postLearnRate(params) {
 export function doFreeLesson(params) {
   return request.post(`/lesson/doFreeLesson`, params)
 }
-export function getUserByToken(params) {
-  return request(`/user/getUserByToken${stringify(params)}`)
+export function getUserByToken() {
+  return request('user/getUserByToken')
 }

@@ -1,5 +1,5 @@
 import { uploadAnswer } from '../../services/columns'
-import { getPosterInfo } from '../../services/shareApi'
+import { getUserByToken } from '../../services/freezoneApi'
 
 const questionList = {
   namespaced: true,
@@ -110,8 +110,10 @@ const questionList = {
         questionIndex: nextIndex
       })
     },
-    async getQrcode(_, payload) {
-      return await getPosterInfo(payload)
+    async getUser() {
+      const response=await getUserByToken()
+        console.log(response);
+        return {nickName:'五类'};
     }
   }
 }

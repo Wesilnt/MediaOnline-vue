@@ -131,10 +131,8 @@
                 </strong>
                 <p>请继续加油</p>
                 <hr class="settlement-dashed-underline">
-                <img class="settlement-qr" :src="qrCodeUrl" />
+                <qrcode  class="settlement-qr" :value="qrCode"  tag="img" :options="{level:'M'}"/>
                 <p>分享二维码，邀请好友一起试听</p>
-                <br>
-                <p>长按保存图片</p>
             </div>
         </van-popup>
     </div>
@@ -167,7 +165,8 @@ export default {
       remainTime: 0,
       shareImg: null,
       nickName: null,
-      qrCodeUrl: null,
+      qrCode: window.location.href,
+      qrCodeWidth: window.innerWidth * 0.2,
       cvsRenderLoading: false
     }
   },
@@ -200,7 +199,7 @@ export default {
   },
   methods: {
     ...mapMainActions(['registerWxConfig', 'wxChooseImage']),
-    ...mapActions(['renderAnswers', 'handleNext', 'uploadAnswer', 'getQrcode']),
+    ...mapActions(['renderAnswers', 'handleNext', 'uploadAnswer', 'getUser']),
     async openQuestionAnswer() {
       if (!this.answersChecked) {
         await this.renderAnswers()
@@ -222,39 +221,36 @@ export default {
       })
       if (popup === 'settlementShow' && !this.shareImg) {
         this.cvsRenderLoading = true
-        const reponse = await this.getQrcode({
-          busId: '1654646',
-          pageUrl: window.location.href
-        })
-        if (!reponse) {
+        const response = await this.getUser()
+        console.log(response)
+        if (!response) {
           this.cvsRenderLoading = false
           this.handlePopupHide('settlementShow')
           this.$toast('分享图片获取失败')
           return
         }
-        const { nickName, qrCodeUrl } = await reponse
-
-        this.nickName =await nickName
-        this.qrCodeUrl =await qrCodeUrl
-        html2canvas(this.$refs.settlement, {
-          backgroundColor: '#4C4C4C',
-          allowTaint: true,
-          width: window.innerWidth,
-          height: window.innerHeight,
-          x: 0,
-          y: 0,
-          scrollX: 0,
-          scrollY: 0
-        }).then(canvas => {
-          const image = new Image()
-          const canvasImg = canvas.toDataURL('image/png')
-          image.src = canvasImg
-          image.onload = () => {
-            this.shareImg = canvasImg
-
-            this.cvsRenderLoading = false
-          }
-        })
+        const { nickName } = await response
+        this.nickName = await nickName
+        setTimeout(() => {
+          html2canvas(this.$refs.settlement, {
+            backgroundColor: '#4C4C4C',
+            allowTaint: true,
+            width: window.innerWidth,
+            height: window.innerHeight,
+            x: 0,
+            y: 0,
+            scrollX: 0,
+            scrollY: 0
+          }).then(canvas => {
+            const image = new Image()
+            const canvasImg = canvas.toDataURL('image/png')
+            image.src = canvasImg
+            image.onload = () => {
+              this.shareImg = canvasImg
+              this.cvsRenderLoading = false
+            }
+          })
+        }, 300)
       }
     },
     handlePopupHide(popup) {
@@ -520,8 +516,8 @@ export default {
 .settlement-qr {
   display: block;
   margin: 0 auto 32px;
-  width: 152px;
-  height: 152px;
+  width: 200px;
+  height: 200px;
   background-color: #c8d3ff;
 }
 .loading-wrapper {
