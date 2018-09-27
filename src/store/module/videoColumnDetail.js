@@ -44,7 +44,7 @@ const videoColumnDetail = {
       const profilePic = result.profilePic
       const freeLessonList = result.freeLessonList
       //绑定与拼团相关的内容
-      commit('groupManager/bindColunmnInfo',{courseId,profilePic,'freeLesson':{freeLessonList,type:'video'}})
+      dispatch('groupManager/initColumnInfo',{profilePic,freeLessonList,'freeLesson':{freeLessonList,type:'video'}})
 
       if (groupBuyId) {
           //这里是分享链接进来的

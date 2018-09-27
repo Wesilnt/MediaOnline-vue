@@ -18,7 +18,7 @@ const groupManager = {
 
         profilePic:'',//专栏头图
         courseId:0,//专栏ID
-        freeLesson,//试听对象  type字段用来区分点击试听按钮跳往哪里  freeLessonList是当前专栏的免费试听课程数组
+        freeLesson:{},//试听对象  type字段用来区分点击试听按钮跳往哪里  freeLessonList是当前专栏的免费试听课程数组
 
         userAccessStatus:0,
         groupBuyId:0,//拼团ID
@@ -78,6 +78,10 @@ const groupManager = {
         }
     },
     actions:{
+
+        initColumnInfo({commit},{courseId,profilePic,freeLesson}){
+            commit('bindColunmnInfo',{courseId,profilePic,freeLesson})
+        },
 
         //初始化工具条
         initToolsBar({commit,dispatch},toolsData){
