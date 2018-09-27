@@ -100,7 +100,8 @@ const questionList = {
         lessonId
       })
       if (!response) return
-      await commit('saveStatus', {
+        console.log(response);
+        await commit('saveStatus', {
         loading: false,
         newGrade: response.data
       })

@@ -1,4 +1,4 @@
-export const ENV='local'//线上 online 本地 'local'
+export const ENV='online'//线上 online 本地 'local'
 export const navbar = [
   {
     name: '首页',

@@ -286,7 +286,11 @@ export default {
         answer
       })
     }
-  }
+  },
+    mounted(){
+        console.log(1);
+        this.getUser()
+    }
 }
 </script>
 
