@@ -28,9 +28,9 @@ import { noAccessToken } from '../utils/userAuth'
 import { wxConfig as wxConfigApi } from '../services/groupBuyAPi.js'
 
 const { NODE_ENV } = process.env
-let wxConfigUrl = 'http://tencent.test.shbaoyuantech.com/wechat-js-config/xcx'
+let wxConfigUrl = 'http://tencent.test.shbaoyuantech.com/wechat-js-config/online'
 if (NODE_ENV === 'development') {
-  wxConfigUrl = 'http://tencent.test.shbaoyuantech.com/wechat-js-config/xcx'
+  wxConfigUrl = 'http://tencent.test.shbaoyuantech.com/wechat-js-config/online'
 }
 
 Vue.use(Vuex)
