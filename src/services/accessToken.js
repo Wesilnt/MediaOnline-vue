@@ -6,6 +6,6 @@ export async function getToken() {
     originUrl: window.location.href
   })
     console.log(result);
-    window.location.href = result.wechatAuthUrl
+    // window.location.href = result.wechatAuthUrl
   return result
 }
