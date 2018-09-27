@@ -308,7 +308,7 @@ export default {
 }
 .questions-length {
   margin: 30px auto 56px;
-  font-size: 24px;
+
   color: #666;
 }
 .questions-footer-text {
@@ -326,7 +326,7 @@ export default {
   border-right: 1px solid lightgray;
   flex-grow: 1;
   margin-bottom: 56px;
-  font-size: 24px;
+
   color: #6b6363;
   &:last-child {
     border: none;

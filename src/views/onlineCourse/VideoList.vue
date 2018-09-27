@@ -82,7 +82,7 @@ export default {
 .home-warnTip {
   text-align: center;
   margin: 120px auto 180px;
-  font-size: 24px;
+
   color: rgb(200, 200, 200);
 }
 </style>

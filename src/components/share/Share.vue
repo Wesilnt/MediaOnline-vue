@@ -117,7 +117,7 @@ export default {
     flex-direction: column;
     transition: all 0.2s ease;
     .share-src {
-      font-size: 24px;
+
       color: rgb(82, 82, 77);
       text-align: center;
       margin-top: 16px;
@@ -150,7 +150,7 @@ export default {
       .share-label {
         margin-top: 20px;
         color: rgb(82, 81, 77);
-        font-size: 24px;
+
       }
     }
   }

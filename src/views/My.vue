@@ -146,7 +146,6 @@ export default {
       height: 48px;
       border-radius: 30px;
       padding: 10px 40px 48px 40px;
-      font-size: 24px;
       color: rgb(255, 255, 255);
     }
   }

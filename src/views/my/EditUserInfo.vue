@@ -244,7 +244,6 @@ export default {
 
     &-agreement-label {
       color: #ffa32f;
-      font-size: 24px;
       text-align: center; //文字居中
     }
     &-agreement-text {

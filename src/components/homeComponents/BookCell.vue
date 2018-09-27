@@ -1,6 +1,6 @@
 <template>
   <div class="cell">
-    <div class="cell-header" @click="onItemClick" :style="{backgroundImage: `url(${book.coverPic})`}" >
+    <div class="cell-header" @click="onItemClick" v-lazy:background-image="book.coverPic">
       <span v-if="book.isNew" class="cell-isNew">上新</span>
       <i class="qhht-icon bookPlayTringle" @click.stop="onPlayClick" />
     </div>

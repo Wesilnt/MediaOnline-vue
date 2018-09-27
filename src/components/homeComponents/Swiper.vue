@@ -20,11 +20,5 @@ export default {
 </script>
 
 <style lang='less' scoped>
-.swiper-wrapper {
-  margin-bottom: 28px;
-}
-.swiperImg {
-  width: 100%;
-  height: 46.7vw;
-}
+
 </style>

@@ -122,7 +122,7 @@ export default {
           color: #333030;
         }
         &-detail {
-          font-size: 24px;
+
           color: #7d7d7e;
           padding: 16px 0px 0px 0px;
         }
@@ -148,7 +148,7 @@ export default {
       background-image: url('../../assets/my-nodata.png');
     }
     &-warn {
-      font-size: 24px;
+
       margin: 40px 0;
     }
   }

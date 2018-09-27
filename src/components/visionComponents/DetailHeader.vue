@@ -33,7 +33,6 @@ export default {
 }
 .right {
   margin-top: 4px;
-  font-size: 24px;
   color: rgb(41, 53, 76);
   display: flex;
   vertical-align: middle;

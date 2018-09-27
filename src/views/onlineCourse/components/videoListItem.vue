@@ -49,7 +49,6 @@ export default {
   font-weight: 900;
 }
 .cl-videolist-item-info {
-  font-size: 24px;
   color: rgb(102, 102, 102);
   margin-bottom: 20px;
 }
@@ -59,7 +58,7 @@ export default {
   margin-bottom: 24px;
 }
 .cl-videolist-item-name {
-  font-size: 24px;
+
   color: rgb(102, 102, 102);
   &:after {
     content: '·';
@@ -67,7 +66,7 @@ export default {
   }
 }
 .cl-videolist-item-job {
-  font-size: 24px;
+
   color: rgb(102, 102, 102);
   margin-left: 4px;
 }
@@ -76,7 +75,7 @@ export default {
   flex-direction: row;
 }
 .cl-videolist-item-price {
-  font-size: 24px;
+
   color: rgb(255, 163, 47);
   &:after {
     content: '/';
@@ -84,7 +83,7 @@ export default {
   }
 }
 .cl-videolist-item-sets {
-  font-size: 24px;
+
   color: rgb(102, 102, 102);
 }
 </style>

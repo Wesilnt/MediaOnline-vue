@@ -1,6 +1,6 @@
 <template>
     <div>
-        <VisionCell   v-for="(item, index) in visionList" :key="index" :vision="item"/>
+        <VisionCell  v-for="(item, index) in visionList" :key="index" :vision="item"/>
     </div>
 </template>
 

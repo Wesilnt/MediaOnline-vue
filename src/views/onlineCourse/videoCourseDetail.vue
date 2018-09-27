@@ -307,7 +307,6 @@ export default {
 <style lang="scss" scoped>
 .videocourse-detail-container {
   background-color: #fff;
-  font-size: 24px;
 }
 //header
 .video-detail-header {
@@ -346,7 +345,6 @@ export default {
 
   label {
     color: white;
-    font-size: 24px;
     height: 28px;
     line-height: 28px;
     padding: 0;

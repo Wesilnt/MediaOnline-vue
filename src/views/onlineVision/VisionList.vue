@@ -2,15 +2,12 @@
   <!-- <div v-infinite-scroll="loadMore" class="myScroll" infinite-scroll-disabled="loading" infinite-scroll-distance="30"> -->
   <div>
     <img :src="bannerPic" class="head" alt="">
-    <div class="middle" />
-    <van-list v-model="refreshing" :finished="finished" @load="loadMore" @offset="10">
-      <div v-for="(item, index) in visionList" :key="index" class="list">
-        <VisionCell :vision="item" class="cell" />
-        <div class="sep" />
+    <van-list class="view-list" v-model="refreshing" :finished="finished" @load="loadMore" @offset="10">
+      <div v-for="(item, index) in visionList" :key="index" class="view-list-cell">
+        <VisionCell :vision="item"  />
       </div>
-    
-    <div v-if="finished" class="bottomtip">没有更多了，不要再拉了</div>
     </van-list>
+    <div class="view-footer" v-if="finished">没有更多了，不要再拉了</div>
   </div>
 </template>
 
@@ -56,24 +53,20 @@ export default {
   width: 100%;
   height: 300px;
 }
-.middle {
-  height: 10px;
-  width: 100%;
+.view-list {
+  padding: 28px;
 }
-.cell {
-  margin-top: 20px;
-  padding-bottom: 20px;
+.view-list-cell {
+  border-bottom: 2px solid #f1f1f1;
+  margin-bottom: 20px;
+  /deep/ .cell {
+    margin-bottom: 20px;
+  }
 }
-.sep {
-  height: 1px;
-  width: 100%;
-  background-color: lightgray;
-}
-.bottomtip {
+.view-footer {
   text-align: center;
   height: 160px;
-  color: lightgray;
+  color: #c8c8c8;
   line-height: 160px;
-  font-size: 28px;
 }
 </style>

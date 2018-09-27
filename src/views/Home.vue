@@ -1,6 +1,10 @@
 <template>
   <div class="index">
-    <Swiper :images="bannerList"/>
+      <van-swipe :auto="2000" class="index-swiper">
+          <van-swipe-item v-for="(list,index) in bannerList" :key="index" @click="routerToSwiperDetail">
+              <img class="index-swiper-img" :alt="list.desc" v-lazy="list.url">
+          </van-swipe-item>
+      </van-swipe>
     <Notice :message-count="newMessageCount"/>
     <div class="index-container">
       <Header :link="'/home/freezone'" title="免费专区" subtitle="探索更多"/>
@@ -48,7 +52,10 @@ export default {
     'bookList'
   ]),
   methods: {
-    ...mapActions(['getIndexPageData'])
+    ...mapActions(['getIndexPageData']),
+    routerToSwiperDetail() {
+      this.$router.push({ path: `/user/${userId}` })
+    }
   },
   mounted() {
     this.getIndexPageData()
@@ -58,9 +65,15 @@ export default {
 
 <style lang='less' scoped>
 .index {
-  font-size: 24px;
-  color: #3E3E53;
+  color: #3e3e53;
   margin-bottom: 100px;
+}
+.index-swiper {
+  margin-bottom: 28px;
+}
+.index-swiper-img {
+  width: 100%;
+  height: 46.7vw;
 }
 .index-container {
   padding: 0 28px;

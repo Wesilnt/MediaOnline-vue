@@ -92,7 +92,7 @@ export default {
     }
     h4 {
       margin: 20px 0 0 0;
-      font-size: 24px;
+
       line-height: 24px;
       font-weight: 300;
       color: rgb(102, 102, 102);
@@ -117,7 +117,7 @@ export default {
     line-height: 36px;
   }
   .bottom-container p {
-    font-size: 24px;
+
     color: rgb(148, 154, 170);
     margin: 0;
     line-height: 24px;

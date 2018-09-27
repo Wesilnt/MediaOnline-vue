@@ -291,7 +291,7 @@ export default {
     margin: 40px 0 0 0;
   }
   h4 {
-    font-size: 24px;
+
     line-height: 24px;
     color: rgb(118, 118, 118);
     text-align: center;

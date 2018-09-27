@@ -1,5 +1,5 @@
 <template>
-  <div :style="{backgroundImage: `url(${video.coverPic})` }" @click="onItemClick" class="qhht-flex cell">
+  <div v-lazy:background-image="`video.coverPic`" @click="onItemClick" class="qhht-flex cell">
     <i class="qhht-icon videoPlayTringle" />
     <p class="videoTitle">{{video.name}}</p>
     <p>{{video.briefIntro}}</p>

@@ -1,6 +1,6 @@
 <template>
-  <div class="qhht-flex cell" @click="enterVisionDetail(vision.id)">
-      <img :src="vision.coverPic" class="visionicon" alt="">
+  <lazy-component class="qhht-flex cell" @click="enterVisionDetail(vision.id)">
+      <img v-lazy="vision.coverPic" class="visionicon" alt="">
     <ul class="detailContent">
       <li class="visionTitle">{{vision.name}}</li>
       <li>{{vision.briefIntro}}</li>
@@ -12,10 +12,10 @@
     <div class="cell-footer">
       <p class="fit">{{vision.fitFor}}岁</p>
       <div class="visionPlay" @click.stop="enterVisionPlay">
-        <i class="qhht-icon palyTringle" />试听
+        <i class="qhht-icon playTringle" />试听
       </div>
     </div>
-  </div>
+  </lazy-component>
 </template>
 
 <script>
@@ -61,7 +61,7 @@ export default {
 .visionicon {
   width: 180px;
   height: 240px;
-  background-color: rgb(253, 231, 231);
+  /*background-color: rgb(253, 231, 231);*/
   border-radius: 12px;
 }
 
@@ -82,7 +82,7 @@ export default {
   padding: 0 5px;
   line-height: 40px;
 }
-.palyTringle {
+.playTringle {
   width: 16px;
   height: 20px;
   margin-right: 8px;

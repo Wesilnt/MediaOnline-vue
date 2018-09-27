@@ -116,7 +116,7 @@ export default {
   // text-align: left;
 }
 .cl-list-info {
-  font-size: 24px;
+
   color: rgb(102, 102, 102);
   text-align: left;
 }
@@ -131,7 +131,7 @@ export default {
     padding: 7px 17px;
     height: 50px;
     align-self: center;
-    font-size: 24px;
+
     color: white;
     line-height: 41px;
     border: none;
@@ -152,7 +152,7 @@ export default {
   }
 
   .cl-number {
-    font-size: 24px;
+
     color: rgb(102, 102, 102);
     margin-left: 10px;
   }

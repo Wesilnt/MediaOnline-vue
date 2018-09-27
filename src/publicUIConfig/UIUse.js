@@ -50,6 +50,7 @@ Vue.use(Swipe).use(SwipeItem)
 Vue.use(Checkbox).use(CheckboxGroup)
 Vue.use(Lazyload, {
   error: loading,
-  loading: loading
+  loading: loading,
+    lazyComponent: true
 })
 Vue.use(PullRefresh)

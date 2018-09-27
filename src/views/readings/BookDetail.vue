@@ -237,7 +237,7 @@ export default {
       color: rgb(62, 62, 83);
     }
     .book-introduce-header :nth-child(2) {
-      font-size: 24px;
+
       align-self: flex-end;
       line-height: 24px;
       color: rgb(170, 175, 188);
@@ -274,7 +274,7 @@ export default {
     width: 100%;
     text-align: center;
     height: 64px;
-    font-size: 24px;
+
     padding: 96px 0 216px;
     color: rgb(200, 200, 200);
   }

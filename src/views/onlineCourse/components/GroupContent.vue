@@ -264,7 +264,7 @@ export default {
 .videocol-allbtn {
   margin-right: 20px;
   border: none;
-  font-size: 24px;
+
   height: 24px;
   line-height: 24px;
   color: rgb(155, 161, 176);

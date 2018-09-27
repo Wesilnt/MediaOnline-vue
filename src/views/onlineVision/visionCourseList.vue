@@ -73,7 +73,7 @@ export default {
   display: flex;
   border: 2px rgb(255, 163, 47) solid;
   border-radius: 8px;
-  font-size: 24px;
+
   color: rgb(255, 163, 47);
   margin-right: 28px;
   line-height: 60px;

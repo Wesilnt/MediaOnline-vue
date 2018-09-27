@@ -151,7 +151,7 @@ export default {
   height: 48px;
 }
 .groupBuy-deadline {
-  font-size: 24px;
+
   color: rgb(204, 204, 204);
   margin: 16px 0 10px;
 }

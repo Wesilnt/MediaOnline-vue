@@ -140,12 +140,12 @@ export default {
     margin: 12px 0 0px 0;
     line-height: 24px;
     span {
-      font-size: 24px;
+
       color: rgb(102, 102, 102);
       margin-right: 20px;
     }
     .book-datetime {
-      font-size: 24px;
+
       border: 1px solid; /*no*/
       border-radius: 10px;
       padding: 2px 20px;

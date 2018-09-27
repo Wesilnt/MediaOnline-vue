@@ -144,7 +144,6 @@ export default {
 @fail: #ccc;
 .my-puzzle {
   &-container {
-    font-size: 24px;
     min-height: 100vh;
     background-color: #fffcf7;
     .van-tabs {
@@ -244,7 +243,6 @@ export default {
       background-image: url('../../assets/my-nodata.png');
     }
     &-warn {
-      font-size: 24px;
       margin: 40px 0;
     }
     &-btn {

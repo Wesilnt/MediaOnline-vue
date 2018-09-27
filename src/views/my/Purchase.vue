@@ -177,7 +177,7 @@ export default {
       background-image: url('../../assets/my-nodata.png');
     }
     &-warn {
-      font-size: 24px;
+
       margin: 40px 0;
     }
   }

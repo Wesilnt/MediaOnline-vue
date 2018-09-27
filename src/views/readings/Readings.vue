@@ -132,7 +132,7 @@ export default {
     }
     p {
       margin: 40px 0 0 0;
-      font-size: 24px;
+
     }
   }
   //中间按钮样式
@@ -147,7 +147,7 @@ export default {
       color: white;
       text-align: center;
       line-height: 64px;
-      font-size: 24px;
+
       width: 208px;
       border-radius: 20px;
       height: 64px;
@@ -184,7 +184,7 @@ export default {
         border-top-right-radius: 20px;
         background-color: red;
         padding: 6px 24px;
-        font-size: 24px;
+
         color: white;
       }
       img {
@@ -199,12 +199,11 @@ export default {
       display: flex;
       flex-direction: column;
       p {
-        font-size: 24px;
+
         color: rgb(22, 35, 60);
         margin: 20px 0 0 0;
       }
       span {
-        font-size: 24px;
         color: rgb(255, 163, 47);
         margin-top: 16px;
       }
@@ -214,7 +213,6 @@ export default {
     width: 100%;
     text-align: center;
     height: 64px;
-    font-size: 24px;
     margin-bottom: 64px;
     color: rgb(200, 200, 200);
   }
