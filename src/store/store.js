@@ -85,6 +85,32 @@ export default new Vuex.Store({
         wxRegisterPath: fullPath
       })
     },
+    // //支付
+    // async wxPayment({state},{timestamp,nonceStr,package,paySign,successCB,failCB}){
+    //   let fullPath = window.location.href
+    //   let jsApiList = ['chooseWXPay']
+    //   dispatch('registerWxConfig',{fullPath,jsApiList})   
+    //   wx.ready(function(){
+    //     wx.chooseWXPay({
+    //         timestamp: timestamp,
+    //         nonceStr: nonceStr, // 支付签名随机串，不长于 32 位
+    //         package: package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
+    //         signType: 'MD5', // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+    //         paySign: paySign, // 支付签名
+    //         success: function (res) {
+    //           successCB(res)
+    //         },
+    //         fail : function (errmsg) {
+    //           failCB(res)
+    //         },
+    //         complete : function (res) {
+    //           if(res.errMsg == "chooseWXPay:cancel" ) {
+    //             console.log('支付取消')
+    //           } 
+    //         }
+    //     }); 
+    //   })
+    // },
     async setWxShareFriend(
       { state },
       {
