@@ -16,7 +16,7 @@ ___
 [UI 设计文档访问地址](...)
 
 
-[二维码说明文档](https://xkeshi.github.io/vue-qrcode/)
+[二维码说明文档](https://gerardreches.github.io/vue-qrcode-component/)
 
 
 ___

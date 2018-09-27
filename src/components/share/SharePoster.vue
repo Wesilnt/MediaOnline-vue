@@ -9,12 +9,11 @@
     </div> 
     <a v-show="false" ref="download"  download="poster"/>
     <loading-dialog v-if="loading"></loading-dialog>
-    <qrcode :style="{display:'none',}" v-if="showQrcode" :value="shareUrl" tag="img"></qrcode>
+    <qr-code  :style="{display:'none',}" v-if="showQrcode" :text="shareUrl" error-level="Q" />
   </div>
 </template> 
 <script>
 import LoadingDialog from '../LoadingDialog.vue'
-import Qrcode from '@xkeshi/vue-qrcode'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers('share')
 export default {
