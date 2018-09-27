@@ -113,16 +113,16 @@
                     <van-loading />
                     <p>正在生成分享图片</p>
                 </div>
-                <img class="share-img" v-show="!cvsRenderLoading" :src="shareImg" alt="">
+                <div v-show="!cvsRenderLoading">
+                    <img class="share-img"  :src="shareImg" alt="">
+                    <a class="qhht-blockButton share-img_close" @click="handlePopupHide('settlementShow')">关闭分享</a>
+                </div>
             </div>
             <div class="settlement-canvas" ref="settlement">
-                <div  class="answer-btn-close">
-                    <a @click="handlePopupHide('settlementShow')">关闭</a>
-                </div>
                 <div class="settlement-title">成绩单</div>
                 <hr class="settlement-title-underline">
                 <strong class="answer-name">
-                    XXX同学，你在
+                   {{nickName}}同学，你在
                 </strong>
                 <p>《{{title}}》</p>
                 <p>课程自测中获得</p>
@@ -131,7 +131,7 @@
                 </strong>
                 <p>请继续加油</p>
                 <hr class="settlement-dashed-underline">
-                <i class="settlement-qr"></i>
+                <img class="settlement-qr" :src="qrCodeUrl" />
                 <p>分享二维码，邀请好友一起试听</p>
                 <br>
                 <p>长按保存图片</p>
@@ -166,6 +166,8 @@ export default {
       settlementShow: false,
       remainTime: 0,
       shareImg: null,
+      nickName: null,
+      qrCodeUrl: null,
       cvsRenderLoading: false
     }
   },
@@ -213,38 +215,46 @@ export default {
         this.handlePopupShow('questionShow')
       }
     },
-    handlePopupShow(popup) {
+    async handlePopupShow(popup) {
       const array = ['reviewShow', 'questionShow', 'settlementShow']
       array.forEach(item => {
         this[item] = popup === item
       })
-      if (popup === 'settlementShow') {
+      if (popup === 'settlementShow' && !this.shareImg) {
         this.cvsRenderLoading = true
-        setTimeout(() => {
-          html2canvas(this.$refs.settlement, {
-            backgroundColor: '#4C4C4C',
-            allowTaint: true,
-            width: window.innerWidth,
-            height: window.innerHeight,
-            x: 0,
-            y: 0,
-            scrollX: 0,
-            scrollY: 0
-          }).then(async canvas => {
-            const qrcode = await this.getQrcode({
-              busId: '1654646',
-              pageUrl: window.location.href
-            })
-            console.log(qrcode)
-            const image = new Image()
-            const canvasImg = canvas.toDataURL('image/png')
-            image.src = canvasImg
-            image.onload = () => {
-              this.shareImg = canvasImg
-              this.cvsRenderLoading = false
-            }
-          })
-        }, 300)
+        const reponse = await this.getQrcode({
+          busId: '1654646',
+          pageUrl: window.location.href
+        })
+        if (!reponse) {
+          this.cvsRenderLoading = false
+          this.handlePopupHide('settlementShow')
+          this.$toast('分享图片获取失败')
+          return
+        }
+        const { nickName, qrCodeUrl } = await reponse
+
+        this.nickName =await nickName
+        this.qrCodeUrl =await qrCodeUrl
+        html2canvas(this.$refs.settlement, {
+          backgroundColor: '#4C4C4C',
+          allowTaint: true,
+          width: window.innerWidth,
+          height: window.innerHeight,
+          x: 0,
+          y: 0,
+          scrollX: 0,
+          scrollY: 0
+        }).then(canvas => {
+          const image = new Image()
+          const canvasImg = canvas.toDataURL('image/png')
+          image.src = canvasImg
+          image.onload = () => {
+            this.shareImg = canvasImg
+
+            this.cvsRenderLoading = false
+          }
+        })
       }
     },
     handlePopupHide(popup) {
@@ -340,6 +350,7 @@ export default {
   border-radius: 8px;
   font-size: 28px;
   overflow: hidden;
+  background: #fff;
 }
 .answer-wrapper {
   padding: 40px 30px 52px;
@@ -440,15 +451,23 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  background: #7f7f7f;
+  background: #000;
   z-index: 10;
 }
 .share-img {
   width: 100%;
 }
+.share-img_close {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  border-radius: 0;
+}
 .settlement-canvas {
   position: absolute;
-  top: 50%;
+  top: 46%;
   left: 50%;
   width: 702px;
   transform: translate(-50%, -50%);
@@ -459,7 +478,7 @@ export default {
   color: #818181;
 }
 .settlement-title {
-  margin-top: 44px;
+  margin-top: 56px;
   font-size: 90px;
   font-weight: 600;
   color: #8297ea;
@@ -503,7 +522,7 @@ export default {
   margin: 0 auto 32px;
   width: 152px;
   height: 152px;
-  background-color: #20c997;
+  background-color: #c8d3ff;
 }
 .loading-wrapper {
   margin: 47% auto 0;
