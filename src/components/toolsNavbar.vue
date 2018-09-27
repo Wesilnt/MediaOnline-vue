@@ -156,7 +156,7 @@ export default {
       } else {
         //参与拼团
         params = {
-          courseId: this.courseId,
+          courseId: this.groupBuyId,
           payType: 2
         }
       }
