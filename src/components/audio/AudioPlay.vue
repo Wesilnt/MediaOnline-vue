@@ -180,14 +180,14 @@ export default {
     },
     //查看文稿
     onDraft() {
-      this.$route.push({
+      this.$router.push({
         name: 'AudioDraft',
         params: { lessonid: this.lessonId }
       })
     },
     //评论
     toComment() {
-      this.$route.push({
+      this.$router.push({
         name: 'AudioCmts',
         params: { lessonid: this.lessonId }
       })
@@ -493,49 +493,49 @@ export default {
   }
 }
 
-.van-toast {
-  .van-icon-success {
-    background-image: url('../../assets/audio_love_collect.png');
-    background-size: 28px;
-    background-repeat: no-repeat;
-    margin: 1px auto 12px;
-    height: 28px;
-    width: 28px;
-  }
-  .van-icon-success::before {
-    content: none;
-  }
-  .van-toast--text {
-    max-width: 80%;
-    white-space: nowrap;
-    min-width: inherit;
-    width: auto;
-  }
+// .van-toast {
+//   .van-icon-success {
+//     background-image: url('../../assets/audio_love_collect.png');
+//     background-size: 28px;
+//     background-repeat: no-repeat;
+//     margin: 1px auto 12px;
+//     height: 28px;
+//     width: 28px;
+//   }
+//   .van-icon-success::before {
+//     content: none;
+//   }
+//   .van-toast--text {
+//     max-width: 80%;
+//     white-space: nowrap;
+//     min-width: inherit;
+//     width: auto;
+//   }
 
-  .van-icon-fail::before {
-    content: none;
-  }
-  .van-toast__text {
-    padding-top: 0;
-    width: auto;
-  }
+//   .van-icon-fail::before {
+//     content: none;
+//   }
+//   .van-toast__text {
+//     padding-top: 0;
+//     width: auto;
+//   }
 
-  .van-list__loading {
-    width: 100vw;
-  }
-}
-.van-toast.van-toast--default {
-  min-height: 0;
-  width: auto;
-  min-width: inherit;
-  white-space: nowrap;
-}
-.van-toast.van-icon-fail {
-  background-image: url('../../assets/audio_play_tip.png');
-  background-size: 28px;
-  background-repeat: no-repeat;
-  margin: 1px auto 12px;
-  height: 28px;
-  width: 28px;
-}
+//   .van-list__loading {
+//     width: 100vw;
+//   }
+// }
+// .van-toast.van-toast--default {
+//   min-height: 0;
+//   width: auto;
+//   min-width: inherit;
+//   white-space: nowrap;
+// }
+// .van-toast.van-icon-fail {
+//   background-image: url('../../assets/audio_play_tip.png');
+//   background-size: 28px;
+//   background-repeat: no-repeat;
+//   margin: 1px auto 12px;
+//   height: 28px;
+//   width: 28px;
+// }
 </style>

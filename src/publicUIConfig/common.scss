@@ -171,7 +171,7 @@ ol {
 
 .van-toast {
   .van-icon-success {
-    background-image: url(require('../assets/audio_love_collect.png'));
+    background: url('../src/assets/audio_love_collect.png');
     background-size: 28px;
     background-repeat: no-repeat;
     margin: 1px auto 12px;
@@ -207,7 +207,7 @@ ol {
   white-space: nowrap;
 }
 .van-toast.van-icon-fail {
-  background-image: url(require('../assets/audio_play_tip.png'));
+  background: url('../src/assets/audio_play_tip.png');
   background-size: 28px;
   background-repeat: no-repeat;
   margin: 1px auto 12px;
