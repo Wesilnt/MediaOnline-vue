@@ -39,7 +39,7 @@ export async function wechatSubscribed() {
 //微信JDK授权
 export function wxConfig(params) {
   return request(
-    `http://tencent.test.shbaoyuantech.com/wechat-js-config/xcx?${stringify(
+    `http://tencent.test.shbaoyuantech.com/wechat-js-config/online?${stringify(
       params
     )}`
   )
