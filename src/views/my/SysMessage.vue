@@ -28,7 +28,7 @@
             </div>
         </div>
         <div>
-            <div>
+            <div style="margin-bottom: 59px">
                 <div v-for="item,index in messageList" :key="item.id" class="sysmessage-list">
                     <div class="sysmessage-list-item">
 
@@ -68,6 +68,7 @@
                     </div>
                     <van-popup v-model="isShowDelete" position="bottom" >
                         <img class="del-icon" src="../../assets/images/alter_delete.png" @click="handleDelete"/>
+                        <p class="del-text">删除</p>
                     </van-popup>
                     <van-popup v-model="showCheck" position="bottom" :overlay="false" :lock-scroll="false">
                         <img class="del-icon" src="../../assets/images/alter_delete.png" @click="handleDeleteAll"/>
@@ -110,7 +111,7 @@
     },
     methods: {
       ...mapMutations(['setCheckToList','setCheckList']),
-      ...mapActions(['queryList', 'delSysMessage']),
+      ...mapActions(['queryList', 'delMessage','delManyMessage']),
       handleMenu: function () {
         this.setCheckToList()
         this.showCheck = true
@@ -123,12 +124,14 @@
       handleDelete: function () {
         console.log("handle" + this.deleteId)
         let id = this.deleteId
-        this.delSysMessage({id})
+        this.delMessage({id})
       },
       handleDeleteAll: function () {
         this.showCheck = false
         this.checked = false
         //  to do delete select message
+        this.delManyMessage()
+
       },
       allChecked: function () {
         console.log("all checked")
