@@ -62,27 +62,31 @@ export default {
         },
         //书详情
         async getBookDetail({dispatch, commit }, params) {
-            const res = await getBookDetail(params) 
-            console.log(res)
-            commit("bindBookDetail", res)
-
-          //设置底部购买工具栏 
-          const toolsData = {
-            "collectLikeDuration" : res.collectLikeDuration,
-            "collectLikeId" : res.collectLikeId,
-            "collectLikePersonCount" : res.collectLikePersonCount,
-            "collectLikeTemplateId" : res.collectLikeTemplateId,
-            "groupBuyDuration" : res.groupBuyDuration,
-            "groupBuyPersonCount" : res.groupBuyPersonCount,
-            "groupBuyPrice" : res.groupBuyPrice,
-            "groupBuyId": params.groupBuyId || res.groupBuyId,
-            "groupBuyTemplateId" : res.groupBuyTemplateId,
-            "userAccessStatus" : res.userAccessStatus,
-            'price': res.price
-          }
-          console.log(toolsData)
-          dispatch('groupManager/initToolsBar',toolsData)
-
+            const result = await getBookDetail(params) 
+            console.log(result)
+            commit("bindBookDetail", result)
+            const groupBuyId =  params.groupBuyId
+            if (groupBuyId) {
+                //这里是分享链接进来的
+              dispatch('groupManager/getGroupBuyDetail', groupBuyId)
+            } else {
+                //这里是正常途径进来的
+              const toolsData = {
+                collectLikeDuration: result.collectLikeDuration,
+                collectLikeId: result.collectLikeId,
+                collectLikePersonCount: result.collectLikePersonCount,
+                collectLikeTemplateId: result.collectLikeTemplateId,
+                groupBuyDuration: result.groupBuyDuration,
+                groupBuyPersonCount: result.groupBuyPersonCount,
+                groupBuyPrice: result.groupBuyPrice,
+                groupBuyId: result.groupBuyId,
+                groupBuyTemplateId: result.groupBuyTemplateId,
+                userAccessStatus: result.userAccessStatus,
+                price: result.price
+              }
+              
+              dispatch('groupManager/initToolsBar', toolsData)
+            }
         },
         //书单集列表
         async getSingleSetList({state, commit }, refresh) {
