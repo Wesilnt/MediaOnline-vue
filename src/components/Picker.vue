@@ -31,8 +31,7 @@ export default {
       this.$emit('toggle', value)
     },
     onCancel() {
-      console.log("cancel")
-      this.$emit('changePicker', false)
+      this.$emit('close', false)
     }
   }
 }

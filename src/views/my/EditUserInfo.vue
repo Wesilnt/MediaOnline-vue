@@ -40,10 +40,10 @@
                         <van-radio v-if="gender === '0'" name="0"/>
                     </div>
                     <div class="userinfo-identity-container-item"
-                         :class="{'userinfo-identity-container-item-selected':gender === '1'}"
+                         :class="{'userinfo-identity-container-item-selected-girl':gender === '1'}"
                          @click="genderChoice('1')">
                         <div class="userinfo-identity-container-item-circle"
-                             :class="{'userinfo-identity-container-item-selected-circle':gender === '1'}"/>
+                             :class="{'userinfo-identity-container-item-selected-girl-circle':gender === '1'}"/>
                         <p class="userinfo-identity-container-item-text"
                            :class="{'userinfo-identity-container-item-selected-text':gender === '1'}">我是女生</p>
                         <van-radio v-if="gender === '1'" name="1"/>
@@ -141,7 +141,7 @@ export default {
         } else if (this.showNext === true) {
           this.updateUserInfo({
             role: this.identity,
-            gender: this.sex,
+            gender: this.gender,
             grade: this.grade
           })
         }
@@ -162,8 +162,7 @@ export default {
   }
 }
 </script>
-
-<style lang="less">
+<style lang="less" scoped>
 .userinfo {
   &-title {
     padding: 104px 0px 60px 60px;
@@ -205,7 +204,7 @@ export default {
           height: 120px;
           margin: 40px 0px 40px 20px;
           border-radius: 50%;
-          box-shadow: #f4f4f4 5px 5px 5px 5px;
+          box-shadow: #e5e5e5 3px 3px 3px 3px;
         }
       }
       &-item-selected {
@@ -215,9 +214,19 @@ export default {
         }
         &-circle {
           background-color: #418ee0;
-          box-shadow: #418ee0 5px 5px 5px 5px;
+          box-shadow: #418ee0 0px 0px 0px 0px;
         }
       }
+        &-item-selected-girl {
+            background-color: #f7828f;
+            &-text {
+                color: white;
+            }
+            &-circle {
+                background-color: #db4154;
+                box-shadow: #db4154 0px 0px 0px 0px;
+            }
+        }
     }
   }
   &-grade-container {
@@ -267,7 +276,7 @@ export default {
   bottom: -25px;
 }
 .van-picker {
-    height: 130px;
+    height: 170px;
 }
 .van-picker__columns {
     overflow: hidden;

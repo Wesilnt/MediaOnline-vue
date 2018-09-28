@@ -31,7 +31,6 @@ import reply from '../assets/images/my_reply.png'
 import praise from '../assets/images/my_praise.png'
 import sys from '../assets/images/my_sys_message.png'
 import help from '../assets/images/my_help.png'
-import bg from '../assets/images/my_head_bg.png'
 
 export default {
   name: 'My',
@@ -40,9 +39,8 @@ export default {
   },
   data: function() {
     return {
-      nickName: '肖绪波',
+      nickName: '',
       avatarUrl: praise,
-      headBg: bg,
       list: [
         {
           name: '/my/Purchase',

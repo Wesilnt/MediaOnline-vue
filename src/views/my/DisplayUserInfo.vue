@@ -15,8 +15,7 @@
             <p class="display-user-info-column-content">{{ userInfo.mobileNo === null ? '没有手机号码' : userInfo.mobileNo }}</p>
             <img class="display-user-info-column-image-lock" src="../../assets/images/my_userinfo_lock.png"/>
         </div>
-        <Picker :columns="whichPicker ==='gender' ? genders : grades" :isShow="isShow" v-on:toggle="toggleConfirm"
-                v-on:click="changePicker"/>
+        <Picker :columns="whichPicker ==='gender' ? genders : grades" :isShow="isShow" v-on:toggle="toggleConfirm" v-on:close="closePicker"/>
     </div>
 </template>
 
@@ -74,7 +73,7 @@ export default {
         Toast.fail('电话号码无法编辑')
       }
     },
-    changePicker: function(value) {
+    closePicker: function(value) {
       this.isShow = false
     },
     toggleConfirm: function(value) {
