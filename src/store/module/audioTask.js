@@ -1,6 +1,6 @@
 import { getAudioDetail, postLearnRate } from '../../services/audioApi'
-import { throttle } from '../../utils/utils'
-import { Toast } from 'vant'
+import { throttle } from '../../utils/utils' 
+import {Toast} from 'vant'
 
 export default {
   state: {
@@ -15,10 +15,7 @@ export default {
     throttle: null,
     statusFunc: (commit, status) => commit('statusUpdate', status),
     saveProgress: (id, currentTime, maxTime) => {
-      localStorage.setItem(
-        'learntime-' + id,
-        JSON.stringify({ currentTime, maxTime })
-      )
+      localStorage.setItem('learntime-' + id,JSON.stringify({ currentTime, maxTime }))
     }
   },
   mutations: {
@@ -138,39 +135,38 @@ export default {
     //初始化播放器
     initAudio({ state, getters, commit, dispatch }) {
       commit('initThrottle')
+      //===========
+      // state._fb = document.createElement('div')
+      // state._fb.style.width = '68px'
+      // state._fb.style.height = '68px'
+      // state._fb.style.backgroundColor = 'red'
+      // state._fb.style.zIndex = 999999999
+      // state._fb.style.position = 'fixed'
+      // state._fb.style.bottom = '24px'
+      // state._fb.style.right = '8px' 
+      // document.body.appendChild(state._fb)
+      //===========
       state._at = document.createElement('AUDIO')
       state._at.style.display = 'none'
       document.body.appendChild(state._at)
       document.body.removeChild(state._at)
       state._at.addEventListener('timeupdate', () => commit('timeUpdate'))
-      state._at.addEventListener('playing', () =>
-        commit('statusUpdate', 'play')
-      )
+      state._at.addEventListener('playing', () =>commit('statusUpdate', 'play'))
       state._at.addEventListener('pause', () => commit('statusUpdate', 'pause'))
       //请求数据时遇到错误
       state._at.addEventListener('error', () => commit('statusUpdate', 'error'))
       //客户端主动终止下载（不是因为错误引起），
       state._at.addEventListener('abort', () => commit('statusUpdate', 'abort'))
       //寻找中，
-      state._at.addEventListener('seeking', () =>
-        commit('statusUpdate', 'seeking')
-      )
+      state._at.addEventListener('seeking', () =>commit('statusUpdate', 'seeking'))
       //可以播放，歌曲全部加载完毕
-      state._at.addEventListener('loadedmetadata', () =>
-        commit('statusUpdate', 'loadedmetadata')
-      )
+      state._at.addEventListener('loadedmetadata', () =>commit('statusUpdate', 'loadedmetadata'))
       //成功获取资源长度
-      state._at.addEventListener('canplaythrough', () =>
-        commit('statusUpdate', 'canplaythrough')
-      )
+      state._at.addEventListener('canplaythrough', () =>commit('statusUpdate', 'canplaythrough'))
       //寻找完毕
-      state._at.addEventListener('seeked', () =>
-        commit('statusUpdate', 'seeked')
-      )
+      state._at.addEventListener('seeked', () =>commit('statusUpdate', 'seeked'))
       //客户端正在请求数据
-      state._at.addEventListener('progress', () =>
-        commit('statusUpdate', 'progress')
-      )
+      state._at.addEventListener('progress', () =>commit('statusUpdate', 'progress'))
       state._at.addEventListener('ended', () => {
         commit('statusUpdate', 'ended')
         let currentTime = 0
@@ -184,33 +180,23 @@ export default {
           data.currentTime = state._at.duration
           dispatch('playNext') //播放下一集
         }
-        localStorage.setItem(
-          'learntime-' + state.audioDetail.id,
-          JSON.stringify(data)
-        )
+        localStorage.setItem('learntime-' + state.audioDetail.id,JSON.stringify(data))
       })
       //可以播放，但中途可能因为加载而暂停
-      state._at.addEventListener('canplay', () =>
-        commit('statusUpdate', 'canplay')
-      )
+      state._at.addEventListener('canplay', () =>commit('statusUpdate', 'canplay'))
       //等待数据，并非错误
-      state._at.addEventListener('waiting', () =>
-        commit('statusUpdate', 'waiting')
-      )
+      state._at.addEventListener('waiting', () =>commit('statusUpdate', 'waiting'))
       //播放速率改变
-      state._at.addEventListener('ratechange', () =>
-        commit('statusUpdate', 'ratechange')
-      )
+      state._at.addEventListener('ratechange', () =>commit('statusUpdate', 'ratechange'))
       //音量改变
-      state._at.addEventListener('volumechange', () =>
-        commit('statusUpdate', 'volumechange')
-      )
+      state._at.addEventListener('volumechange', () =>commit('statusUpdate', 'volumechange'))
       //网速失速
-      state._at.addEventListener('stalled', () =>
-        commit('statusUpdate', 'stalled')
-      )
+      state._at.addEventListener('stalled', () =>commit('statusUpdate', 'stalled'))
     },
-    onDestroy() {}
+    onDestroy({state}) {
+      // state._at.removeEventListener()
+
+    }
   },
   getters: {
     pageSize: state => state.pageSize,

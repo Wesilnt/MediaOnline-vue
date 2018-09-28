@@ -5,8 +5,7 @@ import {
   getAudioDesc,
   getSingleSetList,
   getCommentList
-} from '../../services/audioApi'
-import { Toast } from 'vant'
+} from '../../services/audioApi' 
 
 export default {
   namespaced: true,
@@ -115,9 +114,10 @@ export default {
   getters: {
     audio: (state, getters, rootState) => rootState.audiotask.audioDetail,
     audioId: (state, getters, rootState) => rootState.audiotask.audioId,
-    currentTime: (state, getters, rootState) => (touching, progress) =>
-      touching ? progress : rootState.audiotask.currentTime,
-    maxTime: (state, getters, rootState) => rootState.audiotask.maxTime,
+    currentTime: (state, getters, rootState) =>  Math.round(rootState.audiotask.currentTime),
+    // currentTime: (state, getters, rootState) => (touching, progress) =>
+    //   touching ? progress : rootState.audiotask.currentTime,
+    maxTime: (state, getters, rootState) => Math.round(rootState.audiotask.maxTime),
     playMode: (state, getters, rootState) => rootState.audiotask.playMode,
     status: (state, getters, rootState) => rootState.audiotask.status,
     playing: (state, getters, rootState) => rootState.audiotask.isPlaying,

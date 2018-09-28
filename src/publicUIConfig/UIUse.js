@@ -13,6 +13,7 @@ import {
   Toast,
   Tag,
   Swipe,
+  Slider,
   SwipeItem,
   Popup,
   PullRefresh,
@@ -33,6 +34,7 @@ import {
 
 Vue.use(Cell)
 Vue.use(Popup)
+Vue.use(Slider)
 Vue.use(SwipeCell)
 Vue.use(Dialog)
 Vue.use(List)

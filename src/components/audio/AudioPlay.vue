@@ -19,20 +19,27 @@
         <div class="tab-container-share" @click="onShare"/>
       </div>
       <!-- 进度条 -->
-      <div class="slider-container">
+      <div class="slider-container"> 
         <div slot="start">{{parseInt(touching?progress:currentTime(touching,progress)) | formatDuring}}</div>
-      <input type="range"
-        @input="onInputChange"
-        :value="touching?progress:currentTime(touching,progress)"
-        :min="0"
-        :max="maxTime"
+      <!-- <input type="range" 
+        @input="onInputChange" 
+        :value="touching?progress:currentTime(touching,progress)" 
+        :min="0" 
+        :max="maxTime"  
         :style="{background:touching
         ?'linear-gradient(to right,#FFCD7D ' + parseInt(progress * 100 / maxTime) + '%,  #E5E5E5 1%, #E5E5E5'
         : 'linear-gradient(to right,#FFCD7D ' + parseInt(currentTime(touching,progress) * 100 / maxTime) + '%,  #E5E5E5 1%, #E5E5E5'}"
         @touchstart="handleTouchStart"
         @touchcancel="handleTouchCancel"
         @touchmove="handleTouchMove"
-        @touchend="handleTouchEnd"/>
+        @touchend="handleTouchEnd"/> -->
+        <van-slider style="width:80%;"
+          :value="progress"
+          v-model="progress" 
+          :max="maxTime" 
+          :step="1" 
+          bar-height="2px" 
+          @change="onSliderChnage"/>
         <div slot="end">{{ maxTime | formatDuring}}</div>
       </div>
       <!-- 播放按钮 -->
@@ -87,7 +94,7 @@ export default {
   components: { 'share-pop': SharePop },
   data() {
     return {
-      shareData:null,  //分享数据
+      shareData: null, //分享数据
       lessonId: this.$route.params.id,
       hiddenDraft: this.$route.query.hiddenDraft,
       isInit: true,
@@ -135,6 +142,10 @@ export default {
   watch: {
     audioId: function(id) {
       this.lessonId = id
+    },
+    currentTime: function(value) {
+      this.progress = (value * 100) / this.maxTime
+      return value
     }
   },
   methods: {
@@ -158,8 +169,12 @@ export default {
     onInputChange(e) {
       this.progress = e.target.value
     },
+    onSliderChnage() {
+      this.seekTo(this.progress)
+    },
     handleTouchStart(e) {
       this.touching = true
+      console.log(e)
     },
     handleTouchMove() {},
     handleTouchEnd(e) {
@@ -347,14 +362,14 @@ export default {
     margin-top: 32px;
 
     > :nth-child(1) {
-      margin-right: 20px;
+      margin-right: 30px;
       font-size: 20px;
       color: rgb(146, 145, 150);
     }
     > :nth-child(3) {
       font-size: 20px;
       color: rgb(146, 145, 150);
-      margin-left: 20px;
+      margin-left: 30px;
     }
     input[type='range'] {
       // background-image: -webkit-linear-gradient(left,red, yellow);   //我咋记得是 to left
@@ -385,8 +400,24 @@ export default {
       // border: 5px solid #006eb3;
       /*-webkit-box-shadow: 0 -1px 1px #fc7701 inset;*/
     }
+    .van-slider {
+      background-color: #E5E5E5;
+      /deep/.van-slider__bar {
+        max-width: 100%;
+      }
+      .van-slider__button {
+        background: url(../../assets/audio_play_slider.png) no-repeat;
+        background-position: center;
+        background-size: 18px;
+        border-radius: 15px;
+        width: 18px;
+        height: 18px;
+      }
+      .van-slider__bar{
+        background-color: #FFCD7D;
+      }
+    }
   }
-
   .play-btns {
     display: flex;
     flex-direction: row;
@@ -499,7 +530,7 @@ export default {
   }
 }
 
- .van-toast {
+.van-toast {
   /deep/.van-icon-success {
     background-image: url('../../assets/audio_love_collect.png');
     background-size: 28px;

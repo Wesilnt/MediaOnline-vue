@@ -1,6 +1,10 @@
 <template>
     <div class="descrip-container">
-        <div class="descrip-header" :style="{background:'url('+getBookIntroduce.coverPic+') no-repeat;','background-size':'100%'}"/>
+          <div class="book-header-container" v-show="false">
+      <div class="book-cover" :style="{background:'url('+bookDetail.coverPic+')','background-size':'100%'}">
+        <span v-if="new Date().getTime() - new Date(bookDetail.createTime).getTime()<30*24*3600*1000">上新</span>
+      </div>
+    </div>
         <div class="course-name">
            {{getBookIntroduce.name}}
         </div>
@@ -36,6 +40,34 @@ export default {
 .descrip-container {
   display: flex;
   flex-direction: column;
+
+  //1. 作品封面介绍
+  .book-header-container {
+    height: 440px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    background-color: #f6f5f6;
+    padding-top: 36px;
+    .book-cover {
+      position: relative;
+      height: 350px;
+      width: 268px;
+      background-color: #fde3e3;
+      span {
+        border-top-right-radius: 20px;
+        background-color: red;
+        font-weight: 500;
+        padding: 10px 20px;
+        position: absolute;
+        bottom: 0;
+        color: white;
+        font-size: 36px;
+        letter-spacing: 4px;
+      }
+    }
+  }
   .descrip-header {
     height: 372px;
     width: 100%;
