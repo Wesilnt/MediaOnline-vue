@@ -104,22 +104,25 @@ export default {
     },
     async handleScroll() {
       //1.监听滚动
-      let scrollTop = Math.abs(
-        this.$refs.detailmain.getBoundingClientRect().top
-      )
-      let tryCourseH = this.$el.querySelector('#tryCourse').offsetTop - 50
-      let messageH = this.$el.querySelector('#leavemessage').offsetTop - 50
+      let scrollTop = document.documentElement.scrollTop
+      let tryCourseH = this.$el.querySelector('#tryCourse').offsetTop - 60
+      let messageH = this.$el.querySelector('#leavemessage').offsetTop - 60
+      console.log('======'+document.body.scrollHeight)
+      console.log('scrollTopaaa =',scrollTop)
+      // console.log('tryCourseH =',tryCourseH)  //970
+      // console.log('messageH =',messageH)    //1289
       if (scrollTop < tryCourseH) {
         this.selected = 0
       } else if (scrollTop < messageH && scrollTop > tryCourseH) {
         this.selected = 1
+        console.log('代码走到这里了')
       } else if (scrollTop > messageH) {
         this.selected = 2
       }
     },
     clickFnc(index) {
       this.selected = index
-      let positionId
+      let positionId = ''
       switch (index) {
         case 0:
           positionId = '#desc'
@@ -133,13 +136,17 @@ export default {
         default:
           break
       }
-
+      console.log(positionId,index)
       let anchor = this.$el.querySelector(positionId)
-      document.body.scrollTop = anchor.offsetHeight - 50
-      // // Firefox
-      document.documentElement.scrollTop = anchor.offsetTop - 50
-      // Safari
-      window.pageYOffset = anchor.offsetTop - 50
+    
+      document.body.scrollTop = anchor.offsetTop - 60
+    
+      // // // Firefox
+      document.documentElement.scrollTop = anchor.offsetTop - 60
+      // // Safari
+      window.pageYOffset = anchor.offsetTop - 60
+
+        // console.log("anchor = "+anchor.offsetTop)
     }
   },
   created() {
@@ -172,7 +179,7 @@ export default {
 .videocol-navbar {
   position: -webkit-sticky;
   position: sticky;
-  top: 0px;
+  top: -1px;
   left: 0;
   right: 0;
   width: 100%;
