@@ -90,7 +90,6 @@ const checkResponseCode = (url, response) => {
  */
 function request(url, options, needToken = true) {
   let accessToken = ''
-  console.log("Api" + api)
   const baseURI = isUrl(url) ? '' : api
   let defaultOptions
   if (needToken) {
