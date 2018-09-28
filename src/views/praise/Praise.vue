@@ -105,6 +105,14 @@ export default {
     onShare() {
       //显示分享框
       this.showShare = true
+      //拼装分享内容
+      const shareData = {
+        link: `/#/Praise/${this.courseId}/${this.collectLikeId}`,
+        title: '集赞分享',
+        desc: '这是一个神奇的集赞活动',
+        imgUrl: ''
+      }
+      this.shareData = shareData
     },
     closeShare() {
       //关闭分享框

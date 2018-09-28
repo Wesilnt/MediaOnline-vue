@@ -52,6 +52,7 @@ const groupManager = {
             state.countDownTime = payload.countDownTime
             state.headerType = payload.headerType
             state.isOwner = payload.isOwner
+            state.isSixGroup = payload.isSixGroup
         },
         bindAchieveOriginBuy(state,achieveOriginBuy){
             state.achieveOriginBuy = achieveOriginBuy
@@ -240,6 +241,7 @@ const groupManager = {
             console.log('isShowGroupBuy = '+ isShowGroupBuy)
             const groupBuyId = groupData.groupBuyId
             commit('bindOrderObject',{toolsObject,groupBuyId,isShowGroupBuy,userAccessStatus})
+            commit('bindCollectLikeId',praiseData.collectLikeId)
 
         },
         //获取拼团详情
@@ -423,8 +425,9 @@ const groupManager = {
             let topList = []
             let botList = []            
             let userList = result.userList
-            
+            let isSixGroup = false
             if(result.personCount > 3) {
+                isSixGroup = true
                 let tempList = []
                 for(let i = 0; i < 6; i++) {
                     if(userList[i] == null) {
@@ -440,7 +443,7 @@ const groupManager = {
                    topList=tempList.slice(0,2)
                    botList=tempList.slice(2,6)
             }else{
-               
+                isSixGroup = false
                 for(let i = 0; i < 3; i++) {
                    if(userList[i] == null) {
                     topList.push({})
@@ -453,13 +456,15 @@ const groupManager = {
                    } 
                 }
             }
+
             commit('bindGroupHeaderData',{
                 "leavePerson" : personNum,
                 "countDownTime" : countTime,
                 "userListTop" : topList,
                 "userListBot" : botList || [],
                 "headerType" :headerType,
-                'isOwner':isOwner
+                'isOwner':isOwner,
+                'isSixGroup':isSixGroup
             }) 
         },
 
@@ -483,15 +488,15 @@ const groupManager = {
             if(!telephone){
                 const result = await getMyUserInfo()
                 if(result==null) return
-                let phoneNum = result.data.mobileNo
+                let phoneNum = result.mobileNo
                 if(phoneNum){
                     window.localStorage.setItem('telephone',phoneNum) 
                     if(payload.payType == 3){
                         //发起集赞
-                        params = {
+                        let params = {
                             courseId: payload.courseId
                         }
-                        this.startCollectLike(params)
+                        dispatch('startCollectLike',params)
                     }else{
                         dispatch('beginPayment',payload)
                     }                   
@@ -503,10 +508,10 @@ const groupManager = {
             }else {
                 if(payload.payType == 3){
                     //发起集赞
-                    params = {
+                    let params = {
                         courseId: payload.courseId
                     }
-                    this.startCollectLike(params)
+                    dispatch('startCollectLike',params)
                 }else{
                     dispatch('beginPayment',payload)
                 }
@@ -576,6 +581,7 @@ const groupManager = {
             const result = await getCollectLike(payload)
             console.log('领取集赞成功')
             console.log(result)
+            dispatch('updateFatherData')
         },
         //调起微信支付
         async getPayment({commit,dispatch},{result,payType}){
@@ -666,9 +672,8 @@ const groupManager = {
         },
         
         //从新获取专栏详情接口,刷新父组件显示
-        async updateFatherData({commit,dispatch,getters}){
-            dispatch('videoColumnDetail/getVideoColumnDetail',{"courseId" : getters.courseId},{root:true})
-            commit('bindCollectLikeId',result.id)
+        async updateFatherData({commit,dispatch,state}){
+            dispatch('videoColumnDetail/getVideoColumnDetail',{"courseId" : state.courseId},{root:true})
         },
     }
 }
