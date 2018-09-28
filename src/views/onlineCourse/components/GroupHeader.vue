@@ -38,9 +38,17 @@
             </div>
             <div class="groupBuy-circleline"></div>
         </div>
-        <div class="groupBuy-banner" :style="{ background : 'url('+profilePic+')','background-size' : '100%' }">
+
+        <div v-if="headerImageType==='audio'">
+          <div class="book-header-container">
+            <div class="book-cover" :style="{background:'url('+profilePic+')','background-size':'100%'}">
+              <!-- <span v-if="new Date().getTime() - new Date(bookDetail.createTime).getTime()<30*24*3600*1000">上新</span> -->
+            </div>
+          </div>
+        </div>
+        <div v-else class="groupBuy-banner" :style="{background:'url('+profilePic+')','background-size':'100%'}">
             <!-- <div class="groupBuy-circleline" v-show="true"></div> -->
-            <span class="groupBuy-banner-bottom">99人已购买{{isShowGroupBuy}}</span>
+            <span class="groupBuy-banner-bottom">99人已购买</span>
         </div>
     </div>
 </template>
@@ -55,7 +63,7 @@ export default {
   name: 'GroupHeader',
   data() {
     return {
-      // isShowGroupBuy:false
+
     }
   },
   components: {
@@ -70,7 +78,8 @@ export default {
       'isSixGroup',
       'headerType',
       'isShowGroupBuy',
-      'profilePic'   
+      'profilePic',
+      'headerImageType'   
     ])
 
   }
@@ -182,5 +191,32 @@ export default {
   margin-top: -16px;
   margin-left: -6%;
   z-index: 99;
+}
+//1. 作品封面介绍
+.book-header-container {
+  height: 440px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  background-color: #f6f5f6;
+  padding-top: 36px;
+  .book-cover {
+    position: relative;
+    height: 350px;
+    width: 268px;
+    background-color: #fde3e3;
+    span {
+      border-top-right-radius: 20px;
+      background-color: red;
+      font-weight: 500;
+      padding: 10px 20px;
+      position: absolute;
+      bottom: 0;
+      color: white;
+      font-size: 36px;
+      letter-spacing: 4px;
+    }
+  }
 }
 </style>

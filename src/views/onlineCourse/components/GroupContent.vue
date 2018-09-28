@@ -242,6 +242,7 @@ export default {
   text-align: left;
   color: rgb(62, 62, 83);
   margin-top: 48px;
+  margin-bottom: 48px;
   align-items: center;
 }
 
@@ -287,7 +288,7 @@ export default {
 }
 .videocol-purchase-tip-fatherView {
   width: 100%;
-  margin-bottom: 100px;
+  margin-bottom: 120px;
 }
 .videocol-purchase-tip-fatherView :last-child {
   margin-bottom: 60px;

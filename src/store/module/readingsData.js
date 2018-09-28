@@ -66,6 +66,12 @@ export default {
             console.log(result)
             commit("bindBookDetail", result)
             const groupBuyId =  params.groupBuyId
+            const courseId = params.courseId
+            const profilePic = result.coverPic
+            const freeLessonList = result.freeLessonList
+            const headerImageType = "audio"
+              //绑定与拼团相关的内容
+            dispatch('groupManager/initColumnInfo',{headerImageType,courseId,profilePic,'freeLesson':{freeLessonList,type:'audio'}})
             if (groupBuyId) {
                 //这里是分享链接进来的
               dispatch('groupManager/getGroupBuyDetail', groupBuyId)

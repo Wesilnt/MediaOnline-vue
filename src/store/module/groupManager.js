@@ -29,7 +29,10 @@ const groupManager = {
         isShowGroupBuy:false ,
         
         //发起集赞标记位
-        startPraiseFlag:false
+        startPraiseFlag:false,
+
+        //专栏图样式区分
+        headerImageType:''
     },
     getters:{
         // //专栏头图
@@ -78,16 +81,17 @@ const groupManager = {
             state.startPraiseFlag = flag
         },
 
-        bindColunmnInfo(state,{profilePic,courseId,freeLesson}){
+        bindColunmnInfo(state,{headerImageType,profilePic,courseId,freeLesson}){
             state.profilePic = profilePic
             state.courseId = courseId
             state.freeLesson = freeLesson
+            state.headerImageType = headerImageType
         }
     },
     actions:{
 
-        initColumnInfo({commit},{courseId,profilePic,freeLesson}){
-            commit('bindColunmnInfo',{courseId,profilePic,freeLesson})
+        initColumnInfo({commit},{headerImageType,courseId,profilePic,freeLesson}){
+            commit('bindColunmnInfo',{headerImageType,courseId,profilePic,freeLesson})
         },
 
         //初始化工具条

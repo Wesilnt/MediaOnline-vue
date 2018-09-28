@@ -43,8 +43,9 @@ const videoColumnDetail = {
       commit('bindVideoColumnDetail', result)
       const profilePic = result.profilePic
       const freeLessonList = result.freeLessonList
+      const headerImageType = "video"
       //绑定与拼团相关的内容
-      dispatch('groupManager/initColumnInfo',{courseId,profilePic,'freeLesson':{freeLessonList,type:'video'}})
+      dispatch('groupManager/initColumnInfo',{headerImageType,courseId,profilePic,'freeLesson':{freeLessonList,type:'video'}})
 
       if (groupBuyId) {
           //这里是分享链接进来的

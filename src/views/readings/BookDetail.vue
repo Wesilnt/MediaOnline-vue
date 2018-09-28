@@ -2,7 +2,7 @@
   <div class="book-detail-container">
      <GroupHeader></GroupHeader>
     <!-- 1. 头部 -->
-    <div class="book-header-container">
+    <div class="book-header-container" v-show="false">
       <div class="book-cover" :style="{background:'url('+bookDetail.coverPic+')','background-size':'100%'}">
         <span v-if="new Date().getTime() - new Date(bookDetail.createTime).getTime()<30*24*3600*1000">上新</span>
       </div>
@@ -161,7 +161,6 @@ export default {
     justify-content: center;
     background-color: #f6f5f6;
     padding-top: 36px;
-
     .book-cover {
       position: relative;
       height: 350px;
