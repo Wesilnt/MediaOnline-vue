@@ -20,7 +20,6 @@
 </template>
 
 <script>
-import Swiper from '../components/homeComponents/Swiper.vue'
 import Notice from '../components/homeComponents/Notice.vue'
 import Header from '../components/homeComponents/Header.vue'
 import FreeList from './FreeList.vue'
@@ -35,7 +34,6 @@ const { mapState, mapActions } = createNamespacedHelpers('homeData')
 export default {
   name: 'Homepage',
   components: {
-    Swiper,
     Notice,
     Header,
     FreeList,

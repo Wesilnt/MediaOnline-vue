@@ -116,10 +116,13 @@ export default {
     async joinCollectLike({ commit }, params) {
       const res = await joinCollectLike(params)
       console.log(res)
+      dispatch('getCollectDetail',params)
     },
     //获取用户信息是否订阅免费专区
     async getUserByToken({ commit }, params) {
       const res = await getUserByToken(params)
+      console.log('==============')
+      console.log(res)
       if (!res) return
       commit('bindUserInfo', res)
     }
@@ -146,7 +149,7 @@ export default {
       )
       userList.map((item, index) => {
         totalNums[index] = item.avatarUrl
-        praised = !praised && item.id == userId
+        praised = !praised && item.id == state.userId
       })
       isCurrentUser = state.userId == state.praiseDetail.starterUid
       alreadyCount = state.praiseDetail.alreadyCount

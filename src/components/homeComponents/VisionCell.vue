@@ -1,21 +1,21 @@
 <template>
-  <lazy-component class="qhht-flex cell" @click="enterVisionDetail(vision.id)">
-      <img v-lazy="vision.coverPic" class="visionicon" alt="">
-    <ul class="detailContent">
-      <li class="visionTitle">{{vision.name}}</li>
+  <div class="qhht-flex cell" @click="enterVisionDetail(vision.id)">
+    <img v-lazy="vision.coverPic" class="vision-avater" alt="">
+    <ul class="cell-content">
+      <li class="cell-content-title">{{vision.name}}</li>
       <li>{{vision.briefIntro}}</li>
       <li>{{vision.authorName}}</li>
       <li class="footText">
         <span class="price">¥{{vision.price}}</span>/共{{vision.lessonCount}}讲
       </li>
     </ul>
-    <div class="cell-footer">
-      <p class="fit">{{vision.fitFor}}岁</p>
-      <div class="visionPlay" @click.stop="enterVisionPlay">
-        <i class="qhht-icon playTringle" />试听
-      </div>
+    <div class="qhht-flex cell-footer">
+      <span class="fit">{{vision.fitFor}}岁</span>
+      <a v-if="vision.freeLessonList" class="cell-footer-btn" @click.stop="enterVisionPlay">
+        <i class="qhht-icon play-tringle" />试听
+      </a>
     </div>
-  </lazy-component>
+  </div>
 </template>
 
 <script>
@@ -23,15 +23,17 @@ export default {
   props: ['vision'],
   methods: {
     enterVisionDetail(id) {
+      console.log(id)
       this.$router.push({ path: '/home/visionDetail/' + id })
     },
     enterVisionPlay() {
-      if (this.vision.freeLessonList.length === 0) {
+      const { freeLessonList } = this.vision
+      if (!freeLessonList || freeLessonList.length === 0) {
         return
       }
       this.$router.push({
         name: 'AudioPlay',
-        params: { id: this.book.freeLessonList[0].id }
+        params: { id: freeLessonList[0].id }
       })
     }
   }
@@ -41,30 +43,28 @@ export default {
 <style lang="less" scoped>
 .cell {
   flex-wrap: nowrap;
-  height: 240px;
+  /*height: 240px;*/
   align-items: center;
   margin-bottom: 36px;
 }
-.detailContent {
-  flex: 2;
+.vision-avater {
+  width: 180px;
+  height: 240px;
+  border-radius: 12px;
+}
+.cell-content {
+  flex: 1;
   margin-left: 20px;
+  padding: 20px 0;
   /deep/ li {
     color: #949aaa;
   }
-  .visionTitle {
+  .cell-content-title {
     font-size: 32px;
     color: rgb(68, 78, 98);
     font-weight: bolder;
   }
 }
-
-.visionicon {
-  width: 180px;
-  height: 240px;
-  /*background-color: rgb(253, 231, 231);*/
-  border-radius: 12px;
-}
-
 .price {
   color: rgb(255, 163, 47);
 }
@@ -73,25 +73,30 @@ export default {
 }
 .cell-footer {
   text-align: center;
+  padding: 28px 0;
+  flex-wrap: wrap;
+  flex-direction: column;
+  height: 240px;
 }
 .fit {
   border: 2px #dadde2 solid;
   border-radius: 20px;
   font-size: 20px;
   height: 40px;
-  padding: 0 5px;
+  padding: 0 10px;
   line-height: 40px;
+  min-width: 132px;
 }
-.playTringle {
+.play-tringle {
   width: 16px;
   height: 20px;
   margin-right: 8px;
   background-image: url('../../assets/home_vision_play.jpg');
 }
-.visionPlay {
+.cell-footer-btn {
   width: 132px;
   height: 60px;
-  margin-top: 96px;
+
   line-height: 60px;
   border-radius: 30px;
   background-color: #ffa32f;
