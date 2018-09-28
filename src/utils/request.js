@@ -90,6 +90,7 @@ const checkResponseCode = (url, response) => {
  */
 function request(url, options, needToken = true) {
   let accessToken = ''
+  console.log("Api" + api)
   const baseURI = isUrl(url) ? '' : api
   let defaultOptions
   if (needToken) {
@@ -97,7 +98,7 @@ function request(url, options, needToken = true) {
     accessToken =
         ISONLINE
         ? getCookie('COOKIE_TOKEN_KEY_CNONLINE')
-        : "f9ec36d8-1e0d-41ff-8bb0-5209fbcfa9a4"
+        : "e4756a02-9571-431d-ab0f-c315479fccad"
     defaultOptions = {
       // credentials: 'include',
       // mode: 'no-cors',
