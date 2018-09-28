@@ -78,17 +78,18 @@ export default {
     PhoneVerif
   },
   watch: {
-    // collectLikeId: function(newVal,) {
-    //   if (newVal != 0) {
-    //     this.$router.push({
-    //       name: 'Praise',
-    //       params: {
-    //         courseId: this.$route.params.courseId,
-    //         collectLikeId: newVal
-    //       }
-    //     })
-    //   }
-    // },
+    collectLikeId: function(newVal,) {
+      if (newVal != 0 && this.startPraiseFlag) {
+        this.toggolePraiseFlag(false)
+        this.$router.push({
+          name: 'Praise',
+          params: {
+            courseId: this.$route.params.courseId,
+            collectLikeId: newVal
+          }
+        })
+      }
+    },
     achieveOriginBuy: function(newVal) {
       if (newVal == true) {
         //原价购买完成跳转到单集详情页
@@ -109,6 +110,7 @@ export default {
       'userAccessStatus',
       'freeLesson',  //试听对象
       'courseId',    //专栏ID
+      'startPraiseFlag'
     ])
   },
   filters: {
@@ -119,7 +121,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['bindIsShowMobileDialog']),
+    ...mapMutations(['bindIsShowMobileDialog','toggolePraiseFlag']),
     ...mapActions([
       'startGroupBuy',
       'getCollectLike',

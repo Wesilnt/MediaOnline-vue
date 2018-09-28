@@ -1,6 +1,7 @@
 
 import { wxConfig,getGroupBuyDetail,startGroupBuy,joinGroupBuy,startCollectLike,getCollectLike,unlockCourse,wechatSubscribed } from '../../services/groupBuyAPi.js'
 import {getMyUserInfo} from '../../services/my'
+import { stat } from 'fs';
 
 const groupManager = {
     namespaced: true,
@@ -25,7 +26,10 @@ const groupManager = {
         //工具条对象
         toolsObject:null,
         //是否显示拼团UI
-        isShowGroupBuy:false  
+        isShowGroupBuy:false ,
+        
+        //发起集赞标记位
+        startPraiseFlag:false
     },
     getters:{
         // //专栏头图
@@ -69,6 +73,9 @@ const groupManager = {
 
         deleteCountTime(state) {
             state.countDownTime = 0
+        },
+        toggolePraiseFlag(state,flag) {
+            state.startPraiseFlag = flag
         },
 
         bindColunmnInfo(state,{profilePic,courseId,freeLesson}){
@@ -238,8 +245,9 @@ const groupManager = {
                 break
             }
             const groupBuyId = groupData.groupBuyId
+            const collectLikeId = praiseData.collectLikeId
             commit('bindOrderObject',{toolsObject,groupBuyId,isShowGroupBuy,userAccessStatus})
-            commit('bindCollectLikeId',praiseData.collectLikeId)
+            commit('bindCollectLikeId',collectLikeId)
 
         },
         //获取拼团详情
@@ -567,11 +575,13 @@ const groupManager = {
             dispatch('getPayment',{result,payType:2})
         },
         //发起集赞
-        async startCollectLike({dispatch},payload) {
+        async startCollectLike({dispatch,commit},payload) {
             const result = await startCollectLike(payload)
             console.log('发起集赞成功')
             if (result == null) return
-            dispatch('updateFatherData')
+            commit("toggolePraiseFlag",true)
+            dispatch('updateFatherData') 
+           
         },
         //领取集赞
         async getCollectLike({commit},payload) {
@@ -669,8 +679,8 @@ const groupManager = {
         },
         
         //从新获取专栏详情接口,刷新父组件显示
-        async updateFatherData({commit,dispatch,state}){
-            dispatch('videoColumnDetail/getVideoColumnDetail',{"courseId" : state.courseId},{root:true})
+        async updateFatherData({dispatch,state}){
+            dispatch('videoColumnDetail/getVideoColumnDetail',{"courseId" : state.courseId},{root:true})            
         },
     }
 }
