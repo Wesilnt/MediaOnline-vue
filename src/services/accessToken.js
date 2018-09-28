@@ -1,6 +1,7 @@
 import request from '../utils/request'
 import { ISONLINE } from '../utils/config'
 
+const { NODE_ENV } = process.env
 
 let originUrl='http://t.shbaoyuantech.com/#';
  if (NODE_ENV === 'production') {
