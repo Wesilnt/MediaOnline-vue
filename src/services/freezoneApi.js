@@ -9,7 +9,7 @@ export async function postLearnRate(params) {
 }
 export async function doFreeLesson(params) {
   return request.post(`/lesson/doFreeLesson`, params)
-} 
-export async function getUserByToken() { 
-  return request('user/getUserByToken')
+}
+export async function getUserByToken() {
+  return request('/user/getUserByToken')
 }
