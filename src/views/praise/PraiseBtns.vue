@@ -13,7 +13,7 @@
         {{btnState.rightText}}
       </span>
     </div>
-    <mobile-validate v-if="show" @callback="validateCallback"/>
+    <!-- <mobile-validate v-if="show" @callback="validateCallback"/> -->
   </div>
 </template>
 <script>
@@ -124,10 +124,10 @@ export default {
         })
       }
     },
-    validateCallback() {
-      this.show = false
-      this.joinCollectLike({ collectLikeId: this.collectlikeid })
-    }
+    // validateCallback() {
+    //   this.show = false
+    //   this.joinCollectLike({ collectLikeId: this.collectlikeid })
+    // }
   }
 }
 </script>
