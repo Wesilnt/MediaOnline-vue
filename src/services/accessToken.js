@@ -1,12 +1,16 @@
 import request from '../utils/request'
 import { ISONLINE } from '../utils/config'
 
+
+let originUrl='http://t.shbaoyuantech.com/#';
+ if (NODE_ENV === 'production') {
+   originUrl='http://m.shbaoyuantech.com/#';
+}
+
 export async function getToken() {
-  console.log(window.location.href)
     const originHref=window.location.href.split('#')[1]
-    // debugger
   const result = await request.post('/auth/wechat/get-wechat-auth-link', {
-    originUrl:'http://t.shbaoyuantech.com/#' +originHref
+    originUrl:originUrl + originHref
   })
   if (ISONLINE) window.location.href = result.wechatAuthUrl
   return result
