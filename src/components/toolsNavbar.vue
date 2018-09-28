@@ -78,17 +78,17 @@ export default {
     PhoneVerif
   },
   watch: {
-    collectLikeId: function(newVal) {
-      if (newVal != 0) {
-        this.$router.push({
-          name: 'Praise',
-          params: {
-            courseId: this.$route.params.courseId,
-            collectLikeId: newVal
-          }
-        })
-      }
-    },
+    // collectLikeId: function(newVal,) {
+    //   if (newVal != 0) {
+    //     this.$router.push({
+    //       name: 'Praise',
+    //       params: {
+    //         courseId: this.$route.params.courseId,
+    //         collectLikeId: newVal
+    //       }
+    //     })
+    //   }
+    // },
     achieveOriginBuy: function(newVal) {
       if (newVal == true) {
         //原价购买完成跳转到单集详情页

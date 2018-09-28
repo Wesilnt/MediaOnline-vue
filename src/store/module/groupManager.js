@@ -44,8 +44,7 @@ const groupManager = {
         bindCollectLikeId(state,collectLikeId) {
             state.collectLikeId = collectLikeId
         },
-        bindGroupHeaderData(state,payload){
-         
+        bindGroupHeaderData(state,payload){        
             state.userListTop = payload.userListTop
             state.userListBot = payload.userListBot
             state.leavePerson = payload.leavePerson
@@ -238,7 +237,6 @@ const groupManager = {
                     }                 
                 break
             }
-            console.log('isShowGroupBuy = '+ isShowGroupBuy)
             const groupBuyId = groupData.groupBuyId
             commit('bindOrderObject',{toolsObject,groupBuyId,isShowGroupBuy,userAccessStatus})
             commit('bindCollectLikeId',praiseData.collectLikeId)
@@ -246,7 +244,6 @@ const groupManager = {
         },
         //获取拼团详情
         async getGroupBuyDetail({commit,dispatch},groupBuyId) {
-            console.log('groupBuyId =',groupBuyId)
             const result = await getGroupBuyDetail({'groupBuyId':groupBuyId})
             console.log('获取拼团详情成功')
             console.log(result)
