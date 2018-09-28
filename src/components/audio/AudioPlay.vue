@@ -8,33 +8,33 @@
       <!-- 中间tabbar -->
       <div class="tab-container">
         <div class="tab-container-collect" @click="onCollect"
-         :style="{backgroundImage:isLike 
+         :style="{backgroundImage:isLike
          ? 'url('+require('../../assets/audio_love_collect.png')+')'
-         : 'url('+require('../../assets/audio_love_normal.png')+')'}"> 
+         : 'url('+require('../../assets/audio_love_normal.png')+')'}">
         </div>
         <div v-if="!hiddenDraft" class="tab-container-draft" @click="onDraft"/>
         <div  class="tab-container-comment" @click="toComment">
-          <span>{{audio.commentCount}}</span> 
+          <span>{{audio.commentCount}}</span>
         </div>
         <div class="tab-container-share" @click="onShare"/>
       </div>
       <!-- 进度条 -->
       <div class="slider-container">
-        <div slot="start">{{parseInt(touching?progress:currentTime(touching,progress)) | formatDuring}}</div> 
-      <input type="range" 
-        @input="onInputChange" 
-        :value="touching?progress:currentTime(touching,progress)" 
-        :min="0" 
-        :max="maxTime" 
+        <div slot="start">{{parseInt(touching?progress:currentTime(touching,progress)) | formatDuring}}</div>
+      <input type="range"
+        @input="onInputChange"
+        :value="touching?progress:currentTime(touching,progress)"
+        :min="0"
+        :max="maxTime"
         :style="{background:touching
         ?'linear-gradient(to right,#FFCD7D ' + parseInt(progress * 100 / maxTime) + '%,  #E5E5E5 1%, #E5E5E5'
         : 'linear-gradient(to right,#FFCD7D ' + parseInt(currentTime(touching,progress) * 100 / maxTime) + '%,  #E5E5E5 1%, #E5E5E5'}"
-        @touchstart="handleTouchStart" 
-        @touchcancel="handleTouchCancel" 
+        @touchstart="handleTouchStart"
+        @touchcancel="handleTouchCancel"
         @touchmove="handleTouchMove"
         @touchend="handleTouchEnd"/>
         <div slot="end">{{ maxTime | formatDuring}}</div>
-      </div> 
+      </div>
       <!-- 播放按钮 -->
       <div class="play-btns">
         <div class="btn-item" @click="onPlayMode">
@@ -100,7 +100,7 @@ export default {
       progress: 0,
       rangeValue: 0,
       cover: '',
-      progressColor: '#ff0000', 
+      progressColor: '#ff0000',
       display: false,
       touchStart: 0
     }
@@ -198,7 +198,7 @@ export default {
         link: `/#/audio/audioplay/${this.lessonId}`,
         title: '音频分享',
         desc: '音频',
-        imgUrl: ''
+        imgUrl: require('../../assets/logo.png')
       }
       this.showShare = true
     },
