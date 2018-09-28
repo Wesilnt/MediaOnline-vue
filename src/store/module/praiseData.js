@@ -116,6 +116,7 @@ export default {
     async joinCollectLike({ commit }, params) {
       const res = await joinCollectLike(params)
       console.log(res)
+      dispatch('getCollectDetail',params)
     },
     //获取用户信息是否订阅免费专区
     async getUserByToken({ commit }, params) {
