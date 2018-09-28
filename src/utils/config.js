@@ -1,4 +1,6 @@
-export const ISONLINE=false
+import { truncate } from 'fs';
+
+export const ISONLINE=truncate
 export const navbar = [
   {
     name: '首页',

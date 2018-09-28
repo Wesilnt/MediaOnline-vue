@@ -223,6 +223,8 @@ export default {
       margin: 4.22535211% 4.22535211% 0;
       display: flex;
       flex-direction: row;
+      overflow: hidden;
+      position: relative;
     }
     .people-container img {
       width: 80px;
@@ -291,6 +293,7 @@ export default {
         position: absolute;
         width: 100%;
         height: 100%;
+        border-radius: 50%;
       }
     }
     .praise-explain {
