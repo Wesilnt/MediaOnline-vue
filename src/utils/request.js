@@ -97,7 +97,7 @@ function request(url, options, needToken = true) {
     accessToken =
         ISONLINE
         ? getCookie('COOKIE_TOKEN_KEY_CNONLINE')
-        : "f9ec36d8-1e0d-41ff-8bb0-5209fbcfa9a4"
+        : "4ee6b482-2b60-4aa1-8ec5-98709d5873fc"
     defaultOptions = {
       // credentials: 'include',
       // mode: 'no-cors',
