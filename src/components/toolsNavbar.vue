@@ -20,7 +20,7 @@
             </div>
         </div>
         <Share :show="sharePageShow" :shareid="courseId" :shareInfo="shareData" @close="cancelSharePage"></Share>
-        <PhoneVerif v-if="isShowMobileDialog" :callback="cancelDialog"></PhoneVerif>
+        <PhoneVerif v-if="isShowMobileDialog" @callback="cancelDialog"></PhoneVerif>
     </div>
    
 </template>
@@ -78,17 +78,17 @@ export default {
     PhoneVerif
   },
   watch: {
-    collectLikeId: function(newVal) {
-      if (newVal != 0) {
-        this.$router.push({
-          name: 'Praise',
-          params: {
-            courseId: this.$route.params.courseId,
-            collectLikeId: newVal
-          }
-        })
-      }
-    },
+    // collectLikeId: function(newVal,) {
+    //   if (newVal != 0) {
+    //     this.$router.push({
+    //       name: 'Praise',
+    //       params: {
+    //         courseId: this.$route.params.courseId,
+    //         collectLikeId: newVal
+    //       }
+    //     })
+    //   }
+    // },
     achieveOriginBuy: function(newVal) {
       if (newVal == true) {
         //原价购买完成跳转到单集详情页
@@ -96,7 +96,7 @@ export default {
         this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
       }
     },
-    isShowMobileDialog: function(newVal) {}
+    // isShowMobileDialog: function(newVal) {}
   },
   computed: {
     ...mapState([
@@ -132,10 +132,10 @@ export default {
     clickAuditionBtn() {
       if(this.freeLesson.freeLessonList && this.freeLesson.freeLessonList.length > 0) {
         if(this.freeLesson.type == "video"){
-          const lessonId = this.freeLessonList[0].id
+          const lessonId = this.freeLesson.freeLessonList[0].id
           this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
         }else {
-          const id = this.freeLessonList[0].id
+          const id = this.freeLesson.freeLessonList[0].id
           this.$router.push({ name: 'AudioPlay', params: { id } })       
         }
       }
@@ -175,14 +175,15 @@ export default {
           this.checkoutAuthorrization(params)
           break
         case 1003:
+          this.clickAuditionBtn()
           //拼团成功.解锁专栏,跳转到单集详情页
-          if(this.freeLessonList[0]){
-            const lessonId = this.freeLessonList[0].id
-            this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
-          }else
-          {
-            console.log('没有试听课程')
-          }
+          // if(this.freeLesson.freeLessonList){
+          //   const lessonId = this.freeLessonList[0].id
+          //   this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
+          // }else
+          // {
+          //   console.log('没有试听课程')
+          // }
           break
         case 1005:
           //拼团中
@@ -246,6 +247,7 @@ export default {
     },
     //关闭手机号收集框
     cancelDialog() {
+      console.log('代码走到这里每有啊')
       this.bindIsShowMobileDialog(false)
     }
   }

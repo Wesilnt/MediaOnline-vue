@@ -31,6 +31,8 @@ export default {
   created() {},
   watch: {
     validate: function(res) {
+      console.log('res ===')
+      console.log(res)
       if (res) this.$emit('callback')
     }
   },

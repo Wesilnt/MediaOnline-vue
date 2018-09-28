@@ -9,7 +9,7 @@
                 </div>
                 <div class="qhht-flex groupBuy-usericon-bot">
                         <div class="groupBuy-usericon-item" v-for="(item,index) in userListBot" :key="index" :style="item.avatarUrl==null?{}:{ background : 'url('+item.avatarUrl+')', 'background-size' : '100%'}">
-                            <div class="groupBuy-usericon-manager" v-show="item.isStarter">团长</div>            
+                            <!-- <div class="groupBuy-usericon-manager" v-show="item.isStarter">团长</div>             -->
                         </div>
                 </div>
             </div>
@@ -23,9 +23,9 @@
             <div v-if="headerType==100">
                 <div class="groupBuy-info">剩余<span>{{leavePerson}}</span>个名额</div>
                 <div class="groupBuy-countDown-container">
-                    <CountDown :duration="countDownTime"></CountDown>
+                    <CountDown :duration="countDownTime"></CountDown>                  
                 </div>
-                <div class="groupBuy-deadline">距离截止时间</div>               
+                <div class="groupBuy-deadline">距离截止时间{{isSixGroup}}</div>               
             </div>
             <div v-else-if="headerType==101">
                 <div class="groupBuy-info">拼团成功</div>
@@ -70,8 +70,7 @@ export default {
       'isSixGroup',
       'headerType',
       'isShowGroupBuy',
-      'profilePic'
-   
+      'profilePic'   
     ])
 
   }
