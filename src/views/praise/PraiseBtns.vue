@@ -82,10 +82,11 @@ export default {
     onSingle() {
       if (1 == this.state) {
         //TODO  参与集赞
-        if (true)
+        // if (true)
           //手机号检验
-          this.show = true
-        else this.joinCollectLike({ collectLikeId: this.collectlikeid })
+          // this.show = true
+        // else 
+        this.joinCollectLike({ collectLikeId: this.collectlikeid })
       }
       if (
         3 == this.state || //集赞完成未领取（发起人）
