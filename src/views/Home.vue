@@ -1,8 +1,8 @@
 <template>
   <div class="index">
-      <van-swipe :auto="2000" class="index-swiper">
+      <van-swipe :autoplay="4000" class="index-swiper">
           <van-swipe-item v-for="(list,index) in bannerList" :key="index" @click="routerToSwiperDetail">
-              <img class="index-swiper-img" :alt="list.desc" v-lazy="list.url">
+              <i class="qhht-icon lazy-img-large index-swiper-img"   v-lazy:background-image="list.url"></i>
           </van-swipe-item>
       </van-swipe>
     <Notice :message-count="newMessageCount"/>

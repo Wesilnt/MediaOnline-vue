@@ -49,8 +49,9 @@ Vue.use(Tab).use(Tabs)
 Vue.use(Swipe).use(SwipeItem)
 Vue.use(Checkbox).use(CheckboxGroup)
 Vue.use(Lazyload, {
-  // error: loading,
-  // loading: loading,
-    lazyComponent: true
+  error: loading,
+  loading: loading,
+    lazyComponent: true,
+    attempt:1
 })
 Vue.use(PullRefresh)

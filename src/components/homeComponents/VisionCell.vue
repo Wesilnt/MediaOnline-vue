@@ -1,6 +1,6 @@
 <template>
   <div class="qhht-flex cell" @click="enterVisionDetail(vision.id)">
-    <img v-lazy="vision.coverPic" class="vision-avater" alt="">
+    <i v-lazy:background-image="vision.coverPic" class="qhht-icon vision-avater"></i>
     <ul class="cell-content">
       <li class="cell-content-title">{{vision.name}}</li>
       <li>{{vision.briefIntro}}</li>

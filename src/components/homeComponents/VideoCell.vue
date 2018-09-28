@@ -30,7 +30,7 @@ export default {
   height: 220px;
   border-radius: 16px;
   overflow: hidden;
-  background-color: #fffef8;
+  background: #f6f6f6 center no-repeat;
   padding: 30px 36px;
   flex-wrap: wrap;
   margin-bottom: 20px;

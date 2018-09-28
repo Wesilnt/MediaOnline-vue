@@ -169,52 +169,30 @@ ol {
   }
 }
 
-// .van-toast {
-//   .van-icon-success {
-//     background: url('../src/assets/audio_love_collect.png');
-//     background-size: 28px;
-//     background-repeat: no-repeat;
-//     margin: 1px auto 12px;
-//     height: 28px;
-//     width: 28px;
-//   }
-//   .van-icon-success::before {
-//     content: none;
-//   }
-//   .van-toast--text {
-//     max-width: 80%;
-//     white-space: nowrap;
-//     min-width: inherit;
-//     width: auto;
-//   }
-
-//   .van-icon-fail::before {
-//     content: none;
-//   }
-//   .van-toast__text {
-//     padding-top: 0;
-//     width: auto;
-//   }
-
-//   .van-list__loading {
-//     width: 100vw;
-//   }
-// }
-// .van-toast.van-toast--default {
-//   min-height: 0;
-//   width: auto;
-//   min-width: inherit;
-//   white-space: nowrap;
-// }
-// .van-toast.van-icon-fail {
-//   background: url('../src/assets/audio_play_tip.png');
-//   background-size: 28px;
-//   background-repeat: no-repeat;
-//   margin: 1px auto 12px;
-//   height: 28px;
-//   width: 28px;
-// }
 .van-toast.van-toast--text.van-toast--middle{
     width: auto;
     min-width: 0; 
+}
+
+/*懒加载图片
+分为正常尺寸/小尺寸 80%的标签宽/大尺寸 240px
+最好用背景图方式加载
+<div v-lazy:background-image="src" @click="onItemClick" class="lazy-img-large...."></div>
+*/
+[lazy='error'],
+[lazy='loading'] {
+  background-size: 120px !important;
+  background-color: #f6f6f6 !important;
+}
+.lazy-img-small {
+  &[lazy='loading'],
+  &[lazy='error'] {
+    background-size: 80% !important;
+  }
+}
+.lazy-img-large {
+  &[lazy='loading'],
+  &[lazy='error'] {
+    background-size: 240px !important;
+  }
 }

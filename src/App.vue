@@ -16,6 +16,6 @@ export default {
 <style lang="scss">
 @import 'publicUIConfig/common';
 .router-view {
-  font-size: 24px;
+      font-size: 24px;
 }
 </style>

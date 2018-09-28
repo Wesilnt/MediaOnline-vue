@@ -1,9 +1,9 @@
 <template>
-  <div class="freelist">
-    <div v-for="item in freelistList" :key="item.id" class="qhht-flex freelist-cell">
-      <i class="qhht-icon freelist-play-button" ></i>
+  <div class="freeList">
+    <div v-for="item in freeList" :key="item.id" class="qhht-flex freeList-cell">
+      <i class="qhht-icon freeList-play-button" ></i>
       <div  class="content">
-        <span class="content-type">{{item.type}}</span>
+        <span class="content-type">{{item.type?item.type:'假装文学'}}</span>
         <span> {{item.title}}</span>
       </div>
     </div>
@@ -13,18 +13,18 @@
 
 <script>
 export default {
-  props: ['freelistList']
+  props: ['freeList']
 }
 </script>
 
 <style lang="less" scoped>
-.freelist {
+.freeList {
   background-color: rgba(245, 245, 245, 0.5);
   border-radius: 14px;
   margin-bottom: 28px;
   overflow: hidden;
 }
-.freelist-cell {
+.freeList-cell {
   position: relative;
   padding: 24px 20px;
   &:not(:last-child) {
@@ -41,7 +41,7 @@ export default {
     }
   }
 }
-.freelist-play-button {
+.freeList-play-button {
   display: inline-block;
   width: 48px;
   height: 48px;
