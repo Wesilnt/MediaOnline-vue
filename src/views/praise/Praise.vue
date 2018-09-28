@@ -46,7 +46,7 @@
     <!-- 集赞说明框 -->
     <PraiseExplain v-if="showExplain" @close="closeExplain"/>
     <!-- 分享框 --> 
-    <share-pop :show="showShare" @close="closeShare" :sharetype="'praise'" :shareid="collectLikeId"/> 
+    <share-pop :show="showShare" @close="closeShare" :sharetype="'praise'" :shareInfo="shareData" :shareid="collectLikeId"/> 
   </div>
 </template>
 <script>
@@ -68,7 +68,8 @@ export default {
       courseId: this.$route.params.courseId,
       collectLikeId: this.$route.params.collectLikeId,
       showShare: false, //显示分享框
-      showExplain: false
+      showExplain: false,
+      shareData:{}
     }
   },
   components: {
