@@ -1,6 +1,6 @@
 module.exports = {
   plugins: [
-    require('postcss-theme-variables')({
+    /*require('postcss-theme-variables')({
       vars: {
         red: '#E93423',
         gray: '#CCC',
@@ -12,7 +12,7 @@ module.exports = {
         'active-color': '#FEA32F'
       },
       prefix: '$'
-    }),
+    }),*/
     require('precss')(),
     require('postcss-calc')(),
     require('autoprefixer')({

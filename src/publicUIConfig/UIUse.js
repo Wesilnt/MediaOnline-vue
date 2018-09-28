@@ -1,8 +1,8 @@
-import 'vant/packages/vant-css/src/base.css'
+// import 'vant/packages/vant-css/src/base.css'
 
 // 引入组件对应的样式
-import 'vant/packages/vant-css/src/button.css'
-import 'vant/packages/vant-css/src/checkbox.css'
+// import 'vant/packages/vant-css/src/button.css'
+// import 'vant/packages/vant-css/src/checkbox.css'
 import loading from '../assets/loading.png'
 
 import Vue from 'vue'
@@ -49,8 +49,8 @@ Vue.use(Tab).use(Tabs)
 Vue.use(Swipe).use(SwipeItem)
 Vue.use(Checkbox).use(CheckboxGroup)
 Vue.use(Lazyload, {
-  error: loading,
-  loading: loading,
+  // error: loading,
+  // loading: loading,
     lazyComponent: true
 })
 Vue.use(PullRefresh)

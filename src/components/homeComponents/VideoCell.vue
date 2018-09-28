@@ -1,5 +1,5 @@
 <template>
-  <div v-lazy:background-image="`video.coverPic`" @click="onItemClick" class="qhht-flex cell">
+  <div v-lazy:background-image="video.coverPic" @click="onItemClick" class="qhht-flex cell">
     <i class="qhht-icon videoPlayTringle" />
     <p class="videoTitle">{{video.name}}</p>
     <p>{{video.briefIntro}}</p>
@@ -15,7 +15,6 @@ export default {
   props: ['video'],
   methods: {
     onItemClick() {
-      console.log(this.video.id)
       this.$router.push({
         name: 'videoColumnDetail',
         params: { courseId: this.video.id }

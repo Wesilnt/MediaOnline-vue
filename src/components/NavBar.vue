@@ -56,11 +56,13 @@ export default {
   box-shadow: 0 0 2px #ddd;
   color: #ddd;
   background: #fff;
+    letter-spacing: 2px;
 }
 .navbar-item {
   flex-grow: 1;
-  padding: 6px 0;
+  padding: 10px 0;
   position: relative;
+  transition: color 0.3s linear;
   &:not(:last-child):after {
     content: '';
     position: absolute;
@@ -68,17 +70,15 @@ export default {
     top: 20%;
     width: 0.5px;
     height: 60%;
-    background: #b8c2ca;
+    background: #f1f1f1;
   }
   &.active {
     color: #ffa32f;
   }
 }
 .navbar-item-title {
-  /*font-weight: bolder;*/
   font-size: 20px;
   padding-top: 6px;
-  padding-bottom: 4px;
 }
 .navbar-icon {
   padding-top: 14px;

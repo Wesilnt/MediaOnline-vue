@@ -10,7 +10,7 @@ const homeData = {
   namespaced: true,
   state: {
     bannerList: [],
-    newMessageCount: 0,
+    newMessageCount:0,
     freeList: [],
     visionList: [],
     videoList: [],
@@ -34,7 +34,7 @@ const homeData = {
       commit('setFreeList', result.result)
     },
     async getNewMessageCount({ commit }) {
-      let result = await getNewMessageCount({ busiTypes: 3101 })
+      let result = await getNewMessageCount({ busiTypes: '3101,3102,3103,3105,3106'})
       commit('setNewMessageCount', result.data)
     },
     async getVisionList({ commit }) {
