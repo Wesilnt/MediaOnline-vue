@@ -1,5 +1,5 @@
 <template>
-    <div class="purchase-toolbar" v-show="toolsObject.isShow">
+    <div class="purchase-toolbar" v-show="toolsObject&&toolsObject.isShow">
         <div class="toolbar-audition" @click="clickAuditionBtn">
             <i class="qhht-icon audition-icon"></i>
             <p class="under-text">{{freeLesson.type == "video"?'试看':'试听'}}</p>
@@ -67,10 +67,6 @@ export default {
     },
     collectText: {
       default: '发起集赞'
-    },
-    isShow: {
-      type: Boolean,
-      default: true
     }
   },
   components: {
