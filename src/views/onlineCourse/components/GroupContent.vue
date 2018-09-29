@@ -217,7 +217,7 @@ export default {
   position: relative;
   padding: 0 40px 40px;
   width: 100%;
-  height: 950px;
+  height: auto;
   //   margin: 40px 0;
   background-color: #fff;
   border-bottom: 8px solid rgb(247, 247, 247);
@@ -229,7 +229,7 @@ export default {
   width: 80px;
   height: 80px;
   right: 40px;
-  bottom: 40px;
+  bottom: 50px;
 }
 
 //区头

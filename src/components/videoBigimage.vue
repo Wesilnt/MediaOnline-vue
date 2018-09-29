@@ -31,7 +31,7 @@ export default {
 <style lang="scss" scoped>
 .originImage {
   width: 100%;
-  height: 800px;
+  max-height: 800px;
   overflow: hidden;
 }
 .video-bigimage-container {
