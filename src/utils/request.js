@@ -1,6 +1,6 @@
 import 'whatwg-fetch'
 import { Toast } from 'vant'
-import api from '../utils/config'
+import api from './config'
 import { isUrl, json2formData } from './utils'
 import {
   getAccessToken,
@@ -13,7 +13,7 @@ import {
   getCookie
 } from './userAuth'
 import store from '../store/store'
-import { IS_ONLINE } from './config'
+import { ISONLINE } from './config'
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -93,11 +93,9 @@ function request(url, options, needToken = true) {
   const baseURI = isUrl(url) ? '' : api
   let defaultOptions
   if (needToken) {
-
-    accessToken =
-        IS_ONLINE
-        ? getCookie('COOKIE_TOKEN_KEY_CNONLINE')
-        : "c2ea2384-1fa7-4ab6-a722-9a5abbd05c08"
+    accessToken = ISONLINE
+      ? getCookie('COOKIE_TOKEN_KEY_CNONLINE')
+      : '7706537a-c6fc-4f1e-91df-50546dbe35d1'
     defaultOptions = {
       // credentials: 'include',
       // mode: 'no-cors',
