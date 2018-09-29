@@ -1,4 +1,11 @@
 export const ISONLINE=true
+//TODO router 设置未统一，后期需要统一格式
+export  const courseType={
+  '1007':'home/readings/book?id=',// 读书会
+  '1005':'videoColumnDetail/',// 线上课程
+  '1003':'home/visionDetail/',// 少年视野
+  '1001':'home/freezone',// 免费专区
+}
 export const navbar = [
   {
     name: '首页',

@@ -1,8 +1,8 @@
 <template>
   <div class="index">
       <van-swipe :autoplay="4000" class="index-swiper">
-          <van-swipe-item v-for="(list,index) in bannerList" :key="index" @click="routerToSwiperDetail">
-              <i class="qhht-icon lazy-img-larger index-swiper-img"   v-lazy:background-image="list.url"></i>
+          <van-swipe-item v-for="list in bannerList" :key="list.url">
+              <i class="qhht-icon lazy-img-larger index-swiper-img"   v-lazy:background-image="list.url"  @click="routerToSwiperDetail(list.link)"></i>
           </van-swipe-item>
       </van-swipe>
     <Notice :message-count="newMessageCount"/>
@@ -29,6 +29,7 @@ import BookList from './BookList.vue'
 import homeData from '../store/module/homeData.js'
 
 import { createNamespacedHelpers } from 'vuex'
+import { courseType } from '../utils/config';
 const { mapState, mapActions } = createNamespacedHelpers('homeData')
 
 export default {
@@ -51,8 +52,19 @@ export default {
   ]),
   methods: {
     ...mapActions(['getIndexPageData']),
-    routerToSwiperDetail() {
-      this.$router.push({ path: `/user/${userId}` })
+    routerToSwiperDetail(url) {
+        console.log(url);
+        if(!url){
+            return
+        }
+        if(url.includes('&/&')){
+            const [type,id]=url.split('&/&');
+            this.$router.push({ path: `/${courseType[type]}${id}` })
+        }else{
+            console.log(url);
+            window.location.href=url
+        }
+
     }
   },
   mounted() {
