@@ -1,5 +1,5 @@
 import request from '../utils/request'
-import { ISONLINE } from '../utils/config'
+import { IS_ONLINE } from '../utils/config'
 
 const { NODE_ENV } = process.env
 
@@ -13,6 +13,6 @@ export async function getToken() {
   const result = await request.post('/auth/wechat/get-wechat-auth-link', {
     originUrl:originUrl + originHref
   })
-  if (ISONLINE) window.location.href = result.wechatAuthUrl
+  if (IS_ONLINE) window.location.href = result.wechatAuthUrl
   return result
 }
