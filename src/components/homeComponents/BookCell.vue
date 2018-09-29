@@ -17,8 +17,9 @@ export default {
   methods: {
     onItemClick() {
       this.$router.push({
-        path: '/home/readings/book',
-        query: { id: this.book.id, hiddenDraft: true }
+        name: 'BookDetail',
+        params: { courseId: this.book.id},
+        query:{playType:"readings"}
       })
     },
     onPlayClick() { 
@@ -26,7 +27,7 @@ export default {
         this.$router.push({
           name: 'AudioPlay',
           params: { id: this.book.freeLessonList[0].id },
-          query: { hiddenDraft: 1 }
+          query:{playType:"readings"}
         })
       }else{
         this.$toast('本书籍暂时不支持试听')

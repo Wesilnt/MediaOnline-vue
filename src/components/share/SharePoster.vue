@@ -19,6 +19,7 @@ const { mapState, mapActions, mapGetters } = createNamespacedHelpers('share')
 export default {
   name: 'shareposter', 
   data() {
+    console.log(this.$route.query)
     return {
       showQrcode:true,
       shareUrl: this.$route.query.shareUrl,
@@ -48,11 +49,8 @@ export default {
     this.ctx.mozImageSmoothingEnabled = false
     this.ctx.webkitImageSmoothingEnabled = false
     this.ctx.msImageSmoothingEnabled = false
-    this.ctx.imageSmoothingEnabled = false
-    console.log(this.type)
-     this.getUserInfo().then(()=>{
-            this.drawBottomMap()
-     })
+    this.ctx.imageSmoothingEnabled = false 
+     this.getUserInfo().then(()=> this.drawBottomMap())
     // if (this.type == 'praise') {
     //   this.getPosterforPraise({ collectLikeId: this.id }).then(res => {
     //     this.drawBottomMap()
@@ -101,7 +99,6 @@ export default {
     //绘制头像
     drawHeadImage() {
       var header = new Image()
-      console.log(this.user.avatarUrl)
       header.setAttribute('crossOrigin', 'anonymous')
       header.src = this.user.avatarUrl + '?timeStamp=' + Date.now()
       header.onload = () => {

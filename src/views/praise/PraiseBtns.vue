@@ -17,7 +17,7 @@
   </div>
 </template>
 <script>
-import { createNamespacedHelpers } from 'vuex'
+import { createNamespacedHelpers,mapState as mapRootState } from 'vuex'
 import MobileVali from '../../components/PhoneVerif.vue'
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers('praise')
 let buttonDatas = [
@@ -77,6 +77,7 @@ export default {
       this.btnState = buttonDatas[newValue]
     }
   },
+  computed:{...mapRootState(['url'])},
   methods: {
     ...mapActions(['joinCollectLike']),
     onSingle() {
@@ -107,14 +108,13 @@ export default {
       this.$emit('share')
     },
     onRight() {
-      if (0 == this.state) {
-        console.log(this.collectlikeid)
+      if (0 == this.state) { 
         let params = { id: this.collectlikeid }
         //分享海报
         this.$router.push({
           name: 'SharePoster',
           params,
-          query: { sharetype: 'praise' }
+          query: {shareUrl:( this.url + `#/praise/active/${this.courseid}/${this.collectlikeid}`) || '/#/home'}
         })
       }
       if (2 == this.state) {

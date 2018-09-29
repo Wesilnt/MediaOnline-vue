@@ -12,7 +12,7 @@
          ? 'url('+require('../../assets/audio_love_collect.png')+')'
          : 'url('+require('../../assets/audio_love_normal.png')+')'}">
         </div>
-        <div v-if="!hiddenDraft" class="tab-container-draft" @click="onDraft"/>
+        <div v-if="'readings'!=playType" class="tab-container-draft" @click="onDraft"/>
         <div  class="tab-container-comment" @click="toComment">
           <span>{{audio.commentCount}}</span>
         </div>
@@ -97,6 +97,7 @@ export default {
       shareData: null, //分享数据
       lessonId: this.$route.params.id,
       hiddenDraft: this.$route.query.hiddenDraft,
+      playType: this.$route.query.playType, //播放类型 freezone 免费专区  onlinevision 在线视野  readings 读书会
       isInit: true,
       play: true,
       isSingle: false, //是否单个循环
@@ -138,7 +139,7 @@ export default {
   created() {
     this.isInit = true 
     this.toggleFloatButton(false)  //隐藏悬浮按钮
-    this.playAudio({ lessonId: this.lessonId })
+    this.playAudio({ lessonId: this.lessonId ,playType:this.playType})
   },
   watch: {
     audioId: function(id) {
@@ -267,10 +268,10 @@ export default {
       this.isInit = true
       this.popupVisible = false
       if (audio.isFree) {
-        this.$router.replace({
+        this.$router.push({
           name: 'AudioPlay',
           params: { id: audio.id },
-          query: { hiddenDraft: this.hiddenDraft }
+          query:{playType:this.playType}
         })
         this.playAudio({ lessonId: audio.id })
       } else {
@@ -290,9 +291,10 @@ export default {
 .audioplay-container {
   display: flex;
   flex-direction: column;
-  background: transparent center 30% no-repeat;
+  background: transparent center no-repeat;
   background-size: 100vw 100vw;
-  height: 100vh;
+  height: 0px;
+  padding-bottom: 100%;
   .cover {
     height: 750px;
     width: 100%;

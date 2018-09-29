@@ -64,7 +64,7 @@
       :immediate-check="false"
       @load="scrollBottom"
       @offset="10">
-         <singleset-list :list="singleSetList" :play-id="playingId"/>
+         <singleset-list :list="singleSetList" :play-id="playingId" :singletype="'readings'"/>
     </van-list>
     <!-- 6. 分页布局 -->
     <div class="load-more-container" v-if="singleFinished">
@@ -95,7 +95,7 @@ const {
 export default {
   data() {
     return {
-      courseId: this.$route.query.id,
+      courseId: this.$route.params.courseId,
       currentPage: 1,
       pageSize: 20,
       refreshing: false

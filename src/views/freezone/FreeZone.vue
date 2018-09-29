@@ -9,7 +9,7 @@
           :immediate-check="false"
           @load="scrollBottom"
           @offset="10">
-            <router-link v-for="(item,index) of freeZoneList" :key="item.id" :to="{name:'AudioPlay', params:{id:item.id}}">
+            <router-link v-for="(item,index) of freeZoneList" :key="item.id" :to="{name:'AudioPlay', params:{id:item.id},query:{playType:'freezone'}}">
                 <div class="book-item">
                     <img :src="playingId==item.id?playingIcon:pauseIcon" >
                     <div class="book-content">

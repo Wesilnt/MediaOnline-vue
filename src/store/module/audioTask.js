@@ -16,6 +16,7 @@ export default {
     maxTime: 0, //音频总时长
     playMode: 'order', // order:顺序播放  single：单曲播放
     isPlaying: false, //是否正在播放
+    playType: "freezone", // //freezone 免费专区  onlinevision 在线视野  readings 读书会
     throttle: null,
     statusFunc: (commit, status) => commit('statusUpdate', status),
     saveProgress: (id, currentTime, maxTime) => {
@@ -34,8 +35,9 @@ export default {
     },
     //音频播放同步方法
     syncPlay(state, params) {
-      if (params) {
+      if (params)  {
         state._at.src = params.audioUrl
+        state.playType = params.playType || state.playType
       }
       let localCache = localStorage.getItem('learntime-' + state.audioDetail.id)
       if (localCache) {
@@ -107,7 +109,7 @@ export default {
       }
       if (params) {
         const res = await dispatch('getAudioDetail', params)
-        commit('syncPlay', { audioUrl: res.audioUrl })
+        commit('syncPlay', { audioUrl: res.audioUrl,playType:params.playType })
         return res
       } else {
         commit(state.isPlaying ? 'syncPause' : 'syncPlay')
@@ -122,7 +124,7 @@ export default {
     async playNext({ state, dispatch }) {
       let nextId = state.audioDetail.nextLessonId
       if (nextId) {
-        dispatch('getAudioDetail', { lessonId: state.audioDetail.nextLessonId })
+        dispatch('asyncPlay', { lessonId: state.audioDetail.nextLessonId })
       } else {
         Toast('已经是最后一条')
       }
@@ -131,7 +133,7 @@ export default {
     async playPre({ state, dispatch }) {
       let preId = state.audioDetail.preLessonId
       if (preId) {
-        dispatch('getAudioDetail', { lessonId: state.audioDetail.preLessonId })
+        dispatch('asyncPlay', { lessonId: state.audioDetail.preLessonId })
       } else {
         Toast('这是第一条')
       }
@@ -143,18 +145,7 @@ export default {
     },
     //初始化播放器
     initAudio({ state, getters, commit, dispatch }) {
-      commit('initThrottle')
-      //===========
-      // state._fb = document.createElement('div')
-      // state._fb.style.width = '68px'
-      // state._fb.style.height = '68px'
-      // state._fb.style.backgroundColor = 'red'
-      // state._fb.style.zIndex = 999999999
-      // state._fb.style.position = 'fixed'
-      // state._fb.style.bottom = '24px'
-      // state._fb.style.right = '8px' 
-      // document.body.appendChild(state._fb)
-      //===========
+      commit('initThrottle') 
       state._at = document.createElement('AUDIO')
       state._at.style.display = 'none'
       document.body.appendChild(state._at)
@@ -186,7 +177,7 @@ export default {
           commit('syncPlay', { audioUrl: state.audioDetail.audioUrl })
         }
         if (state.playMode == 'order') {
-          data.currentTime = state._at.duration
+          data.currentTime = state._at.duration+1
           dispatch('playNext') //播放下一集
         }
         localStorage.setItem('learntime-' + state.audioDetail.id,JSON.stringify(data))

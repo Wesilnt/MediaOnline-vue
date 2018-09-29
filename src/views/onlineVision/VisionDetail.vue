@@ -28,7 +28,7 @@
     <!-- try -->
     <div id="try" ref="try" class="try bottomline">
       <DetailHeader title="试看课程" subtitle="全部" link='visionCourseList' />
-      <SingleSetList :list='visionDetail.freeLessonList'></SingleSetList>
+      <SingleSetList :list='visionDetail.freeLessonList' :singletype="'onlinevision'"></SingleSetList>
     </div>
     <!-- message -->
     <div id="message" ref="message" class="message bottomline" >

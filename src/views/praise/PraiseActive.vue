@@ -18,7 +18,7 @@ export default {
       collectLikeId: this.$route.params.collectLikeId
     }
   },
-  computed: { ...mapState(['picList', 'courseName']) },
+  computed: { ...mapState(['userId','picList', 'courseName']) },
   created() {
     this.checkStatus({ collectLikeId: this.collectLikeId })
   },

@@ -40,7 +40,8 @@ export default {
     //播放音频
     async playAudio({ getters, commit, dispatch }, params) {
       if (params && params.lessonId) {
-        dispatch('audiotask/asyncPlay', params, { root: true }).then(res => {
+        dispatch('audiotask/asyncPlay', params, { root: true })
+        .then(res => {
           dispatch('getSingleSetList', {
             courseId: res.courseId,
             pageSize: getters.pageSize
@@ -78,7 +79,8 @@ export default {
     },
     //音频单集详情
     async getAudioDetail({ getters, commit, dispatch }, params) {
-      dispatch('audiotask/getAudioDetail', params, { root: true }).then(res => {
+      dispatch('audiotask/getAudioDetail', params, { root: true })
+      .then(res => {
         commit('bindAudioDetail', res)
         dispatch('getSingleSetList', {
           courseId: res.courseId,
