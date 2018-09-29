@@ -17,6 +17,7 @@ const groupManager = {
         achieveOriginBuy:false, //是否完成原价购买
         isShowMobileDialog:false, //是否弹出手机号收集框
 
+
         profilePic:'',//专栏头图
         courseId:0,//专栏ID
         freeLesson:{},//试听对象  type字段用来区分点击试听按钮跳往哪里  freeLessonList是当前专栏的免费试听课程数组
@@ -36,16 +37,9 @@ const groupManager = {
     },
     getters:{
         // //专栏头图
-        // profilePic(state,getters,{ videoColumnDetail }) {
-        //     return videoColumnDetail.profilePic
-        // },
-        // //专栏ID
-        // courseId(state,getters,{ videoColumnDetail }) {
-        //     return videoColumnDetail.courseId
-        // },
-        // freeLessonList(state,getters,{ videoColumnDetail }){
-        //     return videoColumnDetail.freeLessonList
-        // }
+        buyCount(state,getters,{ videoColumnDetail }) {
+            return videoColumnDetail.buyCount
+        },
     },
     mutations:{
         bindCollectLikeId(state,collectLikeId) {
@@ -250,6 +244,7 @@ const groupManager = {
             }
             const groupBuyId = groupData.groupBuyId
             const collectLikeId = praiseData.collectLikeId
+            console.log(toolsObject)
             commit('bindOrderObject',{toolsObject,groupBuyId,isShowGroupBuy,userAccessStatus})
             commit('bindCollectLikeId',collectLikeId)
 

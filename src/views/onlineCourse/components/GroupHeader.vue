@@ -36,19 +36,19 @@
             <div v-else-if="headerType==103">
                 <div class="groupBuy-info">拼团已满</div>
             </div>
-            <div class="groupBuy-circleline"></div>
+            <div class="groupBuy-circleline" v-show="false"></div>
         </div>
 
         <div v-if="headerImageType==='audio'">
           <div class="book-header-container">
-            <div class="book-cover" :style="{background:'url('+profilePic+')','background-size':'100%'}">
+            <div class="book-cover" v-lazy:background-image="profilePic" :style="{'background-size':'100%'}">
               <!-- <span v-if="new Date().getTime() - new Date(bookDetail.createTime).getTime()<30*24*3600*1000">上新</span> -->
             </div>
           </div>
         </div>
-        <div v-else class="groupBuy-banner" :style="{background:'url('+profilePic+')','background-size':'100%'}">
+        <div v-else class="groupBuy-banner" v-lazy:background-image="profilePic" :style="{'background-size':'100%'}">
             <!-- <div class="groupBuy-circleline" v-show="true"></div> -->
-            <span class="groupBuy-banner-bottom">99人已购买</span>
+            <span class="groupBuy-banner-bottom" v-show="buyCount == 0 ? false : true">{{buyCount}}人已购买</span>
         </div>
     </div>
 </template>
@@ -80,6 +80,9 @@ export default {
       'isShowGroupBuy',
       'profilePic',
       'headerImageType'   
+    ]),
+    ...mapGetters([
+      'buyCount'
     ])
 
   }
@@ -179,7 +182,7 @@ export default {
     bottom: 20px;
     right: 40px;
     font-size: 28px;
-    color: red;
+    color: white;
   }
 }
 .groupBuy-circleline {

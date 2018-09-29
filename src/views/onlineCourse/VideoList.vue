@@ -1,6 +1,6 @@
 <template>
     <div class="home-container">
-        <div class="home-header"><img :src="columnHeaderImage" alt=""></div>
+        <div class="home-header"><img v-lazy="columnHeaderImage" alt=""></div>
         <van-list
           class="home-video"
           v-model="refreshing"

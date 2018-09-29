@@ -1,10 +1,10 @@
 <template>
-    <div class="cl-videolist-container" :style="{ background : 'url('+iteminfo.coverPicH+')','background-size' : '100% 100%',backgroundRepeat : 'no-repeat' }" @click="$emit('jumpEvent')">
+    <div class="cl-videolist-container" v-lazy:background-image="iteminfo.coverPicH" @click="$emit('jumpEvent')">
         <div class="cl-videolist-item-title">{{iteminfo.name}}</div>
         <div class="cl-videolist-item-info">{{iteminfo.briefIntro}}</div>
         <div class="cl-videolist-item-teacher">
-            <div class="cl-videolist-item-name">{{iteminfo.commentator}}</div>
-            <div class="cl-videolist-item-job">{{iteminfo.commentatorIntro}}</div>      
+            <div class="cl-videolist-item-name">{{iteminfo.authorName}}</div>
+            <!-- <div class="cl-videolist-item-job">{{iteminfo.commentatorIntro}}</div>       -->
         </div>
         <div class="cl-videolist-item-bottom">
             <div class="cl-videolist-item-price">¥{{iteminfo.price}}</div>

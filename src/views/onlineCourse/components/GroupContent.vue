@@ -249,7 +249,7 @@ export default {
   text-align: left;
   color: rgb(62, 62, 83);
   margin-top: 48px;
-  margin-bottom: 48px;
+  margin-bottom: 32px;
   align-items: center;
 }
 
@@ -261,6 +261,7 @@ export default {
 .videocol-sction-title h4 label {
   font-size: 28px;
   color: rgb(155, 161, 176);
+  margin:0;
 }
 //试看课程
 .videocol-all {

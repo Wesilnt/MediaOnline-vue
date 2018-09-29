@@ -1,8 +1,8 @@
 <template>
-    <div class="purchase-toolbar" v-show="isShow">
+    <div class="purchase-toolbar" v-show="toolsObject.isShow">
         <div class="toolbar-audition" @click="clickAuditionBtn">
             <i class="qhht-icon audition-icon"></i>
-            <p class="under-text">试听</p>
+            <p class="under-text">{{freeLesson.type == "video"?'试看':'试听'}}</p>
         </div>
         <hr class="vertical-line"/>
         <div v-show="toolsObject&&toolsObject.originPrice" :class="toolsObject&&toolsObject.collage==false&&toolsObject.collect==false ?'toolbar-price-active' :'toolbar-price'"  @click="clickOriginPriceBtn">
