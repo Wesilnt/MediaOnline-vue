@@ -6,6 +6,7 @@ const myPuzzle_Praise = () =>
   import(/* webpackChunkName: "myPuzzle_Praise" */ '../views/my/MyPuzzle_Praise')
 const sysMessage = () => import('../views/my/SysMessage')
 const help = () => import('../views/my/Help')
+const editUserPhone = () => import('../views/my/EditUserPhone')
 const editUserInfo = () => import('../views/my/EditUserInfo')
 const displayUserInfo = () => import('../views/my/DisplayUserInfo')
 const WxConfig = () => import('../views/my/WxConfig')
@@ -46,6 +47,10 @@ const PageInfo_From_My = [
   {
     path: '/my/EditUserInfo',
     component: editUserInfo
+  },
+  {
+    path: '/my/EditUserPhone',
+    component: editUserPhone
   },
   {
     path: '/my/DisplayUserInfo',

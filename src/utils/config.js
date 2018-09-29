@@ -1,11 +1,18 @@
+// 编译环境
+const { NODE_ENV } = process.env
+
+//是否为线上环境，设置为 False 则为调试模式
 export const ISONLINE=true
-//TODO router 设置未统一，后期需要统一格式
+
+// TODO router 设置未统一，后期需要统一格式
 export  const courseType={
   '1007':'home/readings/book?id=',// 读书会
   '1005':'videoColumnDetail/',// 线上课程
   '1003':'home/visionDetail/',// 少年视野
   '1001':'home/freezone',// 免费专区
 }
+
+// 首页导航Tab
 export const navbar = [
   {
     name: '首页',
@@ -20,3 +27,14 @@ export const navbar = [
     path: '/my'
   }
 ]
+
+// 后端接口api
+let api = 'https://xcx.test.shbaoyuantech.com:30000'
+if (NODE_ENV === 'development') {
+  api = 'https://xcx.test.shbaoyuantech.com:30000'
+} else if (NODE_ENV === 'production') {
+  api = 'https://xcx.shbaoyuantech.com'
+} else {
+  throw new Error('域名地址既不是测试环境也不是正式环境')
+}
+export default api

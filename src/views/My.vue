@@ -96,11 +96,11 @@ export default {
   methods: {
     ...mapActions(['queryNewMessageCount', 'getMyUserInfo']),
     editUserInfo: function() {
-      if (this.userInfo.gender && this.userInfo.grade && this.userInfo.role) {
+    /*  if (this.userInfo.gender && this.userInfo.grade && this.userInfo.role) {
         this.$router.push({ path: './my/DisplayUserInfo' })
-      } else {
-        this.$router.push({ path: './my/EditUserInfo' })
-      }
+      } else {*/
+        this.$router.push({ path: './my/EditUserPhone' })
+      //}
     },
     itemClick: function(name) {
       this.$router.push({ path: name })

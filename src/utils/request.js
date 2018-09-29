@@ -1,6 +1,6 @@
 import 'whatwg-fetch'
 import { Toast } from 'vant'
-import api from '../api/api'
+import api from '../utils/config'
 import { isUrl, json2formData } from './utils'
 import {
   getAccessToken,
@@ -96,8 +96,8 @@ function request(url, options, needToken = true) {
 
     accessToken =
         ISONLINE
-        ? getCookie('COOKIE_TOKEN_KEY_CNONLINE') 
-        : "c2ea2384-1fa7-4ab6-a722-9a5abbd05c08" 
+        ? getCookie('COOKIE_TOKEN_KEY_CNONLINE')
+        : "c2ea2384-1fa7-4ab6-a722-9a5abbd05c08"
     defaultOptions = {
       // credentials: 'include',
       // mode: 'no-cors',
