@@ -177,22 +177,22 @@ ol {
 /*懒加载图片
 分为正常尺寸/小尺寸 80%的标签宽/大尺寸 240px
 最好用背景图方式加载
-<div v-lazy:background-image="src" @click="onItemClick" class="lazy-img-large...."></div>
+<div v-lazy:background-image="src" @click="onItemClick" class="lazy-img-larger...."></div>
 */
 [lazy='error'],
 [lazy='loading'] {
-  background-size: 120px !important;
+  background-size: 100px !important;
   background-color: #f6f6f6 !important;
 }
-.lazy-img-small {
+.lazy-img-larger {
   &[lazy='loading'],
   &[lazy='error'] {
-    background-size: 80% !important;
+    background-size:186px  !important;
   }
 }
-.lazy-img-large {
+.lazy-img-most {
   &[lazy='loading'],
   &[lazy='error'] {
-    background-size: 240px !important;
+    background-size: 254px !important;
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <!-- <div v-infinite-scroll="loadMore" class="myScroll" infinite-scroll-disabled="loading" infinite-scroll-distance="30"> -->
   <div>
-    <img :src="bannerPic" class="head" alt="">
+    <div class="lazy-img-larger head" v-lazy:background-image="bannerPic"></div>
     <van-list class="view-list" v-model="refreshing" :finished="finished" @load="loadMore" @offset="10">
       <div v-for="(item, index) in visionList" :key="index" class="view-list-cell">
         <VisionCell :vision="item"  />
@@ -49,9 +49,9 @@ export default {
   overflow-y: auto;
 }
 .head {
-  display: block;
-  width: 100%;
   height: 300px;
+  background: #f6f6f6 center no-repeat;
+  background-size: 100%;
 }
 .view-list {
   padding: 28px;

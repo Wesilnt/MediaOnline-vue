@@ -1,17 +1,16 @@
 <template>
-    <div class="cl-videolist-container" v-lazy:background-image="iteminfo.coverPicH" @click="$emit('jumpEvent')">
-        <div class="cl-videolist-item-title">{{iteminfo.name}}</div>
-        <div class="cl-videolist-item-info">{{iteminfo.briefIntro}}</div>
-        <div class="cl-videolist-item-teacher">
-            <div class="cl-videolist-item-name">{{iteminfo.authorName}}</div>
-            <!-- <div class="cl-videolist-item-job">{{iteminfo.commentatorIntro}}</div>       -->
+    <div class="lazy-img-larger cl-videolist-container"  v-lazy:background-image="iteminfo.coverPicH" @click="$emit('jumpEvent')">
+        <p class="cl-videolist-item-title">{{iteminfo.name}}</p>
+        <p>{{iteminfo.briefIntro}}</p>
+        <p class="cl-videolist-item-teacher">
+            {{iteminfo.authorName}}
+        </p>
+        <div>
+            <span class="videolist-item-price">¥{{iteminfo.price}}</span>
+            /
+            <span>共{{iteminfo.lessonCount}}讲</span>
         </div>
-        <div class="cl-videolist-item-bottom">
-            <div class="cl-videolist-item-price">¥{{iteminfo.price}}</div>
-            <div class="cl-videolist-item-sets">共{{iteminfo.lessonCount}}讲</div>
-        </div>
-        <img :src="require('../../../assets/images/onlinecourse-video-course-play.png')">
-      
+        <i class="qhht-icon videolist-item-btn"></i>
     </div>
 </template>
 
@@ -22,68 +21,36 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 .cl-videolist-container {
   position: relative;
-  width: 100%;
-  background-color: rgb(253, 231, 231);
-  padding: 32px 36px;
-  box-sizing: border-box;
-  text-align: left;
-  border-radius: 16px;
+  padding-top: 32px;
+  padding-left: 36px;
+  border-radius: 12px;
   margin-bottom: 20px;
-
-  img {
-    position: absolute;
-    width: 80px;
-    height: 80px;
-    top: 50%;
-    left: 50%;
-    transform: translateX(-50%) translateY(-50%);
-  }
+  background: #f6f6f6 center no-repeat;
+  background-size: cover;
+  height: 220px;
+  color: #666;
+}
+.videolist-item-btn {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-image: url('../../../assets/images/onlinecourse-video-course-play.png');
 }
 .cl-videolist-item-title {
   font-size: 32px;
-  color: rgb(51, 51, 51);
-  margin-bottom: 20px;
+  color: #333;
   font-weight: 900;
 }
-.cl-videolist-item-info {
-  color: rgb(102, 102, 102);
-  margin-bottom: 20px;
-}
 .cl-videolist-item-teacher {
-  display: flex;
-  flex-direction: row;
   margin-bottom: 24px;
 }
-.cl-videolist-item-name {
-
-  color: rgb(102, 102, 102);
-  &:after {
-    content: '·';
-    margin-left: 4px;
-  }
-}
-.cl-videolist-item-job {
-
-  color: rgb(102, 102, 102);
-  margin-left: 4px;
-}
-.cl-videolist-item-bottom {
-  display: flex;
-  flex-direction: row;
-}
-.cl-videolist-item-price {
-
-  color: rgb(255, 163, 47);
-  &:after {
-    content: '/';
-    margin-left: 4px;
-  }
-}
-.cl-videolist-item-sets {
-
-  color: rgb(102, 102, 102);
+.videolist-item-price {
+  color: #ffa32f;
 }
 </style>

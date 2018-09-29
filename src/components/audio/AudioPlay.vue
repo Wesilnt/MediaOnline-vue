@@ -1,5 +1,5 @@
 <template>
-  <div class="audioplay-container" :style="{backgroundImage:'url('+audio.coverPic+')'}">
+  <div class="lazy-img-most audioplay-container" v-lazy:background-image="audio.coverPic">
     <!-- 封面 -->
     <div class="controller-container">
       <!-- 主，副标题 -->
@@ -290,7 +290,7 @@ export default {
 .audioplay-container {
   display: flex;
   flex-direction: column;
-  background-repeat: no-repeat;
+  background: transparent center 30% no-repeat;
   background-size: 100vw 100vw;
   height: 100vh;
   .cover {

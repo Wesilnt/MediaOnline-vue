@@ -1,6 +1,6 @@
 <template>
-  <div v-lazy:background-image="video.coverPic" @click="onItemClick" class="qhht-flex cell">
-    <i class="qhht-icon videoPlayTringle" />
+  <div v-lazy:background-image="video.coverPic" @click="onItemClick" class="qhht-flex lazy-img-larger cell">
+      <i class="qhht-icon videoPlayTringle" ></i>
     <p class="videoTitle">{{video.name}}</p>
     <p>{{video.briefIntro}}</p>
     <p>{{video.authorName}}</p>

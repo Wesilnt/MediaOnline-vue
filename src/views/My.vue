@@ -1,7 +1,7 @@
 <template>
     <div class="my">
         <div class="my-user-info" @click="editUserInfo">
-            <i class="qhht-icon lazy-img-small my-user-info-avatar" v-lazy:background-image="userInfo.avatarUrl"></i>
+            <i class="qhht-icon my-user-info-avatar" :style="{backgroundImage:`url(${userInfo.avatarUrl})`}"></i>
             <span class="my-user-info-nickname">{{ userInfo.nickName }}</span>
             <div class="my-user-info-edit">编辑个人资料</div>
         </div>
@@ -11,7 +11,7 @@
                 <div v-if="(newReplyMessageCount !== 0 && item.name ==='/my/Reply') || (newSysMessageCount !== 0 && item.name ==='/my/SysMessage') " class="my-grid-item-badge">
                     {{ item.name === '/my/Reply' ? newReplyMessageCount : newSysMessageCount }}
                 </div>
-                <i class="qhht-icon lazy-img-small my-grid-item-img" v-lazy:background-image="item.image"></i>
+                <i class="qhht-icon my-grid-item-img"  :style="{backgroundImage:`url(${item.image})`}"></i>
                 <span class="my-grid-item-title">{{item.title}}</span>
             </div>
         </div>

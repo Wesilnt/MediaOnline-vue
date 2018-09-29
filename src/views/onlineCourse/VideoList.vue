@@ -1,6 +1,6 @@
 <template>
     <div class="home-container">
-        <div class="home-header"><img v-lazy="columnHeaderImage" alt=""></div>
+        <div class="lazy-img-larger home-header-img" v-lazy:background-image="columnHeaderImage"></div>
         <van-list
           class="home-video"
           v-model="refreshing"
@@ -14,8 +14,6 @@
             <videolistitem v-for="item of columns" :key="item.id" :iteminfo="item" @jumpEvent="jumpToVideoDetail(item.id)"/>
         </div> -->
         <div class="home-warnTip" v-show="finished">没有更多了,不要在拉了~</div>
-
-
     </div>
 </template>
 <script>
@@ -65,12 +63,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.home-header {
-  width: 100%;
+.home-header-img {
   height: 300px;
   margin-bottom: 20px;
-  background-color: red;
-
+  background: #f6f6f6 center no-repeat;
+  background-size: 100%;
   img {
     width: 100%;
     height: 300px;

@@ -1,17 +1,17 @@
 <template>
     <div class="read-container">
         <!-- 1. 头部信息 -->
-        <div class="header-container" :style="{background:'url('+bannerPic+')','background-size':'100% 100%'}"/>
+        <div class="header-container" v-lazy:background-image="bannerPic"></div>
         <!-- 2. 全部书籍按钮 -->
-        <div class="read-btn">
-            <p>
+        <div class="book-sticky">
+            <a class="book-btn">
                 全部书籍
-            </p>
+            </a>
         </div>
         <!-- 3. 读书会列表 -->  
           <div  class="read-list-container">
             <div v-for="item of bookList" :key="item.id"  @click="toDetail(item.id)" class="list-item">
-                <div class="top-container" :style="{background:'url('+item.coverPic+')','background-size':'100% 100%'}">
+                <div class="top-container" v-lazy:background-image="item.coverPic">
                     <span>上新</span>
                     <img src="../../assets/readings_item_play.png">
                 </div>
@@ -34,54 +34,66 @@ const { mapState, mapActions } = createNamespacedHelpers('readings')
 export default {
   data() {
     return {
-      refreshing:false
+      refreshing: false
     }
   },
-  directives:{
-   'scrollbottom':function(el,binding){ 
-     let top = 0
-     window.onscroll= function(){ 
-          var scrollTop = 0, bodyScrollTop = 0, documentScrollTop = 0;
-          if (document.body) {
-              bodyScrollTop = document.body.scrollTop;
-          }
-          if (document.documentElement) {
-              documentScrollTop = document.documentElement.scrollTop;
-          }
-          scrollTop = (bodyScrollTop - documentScrollTop > 0) ? bodyScrollTop : documentScrollTop; 
+  directives: {
+    scrollbottom: function(el, binding) {
+      let top = 0
+      window.onscroll = function() {
+        var scrollTop = 0,
+          bodyScrollTop = 0,
+          documentScrollTop = 0
+        if (document.body) {
+          bodyScrollTop = document.body.scrollTop
+        }
+        if (document.documentElement) {
+          documentScrollTop = document.documentElement.scrollTop
+        }
+        scrollTop =
+          bodyScrollTop - documentScrollTop > 0
+            ? bodyScrollTop
+            : documentScrollTop
 
-          var windowHeight = 0;
-          if (document.compatMode == "CSS1Compat") {
-              windowHeight = document.documentElement.clientHeight;
-          } else {
-              windowHeight = document.body.clientHeight;
-          }
-          
-          // console.log(windowHeight)
-          var scrollHeight = 0, bodyScrollHeight = 0, documentScrollHeight = 0;
-          if (document.body) {
-              bodyScrollHeight = document.body.scrollHeight;
-          }
-          if (document.documentElement) {
-              documentScrollHeight = document.documentElement.scrollHeight;
-          }
-          scrollHeight = (bodyScrollHeight - documentScrollHeight > 0) ? bodyScrollHeight : documentScrollHeight; 
-          // console.log(scrollHeight) 
-          if(scrollTop -top >0
-             &&scrollTop+windowHeight>=scrollHeight - 10
-             &&!binding.value.finished
-             &&!refreshing){
-             binding.value.scrollBottom()
-          }
-          top = scrollTop
-     } 
-   }
+        var windowHeight = 0
+        if (document.compatMode == 'CSS1Compat') {
+          windowHeight = document.documentElement.clientHeight
+        } else {
+          windowHeight = document.body.clientHeight
+        }
+
+        // console.log(windowHeight)
+        var scrollHeight = 0,
+          bodyScrollHeight = 0,
+          documentScrollHeight = 0
+        if (document.body) {
+          bodyScrollHeight = document.body.scrollHeight
+        }
+        if (document.documentElement) {
+          documentScrollHeight = document.documentElement.scrollHeight
+        }
+        scrollHeight =
+          bodyScrollHeight - documentScrollHeight > 0
+            ? bodyScrollHeight
+            : documentScrollHeight
+        // console.log(scrollHeight)
+        if (
+          scrollTop - top > 0 &&
+          scrollTop + windowHeight >= scrollHeight - 10 &&
+          !binding.value.finished &&
+          !refreshing
+        ) {
+          binding.value.scrollBottom()
+        }
+        top = scrollTop
+      }
+    }
   },
   computed: {
-    ...mapState(['bannerPic', 'bookList','loading','finished']),
+    ...mapState(['bannerPic', 'bookList', 'loading', 'finished'])
   },
-  watch:{
-    loading:function(state){
+  watch: {
+    loading: function(state) {
       this.refreshing = state.loading
     }
   },
@@ -90,13 +102,13 @@ export default {
   },
   methods: {
     ...mapActions(['getReadingsList']),
-    scrollBottom(){ 
+    scrollBottom() {
       console.log('分页')
-     this.getReadingsList(true)
+      this.getReadingsList(true)
     },
     //音频播放
-    toDetail(id){  
-      this.$router.push({path:"/home/readings/book",query:{id}})    
+    toDetail(id) {
+      this.$router.push({ path: '/home/readings/book', query: { id } })
     }
   }
 }
@@ -110,11 +122,11 @@ export default {
   .header-container {
     display: flex;
     flex-direction: column;
-    background-color: #f6c26b;
+    background: #f6f6f6 center no-repeat;
     color: white;
     padding: 40px;
-    height: 372px; 
-    background-size:100% 100%;
+    height: 372px;
+    background-size: 100%;
     h5 {
       font-size: 48px;
       line-height: 56px;
@@ -132,27 +144,29 @@ export default {
     }
     p {
       margin: 40px 0 0 0;
-
     }
   }
   //中间按钮样式
-  .read-btn {
+  .book-sticky {
     position: sticky;
-    top: 0px;
-    z-index: 2004;
+    top: 0;
+    left: 0;
+    right: 0;
     width: 100%;
     background-color: white;
-    p {
-      margin: 40px 0 0 40px;
-      color: white;
-      text-align: center;
-      line-height: 64px;
-
-      width: 208px;
-      border-radius: 20px;
-      height: 64px;
-      background-color: rgb(255, 163, 47);
-    }
+    z-index: 2004;
+  }
+  .book-btn {
+    display: inline-block;
+    margin: 20px 40px;
+    color: white;
+    text-align: center;
+    line-height: 64px;
+    width: 208px;
+    border-radius: 12px;
+    height: 64px;
+    background-color: #ffa32f;
+    box-shadow: 0 1px 1px #efefef;
   }
   //列表样式
   .read-list-container {
@@ -171,20 +185,19 @@ export default {
     }
     .top-container {
       position: relative;
-      background-color: #fde3e3;
       border-radius: 20px;
       width: 100%;
       height: 0;
       padding-bottom: 130.6122449%;
+      background: #f6f6f6 center no-repeat;
+      background-size: 100%;
       span {
         position: absolute;
         bottom: 0;
         left: 0;
-        border-bottom-left-radius: 20px;
-        border-top-right-radius: 20px;
+        border-radius: 0 20px 0 20px;
         background-color: red;
         padding: 6px 24px;
-
         color: white;
       }
       img {
@@ -199,7 +212,6 @@ export default {
       display: flex;
       flex-direction: column;
       p {
-
         color: rgb(22, 35, 60);
         margin: 20px 0 0 0;
       }
