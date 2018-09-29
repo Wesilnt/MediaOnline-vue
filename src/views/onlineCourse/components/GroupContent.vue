@@ -224,14 +224,6 @@ export default {
   overflow: hidden;
 }
 
-.videocol-bigimage-bg {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-}
-
 .videocol-bigimage-search {
   position: absolute;
   width: 80px;
