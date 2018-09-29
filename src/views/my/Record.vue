@@ -2,7 +2,7 @@
     <section>
         <div v-if="playRecordList.length===0" class="playRecord-nodata">
             <i class="qhht-icon playRecord-nodata-icon"/>
-            <p class="playRecord-nodata-warn">暂无播放记录</p>
+            <p class="playRecord-nodata-warn">亲，您还没有播放记录</p>
             <a class="playRecord-nodata-btn"></a>
         </div>
         <div v-else class="playRecord-container">
@@ -145,7 +145,7 @@ export default {
       width: 180px;
       height: 200px;
       margin-top: 180px;
-      background-image: url('../../assets/my-nodata.png');
+      background-image: url('../../assets/images/my_record_empty.png');
     }
     &-warn {
 

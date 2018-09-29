@@ -3,7 +3,7 @@
         <div v-if="onLineVisionList.length === 0 &&onLineVideoList.length === 0 && onLineReadList.length === 0 " >
             <div class="purchase-nodata">
                 <i class="qhht-icon purchase-nodata-icon"/>
-                <p class="purchase-nodata-warn">暂无购买记录</p>
+                <p class="purchase-nodata-warn">亲，您还没有购买</p>
                 <a class="purchase-nodata-btn"></a>
             </div>
         </div>
@@ -174,7 +174,7 @@ export default {
       width: 180px;
       height: 200px;
       margin-top: 180px;
-      background-image: url('../../assets/my-nodata.png');
+      background-image: url('../../assets/images/my_data_empty.png');
     }
     &-warn {
 

@@ -2,7 +2,7 @@
     <section>
         <div v-if="likeList.length===0" class="like-nodata">
             <i class="qhht-icon like-nodata-icon"/>
-            <p class="like-nodata-warn">暂无任何收藏</p>
+            <p class="like-nodata-warn">亲，您还没有添加过喜欢的内容</p>
             <a class="like-nodata-btn"></a>
         </div>
         <div v-else class="like-container">
@@ -151,7 +151,7 @@ export default {
       width: 180px;
       height: 200px;
       margin-top: 180px;
-      background-image: url('../../assets/my-nodata.png');
+      background-image: url('../../assets/images/my_like_empty.png');
     }
     &-warn {
 

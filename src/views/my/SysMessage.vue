@@ -274,7 +274,7 @@
                 width: 180px;
                 height: 200px;
                 margin-top: 180px;
-                background-image: url('../../assets/my-nodata.png');
+                background-image: url('../../assets/images/my_data_empty.png');
             }
             &-warn {
 
