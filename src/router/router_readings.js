@@ -9,7 +9,7 @@ export default [
     component: Readings
   },
   {
-    path: '/home/readings/book',
+    path: '/home/readings/book/:courseId',
     name: 'BookDetail',
     component: BookDetail
   },

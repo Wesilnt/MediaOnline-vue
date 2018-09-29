@@ -11,7 +11,7 @@
       <div v-if="item.id != -1" @click="spreat(item.id)" :class="(item.id ===selectCate)&&spread?'categoryHeader selectShadow':'categoryHeader'" :style="{background:'url('+item.picUrl+')'}">
         <div class="categoryHeaderCount"> {{item.lessonCount}}期 </div>
       </div>
-      <SingleSetList v-show="item.id == selectCate && spread" class="categoryList" :list='item.lessonList'></SingleSetList>
+      <SingleSetList v-show="item.id == selectCate && spread" :singletype="'onlinevision'" class="categoryList" :list='item.lessonList'></SingleSetList>
     </div>
   </div>
 </template>

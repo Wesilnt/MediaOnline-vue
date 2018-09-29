@@ -63,6 +63,7 @@ const {
 export default {
   name: 'Praise',
   data() {
+    console.log("000000000000",this.$route.params.courseId)
     return {
       interval: null,
       courseId: this.$route.params.courseId,

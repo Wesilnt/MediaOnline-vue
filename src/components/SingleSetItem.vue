@@ -24,14 +24,14 @@
 <script>
 export default {
   //singleset 单集  playing是否正在播放
-  props: ['item', 'playing'],
+  props: ['item', 'playing','singletype'],
   methods: {
     onItemClick(audio) {
       if (audio.isFree) {
         this.$router.push({
           name: 'AudioPlay',
           params: { id: audio.id },
-          query: { hiddenDraft: 1 }
+          query:{playType:this.singletype}
         })
       } else {
         this.$toast.fail('您还未购买该专栏')

@@ -1,7 +1,7 @@
 <template>
     <div class="read-container">
         <!-- 1. 头部信息 -->
-        <div class="header-container" v-lazy:background-image="bannerPic"></div>
+        <div class="header-container " v-lazy:background-image="bannerPic"></div>
         <!-- 2. 全部书籍按钮 -->
         <div class="book-sticky">
             <a class="book-btn">
@@ -108,7 +108,7 @@ export default {
     },
     //音频播放
     toDetail(id) {
-      this.$router.push({ path: '/home/readings/book', query: { id } })
+      this.$router.push({ name: 'BookDetail', params: { courseId:id } })
     }
   }
 }

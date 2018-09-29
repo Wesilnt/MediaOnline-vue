@@ -1,6 +1,6 @@
 <template>
   <div v-show="forceHidenFloat&&showFloat" ref="mediaIcon" class="media-icon-container" :style="{left:x,top:y}">
-     <canvas ref="canvasArc"/>
+     <canvas width="68" height="68" ref="canvasArc"/>
   </div>
 </template>
 <script>
@@ -23,7 +23,13 @@ export default {
       windowHeight: window.screen.height
     }
   },
-  computed:{...mapState(['isPlaying','currentTime','maxTime','audioId','forceHidenFloat','showFloat'])},
+  computed:{...mapState(['isPlaying'
+  ,'currentTime'
+  ,'maxTime'
+  ,'audioId'
+  ,'forceHidenFloat'
+  ,'showFloat'
+  , 'playType'])},
   methods: {
     //触摸开始
     _touchStart: function(e) {
@@ -52,7 +58,7 @@ export default {
       let offsetX = e.changedTouches[0].clientX - this.startX
       let offsetY = e.changedTouches[0].clientY - this.startY
       if (offsetTime < 800 && Math.abs(offsetX) < 50 && Math.abs(offsetY) < 50) {
-        this.$router.push({name:'AudioPlay',params:{id:this.audioId}})
+        this.$router.push({name:'AudioPlay',params:{id:this.audioId},query:{playType:this.playType}})
       }
       e.preventDefault()
     },
@@ -78,6 +84,15 @@ export default {
       this._ctx.arc(this.width/2, this.height/2 , this.height/2, 0, 2* Math.PI, 1)
       this._ctx.fillStyle = 'white' 
       this._ctx.fill() 
+ 
+      // this._ctx.fillStyle = '#EB852A'; 
+      // this._ctx.shadowOffsetX = 15; // 阴影Y轴偏移
+      // this._ctx.shadowOffsetY = 15; // 阴影X轴偏移
+      // this._ctx.shadowBlur = 14; // 模糊尺寸
+      // this._ctx.shadowColor = 'rgba(0, 0, 0, 0.5)'; // 颜色
+      // this._ctx.beginPath(); 
+      // this._ctx.arc(this.width/2, this.height/2 , this.height/2, 0, 2 * Math.PI, false); 
+      // this._ctx.fill();
     },
     //绘制按鈕底色
     _drawPlayIconBg: function() { 
@@ -131,8 +146,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .media-icon-container {
-  position: fixed;
-
+  position: fixed; 
   width: 136px;
   height: 136px;
   z-index: 999999; 
