@@ -62,8 +62,7 @@ const {
 } = createNamespacedHelpers('praise')
 export default {
   name: 'Praise',
-  data() {
-    console.log("000000000000",this.$route.params.courseId)
+  data() { 
     return {
       interval: null,
       courseId: this.$route.params.courseId,
@@ -87,6 +86,7 @@ export default {
     // this.startCollectLike({courseId:this.courseId})
     this.getUserByToken()
     this.getCollectDetail({ collectLikeId: this.collectLikeId })
+    console.log(this.$router)
   },
   methods: {
     ...mapActions([
@@ -109,7 +109,7 @@ export default {
       this.showShare = true
       //拼装分享内容
       const shareData = {
-        link: `/#/Praise/${this.courseId}/${this.collectLikeId}`,
+        link: `/#/praise/active/${this.courseId}/${this.collectLikeId}`,
         title: '集赞分享',
         desc: '这是一个神奇的集赞活动',
         imgUrl: ''
@@ -196,7 +196,7 @@ export default {
 .praise-container {
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: 100vh;
   //1. 头部封面
   .praise-header {
     position: absolute;

@@ -187,13 +187,13 @@ export default {
       top: 0;
       left: 0;
       position: absolute;
-      height: 100%;
+      height: auto;
       width: 100%;
     }
     .top-container p {
       z-index: 1000;
       width: 100%;
-      bottom: 0;
+      top: 1260px;
       left: 0;
       font-size: 30px;
       position: absolute;

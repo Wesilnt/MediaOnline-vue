@@ -1,6 +1,8 @@
 import { stringify } from 'qs'
 import request from '../utils/request'
-
+export async function wechatSubscribed() {
+  return request(`/auth/wechat/subscribed?`)
+}
 export function checkStatus(params) {
   return request(`/collectLike/checkStatus?${stringify(params)}`)
 }

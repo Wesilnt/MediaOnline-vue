@@ -4,13 +4,13 @@
             <img :src="item">
         </div>
         <div class="help-btn" @click="toHelp">
-            为TA助力，免费领取{{courseName}}
+            为TA助力，免费领取《{{courseName}}》
         </div>
     </div>
 </template>
 <script>
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions, mapGetters } = createNamespacedHelpers('praise')
+const { mapState,mapMutations, mapActions, mapGetters } = createNamespacedHelpers('praise')
 export default {
   data() {
     return {
@@ -18,18 +18,35 @@ export default {
       collectLikeId: this.$route.params.collectLikeId
     }
   },
-  computed: { ...mapState(['userId','picList', 'courseName']) },
+  computed: { ...mapState(['userId','picList', 'courseName','praiseDetail','isPraised']) },
   created() {
-    this.checkStatus({ collectLikeId: this.collectLikeId })
+    let response = this.checkoutAuthorrization({ collectLikeId: this.collectLikeId })
+    if(response)response.then(()=>{
+       if(this.userId == this.praiseDetail.starterUid||this.isPraised){
+         this.toHelp()
+       }
+    })
+    // this.checkStatus({ collectLikeId: this.collectLikeId }) 
+    // this.getCollectDetail({ collectLikeId: this.collectLikeId })
+    // .then(()=>{
+    //    if(this.userId == praiseDetail.starterUid||this.isPraised){
+    //      this.toHelp()
+    //    }
+    // })
   },
   methods: {
-    ...mapActions(['checkStatus']),
+    ...mapMutations(['destroyInterval']),
+    ...mapActions(['checkoutAuthorrization','checkStatus','getUserByToken','getCollectDetail']),
     toHelp() {
-      this.$router.push({
+      this.$router.replace({
         name: 'Praise',
-        params: { courseId: this.courseId, collectLikeId: this.collectLikeId }
+        params: { courseId: this.courseId, collectLikeId: this.collectLikeId },
+        replace:true
       })
     }
+  },
+  beforeDestroy(){
+    this.destroyInterval()
   }
 }
 </script>

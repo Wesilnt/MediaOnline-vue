@@ -1,4 +1,5 @@
 import {
+  wechatSubscribed,
   getUserByToken,
   checkStatus,
   getCollectDetail,
@@ -12,6 +13,7 @@ export default {
   namespaced: true,
   state: {
     userId: 0,
+    isPraised:false,   //当前用户关于这个集赞是否已点赞
     rollerFlag: true,
     praiseDetail: {},
     seconds: 0, //倒计时总时长(秒)
@@ -23,6 +25,7 @@ export default {
   },
   mutations: {
     bindPraiseDetail(state, res) {
+      res.userList.map(item => state.isPraised = !state.isPraised && item.id == state.userId)
       state.praiseDetail = res
     },
     bindUserInfo(state, res) {
@@ -59,6 +62,16 @@ export default {
     }
   },
   actions: {
+    //验证是否完成了公众号授权
+    async checkoutAuthorrization({dispatch},params){ 
+      const result = await wechatSubscribed()  
+      if(result && result==1){
+          dispatch('checkStatus',params)
+          return dispatch('getUserByToken').then(()=>dispatch('getCollectDetail',params))
+      }else{          //跳转去关注公众号
+          window.location.href = "https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzA4Mzg3NjE2Mg==&scene=126#wechat_redirect"
+      }
+    },
     //积攒状态检查
     async checkStatus({ commit }, params) {
       const res = await checkStatus(params)
@@ -70,11 +83,10 @@ export default {
       const res = await getCollectDetail(params)
       console.log(res)
       commit('bindPraiseDetail', res)
-      /////
+      //
       if (res.status != 1202) return
       let rollerInterval = setInterval(() => commit('setRollerInterval'), 7000)
-      let totalTime =
-        res.duration * 3600 - res.sysTime / 1000 + res.createTime / 1000
+      let totalTime = res.duration * 3600 +  (res.createTime - res.sysTime) / 1000  
       let timerInterval = setInterval(() => {
         var hours = parseInt(totalTime / (60 * 60))
         var minutes = parseInt((totalTime % (60 * 60)) / 60)
@@ -85,17 +97,11 @@ export default {
         hours = hours < 10 ? '0' + hours : hours
         minutes = minutes < 10 ? '0' + minutes : minutes
         seconds = seconds < 10 ? '0' + seconds : seconds
-        let remainTime =
-          '距离结束还有:' + hours + '时' + minutes + '分' + seconds + '秒'
+        let remainTime = '距离结束还有:' + hours + '时' + minutes + '分' + seconds + '秒'
         totalTime -= 1
-        commit('setTimerInterval', {
-          timerInterval,
-          rollerInterval,
-          isEnded: totalTime <= 0,
-          remainTime
-        })
+        commit('setTimerInterval', { timerInterval, rollerInterval,isEnded: totalTime <= 0,remainTime})
       }, 1000)
-      /////
+      //
     },
     //领取集赞
     async getCollectLike({ commit }, params) {
@@ -120,11 +126,10 @@ export default {
     },
     //获取用户信息是否订阅免费专区
     async getUserByToken({ commit }, params) {
-      const res = await getUserByToken(params)
-      console.log('==============')
+      const res = await getUserByToken(params) 
       console.log(res)
       if (!res) return
-      commit('bindUserInfo', res)
+      commit('bindUserInfo', res) 
     }
   },
   getters: {
@@ -154,9 +159,7 @@ export default {
       isCurrentUser = state.userId == state.praiseDetail.starterUid
       alreadyCount = state.praiseDetail.alreadyCount
       let code = state.praiseDetail.code ? parseInt(state.praiseDetail.code) : 0
-      let status = state.praiseDetail.status
-        ? parseInt(state.praiseDetail.status)
-        : 0
+      let status = state.praiseDetail.status ? parseInt(state.praiseDetail.status): 0
       // isCurrentUser = false
       //1. 集赞中：发起人         btnState:0
       if (status == 1202 && isCurrentUser) {
