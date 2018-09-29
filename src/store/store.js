@@ -198,7 +198,7 @@ export default new Vuex.Store({
     userInfo,
     visionData,
     readings,
-    audio,
+    // audio,
     comment,
     freezone,
     audiotask,

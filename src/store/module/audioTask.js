@@ -1,9 +1,13 @@
 import { getAudioDetail, postLearnRate } from '../../services/audioApi'
 import { throttle } from '../../utils/utils' 
 import {Toast} from 'vant'
+import audioData from './audioData'
 
 export default {
+  namespaced:true,
   state: {
+    forceHidenFloat:false,
+    showFloat:false,
     status: 'default', //播放状态
     audioDetail: {}, //音频数据
     audioId: 0, //播放音频ID
@@ -54,7 +58,7 @@ export default {
     // 播放进度更新
     timeUpdate(state) {
       state.currentTime = state._at.currentTime
-      state.maxTime = state._at.duration
+      state.maxTime = state._at.duration 
       if (state.throttle)
         state.throttle(state.audioDetail.id, state.currentTime, state.maxTime)
     },
@@ -62,10 +66,15 @@ export default {
     statusUpdate(state, status) {
       state.status = status
       state.isPlaying = !state._at.paused
+      state.showFloat = true
     },
     //设置播放模式
     setPlayMode(state, playMode) {
       state.playMode = playMode
+    },
+    //悬浮按钮是否显示
+    setFloatButton(state,isShow){ 
+      state.forceHidenFloat = isShow
     }
   },
   actions: {
@@ -201,5 +210,8 @@ export default {
   getters: {
     pageSize: state => state.pageSize,
     currentPage: state => state.currentPage
+  },
+  modules:{
+    audioData
   }
 }

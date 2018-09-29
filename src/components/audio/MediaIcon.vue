@@ -1,5 +1,5 @@
 <template>
-  <div ref="mediaIcon" class="media-icon-container" :style="{left:x,top:y}">
+  <div v-show="forceHidenFloat&&showFloat" ref="mediaIcon" class="media-icon-container" :style="{left:x,top:y}">
      <canvas ref="canvasArc"/>
   </div>
 </template>
@@ -10,8 +10,8 @@ export default {
   data() {
     return {
       _ctx: null, 
-      x: '10px',
-      y: '20px',
+      x: (window.screen.width- 68 - 6) + 'px' ,
+      y: (window.screen.height - 68 - 50) + 'px',
       width: 68,
       height: 68,
       startX: 48,
@@ -23,11 +23,10 @@ export default {
       windowHeight: window.screen.height
     }
   },
-  computed:{...mapState(['isPlaying','currentTime','maxTime'])},
+  computed:{...mapState(['isPlaying','currentTime','maxTime','audioId','forceHidenFloat','showFloat'])},
   methods: {
     //触摸开始
     _touchStart: function(e) {
-       console.dir(this.$store)
       this.startTime = new Date().getTime()
       this.startX = e.touches[0].clientX
       this.startY = e.touches[0].clientY
@@ -53,12 +52,7 @@ export default {
       let offsetX = e.changedTouches[0].clientX - this.startX
       let offsetY = e.changedTouches[0].clientY - this.startY
       if (offsetTime < 800 && Math.abs(offsetX) < 50 && Math.abs(offsetY) < 50) {
-        // this.setData({ isPlaying: !this.data.isPlaying })
-        // this._toggleBtn(this.data.isPlaying)
-        // this._am.play()
-        // this.triggerEvent('onClick')
-        // this.isPlaying = !this.isPlaying
-        // this._togglePlay()
+        this.$router.push({name:'AudioPlay',params:{id:this.audioId}})
       }
       e.preventDefault()
     },
@@ -97,10 +91,18 @@ export default {
       let angle = -1/2* Math.PI + progress / duration *2 *Math.PI
       let max = parseInt(duration)
       let value = parseInt(progress) 
+      //1. 进度条
       this._ctx.beginPath()
-      this._ctx.arc(this.width/2, this.height/2, this.height/2 - this.outRingWidth, -1/2* Math.PI , angle, 0)
-      this._ctx.strokeStyle = '#FFCD7D'
       this._ctx.lineWidth = this.progressgWidth
+      this._ctx.strokeStyle = '#FFCD7D'
+      this._ctx.arc(this.width/2, this.height/2, this.height/2 - this.outRingWidth, -1/2* Math.PI , angle, 0)
+      this._ctx.stroke()
+      this._ctx.closePath()
+      //2. 底色部分
+      this._ctx.beginPath()
+      this._ctx.lineWidth = this.progressgWidth
+      this._ctx.strokeStyle = 'white'
+      this._ctx.arc(this.width/2, this.height/2, this.height/2 - this.outRingWidth, angle , 3/2*Math.PI, 0)
       this._ctx.stroke()
       this._ctx.closePath()
     },
@@ -113,8 +115,17 @@ export default {
     this._drawProgressColor()
     this._drawPlayIconBg()
     this._setProgress(10, 100)
-    this._togglePlay()
-    console.log(this)
+    this._togglePlay() 
+  },
+  watch:{
+    isPlaying:function(value){
+      this._togglePlay(value)
+      return value
+    },
+    currentTime: function(value) {
+      this._setProgress(this.currentTime,this.maxTime)
+      return value
+    }
   }
 }
 </script>

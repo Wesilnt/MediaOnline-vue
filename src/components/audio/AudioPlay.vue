@@ -20,7 +20,7 @@
       </div>
       <!-- 进度条 -->
       <div class="slider-container"> 
-        <div slot="start">{{parseInt(touching?progress:currentTime(touching,progress)) | formatDuring}}</div>
+        <div slot="start">{{currentTime | formatDuring}}</div>
       <!-- <input type="range" 
         @input="onInputChange" 
         :value="touching?progress:currentTime(touching,progress)" 
@@ -33,11 +33,11 @@
         @touchcancel="handleTouchCancel"
         @touchmove="handleTouchMove"
         @touchend="handleTouchEnd"/> -->
-        <van-slider style="width:80%;"
-          :value="progress"
-          v-model="progress" 
+        <van-slider style="width:80%;" 
+          v-model="progress"
           :max="maxTime" 
-          :step="1" 
+          :min="0"
+          :step="100/maxTime" 
           bar-height="2px" 
           @change="onSliderChnage"/>
         <div slot="end">{{ maxTime | formatDuring}}</div>
@@ -88,7 +88,7 @@
 <script>
 import SharePop from '../share/Share.vue'
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions, mapGetters } = createNamespacedHelpers('audio')
+const { mapState,mapMutations, mapActions, mapGetters } = createNamespacedHelpers('audiotask/audioData')
 
 export default {
   components: { 'share-pop': SharePop },
@@ -136,7 +136,8 @@ export default {
     ])
   },
   created() {
-    this.isInit = true
+    this.isInit = true 
+    this.toggleFloatButton(false)  //隐藏悬浮按钮
     this.playAudio({ lessonId: this.lessonId })
   },
   watch: {
@@ -144,11 +145,12 @@ export default {
       this.lessonId = id
     },
     currentTime: function(value) {
-      this.progress = (value * 100) / this.maxTime
+      this.progress = (value * 100) / this.maxTime 
       return value
     }
   },
   methods: {
+    ...mapMutations(['setFloatButton']),
     ...mapActions([
       'getAudioDetail',
       'postFavorite',
@@ -158,7 +160,8 @@ export default {
       'setPlayMode',
       'seekTo',
       'pre',
-      'next'
+      'next',
+      'toggleFloatButton'
     ]),
     //进度条拖动 OTAwOWY1ZjgtZTJiYy00Y2IwLTk4ZDktNzIxYjMyMTUzYzU2
     sliderChange(value) {
@@ -277,6 +280,9 @@ export default {
         })
       }
     }
+  },
+  beforeDestroy(){
+     this.toggleFloatButton(true)  //隐藏悬浮按钮
   }
 }
 </script>

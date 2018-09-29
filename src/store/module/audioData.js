@@ -40,7 +40,7 @@ export default {
     //播放音频
     async playAudio({ getters, commit, dispatch }, params) {
       if (params && params.lessonId) {
-        dispatch('asyncPlay', params, { root: true }).then(res => {
+        dispatch('audiotask/asyncPlay', params, { root: true }).then(res => {
           dispatch('getSingleSetList', {
             courseId: res.courseId,
             pageSize: getters.pageSize
@@ -48,33 +48,37 @@ export default {
           commit('bindAudioDetail', res)
         })
       } else {
-        dispatch('asyncPlay', params, { root: true })
+        dispatch('audiotask/asyncPlay', params, { root: true })
       }
     },
     //播放音频
     async pauseAudio({ dispatch }) {
-      dispatch('asyncPause', null, { root: true })
+      dispatch('audiotask/asyncPause', null, { root: true })
     },
     //播放音频
     async setPlayMode({ commit }, playMode) {
-      commit('setPlayMode', playMode, { root: true })
+      commit('audiotask/setPlayMode', playMode, { root: true })
     },
     //拖动音频进度
     async seekTo({ commit }, progress) {
-      commit('seekTo', progress, { root: true })
+      commit('audiotask/seekTo', progress, { root: true })
     },
     //下一集
     async next({ dispatch }, params) {
-      dispatch('playNext', params, { root: true })
+      dispatch('audiotask/playNext', params, { root: true })
     },
     //上一集
     async pre({ commit }, params) {
-      dispatch('playPre', params, { root: true })
+      dispatch('audiotask/playPre', params, { root: true })
     },
+    //悬浮按钮是否显示
+    toggleFloatButton({commit},isShow){ 
 
+      commit('audiotask/setFloatButton', isShow, { root: true })
+    },
     //音频单集详情
     async getAudioDetail({ getters, commit, dispatch }, params) {
-      dispatch('getAudioDetail', params, { root: true }).then(res => {
+      dispatch('audiotask/getAudioDetail', params, { root: true }).then(res => {
         commit('bindAudioDetail', res)
         dispatch('getSingleSetList', {
           courseId: res.courseId,
@@ -114,7 +118,7 @@ export default {
   getters: {
     audio: (state, getters, rootState) => rootState.audiotask.audioDetail,
     audioId: (state, getters, rootState) => rootState.audiotask.audioId,
-    currentTime: (state, getters, rootState) =>  Math.round(rootState.audiotask.currentTime),
+    currentTime: (state, getters, rootState) => Math.round(rootState.audiotask.currentTime),
     // currentTime: (state, getters, rootState) => (touching, progress) =>
     //   touching ? progress : rootState.audiotask.currentTime,
     maxTime: (state, getters, rootState) => Math.round(rootState.audiotask.maxTime),
