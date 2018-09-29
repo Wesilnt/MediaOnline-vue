@@ -4,11 +4,11 @@
     <div class="video-detail-header" :style="{ background : 'url('+radioShowPic+')' }">
       <div class="video-detail-header-right-top">
           <img :src="isLike?collectIcon:unCollectIcon" class="video-detail-collect" alt="" @click="onCollectFavorite">
-          <img :src="require('../../assets/images/onlinecourse-play_ic_share@2x.png')" class="video-detail-share" alt="" @click="onShareAction">
+          <img :src="require('../../assets/images/onlinecourse-play_ic_share.png')" class="video-detail-share" alt="" @click="onShareAction">
       </div>
       <div class="video-detail-header-left-bottom" @click="clickPlayVideoBtn">
           <img :src="require('../../assets/images/onlinecourse-video-detail-header.jpg')" alt="" >
-          <label>开始播放</label>   
+          <label>开始播放</label>
       </div>
           <!-- <img :src="require('../../assets/images/onlinecourse_video_ic_gift.png')" class="video-detail-header-gift" alt="">     -->
     </div>
@@ -36,7 +36,7 @@
       <div id="catalog" ref="catalog" class="video-detail-sction-title">
           <h4>目录</h4>
       </div>
-      <playlist v-for="(item,index) of lessonList" :key="item.id" :iteminfo="item" :activeID="activeID" :lastindex="index == (lessonList.length - 1)" @jumpEvent="beActive"/>      
+      <playlist v-for="(item,index) of lessonList" :key="item.id" :iteminfo="item" :activeID="activeID" :lastindex="index == (lessonList.length - 1)" @jumpEvent="beActive"/>
     </div>
     <!-- 留言 -->
     <div class="video-detail-base">
@@ -47,7 +47,7 @@
               <span>我要留言</span>
           </div>
       </div>
-      <CommentItem class="video-course-comment" v-for="item in singleComments" :key="item.id" :comment="item" :unindent="true" :regiontype="2202"/>      
+      <CommentItem class="video-course-comment" v-for="item in singleComments" :key="item.id" :comment="item" :unindent="true" :regiontype="2202"/>
     </div>
       <CommentBar :show="commentBarShow" v-on:toggle="toggleKeyboard"/>
       <Share :show="sharePageShow" :shareid="courseId" @close="cancelSharePage"></Share>

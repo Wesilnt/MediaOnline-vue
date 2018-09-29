@@ -67,11 +67,11 @@
                              @click="showDelete(item.id)"/>
                     </div>
                     <van-popup v-model="isShowDelete" position="bottom" >
-                        <img class="del-icon" src="../../assets/images/alter_delete.png" @click="handleDelete"/>
+                        <img class="del-icon" src="../../assets/images/my_alter_delete.png" @click="handleDelete"/>
                         <p class="del-text">删除</p>
                     </van-popup>
                     <van-popup v-model="showCheck" position="bottom" :overlay="false" :lock-scroll="false">
-                        <img class="del-icon" src="../../assets/images/alter_delete.png" @click="handleDeleteAll"/>
+                        <img class="del-icon" src="../../assets/images/my_alter_delete.png" @click="handleDeleteAll"/>
                         <p class="del-text">删除</p>
                     </van-popup>
                 </div>
@@ -101,8 +101,8 @@
         checkboxes: [],
         checked: false,
         icon: {
-          normal: require('../../assets/images/checkbox-normal.png'),
-          active: require('../../assets/images/checkbox-checked.png'),
+          normal: require('../../assets/images/my_checkbox_normal.png'),
+          active: require('../../assets/images/my_checkbox_checked.png'),
         }
       }
     },
