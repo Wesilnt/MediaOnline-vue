@@ -8,10 +8,12 @@
 // import { mapActions } from 'vuex'
 import MediaIcon from './components/audio/MediaIcon'
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapMutations, mapActions } = createNamespacedHelpers( 'audiotask')
+const { mapState, mapMutations, mapActions } = createNamespacedHelpers(
+  'audiotask'
+)
 export default {
   name: 'App',
-  components:{MediaIcon},
+  components: { MediaIcon },
   created() {
     this.initAudio()
   },
@@ -23,6 +25,6 @@ export default {
 <style lang="scss">
 @import 'publicUIConfig/common';
 .router-view {
-      font-size: 24px;
+  font-size: 24px;
 }
 </style>
