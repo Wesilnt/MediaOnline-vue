@@ -2,11 +2,11 @@
     <section>
         <p class="userinfo-title">欢迎使用秦汉胡同 </p>
         <div class="userinfo-phone">
-            <div class="userinfo-phone-container">
+            <div v-if="isInputPhone" class="userinfo-phone-container">
                 <input class="userinfo-phone-container-input-phone" v-model="mobileNumber" type="number" name="points" maxlength="11" placeholder="请输入手机号"/>
             </div>
-            <div class="userinfo-phone-container">
-              <p>{{ mobileNumber }}</p>
+            <div v-if="!isInputPhone" class="userinfo-phone-container">
+              <p class="userinfo-phone-container-phone-text">{{ mobileNumber }}</p>
                 <div class="v-code">
                     <input
                             ref="vcode"
@@ -47,12 +47,13 @@
     name: 'EditUserPhone',
     data: function () {
       return {
+        isInputPhone:true,
         phone: '',
         validCode: '',
         mobileNumber: '',
         validateCode: '',
         code: '',
-        codeLength: 6,
+        codeLength: 4,
         telDisabled: false,
         focused: false
       }
@@ -69,7 +70,7 @@
     watch: {
       code(newVal) {
         this.code = newVal.replace(/[^\d]/g,'')
-        if (newVal.length > 5) {
+        if (newVal.length > 3) {
           // this.telDisabled = true
           this.$refs.vcode.blur()
           setTimeout(() => {
@@ -90,6 +91,7 @@
       },
       handleNext: function () {
         this.sendCode()
+        this.isInputPhone = false
       }
     }
   }
@@ -110,9 +112,7 @@
                 color: #a3a8b6;
             }
             &-container {
-                display: flex;
-                flex-direction: row;
-                padding: 140px 60px 50px 60px;
+                padding: 40px 60px 50px 60px;
                 &-input-phone {
                     width: 100%;
                     height: 80px;
@@ -125,6 +125,11 @@
                     border-bottom-color: #ffa32f;
                     border-bottom-width: 1px;
                     font-size: 36px;
+                }
+                &-phone-text{
+                    font-size: 36px;
+                    padding: 0px 0px 80px 0px;
+                    letter-spacing: 3px;
                 }
             }
         }
@@ -149,6 +154,22 @@
             }
         }
     }
+    .v-code {
+        margin-top: 20px;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        position: relative;
+        width:70%;
+        margin-left: auto;
+        margin-right: auto;
+    }
     .v-code input {
         position: absolute;
         top: -100%;
@@ -157,11 +178,11 @@
     }
     .v-code .line {
         position: relative;
-        width: 40px;
-        height: 32px;
+        width: 60px;
+        height: 80px;
         line-height: 32px;
         text-align: center;
-        font-size: 28px;
+        font-size: 96px;
     }
     .v-code .line::after {
         display: block;
@@ -170,8 +191,8 @@
         left: 0;
         width: 100%;
         bottom: 0;
-        height: 1px;
-        background-color: #aaaaaa;
+        height: 5px;
+        background-color: #ffa32f;
         transform: scaleY(.5);
         transform-origin: 0 100%;
     }
@@ -189,16 +210,7 @@
         animation-iteration-count: infinite;
         animation-fill-mode: both;
     }
-    /*.v-code .line.animated::before {
-      display: block;
-      content: '';
-      position: absolute;
-      left: 0;
-      bottom: -1px;
-      width: 100%;
-      height: 2px;
-      background-color: #000000;
-    }*/
+
     @keyframes coruscate {
         0% {
             opacity: 0
