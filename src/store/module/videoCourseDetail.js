@@ -7,7 +7,7 @@ import {
 } from '../../services/columns.js'
 import { getCommentList, postComment } from '../../services/comment.js'
 import questionList from './questionList'
-
+import router from '../../router/router'
 const videoCourseDetail = {
   namespaced: true,
   state: {
@@ -40,6 +40,7 @@ const videoCourseDetail = {
     rankNum: 3, //自测题排行
     deblockQuestion: false, //是否解锁自测题
     progress: 0,   //自测题进度
+    activeID: '' //当前选中单集ID
   },
   getters: {
     haveQuestionBOList: state => {
@@ -62,7 +63,10 @@ const videoCourseDetail = {
       state.questionBOList = payload.questionBOList
       state.grade = payload.grade
       state.learnTotalTime = payload.learnTotalTime
-      state.learnTime = payload.learnTime
+      state.learnTime = payload.learnTime      
+    },
+    bindActiveId(state,lessonId){
+      state.activeID = lessonId
     },
     bindQuestionBymyself(state, {deblockQuestion,progress}) {
       state.deblockQuestion = deblockQuestion||state.deblockQuestion
@@ -159,9 +163,13 @@ const videoCourseDetail = {
       //获取视频列表数据
       const result = await getVideoLessonDetail({ lessonId })
       console.log('视频单集详情接口')
-      console.log('result = ', result)
-      commit('bindVideoCourseDetail', result)      
+      console.log('result = ', result)       
       if (result == null) return
+      commit('bindVideoCourseDetail', result)  
+      commit('bindActiveId',lessonId)
+      //刷新路由中单集ID
+      router.push({name:'videoCourseDetail',params:{lessonId}})
+
       let params = {
         courseId: result.courseId,
         currentPage: 1,
@@ -186,6 +194,7 @@ const videoCourseDetail = {
       const result = await getLessonListByCourse(params)
       console.log('获取目录课程数据')
       console.log(result)
+      if (result == null) return
       commit('bindAllCourse', result)
     },
 
@@ -200,6 +209,7 @@ const videoCourseDetail = {
         currentPage,
         pageSize
       })
+      if (result == null) return
       commit('bindCommentList', result)
     },
 

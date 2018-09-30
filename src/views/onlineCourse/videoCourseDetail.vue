@@ -105,7 +105,7 @@ export default {
       sharePageShow: false,
       //控制目录当前播放的状态
       isPlaying: false,
-      activeID: '' //当前选中单集ID
+
     }
   },
   computed: {
@@ -128,7 +128,8 @@ export default {
       'learnTime', //服务器上次播放位置
       'learnTotalTime', //服务器累计播放时长
       'deblockQuestion',
-      'progress'
+      'progress',
+      'activeID' //当前播放的单集ID
     ]),
     ...mapGetters(['haveQuestionBOList'])
   },
@@ -154,10 +155,10 @@ export default {
     //获取课程ID
     const { lessonId } = this.$route.params
     this.getVideoCourseDetail({ lessonId })
-    this.activeID = this.$route.params.lessonId
+    // this.activeID = this.$route.params.lessonId
   },
   methods: {
-    ...mapMutations(['updateLocalVideoData','bindQuestionBymyself']),
+    ...mapMutations(['updateLocalVideoData','bindQuestionBymyself','bindActiveId']),
     ...mapActions([
       'getVideoCourseDetail',
       'getLessonListByCourse',
@@ -250,11 +251,12 @@ export default {
     },
     //点击目录
     beActive(lessonId) {
-      this.activeID = lessonId
+
+      // this.bindActiveId(lessonId)
       //刷新接口
       this.getVideoCourseDetail({ lessonId: lessonId })
-      //刷新路由中单集ID
-      this.$router.push({name:'videoCourseDetail',params:{lessonId}})
+      // //刷新路由中单集ID
+      // this.$router.push({name:'videoCourseDetail',params:{lessonId}})
     },
     clickFnc(index) {
       this.selected = index
