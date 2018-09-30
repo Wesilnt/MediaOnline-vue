@@ -16,7 +16,7 @@ export default {
     maxTime: 0, //音频总时长
     playMode: 'order', // order:顺序播放  single：单曲播放
     isPlaying: false, //是否正在播放
-    playType: "freezone", // //freezone 免费专区  onlinevision 在线视野  readings 读书会
+    playType: "FreeZone", // //RreeZone 免费专区  OnlineVision 在线视野  Readings 读书会
     throttle: null,
     statusFunc: (commit, status) => commit('statusUpdate', status),
     saveProgress: (id, currentTime, maxTime) => {

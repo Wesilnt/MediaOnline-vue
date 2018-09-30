@@ -64,7 +64,7 @@ let buttonDatas = [
 ]
 export default {
   components: { 'mobile-validate': MobileVali },
-  props: ['state', 'courseid', 'collectlikeid'],
+  props: ['state', 'courseid', 'collectlikeid','columntype'],
   data() {
     return {
       show: false,
@@ -96,10 +96,7 @@ export default {
         7 == this.state
       ) {
         //TODO专栏详情
-        this.$router.push({
-          name: 'videoColumnDetail',
-          params: { courseId: this.courseid }
-        })
+       this.goColumnDetail()
         return
       }
     },
@@ -111,24 +108,25 @@ export default {
       if (0 == this.state) { 
         let params = { id: this.collectlikeid }
         //分享海报
+         //专栏类型columnType：  FreeZone 免费专区 OnlineCourse 在线课堂  OnlineVision 在线视野  Readings 读书会
         this.$router.push({
           name: 'SharePoster',
           params,
-          query: {shareUrl:( this.url + `#/praise/active/${this.courseid}/${this.collectlikeid}`) || '/#/home'}
+          query: {shareUrl:( this.url + `#/praise/active/${this.courseid}/${this.collectlikeid}?columnType=${this.columntype}`) || '/#/home'}
         })
       }
       if (2 == this.state) {
         //我也要集赞
-        this.$router.push({
-          name: 'videoColumnDetail',
-          params: { courseId: this.courseid }
-        })
+         this.goColumnDetail()
       }
     },
-    // validateCallback() {
-    //   this.show = false
-    //   this.joinCollectLike({ collectLikeId: this.collectlikeid })
-    // }
+    goColumnDetail(){
+      let columnName = columntype == "OnlineCourse" ? 
+                'videoColumnDetail':columntype == 'OnlineVision'?
+                'VisionDetail':columntype == 'Readings'? 
+                'BookDetail':''
+      this.$router.push({name: columnName, params: { courseId: this.courseid }})
+    }
   }
 }
 </script>

@@ -17,7 +17,7 @@ const PageInfo_From_Home = [
     component: VisionList
   },
   {
-    path: '/home/visionDetail/:id',
+    path: '/home/visionDetail/:courseId',
     name: 'VisionDetail',
     component: VisionDetail,
     props: true

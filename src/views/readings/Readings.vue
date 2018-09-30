@@ -123,6 +123,7 @@ export default {
     display: flex;
     flex-direction: column;
     background: #f6f6f6 center/100% no-repeat;
+    background-size: 100%;
     color: white;
     padding: 40px;
     height: 372px;
@@ -188,6 +189,9 @@ export default {
       width: 100%;
       height: 0;
       padding-bottom: 130.6122449%;
+      background-size: 100%;
+      background-repeat: no-repeat;
+      background-position: center;
       background: #f6f6f6 center/100& no-repeat;
       span {
         position: absolute;

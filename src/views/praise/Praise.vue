@@ -18,7 +18,12 @@
       </div>
       <!-- 2.2 点赞/集赞 操作按钮 -->
       <div class="btn-container">  
-        <priasebtn :state="praiseData.btnState" :courseid="courseId" :collectlikeid="collectLikeId" @share="onShare"/> 
+        <priasebtn 
+        :columntype="columnType"
+        :state="praiseData.btnState" 
+        :courseid="courseId" 
+        :collectlikeid="collectLikeId"
+         @share="onShare"/> 
       </div>
       <!-- 2.3 集赞人数提示 -->
       <div class="number-container">
@@ -64,6 +69,7 @@ export default {
   name: 'Praise',
   data() { 
     return {
+      columnType:this.$route.query.columnType,  //专栏类型  FreeZone 免费专区 OnlineCourse 在线课堂  OnlineVision 在线视野  Readings 读书会
       interval: null,
       courseId: this.$route.params.courseId,
       collectLikeId: this.$route.params.collectLikeId,

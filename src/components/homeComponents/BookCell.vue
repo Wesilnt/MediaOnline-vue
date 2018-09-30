@@ -19,7 +19,7 @@ export default {
       this.$router.push({
         name: 'BookDetail',
         params: { courseId: this.book.id},
-        query:{playType:"readings"}
+        query:{playType:"Readings"}
       })
     },
     onPlayClick() { 
@@ -27,7 +27,7 @@ export default {
         this.$router.push({
           name: 'AudioPlay',
           params: { id: this.book.freeLessonList[0].id },
-          query:{playType:"readings"}
+          query:{playType:"Readings"}
         })
       }else{
         this.$toast('本书籍暂时不支持试听')

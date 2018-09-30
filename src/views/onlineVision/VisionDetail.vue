@@ -28,11 +28,11 @@
     <!-- try -->
     <div id="try" ref="try" class="try bottomline">
       <DetailHeader title="试看课程" subtitle="全部" link='visionCourseList' />
-      <SingleSetList :list='visionDetail.freeLessonList' :singletype="'onlinevision'"></SingleSetList>
+      <SingleSetList :list='visionDetail.freeLessonList' :singletype="'OnlineVision'"></SingleSetList>
     </div>
     <!-- message -->
     <div id="message" ref="message" class="message bottomline" >
-      <DetailHeader title="精选留言" link='videoCourseCmts' :params='{"courseId":id}' :subtitle="visionDetail.commentCount + '条'" />
+      <DetailHeader title="精选留言" link='videoCourseCmts' :params='{"courseId":courseId}' :subtitle="visionDetail.commentCount + '条'" />
       <div v-for="item of commentList" :key="item.id" class="comment-item">
         <comment-item :comment="item" />
       </div>
@@ -47,14 +47,13 @@
       </div>
     </div>
    <tools-navbar
-                v-on:router-to-audition="routerToAudition"
-                v-on:router-to-collage="routerToCollage"
-                v-on:router-to-collect="routerToCollect"
-                :price="['100','10']"
-                collageText="拼团拼团"
-                :collect='true'
-                :collage='true'
-            />
+        v-on:router-to-audition="routerToAudition"
+        v-on:router-to-collage="routerToCollage"
+        v-on:router-to-collect="routerToCollect"
+        :price="['100','10']"
+        collageText="拼团拼团"
+        :collect='true'
+        :collage='true'/>
   </div>
 
 </template>
@@ -79,7 +78,7 @@ export default {
     toolsNavbar,
     GroupHeader
   },
-  props: ['id'],
+  props: ['courseId'],
   data() {
     return {
       arrowUp,
@@ -91,8 +90,8 @@ export default {
     }
   },
   created() {
-    this.getVisionDetail({courseId:this.id, groupBuyId: this.$route.query.groupById})
-    this.getCommentList(this.id)
+    this.getVisionDetail({courseId:this.courseId, groupBuyId: this.$route.query.groupById})
+    this.getCommentList(this.courseId)
   },
   mounted() {
     window.addEventListener('scroll', this.handleScroll)

@@ -20,7 +20,7 @@ export default {
     remainTime: null, //倒计时提示文案
     rollerInterval: null, //倒计时滚动定时器
     timerInterval: null, //倒计时定时器
-    picList: [],
+    pageBgUrl: '',
     courseName: ''
   },
   mutations: {
@@ -52,7 +52,7 @@ export default {
     },
     //绑定集赞状态
     bindPraiseStatus(state, res) {
-      state.picList = res.picList
+      state.pageBgUrl = res.pageBgUrl
       state.courseName = res.courseName
     },
     //销毁定时器

@@ -64,7 +64,7 @@
       :immediate-check="false"
       @load="scrollBottom"
       @offset="10">
-         <singleset-list :list="singleSetList" :play-id="playingId" :singletype="'readings'"/>
+         <singleset-list :list="singleSetList" :play-id="playingId" :singletype="'Readings'"/>
     </van-list>
     <!-- 6. 分页布局 -->
     <div class="load-more-container" v-if="singleFinished">

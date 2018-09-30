@@ -1,10 +1,10 @@
 <template>
     <div class="praise-active">
-        <div v-for="(item,i) of picList" :key="i" class="active-item">
+        <!-- <div v-for="(item,i) of picList" :key="i" class="active-item">
             <img :src="item">
-        </div>
-        <div class="help-btn" @click="toHelp">
-            为TA助力，免费领取《{{courseName}}》
+        </div> -->
+        <div class="active-item" v-lazy:background-image="pageBgUrl" :style="{marginBottom:!isNewUser?'48px':'0px'}"></div>
+        <div class="help-btn" @click="toHelp">为TA助力，免费领取《{{courseName}}》
         </div>
     </div>
 </template>
@@ -15,16 +15,16 @@ export default {
   data() {
     return {
       courseId: this.$route.params.courseId,
-      collectLikeId: this.$route.params.collectLikeId
+      collectLikeId: this.$route.params.collectLikeId,
+      isNewUser:false
     }
   },
-  computed: { ...mapState(['userId','picList', 'courseName','praiseDetail','isPraised']) },
+  computed: { ...mapState(['userId','pageBgUrl', 'courseName','praiseDetail','isPraised']) },
   created() {
     let response = this.checkoutAuthorrization({ collectLikeId: this.collectLikeId })
     if(response)response.then(()=>{
-       if(this.userId == this.praiseDetail.starterUid||this.isPraised){
-         this.toHelp()
-       }
+       this.isNewUser = this.userId == this.praiseDetail.starterUid||this.isPraised
+       if(this.isNewUser) this.toHelp()
     })
     // this.checkStatus({ collectLikeId: this.collectLikeId }) 
     // this.getCollectDetail({ collectLikeId: this.collectLikeId })
@@ -51,13 +51,12 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.active-item {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  img {
-    width: 100%;
-  }
+.active-item { 
+  width: 100%; 
+  height: 100vh;
+  background-size: 100%;
+  background-position: center; 
+  background-repeat: no-repeat;
 }
 .help-btn {
   background-color: rgb(255, 163, 47);

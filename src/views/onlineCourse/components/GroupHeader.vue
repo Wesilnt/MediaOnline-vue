@@ -38,14 +38,15 @@
             </div>
             <div class="groupBuy-circleline" v-show="false"></div>
         </div>
-
-        <div v-if="headerImageType==='audio'">
+        <!--1. 读书会头图-->
+        <div v-if="serviceType==='Readings'">
           <div class="book-header-container lazy-img-larger">
             <div class="book-cover" v-lazy:background-image="profilePic" :style="{'background-size':'100%',backgroundPosition:'center',backgroundRepeat:'no-repeat'}">
               <!-- <span v-if="new Date().getTime() - new Date(bookDetail.createTime).getTime()<30*24*3600*1000">上新</span> -->
             </div>
           </div>
         </div>
+           <!--2. 少年视野，少年必修-->
         <div v-else class="groupBuy-banner" v-lazy:background-image="profilePic" :style="{'background-size':'100%'}">
             <!-- <div class="groupBuy-circleline" v-show="true"></div> -->
             <span class="groupBuy-banner-bottom" v-show="buyCount == 0 ? false : true">{{buyCount}}人已购买</span>
@@ -79,7 +80,7 @@ export default {
       'headerType',
       'isShowGroupBuy',
       'profilePic',
-      'headerImageType'   
+      'serviceType'   
     ]),
     ...mapGetters([
       'buyCount'

@@ -97,7 +97,7 @@ export default {
       shareData: null, //分享数据
       lessonId: this.$route.params.id,
       hiddenDraft: this.$route.query.hiddenDraft,
-      playType: this.$route.query.playType, //播放类型 freezone 免费专区  onlinevision 在线视野  readings 读书会
+      playType: this.$route.query.playType, //播放类型 FreeZone 免费专区  OnlineVision 在线视野  Readings 读书会
       isInit: true,
       play: true,
       isSingle: false, //是否单个循环

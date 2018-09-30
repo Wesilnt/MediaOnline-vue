@@ -82,7 +82,8 @@ export default {
           params: {
             courseId: this.$route.params.courseId,
             collectLikeId: newVal
-          }
+          },
+          query:{columnType:this.serviceType}
         })
       }
     },
@@ -224,6 +225,9 @@ export default {
             params: {
               courseId: this.$route.params.courseId,
               collectLikeId: this.collectLikeId
+            },
+            query:{
+              columnType:this.serviceType
             }
           })
           break
@@ -260,11 +264,11 @@ export default {
         break
         case 'OnlineVision':
             const visionId = this.freeLesson[0].id
-            this.$router.push({ name: 'AudioPlay', params: { id:visionId } })   
+            this.$router.push({ name: 'AudioPlay', params: { id:visionId },query :{playType:this.serviceType}})   
         break
         case 'Readings':
             const readingId = this.freeLesson[0].id
-            this.$router.push({ name: 'AudioPlay', params: { id:readingId } })   
+            this.$router.push({ name: 'AudioPlay', params: { id:readingId },query :{playType:this.serviceType} })   
         break
       }
     }
