@@ -92,7 +92,6 @@ function request(url, options) {
       headers: {
         Authorization: `Bearer ${btoa(accessToken)}`
       }
-    }
   }
   const newOptions = { ...defaultOptions, ...options }
   if (newOptions.method === 'POST' || newOptions.method === 'PUT') {
