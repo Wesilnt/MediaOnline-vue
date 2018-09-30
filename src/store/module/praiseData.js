@@ -85,6 +85,7 @@ export default {
       commit('bindPraiseDetail', res)
       //
       if (res.status != 1202) return
+     await commit('destroyInterval')
       let rollerInterval = setInterval(() => commit('setRollerInterval'), 7000)
       let totalTime = res.duration * 3600 +  (res.createTime - res.sysTime) / 1000  
       let timerInterval = setInterval(() => {

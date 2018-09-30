@@ -32,8 +32,8 @@ const groupManager = {
         //发起集赞标记位
         startPraiseFlag:false,
 
-        //专栏图样式区分
-        headerImageType:''
+        //业务类型
+        serviceType:""    //"FreeZone" "OnlineVision" "OnlineCourse" "Readings"
     },
     getters:{
         // //专栏头图
@@ -75,17 +75,17 @@ const groupManager = {
             state.startPraiseFlag = flag
         },
 
-        bindColunmnInfo(state,{headerImageType,profilePic,courseId,freeLesson}){
+        bindColunmnInfo(state,{serviceType,profilePic,courseId,freeLesson}){
             state.profilePic = profilePic
             state.courseId = courseId
             state.freeLesson = freeLesson
-            state.headerImageType = headerImageType
+            state.serviceType = serviceType
         }
     },
     actions:{
 
-        initColumnInfo({commit},{headerImageType,courseId,profilePic,freeLesson}){
-            commit('bindColunmnInfo',{headerImageType,courseId,profilePic,freeLesson})
+        initColumnInfo({commit},{serviceType,courseId,profilePic,freeLesson}){
+            commit('bindColunmnInfo',{serviceType,courseId,profilePic,freeLesson})
         },
 
         //初始化工具条
