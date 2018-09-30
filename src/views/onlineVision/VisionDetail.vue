@@ -1,7 +1,7 @@
 <template>
   <div id="detailmain" ref="detailmain">
-     <GroupHeader></GroupHeader>
-    <img :src="visionDetail.coverPic" class="head" alt="">
+    <GroupHeader></GroupHeader>
+    <!-- <img :src="visionDetail.coverPic" class="head" alt=""> -->
 
     <div class="navbar">
       <span v-for="(nav,index) in navBars" :key="index" :class="currentNav==index?'item active':'item'" @click="navbarTap(index)">{{nav}}</span>

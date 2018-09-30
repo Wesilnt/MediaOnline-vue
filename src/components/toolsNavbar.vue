@@ -2,7 +2,7 @@
     <div class="purchase-toolbar" v-show="toolsObject&&toolsObject.isShow">
         <div class="toolbar-audition" @click="clickAuditionBtn">
             <i class="qhht-icon audition-icon"></i>
-            <p class="under-text">{{freeLesson.type == "video"?'试看':'试听'}}</p>
+            <p class="under-text">{{serviceType == "OnlineCourse"?'试看':'试听'}}</p>
         </div>
         <hr class="vertical-line"/>
         <div v-show="toolsObject&&toolsObject.originPrice" :class="toolsObject&&toolsObject.collage==false&&toolsObject.collect==false ?'toolbar-price-active' :'toolbar-price'"  @click="clickOriginPriceBtn">
@@ -106,7 +106,8 @@ export default {
       'userAccessStatus',
       'freeLesson',  //试听对象
       'courseId',    //专栏ID
-      'startPraiseFlag'
+      'startPraiseFlag',
+      'serviceType'
     ])
   },
   filters: {
@@ -129,13 +130,7 @@ export default {
     //点击试听按钮 跳转
     clickAuditionBtn() {
       if(this.freeLesson.freeLessonList && this.freeLesson.freeLessonList.length > 0) {
-        if(this.freeLesson.type == "video"){
-          const lessonId = this.freeLesson.freeLessonList[0].id
-          this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
-        }else {
-          const id = this.freeLesson.freeLessonList[0].id
-          this.$router.push({ name: 'AudioPlay', params: { id } })       
-        }
+        this.gotoInfoPage()
       }
     },
     //点击原价购买按钮
@@ -144,7 +139,17 @@ export default {
         courseId: this.courseId,
         payType: 0
       }
-      this.checkoutAuthorrization(params)
+      switch(this.userAccessStatus){
+        //没有购买和集赞行为
+        case 0:
+          this.checkoutAuthorrization(params)
+        break
+        case 1001:
+          if(this.freeLesson.freeLessonList && this.freeLesson.freeLessonList.length > 0) {
+            this.gotoInfoPage()
+          }
+        break
+      }
     },
     //点击拼团按钮
     clickCollageBtn() {
@@ -162,7 +167,6 @@ export default {
           payType: 2
         }
       }
-      console.log('userAccessStatus =', this.userAccessStatus)
       switch (this.userAccessStatus) {
         case -3:
           //拼团失败,重新发起拼团
@@ -173,15 +177,10 @@ export default {
           this.checkoutAuthorrization(params)
           break
         case 1003:
-          this.clickAuditionBtn()
           //拼团成功.解锁专栏,跳转到单集详情页
-          // if(this.freeLesson.freeLessonList){
-          //   const lessonId = this.freeLessonList[0].id
-          //   this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
-          // }else
-          // {
-          //   console.log('没有试听课程')
-          // }
+          if(this.freeLesson.freeLessonList && this.freeLesson.freeLessonList.length > 0) {
+            this.gotoInfoPage()
+          }
           break
         case 1005:
           //拼团中
@@ -212,8 +211,9 @@ export default {
           break
         case 1008:
           //集赞成功已领取  解锁专栏 跳转到单集详情页
-          const lessonId = this.freeLessonList[0].id
-          this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
+          if(this.freeLesson.freeLessonList && this.freeLesson.freeLessonList.length > 0) {
+            this.gotoInfoPage()
+          }
           break
         case 1009:
           //集赞中
@@ -245,8 +245,26 @@ export default {
     },
     //关闭手机号收集框
     cancelDialog() {
-      console.log('代码走到这里每有啊')
       this.bindIsShowMobileDialog(false)
+    },
+    gotoInfoPage(){
+      switch(this.serviceType) {
+        case 'OnlineCourse':
+            const lessonId = this.freeLesson.freeLessonList[0].id
+            this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
+        break
+        case "FreeZone":
+ 
+        break
+        case 'OnlineVision':
+            const visionId = this.freeLesson.freeLessonList[0].id
+            this.$router.push({ name: 'AudioPlay', params: { id:visionId } })   
+        break
+        case 'Readings':
+            const readingId = this.freeLesson.freeLessonList[0].id
+            this.$router.push({ name: 'AudioPlay', params: { id:readingId } })   
+        break
+      }
     }
   }
 }

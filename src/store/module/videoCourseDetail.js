@@ -142,7 +142,8 @@ const videoCourseDetail = {
       }
     },
     //更新自测题数据
-    updateQuestionData({ state, commit }, lessonId) {
+    updateQuestionData({state,commit},lessonId){
+      console.log('代码走到这里')
       //是否显示自测题
       //第一次进入单集详情页面时,答题进度用服务器保存的视频长度
       let progress = 0
