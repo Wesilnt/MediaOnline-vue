@@ -40,8 +40,8 @@
         </div>
 
         <div v-if="headerImageType==='audio'">
-          <div class="book-header-container">
-            <div class="book-cover" v-lazy:background-image="profilePic" :style="{'background-size':'100%'}">
+          <div class="book-header-container lazy-img-larger">
+            <div class="book-cover" v-lazy:background-image="profilePic" :style="{'background-size':'100%',backgroundPosition:'center',backgroundRepeat:'no-repeat'}">
               <!-- <span v-if="new Date().getTime() - new Date(bookDetail.createTime).getTime()<30*24*3600*1000">上新</span> -->
             </div>
           </div>
