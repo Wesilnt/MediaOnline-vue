@@ -1,7 +1,7 @@
 <template>
   <div class="videocourse-detail-container" id="detailmain" ref="detailmain">
       <!-- 播放器封面 -->
-    <div class="video-detail-header" :style="{ background : 'url('+radioShowPic+')' }">
+    <div class="video-detail-header lazy-img-most" v-lazy:background-image="radioShowPic">
       <div class="video-detail-header-right-top">
           <img :src="isLike?collectIcon:unCollectIcon" class="video-detail-collect" alt="" @click="onCollectFavorite">
           <img :src="require('../../assets/images/onlinecourse-play_ic_share.png')" class="video-detail-share" alt="" @click="onShareAction">
@@ -93,11 +93,11 @@ export default {
       unCollectIcon: require('../../assets/images/onlinecourse_love_normal.png'), //未搜藏
       //视频播放相关属性
       timer: 0, //定时器
-      progress: 0,
+
       loaclPlayTotalTime: 0, //本地累计播放时长
       localPlayTime: 0, //本地播放位置
       playStartTime: null,
-      deblockQuestion: false, //是否解锁自测题
+
       isAchieveQuestion: false, //是否完成自测题
       // 我要留言显示
       commentBarShow: false,
@@ -105,7 +105,7 @@ export default {
       sharePageShow: false,
       //控制目录当前播放的状态
       isPlaying: false,
-      activeID: this.$route.params.lessonID //当前选中单集ID
+      activeID: '' //当前选中单集ID
     }
   },
   computed: {
@@ -126,11 +126,14 @@ export default {
       'isAchieveCollect', //是否完成收藏
       'collectionId', //收藏Id
       'learnTime', //服务器上次播放位置
-      'learnTotalTime' //服务器累计播放时长
+      'learnTotalTime', //服务器累计播放时长
+      'deblockQuestion',
+      'progress'
     ]),
-    ...mapGetters(['haveQuestionBOList', 'haveLessonlist'])
+    ...mapGetters(['haveQuestionBOList'])
   },
   mounted() {
+    
     //监听滚动
     addEventListener('scroll', this.handleScroll)
     //视频播放器相关监听
@@ -151,16 +154,10 @@ export default {
     //获取课程ID
     const { lessonId } = this.$route.params
     this.getVideoCourseDetail({ lessonId })
-    //获取单集评论
-    this.getCommentList({
-      regionType: 2202,
-      regionId: lessonId,
-      currentPage: 1,
-      pageSize: 11
-    })
+    this.activeID = this.$route.params.lessonId
   },
   methods: {
-    ...mapMutations(['updateLocalVideoData']),
+    ...mapMutations(['updateLocalVideoData','bindQuestionBymyself']),
     ...mapActions([
       'getVideoCourseDetail',
       'getLessonListByCourse',
@@ -189,8 +186,8 @@ export default {
         !this.deblockQuestion &&
         Math.round(videoData.playTotalTime) >= Math.round(duration * 0.7)
       ) {
-        console.log(1)
-        this.deblockQuestion = true
+        let deblockQuestion = true
+        this.bindQuestionBymyself({deblockQuestion})
       }
       if (paused) {
         // 获取播放累计时长
@@ -215,12 +212,9 @@ export default {
       // 进度条 未解锁就动态显示
       if (!this.deblockQuestion && duration) {
         const percent = (this.loaclPlayTotalTime / duration) * 100
-        this.progress = percent <= 100 ? percent : 100
-      } else {
-        //第一次进入单集详情页面时,答题进度用服务器保存的视频长度
-        const percent = (this.loaclPlayTotalTime / this.totalTime) * 100
-        this.progress = percent <= 100 ? percent : 100
-      }
+        let progress = percent <= 100 ? percent : 100
+        this.bindQuestionBymyself({progress})
+      } 
     },
     //显示键盘
     toggleKeyboard(commentBarShow, inputer) {
@@ -259,6 +253,8 @@ export default {
       this.activeID = lessonId
       //刷新接口
       this.getVideoCourseDetail({ lessonId: lessonId })
+      //刷新路由中单集ID
+      this.$router.push({name:'videoCourseDetail',params:{lessonId}})
     },
     clickFnc(index) {
       this.selected = index
@@ -278,9 +274,9 @@ export default {
       }
 
       let anchor = this.$el.querySelector(positionId)
-      document.body.scrollTop = anchor.offsetHeight - 50
+      document.body.scrollTop = anchor.offsetHeight - 60
       // // Firefox
-      document.documentElement.scrollTop = anchor.offsetTop - 50
+      document.documentElement.scrollTop = anchor.offsetTop - 60
       // Safari
       pageYOffset = anchor.offsetTop - 50
     },
@@ -289,8 +285,8 @@ export default {
       let scrollTop = Math.abs(
         this.$refs.detailmain.getBoundingClientRect().top
       )
-      let noteH = this.$el.querySelector('#note').offsetTop - 50
-      let catalogH = this.$el.querySelector('#catalog').offsetTop - 50
+      let noteH = this.$el.querySelector('#note').offsetTop - 60
+      let catalogH = this.$el.querySelector('#catalog').offsetTop - 60
       // let leavemessageH = this.$el.querySelector('#leavemessage').offsetTop -50
       if (scrollTop < noteH) {
         this.selected = 0
@@ -312,8 +308,9 @@ export default {
 .video-detail-header {
   width: 100%;
   height: 422px;
-  background-color: rgb(198, 72, 172);
+  // background-color: rgb(198, 72, 172);
   position: relative;
+  background: rgb(198, 72, 172) center no-repeat;
 }
 .video-detail-header-right-top {
   position: absolute;

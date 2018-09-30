@@ -99,7 +99,6 @@ export default {
       })
     },
     gotoVideoCourseDetailPage(lessonId) {
-      console.log('路由跳转 lessonId = ' + lessonId)
       this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
     },
     async handleScroll() {

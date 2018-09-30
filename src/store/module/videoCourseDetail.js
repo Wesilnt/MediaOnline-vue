@@ -37,7 +37,9 @@ const videoCourseDetail = {
     //自测题
     quesNum: 0, //自测题个数
     rightNum: 0, //自测题答对个数
-    rankNum: 3 //自测题排行
+    rankNum: 3, //自测题排行
+    deblockQuestion: false, //是否解锁自测题
+    progress: 0,   //自测题进度
   },
   getters: {
     haveQuestionBOList: state => {
@@ -50,7 +52,6 @@ const videoCourseDetail = {
       state.audioUrl = payload.audioUrl
       state.videoUrl = payload.videoUrl
       state.courseId = payload.courseId
-      console.log('------ + courseID =', payload.courseId)
       state.id = payload.id
       state.isFree = payload.isFree
       state.isLike = payload.isLike
@@ -63,9 +64,9 @@ const videoCourseDetail = {
       state.learnTotalTime = payload.learnTotalTime
       state.learnTime = payload.learnTime
     },
-    bindQuestionBymyself(state, quesNum, rightNum) {
-      state.quesNum = quesNum
-      state.rightNum = rightNum
+    bindQuestionBymyself(state, {deblockQuestion,progress}) {
+      state.deblockQuestion = deblockQuestion||state.deblockQuestion
+      state.progress = progress||state.progress
     },
     bindAllCourse(state, payload) {
       state.lessonList = payload.result
@@ -86,45 +87,22 @@ const videoCourseDetail = {
     submitVideoPlayData(state) {}
   },
   actions: {
-    async getVideoCourseDetail({ commit, dispatch, state }, { lessonId }) {
-      //获取视频列表数据
-      const result = await getVideoLessonDetail({ lessonId })
-      console.log('视频单集详情接口')
-      console.log('result = ', result)
-      commit('bindVideoCourseDetail', result)
-      //获取目录列表数据
-      if (result == null) return
-      let params = {
-        courseId: result.courseId,
-        currentPage: 1,
-        pageSize: 10
-      }
-      dispatch('getLessonListByCourse', params)
-      //判断是否已完成答题
-      //自测题个数
-      const quesNum = result.questionBOList.length
-      //自测题答对个数
-      let rightNum = 0
-      result.questionBOList.forEach(element => {
-        if (element.answer == element.rightOpt) {
-          rightNum++
-        }
-      })
-      commit('bindQuestionBymyself', quesNum, rightNum)
 
+    //更新播放数据
+    updateVideoPlayData({dispatch,state},lessonId){
       //在这里判断是否提交本地的视频播放数据
       let storage = window.localStorage
       //根据单集ID来存储视频播放数据对象
-      let videoData = JSON.parse(storage.getItem(result.id))
+      let videoData = JSON.parse(storage.getItem(lessonId))
       //服务器数据
-      let servicePlayTotalTime = result.learnTotalTime || 0
-      let servicePlayPosition = result.learnTime
+      let servicePlayTotalTime = state.learnTotalTime || 0
+      let servicePlayPosition = state.learnTime
       if (videoData != null) {
         //本地数据
         let loaclPlayTotalTime = videoData.playTotalTime || 0
         let loaclPlayPosition = videoData.historyPlayPosition
-        console.log(videoData)
-        console.log('loaclPlayPosition' + loaclPlayPosition)
+        // console.log(videoData)
+        // console.log('loaclPlayPosition' + loaclPlayPosition)
         if (loaclPlayTotalTime > servicePlayTotalTime) {
           let payload = {
             lessonId: lessonId,
@@ -144,16 +122,63 @@ const videoCourseDetail = {
             historyPlayPosition: servicePlayPosition
           }
           obj = JSON.stringify(obj)
-          storage.setItem(result.id, obj)
+          storage.setItem(lessonId, obj)
         }
+
+        dispatch('updateQuestionData',lessonId)
+
       } else {
+        //第一次本地播放记录为空,更新服务器的记录到本地
         let obj = {
           playTotalTime: servicePlayTotalTime,
           historyPlayPosition: servicePlayPosition
         }
         obj = JSON.stringify(obj)
-        storage.setItem(result.id, obj)
+        storage.setItem(lessonId, obj)
+        dispatch('updateQuestionData',lessonId)
       }
+    },
+    //更新自测题数据
+    updateQuestionData({state,commit},lessonId){
+      //是否显示自测题
+      //第一次进入单集详情页面时,答题进度用服务器保存的视频长度
+      let progress = 0
+      let deblockQuestion = false
+      let videoData = JSON.parse(window.localStorage.getItem(lessonId))
+      const percent = (videoData.playTotalTime / state.totalTime) * 100
+      progress = percent <= 100 ? percent : 100
+      if (!deblockQuestion &&
+        Math.round(videoData.playTotalTime) >= Math.round(state.totalTime * 0.7)
+      ) {
+        deblockQuestion = true
+      }
+      commit('bindQuestionBymyself',{progress,deblockQuestion})
+    },
+    //获取单集详情
+    async getVideoCourseDetail({ commit, dispatch, state }, { lessonId }) {
+      //获取视频列表数据
+      const result = await getVideoLessonDetail({ lessonId })
+      console.log('视频单集详情接口')
+      console.log('result = ', result)
+      commit('bindVideoCourseDetail', result)      
+      if (result == null) return
+      let params = {
+        courseId: result.courseId,
+        currentPage: 1,
+        pageSize: 10
+      }
+      //获取目录列表数据
+      dispatch('getLessonListByCourse', params)
+      //获取单集评论
+      const commentParams = {
+        regionType: 2202,
+        regionId: lessonId,
+        currentPage: 1,
+        pageSize: 11
+      }
+      dispatch('getCommentList',commentParams)
+      //更新视频播放数据
+      dispatch('updateVideoPlayData',lessonId)
     },
 
     async getLessonListByCourse({ commit }, params) {

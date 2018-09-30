@@ -1,6 +1,6 @@
 <template>
     <div class="question-container">
-        <div v-if="grade">
+        <div v-if="grade || newGrade">
             <div class="qhht-flex">
                 <div class="question-to-review-item">
                     <p>{{questionLength}}</p>

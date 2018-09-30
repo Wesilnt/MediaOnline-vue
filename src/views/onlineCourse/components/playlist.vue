@@ -13,7 +13,7 @@
             </div>  
        
         </div>
-             <hr v-if="!lastindex">
+            <hr v-if="!lastindex">
     </div>
 </template>
 

@@ -103,7 +103,7 @@ const questionList = {
         console.log(response);
         await commit('saveStatus', {
         loading: false,
-        newGrade: response.data
+        newGrade: response
       })
     },
     async handleNext({ dispatch, commit }, { nextIndex }) {
