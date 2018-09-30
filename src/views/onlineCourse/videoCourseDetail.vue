@@ -303,7 +303,7 @@ export default {
   height: 422px;
   // background-color: rgb(198, 72, 172);
   position: relative;
-  background: rgb(198, 72, 172) center no-repeat;
+  background: #f6f6f6 center/cover no-repeat;
 }
 .video-detail-header-right-top {
   position: absolute;

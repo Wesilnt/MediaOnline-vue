@@ -1,7 +1,7 @@
 <template>
     <div class="groupBuy-container">
         <div v-show="isShowGroupBuy">
-            <div class="groupBuy-usericon" v-if="isSixGroup == true" >
+            <div class="groupBuy-usericon" v-if="isSixGroup === true" >
                 <div class="qhht-flex groupBuy-usericon-top">
                         <div class="groupBuy-usericon-item" v-for="(item,index) in userListTop" :key="index" :style="item.avatarUrl==null?{}:{ background : 'url('+item.avatarUrl+')', 'background-size' : '100%'}">
                             <div class="groupBuy-usericon-manager" v-show="item.isStarter">团长</div>            
@@ -47,7 +47,8 @@
           </div>
         </div>
            <!--2. 少年视野，少年必修-->
-        <div v-else class="groupBuy-banner" v-lazy:background-image="profilePic" :style="{'background-size':'100%'}">
+        <div v-else class="lazy-img-larger groupBuy-banner" v-lazy:background-image="profilePic">
+
             <!-- <div class="groupBuy-circleline" v-show="true"></div> -->
             <span class="groupBuy-banner-bottom" v-show="buyCount == 0 ? false : true">{{buyCount}}人已购买</span>
         </div>
@@ -63,9 +64,7 @@ import CountDown from '../../../components/CountDown'
 export default {
   name: 'GroupHeader',
   data() {
-    return {
-
-    }
+    return {}
   },
   components: {
     CountDown
@@ -80,12 +79,10 @@ export default {
       'headerType',
       'isShowGroupBuy',
       'profilePic',
-      'serviceType'   
+      'serviceType',
+      'headerImageType'
     ]),
-    ...mapGetters([
-      'buyCount'
-    ])
-
+    ...mapGetters(['buyCount'])
   }
 }
 </script>
@@ -165,19 +162,16 @@ export default {
   height: 48px;
 }
 .groupBuy-deadline {
-
   color: rgb(204, 204, 204);
   margin: 16px 0 10px;
 }
 .groupBuy-banner {
-  width: 100%;
   height: 300px;
-  background-color: rgb(198, 72, 172);
+  background: #f6f6f6 center/cover no-repeat;
   padding: 0 40px;
   box-sizing: border-box;
   text-align: left;
   position: relative;
-
   span {
     position: absolute;
     bottom: 20px;

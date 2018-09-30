@@ -1,7 +1,7 @@
 <template>
   <div class="video-bigimage-container">
     <div class="originImage">
-      <img :src="src" class="img" @click="isExtend=true" @error="imgerrHandler">
+      <img :src="src" class="img" @click="isExtend=true">
     </div>
     <transition enter-active-class="fadeIn" leave-active-class="fadeOut">
       <div v-if="isExtend&&src" class="imageExtend" @click="isExtend=false">
@@ -19,26 +19,18 @@ export default {
     return {
       isExtend: false
     }
-  },
-  methods: {
-    imgerrHandler(e) {
-      e.target.src = this.imgerr
-    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .originImage {
-  width: 100%;
   max-height: 800px;
   overflow: hidden;
 }
 .video-bigimage-container {
   display: inline-block;
   width: 100%;
-  // height: 800px;
-  // overflow: hidden;
   .imageExtend {
     position: fixed;
     top: 0;
@@ -47,11 +39,9 @@ export default {
     left: 0;
     z-index: 3500;
     overflow: scroll;
-    top: 0;
   }
   .img {
     width: 100%;
-    // height: 100%;
     display: block;
   }
   .extend-back {

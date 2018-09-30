@@ -2,16 +2,7 @@ import 'whatwg-fetch'
 import { Toast } from 'vant'
 import api from './config'
 import { isUrl, json2formData } from './utils'
-import {
-  getAccessToken,
-  getRefreshToken,
-  setAccessToken,
-  getExpireTime,
-  setExpireTime,
-  getUserInfo,
-  setUserInfo,
-  getCookie
-} from './userAuth'
+import { getAccessToken, getCookie } from './userAuth'
 import store from '../store/store'
 import { IS_ONLINE } from './config'
 
@@ -88,26 +79,18 @@ const checkResponseCode = (url, response) => {
  * @param  {object} [options] The options we want to pass to "fetch"
  * @return {object}           An object containing either "data" or "err"
  */
-function request(url, options, needToken = true) {
-  let accessToken = ''
+function request(url, options) {
   const baseURI = isUrl(url) ? '' : api
-  let defaultOptions
-  if (needToken) {  
-    accessToken =
-        IS_ONLINE
-        ? getCookie('COOKIE_TOKEN_KEY_CNONLINE')
-        : "8f9d19c4-6239-478b-bfbe-2a5d0cb5401e" 
-
-    defaultOptions = {
-      // credentials: 'include',
-      // mode: 'no-cors',
-      // formData: false,
-      headers: {
-        Authorization: `Bearer ${btoa(accessToken)}`
-      }
+  const accessToken = IS_ONLINE
+    ? getCookie('COOKIE_TOKEN_KEY_CNONLINE')
+    : '9832536e-c17d-4d3f-a548-52b4d1fee9be'
+  const defaultOptions = {
+    // credentials: 'include',
+    // mode: 'no-cors',
+    // formData: false,
+    headers: {
+      Authorization: `Bearer ${btoa(accessToken)}`
     }
-  } else {
-    defaultOptions = {}
   }
   const newOptions = { ...defaultOptions, ...options }
   if (newOptions.method === 'POST' || newOptions.method === 'PUT') {

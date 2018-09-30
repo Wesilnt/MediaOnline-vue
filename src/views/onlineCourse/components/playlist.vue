@@ -1,19 +1,17 @@
 <template>
-    <div class="cl-playlist-container-father" @click="onClick">
-        <div class="cl-playlist-container">
-            <div class="cl-list-left"><img :class="{'cl-img-active' : activeID == iteminfo.id}" :src="activeID == iteminfo.id ? imgPlaying : imgPause"></div>
-            <div class="cl-list-right">
-                <div :class="{'cl-list-title' : true, 'cl-list-title-active' : activeID == iteminfo.id}">{{iteminfo.title}}</div>
-                <div class="cl-list-info">{{iteminfo.subTitle}}</div>
-                <div class="cl-list-bottom">
-                    <input v-if="iteminfo.isFree" class="cl-bottom-btn" type="button" value="试听">
-                    <div class="cl-time">{{iteminfo.createTime | handleDate() }}</div>
-                    <div class="cl-number">{{ studyProgress |getProgress(iteminfo.learnTime,iteminfo.totalTime) }}</div>
-                </div>
-            </div>  
-       
+    <div class="qhht-flex playItem-container" @click="onClick">
+        <i class="qhht-icon playItem-avator">
+            <i class="qhht-icon playItem-item-badge" :class="{'playItem-item-badge-active':activeID === iteminfo.id}"></i>
+        </i>
+        <div class="playItem-content">
+            <p class="playItem-title" :class="{'playItem-title' : true, 'playItem-title-active' : activeID === iteminfo.id}">{{iteminfo.title}}</p>
+            <p class="playItem-info">{{iteminfo.subTitle}}</p>
+            <p>
+                <a v-if="iteminfo.isFree" class="audition-btn">试听</a>
+                <span>{{iteminfo.createTime | handleDate() }}</span> |
+                <span>{{ studyProgress |getProgress(iteminfo.learnTime,iteminfo.totalTime) }}</span>
+            </p>
         </div>
-            <hr v-if="!lastindex">
     </div>
 </template>
 
@@ -22,8 +20,6 @@ export default {
   props: ['iteminfo', 'lastindex', 'activeID'],
   data() {
     return {
-      imgPlaying: require('../../../assets/images/onlinecourse_ic_playing.png'),
-      imgPause: require('../../../assets/images//onlinecourse_play_ic_pause.png'),
       studyProgress: '', //收听进度
       isPlaying: false
     }
@@ -35,7 +31,7 @@ export default {
     },
     //计算收听进度
     getProgress(learnTime, totalTime) {
-      if (learnTime == '') {
+      if (learnTime === '') {
         return '未收听'
       } else {
         return (
@@ -52,109 +48,59 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
-.cl-playlist-container {
-  padding: 28px 0px 24px;
+<style lang='less' scoped>
+.playItem-container {
+  padding: 24px;
   background-color: white;
-  display: flex;
   flex-direction: row;
-  width: 100%;
-  height: 230px;
-  box-sizing: border-box;
-}
-
-.cl-playlist-container-father {
-  display: flex;
-  flex-direction: column;
-  hr {
-    height: 1px;
-    width: 100%;
-    background-color: lightgray;
-    border: none;
+  &:not(:last-child) {
+    border-bottom: 2px solid #ededed;
   }
+  color: #717171;
 }
-
-.cl-list-left {
+.playItem-avator {
   position: relative;
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  text-align: center;
-  background-color: rgb(253, 231, 231);
-  align-self: center;
-  img {
-    position: absolute;
-    top: 26px;
-    left: 32px;
-    width: 40px;
-    height: 48px;
-  }
-
-  .cl-img-active {
-    top: 26px;
-    left: 28px;
-    width: 48px;
-    height: 44px;
+  background-color: #f6f6f6;
+  overflow: hidden;
+}
+.playItem-item-badge {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100px;
+  height: 100px;
+  background-image: url('../../../assets/images/onlinecourse_play_ic_pause.png');
+  background-size: 36px;
+  &.playItem-item-badge-active {
+    background-size: 48px;
+    background-image: url('../../../assets/images/onlinecourse_ic_playing.png');
   }
 }
-.cl-list-right {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
+.playItem-content {
+  flex-grow: 1;
   padding: 0 24px;
-  flex: 1;
-  box-sizing: border-box;
 }
-.cl-list-title {
+.playItem-title {
   font-size: 32px;
-  color: rgb(51, 51, 51);
-  text-align: left;
-}
-.cl-list-title-active {
-  // font-size: 14px;
-  color: rgb(255, 163, 47);
-  // text-align: left;
-}
-.cl-list-info {
-
-  color: rgb(102, 102, 102);
-  text-align: left;
-}
-.cl-list-bottom {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-
-  .cl-bottom-btn {
-    border-radius: 16px;
-    background-color: rgb(237, 108, 103);
-    padding: 7px 17px;
-    height: 50px;
-    align-self: center;
-
-    color: white;
-    line-height: 41px;
-    border: none;
-    margin-right: 20px;
+  color: #333;
+  &.playItem-title-active {
+    color: #ffa32f;
+    font-weight: bolder;
   }
+}
 
-  .cl-time {
-    font-size: 26px;
-    color: rgb(102, 102, 102);
-    // margin-left: 20px;
-
-    &:after {
-      content: '|';
-      margin-left: 10px;
-      width: 1px;
-      height: 30px;
-    }
-  }
-
-  .cl-number {
-
-    color: rgb(102, 102, 102);
-    margin-left: 10px;
-  }
+.playItem-info {
+  margin: 12px 0;
+}
+.audition-btn {
+  display: inline-block;
+  border-radius: 8px;
+  background-color: #ed6c67;
+  padding: 6px 20px;
+  color: white;
+  margin-right: 20px;
 }
 </style>
