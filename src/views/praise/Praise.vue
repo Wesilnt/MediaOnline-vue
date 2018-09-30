@@ -1,9 +1,7 @@
 <template>
   <div class="praise-container">
     <!-- 1. 头部封面图 -->
-    <div class="praise-header">
-            <!-- <img src="../../images/praise_head_bg.png"> -->
-    </div>
+    <div class="praise-header"/>
     <!-- 2. 点赞信息 -->
     <div class="thumbs-detail">
       <!-- 2.1 集赞人提示 -->
@@ -67,15 +65,15 @@ const {
 } = createNamespacedHelpers('praise')
 export default {
   name: 'Praise',
-  data() { 
+  data() {
     return {
-      columnType:this.$route.query.columnType,  //专栏类型  FreeZone 免费专区 OnlineCourse 在线课堂  OnlineVision 在线视野  Readings 读书会
+      columnType: this.$route.query.columnType, //专栏类型  FreeZone 免费专区 OnlineCourse 在线课堂  OnlineVision 在线视野  Readings 读书会
       interval: null,
       courseId: this.$route.params.courseId,
       collectLikeId: this.$route.params.collectLikeId,
       showShare: false, //显示分享框
       showExplain: false,
-      shareData:{}
+      shareData: {}
     }
   },
   components: {
@@ -202,19 +200,20 @@ export default {
 .praise-container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  background: url(../../assets/praise_bg.png) center 20%/100% repeat-y;
+  min-height: 100vh;
   //1. 头部封面
   .praise-header {
     position: absolute;
-    z-index: -99;
     width: 100%;
     top: -12vh;
     bottom: -118px;
     background: url(../../assets/praise_bg.png) center 20%/100% repeat-y;
-    height: 112vh;
+    background-repeat: no-repeat;
   }
   //2. 中间点赞详情 2.66666667%  = 20px/750px
   .thumbs-detail {
+    z-index: 100;
     background-color: white;
     border-radius: 24px;
     margin: 290px 2.66666667% 0;

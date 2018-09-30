@@ -80,6 +80,7 @@ const groupManager = {
             state.courseId = courseId
             state.freeLesson = freeLesson
             state.serviceType = serviceType
+            console.log("serviceType:",serviceType)
         }
     },
     actions:{

@@ -81,7 +81,7 @@ export default {
     //集赞详情
     async getCollectDetail({ state, commit }, params) {
       const res = await getCollectDetail(params)
-      console.log(res)
+      console.log("集赞详情:",res)
       commit('bindPraiseDetail', res)
       //
       if (res.status != 1202) return
@@ -120,9 +120,8 @@ export default {
       console.log(res)
     },
     //参与集赞
-    async joinCollectLike({ commit }, params) {
-      const res = await joinCollectLike(params)
-      console.log(res)
+    async joinCollectLike({ dispatch }, params) {
+      const res = await joinCollectLike(params) 
       dispatch('getCollectDetail',params)
     },
     //获取用户信息是否订阅免费专区

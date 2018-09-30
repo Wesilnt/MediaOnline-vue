@@ -81,15 +81,21 @@ const checkResponseCode = (url, response) => {
  */
 function request(url, options) {
   const baseURI = isUrl(url) ? '' : api
-  const accessToken = IS_ONLINE
-    ? getCookie('COOKIE_TOKEN_KEY_CNONLINE')
-    : '9832536e-c17d-4d3f-a548-52b4d1fee9be'
-  const defaultOptions = {
-    // credentials: 'include',
-    // mode: 'no-cors',
-    // formData: false,
-    headers: {
-      Authorization: `Bearer ${btoa(accessToken)}`
+  let defaultOptions
+  if (needToken) {  
+    accessToken =
+        IS_ONLINE
+        ? getCookie('COOKIE_TOKEN_KEY_CNONLINE')
+        // :"d74e0a2e-7259-422a-8a82-d77b750b0b92"
+        : "c5eaa5c0-d3af-4b8c-976c-ea6b6ea0ff97"
+
+    defaultOptions = {
+      // credentials: 'include',
+      // mode: 'no-cors',
+      // formData: false,
+      headers: {
+        Authorization: `Bearer ${btoa(accessToken)}`
+      } 
     }
   }
   const newOptions = { ...defaultOptions, ...options }

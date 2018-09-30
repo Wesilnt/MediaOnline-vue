@@ -74,7 +74,7 @@ export default {
     PhoneVerif
   },
   watch: {
-    collectLikeId: function(newVal,) {
+    collectLikeId: function(newVal) {
       if (newVal != 0 && this.startPraiseFlag) {
         this.toggolePraiseFlag(false)
         this.$router.push({
@@ -218,7 +218,7 @@ export default {
             this.gotoInfoPage()
           }
           break
-        case 1009:
+        case 1009: 
           //集赞中
           this.$router.push({
             name: 'Praise',
