@@ -169,9 +169,12 @@ export default {
     ]),
     //播放视频
     clickPlayVideoBtn() {
+    
       const video = this.$refs.videoitem
-      //从本地获取历史播放位置
+      //从本地获取当前播放单集历史播放位置
       const videoData = JSON.parse(localStorage.getItem(this.id))
+        console.log('play的回调')
+        console.log("videoData--Play = ",videoData)
       const { historyPlayPosition } = videoData
       video.play()
       video.currentTime =
@@ -181,31 +184,37 @@ export default {
     },
     getVideoProgress({ target }) {
       const { currentTime, paused, duration } = target
-      //  播放累计时长大于视频的总时长，解锁
-      const videoData = JSON.parse(localStorage.getItem(this.id))
-      console.log(videoData.playTotalTime + currentTime, this.totalTime * 0.7)
-      if (
-        !this.deblockQuestion &&
-        videoData.playTotalTime >= this.totalTime * 0.7
-      ) {
-        this.bindQuestionBymyself({ deblockQuestion: true })
-      }
-      // if (paused) {
+      /*
+      视频存储数据逻辑
+      */
       // 获取播放累计时长
-      const durationPlayingTime = this.playStartTime
-        ? (new Date() - this.playStartTime) / 1000
-        : 0
-      this.loaclPlayTotalTime += durationPlayingTime
-      this.playStartTime = null
-      const newVideoData = JSON.parse(localStorage.getItem(this.id))
-      const newTotalTime =
-        durationPlayingTime + Math.round(parseFloat(newVideoData.playTotalTime))
-      const obj = {
-        playTotalTime: newTotalTime,
-        historyPlayPosition: currentTime
+      if(paused){
+        const durationPlayingTime = this.playStartTime
+          ? (new Date() - this.playStartTime) / 1000
+          : 0
+        this.loaclPlayTotalTime += durationPlayingTime
+        this.playStartTime = null
+        const newVideoData = JSON.parse(localStorage.getItem(this.id))
+        const newTotalTime =
+          durationPlayingTime + Math.round(parseFloat(newVideoData.playTotalTime))
+        const obj = {
+          playTotalTime: newTotalTime,
+          historyPlayPosition: currentTime
+        }
+        localStorage.setItem(this.id, JSON.stringify(obj))
+        /*
+        自测题逻辑
+        */
+        //  播放累计时长大于视频的总时长，解锁
+        console.log(newTotalTime,currentTime, this.totalTime * 0.7)
+        if (
+            !this.deblockQuestion &&
+            newTotalTime>= this.totalTime * 0.7
+          ) {
+            this.bindQuestionBymyself({ deblockQuestion: true })
+        }     
       }
-      localStorage.setItem(this.id, JSON.stringify(obj))
-      // }
+      
       // 进度条 未解锁就动态显示
       if (!this.deblockQuestion && duration) {
         const percent = (this.loaclPlayTotalTime / duration) * 100

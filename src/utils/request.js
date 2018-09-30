@@ -87,7 +87,6 @@ function request(url, options) {
         IS_ONLINE
         ? getCookie('COOKIE_TOKEN_KEY_CNONLINE')
         :"d74e0a2e-7259-422a-8a82-d77b750b0b92"
-        // : "c5eaa5c0-d3af-4b8c-976c-ea6b6ea0ff97"
 
     defaultOptions = {
       // credentials: 'include',
