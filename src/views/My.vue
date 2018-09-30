@@ -34,9 +34,6 @@ import help from '../assets/images/my_help.png'
 
 export default {
   name: 'My',
-  components: {
-    // NavBar
-  },
   data: function() {
     return {
       nickName: '',
@@ -84,8 +81,8 @@ export default {
         },
         {
           name: '/my/wx-config',
-          image: praise,
-          title: '微信接口'
+          image: require('../assets/logo.png'),
+          title: '组件测试'
         }
       ]
     }
@@ -96,10 +93,7 @@ export default {
   methods: {
     ...mapActions(['queryNewMessageCount', 'getMyUserInfo']),
     editUserInfo: function() {
-    /*  if (this.userInfo.gender && this.userInfo.grade && this.userInfo.role) {
-        this.$router.push({ path: './my/DisplayUserInfo' })
-      } else {*/
-        this.$router.push({ path: './my/EditUserPhone' })
+      this.$router.push({ path: './my/EditUserPhone' })
       //}
     },
     itemClick: function(name) {
@@ -172,8 +166,8 @@ export default {
       color: #fff;
       text-align: center;
       font-size: 26px;
-      padding: 0px 10px 8px 10px;
-      margin: 0px 0px 0px 100px;
+      padding: 0 10px 8px;
+      margin-bottom: 100px;
     }
     &-img {
       width: 112px;

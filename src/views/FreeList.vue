@@ -16,7 +16,11 @@ export default {
   props: ['freeList'],
   methods: {
     routerToPlayDetail(id) {
-        this.$router.push({ name: 'AudioPlay', params:{id}, query: { playType: 'freezone' }})
+      this.$router.push({
+        name: 'AudioPlay',
+        params: { id },
+        query: { playType: 'freezone' }
+      })
     }
   }
 }
