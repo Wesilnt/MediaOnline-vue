@@ -123,15 +123,15 @@ export default {
       // 记录初始的被监视元素宽高及具顶部信息
       this.scrollToolOffsetBottom = this.$refs.scrollTool.clientHeight + 4
       this.scrollTargetClientRect = this.bars.map(item => {
-        /*TODO getBoundingClientRect与offsetTop优缺点
+        /*TODO getBoundingClientRect与offsetTop优缺点 (微信浏览器没有y值)
 * getBoundingClientRect返回的是元素现在所在位置距离顶部高等，所以如果当前页面记录了访问位置，拿到的就不准确，逻辑会全部错误。但此方法返回的位置最为精确
 * offsetTop 拿到的是距离是当前元素上边缘距离offsetParent返回元素的距离的数值  （offsetParent此属性可以返回距离当前元素最近的采用定位（position属性值为fixed、relative或者absolute）祖先元素）考虑到应用场景，此值拿到的较为准确
 * */
         const elem = this.$refs[item.ref]
         const { offsetTop, clientHeight } = elem
         return { y: offsetTop, height: clientHeight + offsetTop }
-        // const { y, height } = this.$refs[item.ref].getBoundingClientRect()
-        // return { y: Math.ceil(y), height }
+        // const { top, height } = this.$refs[item.ref].getBoundingClientRect()
+        // return { top: Math.ceil(top), height }
       })
     },
     scrollToRef(active) {
@@ -144,13 +144,13 @@ export default {
     handleScroll(e) {
       e.preventDefault()
       e.stopPropagation()
-      const { y } = document.body.getBoundingClientRect()
-      const offsetBodyTop = -y
+      const { top } = document.body.getBoundingClientRect()
+      const offsetBodyTop = -top
       this.scrollTargetClientRect.forEach((item, index) => {
         // console.log( `距顶 ${item.y - offsetBodyTop}, 距底${item.height - offsetBodyTop} `)
         // 如果元素在视图内，就设置active当前对象index
         // 判断依据 body滚动高度是否大于该元素距离顶部高度，且低于该元素高度
-        if (
+          if (
           item.y - offsetBodyTop > 0 &&
           item.height - offsetBodyTop < window.innerHeight &&
           this.active !== index
