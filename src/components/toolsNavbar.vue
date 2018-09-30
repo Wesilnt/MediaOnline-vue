@@ -129,8 +129,10 @@ export default {
     ]),
     //点击试听按钮 跳转
     clickAuditionBtn() {
-      if(this.freeLesson.freeLessonList && this.freeLesson.freeLessonList.length > 0) {
+      if(this.freeLesson && this.freeLesson.length > 0) {
         this.gotoInfoPage()
+      }else{
+        this.$toast('暂无试听课程')
       }
     },
     //点击原价购买按钮
@@ -145,7 +147,7 @@ export default {
           this.checkoutAuthorrization(params)
         break
         case 1001:
-          if(this.freeLesson.freeLessonList && this.freeLesson.freeLessonList.length > 0) {
+          if(this.freeLesson && this.freeLesson.length > 0) {
             this.gotoInfoPage()
           }
         break
@@ -178,7 +180,7 @@ export default {
           break
         case 1003:
           //拼团成功.解锁专栏,跳转到单集详情页
-          if(this.freeLesson.freeLessonList && this.freeLesson.freeLessonList.length > 0) {
+          if(this.freeLesson && this.freeLesson.length > 0) {
             this.gotoInfoPage()
           }
           break
@@ -211,7 +213,7 @@ export default {
           break
         case 1008:
           //集赞成功已领取  解锁专栏 跳转到单集详情页
-          if(this.freeLesson.freeLessonList && this.freeLesson.freeLessonList.length > 0) {
+          if(this.freeLesson && this.freeLesson.length > 0) {
             this.gotoInfoPage()
           }
           break
@@ -247,21 +249,21 @@ export default {
     cancelDialog() {
       this.bindIsShowMobileDialog(false)
     },
-    gotoInfoPage(){
+    gotoInfoPage(){ 
       switch(this.serviceType) {
         case 'OnlineCourse':
-            const lessonId = this.freeLesson.freeLessonList[0].id
+            const lessonId = this.freeLesson[0].id
             this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
         break
         case "FreeZone":
  
         break
         case 'OnlineVision':
-            const visionId = this.freeLesson.freeLessonList[0].id
+            const visionId = this.freeLesson[0].id
             this.$router.push({ name: 'AudioPlay', params: { id:visionId } })   
         break
         case 'Readings':
-            const readingId = this.freeLesson.freeLessonList[0].id
+            const readingId = this.freeLesson[0].id
             this.$router.push({ name: 'AudioPlay', params: { id:readingId } })   
         break
       }
