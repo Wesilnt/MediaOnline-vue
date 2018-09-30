@@ -20,17 +20,20 @@ const visionData = {
             commit('setCategoryList',state.categoryList.slice().reverse());
         },
       async  getVisionListData({commit,state}){
-          let result = await getVisionList({currentPage:state.currentPage, pageSize:state.pageSize, type:1003})
+          await commit('setCurrentPage', 1)
+          let result = await getVisionList({currentPage:1, pageSize:state.pageSize, type:1003})
+          await commit('setFinished', result.courseInfo.result.length>= state.totalCount);
           commit('setBannerPic', result.bannerPic)
           commit('setVisionList', result.courseInfo.result)
           commit('setTotalCount',result.courseInfo.totalCount)
         },
         async getMoreData({commit, state}){
             commit('setIsLoading',true);
-            commit('setCurrentPage', state.currentPage + 1);
+            await commit('setCurrentPage', state.currentPage + 1); 
             let result = await getVisionList({currentPage:state.currentPage, pageSize:state.pageSize, type:1003})
             let newList =state.visionList.concat(result.courseInfo.result);
             await commit('setFinished',newList.length>= state.totalCount);
+            console.log( state.totalCount)
             commit('setVisionList', newList)
             console.log(state.visionList)
             commit('setIsLoading',false);
