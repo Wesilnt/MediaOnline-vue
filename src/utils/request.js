@@ -82,12 +82,9 @@ const checkResponseCode = (url, response) => {
 function request(url, options) {
   const baseURI = isUrl(url) ? '' : api
   let defaultOptions
-  if (needToken) {  
-    accessToken =
-        IS_ONLINE
+    const accessToken = IS_ONLINE
         ? getCookie('COOKIE_TOKEN_KEY_CNONLINE')
-        :"d74e0a2e-7259-422a-8a82-d77b750b0b92"
-
+        : '9832536e-c17d-4d3f-a548-52b4d1fee9be'
     defaultOptions = {
       // credentials: 'include',
       // mode: 'no-cors',
