@@ -16,7 +16,7 @@
             </div>
 
             <div v-for="(item,index) in likeList" :key="item.id" class="like-list">
-                <van-swipe-cell :right-width="150" :on-close="onClose(item.id)">
+               <!-- <van-swipe-cell :right-width="150" :on-close="onClose(item.id)">-->
                     <div class="like-list-item">
                         <!--<img src="" class="like-item-avatar"/>-->
                         <p class="like-list-item-order-number">{{index + 1}}</p>
@@ -30,7 +30,7 @@
                         <img class="like-list-item-img-more" src="../../assets/images/my_record_more.png"/>
                     </div>
                     <span slot="right">删除</span>
-                </van-swipe-cell>
+<!--                </van-swipe-cell>-->
             </div>
         </div>
     </section>

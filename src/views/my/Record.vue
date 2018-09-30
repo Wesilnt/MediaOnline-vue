@@ -15,7 +15,7 @@
                 <img class="playRecord-head-right-icon" src="../../assets/images/my_sys_menu.png">
             </div>
             <div v-for="item in playRecordList" :key="item.id" class="playRecord-list">
-                <van-swipe-cell :right-width="150" :on-close="onClose(item.id)">
+              <!--  <van-swipe-cell :right-width="150" :on-close="onClose(item.id)">-->
                     <div class="playRecord-list-item">
                         <!--<img src="" class="like-item-avatar"/>-->
                         <div class="playRecord-list-item-content">
@@ -28,7 +28,7 @@
                         <img class="playRecord-list-item-img-more" src="../../assets/images/my_record_more.png"/>
                     </div>
                     <span slot="right">删除</span>
-                </van-swipe-cell>
+<!--                </van-swipe-cell>-->
             </div>
         </div>
     </section>
