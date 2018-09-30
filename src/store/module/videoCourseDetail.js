@@ -161,7 +161,8 @@ const videoCourseDetail = {
     //获取单集详情
     async getVideoCourseDetail({ commit, dispatch, state }, { lessonId }) {
       //获取视频列表数据
-      const result = await getVideoLessonDetail({ lessonId })
+        console.log(lessonId);
+        const result = await getVideoLessonDetail({ lessonId })
       console.log('视频单集详情接口')
       console.log('result = ', result)
       if (result == null) return

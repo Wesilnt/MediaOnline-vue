@@ -30,7 +30,7 @@
                         color="#FFA32F"
                         :percentage="progress"
                 />
-                <p class="questions-footer-text">再学习{{remainTime}}秒可解锁自测题</p>
+                <p class="questions-footer-text">再学习{{deblockTime}}秒可解锁自测题</p>
             </div>
         </div>
         <van-popup v-model="questionShow" position="right" class="answer-container" >
@@ -148,10 +148,6 @@ const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
 let timeInter = ''
 export default {
   name: 'QuestionList',
-  props: {
-    progress: 0,
-    deblock: false
-  },
   data: function() {
     return {
       lockIcon: require('../../assets/images/onlinecourse_lock.jpg'), //未解锁
@@ -162,7 +158,6 @@ export default {
       reviewShow: false,
       questionShow: false,
       settlementShow: false,
-      remainTime: 0,
       shareImg: null,
       nickName: null,
       qrCode: window.location.href,
@@ -182,20 +177,13 @@ export default {
       'questionList',
       'questionLength',
       'correct',
-      'videoTime',
-      'delockTime',
+      'deblockTime',
+      'progress',
+      'deblock',
       'questionInfo',
       'grade',
       'title'
     ])
-  },
-  watch: {
-    progress: function(progress) {
-      console.log(this.deblock)
-      this.remainTime = Math.round(
-        this.delockTime - (this.videoTime * progress) / 100
-      )
-    }
   },
   methods: {
     ...mapMainActions(['registerWxConfig', 'wxChooseImage']),
@@ -280,10 +268,11 @@ export default {
       )
         return
       const { lessonId } = this.$route.params
-      this.$emit('update',lessonId)
       this.uploadAnswer({
         lessonId,
         answer
+      }).then(() => {
+        this.$emit('update', { lessonId })
       })
     }
   },

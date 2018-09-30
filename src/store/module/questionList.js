@@ -8,7 +8,7 @@ const questionList = {
       answers: {},
       answersChecked: false,
       questionIndex: 0,
-      loading: false,
+      loading: false
       // newGrade: ''
     }
   },
@@ -23,9 +23,14 @@ const questionList = {
         return prev
       }, 0)
     },
-    videoTime: (state, getters, { videoCourseDetail }) =>
-      videoCourseDetail.totalTime,
-    delockTime: (state, getters) => getters.videoTime * 0.7,
+    deblock: (state, getters, { videoCourseDetail }) =>
+      videoCourseDetail.deblockQuestion,
+    progress: (state, getters, { videoCourseDetail }) =>
+      videoCourseDetail.progress,
+    deblockTime: (state, getters, { videoCourseDetail }) => {
+      const { totalTime, progress } = videoCourseDetail
+      return Math.round((0.7 - progress / 100) * totalTime)
+    },
     grade: (state, getters, { videoCourseDetail }) => videoCourseDetail.grade,
     title: (state, getters, { videoCourseDetail }) => videoCourseDetail.title,
     questionInfo: ({ questionIndex, answers, text }, getters) => {
