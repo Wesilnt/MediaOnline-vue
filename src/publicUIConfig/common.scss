@@ -11,8 +11,7 @@ ol {
   display: inline-block;
   width: 42px;
   height: 42px;
-  background: transparent center no-repeat;
-  background-size: 100%;
+  background: transparent center/100% no-repeat;
 }
 .qhht-flex {
   display: flex;

@@ -29,7 +29,7 @@
       <div class="video-detail-sction-title">
           <h4>自测题</h4>
       </div>
-      <QuestionList :progress="progress" :deblock="deblockQuestion"/>
+      <QuestionList :progress="progress" :deblock="deblockQuestion" @update="getVideoCourseDetail"/>
     </div>
     <!-- 目录 -->
     <div class="video-detail-base">
@@ -134,7 +134,6 @@ export default {
     ...mapGetters(['haveQuestionBOList'])
   },
   mounted() {
-    
     //监听滚动
     addEventListener('scroll', this.handleScroll)
     //视频播放器相关监听
@@ -152,13 +151,11 @@ export default {
     removeEventListener('scroll', this.handleScroll)
   },
   created() {
-    //获取课程ID
     const { lessonId } = this.$route.params
     this.getVideoCourseDetail({ lessonId })
-    // this.activeID = this.$route.params.lessonId
   },
   methods: {
-    ...mapMutations(['updateLocalVideoData','bindQuestionBymyself','bindActiveId']),
+    ...mapMutations(['updateLocalVideoData', 'bindQuestionBymyself','bindActiveId']),
     ...mapActions([
       'getVideoCourseDetail',
       'getLessonListByCourse',
@@ -188,7 +185,7 @@ export default {
         Math.round(videoData.playTotalTime) >= Math.round(duration * 0.7)
       ) {
         let deblockQuestion = true
-        this.bindQuestionBymyself({deblockQuestion})
+        this.bindQuestionBymyself({ deblockQuestion })
       }
       if (paused) {
         // 获取播放累计时长
@@ -214,8 +211,8 @@ export default {
       if (!this.deblockQuestion && duration) {
         const percent = (this.loaclPlayTotalTime / duration) * 100
         let progress = percent <= 100 ? percent : 100
-        this.bindQuestionBymyself({progress})
-      } 
+        this.bindQuestionBymyself({ progress })
+      }
     },
     //显示键盘
     toggleKeyboard(commentBarShow, inputer) {
@@ -251,12 +248,7 @@ export default {
     },
     //点击目录
     beActive(lessonId) {
-
-      // this.bindActiveId(lessonId)
-      //刷新接口
-      this.getVideoCourseDetail({ lessonId: lessonId })
-      // //刷新路由中单集ID
-      // this.$router.push({name:'videoCourseDetail',params:{lessonId}})
+      this.getVideoCourseDetail({ lessonId })
     },
     clickFnc(index) {
       this.selected = index

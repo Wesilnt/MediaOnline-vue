@@ -246,7 +246,7 @@ export default {
 .outlineImage {
   width: 670px;
   height: 800px;
-  margin: 0px 40px 40px;
+  margin: 0 40px 40px;
   background-size: 100%;
 }
 .count {

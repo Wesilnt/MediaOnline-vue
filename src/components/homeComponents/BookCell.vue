@@ -53,8 +53,7 @@ export default {
     width: 196px;
     height: 257px;
     border-radius: 12px;
-    background: #fff center no-repeat;
-    background-size: 100%;
+    background: #fff center/100% no-repeat;
   }
   .bookPlayTringle {
     position: absolute;

@@ -28,8 +28,7 @@ export default {
   padding-left: 36px;
   border-radius: 12px;
   margin-bottom: 20px;
-  background: #f6f6f6 center no-repeat;
-  background-size: cover;
+  background: #f6f6f6 center/cover no-repeat;
   height: 220px;
   color: #666;
 }

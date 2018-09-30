@@ -122,11 +122,10 @@ export default {
   .header-container {
     display: flex;
     flex-direction: column;
-    background: #f6f6f6 center no-repeat;
+    background: #f6f6f6 center/100% no-repeat;
     color: white;
     padding: 40px;
     height: 372px;
-    background-size: 100%;
     h5 {
       font-size: 48px;
       line-height: 56px;
@@ -189,8 +188,7 @@ export default {
       width: 100%;
       height: 0;
       padding-bottom: 130.6122449%;
-      background: #f6f6f6 center no-repeat;
-      background-size: 100%;
+      background: #f6f6f6 center/100& no-repeat;
       span {
         position: absolute;
         bottom: 0;

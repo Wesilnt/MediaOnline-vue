@@ -50,8 +50,7 @@ export default {
 }
 .head {
   height: 300px;
-  background: #f6f6f6 center no-repeat;
-  background-size: 100%;
+  background: #f6f6f6 center/100% no-repeat;
 }
 .view-list {
   padding: 28px;

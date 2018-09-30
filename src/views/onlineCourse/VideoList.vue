@@ -66,8 +66,7 @@ export default {
 .home-header-img {
   height: 300px;
   margin-bottom: 20px;
-  background: #f6f6f6 center no-repeat;
-  background-size: 100%;
+  background: #f6f6f6 center/100% no-repeat;
   img {
     width: 100%;
     height: 300px;

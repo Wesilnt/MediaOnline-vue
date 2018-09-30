@@ -1,6 +1,6 @@
 <template>
     <div class="question-container">
-        <div v-if="grade || newGrade">
+        <div v-if="grade">
             <div class="qhht-flex">
                 <div class="question-to-review-item">
                     <p>{{questionLength}}</p>
@@ -127,7 +127,7 @@
                 <p>《{{title}}》</p>
                 <p>课程自测中获得</p>
                 <strong class="settlement-grade">
-                    {{newGrade?newGrade:grade}}
+                    {{grade}}
                 </strong>
                 <p>请继续加油</p>
                 <hr class="settlement-dashed-underline">
@@ -175,8 +175,8 @@ export default {
       'questionIndex',
       'answers',
       'loading',
-      'answersChecked',
-      'newGrade'
+      'answersChecked'
+      // 'newGrade'
     ]),
     ...mapGetters([
       'questionList',
@@ -222,7 +222,6 @@ export default {
       if (popup === 'settlementShow' && !this.shareImg) {
         this.cvsRenderLoading = true
         const response = await this.getUser()
-        console.log(response)
         if (!response) {
           this.cvsRenderLoading = false
           this.handlePopupHide('settlementShow')
@@ -281,16 +280,16 @@ export default {
       )
         return
       const { lessonId } = this.$route.params
+      this.$emit('update',lessonId)
       this.uploadAnswer({
         lessonId,
         answer
       })
     }
   },
-    mounted(){
-        console.log(1);
-        this.getUser()
-    }
+  mounted() {
+    this.getUser()
+  }
 }
 </script>
 
@@ -523,9 +522,9 @@ export default {
   width: 200px;
   height: 200px;
   background-color: #c8d3ff;
-   /deep/ img{
-        width: 100%;
-    }
+  /deep/ img {
+    width: 100%;
+  }
 }
 .loading-wrapper {
   margin: 47% auto 0;

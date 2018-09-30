@@ -39,7 +39,7 @@ const videoCourseDetail = {
     rightNum: 0, //自测题答对个数
     rankNum: 3, //自测题排行
     deblockQuestion: false, //是否解锁自测题
-    progress: 0,   //自测题进度
+    progress: 0, //自测题进度
     activeID: '' //当前选中单集ID
   },
   getters: {
@@ -63,14 +63,14 @@ const videoCourseDetail = {
       state.questionBOList = payload.questionBOList
       state.grade = payload.grade
       state.learnTotalTime = payload.learnTotalTime
-      state.learnTime = payload.learnTime      
+      state.learnTime = payload.learnTime
     },
-    bindActiveId(state,lessonId){
+    bindActiveId(state, lessonId) {
       state.activeID = lessonId
     },
-    bindQuestionBymyself(state, {deblockQuestion,progress}) {
-      state.deblockQuestion = deblockQuestion||state.deblockQuestion
-      state.progress = progress||state.progress
+    bindQuestionBymyself(state, { deblockQuestion, progress }) {
+      state.deblockQuestion = deblockQuestion || state.deblockQuestion
+      state.progress = progress || state.progress
     },
     bindAllCourse(state, payload) {
       state.lessonList = payload.result
@@ -91,9 +91,8 @@ const videoCourseDetail = {
     submitVideoPlayData(state) {}
   },
   actions: {
-
     //更新播放数据
-    updateVideoPlayData({dispatch,state},lessonId){
+    updateVideoPlayData({ dispatch, state }, lessonId) {
       //在这里判断是否提交本地的视频播放数据
       let storage = window.localStorage
       //根据单集ID来存储视频播放数据对象
@@ -103,22 +102,23 @@ const videoCourseDetail = {
       let servicePlayPosition = state.learnTime
       if (videoData != null) {
         //本地数据
-        let loaclPlayTotalTime = videoData.playTotalTime || 0
-        let loaclPlayPosition = videoData.historyPlayPosition
+        let loaclPlayTotalTime = Math.round(videoData.playTotalTime) || 0
+        let loaclPlayPosition = Math.round(videoData.historyPlayPosition)
         // console.log(videoData)
         // console.log('loaclPlayPosition' + loaclPlayPosition)
-        if (loaclPlayTotalTime > servicePlayTotalTime) {
+        if (
+          loaclPlayTotalTime > servicePlayTotalTime &&
+          loaclPlayPosition > 0
+        ) {
           let payload = {
             lessonId: lessonId,
-            listenTime: Math.round(parseFloat(loaclPlayPosition)), //播放位置
-            showTime: Math.round(parseFloat(loaclPlayTotalTime)) //累计时长
+            listenTime: loaclPlayPosition, //播放位置
+            showTime: loaclPlayTotalTime //累计时长
           }
           // console.log('更新服务器数据 payload = ')
           // console.log(payload)
           //如果本地累计播放时长大于服务器记录的,就用本地的记录更新服务器的记录
-          dispatch('lessonListenForVedio', payload).then(() => {
-            console.log('更新服务器播放数据成功')
-          })
+          dispatch('lessonListenForVedio', payload)
         } else {
           //如果本地时长小与服务器的记录(比如换手机,微信清缓存等异常情况),用服务器记录去更新我本地的播放记录
           let obj = {
@@ -129,8 +129,7 @@ const videoCourseDetail = {
           storage.setItem(lessonId, obj)
         }
 
-        dispatch('updateQuestionData',lessonId)
-
+        dispatch('updateQuestionData', lessonId)
       } else {
         //第一次本地播放记录为空,更新服务器的记录到本地
         let obj = {
@@ -139,11 +138,11 @@ const videoCourseDetail = {
         }
         obj = JSON.stringify(obj)
         storage.setItem(lessonId, obj)
-        dispatch('updateQuestionData',lessonId)
+        dispatch('updateQuestionData', lessonId)
       }
     },
     //更新自测题数据
-    updateQuestionData({state,commit},lessonId){
+    updateQuestionData({ state, commit }, lessonId) {
       //是否显示自测题
       //第一次进入单集详情页面时,答题进度用服务器保存的视频长度
       let progress = 0
@@ -151,24 +150,25 @@ const videoCourseDetail = {
       let videoData = JSON.parse(window.localStorage.getItem(lessonId))
       const percent = (videoData.playTotalTime / state.totalTime) * 100
       progress = percent <= 100 ? percent : 100
-      if (!deblockQuestion &&
+      if (
+        !deblockQuestion &&
         Math.round(videoData.playTotalTime) >= Math.round(state.totalTime * 0.7)
       ) {
         deblockQuestion = true
       }
-      commit('bindQuestionBymyself',{progress,deblockQuestion})
+      commit('bindQuestionBymyself', { progress, deblockQuestion })
     },
     //获取单集详情
     async getVideoCourseDetail({ commit, dispatch, state }, { lessonId }) {
       //获取视频列表数据
       const result = await getVideoLessonDetail({ lessonId })
       console.log('视频单集详情接口')
-      console.log('result = ', result)       
+      console.log('result = ', result)
       if (result == null) return
-      commit('bindVideoCourseDetail', result)  
-      commit('bindActiveId',lessonId)
+      commit('bindVideoCourseDetail', result)
+      commit('bindActiveId', lessonId)
       //刷新路由中单集ID
-      router.push({name:'videoCourseDetail',params:{lessonId}})
+      router.push({ name: 'videoCourseDetail', params: { lessonId } })
 
       let params = {
         courseId: result.courseId,
@@ -184,9 +184,9 @@ const videoCourseDetail = {
         currentPage: 1,
         pageSize: 11
       }
-      dispatch('getCommentList',commentParams)
+      dispatch('getCommentList', commentParams)
       //更新视频播放数据
-      dispatch('updateVideoPlayData',lessonId)
+      dispatch('updateVideoPlayData', lessonId)
     },
 
     async getLessonListByCourse({ commit }, params) {
@@ -222,11 +222,11 @@ const videoCourseDetail = {
       commit('deleteCollection')
     },
 
-    async lessonListenForVedio({ commit }, payload) {
+    async lessonListenForVedio({ commit }, { lessonId, listenTime, showTime }) {
       const result = await lessonListenForVedio({
-        lessonId: payload.lessonId,
-        listenTime: payload.listenTime,
-        showTime: payload.showTime
+        lessonId,
+        listenTime,
+        showTime
       })
       commit('submitVideoPlayData')
     },

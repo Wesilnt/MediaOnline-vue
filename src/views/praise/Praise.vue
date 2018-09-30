@@ -204,11 +204,7 @@ export default {
     width: 100%;
     top: -12vh;
     bottom: -118px;
-    background: url(../../assets/praise_bg.png) no-repeat;
-    background-size: 100%;
-    background-position-y: 20%;
-    background-origin: 0;
-    background-repeat: repeat-y;
+    background: url(../../assets/praise_bg.png) center 20%/100% repeat-y;
     height: 112vh;
   }
   //2. 中间点赞详情 2.66666667%  = 20px/750px

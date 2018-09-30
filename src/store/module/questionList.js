@@ -9,7 +9,7 @@ const questionList = {
       answersChecked: false,
       questionIndex: 0,
       loading: false,
-      newGrade: ''
+      // newGrade: ''
     }
   },
   getters: {
@@ -100,11 +100,10 @@ const questionList = {
         lessonId
       })
       if (!response) return
-        console.log(response);
-        await commit('saveStatus', {
+      /*await commit('saveStatus', {
         loading: false,
         newGrade: response
-      })
+      })*/
     },
     async handleNext({ dispatch, commit }, { nextIndex }) {
       await commit('saveStatus', {
@@ -112,9 +111,8 @@ const questionList = {
       })
     },
     async getUser() {
-      const response=await getMyUserInfo()
-        console.log(response);
-        return {nickName:'五类'};
+      const response = await getMyUserInfo()
+      return response
     }
   }
 }

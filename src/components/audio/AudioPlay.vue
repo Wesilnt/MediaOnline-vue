@@ -401,9 +401,7 @@ export default {
       width: 32px;
       transform: translateY(0px);
       /*background: none repeat scroll 0 0 #5891f5;*/
-      background: url(../../assets/audio_play_slider.png) no-repeat;
-      background-position: center;
-      background-size: 32px;
+      background: url(../../assets/audio_play_slider.png) center/32px no-repeat;
       border-radius: 15px;
       // border: 5px solid #006eb3;
       /*-webkit-box-shadow: 0 -1px 1px #fc7701 inset;*/
@@ -414,9 +412,7 @@ export default {
         max-width: 100%;
       }
       .van-slider__button {
-        background: url(../../assets/audio_play_slider.png) no-repeat;
-        background-position: center;
-        background-size: 18px;
+        background: url(../../assets/audio_play_slider.png) center/18px no-repeat;
         border-radius: 15px;
         width: 18px;
         height: 18px;
