@@ -11,7 +11,7 @@ export default {
     return {
       _ctx: null, 
       x: (window.screen.width- 68 - 6) + 'px' ,
-      y: (window.screen.height - 68 - 50) + 'px',
+      y: (window.screen.height - 68 - 60) + 'px',
       width: 68,
       height: 68,
       startX: 48,

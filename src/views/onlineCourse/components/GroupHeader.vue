@@ -39,7 +39,7 @@
             <div class="groupBuy-circleline" v-show="false"></div>
         </div>
         <!--1. 读书会头图-->
-        <div v-if="serviceType==='Readings'">
+        <div v-if="serviceType ==='Readings'">
           <div class="book-header-container lazy-img-larger">
             <div class="book-cover" v-lazy:background-image="profilePic" :style="{'background-size':'100%',backgroundPosition:'center',backgroundRepeat:'no-repeat'}">
               <!-- <span v-if="new Date().getTime() - new Date(bookDetail.createTime).getTime()<30*24*3600*1000">上新</span> -->

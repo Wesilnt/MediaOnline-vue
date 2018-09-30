@@ -83,10 +83,6 @@ export default {
     onSingle() {
       if (1 == this.state) {
         //TODO  参与集赞
-        // if (true)
-          //手机号检验
-          // this.show = true
-        // else 
         this.joinCollectLike({ collectLikeId: this.collectlikeid })
       }
       if (
@@ -120,10 +116,11 @@ export default {
          this.goColumnDetail()
       }
     },
-    goColumnDetail(){
-      let columnName = columntype == "OnlineCourse" ? 
-                'videoColumnDetail':columntype == 'OnlineVision'?
-                'VisionDetail':columntype == 'Readings'? 
+    goColumnDetail(){ 
+      console.log("撞爛類型："+this.columntype)
+      let columnName = this.columntype == "OnlineCourse" ? 
+                'videoColumnDetail':this.columntype == 'OnlineVision'?
+                'VisionDetail':this.columntype == 'Readings'? 
                 'BookDetail':''
       this.$router.push({name: columnName, params: { courseId: this.courseid }})
     }

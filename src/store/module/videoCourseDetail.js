@@ -91,21 +91,25 @@ const videoCourseDetail = {
     submitVideoPlayData(state) {}
   },
   actions: {
-    //更新播放数据
     updateVideoPlayData({ dispatch, state }, lessonId) {
-      //在这里判断是否提交本地的视频播放数据
       let storage = window.localStorage
       //根据单集ID来存储视频播放数据对象
       let videoData = JSON.parse(storage.getItem(lessonId))
+      console.log('------------- state.learnTime',state.learnTime)
       //服务器数据
       let servicePlayTotalTime = state.learnTotalTime || 0
       let servicePlayPosition = state.learnTime
       if (videoData != null) {
-        //本地数据
+        /*
+          更新播放数据到服务器的逻辑:在请求单集详情接口(getVideoCourseDetail)时,将本地记录的播放记录更新到服务器.
+          这里为什么不在vue实例的生命周期函数beforeDestroy里上传播放进度到服务器,是因为监听不到公众号页面左上角叉号的回调逻辑
+          上传进度的逻辑也分为2种情况:
+          一:如果本地累计观看时长大于服务器存储的播放时长,就将本地的数据上传到服务器
+          二:如果本地累计观看时长小于服务器存储的播放时长,就将服务器的数据拉下来并同步到本地
+        */
         let loaclPlayTotalTime = Math.round(videoData.playTotalTime) || 0
         let loaclPlayPosition = Math.round(videoData.historyPlayPosition)
-        // console.log(videoData)
-        // console.log('loaclPlayPosition' + loaclPlayPosition)
+        console.log('videoData = ',loaclPlayTotalTime,loaclPlayPosition)
         if (
           loaclPlayTotalTime > servicePlayTotalTime &&
           loaclPlayPosition > 0
@@ -115,8 +119,8 @@ const videoCourseDetail = {
             listenTime: loaclPlayPosition, //播放位置
             showTime: loaclPlayTotalTime //累计时长
           }
-          // console.log('更新服务器数据 payload = ')
-          // console.log(payload)
+          console.log('更新服务器数据 payload = ')
+          console.log(payload)
           //如果本地累计播放时长大于服务器记录的,就用本地的记录更新服务器的记录
           dispatch('lessonListenForVedio', payload)
         } else {
@@ -126,12 +130,18 @@ const videoCourseDetail = {
             historyPlayPosition: servicePlayPosition
           }
           obj = JSON.stringify(obj)
+          console.log('更新storge')
           storage.setItem(lessonId, obj)
         }
-
+        console.log('服务器数据更新本地数据')
         dispatch('updateQuestionData', lessonId)
       } else {
-        //第一次本地播放记录为空,更新服务器的记录到本地
+        /*
+          这里有2种情况:
+          一:用户点开一个全新的专栏单集视频,本地数据和服务器数据都为空
+          二:用户微信清空了缓存或者用户换了手机,此时本地数据为空,但服务器数据不为空
+          综上:不做处理,如果本地为空,统一将服务器的数据同步到本地
+        */
         let obj = {
           playTotalTime: servicePlayTotalTime,
           historyPlayPosition: servicePlayPosition
@@ -143,9 +153,11 @@ const videoCourseDetail = {
     },
     //更新自测题数据
     updateQuestionData({state,commit},lessonId){
-      console.log('代码走到这里')
-      //是否显示自测题
-      //第一次进入单集详情页面时,答题进度用服务器保存的视频长度
+      /*
+      自测题逻辑分为2种情况:
+      一:进入单集详情页,没有播放视频.用本地记录的视频播放数据计算是否显示自测题(deblockQuestion)和播放进度(progress),具体的显示逻辑放在了答题组件里面做判断
+      二:开始播放视频,在监听视频播放的回调方法里,用实时返回视频播放数据计算deblockQuestion和progress两个值,并更新vuex里保存的值
+      */
       let progress = 0
       let deblockQuestion = false
       let videoData = JSON.parse(window.localStorage.getItem(lessonId))
@@ -161,23 +173,22 @@ const videoCourseDetail = {
     },
     //获取单集详情
     async getVideoCourseDetail({ commit, dispatch, state }, { lessonId }) {
-      //获取视频列表数据
-        console.log(lessonId);
-        const result = await getVideoLessonDetail({ lessonId })
+      const result = await getVideoLessonDetail({ lessonId })
       console.log('视频单集详情接口')
       console.log('result = ', result)
       if (result == null) return
+      //绑定单集详情内容
       commit('bindVideoCourseDetail', result)
+      //绑定目录列表哪一个单集处于播放状态
       commit('bindActiveId', lessonId)
-      //刷新路由中单集ID
+      //刷新路由参数里的单集ID
       router.push({ name: 'videoCourseDetail', params: { lessonId } })
-
+      //获取专栏单集目录列表数据
       let params = {
         courseId: result.courseId,
         currentPage: 1,
         pageSize: 10
-      }
-      //获取目录列表数据
+      }      
       dispatch('getLessonListByCourse', params)
       //获取单集评论
       const commentParams = {
@@ -187,7 +198,7 @@ const videoCourseDetail = {
         pageSize: 11
       }
       dispatch('getCommentList', commentParams)
-      //更新视频播放数据
+      //更新当前播放视频的播放数据
       dispatch('updateVideoPlayData', lessonId)
     },
 

@@ -61,7 +61,7 @@ export default {
             commit("bindReadingsList", {res, page,totalCount})
         },
         //书详情
-        async getBookDetail({dispatch, commit }, params) {
+        async getBookDetail({dispatch, commit }, params) { 
             const result = await getBookDetail(params) 
             console.log(result)
             commit("bindBookDetail", result)
