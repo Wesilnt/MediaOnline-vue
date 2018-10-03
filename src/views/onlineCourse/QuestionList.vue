@@ -143,7 +143,7 @@ import html2canvas from 'html2canvas'
 import { createNamespacedHelpers } from 'vuex'
 import { mapActions as mapMainActions } from 'vuex'
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
-  'videoCourseDetail/questionList'
+  'videoCourseDetailData/questionListData'
 )
 let timeInter = ''
 export default {

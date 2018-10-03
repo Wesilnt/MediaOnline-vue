@@ -34,7 +34,7 @@ const {
   mapGetters,
   mapActions,
   mapMutations
-} = createNamespacedHelpers('videoColumnDetail/groupManager')
+} = createNamespacedHelpers('videoColumnDetailData/groupManagerData')
 export default {
   name: 'ToolsNavbar',
   data() {

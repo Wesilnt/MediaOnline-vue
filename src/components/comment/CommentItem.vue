@@ -41,7 +41,7 @@
 import praised from '../../assets/images/cmt_praise_selected.png'
 import unPraise from '../../assets/images/cmt_praise_normal.png'
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions } = createNamespacedHelpers('comment')
+const { mapState, mapActions } = createNamespacedHelpers('commentData')
 export default {
   filters: {
     dateFormat: function(value) {

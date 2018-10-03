@@ -13,7 +13,7 @@ import GroupContent from './components/GroupContent'
 import toolsNavbar from '../../components/toolsNavbar.vue'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState, mapMutations, mapActions } = createNamespacedHelpers(
-  'videoColumnDetail'
+  'videoColumnDetailData'
 )
 
 export default {

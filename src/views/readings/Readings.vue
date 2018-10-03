@@ -29,7 +29,7 @@
 </template>
 <script>
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions } = createNamespacedHelpers('readings')
+const { mapState, mapActions } = createNamespacedHelpers('readingsData')
 
 export default {
   data() {

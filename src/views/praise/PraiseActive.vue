@@ -10,7 +10,7 @@
 </template>
 <script>
 import { createNamespacedHelpers } from 'vuex'
-const { mapState,mapMutations, mapActions, mapGetters } = createNamespacedHelpers('praise')
+const { mapState,mapMutations, mapActions, mapGetters } = createNamespacedHelpers('praiseData')
 export default {
   data() {
     return {

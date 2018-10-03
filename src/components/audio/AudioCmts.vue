@@ -23,7 +23,7 @@
 import CommentList from '../comment/CommentList.vue'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState, mapActions, mapMutations } = createNamespacedHelpers(
-  'comment'
+  'commentData'
 )
 export default {
   components: { 'comment-list': CommentList },

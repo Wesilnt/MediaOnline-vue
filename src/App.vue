@@ -9,7 +9,7 @@
 import MediaIcon from './components/audio/MediaIcon'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState, mapMutations, mapActions } = createNamespacedHelpers(
-  'audiotask'
+  'audiotaskData'
 )
 export default {
   name: 'App',

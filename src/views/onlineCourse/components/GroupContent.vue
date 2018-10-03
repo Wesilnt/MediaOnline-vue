@@ -59,7 +59,7 @@ import videoBigimage from '../../../components/videoBigimage.vue'
 
 import { createNamespacedHelpers } from 'vuex'
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
-  'videoColumnDetail/groupContent'
+  'videoColumnDetailData/groupContentData'
 )
 export default {
   name: 'GroupContent',

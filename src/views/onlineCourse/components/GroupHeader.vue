@@ -58,7 +58,7 @@
 <script>
 import { createNamespacedHelpers } from 'vuex'
 const { mapState, mapGetters, mapActions } = createNamespacedHelpers(
-  'videoColumnDetail/groupManager'
+  'videoColumnDetailData/groupManagerData'
 )
 import CountDown from '../../../components/CountDown'
 export default {

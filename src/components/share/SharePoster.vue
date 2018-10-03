@@ -15,7 +15,7 @@
 <script>
 import LoadingDialog from '../LoadingDialog.vue'
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions, mapGetters } = createNamespacedHelpers('share')
+const { mapState, mapActions, mapGetters } = createNamespacedHelpers('shareData')
 export default {
   name: 'shareposter', 
   data() {

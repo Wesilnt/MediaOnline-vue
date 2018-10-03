@@ -1,13 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import myPuzzle_Praise from './module/myPuzzle_PraiseData'
+import myPuzzle_PraiseData from './module/myPuzzle_PraiseData'
 import columnInfoData from './module/columnInfoData'
 import homeData from './module/homeData'
-import videoColumnDetail from './module/videoColumnDetailData'
-import videoCourseDetail from './module/videoCourseDetailData'
+import videoColumnDetailData from './module/videoColumnDetailData'
+import videoCourseDetailData from './module/videoCourseDetailData'
 import visionData from './module/visionData'
-import audio from './module/audioData'
-import readings from './module/readingsData'
+import audioData from './module/audioData'
+import readingsData from './module/readingsData'
 import myData from './module/myData'
 import myFeedbackData from './module/myFeedbackData'
 import mySysMessageData from './module/mySysMessageData'
@@ -15,13 +15,13 @@ import myReplyData from './module/myReplyData'
 import myLikeData from './module/myLikeData'
 import myPlayRecordData from './module/myPlayRecordData'
 import myPurchaseData from './module/myPurchaseData'
-import userInfo from './module/userInfoData'
-import comment from './module/commentData'
-import freezone from './module/freezoneData'
-import audiotask from './module/audioTaskData'
-import share from './module/shareData'
-import praise from './module/praiseData'
-import mobile from './module/mobileData'
+import userInfoData from './module/userInfoData'
+import commentData from './module/commentData'
+import freezoneData from './module/freezoneData'
+import audiotaskData from './module/audioTaskData'
+import shareData from './module/shareData'
+import praiseData from './module/praiseData'
+import mobileData from './module/mobileData'
 
 import { getToken } from '../api/accessTokenApi'
 import { noAccessToken } from '../utils/userAuth'
@@ -183,27 +183,27 @@ export default new Vuex.Store({
     }
   },
   modules: {
-    myPuzzle_Praise,
+    myPuzzle_PraiseData,
     homeData,
     columnInfo: columnInfoData,
-    videoColumnDetail,
-    videoCourseDetail, // 内建 问题列表modul
+    videoColumnDetailData,
+    videoCourseDetailData, // 内建 问题列表modul
     myData,
-    myFeedback: myFeedbackData,
-    mySysMessage: mySysMessageData,
-    myReply: myReplyData,
-    myLike: myLikeData,
-    myPlayRecord: myPlayRecordData,
-    myPurchase: myPurchaseData,
-    userInfo,
+    myFeedbackData,
+    mySysMessageData,
+    myReplyData,
+    myLikeData,
+    myPlayRecordData,
+    myPurchaseData,
+    userInfoData,
     visionData,
-    readings,
+    readingsData,
     // audio,
-    comment,
-    freezone,
-    audiotask,
-    share,
-    praise,
-    mobile
+    commentData,
+    freezoneData,
+    audiotaskData,
+    shareData,
+    praiseData,
+    mobileData
   }
 })

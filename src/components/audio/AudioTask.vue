@@ -4,7 +4,7 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions, mapGetters } = createNamespacedHelpers('audio')
+const { mapState, mapActions, mapGetters } = createNamespacedHelpers('audioData')
 export default {
   data() {
     return {}

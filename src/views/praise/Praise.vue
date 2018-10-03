@@ -62,7 +62,7 @@ const {
   mapMutations,
   mapActions,
   mapGetters
-} = createNamespacedHelpers('praise')
+} = createNamespacedHelpers('praiseData')
 export default {
   name: 'Praise',
   data() {

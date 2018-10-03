@@ -17,7 +17,7 @@
 </template>
 <script>
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions, mapGetters } = createNamespacedHelpers('mobile')
+const { mapState, mapActions, mapGetters } = createNamespacedHelpers('mobileData')
 export default {
   data() {
     return {

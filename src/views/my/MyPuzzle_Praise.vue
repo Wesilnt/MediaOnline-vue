@@ -52,7 +52,7 @@ import Badge from '../../components/Badge'
 import Skeleton from '../../components/Skeleton'
 
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
-  'myPuzzle_Praise'
+  'myPuzzle_PraiseData'
 )
 
 export default {

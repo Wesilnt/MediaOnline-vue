@@ -46,7 +46,7 @@
 
 <script>
   import { createNamespacedHelpers } from 'vuex'
-  const { mapState, mapActions } = createNamespacedHelpers('mobile')
+  const { mapState, mapActions } = createNamespacedHelpers('mobileData')
   export default {
     name: 'EditUserPhone',
     data: function () {

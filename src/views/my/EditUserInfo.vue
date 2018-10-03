@@ -74,7 +74,7 @@ import { Toast } from 'vant'
 import LoadingDialog from '../../components/LoadingDialog'
 import { getGradeNum } from './MyUtil'
 
-const { mapState, mapActions } = createNamespacedHelpers('userInfo')
+const { mapState, mapActions } = createNamespacedHelpers('userInfoData')
 export default {
   name: 'EditUserInfo',
   components: { 'loading-dialog': LoadingDialog },

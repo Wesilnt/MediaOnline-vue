@@ -24,7 +24,7 @@
 </template> 
 <script>
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions, mapGetters } = createNamespacedHelpers('FreeZone')
+const { mapState, mapActions, mapGetters } = createNamespacedHelpers('FreeZoneData')
 export default {
   filters: {
     createtimeFormat: function(value, timeLen) {

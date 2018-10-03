@@ -68,7 +68,7 @@ const {
   mapGetters,
   mapActions,
   mapMutations
-} = createNamespacedHelpers('videoCourseDetail')
+} = createNamespacedHelpers('videoCourseDetailData')
 export default {
   name: 'VideoCourseDetail',
   components: {

@@ -5,7 +5,7 @@
 </template>
 <script>
 import { createNamespacedHelpers } from 'vuex' 
-const { mapState, mapGetters } = createNamespacedHelpers('audiotask')
+const { mapState, mapGetters } = createNamespacedHelpers('audiotaskData')
 export default {
   data() {
     return {

@@ -19,7 +19,7 @@
 <script>
 import { createNamespacedHelpers,mapState as mapRootState } from 'vuex'
 import MobileVali from '../../components/PhoneVerif.vue'
-const { mapState, mapActions, mapGetters } = createNamespacedHelpers('praise')
+const { mapState, mapActions, mapGetters } = createNamespacedHelpers('praiseData')
 let buttonDatas = [
   {
     isSingle: false, //单按钮还是双按钮  0

@@ -91,7 +91,7 @@ const {
   mapMutations,
   mapActions,
   mapGetters
-} = createNamespacedHelpers('readings')
+} = createNamespacedHelpers('readingsData')
 export default {
   data() {
     return {

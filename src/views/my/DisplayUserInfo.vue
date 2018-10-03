@@ -25,7 +25,7 @@ import Picker from '../../components/Picker'
 import { getGradeStr, getGradeNum } from './MyUtil'
 import { Toast } from 'vant'
 
-const { mapState, mapActions } = createNamespacedHelpers('userInfo')
+const { mapState, mapActions } = createNamespacedHelpers('userInfoData')
 export default {
   name: 'DisplayUserInfo',
   components: {
