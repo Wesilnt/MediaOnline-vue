@@ -1,7 +1,7 @@
 import { uploadAnswer } from '../../api/columnsApi'
 import { getMyUserInfo } from '../../api/myApi'
 
-const questionList = {
+const questionListData = {
   namespaced: true,
   state() {
     return {
@@ -121,4 +121,4 @@ const questionList = {
     }
   }
 }
-export default questionList
+export default questionListData

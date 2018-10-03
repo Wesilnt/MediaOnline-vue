@@ -1,6 +1,6 @@
 import { getMyUserInfo } from '../../api/myApi'
 import { postUserInfo } from '../../api/myApi'
-const userInfo = {
+const userInfoData = {
   namespaced: true,
   state: {
     userInfo: [],
@@ -65,4 +65,4 @@ const userInfo = {
     }
   }
 }
-export default userInfo
+export default userInfoData

@@ -13,7 +13,7 @@ const puzzleTypes = {
   fail: '1204'
 }
 
-const myPuzzle_Praise = {
+const myPuzzle_PraiseData = {
   namespaced: true,
   state: {
     puzzleTabs,
@@ -68,4 +68,4 @@ const myPuzzle_Praise = {
     }
   }
 }
-export default myPuzzle_Praise
+export default myPuzzle_PraiseData

@@ -1,4 +1,4 @@
-import { decrement, increment, log } from './type'
+import { decrement, increment, log } from './typeData'
 import { queryAlbums, queryPhotos, queryPosts } from '../../api/mock'
 
 const mocker = {

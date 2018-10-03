@@ -1,5 +1,5 @@
 import { getCommentList, likeComment } from '../../api/commentApi.js'
-const groupContent = {
+const groupContentData = {
   namespaced: true,
   state: {
     videoColumnComments: [] //视频专栏留言数组
@@ -63,4 +63,4 @@ const groupContent = {
   }
 }
 
-export default groupContent
+export default groupContentData

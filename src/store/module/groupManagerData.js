@@ -2,7 +2,7 @@ import { wxConfig,getGroupBuyDetail,startGroupBuy,joinGroupBuy,startCollectLike,
 import {getMyUserInfo} from '../../api/myApi'
 import { stat } from 'fs';
 
-const groupManager = {
+const groupManagerData = {
     namespaced: true,
     state:{
         userListTop:[],     //拼团成员列表第一排
@@ -684,4 +684,4 @@ const groupManager = {
     }
 }
 
-export default groupManager
+export default groupManagerData

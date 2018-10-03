@@ -1,4 +1,4 @@
-import { decrement, increment, log } from './type'
+import { decrement, increment, log } from './typeData'
 
 const counterData = {
   namespaced: true,

@@ -1,5 +1,5 @@
 import { getReadingsList, getBookDetail, getSingleSetList } from '../../api/readingsApi'
-import groupManager from './groupManager'
+import groupManager from './groupManagerData'
 
 export default {
     namespaced: true,

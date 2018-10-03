@@ -1,9 +1,9 @@
 import { getVideoColumnDetail } from '../../api/columnsApi.js'
 
-import groupContent from './groupContent'
-import groupManager from './groupManager'
+import groupContent from './groupContentData'
+import groupManager from './groupManagerData'
 
-const videoColumnDetail = {
+const videoColumnDetailData = {
   namespaced: true,
   state: {
     freeLessonList: [], //试看课程数组
@@ -75,4 +75,4 @@ const videoColumnDetail = {
     groupManager
   }
 }
-export default videoColumnDetail
+export default videoColumnDetailData

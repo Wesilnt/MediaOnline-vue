@@ -6,9 +6,9 @@ import {
   lessonListenForVedio
 } from '../../api/columnsApi.js'
 import { getCommentList, postComment } from '../../api/commentApi.js'
-import questionList from './questionList'
+import questionList from './questionListData'
 import router from '../../router/router'
-const videoCourseDetail = {
+const videoCourseDetailData = {
   namespaced: true,
   state: {
     //单集详情接口
@@ -258,4 +258,4 @@ const videoCourseDetail = {
     questionList
   }
 }
-export default videoCourseDetail
+export default videoCourseDetailData
