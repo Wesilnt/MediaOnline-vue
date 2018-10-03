@@ -1,5 +1,5 @@
 import { decrement, increment, log } from './type'
-import { queryAlbums, queryPhotos, queryPosts } from '../../services/mock'
+import { queryAlbums, queryPhotos, queryPosts } from '../../api/mock'
 
 const mocker = {
   namespaced: true,

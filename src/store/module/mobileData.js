@@ -1,4 +1,4 @@
-import { sendMobileCode, validateMobileCode } from '../../services/mobileApi'
+import { sendMobileCode, validateMobileCode } from '../../api/mobileApi'
 
 export default {
   name: 'mobile',

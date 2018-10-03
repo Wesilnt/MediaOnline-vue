@@ -1,4 +1,4 @@
-import { getMyUserInfo, getNewMessageCount } from '../../services/my'
+import { getMyUserInfo, getNewMessageCount } from '../../api/myApi'
 const myData = {
   namespaced: true,
   state: {

@@ -1,4 +1,4 @@
-import { getCommentList, likeComment } from '../../services/comment.js'
+import { getCommentList, likeComment } from '../../api/commentApi.js'
 const groupContent = {
   namespaced: true,
   state: {

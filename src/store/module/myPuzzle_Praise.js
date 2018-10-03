@@ -1,4 +1,4 @@
-import { queryMyPuzzleList, queryMyPraise } from '../../services/my'
+import { queryMyPuzzleList, queryMyPraise } from '../../api/myApi'
 
 const puzzleTabs = {
   all: '全部',

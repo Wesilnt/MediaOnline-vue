@@ -1,5 +1,5 @@
-import { uploadAnswer } from '../../services/columns'
-import { getMyUserInfo } from '../../services/my'
+import { uploadAnswer } from '../../api/columnsApi'
+import { getMyUserInfo } from '../../api/myApi'
 
 const questionList = {
   namespaced: true,

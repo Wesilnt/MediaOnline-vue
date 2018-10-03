@@ -23,9 +23,9 @@ import share from './module/shareData'
 import praise from './module/praiseData'
 import mobile from './module/mobileData'
 
-import { getToken } from '../services/accessToken'
+import { getToken } from '../api/accessTokenApi'
 import { noAccessToken } from '../utils/userAuth'
-import { wxConfig as wxConfigApi } from '../services/groupBuyAPi.js'
+import { wxConfig as wxConfigApi } from '../api/groupBuyApi.js'
 
 const { NODE_ENV } = process.env
 let wxConfigUrl = 'http://tencent.test.shbaoyuantech.com/wechat-js-config/online'

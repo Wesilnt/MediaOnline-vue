@@ -7,7 +7,7 @@ import {
   getPoster,
   startCollectLike,
   joinCollectLike
-} from '../../services/praiseApi'
+} from '../../api/praiseApi'
 
 export default {
   namespaced: true,

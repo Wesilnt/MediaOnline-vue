@@ -3,7 +3,7 @@ import {
   postLearnRate,
   doFreeLesson,
   getUserByToken
-} from '../../services/freezoneApi'
+} from '../../api/freezoneApi'
 export default {
   namespaced: true,
   state: {

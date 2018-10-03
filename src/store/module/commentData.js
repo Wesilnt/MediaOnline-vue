@@ -2,7 +2,7 @@ import {
   getCommentList,
   postComment,
   likeComment
-} from '../../services/commentApi'
+} from '../../api/commentApi'
 
 export default {
   namespaced: true,

@@ -1,4 +1,4 @@
-import { getColumns } from '../../services/columns.js'
+import { getColumns } from '../../api/columnsApi.js'
 
 const columnInfo = {
   namespaced: true,

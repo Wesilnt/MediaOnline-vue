@@ -1,4 +1,4 @@
-import { getPosterInfo,getUserInfo, getPosterforPraise } from '../../services/shareApi'
+import { getPosterInfo,getUserInfo, getPosterforPraise } from '../../api/shareApi'
 
 export default {
   namespaced: true,

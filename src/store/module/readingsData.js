@@ -1,4 +1,4 @@
-import { getReadingsList, getBookDetail, getSingleSetList } from '../../services/readingsApi'
+import { getReadingsList, getBookDetail, getSingleSetList } from '../../api/readingsApi'
 import groupManager from './groupManager'
 
 export default {

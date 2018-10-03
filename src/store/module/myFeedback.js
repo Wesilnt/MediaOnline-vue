@@ -1,4 +1,4 @@
-import { postFeedback } from '../../services/my'
+import { postFeedback } from '../../api/myApi'
 import { Toast } from 'vant'
 
 const myFeedback = {

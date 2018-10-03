@@ -4,8 +4,8 @@ import {
   doFavorite,
   unFavorite,
   lessonListenForVedio
-} from '../../services/columns.js'
-import { getCommentList, postComment } from '../../services/comment.js'
+} from '../../api/columnsApi.js'
+import { getCommentList, postComment } from '../../api/commentApi.js'
 import questionList from './questionList'
 import router from '../../router/router'
 const videoCourseDetail = {

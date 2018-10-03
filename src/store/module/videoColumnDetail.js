@@ -1,4 +1,4 @@
-import { getVideoColumnDetail } from '../../services/columns.js'
+import { getVideoColumnDetail } from '../../api/columnsApi.js'
 
 import groupContent from './groupContent'
 import groupManager from './groupManager'

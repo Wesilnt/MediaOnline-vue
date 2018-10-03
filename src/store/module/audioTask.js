@@ -1,4 +1,4 @@
-import { getAudioDetail, postLearnRate } from '../../services/audioApi'
+import { getAudioDetail, postLearnRate } from '../../api/audioApi'
 import { throttle } from '../../utils/utils' 
 import {Toast} from 'vant'
 import audioData from './audioData'

@@ -1,5 +1,5 @@
-import { getMyLike } from '../../services/my'
-import { postDelMyLike } from '../../services/my'
+import { getMyLike } from '../../api/myApi'
+import { postDelMyLike } from '../../api/myApi'
 const myLike = {
   namespaced: true,
   state: {

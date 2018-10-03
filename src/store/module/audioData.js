@@ -5,7 +5,7 @@ import {
   getAudioDesc,
   getSingleSetList,
   getCommentList
-} from '../../services/audioApi' 
+} from '../../api/audioApi'
 
 export default {
   namespaced: true,

@@ -1,4 +1,4 @@
-import { getVisionList,getVisionDetail, getCommentList } from '../../services/visionService'
+import { getVisionList,getVisionDetail, getCommentList } from '../../api/visionServiceApi'
 import groupManager from './groupManager'
 const visionData = {
     namespaced: true,

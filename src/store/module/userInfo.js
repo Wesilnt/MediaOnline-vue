@@ -1,5 +1,5 @@
-import { getMyUserInfo } from '../../services/my'
-import { postUserInfo } from '../../services/my'
+import { getMyUserInfo } from '../../api/myApi'
+import { postUserInfo } from '../../api/myApi'
 const userInfo = {
   namespaced: true,
   state: {

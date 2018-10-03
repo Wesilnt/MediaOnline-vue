@@ -1,5 +1,5 @@
-import { getPlayRecord } from '../../services/my'
-import { postDelPlayRecord } from '../../services/my'
+import { getPlayRecord } from '../../api/myApi'
+import { postDelPlayRecord } from '../../api/myApi'
 const myPlayRecord = {
   namespaced: true,
   state: {

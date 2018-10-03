@@ -1,4 +1,4 @@
-import { getMyPurchase } from '../../services/my'
+import { getMyPurchase } from '../../api/myApi'
 const myPurchase = {
   namespaced: true,
   state: {
