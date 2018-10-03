@@ -88,7 +88,7 @@
 <script>
 import SharePop from '../share/Share.vue'
 import { createNamespacedHelpers } from 'vuex'
-const { mapState,mapMutations, mapActions, mapGetters } = createNamespacedHelpers('audiotask/audioData')
+const { mapState,mapMutations, mapActions, mapGetters } = createNamespacedHelpers('audiotaskData/audioData')
 
 export default {
   components: { 'share-pop': SharePop },

@@ -202,6 +202,7 @@ export default new Vuex.Store({
     commentData,
     freezoneData,
     audiotaskData,
+    audioData,
     shareData,
     praiseData,
     mobileData
