@@ -70,7 +70,7 @@ export default {
         title: '分享',
         desc: '测试分享',
         link: window.location.href,
-        imgUrl: require('../../assets/poster_header_bg.jpg'),
+        imgUrl: require('../../assets/images/poster_header_bg.jpg'),
         successCB: res => console.log(res),
         cancelCB: res => console.log(res)
       }

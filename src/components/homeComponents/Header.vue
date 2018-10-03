@@ -34,7 +34,7 @@ export default {
 .headertitle-icon {
   width: 8px;
   height: 33px;
-  background-image: url(../../assets/home_title_line.png);
+  background-image: url(../../assets/images/home_title_line.png);
   margin-right: 20px;
 }
 </style>

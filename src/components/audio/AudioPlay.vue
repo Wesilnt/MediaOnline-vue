@@ -9,8 +9,8 @@
       <div class="tab-container">
         <div class="tab-container-collect" @click="onCollect"
          :style="{backgroundImage:isLike
-         ? 'url('+require('../../assets/audio_love_collect.png')+')'
-         : 'url('+require('../../assets/audio_love_normal.png')+')'}">
+         ? 'url('+require('../../assets/images/audio_love_collect.png')+')'
+         : 'url('+require('../../assets/images/audio_love_normal.png')+')'}">
         </div>
         <div v-if="'readings'!=playType" class="tab-container-draft" @click="onDraft"/>
         <div  class="tab-container-comment" @click="toComment">
@@ -45,19 +45,19 @@
       <!-- 播放按钮 -->
       <div class="play-btns">
         <div class="btn-item" @click="onPlayMode">
-          <img :src="'single'==playMode?require('../../assets/audio_play_single.png'):require('../../assets/audio_play_sort.png')">
+          <img :src="'single'==playMode?require('../../assets/images/audio_play_single.png'):require('../../assets/images/audio_play_sort.png')">
         </div>
         <div class="btn-item" @click="onPlayPrv">
-          <img src="../../assets/audio_play_prv.png">
+          <img src="../../assets/images/audio_play_prv.png">
         </div>
         <div :class="{'play-btn-active':playing}" class="btn-item" @click="onPlayPause">
-          <img :src="playing?require('../../assets/audio_play_play.png'):require('../../assets/audio_play_pause.png')">
+          <img :src="playing?require('../../assets/images/audio_play_play.png'):require('../../assets/images/audio_play_pause.png')">
         </div>
         <div class="btn-item" @click="onPlayNext">
-          <img src="../../assets/audio_play_next.png">
+          <img src="../../assets/images/audio_play_next.png">
         </div>
         <div class="btn-item" @click="onPlayList">
-          <img src="../../assets/audio_play_list.png">
+          <img src="../../assets/images/audio_play_list.png">
         </div>
       </div>
     </div>
@@ -72,7 +72,7 @@
         <div class="list-container">
           <div v-for="(item,index) of singleSetList" :key="item.id" class="list-item">
             <div class="list-content" @click="onItemClick(item)">
-              <img v-if="lessonId==item.id" src="../../assets/audio_list_playing.png">
+              <img v-if="lessonId==item.id" src="../../assets/images/audio_list_playing.png">
               <p :class="{'p-playing':lessonId==item.id}">{{item.title}}</p>
             </div>
             <hr v-show="singleSetList.length-1 != index">
@@ -217,7 +217,7 @@ export default {
         link: `/#/audio/audioplay/${this.lessonId}`,
         title: '音频分享',
         desc: '音频',
-        imgUrl: require('../../assets/logo.png')
+        imgUrl: require('../../assets/images/logo.png')
       }
       this.showShare = true
     },
@@ -336,7 +336,7 @@ export default {
       height: 45px;
       background-repeat: no-repeat;
       background-size: 37px 45px;
-      background-image: url('../../assets/audio_play_manuscripts.png');
+      background-image: url('../../assets/images/audio_play_manuscripts.png');
     }
     &-comment {
       position: relative;
@@ -344,7 +344,7 @@ export default {
       height: 41px;
       background-repeat: no-repeat;
       background-size: 41px 41px;
-      background-image: url('../../assets/audio_play_comments.png');
+      background-image: url('../../assets/images/audio_play_comments.png');
       span {
         left: 30px;
         top: -10px;
@@ -358,7 +358,7 @@ export default {
       height: 40px;
       background-repeat: no-repeat;
       background-size: 41px 41px;
-      background-image: url('../../assets/audio_play_share.jpg');
+      background-image: url('../../assets/images/audio_play_share.jpg');
     }
   }
 
@@ -401,7 +401,7 @@ export default {
       width: 32px;
       transform: translateY(0px);
       /*background: none repeat scroll 0 0 #5891f5;*/
-      background: url(../../assets/audio_play_slider.png) center/32px no-repeat;
+      background: url(../../assets/images/audio_play_slider.png) center/32px no-repeat;
       border-radius: 15px;
       // border: 5px solid #006eb3;
       /*-webkit-box-shadow: 0 -1px 1px #fc7701 inset;*/
@@ -412,7 +412,7 @@ export default {
         max-width: 100%;
       }
       .van-slider__button {
-        background: url(../../assets/audio_play_slider.png) center/18px no-repeat;
+        background: url(../../assets/images/audio_play_slider.png) center/18px no-repeat;
         border-radius: 15px;
         width: 18px;
         height: 18px;
@@ -536,7 +536,7 @@ export default {
 
 .van-toast {
   /deep/.van-icon-success {
-    background-image: url('../../assets/audio_love_collect.png');
+    background-image: url('../../assets/images/audio_love_collect.png');
     background-size: 28px;
     background-repeat: no-repeat;
     margin: 1px auto 12px;
@@ -572,7 +572,7 @@ export default {
   white-space: nowrap;
 }
 .van-toast.van-icon-fail {
-  background-image: url('../../assets/audio_play_tip.png');
+  background-image: url('../../assets/images/audio_play_tip.png');
   background-size: 28px;
   background-repeat: no-repeat;
   margin: 1px auto 12px;

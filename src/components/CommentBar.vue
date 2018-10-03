@@ -18,8 +18,8 @@
 </template>
 
 <script>
-import default_left_icon from '../assets/audio_cmt_speak.png'
-import default_right_icon from '../assets/audio_cmt_text.png'
+import default_left_icon from '../assets/images/audio_cmt_speak.png'
+import default_right_icon from '../assets/images/audio_cmt_text.png'
 
 export default {
   name: 'CommentBar',

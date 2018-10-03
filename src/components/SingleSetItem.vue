@@ -2,7 +2,7 @@
     <div class="singleset-item-container" tag="div" @click="onItemClick(item)">
       <div class="item-content">
         <div :class="{'icon-playing':playing}" class="item-icon">
-          <img :src="playing?require('../assets/readings_detail_play.png'):require('../assets/readings_detail_pause.png')">
+          <img :src="playing?require('../assets/images/readings_detail_play.png'):require('../assets/images/readings_detail_pause.png')">
         </div>
         <div class="item-describe">
           <h3 :class="{'item-playing':playing}">

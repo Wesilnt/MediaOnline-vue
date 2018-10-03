@@ -150,7 +150,7 @@ export default {
           alreadyCount
         }
       let totalNums = new Array(state.praiseDetail.personCount).fill(
-        require('../../assets/praise_header_bg.png')
+        require('../../assets/images/praise_header_bg.png')
       )
       userList.map((item, index) => {
         totalNums[index] = item.avatarUrl

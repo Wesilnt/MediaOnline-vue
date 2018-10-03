@@ -3,7 +3,7 @@
 // 引入组件对应的样式
 // import 'vant/packages/vant-css/src/button.css'
 // import 'vant/packages/vant-css/src/checkbox.css'
-import loading from '../assets/loading.png'
+import loading from '../assets/images/loading.png'
 
 import Vue from 'vue'
 import {

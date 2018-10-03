@@ -57,7 +57,7 @@ export default {
   border-radius: 50%;
   margin-right: 20px;
   background-color: #ffffff;
-  background-image: url('../assets/home_video_play.jpg');
+  background-image: url('../assets/images/home_video_play.jpg');
   background-size: 18px;
   box-shadow: 0 0 15px 2px #e5dacf;
 }

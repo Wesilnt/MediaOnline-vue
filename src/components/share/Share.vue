@@ -8,19 +8,19 @@
         <div class="share-list">
           <div class="share-item" @click="toPoster">
             <div class="share-icon">
-              <img src="../../assets/share_poster.png">
+              <img src="../../assets/images/share_poster.png">
             </div>
             <span class="share-label">生成海报</span>
           </div>
           <div class="share-item" @click="onShareItem('friends')">
             <div class="share-icon">
-              <img src="../../assets/share_friends.png">
+              <img src="../../assets/images/share_friends.png">
             </div>
             <span class="share-label">发送给朋友</span>
           </div>
           <div class="share-item" @click="onShareItem('circle')">
             <div class="share-icon">
-              <img src="../../assets/share_circle.png">
+              <img src="../../assets/images/share_circle.png">
             </div>
             <span class="share-label">分享到朋友圈</span>
           </div>

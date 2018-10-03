@@ -45,8 +45,8 @@ export default {
   data() {
     return {
       timeLen: 30 * 24 * 60 * 60 * 1000,
-      playingIcon: require('../../assets/freezone_playing.png'),
-      pauseIcon: require('../../assets/freezone_pause.png'),
+      playingIcon: require('../../assets/images/freezone_playing.png'),
+      pauseIcon: require('../../assets/images/freezone_pause.png'),
       refreshing: false
     }
   },

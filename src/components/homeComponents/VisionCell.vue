@@ -92,7 +92,7 @@ export default {
   width: 16px;
   height: 20px;
   margin-right: 8px;
-  background-image: url('../../assets/home_vision_play.jpg');
+  background-image: url('../../assets/images/home_vision_play.jpg');
 }
 .cell-footer-btn {
   width: 132px;

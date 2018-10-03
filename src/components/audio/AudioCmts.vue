@@ -5,7 +5,7 @@
     <!-- 评论按钮 -->
     <div class="comment-publish">
       <div class="comment-method" @click="onCommentMethod" v-if="false">
-        <img :src="isSpeak?require('../../assets/audio_cmt_text.png'):require('../../assets/audio_cmt_speak.png')">
+        <img :src="isSpeak?require('../../assets/images/audio_cmt_text.png'):require('../../assets/images/audio_cmt_speak.png')">
       </div>
       <div :class="{touched:isSpeaking}" class="comment-button">
         <p v-if="isSpeak" class="speak-btn" @touchstart.prevent="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
@@ -14,7 +14,7 @@
         <textarea v-else v-model="commentContent" rows="1" placeholder="写评论" @keyup.enter="onKeyUp"/>
       </div>
       <div v-if="!isSpeak" class="comment-send" @click="onSendComment">
-        <img :src="commentContent.length<=0?require('../../assets/cmt_send_unable.png'):require('../../assets/cmt_send_abled.png')">
+        <img :src="commentContent.length<=0?require('../../assets/images/cmt_send_unable.png'):require('../../assets/images/cmt_send_abled.png')">
       </div>
     </div>
   </div>

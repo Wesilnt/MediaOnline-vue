@@ -13,7 +13,7 @@
             <div v-for="item of bookList" :key="item.id"  @click="toDetail(item.id)" class="list-item">
                 <div class="top-container" v-lazy:background-image="item.coverPic">
                     <span>上新</span>
-                    <img src="../../assets/readings_item_play.png">
+                    <img src="../../assets/images/readings_item_play.png">
                 </div>
                 <div class="bottom-container">
                     <p>{{item.name}}</p>

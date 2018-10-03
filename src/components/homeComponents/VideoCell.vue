@@ -49,7 +49,7 @@ export default {
   width: 60px;
   height: 60px;
   background-color: #fff;
-  background-image: url('../../assets/home_video_play.jpg');
+  background-image: url('../../assets/images/home_video_play.jpg');
   background-size: 20px;
   box-shadow: 0 0 15px 2px #e5dacf;
 }

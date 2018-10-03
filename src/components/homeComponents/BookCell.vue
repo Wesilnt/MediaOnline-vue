@@ -64,7 +64,7 @@ export default {
     border-radius: 50%;
     box-shadow: 0 0 8px 1px #e5dacf;
     background-color: #fff;
-    background-image: url('../../assets/home_video_play.jpg');
+    background-image: url('../../assets/images/home_video_play.jpg');
     background-size: 18px;
   }
   .cell-footer {

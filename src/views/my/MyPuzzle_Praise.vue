@@ -191,7 +191,7 @@ export default {
         width: 24px;
         height: 24px;
         margin-right: 12px;
-        background-image: url('../../assets/my_puzzle_clock.png');
+        background-image: url('../../assets/images/my_puzzle_clock.png');
       }
       &-date {
         flex-grow: 1;

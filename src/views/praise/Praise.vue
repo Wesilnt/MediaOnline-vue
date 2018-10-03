@@ -200,7 +200,7 @@ export default {
 .praise-container {
   display: flex;
   flex-direction: column;
-  background: url(../../assets/praise_bg.png) center 20%/100% repeat-y;
+  background: url(../../assets/images/praise_bg.png) center 20%/100% repeat-y;
   min-height: 100vh;
   //1. 头部封面
   .praise-header {
@@ -208,7 +208,7 @@ export default {
     width: 100%;
     top: -12vh;
     bottom: -118px;
-    background: url(../../assets/praise_bg.png) center 20%/100% repeat-y;
+    background: url(../../assets/images/praise_bg.png) center 20%/100% repeat-y;
     background-repeat: no-repeat;
   }
   //2. 中间点赞详情 2.66666667%  = 20px/750px

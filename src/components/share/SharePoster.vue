@@ -90,7 +90,7 @@ export default {
       this.ctx.fillStyle = '#ffffff'
       this.ctx.fillRect(0, this.bottomY, this.canvasW, this.bottomH)
       var cover = new Image()
-      cover.src = require('../../assets/poster_header_bg.jpg')
+      cover.src = require('../../assets/images/poster_header_bg.jpg')
       cover.onload = () => {
         this.ctx.drawImage(cover, 0, 0, this.canvasW, this.canvasH)
         resolve()

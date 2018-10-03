@@ -42,6 +42,6 @@ export default {
   width: 20px;
   height: 20px;
   margin-right: 24px;
-  background-image: url('../../assets/home_notice_arrow.png');
+  background-image: url('../../assets/images/home_notice_arrow.png');
 }
 </style>

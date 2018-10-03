@@ -24,8 +24,8 @@ export default {
     return {
       selectCate: 0,
       spread: true,
-      ascDown: require('../../assets/vision_list_down.png'),
-      ascUp: require('../../assets/vision_list_up.png'),
+      ascDown: require('../../assets/images/vision_list_down.png'),
+      ascUp: require('../../assets/images/vision_list_up.png'),
       Ascending: true
     }
   },

@@ -81,7 +81,7 @@ export default {
         },
         {
           name: '/my/wx-config',
-          image: require('../assets/logo.png'),
+          image: require('../assets/images/logo.png'),
           title: '组件测试'
         }
       ]

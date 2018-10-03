@@ -22,7 +22,7 @@
           <span class="count">(共{{visionDetail.lessonCount}}讲)</span>
         </div>
          <videoBigimage :src="visionDetail.outlinePic" class="outlineImage"></videoBigimage>
-        <img class="zoom" src="../../assets/vision_zoom.png" alt="">
+        <img class="zoom" src="../../assets/images/vision_zoom.png" alt="">
       </div>
     </div>
     <!-- try -->
@@ -60,8 +60,8 @@
 
 <script>
 import DetailHeader from '../../components/visionComponents/DetailHeader.vue'
-import arrowUp from '../../assets/vison_arrow_up.png'
-import arrowDown from '../../assets/vision_arrow_down.png'
+import arrowUp from '../../assets/images/vison_arrow_up.png'
+import arrowDown from '../../assets/images/vision_arrow_down.png'
 import SingleSetList from '../../components/SingleSetList.vue'
 import CommentItem from '../../components/comment/CommentItem.vue'
 import toolsNavbar from '../../components/toolsNavbar.vue'

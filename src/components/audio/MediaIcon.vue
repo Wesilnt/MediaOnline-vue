@@ -66,9 +66,9 @@ export default {
        this._drawPlayIconBg()
       let playIcon = new Image()
       if(this.isPlaying){
-        playIcon.src =  require('../../assets/audio_play_play.png')
+        playIcon.src =  require('../../assets/images/audio_play_play.png')
       }else{
-        playIcon.src =  require('../../assets/audio_play_pause.png')
+        playIcon.src =  require('../../assets/images/audio_play_pause.png')
       }
       playIcon.onload = ()=>{
         this._ctx.drawImage(playIcon,this.width/2-5, this.height/2-8, 10,16);
