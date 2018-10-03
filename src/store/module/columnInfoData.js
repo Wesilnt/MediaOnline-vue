@@ -1,6 +1,6 @@
 import { getColumns } from '../../api/columnsApi.js'
 
-const columnInfo = {
+const columnInfoData = {
   namespaced: true,
   state: {
     columnHeaderImage: '', //专栏头图
@@ -38,4 +38,4 @@ const columnInfo = {
     }
   }
 }
-export default columnInfo
+export default columnInfoData

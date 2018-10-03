@@ -1,7 +1,7 @@
 import { postFeedback } from '../../api/myApi'
 import { Toast } from 'vant'
 
-const myFeedback = {
+const myFeedbackData = {
   namespaced: true,
   state: {
     content: '',
@@ -43,4 +43,4 @@ const myFeedback = {
     }
   }
 }
-export default myFeedback
+export default myFeedbackData

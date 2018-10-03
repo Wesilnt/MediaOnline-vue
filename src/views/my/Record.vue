@@ -37,7 +37,7 @@
 <script>
 import { createNamespacedHelpers } from 'vuex'
 
-const { mapState, mapActions } = createNamespacedHelpers('myPlayRecord')
+const { mapState, mapActions } = createNamespacedHelpers('myPlayRecordData')
 export default {
   name: 'Record',
   components: {

@@ -1,6 +1,6 @@
 import { getPlayRecord } from '../../api/myApi'
 import { postDelPlayRecord } from '../../api/myApi'
-const myPlayRecord = {
+const myPlayRecordData = {
   namespaced: true,
   state: {
     playRecordList: [],
@@ -45,4 +45,4 @@ const myPlayRecord = {
     }
   }
 }
-export default myPlayRecord
+export default myPlayRecordData

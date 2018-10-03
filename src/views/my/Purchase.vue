@@ -60,7 +60,7 @@
 <script>
 import { createNamespacedHelpers } from 'vuex'
 
-const { mapState, mapActions } = createNamespacedHelpers('myPurchase')
+const { mapState, mapActions } = createNamespacedHelpers('myPurchaseData')
 export default {
   name: 'Purchase',
   data: function() {

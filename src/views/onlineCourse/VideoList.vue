@@ -19,7 +19,7 @@
 <script>
 import videoListItem from './components/videoListItem.vue'
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions } = createNamespacedHelpers('columnInfo')
+const { mapState, mapActions } = createNamespacedHelpers('columnInfoData')
 export default {
   name: 'VideoList',
   data() {

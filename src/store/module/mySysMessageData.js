@@ -1,7 +1,7 @@
 import { postDelMessage } from '../../api/myApi'
 import { getMessage } from '../../api/myApi'
 import { Vue } from 'vue'
-const mySysMessage = {
+const mySysMessageData = {
   namespaced: true,
   state: {
     messageList: [{id:'10001',busiType:3102,content:'sadfsfasdfjas;dfj;'},{id:'10002',busiType:3105,content:'sasdfassdf是打发的份上weas;dfj;'}
@@ -86,4 +86,4 @@ const mySysMessage = {
     }
   }
 }
-export default mySysMessage
+export default mySysMessageData

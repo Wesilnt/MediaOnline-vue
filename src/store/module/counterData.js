@@ -1,6 +1,6 @@
 import { decrement, increment, log } from './type'
 
-const counter = {
+const counterData = {
   namespaced: true,
   state: {
     sheep: 0
@@ -46,4 +46,4 @@ const counter = {
     }
   }
 }
-export default counter
+export default counterData

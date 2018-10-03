@@ -39,7 +39,7 @@
 <script>
 import { createNamespacedHelpers } from 'vuex'
 
-const { mapState, mapActions } = createNamespacedHelpers('myLike')
+const { mapState, mapActions } = createNamespacedHelpers('myLikeData')
 export default {
   name: 'Like',
   components: {

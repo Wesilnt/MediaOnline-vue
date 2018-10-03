@@ -86,7 +86,7 @@
   import {Toast} from 'vant'
   import {Vue} from 'vue'
 
-  const {mapState, mapMutations,mapActions} = createNamespacedHelpers('mySysMessage')
+  const {mapState, mapMutations,mapActions} = createNamespacedHelpers('mySysMessageData')
   export default {
     name: 'SysMessage',
     components: {

@@ -5,7 +5,7 @@ import {
   getVisionList,
   getVideoList,
   getBookList
-} from '../../api/homeService'
+} from '../../api/homeApi'
 const homeData = {
   namespaced: true,
   state: {

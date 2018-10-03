@@ -24,7 +24,7 @@
 <script>
 import { createNamespacedHelpers } from 'vuex'
 
-const { mapState, mapActions } = createNamespacedHelpers('myReply')
+const { mapState, mapActions } = createNamespacedHelpers('myReplyData')
 export default {
   name: 'Reply',
   components: {

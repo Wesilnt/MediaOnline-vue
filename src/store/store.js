@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import myPuzzle_Praise from './module/myPuzzle_Praise'
-import columnInfo from './module/columnInfo'
+import columnInfoData from './module/columnInfoData'
 import homeData from './module/homeData'
 import videoColumnDetail from './module/videoColumnDetail'
 import videoCourseDetail from './module/videoCourseDetail'
@@ -9,16 +9,16 @@ import visionData from './module/visionData'
 import audio from './module/audioData'
 import readings from './module/readingsData'
 import myData from './module/myData'
-import myFeedback from './module/myFeedback'
-import mySysMessage from './module/mySysMessage'
-import myReply from './module/myReply'
-import myLike from './module/myLike'
-import myPlayRecord from './module/myPlayRecord'
-import myPurchase from './module/myPurchase'
+import myFeedbackData from './module/myFeedbackData'
+import mySysMessageData from './module/mySysMessageData'
+import myReplyData from './module/myReplyData'
+import myLikeData from './module/myLikeData'
+import myPlayRecordData from './module/myPlayRecordData'
+import myPurchaseData from './module/myPurchaseData'
 import userInfo from './module/userInfo'
 import comment from './module/commentData'
 import freezone from './module/freezoneData'
-import audiotask from './module/audioTask'
+import audiotask from './module/audioTaskData'
 import share from './module/shareData'
 import praise from './module/praiseData'
 import mobile from './module/mobileData'
@@ -185,16 +185,16 @@ export default new Vuex.Store({
   modules: {
     myPuzzle_Praise,
     homeData,
-    columnInfo,
+    columnInfo: columnInfoData,
     videoColumnDetail,
     videoCourseDetail, // 内建 问题列表modul
     myData,
-    myFeedback,
-    mySysMessage,
-    myReply,
-    myLike,
-    myPlayRecord,
-    myPurchase,
+    myFeedback: myFeedbackData,
+    mySysMessage: mySysMessageData,
+    myReply: myReplyData,
+    myLike: myLikeData,
+    myPlayRecord: myPlayRecordData,
+    myPurchase: myPurchaseData,
     userInfo,
     visionData,
     readings,

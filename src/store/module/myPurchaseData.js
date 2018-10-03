@@ -1,5 +1,5 @@
 import { getMyPurchase } from '../../api/myApi'
-const myPurchase = {
+const myPurchaseData = {
   namespaced: true,
   state: {
     onLineVisionList: [],
@@ -47,4 +47,4 @@ const myPurchase = {
     }
   }
 }
-export default myPurchase
+export default myPurchaseData

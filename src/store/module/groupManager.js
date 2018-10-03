@@ -1,4 +1,3 @@
-
 import { wxConfig,getGroupBuyDetail,startGroupBuy,joinGroupBuy,startCollectLike,getCollectLike,unlockCourse,wechatSubscribed } from '../../api/groupBuyApi.js'
 import {getMyUserInfo} from '../../api/myApi'
 import { stat } from 'fs';

@@ -1,6 +1,6 @@
 import { postDelMessage } from '../../api/myApi'
 import { getMessage } from '../../api/myApi'
-const myReply = {
+const myReplyData = {
   namespaced: true,
   state: {
     messageList: [],
@@ -41,4 +41,4 @@ const myReply = {
     }
   }
 }
-export default myReply
+export default myReplyData

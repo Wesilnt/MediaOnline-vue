@@ -21,7 +21,7 @@
 import { createNamespacedHelpers } from 'vuex'
 
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
-  'myFeedback'
+  'myFeedbackData'
 )
 export default {
   name: 'Help',

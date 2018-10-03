@@ -1,6 +1,6 @@
 import { getMyLike } from '../../api/myApi'
 import { postDelMyLike } from '../../api/myApi'
-const myLike = {
+const myLikeData = {
   namespaced: true,
   state: {
     likeList: [],
@@ -45,4 +45,4 @@ const myLike = {
     }
   }
 }
-export default myLike
+export default myLikeData
