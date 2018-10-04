@@ -8,7 +8,7 @@ import {
   startCollectLike,
   joinCollectLike
 } from '../../api/praiseApi'
-
+import { WECHAT_SUBSCRIPTION_URL } from './../../utils/config'
 export default {
   namespaced: true,
   state: {
@@ -69,7 +69,7 @@ export default {
           dispatch('checkStatus',params)
           return dispatch('getUserByToken').then(()=>dispatch('getCollectDetail',params))
       }else{          //跳转去关注公众号
-          window.location.href = "https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzA4Mzg3NjE2Mg==&scene=126#wechat_redirect"
+          window.location.href = WECHAT_SUBSCRIPTION_URL
       }
     },
     //积攒状态检查

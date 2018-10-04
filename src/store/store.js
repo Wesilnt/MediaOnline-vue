@@ -26,12 +26,7 @@ import mobileData from './module/mobileData'
 import { getToken } from '../api/accessTokenApi'
 import { noAccessToken } from '../utils/userAuth'
 import { wxConfig as wxConfigApi } from '../api/groupBuyApi.js'
-
-const { NODE_ENV } = process.env
-let wxConfigUrl = 'http://tencent.test.shbaoyuantech.com/wechat-js-config/online'
-if (NODE_ENV === 'development') {
-  wxConfigUrl = 'http://tencent.test.shbaoyuantech.com/wechat-js-config/online'
-}
+import { wxConfigUrl } from './../utils/config'
 
 Vue.use(Vuex)
 export default new Vuex.Store({

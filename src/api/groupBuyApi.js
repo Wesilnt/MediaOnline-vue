@@ -1,6 +1,6 @@
 import { stringify } from 'qs'
 import request from '../utils/request'
-
+import { wxConfigUrl } from './../utils/config'
 //拼团详情
 export async function getGroupBuyDetail(params) {
   return request(`/groupBuy/detail?${stringify(params)}`)
@@ -39,7 +39,7 @@ export async function wechatSubscribed() {
 //微信JDK授权
 export function wxConfig(params) {
   return request(
-    `http://tencent.test.shbaoyuantech.com/wechat-js-config/online?${stringify(
+    wxConfigUrl + `?${stringify(
       params
     )}`
   )

@@ -4,6 +4,10 @@ const { NODE_ENV } = process.env
 // 调试选项，本地调试请改为 False
 export const IS_ONLINE = true
 
+// 公众号 URL
+export const WECHAT_SUBSCRIPTION_URL = "https://mp.weixin.qq.com/mp/profile_ext?action=home" +
+    "&__biz=MzA4Mzg3NjE2Mg==&scene=126#wechat_redirect"
+
 // TODO router 设置未统一，后期需要统一格式
 export const courseType = {
   '1007': 'home/readings/book?id=', // 读书会
@@ -36,4 +40,24 @@ if (NODE_ENV === 'development') {
 } else {
   throw new Error('域名地址既不是测试环境也不是正式环境')
 }
-export default api
+
+// 前端访问地址
+// http://t.shbaoyuantech.com/#    测试环境
+// http://m.shbaoyuantech.com/#    正式环境
+let originUrl='http://t.shbaoyuantech.com/#';
+if (NODE_ENV === 'production') {
+    originUrl='http://m.shbaoyuantech.com/#';
+}
+
+// 微信授权地址
+// 目前后台将环境地址配置成一样的
+let wxConfigUrl = 'http://tencent.test.shbaoyuantech.com/wechat-js-config/online'
+if (NODE_ENV === 'development') {
+    wxConfigUrl = 'http://tencent.test.shbaoyuantech.com/wechat-js-config/online'
+}
+
+export {
+    api,
+    originUrl,
+    wxConfigUrl,
+}

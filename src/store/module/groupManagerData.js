@@ -1,6 +1,7 @@
 import { wxConfig,getGroupBuyDetail,startGroupBuy,joinGroupBuy,startCollectLike,getCollectLike,unlockCourse,wechatSubscribed } from '../../api/groupBuyApi.js'
 import {getMyUserInfo} from '../../api/myApi'
 import { stat } from 'fs';
+import { WECHAT_SUBSCRIPTION_URL } from '../../utils/config'
 
 const groupManagerData = {
     namespaced: true,
@@ -481,7 +482,7 @@ const groupManagerData = {
                 dispatch('checkoutShowTeleDialog',payload)
             }else{
                 //跳转去关注公众号
-                window.location.href = "https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzA4Mzg3NjE2Mg==&scene=126#wechat_redirect"
+                window.location.href = WECHAT_SUBSCRIPTION_URL
             }
         },
 

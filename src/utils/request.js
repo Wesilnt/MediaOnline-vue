@@ -1,10 +1,10 @@
 import 'whatwg-fetch'
 import { Toast } from 'vant'
-import api from './config'
+import { api } from './config'
 import { isUrl, json2formData } from './utils'
 import { getAccessToken, getCookie } from './userAuth'
 import store from '../store/store'
-import { IS_ONLINE } from './config'
+import IS_ONLINE  from './config'
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -80,7 +80,9 @@ const checkResponseCode = (url, response) => {
  * @return {object}           An object containing either "data" or "err"
  */
 function request(url, options) {
+  console.log("api is " + api)
   const baseURI = isUrl(url) ? '' : api
+    console.log("URL is" + baseURI)
   let defaultOptions
     const accessToken = IS_ONLINE
         ? getCookie('COOKIE_TOKEN_KEY_CNONLINE')
