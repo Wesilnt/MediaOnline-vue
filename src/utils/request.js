@@ -80,9 +80,7 @@ const checkResponseCode = (url, response) => {
  * @return {object}           An object containing either "data" or "err"
  */
 function request(url, options) {
-  console.log("api is " + api)
   const baseURI = isUrl(url) ? '' : api
-    console.log("URL is" + baseURI)
   let defaultOptions
     const accessToken = IS_ONLINE
         ? getCookie('COOKIE_TOKEN_KEY_CNONLINE')
