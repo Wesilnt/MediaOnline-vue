@@ -1,7 +1,7 @@
 import { getVideoColumnDetail } from '../../api/columnsApi.js'
 
-import groupContent from './groupContentData'
-import groupManager from './groupManagerData'
+import groupContentData from './groupContentData'
+import groupManagerData from './groupManagerData'
 
 const videoColumnDetailData = {
   namespaced: true,
@@ -45,11 +45,11 @@ const videoColumnDetailData = {
       const freeLessonList = result.freeLessonList
       const serviceType = "OnlineCourse"
       //绑定与拼团相关的内容
-      dispatch('groupManager/initColumnInfo',{serviceType,courseId,profilePic,'freeLesson':freeLessonList})
+      dispatch('groupManagerData/initColumnInfo',{serviceType,courseId,profilePic,'freeLesson':freeLessonList})
 
       if (groupBuyId) {
           //这里是分享链接进来的
-        dispatch('groupManager/getGroupBuyDetail', groupBuyId)
+        dispatch('groupManagerData/getGroupBuyDetail', groupBuyId)
       } else {
           //这里是正常途径进来的
         const toolsData = {
@@ -66,13 +66,13 @@ const videoColumnDetailData = {
           price: result.price
         }
 
-        dispatch('groupManager/initToolsBar', toolsData)
+        dispatch('groupManagerData/initToolsBar', toolsData)
       }
     }
   },
   modules: {
-    groupContent,
-    groupManager
+    groupContentData,
+    groupManagerData
   }
 }
 export default videoColumnDetailData

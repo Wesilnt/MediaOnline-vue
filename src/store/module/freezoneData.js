@@ -73,6 +73,6 @@ export default {
     }
   },
   getters: {
-    playingId: (state, getters, rootState) => rootState.audiotask.audioDetail.id
+    playingId: (state, getters, rootState) => rootState.audiotaskData.audioDetail.id
   }
 }

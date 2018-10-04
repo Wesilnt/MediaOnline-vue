@@ -40,7 +40,7 @@ export default {
     //播放音频
     async playAudio({ getters, commit, dispatch }, params) {
       if (params && params.lessonId) {
-        dispatch('audiotask/asyncPlay', params, { root: true })
+        dispatch('audiotaskData/asyncPlay', params, { root: true })
         .then(res => {
           dispatch('getSingleSetList', {
             courseId: res.courseId,
@@ -49,37 +49,37 @@ export default {
           commit('bindAudioDetail', res)
         })
       } else {
-        dispatch('audiotask/asyncPlay', params, { root: true })
+        dispatch('audiotaskData/asyncPlay', params, { root: true })
       }
     },
     //播放音频
     async pauseAudio({ dispatch }) {
-      dispatch('audiotask/asyncPause', null, { root: true })
+      dispatch('audiotaskData/asyncPause', null, { root: true })
     },
     //播放音频
     async setPlayMode({ commit }, playMode) {
-      commit('audiotask/setPlayMode', playMode, { root: true })
+      commit('audiotaskData/setPlayMode', playMode, { root: true })
     },
     //拖动音频进度
     async seekTo({ commit }, progress) {
-      commit('audiotask/seekTo', progress, { root: true })
+      commit('audiotaskData/seekTo', progress, { root: true })
     },
     //下一集
     async next({ dispatch }, params) {
-      dispatch('audiotask/playNext', params, { root: true })
+      dispatch('audiotaskData/playNext', params, { root: true })
     },
     //上一集
     async pre({ commit }, params) {
-      dispatch('audiotask/playPre', params, { root: true })
+      dispatch('audiotaskData/playPre', params, { root: true })
     },
     //悬浮按钮是否显示
     toggleFloatButton({commit},isShow){ 
 
-      commit('audiotask/setFloatButton', isShow, { root: true })
+      commit('audiotaskData/setFloatButton', isShow, { root: true })
     },
     //音频单集详情
     async getAudioDetail({ getters, commit, dispatch }, params) {
-      dispatch('audiotask/getAudioDetail', params, { root: true })
+      dispatch('audiotaskData/getAudioDetail', params, { root: true })
       .then(res => {
         commit('bindAudioDetail', res)
         dispatch('getSingleSetList', {
@@ -118,15 +118,15 @@ export default {
     }
   },
   getters: {
-    audio: (state, getters, rootState) => rootState.audiotask.audioDetail,
-    audioId: (state, getters, rootState) => rootState.audiotask.audioId,
-    currentTime: (state, getters, rootState) => Math.round(rootState.audiotask.currentTime),
+    audio: (state, getters, rootState) => rootState.audiotaskData.audioDetail,
+    audioId: (state, getters, rootState) => rootState.audiotaskData.audioId,
+    currentTime: (state, getters, rootState) => Math.round(rootState.audiotaskData.currentTime),
     // currentTime: (state, getters, rootState) => (touching, progress) =>
     //   touching ? progress : rootState.audiotask.currentTime,
-    maxTime: (state, getters, rootState) => Math.round(rootState.audiotask.maxTime),
-    playMode: (state, getters, rootState) => rootState.audiotask.playMode,
-    status: (state, getters, rootState) => rootState.audiotask.status,
-    playing: (state, getters, rootState) => rootState.audiotask.isPlaying,
+    maxTime: (state, getters, rootState) => Math.round(rootState.audiotaskData.maxTime),
+    playMode: (state, getters, rootState) => rootState.audiotaskData.playMode,
+    status: (state, getters, rootState) => rootState.audiotaskData.status,
+    playing: (state, getters, rootState) => rootState.audiotaskData.isPlaying,
     pageSize: state => state.pageSize,
     currentPage: state => state.currentPage
   }

@@ -6,7 +6,7 @@ import {
   lessonListenForVedio
 } from '../../api/columnsApi.js'
 import { getCommentList, postComment } from '../../api/commentApi.js'
-import questionList from './questionListData'
+import questionListData from './questionListData'
 import router from '../../router/router'
 const videoCourseDetailData = {
   namespaced: true,
@@ -255,7 +255,7 @@ const videoCourseDetailData = {
   },
 
   modules: {
-    questionList
+    questionListData
   }
 }
 export default videoCourseDetailData

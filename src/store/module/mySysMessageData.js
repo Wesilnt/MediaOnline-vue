@@ -1,6 +1,6 @@
 import { postDelMessage } from '../../api/myApi'
 import { getMessage } from '../../api/myApi'
-import { Vue } from 'vue'
+
 const mySysMessageData = {
   namespaced: true,
   state: {

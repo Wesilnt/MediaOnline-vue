@@ -21,11 +21,10 @@ const myReplyData = {
         loading: true
       })
       const response = await getMessage({ busiTypes: '3101' })
-      if (!response) return
       await commit({
         type: 'saveList',
         messageList: response
-      })``
+      })
       commit('toggleLoading', {
         loading: false
       })

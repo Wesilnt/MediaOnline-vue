@@ -1,5 +1,5 @@
 import { getReadingsList, getBookDetail, getSingleSetList } from '../../api/readingsApi'
-import groupManager from './groupManagerData'
+import groupManagerData from './groupManagerData'
 
 export default {
     namespaced: true,
@@ -71,10 +71,10 @@ export default {
             const freeLessonList = result.freeLessonList
             const serviceType = "Readings"
             //绑定与拼团相关的内容
-            dispatch('groupManager/initColumnInfo',{serviceType,courseId,profilePic,'freeLesson':freeLessonList})
+            dispatch('groupManagerData/initColumnInfo',{serviceType,courseId,profilePic,'freeLesson':freeLessonList})
             if (groupBuyId) {
                 //这里是分享链接进来的
-              dispatch('groupManager/getGroupBuyDetail', groupBuyId)
+              dispatch('groupManagerData/getGroupBuyDetail', groupBuyId)
             } else {
                 //这里是正常途径进来的
               const toolsData = {
@@ -91,7 +91,7 @@ export default {
                 price: result.price
               }
               
-              dispatch('groupManager/initToolsBar', toolsData)
+              dispatch('groupManagerData/initToolsBar', toolsData)
             }
         },
         //书单集列表
@@ -123,9 +123,9 @@ export default {
                 description:state.bookDetail.description,            //内容介绍
             }
         },
-      playingId:(state,getters,rootState)=>rootState.audiotask.audioDetail.id
+      playingId:(state,getters,rootState)=>rootState.audiotaskData.audioDetail.id
     },
     modules:{
-      groupManager
+      groupManagerData
     }
 }

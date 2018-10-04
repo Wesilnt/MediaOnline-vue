@@ -36,8 +36,8 @@ const groupManagerData = {
     },
     getters:{
         // //专栏头图
-        buyCount(state,getters,{ videoColumnDetail }) {
-            return videoColumnDetail.buyCount
+        buyCount(state,getters,{ videoColumnDetailData }) {
+            return videoColumnDetailData.buyCount
         },
     },
     mutations:{
@@ -679,7 +679,7 @@ const groupManagerData = {
         
         //从新获取专栏详情接口,刷新父组件显示
         async updateFatherData({dispatch,state}){
-            dispatch('videoColumnDetail/getVideoColumnDetail',{"courseId" : state.courseId},{root:true})            
+            dispatch('videoColumnDetailData/getVideoColumnDetail',{"courseId" : state.courseId},{root:true})
         },
     }
 }

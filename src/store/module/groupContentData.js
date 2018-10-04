@@ -5,32 +5,32 @@ const groupContentData = {
     videoColumnComments: [] //视频专栏留言数组
   },
   getters: {
-    description(state, getters, { videoColumnDetail }) {
-      return videoColumnDetail.description
+    description(state, getters, { videoColumnDetailData }) {
+      return videoColumnDetailData.description
     },
-    lessonCount(state, getters, { videoColumnDetail }) {
-      return videoColumnDetail.lessonCount
+    lessonCount(state, getters, { videoColumnDetailData }) {
+      return videoColumnDetailData.lessonCount
     },
-    outlinePic(state, getters, { videoColumnDetail }) {
-      return videoColumnDetail.outlinePic
+    outlinePic(state, getters, { videoColumnDetailData }) {
+      return videoColumnDetailData.outlinePic
     },
-    buyIntro(state, getters, { videoColumnDetail }) {
-      return videoColumnDetail.buyIntro
+    buyIntro(state, getters, { videoColumnDetailData }) {
+      return videoColumnDetailData.buyIntro
     },
-    commentCount(state, getters, { videoColumnDetail }) {
-      return videoColumnDetail.commentCount
+    commentCount(state, getters, { videoColumnDetailData }) {
+      return videoColumnDetailData.commentCount
     },
-    buyCount(state, getters, { videoColumnDetail }) {
-      return videoColumnDetail.buyCount
+    buyCount(state, getters, { videoColumnDetailData }) {
+      return videoColumnDetailData.buyCount
     },
-    freeLessonList(state, getters, { videoColumnDetail }) {
-      return videoColumnDetail.freeLessonList
+    freeLessonList(state, getters, { videoColumnDetailData }) {
+      return videoColumnDetailData.freeLessonList
     },
-    commentsList(state, getters, { videoColumnDetail }) {
+    commentsList(state, getters, { videoColumnDetailData }) {
       return state.videoColumnComments
     },
-    courseId(state, getters, { videoColumnDetail }) {
-      return videoColumnDetail.courseId
+    courseId(state, getters, { videoColumnDetailData }) {
+      return videoColumnDetailData.courseId
     }
   },
   mutations: {
