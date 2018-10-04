@@ -185,7 +185,7 @@ export default new Vuex.Store({
   modules: {
     myPuzzle_PraiseData,
     homeData,
-    columnInfo: columnInfoData,
+    columnInfoData,
     videoColumnDetailData,
     videoCourseDetailData, // 内建 问题列表modul
     myData,
