@@ -1,11 +1,9 @@
 import 'whatwg-fetch'
 import { Toast } from 'vant'
-import { api } from './config'
 import { isUrl, json2formData } from './utils'
 import { getAccessToken, getCookie } from './userAuth'
 import store from '../store/store'
-import IS_ONLINE  from './config'
-import TEST_TOKEN from './config'
+import { IS_ONLINE, TEST_TOKEN, api }  from './config'
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
