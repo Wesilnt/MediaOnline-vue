@@ -1,14 +1,17 @@
-import { postDelMessage } from '../../api/myApi'
-import { getMessage } from '../../api/myApi'
+import {
+  getMessage,
+  getUsedMessage ,
+  postDelMessage
+} from '../../api/myApi'
 const myReplyData = {
   namespaced: true,
   state: {
     messageList: [],
+    usedMessageList:[],
     loading: false
   },
   mutations: {
     saveList(state, payload) {
-      console.log(payload)
       Object.assign(state, payload)
     },
     toggleLoading(state, { loading }) {
@@ -21,12 +24,28 @@ const myReplyData = {
         loading: true
       })
       const response = await getMessage({ busiTypes: '3101' })
+      //将返回的json对象中的 content Json字符串转化成 Json对象
+      for(let i= 0; i < response.length; i++) {
+        response[i].content = JSON.parse(response[i].content)
+      }
       await commit({
         type: 'saveList',
         messageList: response
       })
       commit('toggleLoading', {
         loading: false
+      })
+    },
+    async queryUsedList({ dispatch, commit, state }) {
+
+      const response = await getUsedMessage({ busiTypes: '3101' })
+      //将返回的json对象中的 content Json字符串转化成 Json对象
+      for(let i= 0; i < response.length; i++) {
+        response[i].content = JSON.parse(response[i].content)
+      }
+      await commit({
+        type: 'saveList',
+        usedMessageList: response
       })
     },
     async delMessage({ dispatch, commit, state }, { msgId }) {

@@ -27,6 +27,63 @@ export const formatDuring = mss => {
   seconds = seconds < 10 ? '0' + seconds : seconds
   return minutes + ':' + seconds
 }
+export function getDateDiff(dateStr) {
+  var publishTime = dateStr / 1000,
+    d_seconds,
+    d_minutes,
+    d_hours,
+    d_days,
+    timeNow = parseInt(new Date().getTime() / 1000),
+    d,
+    date = new Date(publishTime * 1000),
+    Y = date.getFullYear(),
+    M = date.getMonth() + 1,
+    D = date.getDate(),
+    H = date.getHours(),
+    m = date.getMinutes(),
+    s = date.getSeconds();
+  //小于10的在前面补0
+  if (M < 10) {
+    M = '0' + M;
+  }
+  if (D < 10) {
+    D = '0' + D;
+  }
+  if (H < 10) {
+    H = '0' + H;
+  }
+  if (m < 10) {
+    m = '0' + m;
+  }
+  if (s < 10) {
+    s = '0' + s;
+  }
+
+  d = timeNow - publishTime;
+  d_days = parseInt(d / 86400);
+  d_hours = parseInt(d / 3600);
+  d_minutes = parseInt(d / 60);
+  d_seconds = parseInt(d);
+
+  if (d_days > 0 && d_days < 3) {
+    return d_days + '天前';
+  } else if (d_days <= 0 && d_hours > 0) {
+    return d_hours + '小时前';
+  } else if (d_hours <= 0 && d_minutes > 0) {
+    return d_minutes + '分钟前';
+  } else if (d_seconds < 60) {
+    if (d_seconds <= 0) {
+      return '刚刚';
+    } else {
+      return d_seconds + '秒前';
+    }
+  } else if (d_days >= 3 && d_days < 30) {
+    return M + '月' + D + '日' + H + ':' + m;
+  } else if (d_days >= 30) {
+    return Y + '月' + M + '日' + D + ' ' + H + ':' + m;
+  }
+}
+
 //学习进度百分比格式化
 export const learntimeFormat = (learntime, totaltime, id) => {
   let progressCache = localStorage.getItem('learntime-' + id)
@@ -97,7 +154,7 @@ export function throttle(func, wait, options) {
    *  表示首次调用返回值方法时，会马上调用func；否则仅会记录当前时刻，当第二次调用的时间间隔超过wait时，才调用func。
    *  options.leading = true;
    * 表示当调用方法时，未到达wait指定的时间间隔，则启动计时器延迟调用func函数，若后续在既未达到wait指定的时间间隔和func函数又未被调用的情况下调用返回值方法，则被调用请求将被丢弃。
-   *  options.trailing = true; 
+   *  options.trailing = true;
    * 注意：当options.trailing = false时，效果与上面的简单实现效果相同
    */
   var context, args, result

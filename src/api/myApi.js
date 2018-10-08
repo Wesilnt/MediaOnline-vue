@@ -33,6 +33,10 @@ export async function queryMyPraise(params) {
 export async function getMessage(params) {
   return request(`/user/getUserMsgListByBusiTypesAndRead?${stringify(params)}`)
 }
+//获取已读消息
+export async function getUsedMessage(params) {
+  return request(`/user/getUserMsgListByBusiTypesOfReaded?${stringify(params)}`)
+}
 //删除系统消息
 export async function postDelMessage(params) {
   return request.post('/user/delUserMsg', params)
