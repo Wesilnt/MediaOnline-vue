@@ -5,6 +5,7 @@ import { isUrl, json2formData } from './utils'
 import { getAccessToken, getCookie } from './userAuth'
 import store from '../store/store'
 import IS_ONLINE  from './config'
+import TEST_TOKEN from './config'
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -84,7 +85,7 @@ function request(url, options) {
   let defaultOptions
     const accessToken = IS_ONLINE
         ? getCookie('COOKIE_TOKEN_KEY_CNONLINE')
-        : '9832536e-c17d-4d3f-a548-52b4d1fee9be'
+        : TEST_TOKEN
     defaultOptions = {
       // credentials: 'include',
       // mode: 'no-cors',

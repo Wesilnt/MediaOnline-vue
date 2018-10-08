@@ -3,10 +3,8 @@ const { NODE_ENV } = process.env
 
 // 调试选项，本地调试请改为 False
 export const IS_ONLINE = true
-
-// 公众号 URL
-export const WECHAT_SUBSCRIPTION_URL = "https://mp.weixin.qq.com/mp/profile_ext?action=home" +
-    "&__biz=MzA4Mzg3NjE2Mg==&scene=126#wechat_redirect"
+// 测试 Token
+export const TEST_TOKEN = '9832536e-c17d-4d3f-a548-52b4d1fee9be'
 
 // TODO router 设置未统一，后期需要统一格式
 export const courseType = {
@@ -31,6 +29,10 @@ export const navbar = [
   }
 ]
 
+// 公众号 URL
+export const WECHAT_SUBSCRIPTION_URL = "https://mp.weixin.qq.com/mp/profile_ext?action=home" +
+  "&__biz=MzA4Mzg3NjE2Mg==&scene=126#wechat_redirect"
+
 // 后端接口api
 let api = 'https://xcx.test.shbaoyuantech.com:30000'
 if (NODE_ENV === 'development') {
@@ -50,7 +52,7 @@ if (NODE_ENV === 'production') {
 }
 
 // 微信授权地址
-// 目前后台将环境地址配置成一样的
+// 目前测试环境和正式环境地址一样
 let wxConfigUrl = 'http://tencent.test.shbaoyuantech.com/wechat-js-config/online'
 if (NODE_ENV === 'development') {
     wxConfigUrl = 'http://tencent.test.shbaoyuantech.com/wechat-js-config/online'
