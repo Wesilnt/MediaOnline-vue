@@ -8,7 +8,8 @@
             <div v-if="!isInputPhone" class="userinfo-phone-code-container">
                 <div class="userinfo-phone-code-container-content">
                     <p class="userinfo-phone-code-container-content-text">{{ mobileNumber }}</p>
-                    <p class="userinfo-phone-code-container-content-countdown">({{ countDownNumber }}秒)</p>
+                    <p  v-if="!showGetValidCode" class="userinfo-phone-code-container-content-countdown">({{ countDownNumber }}秒)</p>
+                    <p v-if="showGetValidCode" class="userinfo-phone-code-container-content-getValidCode" @click="getValidCode">获取验证码</p>
                 </div>
 
                 <div class="v-code">
@@ -17,7 +18,7 @@
                             id="vcode"
                             type="tel"
                             maxlength="6"
-                            v-model="code"
+                            v-model="validCode"
                             @focus="focused = true"
                             @blur="focused = false"
                             :disabled="telDisabled">
@@ -55,9 +56,9 @@
         phone: '',
         countDownNumber: 60,
         validCode: '',
+        showGetValidCode: false,
         mobileNumber: '',
         validateCode: '',
-        code: '',
         codeLength: 6,
         telDisabled: false,
         focused: false
@@ -66,21 +67,26 @@
     computed: {
       ...mapState(['remainTime', 'clickable', 'sending', 'validate']),
       codeArr() {
-        return this.code.split('')
+        return this.validCode.split('')
       },
       cursorIndex() {
-        return this.code.length
+        return this.validCode.length
       }
     },
     watch: {
-      code(newVal) {
-        this.code = newVal.replace(/[^\d]/g,'')
+      validCode(newVal) {
+        this.validateCode = newVal.replace(/[^\d]/g,'')
         if (newVal.length > 5) {
           // this.telDisabled = true
           this.$refs.vcode.blur()
           setTimeout(() => {
-            alert(`vcode: ${this.code}`)
+            alert(`vcode: ${this.validateCode}`)
           }, 500)
+        }
+      },
+      validate(newVal) {
+        if(this.validate === true) {
+          this.$router.push({ path: './EditUserInfo' })
         }
       }
     },
@@ -93,11 +99,28 @@
           return
         }
         this.sendMobileCode({mobileNo: this.mobileNumber})
+        this.countDown()
+      },
+      onConfirm() {
+        if (this.validateCode === '') {
+          this.$toast('请输入正确的验证码')
+          return
+        }
+        this.validateMobileCode({ code: this.validateCode })
+      },
+      getValidCode() {
+        this.showGetValidCode = false
+        this.countDownNumber = 60
+        this.sendCode()
       },
       handleNext: function () {
-        this.sendCode()
-        this.isInputPhone = false
-        this.countDown()
+        if(this.isInputPhone === true) {
+          this.sendCode()
+          this.isInputPhone = false
+          this.countDown()
+        } else {
+          this.onConfirm()
+        }
       },
       countDown:function () {
         let num = 60
@@ -109,6 +132,7 @@
           if (num === 0) {
             //that.countDownNumber
             clearInterval(timer)
+            that.showGetValidCode = true
           }
         }, 1000)
       }
@@ -172,6 +196,12 @@
                         font-size: 36px;
                         padding-right: 80px;
                         color: #ced4da;
+                    }
+                    &-getValidCode{
+                        font-size: 28px;
+                        padding-right: 0px;
+                        color: #ffa32f;
+                        font-weight: bold;
                     }
                 }
             }
