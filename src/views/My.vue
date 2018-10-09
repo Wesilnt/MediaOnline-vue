@@ -70,11 +70,11 @@
             image: praise,
             title: '我的集赞'
           },
-          {
+         /* {
             name: '/my/SysMessage',
             image: sys,
             title: '系统消息'
-          },
+          },*/
           {
             name: '/my/Feedback',
             image: feedback,
