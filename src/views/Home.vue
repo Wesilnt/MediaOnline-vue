@@ -1,20 +1,25 @@
 <template>
   <div class="index">
+    <div>
       <van-swipe :autoplay="4000" class="index-swiper">
-          <van-swipe-item v-for="list in bannerList" :key="list.url">
-              <i class="qhht-icon lazy-img-larger index-swiper-img"   v-lazy:background-image="list.url"  @click="routerToSwiperDetail(list.link)"></i>
-          </van-swipe-item>
+        <van-swipe-item v-for="list in bannerList" :key="list.url">
+          <i class="qhht-icon lazy-img-larger index-swiper-img" v-lazy:background-image="list.url" @click="routerToSwiperDetail(list.link)"></i>
+        </van-swipe-item>
+
       </van-swipe>
-    <Notice :message-count="newMessageCount"/>
+      <div class="swiper_bottom"></div>
+    </div>
+
+    <Notice :message-count="newMessageCount" />
     <div class="index-container">
-      <Header v-if="false" :link="'/home/freezone'" title="免费专区" subtitle="探索更多"/>
-      <FreeList v-if="false" :free-list="freeList"/>
+      <Header v-if="false" :link="'/home/freezone'" title="免费专区" subtitle="探索更多" />
+      <FreeList v-if="false" :free-list="freeList" />
       <Header :link="'/home/visionList'" title="少年视野" subtitle="探索更多" />
-      <DisCoverVisionList :vision-list="visionList"/>
-      <Header :link="'/home/videoList'" title="少年必修" subtitle="探索更多"/>
-      <DisCoverVideoList :video-list="videoList"/>
-      <Header :link="'/home/readings'" title="中国少年读书会" subtitle="探索更多"/>
-      <BookList :book-list="bookList"/>
+      <DisCoverVisionList :vision-list="visionList" />
+      <Header :link="'/home/videoList'" title="少年必修" subtitle="探索更多" />
+      <DisCoverVideoList :video-list="videoList" />
+      <Header :link="'/home/readings'" title="中国少年读书会" subtitle="探索更多" />
+      <BookList :book-list="bookList" />
     </div>
   </div>
 </template>
@@ -76,9 +81,28 @@ export default {
 .index {
   color: #3e3e53;
   margin-bottom: 100px;
+  /deep/.van-swipe__indicators{
+    bottom:30px;
+  }
+  /deep/.van-swipe__indicator {
+    background-color: white;
+  }
+  /deep/.van-swipe__indicator--active{
+    background-color: #D9D9D9;
+  }
 }
 .index-swiper {
   // margin-bottom: 28px;
+}
+.swiper_bottom {
+  background-color: white;
+  width: 100%;
+  height: 60px;
+  position: absolute;
+  top: 320px;
+  border-top-left-radius: 50%;
+  border-top-right-radius: 50%;
+  z-index: 999;
 }
 .index-swiper-img {
   width: 100%;
