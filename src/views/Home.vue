@@ -78,7 +78,7 @@ export default {
   margin-bottom: 100px;
 }
 .index-swiper {
-  margin-bottom: 28px;
+  // margin-bottom: 28px;
 }
 .index-swiper-img {
   width: 100%;

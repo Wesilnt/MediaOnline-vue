@@ -22,7 +22,7 @@ export default {
 
 <style lang="less" scoped>
 .header {
-  border-top: 2px solid #F1F1F1;
+  // border-top: 2px solid #F1F1F1;
   padding: 48px 0 30px;
 }
 .headertitle {

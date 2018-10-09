@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="home_visionlist_bottom">
         <VisionCell  v-for="(item, index) in visionList" :key="index" :vision="item"/>
     </div>
 </template>
@@ -13,3 +13,10 @@ export default {
   props: ['visionList']
 }
 </script>
+
+<style lang="less" scoped>
+.home_visionlist_bottom{
+   border-bottom: 2px solid #F1F1F1;
+}
+</style>
+
