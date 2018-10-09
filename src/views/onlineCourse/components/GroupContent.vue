@@ -18,8 +18,8 @@
             <div class="videocol-sction-title" id="tryCourse">
                 <h4>试看课程</h4>
                 <div class="videocol-all" @click="allFunc()">
-                <span class="videocol-allbtn">全部</span>
-                <img :src="require('../../../assets/images/onlinecourse_arrow_right.png')" class="videocol-allbtn-icon">
+                    <span class="videocol-allbtn">全部</span>
+                    <img :src="require('../../../assets/images/onlinecourse_arrow_right.png')" class="videocol-allbtn-icon">
                 </div>
             </div>
             <playlist v-for="(item,index) of freeLessonList" :key="item.id" :iteminfo="item" :lastindex="index === (freeLessonList.length - 1)" @jumpEvent="gotoVideoCourseDetailPage(item.id)"/>

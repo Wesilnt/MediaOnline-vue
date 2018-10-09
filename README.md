@@ -13,8 +13,9 @@ ___
 
 [UI 库 vant](https://youzan.github.io/vant/#/zh-CN/intro)
 
-[UI 设计文档访问地址](...)
+[缩略图方法](https://developer.qiniu.com/dora/manual/1279/basic-processing-images-imageview2)
 
+http://qiniu.shbaoyuantech.com/Fu_BKxSVHcXFaC-03oEqBQua5r7L?imageView2/1/w/100/h/100/format/webp
 
 [二维码说明文档](https://gerardreches.github.io/vue-qrcode-component/)
 

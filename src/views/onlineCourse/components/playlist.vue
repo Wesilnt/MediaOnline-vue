@@ -1,6 +1,6 @@
 <template>
     <div class="qhht-flex playItem-container" @click="onClick">
-        <i class="qhht-icon playItem-avator">
+        <i class="qhht-icon playItem-avator"  v-lazy:background-image="`${iteminfo.coverPic}?imageView2/1/w/100/h/100/format/webp/q/50`">
             <i class="qhht-icon playItem-item-badge" :class="{'playItem-item-badge-active':activeID === iteminfo.id}"></i>
         </i>
         <div class="playItem-content">
