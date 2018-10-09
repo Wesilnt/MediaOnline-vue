@@ -181,26 +181,42 @@ export default {
         historyPlayPosition >= video.duration ? 0 : historyPlayPosition
       // 记录当前播放时间戳
       this.playStartTime = new Date()
+      this.loaclPlayTotalTime = Math.round(parseFloat(videoData.playTotalTime))
     },
     getVideoProgress({ target }) {
-      const { currentTime, paused, duration } = target
+      const { currentTime, paused, duration, readyState } = target
+      // console.log('0-0-0-0-9-9--9-')
+      // console.dir(target.networkState)
+      // console.dir(target.readyState)
+      // console.dir(target.error)
       /*
       视频存储数据逻辑
       */
+     
       // 获取播放累计时长
-      if(paused){
+      if(readyState==4 || readyState==3){
+        console.log('代码是否能走到这里~~~~~~~~')
         const durationPlayingTime = this.playStartTime
           ? (new Date() - this.playStartTime) / 1000
           : 0
-        this.loaclPlayTotalTime += durationPlayingTime
-        this.playStartTime = null
-        const newVideoData = JSON.parse(localStorage.getItem(this.id))
-        const newTotalTime =
-          durationPlayingTime + Math.round(parseFloat(newVideoData.playTotalTime))
+        console.log(this.playStartTime)
+        // this.loaclPlayTotalTime += durationPlayingTime
+        // const newVideoData = JSON.parse(localStorage.getItem(this.id))
+        const newTotalTime =  this.loaclPlayTotalTime + durationPlayingTime
+        // const newTotalTime =
+        //   durationPlayingTime + Math.round(parseFloat(newVideoData.playTotalTime))
+          let newPosition = currentTime
+        // let newPosition = durationPlayingTime + Math.round(parseFloat(newVideoData.historyPlayPosition))
+        //累计播放时长大于视频总长度.将历史播放进度置为0
+        if(newPosition > this.totalTime){
+          newPosition = 0
+        }
         const obj = {
           playTotalTime: newTotalTime,
-          historyPlayPosition: currentTime
+          historyPlayPosition: newPosition
         }
+        console.log('代码走到这里这阿发0=0=0=00=')
+        console.log(obj)
         localStorage.setItem(this.id, JSON.stringify(obj))
         /*
         自测题逻辑
@@ -213,6 +229,10 @@ export default {
           ) {
             this.bindQuestionBymyself({ deblockQuestion: true })
         }     
+      }else{
+        const videoData = JSON.parse(localStorage.getItem(this.id))
+        this.playStartTime = new Date()
+        this.loaclPlayTotalTime = Math.round(parseFloat(videoData.playTotalTime))
       }
       
       // 进度条 未解锁就动态显示

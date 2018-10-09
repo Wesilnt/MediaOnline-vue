@@ -35,7 +35,7 @@ const homeData = {
     },
     async getNewMessageCount({ commit }) {
       let result = await getNewMessageCount({ busiTypes: '3101,3102,3103,3105,3106'})
-      commit('setNewMessageCount', result.data)
+      commit('setNewMessageCount', result)
     },
     async getVisionList({ commit }) {
       let result = await getVisionList()

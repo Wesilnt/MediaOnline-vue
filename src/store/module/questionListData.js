@@ -13,8 +13,8 @@ const questionListData = {
     }
   },
   getters: {
-    questionList: (state, getters, { videoCourseDetail }) =>
-      videoCourseDetail.questionBOList,
+    questionList: (state, getters, { videoCourseDetailData }) =>
+      videoCourseDetailData.questionBOList,
     questionLength: (state, getters) => getters.questionList.length,
     correct: (state, getters) => {
       const { questionList } = getters
@@ -23,16 +23,16 @@ const questionListData = {
         return prev
       }, 0)
     },
-    deblock: (state, getters, { videoCourseDetail }) =>
-      videoCourseDetail.deblockQuestion,
-    progress: (state, getters, { videoCourseDetail }) =>
-      videoCourseDetail.progress,
-    deblockTime: (state, getters, { videoCourseDetail }) => {
-      const { totalTime, progress } = videoCourseDetail
+    deblock: (state, getters, { videoCourseDetailData }) =>
+      videoCourseDetailData.deblockQuestion,
+    progress: (state, getters, { videoCourseDetailData }) =>
+      videoCourseDetailData.progress,
+    deblockTime: (state, getters, { videoCourseDetailData }) => {
+      const { totalTime, progress } = videoCourseDetailData
       return Math.round((0.7 - progress / 100) * totalTime)
     },
-    grade: (state, getters, { videoCourseDetail }) => videoCourseDetail.grade,
-    title: (state, getters, { videoCourseDetail }) => videoCourseDetail.title,
+    grade: (state, getters, { videoCourseDetailData }) => videoCourseDetailData.grade,
+    title: (state, getters, { videoCourseDetailData }) => videoCourseDetailData.title,
     questionInfo: ({ questionIndex, answers, text }, getters) => {
       const { questionList } = getters
       const queations = {

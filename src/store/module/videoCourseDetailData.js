@@ -95,7 +95,8 @@ const videoCourseDetailData = {
       let storage = window.localStorage
       //根据单集ID来存储视频播放数据对象
       let videoData = JSON.parse(storage.getItem(lessonId))
-      console.log('------------- state.learnTime',state.learnTime)
+      // console.log('------------- videoData.playTotalTime',videoData.historyPlayPosition)
+      // console.log(videoData)
       //服务器数据
       let servicePlayTotalTime = state.learnTotalTime || 0
       let servicePlayPosition = state.learnTime
@@ -107,6 +108,8 @@ const videoCourseDetailData = {
           一:如果本地累计观看时长大于服务器存储的播放时长,就将本地的数据上传到服务器
           二:如果本地累计观看时长小于服务器存储的播放时长,就将服务器的数据拉下来并同步到本地
         */
+       console.log('代码走到这里了')
+       console.log(videoData)
         let loaclPlayTotalTime = Math.round(videoData.playTotalTime) || 0
         let loaclPlayPosition = Math.round(videoData.historyPlayPosition)
         console.log('videoData = ',loaclPlayTotalTime,loaclPlayPosition)
@@ -134,6 +137,9 @@ const videoCourseDetailData = {
           storage.setItem(lessonId, obj)
         }
         console.log('服务器数据更新本地数据')
+        videoData = JSON.parse(storage.getItem(lessonId))
+        console.log('新的videodata =')
+        console.log(videoData)
         dispatch('updateQuestionData', lessonId)
       } else {
         /*

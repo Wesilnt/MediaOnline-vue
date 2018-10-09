@@ -12,7 +12,7 @@
          ? 'url('+require('../../assets/images/audio_love_collect.png')+')'
          : 'url('+require('../../assets/images/audio_love_normal.png')+')'}">
         </div>
-        <div v-if="'readings'!=playType" class="tab-container-draft" @click="onDraft"/>
+        <div v-if="'Readings'!=playType" class="tab-container-draft" @click="onDraft"/>
         <div  class="tab-container-comment" @click="toComment">
           <span>{{audio.commentCount}}</span>
         </div>
@@ -87,7 +87,7 @@
 </template>
 <script>
 import SharePop from '../share/Share.vue'
-import { createNamespacedHelpers } from 'vuex'
+import { createNamespacedHelpers ,mapActions as rootActions} from 'vuex'
 const { mapState,mapMutations, mapActions, mapGetters } = createNamespacedHelpers('audiotaskData/audioData')
 
 export default {
@@ -151,6 +151,7 @@ export default {
     }
   },
   methods: {
+    ...rootActions(['getUserInfo']),
     ...mapMutations(['setFloatButton']),
     ...mapActions([
       'getAudioDetail',
@@ -212,14 +213,17 @@ export default {
       })
     },
     //分享
-    onShare() {
-      this.shareData = {
-        link: `/#/audio/audioplay/${this.lessonId}`,
-        title: '音频分享',
-        desc: '音频',
-        imgUrl: require('../../assets/images/logo.png')
-      }
-      this.showShare = true
+    onShare() { 
+      this.getUserInfo()
+      .then(user=>{
+          this.shareData = {
+            link: `/#/audio/audioplay/${this.lessonId}`, 
+            title: `我是${user.nickName}, 我想免费领取《${this.audio?this.audio.title:'国学说'}》,来帮我点赞吧`,
+            desc: '你一定会爱上国学课...',
+            imgUrl: require('../../assets/images/logo.png')
+          }
+          this.showShare = true
+      })
     },
     //分享框关闭
     closeShare() {

@@ -27,7 +27,7 @@
                                         <Badge :status="isPraise?puzzle.collectLikeStatus:puzzle.groupBuyStatus">{{pageName}}</Badge>
                                     </p>
                                     <div class="qhht-flex">
-                                        <img :alt="puzzle.course.name" :title="puzzle.course.name" class="my-puzzle-content-img" v-lazy="puzzle.course.coverPic" >
+                                        <div v-lazy:background-image="puzzle.course.coverPic" class="my-puzzle-content-img"></div>
                                         <ul class="my-puzzle-display">
                                             <li><h3> {{puzzle.course.name}}</h3></li>
                                             <li>{{puzzle.course.priefIntro?puzzle.course.priefIntro:'暂无简介'}}</li>
@@ -176,7 +176,7 @@ export default {
     /*}*/
   }
   &-content {
-    padding: 32px 40px;
+    padding: 132px 40px 32px;
     .van-list {
       min-height: 50vh;
     }
@@ -205,6 +205,7 @@ export default {
       width: 136px;
       height: 180px;
       border-radius: 12px;
+      background: #f6f6f6 center/cover no-repeat;
     }
   }
   &-display {

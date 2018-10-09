@@ -140,7 +140,6 @@ export function debounce(func, wait, immediate) {
     var callNow = immediate && !timeout
     // 在wait指定的时间间隔内首次调用该方法，则启动计时器定时调用func函数
     if (!timeout) timeout = setTimeout(later, wait)
-    console.log(callNow)
     if (callNow) {
       result = func.apply(context, args)
       context = args = null

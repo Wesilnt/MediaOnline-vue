@@ -3,7 +3,7 @@ import { Toast } from 'vant'
 import { isUrl, json2formData } from './utils'
 import { getAccessToken, getCookie } from './userAuth'
 import store from '../store/store'
-import { IS_ONLINE, TEST_TOKEN, api }  from './config'
+import { IS_ONLINE, TEST_TOKEN, api } from './config'
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -80,17 +80,16 @@ const checkResponseCode = (url, response) => {
  */
 function request(url, options) {
   const baseURI = isUrl(url) ? '' : api
-  let defaultOptions
-    const accessToken = IS_ONLINE
-        ? getCookie('COOKIE_TOKEN_KEY_CNONLINE')
-        : TEST_TOKEN
-    defaultOptions = {
-      // credentials: 'include',
-      // mode: 'no-cors',
-      // formData: false,
-      headers: {
-        Authorization: `Bearer ${btoa(accessToken)}`
-      }
+  const accessToken = IS_ONLINE
+    ? getCookie('COOKIE_TOKEN_KEY_CNONLINE')
+    : TEST_TOKEN
+  const defaultOptions = {
+    // credentials: 'include',
+    // mode: 'no-cors',
+    // formData: false,
+    headers: {
+      Authorization: `Bearer ${btoa(accessToken)}`
+    }
   }
   const newOptions = { ...defaultOptions, ...options }
   if (newOptions.method === 'POST' || newOptions.method === 'PUT') {
