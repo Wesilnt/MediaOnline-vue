@@ -2,8 +2,8 @@
     <div>
         <router-view/>
         <div class="navbar">
-            <div v-for="(nav) in navbar" :key="nav.path" class="navbar-item animated" :class="{active:nav.path===currentPath,bounceIn:nav.path===currentPath}"  @click="togglePath(nav.path)">
-                <i :style="{backgroundImage:nav.path===currentPath?`url(${nav.activeIcon})`:`url(${nav.icon})`}" class="qhht-icon navbar-icon" />
+            <div v-for="(nav) in navbar" :key="nav.path" class="navbar-item" :class="{active:nav.path===currentPath}"  @click="togglePath(nav.path)">
+                <i :style="{backgroundImage:nav.path===currentPath?`url(${nav.activeIcon})`:`url(${nav.icon})`}" class="qhht-icon navbar-icon animated" :class="{bounceIn:nav.path===currentPath}"></i>
                 <div class="navbar-item-title">{{nav.name}}</div>
             </div>
         </div>
@@ -62,8 +62,8 @@ export default {
   flex-grow: 1;
   padding: 10px 0;
   position: relative;
-  transition: color 0.3s linear;
-  /*&:not(:last-child):after {
+  transition: color 0.3s linear .3s;
+  &:not(:last-child):after {
     content: '';
     position: absolute;
     right: 0;
@@ -71,9 +71,7 @@ export default {
     width: 0.5px;
     height: 60%;
     background: #f1f1f1;
-    transition: none;
-    animation: none;
-  }*/
+  }
   &.active {
     color: #ffa32f;
   }
