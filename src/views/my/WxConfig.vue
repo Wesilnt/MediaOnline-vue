@@ -11,10 +11,10 @@
             <van-button type="warning" size="large" @click="onOpenPupop">测试Picker</van-button>
             <van-button type="danger" size="large">待测试</van-button>
         </div>
-        <div class="wxconfig-title" id="describe">
+        <div class="wxconfig-comment" id="describe">
             <p>模拟详情</p>
         </div>
-        <div class="wxconfig-title" id="comment">
+        <div class="wxconfig-comment" id="comment">
             <p>模拟评论</p>
         </div>
         <div class="wxconfig-footer">
@@ -101,12 +101,20 @@ export default {
   background: #fff center no-repeat;
 }
 .wxconfig-title {
-  height: 560px;
-  margin: 20px;
-  line-height: 560px;
-  background: #fffad0;
-  color: #6b6b6b;
-  text-align: center;
+     height: 2000px;
+     margin: 20px;
+     line-height: 2000px;
+     background: #fffad0;
+     color: #6b6b6b;
+     text-align: center;
+ }
+.wxconfig-comment {
+    height: 200px;
+    margin: 20px;
+    line-height: 200px;
+    background: #fffad0;
+    color: #6b6b6b;
+    text-align: center;
 }
 
 .wxconfig-footer {

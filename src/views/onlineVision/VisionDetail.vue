@@ -3,13 +3,10 @@
     <GroupHeader></GroupHeader>
     <!-- <img :src="visionDetail.coverPic" class="head" alt=""> -->
 
-    <div class="navbar">
-      <span v-for="(nav,index) in navBars" :key="index" :class="currentNav==index?'item active':'item'" @click="navbarTap(index)">{{nav}}</span>
-    </div>
+    <ScrollNavBar :bars="navBars" />
     <!-- introduce -->
-    <div id="intro" ref="intro" class="intro">
-      <div class="info bottomline">
-        <!-- <p class="infoText">【本课程建议9岁以上孩子学习】</p> -->
+    <div  class="intro">
+      <div id="intro" class="info bottomline">
         <div :class=" showall?'textFold infoText fulltext':'textFold infoText detault'">{{visionDetail.description}}
         </div>
         <div :class="showall?'show hide':'show'">
@@ -26,12 +23,12 @@
       </div>
     </div>
     <!-- try -->
-    <div id="try" ref="try" class="try bottomline">
+    <div id="try" class="try bottomline">
       <DetailHeader title="试看课程" subtitle="全部" link='visionCourseList' />
       <SingleSetList :list='visionDetail.freeLessonList' :singletype="'OnlineVision'"></SingleSetList>
     </div>
     <!-- message -->
-    <div id="message" ref="message" class="message bottomline" >
+    <div id="message" class="message bottomline" >
       <DetailHeader title="精选留言" link='videoCourseCmts' :params='{"courseId":courseId}' :subtitle="visionDetail.commentCount + '条'" />
       <div v-for="item of commentList" :key="item.id" >
         <comment-item :comment="item"  class="vision_comment_item"/>
@@ -59,6 +56,7 @@
 </template>
 
 <script>
+import ScrollNavBar from '../../components/ScrollNavBar'
 import DetailHeader from '../../components/visionComponents/DetailHeader.vue'
 import arrowUp from '../../assets/images/vison_arrow_up.png'
 import arrowDown from '../../assets/images/vision_arrow_down.png'
@@ -72,6 +70,7 @@ const { mapState, mapActions } = createNamespacedHelpers('visionData')
 export default {
   components: {
     DetailHeader,
+    ScrollNavBar,
     videoBigimage,
     SingleSetList,
     CommentItem,
@@ -84,63 +83,35 @@ export default {
       arrowUp,
       arrowDown,
       banner: '',
-      navBars: ['介绍', '试听', '留言'],
-      currentNav: 0,
+      navBars: [
+        {
+          title: '介绍',
+          ref: 'intro'
+        },
+        {
+          title: '试听',
+          ref: 'try'
+        },
+        {
+          title: '留言',
+          ref: 'message'
+        }
+      ],
       showall: false
     }
   },
   created() {
-    this.getVisionDetail({courseId:this.courseId, groupBuyId: this.$route.query.groupById})
+    this.getVisionDetail({
+      courseId: this.courseId,
+      groupBuyId: this.$route.query.groupById
+    })
     this.getCommentList(this.courseId)
-  },
-  mounted() {
-    window.addEventListener('scroll', this.handleScroll)
-  },
-  destroyed() {
-    window.removeEventListener('scroll', this.handleScroll)
   },
   computed: mapState(['visionDetail', 'commentList']),
   methods: {
     ...mapActions(['getVisionDetail', 'getCommentList']),
-    navbarTap(index) {
-      this.currentNav = index
-      let positionId
-      switch (index) {
-        case 0:
-          positionId = '#intro'
-          break
-        case 1:
-          positionId = '#try'
-          break
-        case 2:
-          positionId = '#message'
-          break
-        default:
-          break
-      }
-      let anchor = this.$el.querySelector(positionId)
-      document.body.scrollTop = anchor.offsetHeight - 40
-      // // Firefox
-      document.documentElement.scrollTop = anchor.offsetTop - 40
-      // Safari
-      window.pageYOffset = anchor.offsetTop - 40
-    },
     ellipsis() {
       this.showall = !this.showall
-    },
-    handleScroll() {
-      let scrollTop = Math.abs(
-        this.$refs.detailmain.getBoundingClientRect().top
-      )
-      let tryPosition = this.$el.querySelector('#try').offsetTop - 40
-      let messagePosition = this.$el.querySelector('#message').offsetTop - 40
-      if (scrollTop < tryPosition) {
-        this.currentNav = 0
-      } else if (scrollTop > tryPosition && scrollTop < messagePosition) {
-        this.currentNav = 1
-      } else if (scrollTop > messagePosition) {
-        this.currentNav = 2
-      }
     },
     routerToAudition() {
       console.log('跳转到试听')
@@ -161,34 +132,6 @@ export default {
   width: 100%;
   height: 300px;
   background-color: red;
-}
-
-.navbar {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0px;
-  left: 0;
-  right: 0;
-  width: 100%;
-  height: 80px;
-  display: flex;
-  flex-wrap: nowrap;
-  justify-content: space-around;
-  background-color: white;
-  border-bottom: 2px solid rgb(238, 238, 238);
-  z-index: 999;
-}
-.item {
-  line-height: 80px;
-  font-size: 28px;
-  color: rgb(55, 67, 88);
-  width: 120px;
-  text-align: center;
-}
-
-.active {
-  color: rgb(255, 163, 47);
-  border-bottom: 4px solid rgb(255, 163, 47);
 }
 
 .infoText {
@@ -267,7 +210,7 @@ export default {
   color: rgb(128, 128, 128);
   font-weight: 400;
 }
-.vision_comment_item{
+.vision_comment_item {
   margin: 40px 48px;
 }
 </style>

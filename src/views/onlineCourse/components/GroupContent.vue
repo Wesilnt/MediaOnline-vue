@@ -1,12 +1,9 @@
 <template>
     <div class="group-content-container" id="detailmain" ref="detailmain">
-        <!-- Navbar -->
-        <div class="videocol-navbar" id="navbar" ref="navbar">
-            <div v-for="(item,index) of navbar" :class="{'selected':selected == index }" :key="index" class="videocol-navbar-item" @click="clickFnc(index)">{{item}}</div>
-        </div>
+        <ScrollNavBar :bars="navBars" />
         <!-- description(介绍) -->
         <div class="videocol-base">
-            <course-introduce ref="desc" id="desc" :courseinfo="description"/>
+            <course-introduce  id="desc" :courseinfo="description"/>
         </div>
         <!-- 课程列表 -->
         <div class="videocol-bigimage">
@@ -18,7 +15,7 @@
         </div>
         <!-- 试看课程 -->
         <div class="videocol-base">
-            <div class="videocol-sction-title" id="tryCourse" ref="tryCourse">
+            <div class="videocol-sction-title" id="tryCourse">
                 <h4>试看课程</h4>
                 <div class="videocol-all" @click="allFunc()">
                 <span class="videocol-allbtn">全部</span>
@@ -29,7 +26,7 @@
         </div>
         <!-- 精选留言 -->
         <div class="videocol-base">
-            <div class="videocol-sction-title" id="leavemessage" ref="leavemessage">
+            <div class="videocol-sction-title" id="leaveMessage">
                 <h4>精选留言</h4>
                 <div class="videocol-all" @click="allFunc">
                     <span class="videocol-allbtn">{{commentCount}}条</span>
@@ -51,6 +48,7 @@
 </template>
 
 <script>
+import ScrollNavBar from '../../../components/ScrollNavBar'
 import CourseIntroduce from '../../../components/CourseIntroduce.vue'
 import playlist from './playlist.vue'
 import videoComment from '../../../components/video-comment.vue'
@@ -65,9 +63,20 @@ export default {
   name: 'GroupContent',
   data() {
     return {
-      navbar: ['介绍', '试看', '留言'],
-      selected: 0,
-      navbarFixed: false //控制navbar是否吸顶
+      navBars: [
+        {
+          title: '介绍',
+          ref: 'desc'
+        },
+        {
+          title: '试听',
+          ref: 'tryCourse'
+        },
+        {
+          title: '留言',
+          ref: 'leaveMessage'
+        }
+      ]
     }
   },
   components: {
@@ -75,7 +84,8 @@ export default {
     playlist,
     videoComment,
     CommentItem,
-    videoBigimage
+    videoBigimage,
+    ScrollNavBar
   },
   computed: {
     ...mapGetters([
@@ -101,13 +111,13 @@ export default {
     gotoVideoCourseDetailPage(lessonId) {
       this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
     },
-    async handleScroll() {
+    /*async handleScroll() {
       //1.监听滚动
       let scrollTop = document.documentElement.scrollTop
       let tryCourseH = this.$el.querySelector('#tryCourse').offsetTop - 60
-      let messageH = this.$el.querySelector('#leavemessage').offsetTop - 60
-      console.log('======'+document.body.scrollHeight)
-      console.log('scrollTopaaa =',scrollTop)
+      let messageH = this.$el.querySelector('#leaveMessage').offsetTop - 60
+      console.log('======' + document.body.scrollHeight)
+      console.log('scrollTopaaa =', scrollTop)
       // console.log('tryCourseH =',tryCourseH)  //970
       // console.log('messageH =',messageH)    //1289
       if (scrollTop < tryCourseH) {
@@ -130,23 +140,23 @@ export default {
           positionId = '#tryCourse'
           break
         case 2:
-          positionId = '#leavemessage'
+          positionId = '#leaveMessage'
           break
         default:
           break
       }
-      console.log(positionId,index)
+      console.log(positionId, index)
       let anchor = this.$el.querySelector(positionId)
-    
+
       document.body.scrollTop = anchor.offsetTop - 60
-    
+
       // // // Firefox
       document.documentElement.scrollTop = anchor.offsetTop - 60
       // // Safari
       window.pageYOffset = anchor.offsetTop - 60
 
-        // console.log("anchor = "+anchor.offsetTop)
-    }
+      // console.log("anchor = "+anchor.offsetTop)
+    }*/
   },
   created() {
     //获取专栏评论列表
@@ -156,12 +166,6 @@ export default {
       currentPage: 1,
       pageSize: 11
     })
-  },
-  mounted() {
-    window.addEventListener('scroll', this.handleScroll)
-  },
-  destroyed() {
-    window.removeEventListener('scroll', this.handleScroll)
   }
 }
 </script>
@@ -252,7 +256,7 @@ export default {
 .videocol-sction-title h4 label {
   font-size: 28px;
   color: rgb(155, 161, 176);
-  margin:0;
+  margin: 0;
 }
 //试看课程
 .videocol-all {
