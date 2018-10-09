@@ -205,6 +205,7 @@ export default {
       width: 136px;
       height: 180px;
       border-radius: 12px;
+      background: #f6f6f6 center/cover no-repeat;
     }
   }
   &-display {
