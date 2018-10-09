@@ -66,7 +66,7 @@ export default {
         link: this.url + this.shareInfo.link || '/#/home',
         title: this.shareInfo.title || `${nickname}邀请您一起上课啦！`,
         desc: this.shareInfo.desc || '秦汉胡同国学，让我们的孩子成为一个有涵养的人',
-        imgUrl:  "http://d.hiphotos.bdimg.com/wisegame/wh%3D68%2C68/sign=e3349cba99cad1c8d0eef42147125131/f11f3a292df5e0fe4a5f0594506034a85fdf72e4.jpg",
+        imgUrl:  require('../../assets/images/logo.png'),
         successCB: () => {
           this.$toast('分享回调成功')
         },

@@ -56,7 +56,7 @@
 import PraiseBtn from './PraiseBtns.vue'
 import PraiseExplain from './PraiseExplain.vue'
 import Share from '../../components/share/Share.vue'
-import { createNamespacedHelpers } from 'vuex'
+import { createNamespacedHelpers ,mapActions as rootActions} from 'vuex'
 const {
   mapState,
   mapMutations,
@@ -71,7 +71,7 @@ export default {
       interval: null,
       courseId: this.$route.params.courseId,
       collectLikeId: this.$route.params.collectLikeId,
-      showShare: false, //显示分享框
+      showShare: false,               //显示分享框
       showExplain: false,
       shareData: {}
     }
@@ -82,6 +82,7 @@ export default {
     'share-pop': Share
   },
   computed: {
+    ...rootActions(['getUserInfo']),
     ...mapState(['praiseDetail', 'rollerFlag', 'remainTime']),
     ...mapGetters(['praiseData'])
   },
@@ -108,17 +109,20 @@ export default {
       //显示集赞说明框
       this.showExplain = true
     },
+    //设置分享参数
     onShare() {
-      //显示分享框
-      this.showShare = true
-      //拼装分享内容
-      const shareData = {
-        link: `/#/praise/active/${this.courseId}/${this.collectLikeId}`,
-        title: '集赞分享',
-        desc: '这是一个神奇的集赞活动',
-        imgUrl: ''
-      }
-      this.shareData = shareData
+     this.getUserInfo()
+      .then(user=>{
+        //显示分享框
+        this.showShare = true
+        //拼装分享内容
+        this.shareData = {
+          link: `/#/praise/active/${this.courseId}/${this.collectLikeId}`,
+          title: '我是xxx, 我想免费领取《'+this.praiseDetail?this.praiseDetail.course.name:'国学课'+'》,来帮我点赞吧',
+          desc: '你一定会爱上国学课...',
+          imgUrl: require('../../assets/images/logo.png')
+        }
+      }) 
     },
     closeShare() {
       //关闭分享框

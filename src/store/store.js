@@ -23,7 +23,7 @@ import shareData from './module/shareData'
 import praiseData from './module/praiseData'
 import mobileData from './module/mobileData'
 
-import { getToken } from '../api/accessTokenApi'
+import { getToken, } from '../api/accessTokenApi'
 import { noAccessToken } from '../utils/userAuth'
 import { wxConfig as wxConfigApi } from '../api/groupBuyApi.js'
 import { wxConfigUrl } from './../utils/config'
@@ -48,12 +48,19 @@ export default new Vuex.Store({
     async checkToken({ dispatch }) {
       noAccessToken() && dispatch('getAccessToken')
     },
+    async getUserInfo({  }) {
+       let userStr = localStorage.getItem("userInfo")
+      if(userStr) return JSON.parse(userStr)
+       let userInfo = await getUserByToken()
+       localStorage.setItem('userInfo',JSON.stringify(userInfo))
+       return userInfo
+    },
     /** 注入配置信息 */
     async registerWxConfig({ state, commit }, { fullPath, jsApiList = [] }) {
       const { url, wxRegisterPath } = state
       if (!Array.isArray(jsApiList) || jsApiList.length === 0) {
         throw new Error('[array] jsApiList need')
-        return
+        return 
       }
       if (wxRegisterPath === fullPath) {
         console.log('微信config已启用成功')
