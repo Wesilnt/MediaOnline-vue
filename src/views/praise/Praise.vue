@@ -200,16 +200,15 @@ export default {
 .praise-container {
   display: flex;
   flex-direction: column;
-  background: url(../../assets/images/praise_bg.png) center 20%/100% repeat-y;
+  background: url(../../assets/images/praise_bg.png) center 20%/100%;
   min-height: 100vh;
   //1. 头部封面
   .praise-header {
     position: absolute;
     width: 100%;
-    top: -12vh;
-    bottom: -118px;
+    top: -10vh; 
+    height: 98%;
     background: url(../../assets/images/praise_bg.png) center 20%/100% repeat-y;
-    background-repeat: no-repeat;
   }
   //2. 中间点赞详情 2.66666667%  = 20px/750px
   .thumbs-detail {
@@ -309,9 +308,10 @@ export default {
   .bottom-container {
     display: flex;
     flex-direction: row;
-    padding: 46px 20px 30px;
+    padding: 46px 20px 15px;
     justify-content: space-around;
-    align-items: center;
+    align-items: center; 
+    z-index: 100;
     hr {
       width: 176px;
       height: 1px; /*no*/

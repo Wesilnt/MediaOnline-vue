@@ -66,7 +66,7 @@ export default {
         link: this.url + this.shareInfo.link || '/#/home',
         title: this.shareInfo.title || `${nickname}邀请您一起上课啦！`,
         desc: this.shareInfo.desc || '秦汉胡同国学，让我们的孩子成为一个有涵养的人',
-        imgUrl: this.shareInfo.imgUrl || '',
+        imgUrl: this.shareInfo.imgUrl || require('../../assets/images/logo.png'),
         successCB: () => {
           this.$toast('分享回调成功')
         },

@@ -12,7 +12,7 @@
          ? 'url('+require('../../assets/images/audio_love_collect.png')+')'
          : 'url('+require('../../assets/images/audio_love_normal.png')+')'}">
         </div>
-        <div v-if="'readings'!=playType" class="tab-container-draft" @click="onDraft"/>
+        <div v-if="'Readings'!=playType" class="tab-container-draft" @click="onDraft"/>
         <div  class="tab-container-comment" @click="toComment">
           <span>{{audio.commentCount}}</span>
         </div>
