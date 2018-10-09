@@ -23,7 +23,7 @@ import shareData from './module/shareData'
 import praiseData from './module/praiseData'
 import mobileData from './module/mobileData'
 
-import { getToken, } from '../api/accessTokenApi'
+import { getToken, getUserByToken} from '../api/accessTokenApi'
 import { noAccessToken } from '../utils/userAuth'
 import { wxConfig as wxConfigApi } from '../api/groupBuyApi.js'
 import { wxConfigUrl } from './../utils/config'
