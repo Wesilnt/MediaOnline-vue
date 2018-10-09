@@ -33,8 +33,8 @@
     <!-- message -->
     <div id="message" ref="message" class="message bottomline" >
       <DetailHeader title="精选留言" link='videoCourseCmts' :params='{"courseId":courseId}' :subtitle="visionDetail.commentCount + '条'" />
-      <div v-for="item of commentList" :key="item.id" class="comment-item">
-        <comment-item :comment="item" />
+      <div v-for="item of commentList" :key="item.id" >
+        <comment-item :comment="item"  class="vision_comment_item"/>
       </div>
     </div>
 
@@ -266,5 +266,8 @@ export default {
   margin-top: 10px;
   color: rgb(128, 128, 128);
   font-weight: 400;
+}
+.vision_comment_item{
+  margin: 40px 48px;
 }
 </style>
