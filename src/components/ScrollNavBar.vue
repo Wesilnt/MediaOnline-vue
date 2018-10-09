@@ -80,12 +80,10 @@ export default {
       // 判断依据 body滚动高度是否大于该元素距离顶部高度，且低于该元素高度
       this.scrollElems.find((item, index) => {
         const { top, bottom, height } = item.getBoundingClientRect()
-        // console.log(`顶部距离屏幕底 ${this.windowHeight - top}, 底部距离屏幕底 ${ this.windowHeight - bottom}`)
+        console.log(this.scrollToolOffsetTop)
+        console.log(`顶部距离屏幕底 ${top}, 底部距离屏幕底 ${bottom}`)
 
-        if (
-          (top > 0 && this.windowHeight - top > this.scrollToolOffsetTop) ||
-          (bottom > 0 && this.windowHeight - bottom > this.offsetBottom)
-        ) {
+        if (top > this.scrollToolOffsetTop || bottom > this.offsetBottom) {
           this.active = index
           return true
         }
