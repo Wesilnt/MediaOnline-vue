@@ -10,6 +10,6 @@ export async function getToken() {
   if (IS_ONLINE) window.location.href = result.wechatAuthUrl
   return result
 }
-export function getUserByToken(params) {
+export async function getUserByToken(params) {
   return request(`/user/getUserByToken${stringify(params)}`)
 }

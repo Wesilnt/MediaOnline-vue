@@ -82,18 +82,16 @@ export default {
     'share-pop': Share
   },
   computed: {
-    ...rootActions(['getUserInfo']),
     ...mapState(['praiseDetail', 'rollerFlag', 'remainTime']),
     ...mapGetters(['praiseData'])
   },
   created: function() {
-    this._setBtnAndTips({ status: 1202 }, false, true)
-    // this.startCollectLike({courseId:this.courseId})
-    this.getUserByToken()
-    this.getCollectDetail({ collectLikeId: this.collectLikeId })
-    console.log(this.$router)
+    this._setBtnAndTips({ status: 1202 }, false, true) 
+    // this.getUserByToken()
+    this.getCollectDetail({ collectLikeId: this.collectLikeId }) 
   },
   methods: {
+    ...rootActions(['getUserInfo']),
     ...mapActions([
       'getUserByToken',
       'startCollectLike',

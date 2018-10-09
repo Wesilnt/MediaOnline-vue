@@ -79,12 +79,16 @@ export default {
       if (res) commit('bindPraiseStatus', res)
     },
     //集赞详情
-    async getCollectDetail({ state, commit }, params) {
+    async getCollectDetail({ state, commit,dispatch }, params) {
       const res = await getCollectDetail(params)
       console.log("集赞详情:",res)
       commit('bindPraiseDetail', res)
+      await dispatch('getUserInfo',null,{root:true})
+      .then(user=>{
+        commit('bindUserInfo', user) 
+      })
       //
-      if (res.status != 1202) return
+     if (res.status != 1202) return
      await commit('destroyInterval')
       let rollerInterval = setInterval(() => commit('setRollerInterval'), 7000)
       let totalTime = res.duration * 3600 +  (res.createTime - res.sysTime) / 1000  
