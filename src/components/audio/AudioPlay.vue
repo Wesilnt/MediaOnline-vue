@@ -217,8 +217,8 @@ export default {
       this.getUserInfo()
       .then(user=>{
           this.shareData = {
-            link: `/#/audio/audioplay/${this.lessonId}`,
-            title: '我是'+user.nickName+', 邀请你一起收听《'+(this.audio?this.audio.title:'国学说')+'》',
+            link: `/#/audio/audioplay/${this.lessonId}`, 
+            title: `我是${user.nickName}, 我想免费领取《${this.audio?this.audio.title:'国学说'}》,来帮我点赞吧`,
             desc: '你一定会爱上国学课...',
             imgUrl: require('../../assets/images/logo.png')
           }

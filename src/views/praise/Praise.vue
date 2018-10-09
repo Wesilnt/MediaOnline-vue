@@ -57,6 +57,7 @@ import PraiseBtn from './PraiseBtns.vue'
 import PraiseExplain from './PraiseExplain.vue'
 import Share from '../../components/share/Share.vue'
 import { createNamespacedHelpers ,mapActions as rootActions} from 'vuex'
+import logo from '../../assets/images/logo.png'
 const {
   mapState,
   mapMutations,
@@ -116,9 +117,9 @@ export default {
         //拼装分享内容
         this.shareData = {
           link: `/#/praise/active/${this.courseId}/${this.collectLikeId}`,
-          title: '我是xxx, 我想免费领取《'+(this.praiseDetail?this.praiseDetail.course.name:'国学课')+'》,来帮我点赞吧',
+          title: `我是${user.nickName}, 我想免费领取《${this.praiseDetail?this.praiseDetail.course.name:'国学课'}》,来帮我点赞吧`,
           desc: '你一定会爱上国学课...',
-          imgUrl:  '../../assets/images/logo.png'
+          imgUrl:  logo
         }
       }) 
     },
