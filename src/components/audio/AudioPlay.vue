@@ -218,7 +218,7 @@ export default {
       .then(user=>{
           this.shareData = {
             link: `/#/audio/audioplay/${this.lessonId}`,
-            title: '我是'+user.nickName+', 邀请你一起收听《'+this.audio?this.audio.title:'国学说'+'》',
+            title: '我是'+user.nickName+', 邀请你一起收听《'+(this.audio?this.audio.title:'国学说')+'》',
             desc: '你一定会爱上国学课...',
             imgUrl: require('../../assets/images/logo.png')
           }
