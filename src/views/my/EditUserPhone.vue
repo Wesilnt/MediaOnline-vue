@@ -74,16 +74,6 @@
       }
     },
     watch: {
-      validCode(newVal) {
-        this.validateCode = newVal.replace(/[^\d]/g,'')
-        if (newVal.length > 5) {
-          // this.telDisabled = true
-          this.$refs.vcode.blur()
-          setTimeout(() => {
-            alert(`vcode: ${this.validateCode}`)
-          }, 500)
-        }
-      },
       validate(newVal) {
         if(this.validate === true) {
           this.$router.push({ path: './EditUserInfo' })

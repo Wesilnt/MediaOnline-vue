@@ -31,7 +31,7 @@
   import reply from '../assets/images/my_reply.png'
   import praise from '../assets/images/my_praise.png'
   import sys from '../assets/images/my_sys_message.png'
-  import help from '../assets/images/my_help.png'
+  import feedback from '../assets/images/my_feedback.png'
 
   export default {
     name: 'My',
@@ -70,14 +70,14 @@
             image: praise,
             title: '我的集赞'
           },
-         /* {
+          {
             name: '/my/SysMessage',
             image: sys,
             title: '系统消息'
-          },*/
+          },
           {
-            name: '/my/Help',
-            image: help,
+            name: '/my/Feedback',
+            image: feedback,
             title: '意见反馈'
           }
           /*{

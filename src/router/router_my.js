@@ -5,7 +5,7 @@ const reply = () => import('../views/my/Reply')
 const myPuzzle_Praise = () =>
   import(/* webpackChunkName: "myPuzzle_Praise" */ '../views/my/MyPuzzle_Praise')
 const sysMessage = () => import('../views/my/SysMessage')
-const help = () => import('../views/my/Help')
+const feedback = () => import('../views/my/Feedback')
 const editUserPhone = () => import('../views/my/EditUserPhone')
 const editUserInfo = () => import('../views/my/EditUserInfo')
 const displayUserInfo = () => import('../views/my/DisplayUserInfo')
@@ -41,8 +41,8 @@ const PageInfo_From_My = [
     component: sysMessage
   },
   {
-    path: '/my/Help',
-    component: help
+    path: '/my/Feedback',
+    component: feedback
   },
   {
     path: '/my/EditUserInfo',

@@ -5,7 +5,7 @@ const myFeedbackData = {
   namespaced: true,
   state: {
     content: '',
-    loading: false //http
+    loading: false
   },
   getters: {
     contentLength: ({ content }) => content.length

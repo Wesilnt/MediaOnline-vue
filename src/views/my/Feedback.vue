@@ -1,15 +1,15 @@
 <template>
-    <div class="help-container">
-        <textarea :value="content" @input="handleInput" class="help-textarea-content" rows="8" placeholder="请填写您的意见和建议"/>
-        <div class="help-warning">
-            <p class="help-warning-content-length">{{contentLength}}/200</p>
-            <button class="help-warning-button-submit" :disabled="contentLength===0 || contentLength>=200"
-                    :class="{'help-warning-button-submit-canclick':contentLength>0 && contentLength<200}" @click="handleFeedback">
+    <div class="feedback-container">
+        <textarea :value="content" @input="handleInput" class="feedback-textarea-content" rows="8" placeholder="请填写您的意见和建议"/>
+        <div class="feedback-warning">
+            <p class="feedback-warning-content-length">{{contentLength}}/200</p>
+            <button class="feedback-warning-button-submit" :disabled="contentLength===0 || contentLength>=200"
+                    :class="{'feedback-warning-button-submit-canclick':contentLength>0 && contentLength<200}" @click="handleFeedback">
                 提交反馈
             </button>
-            <p class="help-warning-text-desc">紧急问题可以通过以下方式联系我们：</p>
-            <p class="help-warning-text-mail">
-                <span class="help-warning-mail-label">邮箱：</span>
+            <p class="feedback-warning-text-desc">紧急问题可以通过以下方式联系我们：</p>
+            <p class="feedback-warning-text-mail">
+                <span class="feedback-warning-mail-label">邮箱：</span>
                 qhht@con.shbaoyuantech.com
             </p>
         </div>
@@ -24,7 +24,7 @@ const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
   'myFeedbackData'
 )
 export default {
-  name: 'Help',
+  name: 'Feedback',
   data: function() {
     return {
       inputted: false
@@ -41,7 +41,7 @@ export default {
 </script>
 
 <style scoped lang="less">
-.help {
+.feedback {
   &-container {
     padding: 40px 20px 0;
     font-size: 28px;
