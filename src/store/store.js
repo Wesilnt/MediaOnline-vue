@@ -69,7 +69,7 @@ export default new Vuex.Store({
         signature
       } = await response.js_config
       await wx.config({
-        debug: true,
+        debug: false,
         appId,
         nonceStr,
         timestamp,
