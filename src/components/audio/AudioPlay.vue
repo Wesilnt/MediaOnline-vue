@@ -216,7 +216,7 @@ export default {
       this.shareData = {
         link: `/#/audio/audioplay/${this.lessonId}`,
         title: '音频分享',
-        desc: '音频',
+        desc: '',
         imgUrl: require('../../assets/images/logo.png')
       }
       this.showShare = true
