@@ -103,7 +103,7 @@ export const removeItem = name => {
   localStorage.removeItem(name)
 }
 
-/** 格式化呢时间戳 yyyy/mm/dd hh:mm */
+/** 格式化时间戳 yyyy/mm/dd hh:mm */
 export const formatDate = time => {
   const date = new Date(time * 1000)
   const seperator1 = '/'

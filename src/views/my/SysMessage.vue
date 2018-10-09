@@ -7,9 +7,9 @@
         </div>
         <div v-else class="sysmessage-container">
             <div v-if="showCheck === false" class="sysmessage-head-default">
-                <img class="sysmessage-head-default-left-icon" src="../../assets/images/my_record_play.png"/>
+                <img class="sysmessage-head-default-left-icon" :src="require('../../assets/images/my_record_play.png')"/>
                 <p class="sysmessage-head-default-record-text">最近播放</p>
-                <img class="sysmessage-head-default-right-icon" src="../../assets/images/my_sys_menu.png"
+                <img class="sysmessage-head-default-right-icon" :src="require('../../assets/images/my_sys_menu.png')"
                      @click="handleMenu">
             </div>
             <div v-else="showCheck" class="sysmessage-head-check">
@@ -62,16 +62,17 @@
                             </div>
                             <div class="sysmessage-list-item-content-detail">{{item.content}}</div>
                         </div>
-                        <img v-if="!showCheck" class="sysmessage-list-item-img-more"
-                             src="../../assets/images/my_record_more.png"
-                             @click="showDelete(item.id)"/>
+                        <div v-if="!showCheck" class="sysmessage-list-item-more"
+                             @click="showDelete(item.id)">
+                            <img :src="require('../../assets/images/my_record_more.png')" class="sysmessage-list-item-more-img"/>
+                        </div>
                     </div>
                     <van-popup v-model="isShowDelete" position="bottom" >
-                        <img class="del-icon" src="../../assets/images/my_alter_delete.png" @click="handleDelete"/>
+                        <img class="del-icon" :src="require('../../assets/images/my_alter_delete.png')" @click="handleDelete"/>
                         <p class="del-text">删除</p>
                     </van-popup>
                     <van-popup v-model="showCheck" position="bottom" :overlay="false" :lock-scroll="false">
-                        <img class="del-icon" src="../../assets/images/my_alter_delete.png" @click="handleDeleteAll"/>
+                        <img class="del-icon"  :src="require('../../assets/images/my_alter_delete.png')" @click="handleDeleteAll"/>
                         <p class="del-text">删除</p>
                     </van-popup>
                 </div>
@@ -257,12 +258,12 @@
                         color: #808080;
                     }
                 }
-                &-img-more {
-                    width: 34px;
-                    height: 6px;
-                    margin: 85px 5px 0px 0px;
-                    /*position: absolute;*/
-                    /*right: 30px;*/
+                &-more {
+                    &-img {
+                        width: 32px;
+                        height: 6px;
+                        margin-top: 65px;
+                    }
                 }
             }
         }
@@ -277,7 +278,6 @@
                 background-image: url('../../assets/images/my_data_empty.png');
             }
             &-warn {
-
                 margin: 40px 0;
             }
         }

@@ -70,21 +70,21 @@
             image: praise,
             title: '我的集赞'
           },
-          {
+         /* {
             name: '/my/SysMessage',
             image: sys,
             title: '系统消息'
-          },
+          },*/
           {
             name: '/my/Help',
             image: help,
             title: '意见反馈'
-          },
-          {
+          }
+          /*{
             name: '/my/wx-config',
             image: require('../assets/images/logo.png'),
             title: '组件测试'
-          }
+          }*/
         ]
       }
     },

@@ -13,6 +13,10 @@ export async function getPlayRecord(params) {
 export async function postDelPlayRecord(params) {
   return request.post('/lesson/delUserLesson', params)
 }
+//批量删除播放记录
+export async function postBatchDellayRecord(params) {
+  return request.post('/lesson/batchDelUserLesson', params)
+}
 //我喜欢的(我的收藏)
 export async function getMyLike() {
   return request.post(`/favorite/getLessonListByFavorite?`, true)
@@ -20,6 +24,10 @@ export async function getMyLike() {
 //我喜欢的 删除
 export async function postDelMyLike(params) {
   return request.post('/favorite/unFavorite', params)
+}
+//我喜欢的 删除
+export async function postBatchDelMyLike(params) {
+  return request.post('/favorite/batchUnFavorite', params)
 }
 /* 我的拼团 */
 export async function queryMyPuzzleList(params) {
@@ -37,9 +45,13 @@ export async function getMessage(params) {
 export async function getUsedMessage(params) {
   return request(`/user/getUserMsgListByBusiTypesOfReaded?${stringify(params)}`)
 }
-//删除系统消息
+//删除消息
 export async function postDelMessage(params) {
   return request.post('/user/delUserMsg', params)
+}
+//批量删除消息
+export async function postBatchDelMessage(params) {
+  return request.post('/user/batchDelUserMsg', params)
 }
 //意见反馈
 export async function postFeedback(params) {
