@@ -7,10 +7,15 @@
             @click-overlay="closePopup"
             :lazy-render="false"
     >
+       
         <div class="qhht-flex commentBar-wrapper" >
-            <a class="qhht-icon commentBar-btn" :style="{backgroundImage:`url('${iconLeft}')`}"></a>
-            <div class="commentBar-inputer">
-                <textarea v-focus ref="textarea" @input="checkRows" @keyup.enter="closePopup" :rows="rows" class="commentBar-textarea"  placeholder="输入评论" autofocus></textarea>
+            <a class="qhht-icon commentBar-btn" :style="{backgroundImage:`url('${iconLeft}')`}" @click="toggleRecord"></a>
+
+            <div class="commentBar-inputer" >
+                <div class="voiceRecord" ref="voiceRecord"  v-show="record">
+                    录音测试
+                </div>
+                <textarea v-show="!record" v-focus ref="textarea" @input="checkRows" @keyup.enter="closePopup" :rows="rows" class="commentBar-textarea"  placeholder="输入评论" autofocus></textarea>
             </div>
             <a class="qhht-icon commentBar-btn" :style="{backgroundImage:`url('${iconRight}')`}" @click="closePopup"></a>
         </div>
@@ -18,6 +23,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import default_left_icon from '../assets/images/audio_cmt_speak.png'
 import default_right_icon from '../assets/images/audio_cmt_text.png'
 
@@ -38,7 +44,10 @@ export default {
     return {
       value: '',
       showPop: false,
-      rows: 1
+      rows: 1,
+      record: false,
+      recordTime: 0,
+      touchStartTime: 0
     }
   },
   directives: {
@@ -52,6 +61,24 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['registerWxConfig']),
+    handleRegisterWxConfig: function() {
+      const { fullPath } = this.$route
+      this.registerWxConfig({
+        fullPath,
+        jsApiList: [
+          'startRecord',
+          'stopRecord',
+          'onVoiceRecordEnd',
+          'playVoice',
+          'pauseVoice',
+          'stopVoice',
+          'onVoicePlayEnd',
+          'uploadVoice',
+          'translateVoice'
+        ]
+      })
+    },
     checkRows: function(el) {
       const { target } = el
       let inputerWidth = 0
@@ -72,6 +99,36 @@ export default {
       this.$emit('toggle', false, value ? value : undefined)
       textarea.value = ''
     },
+    toggleRecord() {
+      this.record = !this.record
+    },
+    touchstart() {
+      console.log('start')
+      wx.startRecord()
+      this.touchStartTime = new Date()
+    },
+    touchend() {
+      console.log('end')
+      this.recordTime = new Date() - this.touchStartTime
+      console.log(this.recordTime)
+      wx.stopRecord({
+        success: function(res) {
+          const { localId } = res
+          wx.playVoice({
+            localId // 需要播放的音频的本地ID，由stopRecord接口获得
+          })
+        }
+      })
+    }
+  },
+  mounted() {
+    this.handleRegisterWxConfig()
+    window.addEventListener('contextmenu', function(e) {
+      e.preventDefault()
+    })
+    console.log(this.$refs.voiceRecord)
+    this.$refs.voiceRecord.addEventListener('touchstart', this.touchstart)
+    this.$refs.voiceRecord.addEventListener('touchend', this.touchend)
   }
 }
 </script>
@@ -112,5 +169,14 @@ export default {
   font-size: 30px;
   padding: 6px 12px;
   /*background: #ddd;*/
+}
+.voiceRecord {
+  border-radius: 80px;
+  line-height: 80px;
+  background-color: #20c997;
+  color: #fff;
+  text-align: center;
+  user-select: none;
+  -webkit-touch-callout: none;
 }
 </style>
