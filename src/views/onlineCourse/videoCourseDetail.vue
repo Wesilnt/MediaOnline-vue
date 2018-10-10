@@ -13,7 +13,7 @@
           <!-- <img :src="require('../../assets/images/onlinecourse_video_ic_gift.png')" class="video-detail-header-gift" alt="">     -->
     </div>
     <!-- 播放器 -->
-    <video class="videoitem" ref="videoitem" :src="videoUrl" controls="controls" width="100%" height='100%' preload="auto"></video>
+    <video class="videoitem" ref="videoitem" v-show="true" :src="videoUrl" controls="controls" width="100%" height='100%' preload="auto"></video>
     <!-- Navbar -->
     <ScrollNavBar :bars="navBars" />
     <!-- <div ref="navbar" :class="navbarFixed == true ? 'isFixed' : ''" class="video-detail-navbar">
@@ -185,8 +185,8 @@ export default {
       const video = this.$refs.videoitem
       //从本地获取当前播放单集历史播放位置
       const videoData = JSON.parse(localStorage.getItem(this.id))
-        console.log('play的回调')
-        console.log("videoData--Play = ",videoData)
+        // console.log('play的回调')
+        // console.log("videoData--Play = ",videoData)
       const { historyPlayPosition } = videoData
       video.play()
       video.currentTime =
@@ -207,11 +207,11 @@ export default {
      
       // 获取播放累计时长
       if(readyState==4 || readyState==3){
-        console.log('代码是否能走到这里~~~~~~~~')
+        // console.log('代码是否能走到这里~~~~~~~~')
         const durationPlayingTime = this.playStartTime
           ? (new Date() - this.playStartTime) / 1000
           : 0
-        console.log(this.playStartTime)
+        // console.log(this.playStartTime)
         // this.loaclPlayTotalTime += durationPlayingTime
         // const newVideoData = JSON.parse(localStorage.getItem(this.id))
         const newTotalTime =  this.loaclPlayTotalTime + durationPlayingTime
@@ -227,18 +227,20 @@ export default {
           playTotalTime: newTotalTime,
           historyPlayPosition: newPosition
         }
-        console.log('代码走到这里这阿发0=0=0=00=')
-        console.log(obj)
+        // console.log('代码走到这里这阿发0=0=0=00=')
+        // console.log(obj)
         localStorage.setItem(this.id, JSON.stringify(obj))
         /*
         自测题逻辑
         */
         //  播放累计时长大于视频的总时长，解锁
-        console.log(newTotalTime,currentTime, this.totalTime * 0.7)
+        // console.log(newTotalTime,currentTime, this.totalTime * 0.7)
         if (
             !this.deblockQuestion &&
             newTotalTime>= this.totalTime * 0.7
           ) {
+            console.log('deblockQuestion ===',this.deblockQuestion)
+            console.log('newTotalTime ===',newTotalTime)
             this.bindQuestionBymyself({ deblockQuestion: true })
         }     
       }else{
@@ -246,13 +248,17 @@ export default {
         this.playStartTime = new Date()
         this.loaclPlayTotalTime = Math.round(parseFloat(videoData.playTotalTime))
       }
-      
-      // 进度条 未解锁就动态显示
-      if (!this.deblockQuestion && duration) {
-        const percent = (this.loaclPlayTotalTime / duration) * 100
-        let progress = percent <= 100 ? percent : 100
-        this.bindQuestionBymyself({ progress })
+      if(paused){
+        // 进度条 未解锁就动态显示 
+        if (!this.deblockQuestion && duration) {
+          const percent = (this.loaclPlayTotalTime / duration) * 100
+          let progress = percent <= 100 ? percent : 100
+          this.bindQuestionBymyself({ progress })
+          console.log('loaclPlayTotalTime ===',this.loaclPlayTotalTime)
+          console.log('progress ===',progress)
+        }
       }
+
     },
     //显示键盘
     toggleKeyboard(commentBarShow, inputer) {
