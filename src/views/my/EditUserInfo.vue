@@ -210,7 +210,7 @@ export default {
                 color: white;
             }
             &-circle {
-                background-color: #db4154;
+                background: url('../../assets/images/my_girl.png') center/100% no-repeat;;
                 box-shadow: #db4154 0px 0px 0px 0px;
             }
         }
