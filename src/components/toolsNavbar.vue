@@ -28,7 +28,7 @@
 <script>
 import Share from './share/Share'
 import PhoneVerif from './PhoneVerif'
-import { createNamespacedHelpers } from 'vuex'
+import { createNamespacedHelpers,mapActions as rootActions } from 'vuex'
 const {
   mapState,
   mapGetters,
@@ -119,6 +119,7 @@ export default {
     }
   },
   methods: {
+    ...rootActions(['getUserInfo']),
     ...mapMutations(['bindIsShowMobileDialog','toggolePraiseFlag']),
     ...mapActions([
       'startGroupBuy',
@@ -189,14 +190,23 @@ export default {
           //拼团中
           this.sharePageShow = true
           //拼装分享内容
-          const shareData = {
-            link: `/#/videoColumnDetail/${this.courseId}?groupBuyId=${
-              this.groupBuyId
-            }`,
-            title: '视频分享',
-            desc: '这是一个神奇的视频',
-          }
-          this.shareData = shareData
+          // const shareData = {
+          //   link: `/#/videoColumnDetail/${this.courseId}?groupBuyId=${
+          //     this.groupBuyId
+          //   }`,
+          //   title: '视频分享',
+          //   desc: '这是一个神奇的视频',
+          //   imgUrl: ''
+          // }
+          // this.shareData = shareData
+          this.getUserInfo()
+            .then(user=>{
+              this.shareData = {
+                          link: `/#/videoColumnDetail/${this.courseId}?groupBuyId=${this.groupBuyId}`, 
+                          title: `我是${user.nickName}, 我参加了购买《${this.audio?this.audio.title:'国学课'}》拼团活动,快来跟我一起完成拼团吧。`,
+                          desc: '你一定会爱上国学课...'
+                        } 
+          }) 
           break
       }
     },

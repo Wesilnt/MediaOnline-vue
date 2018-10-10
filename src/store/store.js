@@ -150,7 +150,7 @@ export default new Vuex.Store({
     },
     async setWxShareZone(
       { state },
-      { title, desc, link, imgUrl, successCB = () => {}, cancelCB = () => {} }
+      { title, desc, link, imgUrl='http://qiniu.shbaoyuantech.com/FsvTsNINf5rPwNOmQTfe-WSxTSF1?imageView2/1/w/100/h/100/format/jpg', successCB = () => {}, cancelCB = () => {} }
     ) {
       if (!link.includes(state.url)) {
         throw new Error('link error')
