@@ -81,9 +81,9 @@ export default {
 .index {
   color: #3e3e53;
   margin-bottom: 100px;
-  /deep/.van-swipe__indicators{
-    bottom:30px;
-  }
+  // /deep/.van-swipe__indicators{
+  //   bottom:30px;
+  // }
   /deep/.van-swipe__indicator {
     background-color: white;
   }
