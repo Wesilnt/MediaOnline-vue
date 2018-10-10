@@ -489,7 +489,7 @@ const groupManagerData = {
         //验证是否完成了公众号授权
         async checkoutAuthorrization({state,commit,dispatch},payload){
             if(state.isLoading) {
-              Toast("请不要连续点击...")
+            //   Toast("请不要连续点击...")
               return
             }
             commit('setLoading', true)   //锁住  拼团  集赞中...
@@ -628,6 +628,7 @@ const groupManagerData = {
         //         signature: config.signature,// 必填，签名，见附录1
         //         jsApiList: ['chooseWXPay'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2 
         //    })
+            console.log('result ==',result)
             dispatch('wxPayment',{
                 timestamp: result.timestamp,
                 nonceStr: result.nonceStr, // 支付签名随机串，不长于 32 位
@@ -658,7 +659,7 @@ const groupManagerData = {
                 },
                 failCB : function (errmsg) {
                     console.log(errmsg)
-                    Toast(errmsg)
+                    // Toast(errmsg)
                 }
             },{root:true})      
             // wx.ready(function(){
