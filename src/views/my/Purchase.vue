@@ -1,6 +1,6 @@
 <template>
     <section>
-        <div v-if="onLineVisionList.length === 0 &&onLineVideoList.length === 0 && onLineReadList.length === 0 " >
+        <div v-if="onLineVisionByBoughtList.length === 0 &&onLineVideoByBoughtList.length === 0 && onLineReadByBoughtList.length === 0 " >
             <div class="purchase-nodata">
                 <i class="qhht-icon purchase-nodata-icon"/>
                 <p class="purchase-nodata-warn">亲，您还没有购买</p>
@@ -11,13 +11,13 @@
             <div class="purchase-head">
                 <div class="purchase-head-text">最近学习</div>
                 <img class="purchase-head-left-icon" src="../../assets/images/onlinecourse_arrow_down.png"/>
-                <img class="purchase-head-right-icon" src="../../assets/images/my_sys_menu.png"/>
+                <img class="purchase-head-right-icon" :src="require('../../assets/images/my_sys_menu.png')"@click="handleMenu"/>
             </div>
 
-            <div v-if="onLineVisionList.length !== 0" class="purchase-container">
+            <div v-if="onLineVisionByBoughtList.length !== 0" class="purchase-container">
                 <p class="purchase-container-head">{{tab[0]}}</p>
-                <div v-for="item in onLineVisionList" :key="item.id">
-                    <div class="purchase-container-item" @click='toPlayAudio(item)'>
+                <div v-if="isVertical" v-for="item in onLineVisionByBoughtList" :key="item.id">
+                    <div class="purchase-container-item" @click='toPlayAudio(item.newestLessonId)'>
                         <img :src='item.coverPic' class="purchase-container-item-avatar"/>
                         <div class="purchase-container-item-content">
                             <div class="purchase-container-item-content-name">{{item.name}}</div>
@@ -26,11 +26,19 @@
                         </div>
                     </div>
                 </div>
+                <div v-if="!isVertical" v-for="item in onLineVisionByBoughtList" :key="item.id">
+                    <div class="purchase-container-item" @click='toPlayAudio(item.newestLessonId)'>
+                        <img :src='item.coverPic' class="purchase-container-item-avatar"/>
+                        <div class="purchase-container-item-content">
+                            <div class="purchase-container-item-content-name">{{item.name}}</div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div v-if="onLineVideoList.length !== 0" class="purchase-container">
+            <div v-if="onLineVideoByBoughtList.length !== 0" class="purchase-container">
                 <p class="purchase-container-head">{{tab[1]}}</p>
-                <div v-for="item in onLineVideoList" :key="item.id">
-                    <div class="purchase-container-item" @click='toPlayVideo(item)'>
+                <div  v-if="isVertical" v-for="item in onLineVideoByBoughtList" :key="item.id">
+                    <div class="purchase-container-item" @click='toPlayVideo(item.newestLessonId)'>
                         <img :src='item.coverPic' class="purchase-container-item-avatar"/>
                         <div class="purchase-container-item-content">
                             <div class="purchase-container-item-content-name">{{item.name}}</div>
@@ -39,16 +47,32 @@
                         </div>
                     </div>
                 </div>
+                <div v-if="!isVertical" v-for="item in onLineVideoByBoughtList" :key="item.id">
+                    <div class="purchase-container-item" @click='toPlayVideo(item.newestLessonId)'>
+                        <img :src='item.coverPic' class="purchase-container-item-avatar"/>
+                        <div class="purchase-container-item-content">
+                            <div class="purchase-container-item-content-name">{{item.name}}</div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div v-if="onLineReadList.length !== 0" class="purchase-container">
+            <div v-if="onLineReadByBoughtList.length !== 0" class="purchase-container">
                 <p class="purchase-container-head">{{tab[2]}}</p>
-                <div v-for="item in onLineReadList" :key="item.id">
-                    <div class="purchase-container-item" @click='toPlayAudio(item)'>
+                <div  v-if="isVertical" v-for="item in onLineReadByBoughtList" :key="item.id">
+                    <div class="purchase-container-item" @click='toPlayAudio(item.newestLessonId)'>
                         <img :src='item.coverPic' class="purchase-container-item-avatar"/>
                         <div class="purchase-container-item-content">
                             <div class="purchase-container-item-content-name">{{item.name}}</div>
                             <div class="purchase-container-item-content-playto">播放至：{{ item.availLessonCount }} |  {{ item.lastViewLessonTitle }}</div>
                             <div class="purchase-container-item-content-updateto">更新至：{{ item.lessonCount }}  |  {{ item.newestLessonTitle }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div  v-if="!isVertical" v-for="item in onLineReadByBoughtList" :key="item.id">
+                    <div class="purchase-container-item" @click='toPlayAudio(item.newestLessonId)'>
+                        <img :src='item.coverPic' class="purchase-container-item-avatar"/>
+                        <div class="purchase-container-item-content">
+                            <div class="purchase-container-item-content-name">{{item.name}}</div>
                         </div>
                     </div>
                 </div>
@@ -65,23 +89,33 @@ export default {
   name: 'Purchase',
   data: function() {
     return {
-      tab: ['少年视野', '视频课程', '读书会']
+      tab: ['少年视野', '视频课程', '读书会'],
+      isVertical:true
     }
   },
   computed: {
     ...mapState([
-      'onLineVisionList',
-      'onLineVideoList',
-      'onLineReadList',
+      'onLineVisionByBoughtList',
+      'onLineVideoByBoughtList',
+      'onLineReadByBoughtList',
       'loading'
     ])
   },
   methods: {
-    ...mapActions(['queryList']),
-    getAllPurchase: function(orderBy) {
-      this.queryList({ type: 1003, orderBy: orderBy }) //  获取视野
-      this.queryList({ type: 1005, orderBy: orderBy }) //  获取在线课堂
-      this.queryList({ type: 1007, orderBy: orderBy }) //  获取读书会
+    ...mapActions(['queryListByBought','queryListByLearn']),
+    getAllPurchaseByBought: function() {
+      this.queryListByBought({ type: 1003 }) //  获取视野
+      this.queryListByBought({ type: 1005 }) //  获取在线课堂
+      this.queryListByBought({ type: 1007 }) //  获取读书会
+    },
+    getAllPurchaseByLearn: function() {
+      this.queryList({ type: 1003 }) //  获取视野
+      this.queryList({ type: 1005 }) //  获取在线课堂
+      this.queryList({ type: 1007 }) //  获取读书会
+    },
+    handleMenu:function() {
+      // 横竖显示切换
+      this.isVertical = !this.isVertical
     },
     toPlayAudio: function(item) {
       this.$router.push({ name: 'AudioPlay'
@@ -93,7 +127,8 @@ export default {
     }
   },
   created() {
-    this.getAllPurchase('lastBought')
+    // 默认根据购买时间排序
+    this.getAllPurchaseByBought()
   }
 }
 </script>
