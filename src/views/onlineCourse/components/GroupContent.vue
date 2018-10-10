@@ -240,7 +240,6 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  font-size: 32px;
   text-align: left;
   color: rgb(62, 62, 83);
   margin-top: 48px;
