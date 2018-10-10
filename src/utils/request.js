@@ -5,8 +5,6 @@ import { getAccessToken, getCookie } from './userAuth'
 import store from '../store/store'
 import { IS_ONLINE, TEST_TOKEN, api } from './config'
 
-const { dispatch } = store
-
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
   201: '新建或修改数据成功。',
@@ -52,6 +50,7 @@ const checkResponseCode = (url, response) => {
   if (response.code == 0) {
     return response.data || response
   }
+    const { dispatch } = store
 
   const errorText = response.message || response.error || response.code
   const error = new Error(errorText)
