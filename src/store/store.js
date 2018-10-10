@@ -117,9 +117,9 @@ export default new Vuex.Store({
       { state },
       {
         title,
-        desc,
+        desc='秦汉胡同国学，让我们的孩子成为一个有涵养的人',
         link,
-        imgUrl,
+        imgUrl='http://qiniu.shbaoyuantech.com/FsvTsNINf5rPwNOmQTfe-WSxTSF1?imageView2/1/w/100/h/100/format/jpg',
         type,
         dataUrl,
         successCB = () => {},
@@ -130,10 +130,11 @@ export default new Vuex.Store({
         throw new Error('link error')
         return
       }
+        const nickname='Dorma';
       const shareOptions = {
-        title, // 分享标题
+        title:title|| `${nickname}邀请您一起上课啦！`, // 分享标题
         desc, // 分享描述
-        link, // 分享链接,，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+        link:link||state.url+'/#/home', // 分享链接,，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
         imgUrl, // 分享图标
         type, //  分享类型,music、video或link，不填默认为link       *****只对分享给朋友有效*****
         dataUrl, // 如果type是music或video，则要提供数据链接，默认为空      *****只对分享给朋友有效*****
