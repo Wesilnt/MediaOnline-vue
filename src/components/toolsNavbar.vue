@@ -5,7 +5,7 @@
             <p class="under-text">{{serviceType == "OnlineCourse"?'试看':'试听'}}</p>
         </div>
         <hr class="vertical-line"/>
-        <div v-show="toolsObject&&toolsObject.originPrice" :class="toolsObject&&toolsObject.collage==false&&toolsObject.collect==false ?'toolbar-price-active' :'toolbar-price'"  @click="clickOriginPriceBtn">
+        <div v-show="toolsObject&&toolsObject.originPrice" class="toolbar-price" :class="{'toolbar-price-active':toolsObject&&!toolsObject.collage&&!toolsObject.collect }"  @click="clickOriginPriceBtn">
             <p class="toolbar-price-num">￥{{toolsObject&&toolsObject.originPrice | formatPrice}}</p>
             <span class="under-text">原价购买</span>
         </div>
@@ -20,7 +20,7 @@
             </div>
         </div>
         <Share :show="sharePageShow" :shareid="courseId" :shareInfo="shareData" @close="cancelSharePage"></Share>
-        <PhoneVerif v-if="isShowMobileDialog" @callback="cancelDialog"></PhoneVerif>
+        <PhoneVerif v-if="isShowMobileDialog" @callback="bindIsShowMobileDialog(false)"></PhoneVerif>
     </div>
    
 </template>
@@ -28,10 +28,9 @@
 <script>
 import Share from './share/Share'
 import PhoneVerif from './PhoneVerif'
-import { createNamespacedHelpers,mapActions as rootActions } from 'vuex'
+import { createNamespacedHelpers, mapActions as rootActions } from 'vuex'
 const {
   mapState,
-  mapGetters,
   mapActions,
   mapMutations
 } = createNamespacedHelpers('videoColumnDetailData/groupManagerData')
@@ -83,7 +82,7 @@ export default {
             courseId: this.$route.params.courseId,
             collectLikeId: newVal
           },
-          query:{columnType:this.serviceType}
+          query: { columnType: this.serviceType }
         })
       }
     },
@@ -93,7 +92,7 @@ export default {
         const lessonId = this.freeLessonList[0].id
         this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
       }
-    },
+    }
     // isShowMobileDialog: function(newVal) {}
   },
   computed: {
@@ -105,8 +104,8 @@ export default {
       'groupBuyId',
       'toolsObject',
       'userAccessStatus',
-      'freeLesson',  //试听对象
-      'courseId',    //专栏ID
+      'freeLesson', //试听对象
+      'courseId', //专栏ID
       'startPraiseFlag',
       'serviceType'
     ])
@@ -120,7 +119,7 @@ export default {
   },
   methods: {
     ...rootActions(['getUserInfo']),
-    ...mapMutations(['bindIsShowMobileDialog','toggolePraiseFlag']),
+    ...mapMutations(['bindIsShowMobileDialog', 'toggolePraiseFlag']),
     ...mapActions([
       'startGroupBuy',
       'getCollectLike',
@@ -131,9 +130,9 @@ export default {
     ]),
     //点击试听按钮 跳转
     clickAuditionBtn() {
-      if(this.freeLesson && this.freeLesson.length > 0) {
+      if (this.freeLesson && this.freeLesson.length > 0) {
         this.gotoInfoPage()
-      }else{
+      } else {
         this.$toast('暂无试听课程')
       }
     },
@@ -143,16 +142,16 @@ export default {
         courseId: this.courseId,
         payType: 0
       }
-      switch(this.userAccessStatus){
+      switch (this.userAccessStatus) {
         //没有购买和集赞行为
         case 0:
           this.checkoutAuthorrization(params)
-        break
+          break
         case 1001:
-          if(this.freeLesson && this.freeLesson.length > 0) {
+          if (this.freeLesson && this.freeLesson.length > 0) {
             this.gotoInfoPage()
           }
-        break
+          break
       }
     },
     //点击拼团按钮
@@ -182,7 +181,7 @@ export default {
           break
         case 1003:
           //拼团成功.解锁专栏,跳转到单集详情页
-          if(this.freeLesson && this.freeLesson.length > 0) {
+          if (this.freeLesson && this.freeLesson.length > 0) {
             this.gotoInfoPage()
           }
           break
@@ -199,14 +198,17 @@ export default {
           //   imgUrl: ''
           // }
           // this.shareData = shareData
-          this.getUserInfo()
-            .then(user=>{
-              this.shareData = {
-                          link: `/#/videoColumnDetail/${this.courseId}?groupBuyId=${this.groupBuyId}`, 
-                          title: `我是${user.nickName}, 我参加了购买《${this.audio?this.audio.title:'国学课'}》拼团活动,快来跟我一起完成拼团吧。`,
-                          desc: '你一定会爱上国学课...'
-                        } 
-          }) 
+          this.getUserInfo().then(user => {
+            this.shareData = {
+              link: `/#/videoColumnDetail/${this.courseId}?groupBuyId=${
+                this.groupBuyId
+              }`,
+              title: `我是${user.nickName}, 我参加了购买《${
+                this.audio ? this.audio.title : '国学课'
+              }》拼团活动,快来跟我一起完成拼团吧。`,
+              desc: '你一定会爱上国学课...'
+            }
+          })
           break
       }
     },
@@ -223,11 +225,11 @@ export default {
           break
         case 1008:
           //集赞成功已领取  解锁专栏 跳转到单集详情页
-          if(this.freeLesson && this.freeLesson.length > 0) {
+          if (this.freeLesson && this.freeLesson.length > 0) {
             this.gotoInfoPage()
           }
           break
-        case 1009: 
+        case 1009:
           //集赞中
           this.$router.push({
             name: 'Praise',
@@ -235,8 +237,8 @@ export default {
               courseId: this.$route.params.courseId,
               collectLikeId: this.collectLikeId
             },
-            query:{
-              columnType:this.serviceType
+            query: {
+              columnType: this.serviceType
             }
           })
           break
@@ -258,27 +260,31 @@ export default {
     cancelSharePage() {
       this.sharePageShow = false
     },
-    //关闭手机号收集框
-    cancelDialog() {
-      this.bindIsShowMobileDialog(false)
-    },
-    gotoInfoPage(){ 
-      switch(this.serviceType) {
+    gotoInfoPage() {
+      const { id } = this.freeLesson[0]
+      switch (this.serviceType) {
         case 'OnlineCourse':
-            const lessonId = this.freeLesson[0].id
-            this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
-        break
-        case "FreeZone":
- 
-        break
+          this.$router.push({
+            name: 'videoCourseDetail',
+            params: { lessonId: id }
+          })
+          break
+        case 'FreeZone':
+          break
         case 'OnlineVision':
-            const visionId = this.freeLesson[0].id
-            this.$router.push({ name: 'AudioPlay', params: { id:visionId },query :{playType:this.serviceType}})   
-        break
+          this.$router.push({
+            name: 'AudioPlay',
+            params: { id },
+            query: { playType: this.serviceType }
+          })
+          break
         case 'Readings':
-            const readingId = this.freeLesson[0].id
-            this.$router.push({ name: 'AudioPlay', params: { id:readingId },query :{playType:this.serviceType} })   
-        break
+          this.$router.push({
+            name: 'AudioPlay',
+            params: { id },
+            query: { playType: this.serviceType }
+          })
+          break
       }
     }
   }
@@ -330,16 +336,20 @@ export default {
   line-height: 32px;
 }
 .toolbar-price-active {
-  // margin-left: 28px;
   flex-grow: 1;
-  margin-right: 28px;
-  line-height: 32px;
   background: linear-gradient(
     to right,
     rgb(254, 119, 0) 0,
     rgb(255, 79, 5) 100%
   );
+  .toolbar-price-num {
+    color: #fff;
+  }
+
   border-radius: 80px;
+  .under-text {
+    color: #fff;
+  }
 }
 .toolbar-price-num {
   font-weight: 700;
