@@ -253,7 +253,7 @@ export default {
       this.sharePageShow = false
     },
     setShareInfo(){
-     const link = ""
+     let link = ""
       switch (this.serviceType) {
         case 'OnlineCourse':
           link = `/#/videoColumnDetail/${this.courseId}?groupBuyId=${this.groupBuyId}`
