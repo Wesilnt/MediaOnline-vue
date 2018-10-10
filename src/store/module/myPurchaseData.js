@@ -2,10 +2,12 @@ import { getMyPurchase } from '../../api/myApi'
 const myPurchaseData = {
   namespaced: true,
   state: {
-    onLineVisionList: [],
-    onLineVideoList: [],
-    onLineReadList: [],
-    type: 'lastBought',
+    onLineVisionByBoughtList: [],
+    onLineVideoByBoughtList: [],
+    onLineReadByBoughtList: [],
+    onLineVisionByLearntList: [],
+    onLineVideoByLearnList: [],
+    onLineReadByLearnList: [],
     loading: false
   },
   mutations: {
@@ -18,7 +20,7 @@ const myPurchaseData = {
     }
   },
   actions: {
-    async queryList({ dispatch, commit, state }, { type, orderBy }) {
+    async queryListByBought({ dispatch, commit, state },{ type }) {
       const response = await getMyPurchase({
         type: type,
         orderBy: 'lastBought',
@@ -26,22 +28,45 @@ const myPurchaseData = {
         pageSize: 50
       })
 
-      console.log(response.result)
       if (type === 1003) {
         await commit({
           type: 'saveList',
-          onLineVisionList: response.result
+          onLineVisionByBoughtList: response.result
         })
-        console.log('Purchase' + response.result.length)
       } else if (type === 1005) {
         await commit({
           type: 'saveList',
-          onLineVideoList: response.result
+          onLineVideoByBoughtList: response.result
         })
       } else if (type === 1007) {
         await commit({
           type: 'saveList',
-          onLineReadList: response.result
+          onLineReadByBoughtList: response.result
+        })
+      }
+    },
+    async queryListByLearn({ dispatch, commit, state },{ type }) {
+      const response = await getMyPurchase({
+        type: type,
+        orderBy: 'lastLearn',
+        currentPage: 1,
+        pageSize: 50
+      })
+
+      if (type === 1003) {
+        await commit({
+          type: 'saveList',
+          onLineVisionByLearnList: response.result
+        })
+      } else if (type === 1005) {
+        await commit({
+          type: 'saveList',
+          onLineVideoByLearnList: response.result
+        })
+      } else if (type === 1007) {
+        await commit({
+          type: 'saveList',
+          onLineReadByLearnList: response.result
         })
       }
     }

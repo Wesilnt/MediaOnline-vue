@@ -126,7 +126,7 @@ export default {
     background-size: 100%;
     color: white;
     padding: 40px;
-    height: 372px;
+    height: 300px;
     h5 {
       font-size: 48px;
       line-height: 56px;

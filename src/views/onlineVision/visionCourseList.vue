@@ -11,14 +11,14 @@
       <div v-if="item.id != -1" @click="spreat(item.id)" :class="(item.id ===selectCate)&&spread?'categoryHeader selectShadow':'categoryHeader'" :style="{background:'url('+item.picUrl+')'}">
         <div class="categoryHeaderCount"> {{item.lessonCount}}期 </div>
       </div>
-      <SingleSetList v-show="item.id == selectCate && spread" :singletype="'OnlineVision'" class="categoryList" :list='item.lessonList'></SingleSetList>
+      <SingleSetList v-show="item.id == selectCate && spread" :singletype="'OnlineVision'" class="categoryList" :list='item.lessonList' :coursename="courseName"></SingleSetList>
     </div>
   </div>
 </template>
 <script>
 import SingleSetList from '../../components/SingleSetList.vue'
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions } = createNamespacedHelpers('visionData')
+const { mapState, mapActions,mapGetters } = createNamespacedHelpers('visionData')
 export default {
   data() {
     return {
@@ -33,6 +33,7 @@ export default {
   props:['courseId'],
   computed: mapState(['categoryList']),
   components: {
+    ...mapGetters(['courseName']),
     SingleSetList
   },
   methods: {

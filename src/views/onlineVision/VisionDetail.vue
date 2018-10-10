@@ -24,7 +24,7 @@
     </div>
     <!-- try -->
     <div id="try" class="try bottomline">
-      <DetailHeader title="试看课程" subtitle="全部" link='/home/visionDetail/visionCourseList' :courseId="courseId"/>
+      <DetailHeader title="试看课程" subtitle="全部" link='/home/visionDetail/visionCourseList' :courseId="courseId" :coursename="courseName"/>
       <SingleSetList :list='visionDetail.freeLessonList' :singletype="'OnlineVision'"></SingleSetList>
     </div>
     <!-- message -->
@@ -66,7 +66,7 @@ import toolsNavbar from '../../components/toolsNavbar.vue'
 import GroupHeader from '../onlineCourse/components/GroupHeader'
 import videoBigimage from '../../components/videoBigimage.vue'
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions } = createNamespacedHelpers('visionData')
+const { mapState, mapActions ,mapGetters} = createNamespacedHelpers('visionData')
 export default {
   components: {
     DetailHeader,
@@ -107,7 +107,7 @@ export default {
     })
     this.getCommentList(this.courseId)
   },
-  computed: mapState(['visionDetail', 'commentList']),
+  computed: {...mapGetters(['courseName']),...mapState(['visionDetail', 'commentList'])},
   methods: {
     ...mapActions(['getVisionDetail', 'getCommentList']),
     ellipsis() {
@@ -211,6 +211,6 @@ export default {
   font-weight: 400;
 }
 .vision_comment_item {
-  margin: 40px 48px;
+  padding: 40px 48px;
 }
 </style>

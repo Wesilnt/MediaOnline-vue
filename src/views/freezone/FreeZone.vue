@@ -7,7 +7,7 @@
           :immediate-check="false"
           @load="scrollBottom"
           @offset="10">
-            <router-link class="qhht-flex freeZone-item" v-for="(item,index) of freeZoneList" :key="item.id" :to="{name:'AudioPlay', params:{id:item.id},query:{playType:'freezone'}}">
+            <router-link class="qhht-flex freeZone-item" v-for="item of freeZoneList" :key="item.id" :to="{name:'AudioPlay', params:{id:item.id},query:{playType:'freezone'}}">
                     <img  class="freeZone-infoBtn" :src="playingId===item.id?playingIcon:pauseIcon" >
                     <div class="freeZone-content">
                         <p class="freeZone-item-title" :class="{'book-title-playing':playingId === item.id}">

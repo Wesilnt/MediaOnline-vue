@@ -2,7 +2,7 @@
     <section>
         <div v-if="playRecordList.length===0" class="playRecord-nodata">
             <i class="qhht-icon playRecord-nodata-icon"/>
-            <p class="playRecord-nodata-warn">暂无收藏记录</p>
+            <p class="playRecord-nodata-warn">暂无播放记录</p>
         </div>
         <div v-else class="playRecord-container">
             <div class="playRecord-header-container " v-lazy:background-image="require('../../assets/images/my_playrecord_head.png')"></div>
@@ -51,7 +51,7 @@
                             </div>
                         </div>
                         <div v-if="!showCheck" class="playRecord-list-item-more"
-                             @click="showDelete(item.id)">
+                             @click="showDelete(item.userLessonId)">
                             <img :src="require('../../assets/images/my_record_more.png')" class="playRecord-list-item-more-img"/>
                         </div>
 
@@ -123,7 +123,7 @@
         if (this.playRecordCheckList.length > 0) {
           for (let i = 0; i < this.playRecordCheckList.length; i++) {
             if (this.playRecordCheckList[i] === true) {
-              ids += this.playRecordList[i].id + ','
+              ids += this.playRecordList[i].userLessonId + ','
             }
           }
         }
@@ -197,7 +197,7 @@
 
 <style scoped lang="less">
     @active: #ffa32f;
-    .myPlayRecordData {
+    .playRecord {
         &-container {
         }
         &-header-container {

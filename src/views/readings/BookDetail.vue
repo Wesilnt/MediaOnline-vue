@@ -64,7 +64,7 @@
       :immediate-check="false"
       @load="scrollBottom"
       @offset="10">
-         <singleset-list :list="singleSetList" :play-id="playingId" :singletype="'Readings'"/>
+         <singleset-list :list="singleSetList" :play-id="playingId" :singletype="'Readings'" :coursename="courseName"/>
     </van-list>
     <!-- 6. 分页布局 -->
     <div class="load-more-container" v-if="singleFinished">
@@ -113,7 +113,7 @@ export default {
       'singleFinished',
       'singleSetList'
     ]),
-    ...mapGetters(['playingId'])
+    ...mapGetters(['playingId','courseName'])
   },
   created() {
     this.initData(this.courseId)

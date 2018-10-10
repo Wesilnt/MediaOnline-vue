@@ -61,9 +61,9 @@ export default {
   flex-direction: column;
   padding-bottom: 160px;
   padding-top: 10px;
+  width: 100vw;
 }
-.nodata-container {
-  height: 100vh;
+.nodata-container { 
   width: 100vw;
   text-align: center;
   line-height: 80vh;

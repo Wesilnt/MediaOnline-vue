@@ -29,8 +29,8 @@
           <!-- <font>{{comment.content | getSingleCourseName()}}</font> -->
           {{comment.content | getSingleCourseName(1)}}
         </div>
-        <div class="comment-detail-footer" v-else-if="regiontype===2202">
-          <span class="comment-replyer">{{comment.childComment && comment.childComment.fromNickName}}</span>回复<span class="comment-replyer">{{comment && comment.fromNickName}}：</span>
+        <div class="comment-detail-footer" v-else-if="regiontype===2202 && comment.childComment">
+          <span class="comment-replyer">{{ comment.childComment.fromNickName}}</span>回复<span class="comment-replyer">{{comment && comment.fromNickName}}：</span>
           {{comment.childComment && comment.childComment.content }}
         </div>
       </div>
@@ -92,6 +92,7 @@ export default {
   color: #333;
 }
 .comment-item {
+  width: 100%;
   padding: 48px 40px 48px;
 }
 .comment-avatar {

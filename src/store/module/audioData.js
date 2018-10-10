@@ -1,5 +1,4 @@
-import {
-  getAudioDetail,
+import { 
   postFavorite,
   postUnFavorite,
   getAudioDesc,
@@ -12,9 +11,9 @@ export default {
   state: {
     isLike: false,
     singleSetList: [],
-    currentPage: 1, //音频列表分页-页码
-    pageSize: 20, //分页-记录条数
-    commentList: [], //评论列表
+    currentPage: 1,           //音频列表分页-页码
+    pageSize: 20,             //分页-记录条数
+    commentList: [],          //评论列表
     draftContent: { manuscript: '' }
   },
   mutations: {
@@ -42,10 +41,7 @@ export default {
       if (params && params.lessonId) {
         dispatch('audiotaskData/asyncPlay', params, { root: true })
         .then(res => {
-          dispatch('getSingleSetList', {
-            courseId: res.courseId,
-            pageSize: getters.pageSize
-          })
+          dispatch('getSingleSetList', { courseId: res.courseId, pageSize: getters.pageSize })
           commit('bindAudioDetail', res)
         })
       } else {
@@ -74,18 +70,18 @@ export default {
     },
     //悬浮按钮是否显示
     toggleFloatButton({commit},isShow){ 
-
       commit('audiotaskData/setFloatButton', isShow, { root: true })
+    },
+    //绑定专栏名
+    async bindCourseName({commit}, courseName){
+      commit('audiotaskData/bindCourseName', courseName, { root: true })
     },
     //音频单集详情
     async getAudioDetail({ getters, commit, dispatch }, params) {
       dispatch('audiotaskData/getAudioDetail', params, { root: true })
       .then(res => {
         commit('bindAudioDetail', res)
-        dispatch('getSingleSetList', {
-          courseId: res.courseId,
-          pageSize: getters.pageSize
-        })
+        dispatch('getSingleSetList', {courseId: res.courseId, pageSize: getters.pageSize})
       })
     },
     //音频收藏 我喜欢的
@@ -120,9 +116,7 @@ export default {
   getters: {
     audio: (state, getters, rootState) => rootState.audiotaskData.audioDetail,
     audioId: (state, getters, rootState) => rootState.audiotaskData.audioId,
-    currentTime: (state, getters, rootState) => Math.round(rootState.audiotaskData.currentTime),
-    // currentTime: (state, getters, rootState) => (touching, progress) =>
-    //   touching ? progress : rootState.audiotask.currentTime,
+    currentTime: (state, getters, rootState) => Math.round(rootState.audiotaskData.currentTime), 
     maxTime: (state, getters, rootState) => Math.round(rootState.audiotaskData.maxTime),
     playMode: (state, getters, rootState) => rootState.audiotaskData.playMode,
     status: (state, getters, rootState) => rootState.audiotaskData.status,

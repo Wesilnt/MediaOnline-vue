@@ -9,7 +9,7 @@
                          :class="{'userinfo-identity-container-item-selected':identity === '0'}"
                          @click="identityChoice('0')">
                         <div class="userinfo-identity-container-item-circle"
-                             :class="{'userinfo-identity-container-item-selected-circle':identity === '0'}"/>
+                             :class="{'userinfo-identity-container-item-selected-parent-circle':identity === '0'}"/>
                         <p class="userinfo-identity-container-item-text"
                            :class="{'userinfo-identity-container-item-selected-text':identity === '0'}">我是家长</p>
                         <van-radio v-if="identity === '0'" name="0"/>
@@ -18,7 +18,7 @@
                          :class="{'userinfo-identity-container-item-selected':identity === '1'}"
                          @click="identityChoice('1')">
                         <div class="userinfo-identity-container-item-circle"
-                             :class="{'userinfo-identity-container-item-selected-circle':identity === '1'}"/>
+                             :class="{'userinfo-identity-container-item-selected-student-circle':identity === '1'}"/>
                         <p class="userinfo-identity-container-item-text"
                            :class="{'userinfo-identity-container-item-selected-text':identity === '1'}">我是学生</p>
                         <van-radio v-if="identity === '1'" name="1"/>
@@ -34,7 +34,7 @@
                          :class="{'userinfo-identity-container-item-selected':gender === '0'}"
                          @click="genderChoice('0')">
                         <div class="userinfo-identity-container-item-circle"
-                             :class="{'userinfo-identity-container-item-selected-circle':gender === '0'}"/>
+                             :class="{'userinfo-identity-container-item-selected-boy-circle':gender === '0'}"/>
                         <p class="userinfo-identity-container-item-text"
                            :class="{'userinfo-identity-container-item-selected-text':gender === '0'}">我是男生</p>
                         <van-radio v-if="gender === '0'" name="0"/>
@@ -69,209 +69,245 @@
 </template>
 
 <script>
-import { createNamespacedHelpers } from 'vuex'
-import { Toast } from 'vant'
-import LoadingDialog from '../../components/LoadingDialog'
-import { getGradeNum } from './../../utils/utils'
+  import {createNamespacedHelpers} from 'vuex'
+  import {Toast} from 'vant'
+  import LoadingDialog from '../../components/LoadingDialog'
+  import {getGradeNum} from './../../utils/utils'
 
-const { mapState, mapActions } = createNamespacedHelpers('userInfoData')
-export default {
-  name: 'EditUserInfo',
-  components: { 'loading-dialog': LoadingDialog },
-  data: function() {
-    return {
-      identity: '',
-      gender: '',
-      grade: -1,
-      showIdentity: true,
-      showNext: false,
-      showLoading:false,
-      columns: [
-        '未上学',
-        '幼儿园',
-        '一年级',
-        '二年级',
-        '三年级',
-        '四年级',
-        '五年级',
-        '六年级',
-        '初一',
-        '初二',
-        '初三',
-        '初三以上'
-      ]
-    }
-  },
-  computed: {
-    ...mapState(['userInfo', 'loading'])
-  },
-  watch: {
-    loading: function(loading) {
-
-      if(this.loading === false) {
-        this.$router.history.go(-2)
+  const {mapState, mapActions} = createNamespacedHelpers('userInfoData')
+  export default {
+    name: 'EditUserInfo',
+    components: {'loading-dialog': LoadingDialog},
+    data: function () {
+      return {
+        identity: '',
+        gender: '',
+        grade: -1,
+        showIdentity: true,
+        showNext: false,
+        showLoading: false,
+        columns: [
+          '未上学',
+          '幼儿园',
+          '一年级',
+          '二年级',
+          '三年级',
+          '四年级',
+          '五年级',
+          '六年级',
+          '初一',
+          '初二',
+          '初三',
+          '初三以上'
+        ]
       }
-    }
-  },
-  methods: {
-    ...mapActions(['getMyUserInfo', 'updateUserInfo']),
-    handleNext: function() {
-      if (this.showNext === false) {
-        if (this.identity === '') {
-          Toast.fail('请先选择身份')
+    },
+    computed: {
+      ...mapState(['userInfo', 'loading'])
+    },
+    watch: {
+      loading: function (loading) {
+
+        if (this.loading === false) {
+          this.$router.history.go(-2)
+        }
+      }
+    },
+    methods: {
+      ...mapActions(['getMyUserInfo', 'updateUserInfo']),
+      handleNext: function () {
+        if (this.showNext === false) {
+          if (this.identity === '') {
+            Toast.fail('请先选择身份')
+          } else {
+            this.showNext = true
+            this.showIdentity = false
+          }
         } else {
-          this.showNext = true
-          this.showIdentity = false
+          if (this.sex === '') {
+            Toast.fail('请选择性别')
+          } else if (this.grade === '') {
+            Toast.fail('请选择年级')
+          } else if (this.showNext === true) {
+            this.updateUserInfo({
+              role: this.identity,
+              gender: this.gender,
+              grade: this.grade
+            })
+          }
         }
-      } else {
-        if (this.sex === '') {
-          Toast.fail('请选择性别')
-        } else if (this.grade === '') {
-          Toast.fail('请选择年级')
-        } else if (this.showNext === true) {
-          this.updateUserInfo({
-            role: this.identity,
-            gender: this.gender,
-            grade: this.grade
-          })
-        }
+      },
+      identityChoice: function (type) {
+        this.identity = type
+      },
+      genderChoice: function (type) {
+        this.gender = type
+      },
+      onChange(picker, value, index) {
+        this.grade = getGradeNum(value)
       }
-    },
-    identityChoice: function(type) {
-      this.identity = type
-    },
-    genderChoice: function(type) {
-      this.gender = type
-    },
-    onChange(picker, value, index) {
-      this.grade = getGradeNum(value)
     }
   }
-}
 </script>
 <style lang="less" scoped>
-.userinfo {
-  &-title {
-    padding: 104px 0px 60px 60px;
-    font-size: 54px;
-    color: #ffa32f;
-  }
-  &-identity {
-    font-size: 28px;
+    .userinfo {
+        &-title {
+            padding: 104px 0px 60px 60px;
+            font-size: 54px;
+            color: #ffa32f;
+        }
+        &-identity {
+            font-size: 28px;
 
-    &-sub-title {
-      padding: 0px 0px 32px 60px;
-      font-size: 28px;
-      color: #a3a8b6;
+            &-sub-title {
+                padding: 0px 0px 32px 60px;
+                font-size: 28px;
+                color: #a3a8b6;
+            }
+            &-container {
+                display: flex;
+                flex-direction: row;
+                padding: 0px 45px 198px 45px;
+                &-item {
+                    display: flex;
+                    flex-direction: row;
+                    position: relative;
+                    width: 300px;
+                    height: 200px;
+                    padding-bottom: 56px;
+                    border: 1px #000;
+                    margin: 0px 15px 0px 15px;
+                    border-radius: 20px;
+                    box-shadow: #f4f4f4 5px 5px 5px 5px; //边框阴影
+                    background-color: white;
+                    &-text {
+                        line-height: 200px;
+                        font-size: 28px;
+                        padding: 0px 0px 0px 30px;
+                        color: #d2d0d6;
+                    }
+                    &-circle {
+                        width: 120px;
+                        height: 120px;
+                        margin: 40px 0px 40px 20px;
+                        border-radius: 50%;
+                        box-shadow: #e5e5e5 3px 3px 3px 3px;
+                    }
+                }
+                &-item-selected {
+                    background-color: #86befb;
+                    &-text {
+                        color: white;
+                    }
+                    &-circle {
+                        background-color: #418ee0;
+                        box-shadow: #418ee0 0px 0px 0px 0px;
+                    }
+                }
+                &-item-selected-parent {
+                    background-color: #f7828f;
+                    &-text {
+                        color: white;
+                    }
+                    &-circle {
+                        background: url('../../assets/images/my_parent.png') center/100% no-repeat;;
+                        box-shadow: #418ee0 0px 0px 0px 0px;
+                    }
+                }
+
+                &-item-selected-student {
+                    background-color: #f7828f;
+                    &-text {
+                        color: white;
+                    }
+                    &-circle {
+                        background: url('../../assets/images/my_boy.png') center/100% no-repeat;;
+                        box-shadow: #418ee0 0px 0px 0px 0px;
+                    }
+                }
+                &-item-selected-boy {
+                    background-color: #f7828f;
+                    &-text {
+                        color: white;
+                    }
+                    &-circle {
+                        background: url('../../assets/images/my_boy.png') center/100% no-repeat;;
+                        box-shadow: #418ee0 0px 0px 0px 0px;
+                    }
+                }
+
+                &-item-selected-girl {
+                    background-color: #f7828f;
+                    &-text {
+                        color: white;
+                    }
+                    &-circle {
+                        background: url('../../assets/images/my_girl.png') center/100% no-repeat;;
+                        box-shadow: #db4154 0px 0px 0px 0px;
+                    }
+                }
+            }
+        }
+        &-grade-container {
+            margin-top: -100px;
+        }
+        &-submit-area {
+            margin: 72px 55px 0;
+            &-button {
+                width: 100%;
+                height: 90px;
+                margin: 24px auto 80px;
+                font-size: 32px;
+                display: block;
+                text-align: center;
+                border-radius: 50px;
+                border: 1px solid #d4d3d7;
+                color: #b5b5b5;
+                outline: none;
+                background: #ffa32f;
+                color: white;
+                border: none;
+                box-shadow: 0 0 10px #ffaa3f;
+                transition: background, color, border, box-shadow 0.4s linear;
+            }
+
+            &-agreement-label {
+                color: #ffa32f;
+                text-align: center; //文字居中
+            }
+            &-agreement-text {
+                color: #acacb4;
+                padding-bottom: 30px;
+            }
+        }
     }
-    &-container {
-      display: flex;
-      flex-direction: row;
-      padding: 0px 45px 198px 45px;
-      &-item {
+
+    .van-radio-group {
         display: flex;
         flex-direction: row;
-        position: relative;
-        width: 300px;
-        height: 200px;
-        padding-bottom: 56px;
-        border: 1px #000;
-        margin: 0px 15px 0px 15px;
-        border-radius: 20px;
-        box-shadow: #f4f4f4 5px 5px 5px 5px; //边框阴影
-        background-color: white;
-        &-text {
-          line-height: 200px;
-          font-size: 28px;
-          padding: 0px 0px 0px 30px;
-          color: #d2d0d6;
-        }
-        &-circle {
-          width: 120px;
-          height: 120px;
-          margin: 40px 0px 40px 20px;
-          border-radius: 50%;
-          box-shadow: #e5e5e5 3px 3px 3px 3px;
-        }
-      }
-      &-item-selected {
-        background-color: #86befb;
-        &-text {
-          color: white;
-        }
-        &-circle {
-          background-color: #418ee0;
-          box-shadow: #418ee0 0px 0px 0px 0px;
-        }
-      }
-        &-item-selected-girl {
-            background-color: #f7828f;
-            &-text {
-                color: white;
-            }
-            &-circle {
-                background-color: #db4154;
-                box-shadow: #db4154 0px 0px 0px 0px;
-            }
-        }
-    }
-  }
-  &-grade-container {
-    margin-top: -100px;
-  }
-  &-submit-area {
-    margin: 72px 55px 0;
-    &-button {
-      width: 100%;
-      height: 90px;
-      margin: 24px auto 80px;
-      font-size: 32px;
-      display: block;
-      text-align: center;
-      border-radius: 50px;
-      border: 1px solid #d4d3d7;
-      color: #b5b5b5;
-      outline: none;
-      background: #ffa32f;
-      color: white;
-      border: none;
-      box-shadow: 0 0 10px #ffaa3f;
-      transition: background, color, border, box-shadow 0.4s linear;
     }
 
-    &-agreement-label {
-      color: #ffa32f;
-      text-align: center; //文字居中
+    .van-radio {
+        width: 40px;
+        height: 40px;
+        position: absolute;
+        right: 0px;
+        bottom: -25px;
     }
-    &-agreement-text {
-      color: #acacb4;
-      padding-bottom: 30px;
+
+    .van-picker {
+        height: 170px;
     }
-  }
-}
 
-.van-radio-group {
-  display: flex;
-  flex-direction: row;
-}
+    .van-picker__columns {
+        overflow: hidden;
+    }
 
-.van-radio {
-  width: 40px;
-  height: 40px;
-  position: absolute;
-  right: 0px;
-  bottom: -25px;
-}
-.van-picker {
-    height: 170px;
-}
-.van-picker__columns {
-    overflow: hidden;
-}
-.van-picker-column {
-    overflow: visible;
-}
-.van-picker-column__item {
-    width: 100vw;
-}
+    .van-picker-column {
+        overflow: visible;
+    }
+
+    .van-picker-column__item {
+        width: 100vw;
+    }
 </style>
