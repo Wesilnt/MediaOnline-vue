@@ -8,8 +8,8 @@ function getList(params) {
 export function getFreeList(params) {
   return request(`/index/getFreeLessonList?${stringify(params)}`)
 }
-export function getNewMessageCount(params) {
-  return request(`/user/getUserMsgCountByBusiTypes?${stringify(params)}`)
+export function getNewMessageCount() {
+  return request(`/user/getUserMsgCountAndNewestReplyFromAvatarUrl`)
 }
 export function getVisionList() {
   return getList({ type: 1003, pageSize: 3 })

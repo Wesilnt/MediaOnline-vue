@@ -10,7 +10,7 @@
       <!-- <div class="swiper_bottom"></div> -->
     </div>
 
-    <Notice :message-count="newMessageCount" />
+    <Notice :message-count="newMessageCount" :fromAvatarUrl= "fromAvatarUrl"/>
     <div class="index-container">
       <Header v-if="false" :link="'/home/freezone'" title="免费专区" subtitle="探索更多" />
       <FreeList v-if="false" :free-list="freeList" />
@@ -50,6 +50,7 @@ export default {
   computed: mapState([
     'bannerList',
     'newMessageCount',
+    'fromAvatarUrl',
     'freeList',
     'visionList',
     'videoList',
