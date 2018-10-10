@@ -1,5 +1,5 @@
 <template>
-  <div class="videocol-dec-container">
+  <div class="anti-bottomBar">
     <GroupHeader></GroupHeader>
     <GroupContent></GroupContent>
     <!-- 底部工具条 -->
@@ -54,12 +54,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-.videocol-dec-container {
-  margin: 0;
-  padding: 0;
-  background-color: #fff;
-  height: 100%;
-}
-</style>

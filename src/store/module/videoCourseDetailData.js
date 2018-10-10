@@ -220,7 +220,7 @@ const videoCourseDetailData = {
 
     async getCommentList(
       { commit },
-      { regionType, regionId, commentId, currentPage, pageSize }
+      { regionType, regionId, commentId, currentPage=1, pageSize=11 }
     ) {
       const result = await getCommentList({
         regionType,
@@ -258,8 +258,7 @@ const videoCourseDetailData = {
         return Toast('评论失败')
       }
       Toast('评论成功')
-      // commit("postComment", res)
-      // dispatch('getCommentList', {lessonId:params.regionId,isLoadMore:false})
+      dispatch('getCommentList', params)
     }
   },
 

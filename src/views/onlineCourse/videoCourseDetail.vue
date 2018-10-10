@@ -258,7 +258,6 @@ export default {
     toggleKeyboard(commentBarShow, inputer) {
       this.commentBarShow = commentBarShow
       if (inputer) {
-        console.log('留言内容为 ' + inputer)
         const {lessonId }= this.$route.params
         const params = {
           regionId: lessonId,
