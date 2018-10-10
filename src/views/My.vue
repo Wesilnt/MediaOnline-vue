@@ -8,11 +8,9 @@
 
         <div class="my-grid-list">
             <div v-for="item in list" :key="item.name" class="my-grid-item" @click="itemClick(item.name)">
-                <div v-if="(newReplyMessageCount !== 0 && item.name ==='/my/Reply') || (newSysMessageCount !== 0 && item.name ==='/my/SysMessage') "
-                     class="my-grid-item-badge">
-                    {{ item.name === '/my/Reply' ? newReplyMessageCount : newSysMessageCount }}
-                </div>
-                <i class="qhht-icon my-grid-item-img" :style="{backgroundImage:`url(${item.image})`}"></i>
+                <i class="qhht-icon my-grid-item-img" :style="{backgroundImage:`url(${item.image})`}">
+                    <div  v-if="(replyMessageCount !== 0 && item.name ==='/my/Reply')" class="my-grid-item-badge">{{ replyMessageCount }}</div>
+                </i>
                 <span class="my-grid-item-title">{{item.title}}</span>
             </div>
         </div>
@@ -70,16 +68,16 @@
             image: praise,
             title: '我的集赞'
           },
-         /* {
-            name: '/my/SysMessage',
-            image: sys,
-            title: '系统消息'
-          },*/
           {
             name: '/my/Feedback',
             image: feedback,
             title: '意见反馈'
           }
+          /* {
+          name: '/my/SysMessage',
+          image: sys,
+          title: '系统消息'
+        },*/
           /*{
             name: '/my/wx-config',
             image: require('../assets/images/logo.png'),
@@ -89,12 +87,12 @@
       }
     },
     computed: {
-      ...mapState(['newReplyMessageCount', 'newSysMessageCount', 'userInfo'])
+      ...mapState(['replyMessageCount', 'userInfo'])
     },
     methods: {
       ...mapActions(['queryNewMessageCount', 'getMyUserInfo']),
       editUserInfo: function () {
-        if (this.userInfo.gender && this.userInfo.grade && this.userInfo.role) {
+        if (this.userInfo.gender && this.userInfo.grade && this.userInfo.role && this.userInfo.mobileNo) {
           this.$router.push({path: './my/DisplayUserInfo'})
         } else {
           this.$router.push({path: './my/EditUserPhone'})
@@ -163,15 +161,15 @@
             border: 1px #000;
             flex-wrap: wrap;
             &-badge {
-                min-width: 36px;
-                height: 36px;
-                border-radius: 30px;
-                background-color: #e64340;
-                color: #fff;
+             float: right;
+                width: 40px;
+                height: 40px;
+                background: red;
+                color: white;
+                border-radius: 50%;
+                margin-bottom: 10px;
+                padding-top: 5px;
                 text-align: center;
-                font-size: 26px;
-                padding: 0 10px 8px;
-                margin-bottom: 100px;
             }
             &-img {
                 width: 112px;

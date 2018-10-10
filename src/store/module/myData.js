@@ -2,8 +2,7 @@ import { getMyUserInfo, getNewMessageCount } from '../../api/myApi'
 const myData = {
   namespaced: true,
   state: {
-    newReplyMessageCount: 0,
-    newSysMessageCount: 0,
+    replyMessageCount: 0,
     userInfo: [],
     loading: false
   },
@@ -21,15 +20,9 @@ const myData = {
   },
   actions: {
     async queryNewMessageCount({ dispatch, commit, state }) {
-      let replyResult = await getNewMessageCount({ busiTypes: 3101 })
-      if (replyResult) {
-        commit('save', replyResult.data)
-      }
-
-      let sysResult = await getNewMessageCount({ busiTypes: 3103 })
-      if (sysResult) {
-        commit('save', sysResult.data)
-      }
+      let response = await getNewMessageCount({ busiTypes: 3101 })
+      await commit('save',
+        {replyMessageCount:response})
     },
     async getMyUserInfo({ dispatch, commit, state }) {
       let response = await getMyUserInfo()

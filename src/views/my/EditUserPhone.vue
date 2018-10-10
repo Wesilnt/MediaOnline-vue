@@ -85,7 +85,10 @@
     methods: {
       ...mapActions(['init', 'directSendMobileCode', 'validateMobileCode']),
       sendCode() {
-        if (!this.clickable) return
+        if(this.mobileNumber === ''){
+          this.$toast('请输入手机号码')
+          return
+        }
         if (!isPhoneNumber(this.mobileNumber)) {
           this.$toast('请输入正确的手机号码')
           return
