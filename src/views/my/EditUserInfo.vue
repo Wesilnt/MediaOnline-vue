@@ -107,19 +107,9 @@ export default {
   },
   watch: {
     loading: function(loading) {
-      let num = 1
-      let that = this
-      if (loading === true) {
-        this.showLoading = true
-        var timer = setInterval(function() {
-          num--
-          if (num === 0) {
-            that.$router.back(-1)
-            clearInterval(timer)
-          }
-        }, 1000)
-      } else {
-        this.showLoading = false
+
+      if(this.loading === false) {
+        this.$router.history.go(-2)
       }
     }
   },
@@ -148,15 +138,12 @@ export default {
       }
     },
     identityChoice: function(type) {
-      console.log(type)
       this.identity = type
     },
     genderChoice: function(type) {
-      console.log(type)
       this.gender = type
     },
     onChange(picker, value, index) {
-      console.log(value)
       this.grade = getGradeNum(value)
     }
   }

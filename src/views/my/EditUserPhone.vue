@@ -47,6 +47,8 @@
 
 <script>
   import { createNamespacedHelpers } from 'vuex'
+  import { isPhoneNumber } from "../../utils/utils";
+
   const { mapState, mapActions } = createNamespacedHelpers('mobileData')
   export default {
     name: 'EditUserPhone',
@@ -81,22 +83,23 @@
       }
     },
     methods: {
-      ...mapActions(['init', 'sendMobileCode', 'validateMobileCode']),
+      ...mapActions(['init', 'directSendMobileCode', 'validateMobileCode']),
       sendCode() {
         if (!this.clickable) return
-        if (this.mobileNumber === '') {
-          this.$toast('请输入手机号')
+        if (!isPhoneNumber(this.mobileNumber)) {
+          this.$toast('请输入正确的手机号码')
           return
         }
-        this.sendMobileCode({mobileNo: this.mobileNumber})
+        this.isInputPhone = false
+        this.directSendMobileCode({mobileNo: this.mobileNumber})
         this.countDown()
       },
       onConfirm() {
-        if (this.validateCode === '') {
+        if (this.validCode === '') {
           this.$toast('请输入正确的验证码')
           return
         }
-        this.validateMobileCode({ code: this.validateCode })
+        this.validateMobileCode({ code: this.validCode })
       },
       getValidCode() {
         this.showGetValidCode = false
@@ -106,8 +109,6 @@
       handleNext: function () {
         if(this.isInputPhone === true) {
           this.sendCode()
-          this.isInputPhone = false
-          this.countDown()
         } else {
           this.onConfirm()
         }
@@ -158,6 +159,7 @@
                     border-bottom-color: #ffa32f;
                     border-bottom-width: 1px;
                     font-size: 36px;
+                    border-radius: 0px;
                 }
                 &-text{
                     font-size: 36px;

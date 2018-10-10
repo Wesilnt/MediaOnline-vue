@@ -191,3 +191,13 @@ export function throttle(func, wait, options) {
     return result
   }
 }
+/**
+ * 手机号码校验
+ */
+export function isPhoneNumber( value) {
+  if (value && (!(/^[1][34578]\d{9}$/).test(value) || !(/^[1-9]\d*$/).test(value) || value.length !== 11)) {
+    return false
+  } else {
+    return true
+  }
+}

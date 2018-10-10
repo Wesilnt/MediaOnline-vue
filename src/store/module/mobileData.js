@@ -50,6 +50,14 @@ export default {
         if (totalTime <= 0) clearInterval(interval)
       }, 1000)
     },
+    async directSendMobileCode({ commit }, params) {
+
+      const res = await sendMobileCode(params)
+      if (!res) {
+        await commit('endSendCode')
+        return
+      }
+    },
     //校验手机验证码
     async validateMobileCode({ commit }, params) {
       const res = await validateMobileCode(params)

@@ -39,8 +39,7 @@ const userInfoData = {
       await commit('toggleLoading', {
         loading: true
       })
-      const response = await postUserInfo({ role: role, gender:gender, grade:grade})
-      if (!response)return
+      await postUserInfo({ role: role, gender:gender, grade:grade})
       commit('toggleLoading', {
         loading: false
       })
