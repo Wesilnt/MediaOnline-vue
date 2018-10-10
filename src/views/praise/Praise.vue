@@ -115,7 +115,7 @@ export default {
         this.showShare = true
         //拼装分享内容
         this.shareData = {
-          link: `/#/praise/active/${this.courseId}/${this.collectLikeId}`,
+          link: `/#/praise/active/${this.courseId}/${this.collectLikeId}?columnType=${this.columnType}`,
           title: `我是${user.nickName}, 我想免费领取《${this.praiseDetail?this.praiseDetail.course.name:'国学课'}》,求助攻~`,
           desc: '你一定会爱上国学课...',
         }

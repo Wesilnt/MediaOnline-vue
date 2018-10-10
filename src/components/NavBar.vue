@@ -34,6 +34,7 @@ export default {
     togglePath: function(path) {
       if (path !== this.currentPath) {
         this.currentPath = path
+
         this.$router.push({ path })
       }
     }
@@ -62,7 +63,7 @@ export default {
   flex-grow: 1;
   padding: 10px 0;
   position: relative;
-  transition: color 0.3s linear .3s;
+  transition: color 0.3s linear 0.3s;
   &:not(:last-child):after {
     content: '';
     position: absolute;
