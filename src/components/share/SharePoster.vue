@@ -51,19 +51,6 @@ export default {
     this.ctx.msImageSmoothingEnabled = false
     this.ctx.imageSmoothingEnabled = false 
      this.getUserInfo().then(()=> this.drawBottomMap())
-    // if (this.type == 'praise') {
-    //   this.getPosterforPraise({ collectLikeId: this.id }).then(res => {
-    //     this.drawBottomMap()
-    //   })
-    // } else {
-      // this.getPosterInfo({
-      //   busId: this.id,
-      //   pageUrl: 'http://t.shbaoyuantech.com/#/audio/audioplay'
-      // }).then(res => {
-      //   console.log('海报信息：', this.poster)
-      // })
-    //     this.drawBottomMap()
-    // }
   },
   methods: {
     ...mapActions(['getUserInfo','getPosterInfo', 'getPosterforPraise']),

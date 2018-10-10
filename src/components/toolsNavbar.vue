@@ -28,12 +28,14 @@
 <script>
 import Share from './share/Share'
 import PhoneVerif from './PhoneVerif'
-import { createNamespacedHelpers, mapActions as rootActions } from 'vuex'
-const {
-  mapState,
-  mapActions,
-  mapMutations
-} = createNamespacedHelpers('videoColumnDetailData/groupManagerData')
+import {
+  createNamespacedHelpers,
+  mapActions as rootActions,
+  mapGetters
+} from 'vuex'
+const { mapState, mapActions, mapMutations } = createNamespacedHelpers(
+  'videoColumnDetailData/groupManagerData'
+)
 export default {
   name: 'ToolsNavbar',
   data() {
@@ -41,7 +43,7 @@ export default {
       //是否显示分享
       sharePageShow: false,
       //分享内容
-      shareData: null
+      shareData: null,
     }
   },
   props: {
@@ -78,10 +80,7 @@ export default {
         this.toggolePraiseFlag(false)
         this.$router.push({
           name: 'Praise',
-          params: {
-            courseId: this.$route.params.courseId,
-            collectLikeId: newVal
-          },
+          params: {courseId: this.$route.params.courseId,collectLikeId: newVal},
           query: { columnType: this.serviceType }
         })
       }
@@ -108,7 +107,8 @@ export default {
       'courseId', //专栏ID
       'startPraiseFlag',
       'serviceType'
-    ])
+    ]),
+    ...mapGetters(['courseName'])
   },
   filters: {
     formatPrice: function(price) {
@@ -138,10 +138,7 @@ export default {
     },
     //点击原价购买按钮
     clickOriginPriceBtn() {
-      let params = {
-        courseId: this.courseId,
-        payType: 0
-      }
+      let params = {courseId: this.courseId,payType: 0}
       switch (this.userAccessStatus) {
         //没有购买和集赞行为
         case 0:
@@ -159,16 +156,10 @@ export default {
       let params = null
       if (this.isOwner) {
         //发起拼团
-        params = {
-          courseId: this.courseId,
-          payType: 1
-        }
+        params = {courseId: this.courseId, payType: 1}
       } else {
         //参与拼团
-        params = {
-          groupBuyId: this.groupBuyId,
-          payType: 2
-        }
+        params = {groupBuyId: this.groupBuyId, payType: 2}
       }
       switch (this.userAccessStatus) {
         case -3:
@@ -197,18 +188,15 @@ export default {
           //   desc: '这是一个神奇的视频',
           //   imgUrl: ''
           // }
-          // this.shareData = shareData
-          this.getUserInfo().then(user => {
-            this.shareData = {
-              link: `/#/videoColumnDetail/${this.courseId}?groupBuyId=${
-                this.groupBuyId
-              }`,
-              title: `我是${user.nickName}, 我参加了购买《${
-                this.audio ? this.audio.title : '国学课'
-              }》拼团活动,快来跟我一起完成拼团吧。`,
-              desc: '你一定会爱上国学课...'
-            }
-          })
+          // this.shareData = shareData 
+          // this.getUserInfo().then(user => {
+          //   this.shareData = {
+          //     link: `/#/videoColumnDetail/${this.courseId}?groupBuyId=${this.groupBuyId}`, 
+          //     title: `我是${user.nickName}, 我参加了购买《${this.courseName}》拼团活动,快来跟我一起完成拼团吧。`,
+          //     desc: '你一定会爱上这个视频专栏的...' 
+          //   }
+          // })
+          this.setShareInfo() 
           break
       }
     },
@@ -260,6 +248,30 @@ export default {
     cancelSharePage() {
       this.sharePageShow = false
     },
+    setShareInfo(){
+     const link = ""
+      switch (this.serviceType) {
+        case 'OnlineCourse':
+          link = `/#/videoColumnDetail/${this.courseId}?groupBuyId=${this.groupBuyId}`
+          break
+        case 'OnlineVision':
+          link =`/home/visionDetail/${this.courseId}`
+          break
+        case 'Readings':
+           link= `/home/readings/book/${this.courseId}?playType='Readings'`
+          break
+       default:
+          link =`/home/freezone`
+          break
+      } 
+      this.getUserInfo().then(user => {
+          this.shareData = {
+            link, 
+            title: `我是${user.nickName}, 我参加了购买《${this.courseName}》拼团活动,快来跟我一起完成拼团吧。`,
+            desc: '你一定会爱上这个视频专栏的...' 
+          }
+      })
+    },
     gotoInfoPage() {
       const { id } = this.freeLesson[0]
       switch (this.serviceType) {
@@ -275,14 +287,14 @@ export default {
           this.$router.push({
             name: 'AudioPlay',
             params: { id },
-            query: { playType: this.serviceType }
+            query: { playType: this.serviceType,courseName:this.courseName }
           })
           break
         case 'Readings':
           this.$router.push({
             name: 'AudioPlay',
             params: { id },
-            query: { playType: this.serviceType }
+            query: { playType: this.serviceType ,courseName:this.courseName}
           })
           break
       }
@@ -331,22 +343,22 @@ export default {
   background-color: #efefef;
 }
 .toolbar-price {
-  // margin-left: 28px;
   margin-right: 28px;
   line-height: 32px;
 }
 .toolbar-price-active {
+  height: 80px;
   flex-grow: 1;
   background: linear-gradient(
     to right,
     rgb(254, 119, 0) 0,
     rgb(255, 79, 5) 100%
   );
+    border-radius: 80px;
+    padding: 10px 0;
   .toolbar-price-num {
     color: #fff;
   }
-
-  border-radius: 80px;
   .under-text {
     color: #fff;
   }

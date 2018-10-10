@@ -104,6 +104,12 @@ const visionData = {
             state.isLoading = isLoading;
         }
     },
+    getters:{
+        //获取专栏名称
+        courseName(state){
+            return state.visionDetail.name
+        }
+    },
     modules:{
       groupManagerData
     }

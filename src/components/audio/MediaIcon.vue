@@ -29,7 +29,8 @@ export default {
   ,'audioId'
   ,'forceHidenFloat'
   ,'showFloat'
-  , 'playType'])},
+  , 'playType'
+  , 'courseName'])},
   methods: {
     //触摸开始
     _touchStart: function(e) {
@@ -45,7 +46,7 @@ export default {
       left = left < 0 ? 0 : left
       top = top < 0 ? 0 : top
       let maxLeft = this.windowWidth - this.width
-      let maxTop =   this.windowHeight - this.width  
+      let maxTop =   (this.windowHeight - this.width ) * 3 / 4 
       left = left > maxLeft    ? maxLeft  : left
       top =  top > maxTop   ? maxTop : top
       this.x = left + 'px'
@@ -58,7 +59,10 @@ export default {
       let offsetX = e.changedTouches[0].clientX - this.startX
       let offsetY = e.changedTouches[0].clientY - this.startY
       if (offsetTime < 800 && Math.abs(offsetX) < 50 && Math.abs(offsetY) < 50) {
-        this.$router.push({name:'AudioPlay',params:{id:this.audioId},query:{playType:this.playType}})
+        this.$router.push({
+          name:'AudioPlay',
+          params:{id:this.audioId},
+          query:{playType:this.playType,courseName:this.courseName}})
       }
       e.preventDefault()
     },

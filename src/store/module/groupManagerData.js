@@ -17,7 +17,6 @@ const groupManagerData = {
         achieveOriginBuy:false, //是否完成原价购买
         isShowMobileDialog:false, //是否弹出手机号收集框
 
-
         profilePic:'',//专栏头图
         courseId:0,//专栏ID
         freeLesson:{},//试听对象  type字段用来区分点击试听按钮跳往哪里  freeLessonList是当前专栏的免费试听课程数组
@@ -33,13 +32,19 @@ const groupManagerData = {
         startPraiseFlag:false,
 
         //业务类型
-        serviceType:""    //"FreeZone" "OnlineVision" "OnlineCourse" "Readings"
+        serviceType:"",    //"FreeZone" "OnlineVision" "OnlineCourse" "Readings"
+
+        isLoading:false,   //发起拼团  原价购买  发起集赞 防止重复操作
     },
     getters:{
-        // //专栏头图
+        //专栏头图
         buyCount(state,getters,{ videoColumnDetailData }) {
             return videoColumnDetailData.buyCount
         },
+        //专栏名称
+        courseName(state,getters,{ videoColumnDetailData }) {
+            return videoColumnDetailData.courseName
+        }
     },
     mutations:{
         bindCollectLikeId(state,collectLikeId) {
@@ -81,6 +86,10 @@ const groupManagerData = {
             state.freeLesson = freeLesson
             state.serviceType = serviceType
             console.log("serviceType:",serviceType)
+        },
+        
+        setLoading(state ,isLoading){
+          state.isLoading = isLoading
         }
     },
     actions:{
@@ -229,8 +238,7 @@ const groupManagerData = {
                         "isShow":true
                     }                
                 break
-                case 1009:
-                    console.log('集赞中')
+                case 1009: 
                     isShowGroupBuy = false
                     toolsObject = {
                         "originPrice":'',
@@ -474,13 +482,19 @@ const groupManagerData = {
         },
 
         //验证是否完成了公众号授权
-        async checkoutAuthorrization({dispatch},payload){
+        async checkoutAuthorrization({state,commit,dispatch},payload){
+            if(state.isLoading) {
+              Toast("请不要连续点击...")
+              return
+            }
+            commit('setLoading', true)   //锁住  拼团  集赞中...
             const result = await wechatSubscribed()
             console.log('是否关注公众号')
             console.log(result)
             if(result && result==1){
                 dispatch('checkoutShowTeleDialog',payload)
             }else{
+                commit('setLoading', false)
                 //跳转去关注公众号
                 window.location.href = WECHAT_SUBSCRIPTION_URL
             }
@@ -492,7 +506,10 @@ const groupManagerData = {
             console.log('本地存储的手机号 = ',telephone)
             if(!telephone){
                 const result = await getMyUserInfo()
-                if(result==null) return
+                if(result==null) {
+                  commit('setLoading', false)
+                  return
+                }
                 let phoneNum = result.mobileNo
                 if(phoneNum){
                     window.localStorage.setItem('telephone',phoneNum) 
@@ -507,15 +524,14 @@ const groupManagerData = {
                     }                   
                  
                 }else{
+                    commit('setLoading', false)
                     console.log('弹出手机号收集框')
                     commit('bindIsShowMobileDialog',true)
                 }
             }else {
                 if(payload.payType == 3){
                     //发起集赞
-                    let params = {
-                        courseId: payload.courseId
-                    }
+                    let params = { courseId: payload.courseId }
                     dispatch('startCollectLike',params)
                 }else{
                     dispatch('beginPayment',payload)
@@ -551,18 +567,20 @@ const groupManagerData = {
         },
 
         //原价购买
-        async unlockCourse({dispatch},payload) {
+        async unlockCourse({commit,dispatch},payload) {
             const result = await unlockCourse(payload)
             console.log('原价购买成功')
             console.log(result)
+            commit('setLoading', false)
             if(result == null) return
             dispatch("getPayment",{result,payType:0})
         },
         //发起拼团
-        async startGroupBuy({dispatch},payload) {
+        async startGroupBuy({commit,dispatch},payload) {
             const result = await startGroupBuy(payload)
             console.log('发起拼团成功')
             console.log(result)
+            commit('setLoading', false)
             if(result == null) return
             dispatch("getPayment",{result,payType:1})
         },
@@ -571,14 +589,16 @@ const groupManagerData = {
             const result = await joinGroupBuy(payload)
             console.log('参与拼团成功')
             console.log(result)
+            commit('setLoading', false)
             if(result == null) return
             dispatch('getPayment',{result,payType:2})
         },
         //发起集赞
-        async startCollectLike({dispatch,commit},payload) {
-            const result = await startCollectLike(payload)
-            console.log('发起集赞成功')
+        async startCollectLike({state,dispatch,commit},payload) {
+            const result = await startCollectLike(payload) 
+            commit('setLoading', false)
             if (result == null) return
+            console.log('发起集赞成功')
             commit("toggolePraiseFlag",true)
             dispatch('updateFatherData') 
            
@@ -593,89 +613,89 @@ const groupManagerData = {
         //调起微信支付
         async getPayment({commit,dispatch},{result,payType}){
            //微信网页开发支付接口
-           let result0= await wxConfig({'url' : window.location.href})
-           let config = result0.js_config
-           wx.config({
-                debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-                appId: config.appid, // 必填，企业号的唯一标识，此处填写企业号corpid
-                timestamp:config.timestamp , // 必填，生成签名的时间戳
-                nonceStr: config.nonceStr, // 必填，生成签名的随机串
-                signature: config.signature,// 必填，签名，见附录1
-                jsApiList: ['chooseWXPay'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2 
-           })
-            // dispatch('wxPayment',{
-            //     timestamp: result.timestamp,
-            //     nonceStr: result.nonceStr, // 支付签名随机串，不长于 32 位
-            //     package: result.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
-            //     signType: 'MD5', // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
-            //     paySign: result.paySign, // 支付签名
-            //     success: function (res) {
-            //         // 支付成功后的回调函数
-            //         console.log("支付成功"); 
-            //         console.log(payType)
-            //         switch(payType){
-            //             case 0:
-            //                 console.log('原价购买支付成功~~~')
-            //                 commit('bindAchieveOriginBuy',true)
-            //             break
-            //             case 1:
-            //                 console.log('发起拼团支付成功~~~')
-            //                 //调起拼团详情
-            //                 dispatch('getGroupBuyDetail',result.groupBuyId)
-            //             break
-            //             case 2:
-            //                 console.log('参与拼团支付成功~~~')
-            //                 //调起拼团详情
-            //                 dispatch('getGroupBuyDetail',result.groupBuyId)
-            //             break
-            //         }
+        //    let result0= await wxConfig({'url' : window.location.href})
+        //    let config = result0.js_config
+        //    wx.config({
+        //         debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+        //         appId: config.appid, // 必填，企业号的唯一标识，此处填写企业号corpid
+        //         timestamp:config.timestamp , // 必填，生成签名的时间戳
+        //         nonceStr: config.nonceStr, // 必填，生成签名的随机串
+        //         signature: config.signature,// 必填，签名，见附录1
+        //         jsApiList: ['chooseWXPay'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2 
+        //    })
+            dispatch('wxPayment',{
+                timestamp: result.timestamp,
+                nonceStr: result.nonceStr, // 支付签名随机串，不长于 32 位
+                package: result.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
+                signType: 'MD5', // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+                paySign: result.paySign, // 支付签名
+                success: function (res) {
+                    // 支付成功后的回调函数
+                    console.log("支付成功"); 
+                    console.log(payType)
+                    switch(payType){
+                        case 0:
+                            console.log('原价购买支付成功~~~')
+                            commit('bindAchieveOriginBuy',true)
+                        break
+                        case 1:
+                            console.log('发起拼团支付成功~~~')
+                            //调起拼团详情
+                            dispatch('getGroupBuyDetail',result.groupBuyId)
+                        break
+                        case 2:
+                            console.log('参与拼团支付成功~~~')
+                            //调起拼团详情
+                            dispatch('getGroupBuyDetail',result.groupBuyId)
+                        break
+                    }
                    
-            //     },
-            //     fail : function (errmsg) {
-            //         console.log(errmsg)
-            //     }
-            // })      
-            wx.ready(function(){
-                console.log(result)
-                    wx.chooseWXPay({
-                        timestamp: result.timestamp,
-                        nonceStr: result.nonceStr, // 支付签名随机串，不长于 32 位
-                        package: result.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
-                        signType: 'MD5', // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
-                        paySign: result.paySign, // 支付签名
-                        success: function (res) {
-                            // 支付成功后的回调函数
-                            console.log("支付成功"); 
-                            console.log(payType)
-                            switch(payType){
-                                case 0:
-                                    console.log('原价购买支付成功~~~')
-                                    commit('bindAchieveOriginBuy',true)
-                                break
-                                case 1:
-                                    console.log('发起拼团支付成功~~~')
-                                    //调起拼团详情
-                                    dispatch('getGroupBuyDetail',result.groupBuyId)
-                                break
-                                case 2:
-                                    console.log('参与拼团支付成功~~~')
-                                    //调起拼团详情
-                                    dispatch('getGroupBuyDetail',result.groupBuyId)
-                                break
-                            }
+                },
+                fail : function (errmsg) {
+                    console.log(errmsg)
+                }
+            })      
+            // wx.ready(function(){
+            //     console.log(result)
+            //         wx.chooseWXPay({
+            //             timestamp: result.timestamp,
+            //             nonceStr: result.nonceStr, // 支付签名随机串，不长于 32 位
+            //             package: result.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
+            //             signType: 'MD5', // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+            //             paySign: result.paySign, // 支付签名
+            //             success: function (res) {
+            //                 // 支付成功后的回调函数
+            //                 console.log("支付成功"); 
+            //                 console.log(payType)
+            //                 switch(payType){
+            //                     case 0:
+            //                         console.log('原价购买支付成功~~~')
+            //                         commit('bindAchieveOriginBuy',true)
+            //                     break
+            //                     case 1:
+            //                         console.log('发起拼团支付成功~~~')
+            //                         //调起拼团详情
+            //                         dispatch('getGroupBuyDetail',result.groupBuyId)
+            //                     break
+            //                     case 2:
+            //                         console.log('参与拼团支付成功~~~')
+            //                         //调起拼团详情
+            //                         dispatch('getGroupBuyDetail',result.groupBuyId)
+            //                     break
+            //                 }
                            
-                        },
-                        fail : function (errmsg) {
-                            console.log(errmsg)
-                        },
-                        complete : function (res) {
-                            if(res.errMsg == "chooseWXPay:cancel" ) {
-                                console.log('支付取消')
-                            } 
-                        }
+            //             },
+            //             fail : function (errmsg) {
+            //                 console.log(errmsg)
+            //             },
+            //             complete : function (res) {
+            //                 if(res.errMsg == "chooseWXPay:cancel" ) {
+            //                     console.log('支付取消')
+            //                 } 
+            //             }
 
-                    }); 
-           })
+            //         }); 
+        //    })
         },
         
         //从新获取专栏详情接口,刷新父组件显示

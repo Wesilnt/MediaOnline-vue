@@ -25,7 +25,7 @@
     <!-- try -->
     <div id="try" class="try bottomline">
       <DetailHeader title="试看课程" subtitle="全部" link='visionCourseList' />
-      <SingleSetList :list='visionDetail.freeLessonList' :singletype="'OnlineVision'"></SingleSetList>
+      <SingleSetList :list='visionDetail.freeLessonList' :singletype="'OnlineVision'" :coursename="courseName"></SingleSetList>
     </div>
     <!-- message -->
     <div id="message" class="message bottomline" >
@@ -66,7 +66,7 @@ import toolsNavbar from '../../components/toolsNavbar.vue'
 import GroupHeader from '../onlineCourse/components/GroupHeader'
 import videoBigimage from '../../components/videoBigimage.vue'
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions } = createNamespacedHelpers('visionData')
+const { mapState, mapActions ,mapGetters} = createNamespacedHelpers('visionData')
 export default {
   components: {
     DetailHeader,
@@ -107,7 +107,7 @@ export default {
     })
     this.getCommentList(this.courseId)
   },
-  computed: mapState(['visionDetail', 'commentList']),
+  computed: {...mapGetters(['courseName']),...mapState(['visionDetail', 'commentList'])},
   methods: {
     ...mapActions(['getVisionDetail', 'getCommentList']),
     ellipsis() {

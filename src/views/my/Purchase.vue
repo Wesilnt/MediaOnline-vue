@@ -117,8 +117,10 @@ export default {
       // 横竖显示切换
       this.isVertical = !this.isVertical
     },
-    toPlayAudio: function(id) {
-      this.$router.push({ name: 'AudioPlay', params: { id } ,query:{playType:"OnlineVision"}})
+    toPlayAudio: function(item) {
+      this.$router.push({ name: 'AudioPlay'
+      , params: { id:item.newestLessonId }
+       ,query:{playType:"OnlineVision",courseName:item.name}})
     },
     toPlayVideo: function(id) {
       console.log(id)
@@ -212,7 +214,6 @@ export default {
       background-image: url('../../assets/images/my_data_empty.png');
     }
     &-warn {
-
       margin: 40px 0;
     }
   }

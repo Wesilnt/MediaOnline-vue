@@ -14,7 +14,7 @@ export default {
         bookDetail: {}, //书详情
         singleSetList: [], //单集列表
         singleFinished:false,
-        singleLoaing:false,
+        singleLoaing:false
     },
     mutations: {
         initData(state,courseId){
@@ -123,6 +123,11 @@ export default {
                 description:state.bookDetail.description,            //内容介绍
             }
         },
+        //获取专栏名称
+        courseName(state){
+            return state.bookDetail.name
+        },
+
       playingId:(state,getters,rootState)=>rootState.audiotaskData.audioDetail.id
     },
     modules:{

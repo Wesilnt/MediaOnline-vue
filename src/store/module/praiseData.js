@@ -79,12 +79,8 @@ export default {
     async getCollectDetail({ state, commit,dispatch }, params) {
       const res = await getCollectDetail(params)
       console.log("集赞详情:",res)
-      commit('bindPraiseDetail', res)
-      await dispatch('getUserInfo',null,{root:true})
-      .then(user=>{
-        commit('bindUserInfo', user) 
-      })
-      //
+      await dispatch('getUserInfo',null,{root:true}).then(user=>commit('bindUserInfo', user))
+      commit('bindPraiseDetail', res) 
      if (res.status != 1202) return
      await commit('destroyInterval')
       let rollerInterval = setInterval(() => commit('setRollerInterval'), 7000)
@@ -158,6 +154,8 @@ export default {
         praised = !praised && item.id == state.userId
       })
       isCurrentUser = state.userId == state.praiseDetail.starterUid
+      console.log('state.userId',state.userId)
+      console.log('state.praiseDetail.starterUid',state.praiseDetail.starterUid)
       alreadyCount = state.praiseDetail.alreadyCount
       let code = state.praiseDetail.code ? parseInt(state.praiseDetail.code) : 0
       let status = state.praiseDetail.status ? parseInt(state.praiseDetail.status): 0

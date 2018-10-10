@@ -17,6 +17,7 @@ export default {
     playMode: 'order', // order:顺序播放  single：单曲播放
     isPlaying: false, //是否正在播放
     playType: "FreeZone", // //RreeZone 免费专区  OnlineVision 在线视野  Readings 读书会
+    courseName:"", //专栏名
     throttle: null,
     statusFunc: (commit, status) => commit('statusUpdate', status),
     saveProgress: (id, currentTime, maxTime) => {
@@ -24,11 +25,15 @@ export default {
     }
   },
   mutations: {
+    //绑定专栏名
+    bindCourseName(state,courseName){
+      state.courseName = courseName
+    },
     initThrottle(state) {
       state.throttle = throttle(state.saveProgress, 1000)
     },
     //同步音频数据
-    bindAudioDetail(state, res) {
+    bindAudioDetail(state, {res}) {
       state.audioDetail = res
       state.audioUrl = res.audioUrl
       state.audioId = res.id
@@ -92,12 +97,10 @@ export default {
         dispatch('postLearnRate', { lessonId, listenTime })
       } else {
         //更新本地缓存
-        let data = JSON.stringify({
-          currentTIme: res.learnTime,
-          maxTime: res.totalTime
-        })
+        let data = JSON.stringify({currentTIme: res.learnTime,maxTime: res.totalTime})
         localStorage.setItem('learntime-' + res.id, data)
       }
+      console.log(res)
       commit('bindAudioDetail', res)
       return res
     },
