@@ -42,11 +42,7 @@ export default {
   },
   actions: {
     //获取评论列表
-    async getCommentList(
-      { state, commit },
-      { regionId, regionType, isLoadMore }
-    ) {
-      if (state.finished || state.loading) return
+    async getCommentList({ state, commit },{ regionId, regionType, isLoadMore }) {
       await commit('toggleLoading', { loading: true })
       let currentPage = isLoadMore ? state.currentPage + 1 : 1
       let params = {
