@@ -43,7 +43,7 @@ export default {
       //是否显示分享
       sharePageShow: false,
       //分享内容
-      shareData: null
+      shareData: null,
     }
   },
   props: {
@@ -80,10 +80,7 @@ export default {
         this.toggolePraiseFlag(false)
         this.$router.push({
           name: 'Praise',
-          params: {
-            courseId: this.$route.params.courseId,
-            collectLikeId: newVal
-          },
+          params: {courseId: this.$route.params.courseId,collectLikeId: newVal},
           query: { columnType: this.serviceType }
         })
       }
@@ -141,10 +138,7 @@ export default {
     },
     //点击原价购买按钮
     clickOriginPriceBtn() {
-      let params = {
-        courseId: this.courseId,
-        payType: 0
-      }
+      let params = {courseId: this.courseId,payType: 0}
       switch (this.userAccessStatus) {
         //没有购买和集赞行为
         case 0:
@@ -162,16 +156,10 @@ export default {
       let params = null
       if (this.isOwner) {
         //发起拼团
-        params = {
-          courseId: this.courseId,
-          payType: 1
-        }
+        params = {courseId: this.courseId, payType: 1}
       } else {
         //参与拼团
-        params = {
-          groupBuyId: this.groupBuyId,
-          payType: 2
-        }
+        params = {groupBuyId: this.groupBuyId, payType: 2}
       }
       switch (this.userAccessStatus) {
         case -3:
@@ -200,14 +188,15 @@ export default {
           //   desc: '这是一个神奇的视频',
           //   imgUrl: ''
           // }
-          // this.shareData = shareData
-          this.getUserInfo().then(user => {
-            this.shareData = {
-              link: `/#/videoColumnDetail/${this.courseId}?groupBuyId=${this.groupBuyId}`, 
-              title: `我是${user.nickName}, 我参加了购买《${this.courseName}》拼团活动,快来跟我一起完成拼团吧。`,
-              desc: '你一定会爱上这个视频专栏的...'
-            }
-          })
+          // this.shareData = shareData 
+          // this.getUserInfo().then(user => {
+          //   this.shareData = {
+          //     link: `/#/videoColumnDetail/${this.courseId}?groupBuyId=${this.groupBuyId}`, 
+          //     title: `我是${user.nickName}, 我参加了购买《${this.courseName}》拼团活动,快来跟我一起完成拼团吧。`,
+          //     desc: '你一定会爱上这个视频专栏的...' 
+          //   }
+          // })
+          this.setShareInfo() 
           break
       }
     },
@@ -258,6 +247,30 @@ export default {
     //邀请好友拼团
     cancelSharePage() {
       this.sharePageShow = false
+    },
+    setShareInfo(){
+     const link = ""
+      switch (this.serviceType) {
+        case 'OnlineCourse':
+          link = `/#/videoColumnDetail/${this.courseId}?groupBuyId=${this.groupBuyId}`
+          break
+        case 'OnlineVision':
+          link =`/home/visionDetail/${this.courseId}`
+          break
+        case 'Readings':
+           link= `/home/readings/book/${this.courseId}?playType='Readings'`
+          break
+       default:
+          link =`/home/freezone`
+          break
+      } 
+      this.getUserInfo().then(user => {
+          this.shareData = {
+            link, 
+            title: `我是${user.nickName}, 我参加了购买《${this.courseName}》拼团活动,快来跟我一起完成拼团吧。`,
+            desc: '你一定会爱上这个视频专栏的...' 
+          }
+      })
     },
     gotoInfoPage() {
       const { id } = this.freeLesson[0]

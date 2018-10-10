@@ -32,7 +32,9 @@ const groupManagerData = {
         startPraiseFlag:false,
 
         //业务类型
-        serviceType:""    //"FreeZone" "OnlineVision" "OnlineCourse" "Readings"
+        serviceType:"",    //"FreeZone" "OnlineVision" "OnlineCourse" "Readings"
+
+        isLoading:false,   //发起拼团  原价购买  发起集赞 防止重复操作
     },
     getters:{
         //专栏头图
@@ -84,6 +86,10 @@ const groupManagerData = {
             state.freeLesson = freeLesson
             state.serviceType = serviceType
             console.log("serviceType:",serviceType)
+        },
+        
+        setLoading(state ,isLoading){
+          state.isLoading = isLoading
         }
     },
     actions:{
@@ -476,13 +482,19 @@ const groupManagerData = {
         },
 
         //验证是否完成了公众号授权
-        async checkoutAuthorrization({dispatch},payload){
+        async checkoutAuthorrization({state,commit,dispatch},payload){
+            if(state.isLoading) {
+              Toast("请不要连续点击...")
+              return
+            }
+            commit('setLoading', true)   //锁住  拼团  集赞中...
             const result = await wechatSubscribed()
             console.log('是否关注公众号')
             console.log(result)
             if(result && result==1){
                 dispatch('checkoutShowTeleDialog',payload)
             }else{
+                commit('setLoading', false)
                 //跳转去关注公众号
                 window.location.href = WECHAT_SUBSCRIPTION_URL
             }
@@ -494,7 +506,10 @@ const groupManagerData = {
             console.log('本地存储的手机号 = ',telephone)
             if(!telephone){
                 const result = await getMyUserInfo()
-                if(result==null) return
+                if(result==null) {
+                  commit('setLoading', false)
+                  return
+                }
                 let phoneNum = result.mobileNo
                 if(phoneNum){
                     window.localStorage.setItem('telephone',phoneNum) 
@@ -509,15 +524,14 @@ const groupManagerData = {
                     }                   
                  
                 }else{
+                    commit('setLoading', false)
                     console.log('弹出手机号收集框')
                     commit('bindIsShowMobileDialog',true)
                 }
             }else {
                 if(payload.payType == 3){
                     //发起集赞
-                    let params = {
-                        courseId: payload.courseId
-                    }
+                    let params = { courseId: payload.courseId }
                     dispatch('startCollectLike',params)
                 }else{
                     dispatch('beginPayment',payload)
@@ -553,18 +567,20 @@ const groupManagerData = {
         },
 
         //原价购买
-        async unlockCourse({dispatch},payload) {
+        async unlockCourse({commit,dispatch},payload) {
             const result = await unlockCourse(payload)
             console.log('原价购买成功')
             console.log(result)
+            commit('setLoading', false)
             if(result == null) return
             dispatch("getPayment",{result,payType:0})
         },
         //发起拼团
-        async startGroupBuy({dispatch},payload) {
+        async startGroupBuy({commit,dispatch},payload) {
             const result = await startGroupBuy(payload)
             console.log('发起拼团成功')
             console.log(result)
+            commit('setLoading', false)
             if(result == null) return
             dispatch("getPayment",{result,payType:1})
         },
@@ -573,14 +589,16 @@ const groupManagerData = {
             const result = await joinGroupBuy(payload)
             console.log('参与拼团成功')
             console.log(result)
+            commit('setLoading', false)
             if(result == null) return
             dispatch('getPayment',{result,payType:2})
         },
         //发起集赞
-        async startCollectLike({dispatch,commit},payload) {
-            const result = await startCollectLike(payload)
-            console.log('发起集赞成功')
+        async startCollectLike({state,dispatch,commit},payload) {
+            const result = await startCollectLike(payload) 
+            commit('setLoading', false)
             if (result == null) return
+            console.log('发起集赞成功')
             commit("toggolePraiseFlag",true)
             dispatch('updateFatherData') 
            
