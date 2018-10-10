@@ -36,10 +36,7 @@ export default {
       state.rollerFlag = !state.rollerFlag
     },
     //设置时间提示定时器
-    setTimerInterval(
-      state,
-      { timerInterval, rollerInterval, isEnded, remainTime }
-    ) {
+    setTimerInterval( state, { timerInterval, rollerInterval, isEnded, remainTime } ) {
       if (isEnded) {
         clearInterval(state.timerInterval)
         clearInterval(state.rollerInterval)
