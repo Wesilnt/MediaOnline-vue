@@ -195,7 +195,6 @@ export default {
             }`,
             title: '视频分享',
             desc: '这是一个神奇的视频',
-            imgUrl: ''
           }
           this.shareData = shareData
           break
