@@ -7,6 +7,7 @@ export async function getToken() {
   const result = await request.post('/auth/wechat/get-wechat-auth-link', {
     originUrl:originUrl + originHref
   })
+    alert(result.wechatAuthUrl)
   if (IS_ONLINE) window.location.href = result.wechatAuthUrl
   return result
 }

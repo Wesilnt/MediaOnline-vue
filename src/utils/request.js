@@ -116,11 +116,13 @@ function request(url, options) {
     .catch(e => {
       const { dispatch } = store
       const status = e.name
-        alert(e)
+
       if (status === '401-logout') {
+        alert('logout' + e)
         return dispatch('getAccessToken')
       }
-      if (status == 401) {
+      if (status === 401) {
+        alert('401' + e)
         return dispatch('getAccessToken')
       }
       if (status === 403) {
