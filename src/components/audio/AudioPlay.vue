@@ -97,20 +97,14 @@ export default {
       shareData: null, //分享数据
       lessonId: this.$route.params.id,
       hiddenDraft: this.$route.query.hiddenDraft,
-      playType: this.$route.query.playType, //播放类型 FreeZone 免费专区  OnlineVision 在线视野  Readings 读书会
+      playType: this.$route.query.playType,       //播放类型 FreeZone 免费专区  OnlineVision 在线视野  Readings 读书会
+      courseName: this.$route.query.courseName,   //专栏名
       isInit: true,
-      play: true,
-      isSingle: false, //是否单个循环
-      popupVisible: false, //是否显示音频列表弹框
-      playIndex: 0, //播放第几首
+      play: true, 
+      popupVisible: false, //是否显示音频列表弹框 
       showShare: false, //是否显示分享框
       touching: false, //slider触摸
-      progress: 0,
-      rangeValue: 0,
-      cover: '',
-      progressColor: '#ff0000',
-      display: false,
-      touchStart: 0
+      progress: 0,     
     }
   },
   computed: {
@@ -138,6 +132,7 @@ export default {
   },
   created() {
     this.isInit = true 
+    this.bindCourseName(this.courseName)
     this.toggleFloatButton(false)  //隐藏悬浮按钮
     this.playAudio({ lessonId: this.lessonId ,playType:this.playType})
   },
@@ -152,7 +147,7 @@ export default {
   },
   methods: {
     ...rootActions(['getUserInfo']),
-    ...mapMutations(['setFloatButton']),
+    ...mapMutations(['bindCourseName','setFloatButton']),
     ...mapActions([
       'getAudioDetail',
       'postFavorite',
@@ -164,12 +159,7 @@ export default {
       'pre',
       'next',
       'toggleFloatButton'
-    ]),
-    //进度条拖动 OTAwOWY1ZjgtZTJiYy00Y2IwLTk4ZDktNzIxYjMyMTUzYzU2
-    sliderChange(value) {
-      console.log(value)
-      console.log(this.$refs.content)
-    },
+    ]), 
     //拖动进度改变进度
     onInputChange(e) {
       this.progress = e.target.value
@@ -200,17 +190,11 @@ export default {
     },
     //查看文稿
     onDraft() {
-      this.$router.push({
-        name: 'AudioDraft',
-        params: { lessonid: this.lessonId }
-      })
+      this.$router.push({name: 'AudioDraft',params: { lessonid: this.lessonId }})
     },
     //评论
     toComment() {
-      this.$router.push({
-        name: 'AudioCmts',
-        params: { lessonid: this.lessonId }
-      })
+      this.$router.push({name: 'AudioCmts',params: { lessonid: this.lessonId }})
     },
     //分享
     onShare() { 
@@ -218,7 +202,7 @@ export default {
       .then(user=>{
           this.shareData = {
             link: `/#/audio/audioplay/${this.lessonId}`, 
-            title: `我是${user.nickName}, 我想免费领取《${this.audio?this.audio.title:'国学说'}》,来帮我点赞吧`,
+            title: `我是${user.nickName}, 我想免费领取《${this.courseName}》,来帮我点赞吧`,
             desc: '你一定会爱上国学课...',
           }
           this.showShare = true
@@ -271,17 +255,10 @@ export default {
       this.isInit = true
       this.popupVisible = false
       if (audio.isFree) {
-        this.$router.push({
-          name: 'AudioPlay',
-          params: { id: audio.id },
-          query:{playType:this.playType}
-        })
+        this.$router.push({ name: 'AudioPlay',params: { id: audio.id },query:{playType:this.playType}})
         this.playAudio({ lessonId: audio.id })
       } else {
-        this.$toast({
-          duration: 2000,
-          message: '你还未购买该专栏,请购买之后收听!!!'
-        })
+        this.$toast({duration: 2000, message: '你还未购买该专栏,请购买之后收听!'})
       }
     }
   },

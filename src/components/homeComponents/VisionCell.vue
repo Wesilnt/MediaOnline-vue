@@ -34,7 +34,7 @@ export default {
       this.$router.push({
         name: 'AudioPlay',
         params: { id: freeLessonList[0].id },
-        query:{playType:'OnlineVision'}
+        query:{playType:'OnlineVision',courseName:this.vision.name}
       })
     }
   }

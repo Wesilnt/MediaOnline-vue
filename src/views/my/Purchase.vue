@@ -17,7 +17,7 @@
             <div v-if="onLineVisionList.length !== 0" class="purchase-container">
                 <p class="purchase-container-head">{{tab[0]}}</p>
                 <div v-for="item in onLineVisionList" :key="item.id">
-                    <div class="purchase-container-item" @click='toPlayAudio(item.newestLessonId)'>
+                    <div class="purchase-container-item" @click='toPlayAudio(item)'>
                         <img :src='item.coverPic' class="purchase-container-item-avatar"/>
                         <div class="purchase-container-item-content">
                             <div class="purchase-container-item-content-name">{{item.name}}</div>
@@ -30,7 +30,7 @@
             <div v-if="onLineVideoList.length !== 0" class="purchase-container">
                 <p class="purchase-container-head">{{tab[1]}}</p>
                 <div v-for="item in onLineVideoList" :key="item.id">
-                    <div class="purchase-container-item" @click='toPlayVideo(item.newestLessonId)'>
+                    <div class="purchase-container-item" @click='toPlayVideo(item)'>
                         <img :src='item.coverPic' class="purchase-container-item-avatar"/>
                         <div class="purchase-container-item-content">
                             <div class="purchase-container-item-content-name">{{item.name}}</div>
@@ -43,7 +43,7 @@
             <div v-if="onLineReadList.length !== 0" class="purchase-container">
                 <p class="purchase-container-head">{{tab[2]}}</p>
                 <div v-for="item in onLineReadList" :key="item.id">
-                    <div class="purchase-container-item" @click='toPlayAudio(item.newestLessonId)'>
+                    <div class="purchase-container-item" @click='toPlayAudio(item)'>
                         <img :src='item.coverPic' class="purchase-container-item-avatar"/>
                         <div class="purchase-container-item-content">
                             <div class="purchase-container-item-content-name">{{item.name}}</div>
@@ -83,8 +83,10 @@ export default {
       this.queryList({ type: 1005, orderBy: orderBy }) //  获取在线课堂
       this.queryList({ type: 1007, orderBy: orderBy }) //  获取读书会
     },
-    toPlayAudio: function(id) {
-      this.$router.push({ name: 'AudioPlay', params: { id } ,query:{playType:"OnlineVision"}})
+    toPlayAudio: function(item) {
+      this.$router.push({ name: 'AudioPlay'
+      , params: { id:item.newestLessonId }
+       ,query:{playType:"OnlineVision",courseName:item.name}})
     },
     toPlayVideo: function(id) {
       console.log(id)
@@ -177,7 +179,6 @@ export default {
       background-image: url('../../assets/images/my_data_empty.png');
     }
     &-warn {
-
       margin: 40px 0;
     }
   }

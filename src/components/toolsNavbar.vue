@@ -201,11 +201,9 @@ export default {
           // this.shareData = shareData
           this.getUserInfo().then(user => {
             this.shareData = {
-              link: `/#/videoColumnDetail/${this.courseId}?groupBuyId=${
-                this.groupBuyId
-              }`,
+              link: `/#/videoColumnDetail/${this.courseId}?groupBuyId=${this.groupBuyId}`, 
               title: `我是${user.nickName}, 我参加了购买《${this.courseName}》拼团活动,快来跟我一起完成拼团吧。`,
-              desc: '你一定会爱上这个视频专栏的...'
+              desc: '你一定会爱上这个视频专栏的...' 
             }
           })
           break
@@ -274,14 +272,14 @@ export default {
           this.$router.push({
             name: 'AudioPlay',
             params: { id },
-            query: { playType: this.serviceType }
+            query: { playType: this.serviceType,courseName:this.courseName }
           })
           break
         case 'Readings':
           this.$router.push({
             name: 'AudioPlay',
             params: { id },
-            query: { playType: this.serviceType }
+            query: { playType: this.serviceType ,courseName:this.courseName}
           })
           break
       }
