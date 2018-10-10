@@ -259,7 +259,7 @@ export default {
       this.commentBarShow = commentBarShow
       if (inputer) {
         console.log('留言内容为 ' + inputer)
-        const lessonId = this.$route.params.lessonID
+        const {lessonId }= this.$route.params
         const params = {
           regionId: lessonId,
           regionType: 2202,

@@ -28,12 +28,14 @@
 <script>
 import Share from './share/Share'
 import PhoneVerif from './PhoneVerif'
-import { createNamespacedHelpers, mapActions as rootActions, mapGetters } from 'vuex'
-const {
-  mapState,
-  mapActions,
-  mapMutations
-} = createNamespacedHelpers('videoColumnDetailData/groupManagerData')
+import {
+  createNamespacedHelpers,
+  mapActions as rootActions,
+  mapGetters
+} from 'vuex'
+const { mapState, mapActions, mapMutations } = createNamespacedHelpers(
+  'videoColumnDetailData/groupManagerData'
+)
 export default {
   name: 'ToolsNavbar',
   data() {
@@ -203,7 +205,7 @@ export default {
             this.shareData = {
               link: `/#/videoColumnDetail/${this.courseId}?groupBuyId=${this.groupBuyId}`, 
               title: `我是${user.nickName}, 我参加了购买《${this.courseName}》拼团活动,快来跟我一起完成拼团吧。`,
-              desc: '你一定会爱上这个视频专栏的...' 
+              desc: '你一定会爱上这个视频专栏的...'
             }
           })
           break
@@ -328,22 +330,22 @@ export default {
   background-color: #efefef;
 }
 .toolbar-price {
-  // margin-left: 28px;
   margin-right: 28px;
   line-height: 32px;
 }
 .toolbar-price-active {
+  height: 80px;
   flex-grow: 1;
   background: linear-gradient(
     to right,
     rgb(254, 119, 0) 0,
     rgb(255, 79, 5) 100%
   );
+    border-radius: 80px;
+    padding: 10px 0;
   .toolbar-price-num {
     color: #fff;
   }
-
-  border-radius: 80px;
   .under-text {
     color: #fff;
   }

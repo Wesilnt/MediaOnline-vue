@@ -8,6 +8,7 @@ import {
 import { getCommentList, postComment } from '../../api/commentApi.js'
 import questionListData from './questionListData'
 import router from '../../router/router'
+import { Toast } from 'vant'
 const videoCourseDetailData = {
   namespaced: true,
   state: {
@@ -108,11 +109,11 @@ const videoCourseDetailData = {
           一:如果本地累计观看时长大于服务器存储的播放时长,就将本地的数据上传到服务器
           二:如果本地累计观看时长小于服务器存储的播放时长,就将服务器的数据拉下来并同步到本地
         */
-       console.log('代码走到这里了')
-       console.log(videoData)
+        console.log('代码走到这里了')
+        console.log(videoData)
         let loaclPlayTotalTime = Math.round(videoData.playTotalTime) || 0
         let loaclPlayPosition = Math.round(videoData.historyPlayPosition)
-        console.log('videoData = ',loaclPlayTotalTime,loaclPlayPosition)
+        console.log('videoData = ', loaclPlayTotalTime, loaclPlayPosition)
         if (
           loaclPlayTotalTime > servicePlayTotalTime &&
           loaclPlayPosition > 0
@@ -158,7 +159,7 @@ const videoCourseDetailData = {
       }
     },
     //更新自测题数据
-    updateQuestionData({state,commit},lessonId){
+    updateQuestionData({ state, commit }, lessonId) {
       /*
       自测题逻辑分为2种情况:
       一:进入单集详情页,没有播放视频.用本地记录的视频播放数据计算是否显示自测题(deblockQuestion)和播放进度(progress),具体的显示逻辑放在了答题组件里面做判断
@@ -194,7 +195,7 @@ const videoCourseDetailData = {
         courseId: result.courseId,
         currentPage: 1,
         pageSize: 10
-      }      
+      }
       dispatch('getLessonListByCourse', params)
       //获取单集评论
       const commentParams = {
@@ -253,8 +254,10 @@ const videoCourseDetailData = {
     //发布评论
     async postComment({ state, commit, dispatch }, params) {
       const res = await postComment(params)
-      console.log('发布评论成功')
-      console.log(res)
+      if (!res) {
+        return Toast('评论失败')
+      }
+      Toast('评论成功')
       // commit("postComment", res)
       // dispatch('getCommentList', {lessonId:params.regionId,isLoadMore:false})
     }
