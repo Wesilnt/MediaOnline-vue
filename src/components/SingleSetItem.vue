@@ -17,7 +17,6 @@
           </div>
         </div>
       </div>
-      <hr>
     </div> 
 </template>
 
@@ -42,15 +41,12 @@ export default {
 </script>
 <style lang="scss" scoped>
 .singleset-item-container {
-  display: flex;
+  display: block;
   flex-direction: column;
   justify-content: center;
-  hr {
-    height: 2px;
-    border: none;
-    margin: 0 20px;
-    background-color: rgb(237, 237, 237);
-  }
+  border-bottom: 2px solid #F1F1F1;
+  margin: 0 36px -2px;
+
   .item-icon {
     align-self: center;
     width: 96px;
@@ -76,12 +72,11 @@ export default {
     margin: auto 0;
   }
   .item-content {
-    margin-left: 36px;
     display: flex;
     flex-direction: row;
   }
   .item-describe {
-    display: flex;
+    display: block;
     flex-direction: column;
     margin-left: 20px;
     h3 {
@@ -103,7 +98,7 @@ export default {
     }
   }
   .bottom-container {
-    display: flex;
+    display: block;
     flex-direction: row;
     margin: 20px 0 24px 0;
     align-items: center;

@@ -33,7 +33,7 @@ const PageInfo_From_Home = [
     component: BookList
   },
   {
-    path: '/home/visionDetail/visionCourseList',
+    path: '/home/visionDetail/visionCourseList/:courseId',
     name: 'visionCourseList',
     component: visionCourseList,
     props: true

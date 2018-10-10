@@ -24,12 +24,12 @@
     </div>
     <!-- try -->
     <div id="try" class="try bottomline">
-      <DetailHeader title="试看课程" subtitle="全部" link='visionCourseList' />
+      <DetailHeader title="试看课程" subtitle="全部" link='/home/visionDetail/visionCourseList' :courseId="courseId"/>
       <SingleSetList :list='visionDetail.freeLessonList' :singletype="'OnlineVision'"></SingleSetList>
     </div>
     <!-- message -->
     <div id="message" class="message bottomline" >
-      <DetailHeader title="精选留言" link='videoCourseCmts' :params='{"courseId":courseId}' :subtitle="visionDetail.commentCount + '条'" />
+      <DetailHeader title="精选留言" link='/videoCourseCmts' :courseId="courseId" :subtitle="visionDetail.commentCount + '条'" />
       <div v-for="item of commentList" :key="item.id" >
         <comment-item :comment="item"  class="vision_comment_item"/>
       </div>
@@ -187,7 +187,7 @@ export default {
 }
 .outlineImage {
   width: 670px;
-  height: 800px;
+  // height: 800px;
   margin: 0 40px 40px;
   background-size: 100%;
 }

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="listHeader">
-      <span class="headerCount">共143讲</span>
+      <span class="headerCount">共{{courseCount}}讲</span>
       <div class="ascButton" @click="reverseList">
         <img class="sortIcon" :src="Ascending?ascDown:ascUp" alt=""> {{Ascending?'正序':'倒叙'}}
       </div>
@@ -26,15 +26,17 @@ export default {
       spread: true,
       ascDown: require('../../assets/images/vision_list_down.png'),
       ascUp: require('../../assets/images/vision_list_up.png'),
-      Ascending: true
+      Ascending: true,
+      courseCount:0
     }
   },
+  props:['courseId'],
   computed: mapState(['categoryList']),
   components: {
     SingleSetList
   },
   methods: {
-    ...mapActions(['reverse']),
+    ...mapActions(['reverse','getCategoryList']),
     spreat(id) {
       if (id === this.selectCate) {
         this.spread = !this.spread
@@ -48,8 +50,17 @@ export default {
       this.reverse()
     }
   },
-  mounted() {
-    this.selectCate = this.categoryList[0].id
+   mounted() {
+    this.getCategoryList(this.$route.params.courseId).then(()=>{
+      console.log(this.categoryList)
+         this.selectCate =  this.categoryList[0].id
+    this.categoryList.map(item=>{
+      console.log(item)
+      this.courseCount += item.lessonList.length
+    })
+    })
+   
+   
   }
 }
 </script>

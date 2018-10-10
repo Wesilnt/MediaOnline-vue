@@ -1,4 +1,4 @@
-import { getVisionList,getVisionDetail, getCommentList } from '../../api/visionServiceApi'
+import { getVisionList,getVisionDetail, getCommentList, getVisionCourseList } from '../../api/visionServiceApi'
 import groupManagerData from './groupManagerData'
 const visionData = {
     namespaced: true,
@@ -19,6 +19,10 @@ const visionData = {
         reverse({commit,state}){
             commit('setCategoryList',state.categoryList.slice().reverse());
         },
+        async getCategoryList({commit},courseId){
+            let result = await getVisionCourseList({courseId:courseId})
+            commit('setCategoryList',result)
+        },
       async  getVisionListData({commit,state}){
           await commit('setCurrentPage', 1)
           let result = await getVisionList({currentPage:1, pageSize:state.pageSize, type:1003})
@@ -33,15 +37,12 @@ const visionData = {
             let result = await getVisionList({currentPage:state.currentPage, pageSize:state.pageSize, type:1003})
             let newList =state.visionList.concat(result.courseInfo.result);
             await commit('setFinished',newList.length>= state.totalCount);
-            console.log( state.totalCount)
             commit('setVisionList', newList)
-            console.log(state.visionList)
             commit('setIsLoading',false);
         },
         async getVisionDetail({dispatch,commit},{courseId,groupBuyId}){
             let result = await getVisionDetail({'courseId':courseId})
             commit('setVisionDetail', result);
-            commit('setCategoryList',result.categoryList)
 
             const profilePic = result.coverPic
             const freeLessonList = result.freeLessonList
@@ -66,7 +67,6 @@ const visionData = {
                 userAccessStatus: result.userAccessStatus,
                 price: result.price
               }
-              
               dispatch('groupManagerData/initToolsBar', toolsData)
             }
         },
