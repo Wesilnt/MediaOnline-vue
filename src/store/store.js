@@ -88,7 +88,7 @@ export default new Vuex.Store({
       })
     },
     //支付
-    async wxPayment({state},{timestamp,nonceStr,packageStr,paySign,successCB,failCB}){
+    async wxPayment({state,dispatch},{timestamp,nonceStr,packageStr,paySign,successCB,failCB}){
       let fullPath = window.location.href
       let jsApiList = ['chooseWXPay']
       dispatch('registerWxConfig',{fullPath,jsApiList})   
@@ -103,7 +103,7 @@ export default new Vuex.Store({
               successCB(res)
             },
             fail : function (errmsg) {
-              failCB(res)
+              failCB(errmsg)
             },
             complete : function (res) {
               if(res.errMsg == "chooseWXPay:cancel" ) {

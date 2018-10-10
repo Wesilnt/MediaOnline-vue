@@ -31,9 +31,8 @@ import PhoneVerif from './PhoneVerif'
 import {
   createNamespacedHelpers,
   mapActions as rootActions,
-  mapGetters
 } from 'vuex'
-const { mapState, mapActions, mapMutations } = createNamespacedHelpers(
+const { mapState, mapActions, mapMutations,mapGetters } = createNamespacedHelpers(
   'videoColumnDetailData/groupManagerData'
 )
 export default {
@@ -154,7 +153,7 @@ export default {
     //点击拼团按钮
     clickCollageBtn() {
       let params = null
-      if(isFromShare&&!this.isOwner){
+      if(this.isFromShare&&!this.isOwner){
         //参与拼团
         params = {groupBuyId: this.groupBuyId, payType: 2}
       }else{

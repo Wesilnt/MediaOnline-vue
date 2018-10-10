@@ -47,6 +47,7 @@ const groupManagerData = {
         },
         //是否来自分享
         isFromShare(state,getters,{ videoColumnDetailData }) {
+          console.log("videoColumnDetailData"+videoColumnDetailData)
             return videoColumnDetailData.isFromShare
         }
     },
@@ -633,7 +634,7 @@ const groupManagerData = {
                 package: result.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
                 signType: 'MD5', // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
                 paySign: result.paySign, // 支付签名
-                success: function (res) {
+                successCB: function (res) {
                     // 支付成功后的回调函数
                     console.log("支付成功"); 
                     console.log(payType)
@@ -655,10 +656,11 @@ const groupManagerData = {
                     }
                    
                 },
-                fail : function (errmsg) {
+                failCB : function (errmsg) {
                     console.log(errmsg)
+                    Toast(errmsg)
                 }
-            })      
+            },{root:true})      
             // wx.ready(function(){
             //     console.log(result)
             //         wx.chooseWXPay({
