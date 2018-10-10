@@ -331,7 +331,7 @@ export default {
   }
   .roller-enter-active,
   .roller-leave-active {
-    transition: all 1s linear;
+    transition: all 500ms linear;
   }
 }
 </style>
