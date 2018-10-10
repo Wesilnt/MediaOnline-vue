@@ -1,8 +1,10 @@
 <template>
-    <div v-if="messageCount>0" class="qhht-flex notice" @click="enterMessage">
+<div class="noticeContainer" v-if="messageCount>0">
+    <div  class="qhht-flex notice" @click="enterMessage">
         <i class="qhht-icon notice-avatar" :style="{backgroundImage:`url(${fromAvatarUrl})`}"/>
         <span class="message">{{messageCount}}条新消息</span>
         <i class="qhht-icon notice-arrow" />
+    </div>
     </div>
 </template>
 
@@ -18,9 +20,14 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.noticeContainer{
+  margin: 0 28px;
+  width: 694px;
+  border-bottom: 2px solid #F1F1F1;
+}
 .notice {
   width: 360px;
-  margin: 40px auto 28px;
+  margin: 40px auto 20px;
   background-color: #383838;
   border-radius: 8px;
   padding: 8px;

@@ -59,10 +59,10 @@ const homeData = {
     setFreeList(state, freeList) {
       state.freeList = freeList
     },
-    setNewMessageCount(state, fromAvatarUrl) {
+    setFromAvatarUrl(state, fromAvatarUrl) {
       state.fromAvatarUrl = fromAvatarUrl
     },
-    setFromAvatarUrl(state, newMessageCount) {
+    setNewMessageCount(state, newMessageCount) {
       state.newMessageCount = newMessageCount
     },
     setVisionList(state, visionList) {
