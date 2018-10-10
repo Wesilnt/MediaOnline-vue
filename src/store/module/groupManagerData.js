@@ -229,8 +229,7 @@ const groupManagerData = {
                         "isShow":true
                     }                
                 break
-                case 1009:
-                    console.log('集赞中')
+                case 1009: 
                     isShowGroupBuy = false
                     toolsObject = {
                         "originPrice":'',

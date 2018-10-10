@@ -4,7 +4,7 @@ const { NODE_ENV } = process.env
 // 调试选项，本地调试请改为 False
 export const IS_ONLINE = true
 // 测试 Token
-export const TEST_TOKEN = "e2bf9461-3e2a-4e66-9820-aa0891ae9878"
+// export const TEST_TOKEN = "f9fa1791-2c9c-4723-8970-f59dfa1bd53d"
 
 // TODO router 设置未统一，后期需要统一格式
 export const courseType = {
