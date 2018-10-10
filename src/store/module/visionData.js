@@ -41,8 +41,6 @@ const visionData = {
         async getVisionDetail({dispatch,commit},{courseId,groupBuyId}){
             let result = await getVisionDetail({'courseId':courseId})
             commit('setVisionDetail', result);
-            console.log('代码走到这里了aaaa')
-            console.log(result)
             commit('setCategoryList',result.categoryList)
 
             const profilePic = result.coverPic

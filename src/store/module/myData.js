@@ -9,7 +9,6 @@ const myData = {
   },
   mutations: {
     save(state, payload) {
-      console.log(payload)
       Object.assign(state, payload)
     },
     saveUserInfo(state, payload) {
