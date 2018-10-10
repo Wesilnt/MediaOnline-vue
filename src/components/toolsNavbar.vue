@@ -28,7 +28,7 @@
 <script>
 import Share from './share/Share'
 import PhoneVerif from './PhoneVerif'
-import { createNamespacedHelpers, mapActions as rootActions } from 'vuex'
+import { createNamespacedHelpers, mapActions as rootActions, mapGetters } from 'vuex'
 const {
   mapState,
   mapActions,
@@ -108,7 +108,8 @@ export default {
       'courseId', //专栏ID
       'startPraiseFlag',
       'serviceType'
-    ])
+    ]),
+    ...mapGetters(['name'])
   },
   filters: {
     formatPrice: function(price) {
@@ -203,10 +204,8 @@ export default {
               link: `/#/videoColumnDetail/${this.courseId}?groupBuyId=${
                 this.groupBuyId
               }`,
-              title: `我是${user.nickName}, 我参加了购买《${
-                this.audio ? this.audio.title : '国学课'
-              }》拼团活动,快来跟我一起完成拼团吧。`,
-              desc: '你一定会爱上国学课...'
+              title: `我是${user.nickName}, 我参加了购买《${this.name}》拼团活动,快来跟我一起完成拼团吧。`,
+              desc: '你一定会爱上这个视频专栏的...'
             }
           })
           break

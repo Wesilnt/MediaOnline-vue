@@ -15,6 +15,7 @@ export default {
         singleSetList: [], //单集列表
         singleFinished:false,
         singleLoaing:false,
+        name:""
     },
     mutations: {
         initData(state,courseId){

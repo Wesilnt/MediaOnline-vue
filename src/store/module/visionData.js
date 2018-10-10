@@ -13,7 +13,8 @@ const visionData = {
         categoryList:[],
         commentList:[],
         finished:false,
-        isLoading:false
+        isLoading:false,
+        name:""
     },
     actions:{
         reverse({commit,state}){

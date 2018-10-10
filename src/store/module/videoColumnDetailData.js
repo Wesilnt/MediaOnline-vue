@@ -15,6 +15,7 @@ const videoColumnDetailData = {
     commentCount: 0, //留言条数
     buyCount: 0, //购买数量
     courseId: 0, //专栏ID
+    name:''//专栏名称
   },
   getters: {},
   mutations: {
