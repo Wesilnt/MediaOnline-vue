@@ -11,6 +11,7 @@ const homeData = {
   state: {
     bannerList: [],
     newMessageCount:0,
+    fromAvatarUrl:'',
     freeList: [],
     visionList: [],
     videoList: [],
@@ -34,8 +35,9 @@ const homeData = {
       commit('setFreeList', result.result)
     },
     async getNewMessageCount({ commit }) {
-      let result = await getNewMessageCount({ busiTypes: '3101,3102,3103,3105,3106'})
-      commit('setNewMessageCount', result)
+      let result = await getNewMessageCount()
+      commit('setNewMessageCount', result.count)
+      commit('setFromAvatarUrl',result.fromAvatarUrl)
     },
     async getVisionList({ commit }) {
       let result = await getVisionList()
@@ -57,7 +59,10 @@ const homeData = {
     setFreeList(state, freeList) {
       state.freeList = freeList
     },
-    setNewMessageCount(state, newMessageCount) {
+    setNewMessageCount(state, fromAvatarUrl) {
+      state.fromAvatarUrl = fromAvatarUrl
+    },
+    setFromAvatarUrl(state, newMessageCount) {
       state.newMessageCount = newMessageCount
     },
     setVisionList(state, visionList) {

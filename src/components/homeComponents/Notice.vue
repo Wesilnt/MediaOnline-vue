@@ -1,6 +1,6 @@
 <template>
     <div v-if="messageCount>0" class="qhht-flex notice" @click="enterMessage">
-        <i class="qhht-icon notice-avatar" />
+        <i class="qhht-icon notice-avatar" :style="{backgroundImage:`url(${fromAvatarUrl})`}"/>
         <span class="message">{{messageCount}}条新消息</span>
         <i class="qhht-icon notice-arrow" />
     </div>
@@ -8,7 +8,7 @@
 
 <script>
 export default {
-  props: ['messageCount'],
+  props: ['messageCount','fromAvatarUrl'],
   methods: {
     enterMessage() {
       this.$router.push('/my/Reply')
