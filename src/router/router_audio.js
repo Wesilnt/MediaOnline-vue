@@ -5,7 +5,10 @@ export default [
   {
     path: '/audio/audioplay/:id',
     name: 'AudioPlay',
-    component: AudioPlay
+    component: AudioPlay, 
+    meta: {
+      keepAlive: false // 需要被缓存
+    }
   },
   {
     path: '/audio/audiocmts/:lessonid',

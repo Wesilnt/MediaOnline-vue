@@ -220,7 +220,6 @@ export default {
             link: `/#/audio/audioplay/${this.lessonId}`, 
             title: `我是${user.nickName}, 我想免费领取《${this.audio?this.audio.title:'国学说'}》,来帮我点赞吧`,
             desc: '你一定会爱上国学课...',
-            imgUrl: require('../../assets/images/logo.png')
           }
           this.showShare = true
       })
@@ -285,6 +284,14 @@ export default {
         })
       }
     }
+  },
+  /**
+   * 监听页面离开，设置本页面是否缓存起来， 如果跳转到评论页面, 设置本页面router:meta.keepAlive = true, 否则 = false
+   */
+  beforeRouteLeave(to, from, next) { 
+     // 设置下一个路由的 meta
+      from.meta.keepAlive = (to.name === 'AudioCmts')  // 让 頁面缓存，即不刷新
+      next()
   },
   beforeDestroy(){
      this.toggleFloatButton(true)  //隐藏悬浮按钮

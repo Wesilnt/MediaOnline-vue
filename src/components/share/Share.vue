@@ -63,9 +63,9 @@ export default {
       const nickname = 'nihao'
       console.log("=----------==-",this.shareInfo)
       const shareOption = {
-        link: this.url + this.shareInfo.link || '/#/home',
-        title: this.shareInfo.title || `${nickname}邀请您一起上课啦！`,
-        desc: this.shareInfo.desc || '秦汉胡同国学，让我们的孩子成为一个有涵养的人',
+        link: this.url + this.shareInfo.link,
+        title: this.shareInfo.title,
+        desc: this.shareInfo.desc,
         imgUrl:  this.shareInfo.imgUrl,
         successCB: () => {
           this.$toast('分享回调成功')

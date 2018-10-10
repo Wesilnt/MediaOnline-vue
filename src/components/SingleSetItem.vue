@@ -1,7 +1,7 @@
 <template> 
     <div class="singleset-item-container" tag="div" @click="onItemClick(item)">
       <div class="item-content">
-        <div :class="{'icon-playing':playing}" class="item-icon">
+        <div :class="{'icon-playing':playing}" class="item-icon" v-lazy:background-image="item.coverPic">
           <img :src="playing?require('../assets/images/readings_detail_play.png'):require('../assets/images/readings_detail_pause.png')">
         </div>
         <div class="item-describe">
@@ -58,6 +58,7 @@ export default {
     // padding: 28px 31px 28px 35px;
     box-sizing: border-box;
     background-color: #fde3e3;
+    background-size: 96px;
     display: flex;
     border-radius: 96px;
   }

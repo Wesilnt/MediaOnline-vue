@@ -1,6 +1,10 @@
 <template> 
-      <div>
-        <router-view class="router-view"/>  
+      <div> 
+        <keep-alive>
+          <!-- 这里是会被缓存的视图组件，比如 AudioPlay！ -->
+          <router-view  v-if="$route.meta.keepAlive" class="router-view"/>  
+        </keep-alive>
+        <router-view  v-if="!$route.meta.keepAlive" class="router-view"/>   
         <MediaIcon></MediaIcon>
       </div> 
 </template>
