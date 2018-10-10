@@ -7,7 +7,7 @@
         </van-swipe-item>
 
       </van-swipe>
-      <div class="swiper_bottom"></div>
+      <!-- <div class="swiper_bottom"></div> -->
     </div>
 
     <Notice :message-count="newMessageCount" />
@@ -94,16 +94,16 @@ export default {
 .index-swiper {
   // margin-bottom: 28px;
 }
-.swiper_bottom {
-  background-color: white;
-  width: 100%;
-  height: 60px;
-  position: absolute;
-  top: 320px;
-  border-top-left-radius: 50%;
-  border-top-right-radius: 50%;
-  z-index: 999;
-}
+// .swiper_bottom {
+//   background-color: white;
+//   width: 100%;
+//   height: 60px;
+//   position: absolute;
+//   top: 320px;
+//   border-top-left-radius: 50%;
+//   border-top-right-radius: 50%;
+//   z-index: 999;
+// }
 .index-swiper-img {
   width: 100%;
   height: 46.7vw;
