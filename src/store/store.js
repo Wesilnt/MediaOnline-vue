@@ -88,7 +88,7 @@ export default new Vuex.Store({
       })
     },
     //支付
-    async wxPayment({state,dispatch},{timestamp,nonceStr,package,paySign,successCB,failCB}){
+    async wxPayment({state,dispatch},{timestamp,nonceStr,packageStr,paySign,successCB,failCB}){
       let fullPath = window.location.href
       let jsApiList = ['chooseWXPay']
       dispatch('registerWxConfig',{fullPath,jsApiList})
@@ -97,7 +97,7 @@ export default new Vuex.Store({
         wx.chooseWXPay({
             timestamp: timestamp,
             nonceStr: nonceStr, // 支付签名随机串，不长于 32 位
-            package: package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
+            package: packageStr, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
             signType: 'MD5', // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
             paySign: paySign, // 支付签名
             success: function (res) {
