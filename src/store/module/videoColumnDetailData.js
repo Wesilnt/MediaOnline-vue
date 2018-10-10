@@ -15,7 +15,8 @@ const videoColumnDetailData = {
     commentCount: 0, //留言条数
     buyCount: 0, //购买数量
     courseId: 0, //专栏ID
-    name:''//专栏名称
+    name:'',//专栏名称
+    isFromShare:false,
   },
   getters: {
     //获取专栏名称
@@ -27,7 +28,7 @@ const videoColumnDetailData = {
     initDatas(state, courseId) {
       state.courseId = courseId
     },
-    bindVideoColumnDetail(state, result) {
+    bindVideoColumnDetail(state, {result,isFromShare}) {
       state.freeLessonList = result.freeLessonList
       state.description = result.description
       state.outlinePic = result.outlinePic
@@ -36,7 +37,7 @@ const videoColumnDetailData = {
       state.commentCount = result.commentCount
       state.buyCount = result.buyCount
       state.name = result.name
-
+      state.isFromShare = isFromShare
     }
   },
   actions: {
@@ -47,7 +48,7 @@ const videoColumnDetailData = {
       console.log(result)
 
       //绑定专栏详情内容
-      commit('bindVideoColumnDetail', result)
+      commit('bindVideoColumnDetail', {result,isFromShare:groupBuyId?true:false})
       const profilePic = result.profilePic
       const freeLessonList = result.freeLessonList
       const serviceType = "OnlineCourse"

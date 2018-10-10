@@ -44,6 +44,10 @@ const groupManagerData = {
         //专栏名称
         courseName(state,getters,{ videoColumnDetailData }) {
             return videoColumnDetailData.courseName
+        },
+        //是否来自分享
+        isFromShare(state,getters,{ videoColumnDetailData }) {
+            return videoColumnDetailData.isFromShare
         }
     },
     mutations:{
