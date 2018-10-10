@@ -5,6 +5,8 @@ import { getAccessToken, getCookie } from './userAuth'
 import store from '../store/store'
 import { IS_ONLINE, TEST_TOKEN, api } from './config'
 
+const { dispatch } = store
+
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
   201: '新建或修改数据成功。',
@@ -57,10 +59,9 @@ const checkResponseCode = (url, response) => {
   error.response = response
   error.code = response.code
 
-  // 1002: token过期 需重新申请
-  if (response.code === 1002) error.name = 401
-  // 1001: token无效 需退出重新登录
-  if (response.code === 1001) error.name = '401-logout'
+  // 1002: token过期 需重新申请 // 1001: token无效 需退出重新登录
+  if (response.code === 1002 || response.code === 1001) return dispatch('getAccessToken')
+
   Toast.fail({
     duration: 4000, // 持续展示 toast
     message: response.error
@@ -83,15 +84,11 @@ function request(url, options) {
   const accessToken = IS_ONLINE
     ? getCookie('COOKIE_TOKEN_KEY_CNONLINE')
     : TEST_TOKEN
-  const defaultOptions = {
-    // credentials: 'include',
-    // mode: 'no-cors',
-    // formData: false,
-    headers: {
-      Authorization: `Bearer ${btoa(accessToken)}`
-    }
-  }
-  const newOptions = { ...defaultOptions, ...options }
+  const newOptions = { ...{
+          headers: {
+              Authorization: `Bearer ${btoa(accessToken)}`
+          }
+      }, ...options }
   if (newOptions.method === 'POST' || newOptions.method === 'PUT') {
     if (!(newOptions.body instanceof FormData)) {
       newOptions.headers = {
@@ -114,17 +111,7 @@ function request(url, options) {
     })
     .then(checkResponseCode.bind(this, url))
     .catch(e => {
-      const { dispatch } = store
       const status = e.name
-
-      if (status === '401-logout') {
-        alert('logout' + e)
-        return dispatch('getAccessToken')
-      }
-      if (status === 401) {
-        alert('401' + e)
-        return dispatch('getAccessToken')
-      }
       if (status === 403) {
         Toast.fail('403')
         // dispatch(routerRedux.push("/exception/403"));

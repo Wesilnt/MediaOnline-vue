@@ -22,7 +22,6 @@ new Vue({
   store,
   render: h => {
     if (noAccessToken() && IS_ONLINE) {
-      alert('111')
       store.dispatch('getAccessToken')
       return h(Skeleton, {
         props: {
