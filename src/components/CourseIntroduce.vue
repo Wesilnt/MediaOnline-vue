@@ -1,10 +1,11 @@
 <template>
-    <div class="cl-courseIntroduce">
-        <div :class=" isFold ? 'fold' : 'extend'" class="foldbase" @click="foldFn">
-           <div>courseinfo</div>
+    <div class="courseIntroduce">
+        <div ref="content" class="content" :class="{'content-expand':isExpand}" >
+           <!-- <p ref="contentChild">{{courseinfo}}</p> -->
+           <div ref="contentChild" v-html="courseinfo"></div>
         </div>
-        <div class="arrow-container"  @click="foldFn">
-          <i class="qhht-icon arrow-icon-innner" :style="isFold ? imgUp : imgDown"></i>
+        <div class="arrow-container" :class="{'arrow-container-expand':isExpand}" v-if="needExpand">
+          <i class="qhht-icon arrow-icon-innner" :style="!isExpand ? imgUp : imgDown" @click="handleExpand"></i>
         </div>
     </div>
 </template>
@@ -15,7 +16,9 @@ export default {
   props: ['courseinfo'],
   data() {
     return {
-      isFold: false,
+      // infoword:'',
+      needExpand: false,
+      isExpand: false,
       imgDown: {
         backgroundImage:
           'url(' + require('../assets/images/onlinecourse_arrow_down.png') + ')'
@@ -27,39 +30,44 @@ export default {
     }
   },
   methods: {
-    foldFn() {
-      this.isFold = !this.isFold
+    handleExpand() {
+      this.isExpand = !this.isExpand
+    }
+  },
+  watch:{
+    // Vue 中的 nextTick 来监听 DOM 中是数据变化。
+    'courseinfo':function(newVal){
+        this.$nextTick(function(){
+          console.log(this.$refs.content.clientHeight)
+          console.log(this.$refs.contentChild.clientHeight)
+          this.needExpand =
+                  this.$refs.content.clientHeight < this.$refs.contentChild.clientHeight
+          console.log(this.needExpand)
+        })
+
     }
   }
 }
 </script>
 
 <style lang='scss' scoped>
-.cl-courseIntroduce {
+.courseIntroduce {
   position: relative;
   background-color: #fff;
   margin-top: 48px;
-  .foldbase {
-    width: 100%;
-    background-color: white;
-    transition: height 0.3s linear;
+  margin-bottom: 20px;
+  .content {
+    max-height: 150px;
+    overflow: hidden;
+    font-size: 30px;
+    word-wrap: break-word;
+    transition: height 0.4s linear;
+    &.content-expand {
+      max-height: inherit;
+      overflow: visible;
+    }
   }
 }
-
-.foldbase p {
-  // padding: 0 20px;
-  font-size: 30px;
-  word-wrap: break-word;
-}
-.fold {
-  height: 250px;
-  overflow: hidden;
-}
-.extend {
-  height: auto;
-  overflow: auto;
-}
-
 .arrow-container {
   position: absolute;
   width: 100%;
@@ -75,8 +83,15 @@ export default {
   //   rgba(255, 255, 255, 1) 100%
   // );
   // margin-top: -70px;
+  .arrow-icon-innner {
+    margin-top: 50px;
+  }
 }
-.arrow-icon-innner {
-  margin-top: 50px;
+.arrow-container-expand {
+  position: relative;
+  .arrow-icon-innner {
+    margin-top: 0px;
+  }
 }
+
 </style>
