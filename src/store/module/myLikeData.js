@@ -17,10 +17,14 @@ const myLikeData = {
     toggleLoading(state, { loading }) {
       state.loading = loading
     },
-    modifyLikeList(state, { id }) {
-      for (let i = 0; i < state.likeList.length; i++) {
-        if (state.likeList[i].id === id) state.likeList.splice(i, 1)
-      }
+    modifyLikeList(state, { ids }) {
+      let idArray = new Array();
+      idArray = ids.split(',')
+      for (let i = 0; i < idArray.length; i++) {
+        for (let j = 0; j < state.likeList.length; j++) {
+          if (idArray[i].indexOf(state.likeList[j].id) != -1) state.likeList.splice(j, 1)
+        }
+     }
     }
   },
   actions: {
@@ -43,30 +47,17 @@ const myLikeData = {
       if (!response) return
       //删除本地的消息
       await commit('modifyLikeList', {
-        id: id
+        ids: id
       })
     },
-    async batchDelMyLike({dispatch, commit, state},{likeCheckList}) {
-      console.log("likeCheckList" + likeCheckList)
-      let idsStr = ''
-      if (likeCheckList.length > 0) {
-        for (let i = 0; i < likeCheckList.length; i++) {
-          if (likeCheckList[i] === true) {
-            idsStr += state.likeList[i].id + ','
-          }
-        }
-      }
-      console.log("idsStr:" + idsStr)
-      if(idsStr === '')return
+    async batchDelMyLike({dispatch, commit, state},{ids}) {
+      console.log("ids" + ids)
       //删除服务器上的消息
-     // const response = await postBatchDelMyLike({id: idsStr})
-/*      if (!response) return
+      const response = await postBatchDelMyLike({ lessonIds: ids })
+      if (!response) return
       //删除本地的消息
       await commit('modifyLikeList', {
-        id: id
-      })*/
-      commit('toggleLoading', {
-        loading: false
+        ids: ids
       })
     }
   }

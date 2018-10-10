@@ -22,7 +22,7 @@
 <script>
 import { createNamespacedHelpers } from 'vuex'
 import Picker from '../../components/Picker'
-import { getGradeStr, getGradeNum } from './MyUtil'
+import { getGradeStr, getGradeNum } from './../../utils/utils'
 import { Toast } from 'vant'
 
 const { mapState, mapActions } = createNamespacedHelpers('userInfoData')
