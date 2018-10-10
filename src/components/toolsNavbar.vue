@@ -108,7 +108,7 @@ export default {
       'startPraiseFlag',
       'serviceType'
     ]),
-    ...mapGetters(['courseName'])
+    ...mapGetters(['courseName','isFromShare'])
   },
   filters: {
     formatPrice: function(price) {
@@ -154,13 +154,18 @@ export default {
     //点击拼团按钮
     clickCollageBtn() {
       let params = null
-      if (this.isOwner) {
-        //发起拼团
-        params = {courseId: this.courseId, payType: 1}
-      } else {
+      if(isFromShare&&!this.isOwner){
         //参与拼团
         params = {groupBuyId: this.groupBuyId, payType: 2}
+      }else{
+        //发起拼团
+        params = {courseId: this.courseId, payType: 1}
       }
+      // if (this.isOwner) {
+      
+      // } else {
+        
+      // }
       switch (this.userAccessStatus) {
         case -3:
           //拼团失败,重新发起拼团
