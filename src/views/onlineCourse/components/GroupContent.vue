@@ -103,60 +103,14 @@ export default {
   methods: {
     ...mapActions(['getCommentList', 'likeComment']),
     allFunc() {
-      this.$router.push({
-        name: 'videoCourseCmts',
-        params: { courseId: this.courseId }
-      })
+      if (this.freeLessonList && this.freeLessonList.length > 0){
+        const lessonId = this.freeLessonList[0].id
+        this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
+      }
     },
     gotoVideoCourseDetailPage(lessonId) {
       this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
     },
-    /*async handleScroll() {
-      //1.监听滚动
-      let scrollTop = document.documentElement.scrollTop
-      let tryCourseH = this.$el.querySelector('#tryCourse').offsetTop - 60
-      let messageH = this.$el.querySelector('#leaveMessage').offsetTop - 60
-      console.log('======' + document.body.scrollHeight)
-      console.log('scrollTopaaa =', scrollTop)
-      // console.log('tryCourseH =',tryCourseH)  //970
-      // console.log('messageH =',messageH)    //1289
-      if (scrollTop < tryCourseH) {
-        this.selected = 0
-      } else if (scrollTop < messageH && scrollTop > tryCourseH) {
-        this.selected = 1
-        console.log('代码走到这里了')
-      } else if (scrollTop > messageH) {
-        this.selected = 2
-      }
-    },
-    clickFnc(index) {
-      this.selected = index
-      let positionId = ''
-      switch (index) {
-        case 0:
-          positionId = '#desc'
-          break
-        case 1:
-          positionId = '#tryCourse'
-          break
-        case 2:
-          positionId = '#leaveMessage'
-          break
-        default:
-          break
-      }
-      console.log(positionId, index)
-      let anchor = this.$el.querySelector(positionId)
-
-      document.body.scrollTop = anchor.offsetTop - 60
-
-      // // // Firefox
-      document.documentElement.scrollTop = anchor.offsetTop - 60
-      // // Safari
-      window.pageYOffset = anchor.offsetTop - 60
-
-      // console.log("anchor = "+anchor.offsetTop)
-    }*/
   },
   created() {
     //获取专栏评论列表
@@ -178,37 +132,6 @@ export default {
   height: 100%;
 }
 
-//导航条
-.videocol-navbar {
-  position: -webkit-sticky;
-  position: sticky;
-  top: -1px;
-  left: 0;
-  right: 0;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  background-color: #fff;
-  border-bottom: 1px solid lightgray;
-  box-sizing: border-box;
-  padding-top: 28px;
-  text-align: center;
-  z-index: 999;
-
-  .videocol-navbar-item {
-    width: 100px;
-    padding-bottom: 22px;
-    font-size: 28px;
-    color: rgb(62, 62, 83);
-  }
-
-  .videocol-navbar-item.selected {
-    font-size: 28px;
-    color: rgb(255, 163, 47);
-    border-bottom: 6px solid rgb(255, 163, 47);
-  }
-}
 //介绍
 .videocol-base {
   padding: 0 40px;

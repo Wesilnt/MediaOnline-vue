@@ -1,5 +1,5 @@
 <template>
-  <div class="videocourse-detail-container" id="detailmain" ref="detailmain">
+  <div class="videocourse-detail-container" id="detailmain" ref="detailmain">  
       <!-- 播放器封面 -->
     <div class="video-detail-header lazy-img-most" v-lazy:background-image="radioShowPic">
       <div class="video-detail-header-right-top">
@@ -15,12 +15,13 @@
     <!-- 播放器 -->
     <video class="videoitem" ref="videoitem" :src="videoUrl" controls="controls" width="100%" height='100%' preload="auto"></video>
     <!-- Navbar -->
-    <div ref="navbar" :class="navbarFixed == true ? 'isFixed' : ''" class="video-detail-navbar">
+    <ScrollNavBar :bars="navBars" />
+    <!-- <div ref="navbar" :class="navbarFixed == true ? 'isFixed' : ''" class="video-detail-navbar">
         <div v-for="(item,index) of navbar" :class="{'selected':selected == index }" :key="index" class="video-detail-navbar-item" @click="clickFnc(index)">{{item}}</div>
-    </div>
+    </div> -->
     <!-- 资料 -->
     <div class="video-detail-base">
-      <div id="note" ref="note" class="video-detail-sction-title">
+      <div id="desc" ref="desc" class="video-detail-sction-title">
           <h4>笔记</h4>
       </div>
       <CourseIntroduce :courseinfo="description" />
@@ -33,14 +34,14 @@
     </div>
     <!-- 目录 -->
     <div class="video-detail-base">
-      <div id="catalog" ref="catalog" class="video-detail-sction-title">
+      <div id="tryCourse" ref="tryCourse" class="video-detail-sction-title">
           <h4>目录</h4>
       </div>
       <playlist v-for="(item,index) of lessonList" :key="item.id" :iteminfo="item" :activeID="activeID" :lastindex="index == (lessonList.length - 1)" @jumpEvent="beActive"/>
     </div>
     <!-- 留言 -->
     <div class="video-detail-base">
-      <div id="leavemessage" ref="leavemessage" class="video-detail-sction-title">
+      <div id="leaveMessage" ref="leaveMessage" class="video-detail-sction-title">
           <h4>留言</h4>
           <div class="video-detail-leavemessage" @click="toggleKeyboard(true)">
               <img src="../../assets/images/onlinecourse_video_detail_ic_editor.png" alt="">
@@ -55,6 +56,7 @@
 </template>
 
 <script>
+import ScrollNavBar from '../../components/ScrollNavBar'
 import CourseIntroduce from '../../components/CourseIntroduce.vue'
 import playlist from './components/playlist.vue'
 import CommentItem from '../../components/comment/CommentItem.vue'
@@ -78,13 +80,28 @@ export default {
     CommentItem,
     QuestionList,
     CommentBar,
-    Share
+    Share,
+    ScrollNavBar
   },
   data() {
     return {
-      navbar: ['资料', '目录', '留言'],
-      navbarFixed: false, //控制navbar是否吸顶
-      selected: 0,
+      navBars: [
+        {
+          title: '资料',
+          ref: 'desc'
+        },
+        {
+          title: '目录',
+          ref: 'tryCourse'
+        },
+        {
+          title: '留言',
+          ref: 'leaveMessage'
+        }
+      ],
+      // navbar: ['资料', '目录', '留言'],
+      // navbarFixed: false, //控制navbar是否吸顶
+      // selected: 0,
       currentVideoTime: 0,
       inputValue: '',
       lockIcon: require('../../assets/images/onlinecourse_lock.jpg'), //未解锁
@@ -133,8 +150,6 @@ export default {
     ...mapGetters(['haveQuestionBOList'])
   },
   mounted() {
-    //监听滚动
-    addEventListener('scroll', this.handleScroll)
     //视频播放器相关监听
     const vid = this.$refs.videoitem
     //视频进度
@@ -145,9 +160,6 @@ export default {
     const vid = this.$refs.videoitem
     vid.removeEventListener('timeupdate', this.getVideoProgress)
     vid.removeEventListener('play', this.clickPlayVideoBtn)
-  },
-  destroyed() {
-    removeEventListener('scroll', this.handleScroll)
   },
   created() {
     const { lessonId } = this.$route.params
@@ -278,46 +290,46 @@ export default {
     beActive(lessonId) {
       this.getVideoCourseDetail({ lessonId })
     },
-    clickFnc(index) {
-      this.selected = index
-      let positionId
-      switch (index) {
-        case 0:
-          positionId = '#note'
-          break
-        case 1:
-          positionId = '#catalog'
-          break
-        case 2:
-          positionId = '#leavemessage'
-          break
-        default:
-          break
-      }
+    // clickFnc(index) {
+    //   this.selected = index
+    //   let positionId
+    //   switch (index) {
+    //     case 0:
+    //       positionId = '#note'
+    //       break
+    //     case 1:
+    //       positionId = '#catalog'
+    //       break
+    //     case 2:
+    //       positionId = '#leavemessage'
+    //       break
+    //     default:
+    //       break
+    //   }
 
-      let anchor = this.$el.querySelector(positionId)
-      document.body.scrollTop = anchor.offsetHeight - 60
-      // // Firefox
-      document.documentElement.scrollTop = anchor.offsetTop - 60
-      // Safari
-      pageYOffset = anchor.offsetTop - 50
-    },
-    async handleScroll() {
-      //1.监听滚动
-      let scrollTop = Math.abs(
-        this.$refs.detailmain.getBoundingClientRect().top
-      )
-      let noteH = this.$el.querySelector('#note').offsetTop - 60
-      let catalogH = this.$el.querySelector('#catalog').offsetTop - 60
-      // let leavemessageH = this.$el.querySelector('#leavemessage').offsetTop -50
-      if (scrollTop < noteH) {
-        this.selected = 0
-      } else if (scrollTop < catalogH && scrollTop > noteH) {
-        this.selected = 1
-      } else if (scrollTop > catalogH) {
-        this.selected = 2
-      }
-    }
+    //   let anchor = this.$el.querySelector(positionId)
+    //   document.body.scrollTop = anchor.offsetHeight - 60
+    //   // // Firefox
+    //   document.documentElement.scrollTop = anchor.offsetTop - 60
+    //   // Safari
+    //   pageYOffset = anchor.offsetTop - 50
+    // },
+    // async handleScroll() {
+    //   //1.监听滚动
+    //   let scrollTop = Math.abs(
+    //     this.$refs.detailmain.getBoundingClientRect().top
+    //   )
+    //   let noteH = this.$el.querySelector('#note').offsetTop - 60
+    //   let catalogH = this.$el.querySelector('#catalog').offsetTop - 60
+    //   // let leavemessageH = this.$el.querySelector('#leavemessage').offsetTop -50
+    //   if (scrollTop < noteH) {
+    //     this.selected = 0
+    //   } else if (scrollTop < catalogH && scrollTop > noteH) {
+    //     this.selected = 1
+    //   } else if (scrollTop > catalogH) {
+    //     this.selected = 2
+    //   }
+    // }
   }
 }
 </script>
