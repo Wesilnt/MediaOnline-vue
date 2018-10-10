@@ -1,7 +1,7 @@
 <template>
     <div class="cl-courseIntroduce">
         <div :class=" isFold ? 'fold' : 'extend'" class="foldbase" @click="foldFn">
-           <div>sfasdfasdfs沙发斯蒂芬手动阀手动阀的说法的说法案发打发打发打发打的sfasdfasdfs沙发斯蒂芬手动阀手动阀的说法的说法案发打发打发打发打的费sfasdfasdfs沙发斯蒂芬手动阀手动阀的说法的说法案发打发打发打发打的费sfasdfasdfs沙发斯蒂芬手动阀手动阀的说法的说法案发打发打发打发打的费费</div>
+           <div>courseinfo</div>
         </div>
         <div class="arrow-container"  @click="foldFn">
           <i class="qhht-icon arrow-icon-innner" :style="isFold ? imgUp : imgDown"></i>
