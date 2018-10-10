@@ -40,8 +40,8 @@ const groupManagerData = {
             return videoColumnDetailData.buyCount
         },
         //专栏名称
-        name({ videoColumnDetailData }) {
-            return videoColumnDetailData.name
+        courseName({ videoColumnDetailData }) {
+            return videoColumnDetailData.courseName
         }
     },
     mutations:{

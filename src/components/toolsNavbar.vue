@@ -109,7 +109,7 @@ export default {
       'startPraiseFlag',
       'serviceType'
     ]),
-    ...mapGetters(['name'])
+    ...mapGetters(['courseName'])
   },
   filters: {
     formatPrice: function(price) {
@@ -204,7 +204,7 @@ export default {
               link: `/#/videoColumnDetail/${this.courseId}?groupBuyId=${
                 this.groupBuyId
               }`,
-              title: `我是${user.nickName}, 我参加了购买《${this.name}》拼团活动,快来跟我一起完成拼团吧。`,
+              title: `我是${user.nickName}, 我参加了购买《${this.courseName}》拼团活动,快来跟我一起完成拼团吧。`,
               desc: '你一定会爱上这个视频专栏的...'
             }
           })
