@@ -154,7 +154,7 @@
     },
     filters: {
       formatDate: function (time) {
-        var date = new Date(time)
+        let date = new Date(time)
         const separator = '-'
         let month = date.getMonth() + 1
         let strDate = date.getDate()

@@ -2,13 +2,14 @@
     <section>
         <div v-if="likeList.length===0" class="like-nodata">
             <i class="qhht-icon like-nodata-icon"/>
-            <p class="like-nodata-warn">暂无系统消息</p>
+            <p class="like-nodata-warn">暂无收藏记录</p>
         </div>
         <div v-else class="like-container">
-            <div class="like-head-top-img"/>
+            <div class="like-header-container " v-lazy:background-image="require('../../assets/images/my_like_head.png')"></div>
             <div v-if="showCheck === false" class="like-head-default">
                 <img class="like-head-default-left-icon" :src="require('../../assets/images/my_record_play.png')"/>
                 <p class="like-head-default-record-text">播放全部</p>
+                <div class="like-head-default-record-number">(共{{likeList.length}}条记录)</div>
                 <img class="like-head-default-right-icon" :src="require('../../assets/images/my_sys_menu.png')"
                      @click="handleMenu">
             </div>
@@ -40,13 +41,13 @@
                                  @click="toggleCheck(index)"
                             >
                         </van-checkbox>
+                        <p v-if="!showCheck" class="like-list-item-content-order-number">{{index + 1}}</p>
                         <div class="like-list-item-content">
-                            <p class="like-list-item-content-order-number">{{index + 1}}</p>
+
                             <div class="like-list-item-content-info">
                                 <p class="like-list-item-content-info-name">{{item.title}}</p>
                                 <p class="like-list-item-content-info-detail">{{item.courseName}} -
                                     {{item.subTitle}} - {{item.learnTime}} / {{item.totalTime}}</p>
-
                             </div>
                         </div>
                         <div v-if="!showCheck" class="like-list-item-more"
@@ -118,8 +119,21 @@
         this.showCheck = false
         this.checked = false
         //  to do delete select like
-        let checkList = this.likeCheckList
-        this.batchDelMyLike(checkList)
+        let ids = ''
+        if (this.likeCheckList.length > 0) {
+          for (let i = 0; i < this.likeCheckList.length; i++) {
+            if (this.likeCheckList[i] === true) {
+              ids += this.likeList[i].id + ','
+            }
+          }
+        }
+        console.log("idsStr:" + ids)
+        if(ids === ''){
+          return
+        } else {
+          ids = ids.substring(0,ids.length - 1)
+        }
+        this.batchDelMyLike({ids})
 
       },
       allChecked: function () {
@@ -165,7 +179,7 @@
     },
     filters: {
       formatDate: function (time) {
-        var date = new Date(time)
+        let date = new Date(time)
         const separator = '-'
         let month = date.getMonth() + 1
         let strDate = date.getDate()
@@ -186,10 +200,13 @@
     .like {
         &-container {
         }
-        &-head-top-img {
-            width: 100%;
+        &-header-container {
+            display: flex;
+            flex-direction: column;
+            background: #f6f6f6 center/100% no-repeat;
+            background-size: 100%;
+            color: white;
             height: 300px;
-            background-image: url('../../assets/images/my_like_head.png') ;
         }
         &-head-default {
             display: flex;
@@ -206,6 +223,11 @@
                 padding: 3px 8px 0px 0px;
                 font-size: 36px;
                 color: #3e3e53;
+            }
+            &-record-number {
+                padding: 6px 0px 0px 0px;
+                font-size: 28px;
+                color: #7d7d7e;
             }
             &-right-icon {
                 width: 28px;
@@ -248,8 +270,7 @@
                 flex-direction: row;
                 border-bottom: 0.1px solid #ddd;
                 &-check {
-                    margin: 55px 0px 0px 0px;
-                    padding: 0px 20px 0px 0px;
+                    padding: 24px 35px 24px 0px;
                 }
                 &-content {
                     flex-grow: 1;
@@ -288,7 +309,7 @@
                 width: 180px;
                 height: 200px;
                 margin-top: 180px;
-                background-image: url('../../assets/images/my_data_empty.png');
+                background-image: url('../../assets/images/my_like_empty.png');
             }
             &-warn {
                 margin: 40px 0;

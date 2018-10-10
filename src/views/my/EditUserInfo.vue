@@ -72,7 +72,7 @@
 import { createNamespacedHelpers } from 'vuex'
 import { Toast } from 'vant'
 import LoadingDialog from '../../components/LoadingDialog'
-import { getGradeNum } from './MyUtil'
+import { getGradeNum } from './../../utils/utils'
 
 const { mapState, mapActions } = createNamespacedHelpers('userInfoData')
 export default {

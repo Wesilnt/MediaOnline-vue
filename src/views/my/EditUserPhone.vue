@@ -117,11 +117,10 @@
         let num = 60
         let that = this
         clearInterval(timer)
-        var timer = setInterval(function() {
+        let timer = setInterval(function() {
           num--
           that.countDownNumber = num
           if (num === 0) {
-            //that.countDownNumber
             clearInterval(timer)
             that.showGetValidCode = true
           }
