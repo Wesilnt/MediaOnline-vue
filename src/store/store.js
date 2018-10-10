@@ -91,7 +91,8 @@ export default new Vuex.Store({
     async wxPayment({state,dispatch},{timestamp,nonceStr,packageStr,paySign,successCB,failCB}){
       let fullPath = window.location.href
       let jsApiList = ['chooseWXPay']
-      dispatch('registerWxConfig',{fullPath,jsApiList})   
+      dispatch('registerWxConfig',{fullPath,jsApiList})
+      console.log('packageStr = ',packageStr)   
       wx.ready(function(){
         wx.chooseWXPay({
             timestamp: timestamp,
