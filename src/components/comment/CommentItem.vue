@@ -89,9 +89,10 @@ export default {
 <style lang='less' scoped>
 .comments-container {
   font-size: 28px;
-  color: #333;
+  color: #333; 
 }
 .comment-item {
+  width: 100%;
   padding: 48px 40px 48px;
 }
 .comment-avatar {

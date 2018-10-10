@@ -211,6 +211,6 @@ export default {
   font-weight: 400;
 }
 .vision_comment_item {
-  margin: 40px 48px;
+  padding: 40px 48px;
 }
 </style>
