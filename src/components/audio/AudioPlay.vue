@@ -146,8 +146,7 @@ export default {
     }
   },
   methods: {
-    ...rootActions(['getUserInfo']),
-    ...mapMutations(['bindCourseName','setFloatButton']),
+    ...rootActions(['getUserInfo']), 
     ...mapActions([
       'getAudioDetail',
       'postFavorite',
@@ -158,7 +157,8 @@ export default {
       'seekTo',
       'pre',
       'next',
-      'toggleFloatButton'
+      'toggleFloatButton',
+      'bindCourseName'
     ]), 
     //拖动进度改变进度
     onInputChange(e) {
