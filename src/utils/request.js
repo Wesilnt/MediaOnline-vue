@@ -43,10 +43,11 @@ function checkStatus(url, response) {
       duration: 3000,
       message: response.error
     })
+    console.error('返回错误状态码' + error)
+    console.dir(error)
+    console.error('接口名称  ' + url)
   }
-  console.error('返回错误状态码' + error)
-  console.dir(error)
-  console.error('接口名称  ' + url)
+
   throw error
 }
 
@@ -70,15 +71,21 @@ const checkResponseCode = (url, response) => {
   // 1002: token过期 需重新申请 // 1001: token无效 需退出重新登录
   if (response.code === 1002 || response.code === 1001)
     return dispatch('getAccessToken')
+  if(isProdVersion) {
+    Toast.fail({
+      duration: 3000, // 持续展示 toast
+      message: '网络异常'
+    })
+  } else {
+    Toast.fail({
+      duration: 3000, // 持续展示 toast
+      message: response.error
+    })
+    console.error('返回响应错误' + error)
+    console.dir(error)
+    console.error('接口名称  ' + url)
+  }
 
-  Toast.fail({
-    duration: 4000, // 持续展示 toast
-    message: response.error
-  })
-  // toast.fail(response.error);
-  console.error('返回响应错误' + error)
-  console.dir(error)
-  console.error('接口名称  ' + url)
   throw error
 }
 /**
@@ -125,17 +132,29 @@ function request(url, options) {
     .catch(e => {
       const status = e.name
       if (status === 403) {
-        Toast.fail('403')
+        if(isProdVersion) {
+          Toast.fail('网络异常')
+        } else {
+          Toast.fail('403')
+        }
         // dispatch(routerRedux.push("/exception/403"));
         return
       }
       if (status <= 504 && status >= 500) {
-        Toast.fail('500')
+        if(isProdVersion) {
+          Toast.fail('网络异常')
+        } else {
+          Toast.fail('500')
+        }
         // dispatch(routerRedux.push('/exception/500'));
         return
       }
       if (status >= 404 && status < 422) {
-        Toast.fail('404')
+        if(isProdVersion) {
+          Toast.fail('网络异常')
+        } else {
+          Toast.fail('404')
+        }
         // dispatch(routerRedux.push("/exception/404"));
       }
     })
