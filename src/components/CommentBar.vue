@@ -7,16 +7,17 @@
             @click-overlay="closePopup"
             :lazy-render="false"
     >
-       
         <div class="qhht-flex commentBar-wrapper" >
             <a class="qhht-icon commentBar-btn" :style="{backgroundImage:`url('${record?iconInputer:iconSpeaker}')`}" @click="toggleRecord"></a>
             <div class="commentBar-inputer" >
                 <div class="voiceRecord" :class="{'voiceRecord-touched':touched}" ref="voiceRecord"  v-show="record">
                    {{touched?'松开 结束':'按住 说话'}}
-                    <span class="voiceRecord-progress" :style="{width:`${recordProgress}%`}">{{recordTime}}</span>
+                    <span class="voiceRecord-progress" :style="{width:`${recordProgress}%`}"></span>
+                    <span class="record-badge">{{recordTime}} / {{MAXRECORD}}</span>
                 </div>
                 <textarea v-show="!record" v-focus ref="textarea" @input="checkRows" @keyup.enter="closePopup" :rows="rows" class="commentBar-textarea"  placeholder="写评论" autofocus></textarea>
             </div>
+            <a v-show="record && recordTime>0 && !touched" class="record-play">试听</a>
             <a v-show="(!record || recordTime>0) && !touched" class="qhht-icon commentBar-btn" :style="{backgroundImage:`url('${iconSubmit}')`}" @click="submit"></a>
             <!--<a class="commentBar-submit" @click="closePopup">发送</a>-->
         </div>
@@ -28,9 +29,7 @@ import default_speaker_icon from '../assets/images/audio_cmt_speak.png'
 import default_inputer_icon from '../assets/images/audio_cmt_text.png'
 import default_submit_icon from '../assets/images/comment-submit.png'
 
-const MAXRECORD = 60
 let inter = null
-let touchStartTime = 0
 export default {
   name: 'CommentBar',
   props: {
@@ -50,11 +49,14 @@ export default {
   data: function() {
     return {
       value: '',
+      MAXRECORD: 60,
       showPop: false,
       rows: 1,
       record: false,
       touched: false,
-      recordTime: 0
+      play: false,
+      recordTime: 0,
+      localId: null
     }
   },
   directives: {
@@ -64,7 +66,7 @@ export default {
   },
   computed: {
     recordProgress: function() {
-      return (this.recordTime / MAXRECORD) * 100
+      return (this.recordTime / this.MAXRECORD) * 100
     }
   },
   watch: {
@@ -109,6 +111,9 @@ export default {
     intervalRocrdTime() {
       this.recordTime = 0
       inter = setInterval(() => {
+        if (this.recordTime === this.MAXRECORD) {
+          return clearInterval(inter)
+        }
         this.recordTime++
       }, 1000)
     },
@@ -123,11 +128,20 @@ export default {
       wx.stopRecord({
         success: function(res) {
           const { localId } = res
-          wx.playVoice({
-            localId // 需要播放的音频的本地ID，由stopRecord接口获得
-          })
+          this.localId = localId
         }
       })
+    },
+    togglePlayVoice() {
+      const { localId } = this
+      if (!localId) return
+      this.play
+        ? wx.stopVoice({
+            localId // 需要停止的音频的本地ID，由stopRecord接口获得
+          })
+        : wx.playVoice({
+            localId // 需要播放的音频的本地ID，由stopRecord接口获得
+          })
     }
   },
   mounted() {
@@ -137,6 +151,18 @@ export default {
     console.log(this.$refs.voiceRecord)
     this.$refs.voiceRecord.addEventListener('touchstart', this.touchstart)
     this.$refs.voiceRecord.addEventListener('touchend', this.touchend)
+    wx.onVoiceRecordEnd({
+      complete: function(res) {
+        this.localId = res.localId
+        this.touched = false
+        clearInterval(inter)
+      }
+    })
+    wx.onVoicePlayEnd({
+      success: function(res) {
+        this.play = false
+      }
+    })
   }
 }
 </script>
@@ -202,10 +228,27 @@ export default {
     left: 0;
     top: 0;
     bottom: 0;
-    background-color: rgba(0,0,0,.18);
+    background-color: rgba(0, 0, 0, 0.18);
+    transition: width 0.3s linear;
   }
   &.voiceRecord-touched {
     background-color: #1da176;
+  }
+}
+.record-badge {
+  position: absolute;
+  font-size: 16px;
+  right: 40px;
+  color: #fff7b0;
+}
+.record-play {
+  padding: 4px 18px;
+  border-radius: 6px;
+  margin-right: 20px;
+  background-color: #03a9f4;
+  color: #fff;
+  &:hover {
+    color: #fff;
   }
 }
 </style>
