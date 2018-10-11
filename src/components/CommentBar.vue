@@ -77,8 +77,8 @@ export default {
   },
   methods: {
     preventDefault: function(e) {
-        console.log(e);
-        e.preventDefault()
+      console.log(e)
+      e.preventDefault()
     },
     checkRows: function(el) {
       const { target } = el
@@ -139,6 +139,7 @@ export default {
     },
     togglePlayVoice() {
       const { localId } = this
+      console.log(localId)
       if (!localId) return
       this.play
         ? wx.stopVoice({
@@ -164,7 +165,7 @@ export default {
     })
     wx.onVoicePlayEnd({
       success: res => {
-        console.log(this)
+        console.log('播放暂停')
         this.play = false
       }
     })
