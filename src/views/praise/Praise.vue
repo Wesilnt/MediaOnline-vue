@@ -56,7 +56,7 @@
 import PraiseBtn from './PraiseBtns.vue'
 import PraiseExplain from './PraiseExplain.vue'
 import Share from '../../components/share/Share.vue'
-import { createNamespacedHelpers ,mapActions as rootActions} from 'vuex'
+import { createNamespacedHelpers ,mapState as rootState, mapActions as rootActions} from 'vuex'
 const {
   mapState,
   mapMutations,
@@ -82,6 +82,7 @@ export default {
     'share-pop': Share
   },
   computed: {
+    ...rootState(['url']),
     ...mapState(['praiseDetail', 'rollerFlag', 'remainTime']),
     ...mapGetters(['praiseData'])
   },
@@ -115,7 +116,7 @@ export default {
         this.showShare = true
         //拼装分享内容
         this.shareData = {
-          link: `/#/praise/active/${this.courseId}/${this.collectLikeId}?columnType=${this.columnType}`,
+          link: this.url+ `/#/praise/active/${this.courseId}/${this.collectLikeId}?columnType=${this.columnType}`,
           title: `我是${user.nickName}, 我想免费领取《${this.praiseDetail?this.praiseDetail.course.name:'国学课'}》,求助攻~`,
           desc: '你一定会爱上国学课...',
         }
@@ -196,12 +197,18 @@ export default {
        this.getUserInfo()
       .then(user=>{
         //显示分享框
-        this.showShare = true
+        // this.showShare = true
         //拼装分享内容
         this.shareData = {
-          link: `/#/praise/active/${this.courseId}/${this.collectLikeId}?columnType=${this.columnType}`,
+          link: this.url+`/#/praise/active/${this.courseId}/${this.collectLikeId}?columnType=${this.columnType}`,
           title: `我是${user.nickName}, 我想免费领取《${this.praiseDetail?this.praiseDetail.course.name:'国学课'}》,求助攻~`,
           desc: '你一定会爱上国学课...',
+          successCB: () => {
+             this.$toast('分享回调成功')
+          },
+          cancelCB: () => {
+            this.$toast('分享回调失败')
+          }
         }
          this.setWxShareFriend(this.shareData)
          this.setWxShareZone(this.shareData)
