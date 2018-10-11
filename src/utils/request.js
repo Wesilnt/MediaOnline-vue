@@ -48,6 +48,9 @@ const checkResponseCode = (url, response) => {
     return response
   }
   if (response.code == 0) {
+    if(parseInt(response.data)=== 0){
+      return response.data
+    }
     return response.data || response
   }
   const { dispatch } = store
