@@ -13,7 +13,8 @@ const visionData = {
         categoryList:[],
         commentList:[],
         finished:false,
-        isLoading:false
+        isLoading:false,
+        courseName:''//专栏名称
     },
     actions:{
         reverse({commit,state}){
@@ -87,6 +88,7 @@ const visionData = {
         },
         setVisionDetail(state, visionDetail){
             state.visionDetail = visionDetail;
+            state.courseName = visionDetail.name
         },
         setCommentList(state, commentList){
             state.commentList = commentList;
@@ -102,12 +104,6 @@ const visionData = {
         },
         setIsLoading(state,isLoading){
             state.isLoading = isLoading;
-        }
-    },
-    getters:{
-        //获取专栏名称
-        courseName(state){
-            return state.visionDetail.name
         }
     },
     modules:{

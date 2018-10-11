@@ -14,7 +14,8 @@ export default {
         bookDetail: {}, //书详情
         singleSetList: [], //单集列表
         singleFinished:false,
-        singleLoaing:false
+        singleLoaing:false,
+        courseName:""//专栏名称
     },
     mutations: {
         initData(state,courseId){
@@ -34,6 +35,7 @@ export default {
         },
         bindBookDetail(state, res) {
             state.bookDetail = res
+            state.courseName = res.name
         },
         bindSingleSetList(state, {res,page,totalCount}) { 
           if(1==page) state.singleSetList = []
@@ -123,11 +125,6 @@ export default {
                 description:state.bookDetail.description,            //内容介绍
             }
         },
-        //获取专栏名称
-        courseName(state){
-            return state.bookDetail.name
-        },
-
       playingId:(state,getters,rootState)=>rootState.audiotaskData.audioDetail.id
     },
     modules:{
