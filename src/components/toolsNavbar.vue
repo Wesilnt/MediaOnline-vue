@@ -206,6 +206,7 @@ export default {
           }
           break
         case 1005:
+        alert('代码走到这里')
           //拼团中
           this.sharePageShow = true
           //拼装分享内容
