@@ -91,7 +91,6 @@ export default {
         this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
       }
     }
-    // isShowMobileDialog: function(newVal) {}
   },
   computed: {
     ...mapState([
@@ -106,9 +105,8 @@ export default {
       'courseId', //专栏ID
       'startPraiseFlag',
       'serviceType',
-      'courseName'
     ]),
-    ...mapGetters(['isFromShare'])
+    ...mapGetters(['isFromShare','courseName'])
   },
   filters: {
     formatPrice: function(price) {
@@ -180,22 +178,6 @@ export default {
           //拼团中
           this.sharePageShow = true
           //拼装分享内容
-          // const shareData = {
-          //   link: `/#/videoColumnDetail/${this.courseId}?groupBuyId=${
-          //     this.groupBuyId
-          //   }`,
-          //   title: '视频分享',
-          //   desc: '这是一个神奇的视频',
-          //   imgUrl: ''
-          // }
-          // this.shareData = shareData 
-          // this.getUserInfo().then(user => {
-          //   this.shareData = {
-          //     link: `/#/videoColumnDetail/${this.courseId}?groupBuyId=${this.groupBuyId}`, 
-          //     title: `我是${user.nickName}, 我参加了购买《${this.courseName}》拼团活动,快来跟我一起完成拼团吧。`,
-          //     desc: '你一定会爱上这个视频专栏的...' 
-          //   }
-          // })
           this.setShareInfo() 
           break
       }
@@ -232,10 +214,6 @@ export default {
           break
         case 0:
           //没有购买和集赞行为
-          // params = {
-          //   courseId: this.courseId
-          // }
-          // this.startCollectLike(params)
           let params = {
             courseId: this.courseId,
             payType: 3

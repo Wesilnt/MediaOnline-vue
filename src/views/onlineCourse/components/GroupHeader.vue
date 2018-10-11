@@ -9,7 +9,6 @@
                 </div>
                 <div class="qhht-flex groupBuy-usericon-bot">
                         <div class="groupBuy-usericon-item" v-for="(item,index) in userListBot" :key="index" :style="item.avatarUrl==null?{}:{ background : 'url('+item.avatarUrl+')', 'background-size' : '100%'}">
-                            <!-- <div class="groupBuy-usericon-manager" v-show="item.isStarter">团长</div>             -->
                         </div>
                 </div>
             </div>
@@ -25,7 +24,7 @@
                 <div class="groupBuy-countDown-container">
                     <CountDown :duration="countDownTime"></CountDown>                  
                 </div>
-                <div class="groupBuy-deadline">距离截止时间{{isSixGroup}}</div>               
+                <div class="groupBuy-deadline">距离截止时间</div>               
             </div>
             <div v-else-if="headerType==101">
                 <div class="groupBuy-info">拼团成功</div>
@@ -42,14 +41,11 @@
         <div v-if="serviceType ==='Readings'">
           <div class="book-header-container lazy-img-larger">
             <div class="book-cover" v-lazy:background-image="profilePic" :style="{'background-size':'100%',backgroundPosition:'center',backgroundRepeat:'no-repeat'}">
-              <!-- <span v-if="new Date().getTime() - new Date(bookDetail.createTime).getTime()<30*24*3600*1000">上新</span> -->
             </div>
           </div>
         </div>
            <!--2. 少年视野，少年必修-->
         <div v-else class="lazy-img-larger groupBuy-banner" v-lazy:background-image="profilePic">
-
-            <!-- <div class="groupBuy-circleline" v-show="true"></div> -->
             <span class="groupBuy-banner-bottom" v-show="buyCount == 0 ? false : true">{{buyCount}}人已购买</span>
         </div>
     </div>
