@@ -11,23 +11,25 @@
         <div class="qhht-flex commentBar-wrapper" >
             <a class="qhht-icon commentBar-btn" :style="{backgroundImage:`url('${record?iconInputer:iconSpeaker}')`}" @click="toggleRecord"></a>
             <div class="commentBar-inputer" >
-                <div class="voiceRecord" ref="voiceRecord"  v-show="record">
-                    录音测试
+                <div class="voiceRecord" :class="{'voiceRecord-touched':touched}" ref="voiceRecord"  v-show="record">
+                   {{touched?'松开 结束':'按住 说话'}}
+                    <span class="voiceRecord-progress" :style="{width:`${recordProgress}%`}">{{recordTime}}</span>
                 </div>
                 <textarea v-show="!record" v-focus ref="textarea" @input="checkRows" @keyup.enter="closePopup" :rows="rows" class="commentBar-textarea"  placeholder="写评论" autofocus></textarea>
             </div>
-            <a v-show="!record || recordTime>0" class="qhht-icon commentBar-btn" :style="{backgroundImage:`url('${iconSubmit}')`}" @click="submit"></a>
+            <a v-show="(!record || recordTime>0) && !touched" class="qhht-icon commentBar-btn" :style="{backgroundImage:`url('${iconSubmit}')`}" @click="submit"></a>
             <!--<a class="commentBar-submit" @click="closePopup">发送</a>-->
         </div>
     </van-popup>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
 import default_speaker_icon from '../assets/images/audio_cmt_speak.png'
 import default_inputer_icon from '../assets/images/audio_cmt_text.png'
 import default_submit_icon from '../assets/images/comment-submit.png'
 
+const MAXRECORD = 60
+let inter = null
 let touchStartTime = 0
 export default {
   name: 'CommentBar',
@@ -48,9 +50,10 @@ export default {
   data: function() {
     return {
       value: '',
-      showPop: true,
+      showPop: false,
       rows: 1,
       record: false,
+      touched: false,
       recordTime: 0
     }
   },
@@ -59,30 +62,17 @@ export default {
       el.focus()
     }
   },
+  computed: {
+    recordProgress: function() {
+      return (this.recordTime / MAXRECORD) * 100
+    }
+  },
   watch: {
     show: function(show) {
       this.showPop = show
     }
   },
   methods: {
-    ...mapActions(['registerWxConfig']),
-    handleRegisterWxConfig: function() {
-      const { fullPath } = this.$route
-      this.registerWxConfig({
-        fullPath,
-        jsApiList: [
-          'startRecord',
-          'stopRecord',
-          'onVoiceRecordEnd',
-          'playVoice',
-          'pauseVoice',
-          'stopVoice',
-          'onVoicePlayEnd',
-          'uploadVoice',
-          'translateVoice'
-        ]
-      })
-    },
     checkRows: function(el) {
       const { target } = el
       let inputerWidth = 0
@@ -116,14 +106,20 @@ export default {
     toggleRecord() {
       this.record = !this.record
     },
+    intervalRocrdTime() {
+      this.recordTime = 0
+      inter = setInterval(() => {
+        this.recordTime++
+      }, 1000)
+    },
     touchstart() {
+      this.intervalRocrdTime()
+      this.touched = true
       wx.startRecord()
-      touchStartTime = new Date()
     },
     touchend() {
-      this.recordTime = new Date() - touchStartTime
-      touchStartTime = 0
-      console.log(this.recordTime)
+      clearInterval(inter)
+      this.touched = false
       wx.stopRecord({
         success: function(res) {
           const { localId } = res
@@ -135,7 +131,6 @@ export default {
     }
   },
   mounted() {
-    this.handleRegisterWxConfig()
     window.addEventListener('contextmenu', function(e) {
       e.preventDefault()
     })
@@ -193,12 +188,24 @@ export default {
   color: #fff;
 }
 .voiceRecord {
+  position: relative;
   border-radius: 72px;
   line-height: 72px;
   background-color: #20c997;
   color: #fff;
   text-align: center;
+  overflow: hidden;
   user-select: none;
   -webkit-touch-callout: none;
+  .voiceRecord-progress {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,.18);
+  }
+  &.voiceRecord-touched {
+    background-color: #1da176;
+  }
 }
 </style>

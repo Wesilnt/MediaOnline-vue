@@ -50,6 +50,7 @@
 import { createNamespacedHelpers } from 'vuex'
 import Badge from '../../components/Badge'
 import Skeleton from '../../components/Skeleton'
+import { puzzleTabs, praiseTypes, puzzleTypes } from '../../utils/config'
 
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
   'myPuzzle_PraiseData'
@@ -59,10 +60,17 @@ export default {
   name: 'MyPuzzlePraise',
   data: function() {
     const { path } = this.$route
-    let pageName = ''
+    let pageName = '',
+      puzzleTypes = puzzleTypes
     if (path.endsWith('my-puzzle')) pageName = '拼团'
-    else if (path.endsWith('my-praise')) pageName = '集赞'
+    else if (path.endsWith('my-praise')) {
+      pageName = '集赞'
+      puzzleTypes = praiseTypes
+    }
+
     return {
+      puzzleTabs,
+      puzzleTypes,
       selected: '1200',
       pageName,
       isPraise: pageName === '集赞',
@@ -73,8 +81,6 @@ export default {
   },
   computed: {
     ...mapState([
-      'puzzleTabs',
-      'puzzleTypes',
       'currentType',
       'puzzleList',
       'querying',
@@ -88,6 +94,7 @@ export default {
   watch: {
     selected: function(currentType) {
       const { isPraise, puzzleTypes, pageSize, currentPage } = this
+        console.log(this);
       const Types = Object.values(puzzleTypes)
       this.toggleCurrentType({
         pageSize,
