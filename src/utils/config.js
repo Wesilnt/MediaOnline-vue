@@ -16,7 +16,7 @@ export const courseType = {
 // 首页导航配置
 export const navbar = [
   {
-    name: '首页',
+    name: '发现',
     icon: require('../assets/images/nav_home_normal.png'),
     activeIcon: require('../assets/images/nav_home_selected.png'),
     path: '/home'
