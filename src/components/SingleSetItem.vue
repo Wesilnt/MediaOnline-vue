@@ -12,7 +12,7 @@
             {{item.subTitle}}
           </h4>
           <div class="bottom-container">
-            <span v-if="item.isAudition">试听</span> 
+            <span v-if="item.isFree">试听</span> 
             <p>{{item.totalTime | formatDuring}} | {{item.learnTime | learntimeFormat(item.totalTime,item.id)}}</p> 
           </div>
         </div>
