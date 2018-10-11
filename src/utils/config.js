@@ -50,7 +50,7 @@ if (NODE_ENV === 'development') {
 // http://m.shbaoyuantech.com/#    正式环境
 let originUrl = 'http://t.shbaoyuantech.com/#'
 if (NODE_ENV === 'production') {
-  originUrl = 'http://t.shbaoyuantech.com/#'
+  originUrl = 'http://m.shbaoyuantech.com/#'
 }
 
 // 微信授权地址
