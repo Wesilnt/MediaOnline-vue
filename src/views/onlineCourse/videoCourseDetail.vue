@@ -13,7 +13,7 @@
           <!-- <img :src="require('../../assets/images/onlinecourse_video_ic_gift.png')" class="video-detail-header-gift" alt="">     -->
     </div>
     <!-- 播放器 -->
-    <video class="videoitem" ref="videoitem" v-show="true" :src="videoUrl" controls="controls" width="100%" height='100%' preload="auto"></video>
+    <video class="videoitem" ref="videoitem" v-show="false" :src="videoUrl" controls="controls" width="100%" height='100%' preload="auto"></video>
     <!-- Navbar -->
     <ScrollNavBar :bars="navBars" />
     <!-- <div ref="navbar" :class="navbarFixed == true ? 'isFixed' : ''" class="video-detail-navbar">
@@ -65,6 +65,7 @@ import QuestionList from './QuestionList'
 import CommentBar from '../../components/CommentBar'
 import Share from '../../components/share/Share.vue'
 import { createNamespacedHelpers } from 'vuex'
+import { mapActions as mapRootActions } from 'vuex'
 const {
   mapState,
   mapGetters,
@@ -164,6 +165,7 @@ export default {
   created() {
     const { lessonId } = this.$route.params
     this.getVideoCourseDetail({ lessonId })
+    this.handleRegisterWxConfig()
   },
   methods: {
     ...mapMutations([
@@ -179,14 +181,31 @@ export default {
       'unCollectFavorite',
       'postComment'
     ]),
+    ...mapRootActions(['registerWxConfig']),
+    handleRegisterWxConfig: function() {
+      const { fullPath } = this.$route
+      this.registerWxConfig({
+        fullPath,
+        jsApiList: [
+          'startRecord',
+          'stopRecord',
+          'onVoiceRecordEnd',
+          'playVoice',
+          'pauseVoice',
+          'stopVoice',
+          'onVoicePlayEnd',
+          'uploadVoice',
+          'translateVoice'
+        ]
+      })
+    },
     //播放视频
     clickPlayVideoBtn() {
-    
       const video = this.$refs.videoitem
       //从本地获取当前播放单集历史播放位置
       const videoData = JSON.parse(localStorage.getItem(this.id))
-        // console.log('play的回调')
-        // console.log("videoData--Play = ",videoData)
+      // console.log('play的回调')
+      // console.log("videoData--Play = ",videoData)
       const { historyPlayPosition } = videoData
       video.play()
       video.currentTime =
@@ -204,9 +223,9 @@ export default {
       /*
       视频存储数据逻辑
       */
-     
+
       // 获取播放累计时长
-      if(readyState==4 || readyState==3){
+      if (readyState == 4 || readyState == 3) {
         // console.log('代码是否能走到这里~~~~~~~~')
         const durationPlayingTime = this.playStartTime
           ? (new Date() - this.playStartTime) / 1000
@@ -214,13 +233,13 @@ export default {
         // console.log(this.playStartTime)
         // this.loaclPlayTotalTime += durationPlayingTime
         // const newVideoData = JSON.parse(localStorage.getItem(this.id))
-        const newTotalTime =  this.loaclPlayTotalTime + durationPlayingTime
+        const newTotalTime = this.loaclPlayTotalTime + durationPlayingTime
         // const newTotalTime =
         //   durationPlayingTime + Math.round(parseFloat(newVideoData.playTotalTime))
-          let newPosition = currentTime
+        let newPosition = currentTime
         // let newPosition = durationPlayingTime + Math.round(parseFloat(newVideoData.historyPlayPosition))
         //累计播放时长大于视频总长度.将历史播放进度置为0
-        if(newPosition > this.totalTime){
+        if (newPosition > this.totalTime) {
           newPosition = 0
         }
         const obj = {
@@ -235,36 +254,34 @@ export default {
         */
         //  播放累计时长大于视频的总时长，解锁
         // console.log(newTotalTime,currentTime, this.totalTime * 0.7)
-        if (
-            !this.deblockQuestion &&
-            newTotalTime>= this.totalTime * 0.7
-          ) {
-            console.log('deblockQuestion ===',this.deblockQuestion)
-            console.log('newTotalTime ===',newTotalTime)
-            this.bindQuestionBymyself({ deblockQuestion: true })
-        }     
-      }else{
+        if (!this.deblockQuestion && newTotalTime >= this.totalTime * 0.7) {
+          console.log('deblockQuestion ===', this.deblockQuestion)
+          console.log('newTotalTime ===', newTotalTime)
+          this.bindQuestionBymyself({ deblockQuestion: true })
+        }
+      } else {
         const videoData = JSON.parse(localStorage.getItem(this.id))
         this.playStartTime = new Date()
-        this.loaclPlayTotalTime = Math.round(parseFloat(videoData.playTotalTime))
+        this.loaclPlayTotalTime = Math.round(
+          parseFloat(videoData.playTotalTime)
+        )
       }
-      if(paused){
-        // 进度条 未解锁就动态显示 
+      if (paused) {
+        // 进度条 未解锁就动态显示
         if (!this.deblockQuestion && duration) {
           const percent = (this.loaclPlayTotalTime / duration) * 100
           let progress = percent <= 100 ? percent : 100
           this.bindQuestionBymyself({ progress })
-          console.log('loaclPlayTotalTime ===',this.loaclPlayTotalTime)
-          console.log('progress ===',progress)
+          console.log('loaclPlayTotalTime ===', this.loaclPlayTotalTime)
+          console.log('progress ===', progress)
         }
       }
-
     },
     //显示键盘
     toggleKeyboard(commentBarShow, inputer) {
       this.commentBarShow = commentBarShow
       if (inputer) {
-        const {lessonId }= this.$route.params
+        const { lessonId } = this.$route.params
         const params = {
           regionId: lessonId,
           regionType: 2202,
@@ -294,7 +311,7 @@ export default {
     //点击目录
     beActive(lessonId) {
       this.getVideoCourseDetail({ lessonId })
-    },
+    }
     // clickFnc(index) {
     //   this.selected = index
     //   let positionId
@@ -472,7 +489,6 @@ export default {
   background-color: rgb(247, 247, 247);
   display: flex;
   align-items: center;
-
   img {
     width: 30px;
     height: 30px;

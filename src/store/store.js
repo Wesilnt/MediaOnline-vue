@@ -115,7 +115,7 @@ export default new Vuex.Store({
       })
     },
     async setWxShareFriend(
-      { state },
+      { state,dispatch },
       {
         title,
         desc='秦汉胡同国学，让我们的孩子成为一个有涵养的人',
@@ -131,22 +131,25 @@ export default new Vuex.Store({
         throw new Error('link error')
         return
       }
-        const nickname='Dorma';
-      const shareOptions = {
-        title:title|| `${nickname}邀请您一起上课啦！`, // 分享标题
-        desc, // 分享描述
-        link:link||state.url+'/#/home', // 分享链接,，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-        imgUrl, // 分享图标
-        type, //  分享类型,music、video或link，不填默认为link       *****只对分享给朋友有效*****
-        dataUrl, // 如果type是music或video，则要提供数据链接，默认为空      *****只对分享给朋友有效*****
-        success: res => successCB(res),
-        cancel: res => cancelCB(res)
-      }
-      wx.ready(() => {
-        // 分享给朋友
-        wx.onMenuShareAppMessage(shareOptions)
-        // 分享给qq
-        wx.onMenuShareQQ(shareOptions)
+      dispatch('getUserInfo').then(user=>{
+        const nickname = user.nickName
+        const shareOptions = {
+          title:title|| `${nickname}邀请您一起上课啦！`, // 分享标题
+          desc, // 分享描述
+          link:link||state.url+'/#/home', // 分享链接,，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+          imgUrl, // 分享图标
+          type, //  分享类型,music、video或link，不填默认为link       *****只对分享给朋友有效*****
+          dataUrl, // 如果type是music或video，则要提供数据链接，默认为空      *****只对分享给朋友有效*****
+          success: res => successCB(res),
+          cancel: res => cancelCB(res)
+        }
+        console.log("设置分享信息：",shareOptions)
+        wx.ready(() => {
+          // 分享给朋友
+          wx.onMenuShareAppMessage(shareOptions)
+          // 分享给qq
+          wx.onMenuShareQQ(shareOptions)
+        })
       })
     },
     async setWxShareZone(

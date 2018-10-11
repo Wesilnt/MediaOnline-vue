@@ -44,17 +44,17 @@ const videoColumnDetailData = {
     async getVideoColumnDetail({ commit, dispatch }, { courseId, groupBuyId }) {
       //获取视频专栏数据
       const result = await getVideoColumnDetail({ courseId })
-      console.log('视频专栏接口数据:')
-      console.log(result)
-
+      
       //绑定专栏详情内容
-      commit('bindVideoColumnDetail', {result,isFromShare:groupBuyId?true:false})
       const profilePic = result.profilePic
       const freeLessonList = result.freeLessonList
       const serviceType = "OnlineCourse"
       //绑定与拼团相关的内容
       dispatch('groupManagerData/initColumnInfo',{serviceType,courseId,profilePic,'freeLesson':freeLessonList})
-
+      
+      console.log('视频专栏接口数据:')
+      console.log(result)
+      commit('bindVideoColumnDetail', {result,isFromShare:groupBuyId?true:false})
       if (groupBuyId) {
           //这里是分享链接进来的
         dispatch('groupManagerData/getGroupBuyDetail', groupBuyId)

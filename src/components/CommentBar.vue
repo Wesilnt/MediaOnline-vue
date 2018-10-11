@@ -7,28 +7,30 @@
             @click-overlay="closePopup"
             :lazy-render="false"
     >
-       
         <div class="qhht-flex commentBar-wrapper" >
             <a class="qhht-icon commentBar-btn" :style="{backgroundImage:`url('${record?iconInputer:iconSpeaker}')`}" @click="toggleRecord"></a>
             <div class="commentBar-inputer" >
-                <div class="voiceRecord" ref="voiceRecord"  v-show="record">
-                    录音测试
+                <div class="voiceRecord" :class="{'voiceRecord-touched':touched}" ref="voiceRecord"  v-show="record">
+                   {{touched?'松开 结束':'按住 说话'}}
+                    <span class="voiceRecord-progress" :style="{width:`${recordProgress}%`}"></span>
+                    <span class="record-badge">{{recordTime}} / {{MAXRECORD}}</span>
                 </div>
                 <textarea v-show="!record" v-focus ref="textarea" @input="checkRows" @keyup.enter="closePopup" :rows="rows" class="commentBar-textarea"  placeholder="写评论" autofocus></textarea>
             </div>
-            <a v-show="!record || recordTime>0" class="qhht-icon commentBar-btn" :style="{backgroundImage:`url('${iconSubmit}')`}" @click="submit"></a>
+            <a v-show="record && recordTime>0 && !touched" class="record-play animated infinite" :class="{heartBeat:play}" @click="togglePlayVoice">试听</a>
+            <a v-show="(!record || recordTime>0) && !touched" class="qhht-icon commentBar-btn" :style="{backgroundImage:`url('${iconSubmit}')`}" @click="submit" ></a>
             <!--<a class="commentBar-submit" @click="closePopup">发送</a>-->
         </div>
     </van-popup>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
 import default_speaker_icon from '../assets/images/audio_cmt_speak.png'
 import default_inputer_icon from '../assets/images/audio_cmt_text.png'
 import default_submit_icon from '../assets/images/comment-submit.png'
 
-let touchStartTime = 0
+let inter = null,
+  voiceRecord = null
 export default {
   name: 'CommentBar',
   props: {
@@ -48,15 +50,24 @@ export default {
   data: function() {
     return {
       value: '',
-      showPop: true,
+      MAXRECORD: 60,
+      showPop: false,
       rows: 1,
       record: false,
-      recordTime: 0
+      touched: false,
+      play: false,
+      recordTime: 0,
+      localId: null
     }
   },
   directives: {
     focus: function(el) {
       el.focus()
+    }
+  },
+  computed: {
+    recordProgress: function() {
+      return (this.recordTime / this.MAXRECORD) * 100
     }
   },
   watch: {
@@ -65,23 +76,9 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['registerWxConfig']),
-    handleRegisterWxConfig: function() {
-      const { fullPath } = this.$route
-      this.registerWxConfig({
-        fullPath,
-        jsApiList: [
-          'startRecord',
-          'stopRecord',
-          'onVoiceRecordEnd',
-          'playVoice',
-          'pauseVoice',
-          'stopVoice',
-          'onVoicePlayEnd',
-          'uploadVoice',
-          'translateVoice'
-        ]
-      })
+    preventDefault: function(e) {
+      console.log(e)
+      e.preventDefault()
     },
     checkRows: function(el) {
       const { target } = el
@@ -116,32 +113,67 @@ export default {
     toggleRecord() {
       this.record = !this.record
     },
+    intervalRocrdTime() {
+      this.recordTime = 0
+      inter = setInterval(() => {
+        if (this.recordTime === this.MAXRECORD) {
+          return clearInterval(inter)
+        }
+        this.recordTime++
+      }, 1000)
+    },
     touchstart() {
+      this.intervalRocrdTime()
+      this.touched = true
       wx.startRecord()
-      touchStartTime = new Date()
     },
     touchend() {
-      this.recordTime = new Date() - touchStartTime
-      touchStartTime = 0
-      console.log(this.recordTime)
+      clearInterval(inter)
+      this.touched = false
       wx.stopRecord({
-        success: function(res) {
+        success: res => {
           const { localId } = res
-          wx.playVoice({
-            localId // 需要播放的音频的本地ID，由stopRecord接口获得
-          })
+          this.localId = localId
         }
       })
+    },
+    togglePlayVoice() {
+      const { localId } = this
+      console.log(localId)
+      if (!localId) return
+      this.play
+        ? wx.stopVoice({
+            localId // 需要停止的音频的本地ID，由stopRecord接口获得
+          })
+        : wx.playVoice({
+            localId // 需要播放的音频的本地ID，由stopRecord接口获得
+          })
+      this.play = !this.play
     }
   },
   mounted() {
-    this.handleRegisterWxConfig()
-    window.addEventListener('contextmenu', function(e) {
-      e.preventDefault()
+    window.addEventListener('contextmenu', this.preventDefault)
+    voiceRecord = this.$refs.voiceRecord
+    voiceRecord.addEventListener('touchstart', this.touchstart)
+    voiceRecord.addEventListener('touchend', this.touchend)
+    wx.onVoiceRecordEnd({
+      complete: res => {
+        // this.localId = res.localId
+        this.touched = false
+        clearInterval(inter)
+      }
     })
-    console.log(this.$refs.voiceRecord)
-    this.$refs.voiceRecord.addEventListener('touchstart', this.touchstart)
-    this.$refs.voiceRecord.addEventListener('touchend', this.touchend)
+    wx.onVoicePlayEnd({
+      success: res => {
+        console.log('播放暂停')
+        this.play = false
+      }
+    })
+  },
+  destroyed() {
+    window.removeEventListener('contextmenu', this.preventDefault)
+    voiceRecord.removeEventListener('touchstart', this.touchstart)
+    voiceRecord.removeEventListener('touchend', this.touchend)
   }
 }
 </script>
@@ -193,12 +225,41 @@ export default {
   color: #fff;
 }
 .voiceRecord {
+  position: relative;
   border-radius: 72px;
   line-height: 72px;
   background-color: #20c997;
   color: #fff;
   text-align: center;
+  overflow: hidden;
   user-select: none;
   -webkit-touch-callout: none;
+  .voiceRecord-progress {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.18);
+    transition: width 0.3s linear;
+  }
+  &.voiceRecord-touched {
+    background-color: #1da176;
+  }
+}
+.record-badge {
+  position: absolute;
+  font-size: 16px;
+  right: 40px;
+  color: #fff7b0;
+}
+.record-play {
+  padding: 4px 18px;
+  border-radius: 6px;
+  margin-right: 20px;
+  background-color: #03a9f4;
+  color: #fff;
+  &:hover {
+    color: #fff;
+  }
 }
 </style>

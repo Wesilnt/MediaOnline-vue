@@ -30,6 +30,7 @@ import Share from './share/Share'
 import PhoneVerif from './PhoneVerif'
 import {
   createNamespacedHelpers,
+  mapState as rootState,
   mapActions as rootActions,
 } from 'vuex'
 const { mapState, mapActions, mapMutations,mapGetters } = createNamespacedHelpers(
@@ -72,7 +73,7 @@ export default {
   components: {
     Share,
     PhoneVerif
-  },
+  }, 
   watch: {
     collectLikeId: function(newVal) {
       if (newVal != 0 && this.startPraiseFlag) {
@@ -90,9 +91,52 @@ export default {
         const lessonId = this.freeLessonList[0].id
         this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
       }
+    },
+    userAccessStatus:function(value){ 
+    this.getUserInfo()
+    .then(user=>{ 
+      let title = null
+      switch (this.userAccessStatus) {  
+        case 1005: //拼团中  
+              title = `我正在参加《${this.courseName}》拼团活动,仅差${this.leavePerson}人,快来和我一起拼团吧!`
+          break
+          case 1009://集赞中
+             title = `我是${user.nickName}, ${true?'我想免费':'正在帮朋友'}领取《${this.courseName}》,求助攻~` 
+          break; 
+          default:
+          title =this.courseName;
+          break
+      }
+       let link = ""
+      switch (this.serviceType) {
+        case 'OnlineCourse':
+          link = this.url+`/#/videoColumnDetail/${this.courseId}?groupBuyId=${this.groupBuyId}`
+          break
+        case 'OnlineVision':
+          link =this.url+`/home/visionDetail/${this.courseId}`
+          break
+        case 'Readings':
+           link= this.url+`/home/readings/book/${this.courseId}?playType='Readings'`
+          break
+       default:
+          link =this.url+`/home/freezone`
+          break
+      }  
+      console.log("设置分享地址：",link, "   设置分享标题：",title)
+      this.shareData = {
+          link, 
+          title,
+          desc: '你一定会爱上国学课...' ,
+          successCB: () => console.log('分享回调成功') ,
+          cancelCB: () =>  this.$toast('分享回调失败')
+      }
+      this.setWxShareFriend(this.shareData)
+      this.setWxShareZone(this.shareData) 
+    }) 
     }
   },
   computed: {
+    ...rootState(['url']),
     ...mapState([
       'userList',
       'collectLikeId',
@@ -105,6 +149,7 @@ export default {
       'courseId', //专栏ID
       'startPraiseFlag',
       'serviceType',
+      'leavePerson'
     ]),
     ...mapGetters(['isFromShare','courseName'])
   },
@@ -116,7 +161,7 @@ export default {
     }
   },
   methods: {
-    ...rootActions(['getUserInfo']),
+      ...rootActions(['getUserInfo','registerWxConfig', 'setWxShareFriend', 'setWxShareZone']), 
     ...mapMutations(['bindIsShowMobileDialog', 'toggolePraiseFlag']),
     ...mapActions([
       'startGroupBuy',
@@ -175,6 +220,7 @@ export default {
           }
           break
         case 1005:
+        alert('代码走到这里')
           //拼团中
           this.sharePageShow = true
           //拼装分享内容
@@ -245,7 +291,7 @@ export default {
       this.getUserInfo().then(user => {
           this.shareData = {
             link, 
-            title: `我是${user.nickName}, 我参加了购买《${this.courseName}》拼团活动,快来跟我一起完成拼团吧。`,
+            title: `我正在参加《${this.courseName}》拼团活动,仅差${2}人,快来和我一起拼团吧!`,
             desc: '你一定会爱上国学课...' 
           }
       })

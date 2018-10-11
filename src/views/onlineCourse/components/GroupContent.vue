@@ -11,7 +11,7 @@
                 <h4>课程列表 <label>(共{{lessonCount}}讲)</label></h4>
             </div>
             <videoBigimage :src="outlinePic"/>   
-            <img :src="require('../../../assets/images/onlinecourse_bigimage_search.png')" class="videocol-bigimage-search">
+            <!-- <img :src="require('../../../assets/images/onlinecourse_bigimage_search.png')" class="videocol-bigimage-search"> -->
         </div>
         <!-- 试看课程 -->
         <div class="videocol-base">
@@ -150,13 +150,13 @@ export default {
   overflow: hidden;
 }
 
-.videocol-bigimage-search {
-  position: absolute;
-  width: 80px;
-  height: 80px;
-  right: 40px;
-  bottom: 50px;
-}
+// .videocol-bigimage-search {
+//   position: absolute;
+//   width: 80px;
+//   height: 80px;
+//   right: 40px;
+//   bottom: 50px;
+// }
 
 //区头
 .videocol-sction-title {

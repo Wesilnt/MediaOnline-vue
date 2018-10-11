@@ -4,7 +4,7 @@ const { NODE_ENV } = process.env
 // 调试选项，本地调试请改为 False
 export const IS_ONLINE = true
 // 测试 Token
-export const TEST_TOKEN = "0b538534-0cb5-4ddf-8ec1-e7cc1a444f93"
+export const TEST_TOKEN = "05005abc-f9f9-438b-b1b6-86fe4b836934"
 
 // TODO router 设置未统一，后期需要统一格式
 export const courseType = {
@@ -59,7 +59,6 @@ let wxConfigUrl =
 if (NODE_ENV === 'development') {
   wxConfigUrl = 'http://tencent.test.shbaoyuantech.com/wechat-js-config/online'
 }
-
 // 是否为线上发布版本
 let isProdVersion = false
 if (NODE_ENV === 'production') {
@@ -67,3 +66,22 @@ if (NODE_ENV === 'production') {
 }
 
 export { api, originUrl, wxConfigUrl, isProdVersion }
+
+export const puzzleTabs = {
+  all: '全部',
+  waiting: '中',
+  succeed: '成功',
+  fail: '失败'
+}
+export const puzzleTypes = {
+  all: '1200',
+  waiting: '1202',
+  succeed: '1203',
+  fail: '1204'
+}
+export const praiseTypes = {
+  all: '1200',
+  waiting: '1202',
+  succeed: '1203,1205',
+  fail: '1204'
+}

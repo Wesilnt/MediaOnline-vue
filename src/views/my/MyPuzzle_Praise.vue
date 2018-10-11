@@ -5,7 +5,7 @@
             <p class="my-puzzle-nodata-warn">暂无{{pageName}}信息</p>
             <a class="my-puzzle-nodata-btn" @click="routerToHome">我要{{pageName}}</a>
         </div>
-        <div  v-show="!allNoData" class="my-puzzle-container">
+        <div   class="my-puzzle-container">
             <van-tabs v-model="selected" color="#ffa32f" :line-width='60'>
                 <van-tab  v-for="item in Object.keys(puzzleTabs)"
                           :key="item"
@@ -50,6 +50,7 @@
 import { createNamespacedHelpers } from 'vuex'
 import Badge from '../../components/Badge'
 import Skeleton from '../../components/Skeleton'
+import { puzzleTabs, praiseTypes, puzzleTypes } from '../../utils/config'
 
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
   'myPuzzle_PraiseData'
@@ -59,10 +60,17 @@ export default {
   name: 'MyPuzzlePraise',
   data: function() {
     const { path } = this.$route
-    let pageName = ''
+    let pageName = '',
+      productTypes = puzzleTypes
     if (path.endsWith('my-puzzle')) pageName = '拼团'
-    else if (path.endsWith('my-praise')) pageName = '集赞'
+    else if (path.endsWith('my-praise')) {
+      pageName = '集赞'
+      productTypes = praiseTypes
+    }
+
     return {
+      puzzleTabs,
+      productTypes,
       selected: '1200',
       pageName,
       isPraise: pageName === '集赞',
@@ -73,8 +81,6 @@ export default {
   },
   computed: {
     ...mapState([
-      'puzzleTabs',
-      'puzzleTypes',
       'currentType',
       'puzzleList',
       'querying',
@@ -87,8 +93,9 @@ export default {
   },
   watch: {
     selected: function(currentType) {
-      const { isPraise, puzzleTypes, pageSize, currentPage } = this
-      const Types = Object.values(puzzleTypes)
+      const { isPraise, productTypes, pageSize, currentPage } = this
+        console.log(productTypes);
+      const Types = Object.values(productTypes)
       this.toggleCurrentType({
         pageSize,
         currentPage,
@@ -106,7 +113,7 @@ export default {
     puzzleList: function(puzzleList) {
       this.allNoData =
         puzzleList.length === 0 &&
-        this.currentType === this.puzzleTypes.all &&
+        this.currentType === this.productTypes.all &&
         this.totalCount === 0
     }
   },

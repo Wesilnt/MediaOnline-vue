@@ -1,23 +1,8 @@
 import { queryMyPuzzleList, queryMyPraise } from '../../api/myApi'
 
-const puzzleTabs = {
-  all: '全部',
-  waiting: '中',
-  succeed: '成功',
-  fail: '失败'
-}
-const puzzleTypes = {
-  all: '1200',
-  waiting: '1202',
-  succeed: '1203',
-  fail: '1204'
-}
-
 const myPuzzle_PraiseData = {
   namespaced: true,
   state: {
-    puzzleTabs,
-    puzzleTypes,
     currentType: '1200',
     puzzleList: [],
     pageSize: 8,

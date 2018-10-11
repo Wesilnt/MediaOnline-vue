@@ -85,7 +85,7 @@
 import toolsNavbar from '../../components/toolsNavbar.vue'
 import GroupHeader from '../onlineCourse/components/GroupHeader'
 import SingleSetList from '../../components/SingleSetList.vue'
-import { createNamespacedHelpers } from 'vuex'
+import { createNamespacedHelpers,mapState as rootState,mapActions as rootActions } from 'vuex'
 const {
   mapState,
   mapMutations,
@@ -106,7 +106,8 @@ export default {
     'tools-navbar': toolsNavbar,
     GroupHeader
   },
-  computed: {          
+  computed: {     
+      ...rootState(['url']),     
     ...mapState([
       'bookDetail',
       'singleLoaing',
@@ -124,12 +125,28 @@ export default {
     })
     this.getSingleSetList(true)
   },
+  mounted(){  
+    this.getUserInfo()
+    .then(user=>{ 
+      //拼装分享内容
+      this.shareData = {
+        link: this.url + `/#/home/readings/book/${this.courseId}`, 
+        title: this.courseName,
+        desc: '你一定会爱上国学课...',
+        successCB: () => console.log('分享回调成功') ,
+        cancelCB: () =>  console.log('分享回调失败')
+      } 
+      this.setWxShareFriend(this.shareData)
+      this.setWxShareZone(this.shareData)
+    }) 
+  },
   watch: {
     singleLoaing: function(loading) {
       this.refreshing = loading
     }
   },
   methods: {
+    ...rootActions(['getUserInfo','registerWxConfig', 'setWxShareFriend', 'setWxShareZone']),  
     ...mapMutations(['initData']),
     ...mapActions(['getBookDetail', 'getSingleSetList']),
     toLookWhole() {

@@ -83,11 +83,11 @@ export default {
       }
       if (shareScore === 'friends') {
         this.$toast('分享给朋友')
-        this.setWxShareFriend(shareOption)
+        // this.setWxShareFriend(shareOption)
       }
       if (shareScore == 'circle') {
         this.$toast('分享到朋友圈')
-        this.setWxShareZone(shareOption)
+        // this.setWxShareZone(shareOption)
       }
     },
     toPoster(){

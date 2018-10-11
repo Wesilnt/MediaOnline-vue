@@ -18,6 +18,7 @@ export default {
     isPlaying: false, //是否正在播放
     playType: "FreeZone", // //RreeZone 免费专区  OnlineVision 在线视野  Readings 读书会
     courseName:"", //专栏名
+    courseId:-1,
     throttle: null,
     statusFunc: (commit, status) => commit('statusUpdate', status),
     saveProgress: (id, currentTime, maxTime) => {
@@ -37,6 +38,7 @@ export default {
       state.audioDetail = res
       state.audioUrl = res.audioUrl
       state.audioId = res.id
+      state.courseId = res.courseId
     },
     //音频播放同步方法
     syncPlay(state, params) {
