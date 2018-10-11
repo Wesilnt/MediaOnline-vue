@@ -1,6 +1,6 @@
 import { wxConfig,getGroupBuyDetail,startGroupBuy,joinGroupBuy,startCollectLike,getCollectLike,unlockCourse,wechatSubscribed } from '../../api/groupBuyApi.js'
 import {getMyUserInfo} from '../../api/myApi'
-import { stat } from 'fs';
+import {Toast} from 'vant'
 import { WECHAT_SUBSCRIPTION_URL } from '../../utils/config'
 
 const groupManagerData = {
@@ -503,7 +503,7 @@ const groupManagerData = {
         //验证是否完成了公众号授权
         async checkoutAuthorrization({state,commit,dispatch},payload){
             if(state.isLoading) {
-            //   Toast("请不要连续点击...")
+              Toast("正在调起支付...")
               return
             }
             commit('setLoading', true)   //锁住  拼团  集赞中...
