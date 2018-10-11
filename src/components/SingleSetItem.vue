@@ -27,7 +27,7 @@ export default {
   methods: {
     onItemClick(audio) {
       let unLock = false
-      switch(useraccessstatus){
+      switch(this.useraccessstatus){
         case -3://拼团失败
         break
         case 0:
@@ -121,7 +121,7 @@ export default {
     }
   }
   .bottom-container {
-    display: block;
+    display: flex;
     flex-direction: row;
     margin: 20px 0 24px 0;
     align-items: center;
