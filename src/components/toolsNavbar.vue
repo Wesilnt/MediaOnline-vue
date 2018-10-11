@@ -122,6 +122,7 @@ export default {
           link =this.url+`/home/freezone`
           break
       }  
+      console.log("设置分享地址：",link, "   设置分享标题：",title)
       this.shareData = {
           link, 
           title,
