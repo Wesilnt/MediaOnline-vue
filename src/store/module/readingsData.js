@@ -6,6 +6,7 @@ export default {
     state: {
         courseId:0,
         pageSize : 10,
+        singlePage:1,
         currentPage:1,
         finished:false,  //分页数据是否加载完成
         loading:false,   //加载中
