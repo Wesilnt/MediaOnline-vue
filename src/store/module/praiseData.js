@@ -62,12 +62,12 @@ export default {
     //验证是否完成了公众号授权
     async checkoutAuthorrization({dispatch},params){ 
       const result = await wechatSubscribed()  
-      if(result && result==1){
+      // if(result && result==1){
           dispatch('checkStatus',params)
           return dispatch('getUserByToken').then(()=>dispatch('getCollectDetail',params))
-      }else{          //跳转去关注公众号
-          window.location.href = WECHAT_SUBSCRIPTION_URL
-      }
+      // }else{          //跳转去关注公众号
+      //     window.location.href = WECHAT_SUBSCRIPTION_URL
+      // }
     },
     //积攒状态检查
     async checkStatus({ commit }, params) {
