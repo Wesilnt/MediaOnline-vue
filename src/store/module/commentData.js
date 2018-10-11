@@ -28,7 +28,9 @@ export default {
     postComment(state, res) {},
     //更新播放列表是否点赞字段
     updateUserCommentLikeId(state, payload) {
-      state.commentList.some(element => {
+      console.log("commentList",state.commentList)
+      state.commentList.map(element => {
+        console.log("===",element, "=====", payload)
         if (element.id == payload) {
           element.userCommentLikeId = '1'
           element.likeCount = element.likeCount + 1
@@ -61,11 +63,7 @@ export default {
       const res = await postComment(params)
       console.log('发布评论：' + res)
       if (null == res) return
-      dispatch('getCommentList', {
-        regionId: params.regionId,
-        regionType: 2202,
-        isLoadMore: false
-      })
+      dispatch('getCommentList', {regionId: params.regionId, regionType: 2202,isLoadMore: false})
     },
     async likeComment({ commit, state }, commentId) {
       const result = await likeComment({ commentId: commentId })

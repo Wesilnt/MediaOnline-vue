@@ -146,6 +146,7 @@ export default {
   mounted(){  
      this.getUserInfo()
     .then(user=>{ 
+      let link = ''
       switch (this.playType) { 
         case 'OnlineVision':
           link = this.url +`/#/home/visionDetail/${this.courseId}`

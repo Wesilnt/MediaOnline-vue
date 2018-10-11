@@ -70,9 +70,7 @@ export default {
     //点赞
     onPraise(praised) {
       if (praised) {
-        return this.$toast({
-          message: '您已点赞'
-        })
+        return this.$toast({  message: '您已点赞' })
       }
       this.likeComment(this.comment.id)
     },
@@ -91,8 +89,7 @@ export default {
   font-size: 28px;
   color: #333;
 }
-.comment-item {
-  width: 100%;
+.comment-item {   
   padding: 48px 40px 48px;
 }
 .comment-avatar {

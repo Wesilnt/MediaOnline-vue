@@ -48,7 +48,8 @@
               <span>我要留言</span>
           </div>
       </div>
-      <CommentItem class="video-course-comment" v-for="item in singleComments" :key="item.id" :comment="item" :unindent="true" :regiontype="2202"/>
+      <CommentList  :regionid="id" :regiontype="2202" :haspadding="true" ></CommentList>
+      <!-- <CommentItem class="video-course-comment" v-for="item in singleComments" :key="item.id" :comment="item" :unindent="true" :regiontype="2202"/> -->
     </div>
       <CommentBar :show="commentBarShow" v-on:toggle="toggleKeyboard"/>
       <Share :show="sharePageShow" :shareid="courseId" @close="cancelSharePage"></Share>
@@ -56,6 +57,7 @@
 </template>
 
 <script>
+import CommentList from '../../components/comment/CommentList.vue'
 import ScrollNavBar from '../../components/ScrollNavBar'
 import CourseIntroduce from '../../components/CourseIntroduce.vue'
 import playlist from './components/playlist.vue'
@@ -82,7 +84,8 @@ export default {
     QuestionList,
     CommentBar,
     Share,
-    ScrollNavBar
+    ScrollNavBar,
+    CommentList
   },
   data() {
     return {

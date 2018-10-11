@@ -156,7 +156,7 @@ export default {
       let btnState = 0 //按钮状态
       let isCurrentUser = false //当前用户是否是发起集赞者
       let praised = false //当前用户是否点赞
-      let alreadyCount = 0 //已点赞人数
+      let alreadyCount = 0 // 
       let praiseDesc = '帮我点赞免费领取，求助攻' //集赞提示信息
       let userList = state.praiseDetail.userList //点赞用户列表
       if (!userList)
