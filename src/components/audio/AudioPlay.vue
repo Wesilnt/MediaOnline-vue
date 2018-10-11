@@ -148,10 +148,10 @@ export default {
     .then(user=>{ 
       switch (this.playType) { 
         case 'OnlineVision':
-          link = this.url +`/home/visionDetail/${this.courseId}`
+          link = this.url +`/#/home/visionDetail/${this.courseId}`
           break
         case 'Readings':
-           link=this.url + `/home/readings/book/${this.courseId}`
+           link=this.url + `/#/home/readings/book/${this.courseId}`
           break 
       } 
       //拼装分享内容

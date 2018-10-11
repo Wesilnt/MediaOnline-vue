@@ -117,16 +117,16 @@ export default {
        let link = ""
       switch (this.serviceType) {
         case 'OnlineCourse':
-          link = this.url+`#/videoColumnDetail/${this.courseId}?groupBuyId=${this.groupBuyId}`
+          link = this.url+`/#/videoColumnDetail/${this.courseId}?groupBuyId=${this.groupBuyId}`
           break
         case 'OnlineVision':
-          link =this.url+`#/home/visionDetail/${this.courseId}`
+          link =this.url+`/#/home/visionDetail/${this.courseId}`
           break
         case 'Readings':
-           link= this.url+`#/home/readings/book/${this.courseId}?playType='Readings'`
+           link= this.url+`/#/home/readings/book/${this.courseId}?playType='Readings'`
           break
        default:
-          link =this.url+`#/home/freezone`
+          link =this.url+`/#/home/freezone`
           break
       }
       console.log("设置分享地址：",link, "   设置分享标题：",title)
