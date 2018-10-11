@@ -5,14 +5,19 @@
 
     <ScrollNavBar :bars="navBars" />
     <!-- introduce -->
-    <div  class="intro">
+    <div  class="intro"> 
       <div id="intro" class="info bottomline">
-        <div :class=" showall?'textFold infoText fulltext':'textFold infoText detault'">{{visionDetail.description}}
+        <div class="text-margin">
+          <CourseIntroduce :courseinfo="visionDetail.description" />
+          </div>
+         
+        <!-- <div :class=" showall?'textFold infoText fulltext':'textFold infoText detault'">{{visionDetail.description}}
         </div>
         <div :class="showall?'show hide':'show'">
           <img :src="showall?arrowUp:arrowDown" class="visionarrow" alt="" @click="ellipsis">
-        </div>
+        </div> -->
       </div>
+
       <!-- outline -->
       <div class="outline bottomline">
         <div class="noticeBuyText">课程列表
@@ -65,6 +70,7 @@ import CommentItem from '../../components/comment/CommentItem.vue'
 import toolsNavbar from '../../components/toolsNavbar.vue'
 import GroupHeader from '../onlineCourse/components/GroupHeader'
 import videoBigimage from '../../components/videoBigimage.vue'
+import CourseIntroduce from '../../components/CourseIntroduce.vue'
 import { createNamespacedHelpers ,mapState as rootState,mapActions as rootActions} from 'vuex'
 const { mapState, mapActions ,mapGetters} = createNamespacedHelpers('visionData')
 export default {
@@ -75,7 +81,8 @@ export default {
     SingleSetList,
     CommentItem,
     toolsNavbar,
-    GroupHeader
+    GroupHeader,
+    CourseIntroduce
   },
   props: ['courseId'],
   data() {
@@ -161,6 +168,9 @@ export default {
   -webkit-box-orient: vertical;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+.text-margin{
+  margin: 0 40px;
 }
 .detault {
   -webkit-line-clamp: 6;
