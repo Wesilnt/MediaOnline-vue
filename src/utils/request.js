@@ -50,16 +50,17 @@ const checkResponseCode = (url, response) => {
   if (response.code == 0) {
     return response.data || response
   }
-    const { dispatch } = store
+  const { dispatch } = store
 
   const errorText = response.message || response.error || response.code
   const error = new Error(errorText)
   error.name = 'code-error'
   error.response = response
   error.code = response.code
-
+  alert(response.code)
   // 1002: token过期 需重新申请 // 1001: token无效 需退出重新登录
-  if (response.code === 1002 || response.code === 1001) return dispatch('getAccessToken')
+  if (response.code === 1002 || response.code === 1001)
+    return dispatch('getAccessToken')
 
   Toast.fail({
     duration: 4000, // 持续展示 toast
@@ -83,11 +84,14 @@ function request(url, options) {
   const accessToken = IS_ONLINE
     ? getCookie('COOKIE_TOKEN_KEY_CNONLINE')
     : TEST_TOKEN
-  const newOptions = { ...{
-          headers: {
-              Authorization: `Bearer ${btoa(accessToken)}`
-          }
-      }, ...options }
+  const newOptions = {
+    ...{
+      headers: {
+        Authorization: `Bearer ${btoa(accessToken)}`
+      }
+    },
+    ...options
+  }
   if (newOptions.method === 'POST' || newOptions.method === 'PUT') {
     if (!(newOptions.body instanceof FormData)) {
       newOptions.headers = {

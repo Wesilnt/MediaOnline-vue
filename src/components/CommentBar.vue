@@ -9,45 +9,49 @@
     >
        
         <div class="qhht-flex commentBar-wrapper" >
-            <a class="qhht-icon commentBar-btn" :style="{backgroundImage:`url('${iconLeft}')`}" @click="toggleRecord"></a>
-
+            <a class="qhht-icon commentBar-btn" :style="{backgroundImage:`url('${record?iconInputer:iconSpeaker}')`}" @click="toggleRecord"></a>
             <div class="commentBar-inputer" >
                 <div class="voiceRecord" ref="voiceRecord"  v-show="record">
                     录音测试
                 </div>
-                <textarea v-show="!record" v-focus ref="textarea" @input="checkRows" @keyup.enter="closePopup" :rows="rows" class="commentBar-textarea"  placeholder="输入评论" autofocus></textarea>
+                <textarea v-show="!record" v-focus ref="textarea" @input="checkRows" @keyup.enter="closePopup" :rows="rows" class="commentBar-textarea"  placeholder="写评论" autofocus></textarea>
             </div>
-            <a class="qhht-icon commentBar-btn" :style="{backgroundImage:`url('${iconRight}')`}" @click="closePopup"></a>
+            <a v-show="!record || recordTime>0" class="qhht-icon commentBar-btn" :style="{backgroundImage:`url('${iconSubmit}')`}" @click="submit"></a>
+            <!--<a class="commentBar-submit" @click="closePopup">发送</a>-->
         </div>
     </van-popup>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
-import default_left_icon from '../assets/images/audio_cmt_speak.png'
-import default_right_icon from '../assets/images/audio_cmt_text.png'
+import default_speaker_icon from '../assets/images/audio_cmt_speak.png'
+import default_inputer_icon from '../assets/images/audio_cmt_text.png'
+import default_submit_icon from '../assets/images/comment-submit.png'
 
+let touchStartTime = 0
 export default {
   name: 'CommentBar',
   props: {
     show: {
       default: false
     },
-    iconLeft: {
-      default: default_left_icon
+    iconSpeaker: {
+      default: default_speaker_icon
     },
-    iconRight: {
-      default: default_right_icon
+    iconInputer: {
+      default: default_inputer_icon
+    },
+    iconSubmit: {
+      default: default_submit_icon
     }
   },
   data: function() {
     return {
       value: '',
-      showPop: false,
+      showPop: true,
       rows: 1,
       record: false,
-      recordTime: 0,
-      touchStartTime: 0
+      recordTime: 0
     }
   },
   directives: {
@@ -93,23 +97,32 @@ export default {
       if (this.rows !== 3 && inputerWidth >= 31) this.rows = 3
       if (this.rows !== 1 && inputerWidth < 31) this.rows = 1
     },
-    closePopup: async function() {
+    closePopup: function() {
+      this.$emit('toggle', false)
+    },
+    submit: function() {
       const { textarea } = this.$refs
       const { value } = textarea
-      this.$emit('toggle', false, value ? value : undefined)
+      if (this.record && this.recordTime === 0) {
+        return this.$toast('请录入语音')
+      }
+      if (!this.record && !value) {
+        return this.$toast('请输入内容')
+      }
+      this.$emit('toggle', false, this.record ? this.recordTime : value)
       textarea.value = ''
+      this.recordTime = 0
     },
     toggleRecord() {
       this.record = !this.record
     },
     touchstart() {
-      console.log('start')
       wx.startRecord()
-      this.touchStartTime = new Date()
+      touchStartTime = new Date()
     },
     touchend() {
-      console.log('end')
-      this.recordTime = new Date() - this.touchStartTime
+      this.recordTime = new Date() - touchStartTime
+      touchStartTime = 0
       console.log(this.recordTime)
       wx.stopRecord({
         success: function(res) {
@@ -139,7 +152,6 @@ export default {
   left: 50%;
   bottom: 0;
   width: 100%;
-  background: transparent;
 }
 .popup-comment-modal {
   background: transparent;
@@ -152,9 +164,11 @@ export default {
   border: none;
   border-top: 1px solid #d4d4d4;
 }
-.commentBar-btn {
-  width: 60px;
-  height: 60px;
+.qhht-icon {
+  &.commentBar-btn {
+    width: 56px;
+    height: 56px;
+  }
 }
 .commentBar-inputer {
   padding: 12px 24px;
@@ -170,9 +184,17 @@ export default {
   padding: 6px 12px;
   /*background: #ddd;*/
 }
+.commentBar-submit {
+  width: 96px;
+  padding: 4px 0;
+  text-align: center;
+  border-radius: 12px;
+  background-color: #4caf50;
+  color: #fff;
+}
 .voiceRecord {
-  border-radius: 80px;
-  line-height: 80px;
+  border-radius: 72px;
+  line-height: 72px;
   background-color: #20c997;
   color: #fff;
   text-align: center;
