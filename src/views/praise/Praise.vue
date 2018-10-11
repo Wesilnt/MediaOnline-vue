@@ -91,7 +91,7 @@ export default {
     this.getCollectDetail({ collectLikeId: this.collectLikeId }) 
   },
   methods: {
-    ...rootActions(['getUserInfo']),
+    ...rootActions(['getUserInfo','registerWxConfig', 'setWxShareFriend', 'setWxShareZone']), 
     ...mapActions([
       'getUserByToken',
       'startCollectLike',
@@ -191,6 +191,22 @@ export default {
       this.state = btnState
       this.praiseDesc = praiseDesc
     }
+  },
+  mounted(){  
+       this.getUserInfo()
+      .then(user=>{
+        //显示分享框
+        this.showShare = true
+        //拼装分享内容
+        this.shareData = {
+          link: `/#/praise/active/${this.courseId}/${this.collectLikeId}?columnType=${this.columnType}`,
+          title: `我是${user.nickName}, 我想免费领取《${this.praiseDetail?this.praiseDetail.course.name:'国学课'}》,求助攻~`,
+          desc: '你一定会爱上国学课...',
+        }
+         this.setWxShareFriend(this.shareData)
+         this.setWxShareZone(this.shareData)
+
+      }) 
   },
   beforeDestroy() {
     this.destroyInterval()
