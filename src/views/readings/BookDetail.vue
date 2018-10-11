@@ -106,14 +106,15 @@ export default {
     'tools-navbar': toolsNavbar,
     GroupHeader
   },
-  computed: {
+  computed: {          
     ...mapState([
       'bookDetail',
       'singleLoaing',
       'singleFinished',
-      'singleSetList'
+      'singleSetList',
+      'courseName'
     ]),
-    ...mapGetters(['playingId','courseName'])
+    ...mapGetters(['playingId'])
   },
   created() {
     this.initData(this.courseId)

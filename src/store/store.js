@@ -49,7 +49,7 @@ export default new Vuex.Store({
       noAccessToken() && dispatch('getAccessToken')
     },
     async getUserInfo() {
-       let userStr = localStorage.getItem("userInfo")
+       let userStr = null
        if(userStr) return JSON.parse(userStr)
        let userInfo = await getUserByToken()
        localStorage.setItem('userInfo',JSON.stringify(userInfo))
