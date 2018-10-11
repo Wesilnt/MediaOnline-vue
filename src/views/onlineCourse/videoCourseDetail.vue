@@ -1,7 +1,7 @@
 <template>
   <div class="videocourse-detail-container" id="detailmain" ref="detailmain">  
       <!-- 播放器封面 -->
-    <div class="video-detail-header lazy-img-most" v-lazy:background-image="radioShowPic">
+    <div class="video-detail-header lazy-img-most" v-lazy:background-image="coverPic">
       <div class="video-detail-header-right-top">
           <img :src="isLike?collectIcon:unCollectIcon" class="video-detail-collect" alt="" @click="onCollectFavorite">
           <img :src="require('../../assets/images/onlinecourse-play_ic_share.png')" class="video-detail-share" alt="" @click="onShareAction">
@@ -128,7 +128,7 @@ export default {
   computed: {
     ...mapState([
       'lessonList', //目录课程
-      'radioShowPic', //视频背景图
+      'coverPic',//视频背景图
       'audioUrl', //音频地址
       'videoUrl', //视频地址
       'courseId', //专栏ID

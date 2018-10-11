@@ -13,7 +13,7 @@ const videoCourseDetailData = {
   namespaced: true,
   state: {
     //单集详情接口
-    radioShowPic: '', //视频背景图
+    coverPic: '', //视频背景图
     vedioShowPic: '',
     audioUrl: '', //音频地址
     videoUrl: '', //视频地址
@@ -50,7 +50,7 @@ const videoCourseDetailData = {
   },
   mutations: {
     bindVideoCourseDetail(state, payload) {
-      state.radioShowPic = payload.radioShowPic
+      state.coverPic = payload.coverPic
       state.audioUrl = payload.audioUrl
       state.videoUrl = payload.videoUrl
       state.courseId = payload.courseId
