@@ -42,12 +42,26 @@ const groupManagerData = {
             return videoColumnDetailData.buyCount
         },
         //专栏名称
-        courseName(state,getters,{ videoColumnDetailData }) {
-            return videoColumnDetailData.courseName
+        // courseName(state,getters,{videoColumnDetailData},rootGetters) {
+        //     return rootGetters['videoColumnDetailData/courseName']
+        // },
+        courseName(state,getters,rootState) {
+            let nameStr = ""
+            switch(state.serviceType){
+                case "OnlineVision":
+                    nameStr = rootState.visionData.courseName
+                break
+                case "OnlineCourse":
+                    nameStr = rootState.videoColumnDetailData.courseName
+                break
+                case "Readings":
+                    nameStr = rootState.readingsData.courseName
+                break
+            }
+            return nameStr
         },
         //是否来自分享
         isFromShare(state,getters,{ videoColumnDetailData }) {
-          console.log("videoColumnDetailData"+videoColumnDetailData)
             return videoColumnDetailData.isFromShare
         }
     },

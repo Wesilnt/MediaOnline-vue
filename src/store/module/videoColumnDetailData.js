@@ -15,14 +15,14 @@ const videoColumnDetailData = {
     commentCount: 0, //留言条数
     buyCount: 0, //购买数量
     courseId: 0, //专栏ID
-    name:'',//专栏名称
+    courseName:'',//专栏名称
     isFromShare:false,
   },
   getters: {
-    //获取专栏名称
-    courseName(state){
-      return state.name
-    }
+    // //获取专栏名称
+    // courseName(state){
+    //   return state.name
+    // }
   },
   mutations: {
     initDatas(state, courseId) {
@@ -36,7 +36,7 @@ const videoColumnDetailData = {
       state.lessonCount = result.lessonCount
       state.commentCount = result.commentCount
       state.buyCount = result.buyCount
-      state.name = result.name
+      state.courseName = result.name
       state.isFromShare = isFromShare
     }
   },

@@ -160,11 +160,6 @@ export default {
         //发起拼团
         params = {courseId: this.courseId, payType: 1}
       }
-      // if (this.isOwner) {
-      
-      // } else {
-        
-      // }
       switch (this.userAccessStatus) {
         case -3:
           //拼团失败,重新发起拼团
