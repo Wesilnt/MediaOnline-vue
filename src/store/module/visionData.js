@@ -46,7 +46,7 @@ const visionData = {
             let result = await getVisionDetail({'courseId':courseId})
             commit('setVisionDetail', result);
 
-            const profilePic = result.coverPic
+            const profilePic = result.profilePic
             const freeLessonList = result.freeLessonList
             const serviceType = "OnlineVision"
             //绑定与拼团相关的内容
