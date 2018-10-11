@@ -33,7 +33,7 @@ export default {
       state.throttle = throttle(state.saveProgress, 1000)
     },
     //同步音频数据
-    bindAudioDetail(state, {res}) {
+    bindAudioDetail(state, res) {
       state.audioDetail = res
       state.audioUrl = res.audioUrl
       state.audioId = res.id
