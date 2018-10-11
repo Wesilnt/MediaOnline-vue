@@ -1,5 +1,7 @@
 <template>
   <div v-show="show" class="share-container" @click.self="onCancel">
+    <div class="share-tip">
+    </div>
     <transition @after-leave="afterLeave">
       <div v-show="isOpen" class="share-content">
         <div class="share-src">
@@ -108,6 +110,14 @@ export default {
   width: 100%;
   background-color: rgba(00, 00, 00, 0.5);
   height: 100%;
+  .share-tip{
+    margin: 40px 30px 0px 400px;
+    width: 320px;
+    height: 164px;
+    background-repeat: no-repeat;
+    background-size: 320px 164px;
+    background-image: url('../../assets/images/share_tip.jpg');
+  }
   .share-content {
     position: fixed;
     background-color: #e1d9d5;
