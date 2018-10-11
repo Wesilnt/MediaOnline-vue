@@ -3,7 +3,7 @@ import { Toast } from 'vant'
 import { isUrl, json2formData } from './utils'
 import { getAccessToken, getCookie } from './userAuth'
 import store from '../store/store'
-import { IS_ONLINE, TEST_TOKEN, api } from './config'
+import { IS_ONLINE, TEST_TOKEN, api, isProdVersion } from './config'
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -33,10 +33,17 @@ function checkStatus(url, response) {
   error.url = response.url
   error.name = response.status
   error.response = response
-  Toast.fail({
-    duration: 4000, // 持续展示 toast
-    message: response.error
-  })
+  if(isProdVersion) {
+    Toast.fail({
+      duration: 3000, // 持续展示 toast
+      message: '网络异常'
+    })
+  } else {
+    Toast.fail({
+      duration: 3000,
+      message: response.error
+    })
+  }
   console.error('返回错误状态码' + error)
   console.dir(error)
   console.error('接口名称  ' + url)
