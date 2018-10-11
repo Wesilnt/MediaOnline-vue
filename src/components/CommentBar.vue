@@ -17,8 +17,8 @@
                 </div>
                 <textarea v-show="!record" v-focus ref="textarea" @input="checkRows" @keyup.enter="closePopup" :rows="rows" class="commentBar-textarea"  placeholder="写评论" autofocus></textarea>
             </div>
-            <a v-show="record && recordTime>0 && !touched" class="record-play">试听</a>
-            <a v-show="(!record || recordTime>0) && !touched" class="qhht-icon commentBar-btn" :style="{backgroundImage:`url('${iconSubmit}')`}" @click="submit"></a>
+            <a v-show="record && recordTime>0 && !touched" class="record-play animated infinite" :class="{heartBeat:play}" @click="togglePlayVoice">试听</a>
+            <a v-show="(!record || recordTime>0) && !touched" class="qhht-icon commentBar-btn" :style="{backgroundImage:`url('${iconSubmit}')`}" @click="submit" ></a>
             <!--<a class="commentBar-submit" @click="closePopup">发送</a>-->
         </div>
     </van-popup>
@@ -29,7 +29,8 @@ import default_speaker_icon from '../assets/images/audio_cmt_speak.png'
 import default_inputer_icon from '../assets/images/audio_cmt_text.png'
 import default_submit_icon from '../assets/images/comment-submit.png'
 
-let inter = null
+let inter = null,
+  voiceRecord = null
 export default {
   name: 'CommentBar',
   props: {
@@ -75,6 +76,9 @@ export default {
     }
   },
   methods: {
+    preventDefault: function(e) {
+      e.preventDefault
+    },
     checkRows: function(el) {
       const { target } = el
       let inputerWidth = 0
@@ -126,7 +130,7 @@ export default {
       clearInterval(inter)
       this.touched = false
       wx.stopRecord({
-        success: function(res) {
+        success: res => {
           const { localId } = res
           this.localId = localId
         }
@@ -142,27 +146,32 @@ export default {
         : wx.playVoice({
             localId // 需要播放的音频的本地ID，由stopRecord接口获得
           })
+      this.play = !this.play
     }
   },
   mounted() {
-    window.addEventListener('contextmenu', function(e) {
-      e.preventDefault()
-    })
-    console.log(this.$refs.voiceRecord)
-    this.$refs.voiceRecord.addEventListener('touchstart', this.touchstart)
-    this.$refs.voiceRecord.addEventListener('touchend', this.touchend)
+    window.addEventListener('contextmenu', this.preventDefault)
+    voiceRecord = this.$refs.voiceRecord
+    voiceRecord.addEventListener('touchstart', this.touchstart)
+    voiceRecord.addEventListener('touchend', this.touchend)
     wx.onVoiceRecordEnd({
-      complete: function(res) {
-        this.localId = res.localId
+      complete: res => {
+        // this.localId = res.localId
         this.touched = false
         clearInterval(inter)
       }
     })
     wx.onVoicePlayEnd({
-      success: function(res) {
+      success: res => {
+        console.log(this)
         this.play = false
       }
     })
+  },
+  destroyed() {
+    window.removeEventListener('contextmenu', this.preventDefault)
+    voiceRecord.removeEventListener('touchstart', this.touchstart)
+    voiceRecord.removeEventListener('touchend', this.touchend)
   }
 }
 </script>

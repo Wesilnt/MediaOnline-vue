@@ -44,7 +44,12 @@ ol {
 .anti-bottomBar{
   margin-bottom: 96px;
 }
-
+.animated {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
 @-webkit-keyframes bounceIn {
   from,
   20%,
@@ -191,16 +196,76 @@ ol {
     transform: translate3d(10px, 0, 0);
   }
 }
+@-webkit-keyframes heartBeat {
+  0% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
 
+  14% {
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+  }
+
+  28% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+
+  42% {
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+  }
+
+  70% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+
+@keyframes heartBeat {
+  0% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+
+  14% {
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+  }
+
+  28% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+
+  42% {
+    -webkit-transform: scale(1.1);
+    transform: scale(1.1);
+  }
+
+  70% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+
+.heartBeat {
+  -webkit-animation-name: heartBeat;
+  animation-name: heartBeat;
+  -webkit-animation-duration: 1.8s;
+  animation-duration: 1.8s;
+  -webkit-animation-timing-function: ease-in-out;
+  animation-timing-function: ease-in-out;
+}
 .shake {
   -webkit-animation-name: shake;
   animation-name: shake;
 }
-.animated {
-  -webkit-animation-duration: 1s;
-  animation-duration: 1s;
-  -webkit-animation-fill-mode: both;
-  animation-fill-mode: both;
+
+.animated.infinite {
+  -webkit-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
 }
 /**toast公共样式*/
 .van-popup {
