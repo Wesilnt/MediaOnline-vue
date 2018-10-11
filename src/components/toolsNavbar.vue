@@ -74,6 +74,13 @@ export default {
     Share,
     PhoneVerif
   },
+  created(){
+   const { fullPath } = this.$route
+    this.registerWxConfig({
+      fullPath,
+      jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline']
+    })
+  },
   watch: {
     collectLikeId: function(newVal) {
       if (newVal != 0 && this.startPraiseFlag) {

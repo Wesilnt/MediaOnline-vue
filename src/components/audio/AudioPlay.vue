@@ -137,6 +137,11 @@ export default {
     this.bindCourseName(this.courseName)
     this.toggleFloatButton(false)  //隐藏悬浮按钮
     this.playAudio({ lessonId: this.lessonId ,playType:this.playType})
+    const { fullPath } = this.$route
+    this.registerWxConfig({
+      fullPath,
+      jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline']
+    })
   },
   mounted(){  
      this.getUserInfo()

@@ -53,6 +53,11 @@ export default {
     const groupBuyId = this.$route.query.groupBuyId
     this.initDatas(courseId)
     this.getVideoColumnDetail({ courseId: courseId, groupBuyId: groupBuyId })
+    const { fullPath } = this.$route
+    this.registerWxConfig({
+      fullPath,
+      jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline']
+    })
   },
   mounted(){  
     this.getUserInfo()
