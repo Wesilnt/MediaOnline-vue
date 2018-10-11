@@ -30,6 +30,7 @@ import Share from './share/Share'
 import PhoneVerif from './PhoneVerif'
 import {
   createNamespacedHelpers,
+  mapState as rootState,
   mapActions as rootActions,
 } from 'vuex'
 const { mapState, mapActions, mapMutations,mapGetters } = createNamespacedHelpers(
@@ -73,6 +74,35 @@ export default {
     Share,
     PhoneVerif
   },
+  mounted(){  
+    this.getUserInfo()
+    .then(user=>{
+       let link = ""
+      switch (this.serviceType) {
+        case 'OnlineCourse':
+          link = this.url+`/#/videoColumnDetail/${this.courseId}?groupBuyId=${this.groupBuyId}`
+          break
+        case 'OnlineVision':
+          link =this.url+`/home/visionDetail/${this.courseId}`
+          break
+        case 'Readings':
+           link= this.url+`/home/readings/book/${this.courseId}?playType='Readings'`
+          break
+       default:
+          link =this.url+`/home/freezone`
+          break
+      }  
+      this.shareData = {
+        link, 
+        title: `我是${user.nickName}, 我参加了购买《${this.courseName}》拼团活动,快来跟我一起完成拼团吧。`,
+        desc: '你一定会爱上国学课...' ,
+        successCB: () => console.log('分享回调成功') ,
+        cancelCB: () =>  this.$toast('分享回调失败')
+      }
+      this.setWxShareFriend(this.shareData)
+      this.setWxShareZone(this.shareData) 
+    }) 
+  },
   watch: {
     collectLikeId: function(newVal) {
       if (newVal != 0 && this.startPraiseFlag) {
@@ -93,6 +123,7 @@ export default {
     }
   },
   computed: {
+    ...rootState(['url']),
     ...mapState([
       'userList',
       'collectLikeId',
@@ -116,7 +147,7 @@ export default {
     }
   },
   methods: {
-    ...rootActions(['getUserInfo']),
+      ...rootActions(['getUserInfo','registerWxConfig', 'setWxShareFriend', 'setWxShareZone']), 
     ...mapMutations(['bindIsShowMobileDialog', 'toggolePraiseFlag']),
     ...mapActions([
       'startGroupBuy',

@@ -87,7 +87,7 @@
 </template>
 <script>
 import SharePop from '../share/Share.vue'
-import { createNamespacedHelpers ,mapActions as rootActions} from 'vuex'
+import { createNamespacedHelpers ,mapState as rootState, mapActions as rootActions} from 'vuex'
 const { mapState,mapMutations, mapActions, mapGetters } = createNamespacedHelpers('audiotaskData/audioData')
 
 export default {
@@ -108,6 +108,7 @@ export default {
     }
   },
   computed: {
+    ...rootState(['url']),
     ...mapState({
       isLike(state) {
         let like = state.isLike
@@ -123,6 +124,7 @@ export default {
     ...mapGetters([
       'audio',
       'audioId',
+      'courseId',
       'currentTime',
       'maxTime',
       'playMode',
@@ -136,6 +138,29 @@ export default {
     this.toggleFloatButton(false)  //隐藏悬浮按钮
     this.playAudio({ lessonId: this.lessonId ,playType:this.playType})
   },
+  mounted(){  
+     this.getUserInfo()
+    .then(user=>{ 
+      switch (this.playType) { 
+        case 'OnlineVision':
+          link = this.url +`/home/visionDetail/${this.courseId}`
+          break
+        case 'Readings':
+           link=this.url + `/home/readings/book/${this.courseId}`
+          break 
+      } 
+      //拼装分享内容
+      this.shareData = {
+        link: this.url + `/#/audio/audioplay/${this.lessonId}`, 
+        title: `我是${user.nickName}, 我想免费领取《${this.courseName}》,来帮我点赞吧`,
+        desc: '你一定会爱上国学课...',
+        successCB: () => console.log('分享回调成功') ,
+        cancelCB: () =>  this.$toast('分享回调失败')
+      } 
+      this.setWxShareFriend(this.shareData)
+      this.setWxShareZone(this.shareData)
+    }) 
+  },
   watch: {
     audioId: function(id) {
       this.lessonId = id
@@ -146,7 +171,7 @@ export default {
     }
   },
   methods: {
-    ...rootActions(['getUserInfo']), 
+      ...rootActions(['getUserInfo','registerWxConfig', 'setWxShareFriend', 'setWxShareZone']), 
     ...mapActions([
       'getAudioDetail',
       'postFavorite',
@@ -200,11 +225,24 @@ export default {
     onShare() { 
       this.getUserInfo()
       .then(user=>{
+          switch (this.playType) { 
+            case 'OnlineVision':
+              link = this.url +`/home/visionDetail/${this.courseId}`
+              break
+            case 'Readings':
+              link=this.url + `/home/readings/book/${this.courseId}`
+              break 
+          } 
+          //拼装分享内容
           this.shareData = {
-            link: `/#/audio/audioplay/${this.lessonId}`, 
+            link: this.url + `/#/audio/audioplay/${this.lessonId}`, 
             title: `我是${user.nickName}, 我想免费领取《${this.courseName}》,来帮我点赞吧`,
             desc: '你一定会爱上国学课...',
-          }
+            successCB: () => console.log('分享回调成功') ,
+            cancelCB: () =>  this.$toast('分享回调失败')
+          } 
+          this.setWxShareFriend(this.shareData)
+          this.setWxShareZone(this.shareData)
           this.showShare = true
       })
     },

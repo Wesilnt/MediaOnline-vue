@@ -116,6 +116,7 @@ export default {
   getters: {
     audio: (state, getters, rootState) => rootState.audiotaskData.audioDetail,
     audioId: (state, getters, rootState) => rootState.audiotaskData.audioId,
+    courseId: (state, getters, rootState) => rootState.audiotaskData.courseId,
     currentTime: (state, getters, rootState) => Math.round(rootState.audiotaskData.currentTime), 
     maxTime: (state, getters, rootState) => Math.round(rootState.audiotaskData.maxTime),
     playMode: (state, getters, rootState) => rootState.audiotaskData.playMode,

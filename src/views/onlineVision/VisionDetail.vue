@@ -65,7 +65,7 @@ import CommentItem from '../../components/comment/CommentItem.vue'
 import toolsNavbar from '../../components/toolsNavbar.vue'
 import GroupHeader from '../onlineCourse/components/GroupHeader'
 import videoBigimage from '../../components/videoBigimage.vue'
-import { createNamespacedHelpers } from 'vuex'
+import { createNamespacedHelpers ,mapState as rootState,mapActions as rootActions} from 'vuex'
 const { mapState, mapActions ,mapGetters} = createNamespacedHelpers('visionData')
 export default {
   components: {
@@ -107,8 +107,24 @@ export default {
     })
     this.getCommentList(this.courseId)
   },
-  computed: {...mapState(['visionDetail','courseName', 'commentList'])},
+  mounted(){  
+    this.getUserInfo()
+    .then(user=>{ 
+      //拼装分享内容
+      this.shareData = {
+        link: this.url + `/#/home/visionDetail/${this.courseId}`, 
+        title: `我是${user.nickName}, 邀请你一起收听《${this.courseName}》`,
+        desc: '你一定会爱上国学课...',
+        successCB: () => console.log('分享回调成功') ,
+        cancelCB: () =>  console.log('分享回调失败')
+      } 
+      this.setWxShareFriend(this.shareData)
+      this.setWxShareZone(this.shareData)
+    }) 
+  },
+  computed: { ...rootState(['url']), ...mapState(['visionDetail','courseName', 'commentList'])},
   methods: {
+    ...rootActions(['getUserInfo','registerWxConfig', 'setWxShareFriend', 'setWxShareZone']),  
     ...mapActions(['getVisionDetail', 'getCommentList']),
     ellipsis() {
       this.showall = !this.showall

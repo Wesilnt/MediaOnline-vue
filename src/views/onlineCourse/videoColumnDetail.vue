@@ -11,7 +11,7 @@
 import GroupHeader from './components/GroupHeader'
 import GroupContent from './components/GroupContent'
 import toolsNavbar from '../../components/toolsNavbar.vue'
-import { createNamespacedHelpers } from 'vuex'
+import { createNamespacedHelpers,mapState as rootState,mapActions as rootActions } from 'vuex'
 const { mapState, mapMutations, mapActions } = createNamespacedHelpers(
   'videoColumnDetailData'
 )
@@ -28,6 +28,7 @@ export default {
   },
   watch: {},
   computed: {
+    ...rootState(['url']),
     ...mapState([
       'freeLessonList', //试看课程数组
       'profilePic', //头图
@@ -42,6 +43,7 @@ export default {
     ])
   },
   methods: {
+    ...rootActions(['getUserInfo','registerWxConfig', 'setWxShareFriend', 'setWxShareZone']),  
     ...mapMutations(['initDatas']),
     ...mapActions(['getVideoColumnDetail'])
   },
@@ -51,6 +53,21 @@ export default {
     const groupBuyId = this.$route.query.groupBuyId
     this.initDatas(courseId)
     this.getVideoColumnDetail({ courseId: courseId, groupBuyId: groupBuyId })
-  }
+  },
+  mounted(){  
+    this.getUserInfo()
+    .then(user=>{ 
+      //拼装分享内容
+      this.shareData = {
+        link: this.url + `/#/videoColumnDetail/${this.courseId}`, 
+        title: `我是${user.nickName}, 邀请你一起收听《${this.courseName}》`,
+        desc: '你一定会爱上国学课...',
+        successCB: () => console.log('分享回调成功') ,
+        cancelCB: () =>  console.log('分享回调失败')
+      } 
+      this.setWxShareFriend(this.shareData)
+      this.setWxShareZone(this.shareData)
+    }) 
+  },
 }
 </script>
