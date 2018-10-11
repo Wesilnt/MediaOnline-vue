@@ -77,7 +77,8 @@ export default {
   },
   methods: {
     preventDefault: function(e) {
-      e.preventDefault
+        console.log(e);
+        e.preventDefault()
     },
     checkRows: function(el) {
       const { target } = el
