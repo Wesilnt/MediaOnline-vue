@@ -13,7 +13,7 @@
           <!-- <img :src="require('../../assets/images/onlinecourse_video_ic_gift.png')" class="video-detail-header-gift" alt="">     -->
     </div>
     <!-- 播放器 -->
-    <video class="videoitem" ref="videoitem" v-show="true" :src="videoUrl" controls="controls" width="100%" height='100%' preload="auto"></video>
+    <video class="videoitem" ref="videoitem" v-show="false" :src="videoUrl" controls="controls" width="100%" height='100%' preload="auto"></video>
     <!-- Navbar -->
     <ScrollNavBar :bars="navBars" />
     <!-- <div ref="navbar" :class="navbarFixed == true ? 'isFixed' : ''" class="video-detail-navbar">
