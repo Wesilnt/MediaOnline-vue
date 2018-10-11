@@ -67,7 +67,7 @@ import QuestionList from './QuestionList'
 import CommentBar from '../../components/CommentBar'
 import Share from '../../components/share/Share.vue'
 import { createNamespacedHelpers } from 'vuex'
-import { mapActions as mapRootActions } from 'vuex'
+import { mapActions as mapRootActions ,mapState as rootState } from 'vuex'
 const {
   mapState,
   mapGetters,
@@ -129,6 +129,7 @@ export default {
     }
   },
   computed: {
+     ...rootState(['url']),
     ...mapState([
       'lessonList', //目录课程
       'coverPic',//视频背景图
@@ -159,6 +160,19 @@ export default {
     //视频进度
     vid.addEventListener('timeupdate', this.getVideoProgress)
     vid.addEventListener('play', this.clickPlayVideoBtn)
+        this.getUserInfo()
+    .then(user=>{ 
+      //拼装分享内容
+      this.shareData = {
+        link: this.url + `/#/videoColumnDetail/${this.courseId}`, 
+        title: `${this.courseName}`,
+        desc: '你一定会爱上国学课...',
+        successCB: () => console.log('分享回调成功') ,
+        cancelCB: () =>  console.log('分享回调失败')
+      } 
+      this.setWxShareFriend(this.shareData)
+      this.setWxShareZone(this.shareData)
+    }) 
   },
   beforeDestroy() {
     const vid = this.$refs.videoitem
@@ -169,6 +183,11 @@ export default {
     const { lessonId } = this.$route.params
     this.getVideoCourseDetail({ lessonId })
     this.handleRegisterWxConfig()
+    const { fullPath } = this.$route
+    this.registerWxConfig({
+      fullPath,
+      jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline']
+    })
   },
   methods: {
     ...mapMutations([
@@ -183,8 +202,8 @@ export default {
       'doCollectFavorite',
       'unCollectFavorite',
       'postComment'
-    ]),
-    ...mapRootActions(['registerWxConfig']),
+    ]), 
+    ...mapRootActions(['registerWxConfig','getUserInfo','registerWxConfig', 'setWxShareFriend', 'setWxShareZone']),
     handleRegisterWxConfig: function() {
       const { fullPath } = this.$route
       this.registerWxConfig({
