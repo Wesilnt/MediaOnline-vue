@@ -56,7 +56,7 @@
 import PraiseBtn from './PraiseBtns.vue'
 import PraiseExplain from './PraiseExplain.vue'
 import Share from '../../components/share/Share.vue'
-import { createNamespacedHelpers ,mapActions as rootActions} from 'vuex'
+import { createNamespacedHelpers ,mapState as rootState, mapActions as rootActions} from 'vuex'
 const {
   mapState,
   mapMutations,
@@ -82,23 +82,41 @@ export default {
     'share-pop': Share
   },
   computed: {
+    ...rootState(['url']),
     ...mapState(['praiseDetail', 'rollerFlag', 'remainTime']),
-    ...mapGetters(['praiseData'])
+    ...mapGetters(['praiseData','isCurrentUser'])
   },
   created: function() {
     this._setBtnAndTips({ status: 1202 }, false, true) 
     // this.getUserByToken()
     this.getCollectDetail({ collectLikeId: this.collectLikeId }) 
   },
+  mounted(){  
+    this.getUserInfo()
+    this.bindColumnTYpe(this.columnType)
+    .then(user=>{ 
+      let title = `我是${user.nickName}, ${true?'我想免费':'正在帮朋友'}领取《${this.praiseDetail.course.name}》,求助攻~` 
+      //拼装分享内容
+      this.shareData = {
+        link: this.url+`/#/praise/active/${this.courseId}/${this.collectLikeId}?columnType=${this.columnType}`,
+        title,
+        desc: '你一定会爱上国学课...',
+        successCB: () => console.log('分享回调成功') ,
+        cancelCB: () =>  this.$toast('分享回调失败')
+      }
+        this.setWxShareFriend(this.shareData)
+        this.setWxShareZone(this.shareData) 
+    }) 
+  },
   methods: {
-    ...rootActions(['getUserInfo']),
+    ...rootActions(['getUserInfo','registerWxConfig', 'setWxShareFriend', 'setWxShareZone']), 
     ...mapActions([
       'getUserByToken',
       'startCollectLike',
       'joinCollectLike',
       'getCollectDetail'
     ]),
-    ...mapMutations(['destroyInterval']),
+    ...mapMutations(['destroyInterval','bindColumnTYpe']),
     closeExplain() {
       //关闭集赞说明框
       this.showExplain = false
@@ -115,7 +133,7 @@ export default {
         this.showShare = true
         //拼装分享内容
         this.shareData = {
-          link: `/#/praise/active/${this.courseId}/${this.collectLikeId}?columnType=${this.columnType}`,
+          link:  `/#/praise/active/${this.courseId}/${this.collectLikeId}?columnType=${this.columnType}`,
           title: `我是${user.nickName}, 我想免费领取《${this.praiseDetail?this.praiseDetail.course.name:'国学课'}》,求助攻~`,
           desc: '你一定会爱上国学课...',
         }

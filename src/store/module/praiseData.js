@@ -21,7 +21,8 @@ export default {
     rollerInterval: null, //倒计时滚动定时器
     timerInterval: null, //倒计时定时器
     pageBgUrl: '',
-    courseName: ''
+    courseName: '',
+    columnType: 'Readings'
   },
   mutations: {
     bindPraiseDetail(state, res) {
@@ -30,6 +31,9 @@ export default {
     },
     bindUserInfo(state, res) {
       state.userId = res.id
+    },
+    bindColumnTYpe(state, columnType) {
+      state.columnType = columnType
     },
     //设置滚动提示定时器
     setRollerInterval(state) {
@@ -62,12 +66,12 @@ export default {
     //验证是否完成了公众号授权
     async checkoutAuthorrization({dispatch},params){ 
       const result = await wechatSubscribed()  
-      if(result && result==1){
+      // if(result && result==1){
           dispatch('checkStatus',params)
           return dispatch('getUserByToken').then(()=>dispatch('getCollectDetail',params))
-      }else{          //跳转去关注公众号
-          window.location.href = WECHAT_SUBSCRIPTION_URL
-      }
+      // }else{          //跳转去关注公众号
+      //     window.location.href = WECHAT_SUBSCRIPTION_URL
+      // }
     },
     //积攒状态检查
     async checkStatus({ commit }, params) {
@@ -78,25 +82,29 @@ export default {
     //集赞详情
     async getCollectDetail({ state, commit,dispatch }, params) {
     const res = await getCollectDetail(params)
-    await dispatch('getUserInfo',null,{root:true}).then(user=>commit('bindUserInfo', user))
+    await dispatch('getUserInfo',null,{root:true})
+    .then(user=>{
+      commit('bindUserInfo', user)
+      dispatch('setShareInfo',{user, res})
+    })
     commit('bindPraiseDetail', res) 
-     if (res.status != 1202) return
-     await commit('destroyInterval')
-      let rollerInterval = setInterval(() => commit('setRollerInterval'), 7000)
-      let totalTime = res.duration * 3600 +  (res.createTime - res.sysTime) / 1000  
-      let timerInterval = setInterval(() => {
-        var hours = parseInt(totalTime / (60 * 60))
-        var minutes = parseInt((totalTime % (60 * 60)) / 60)
-        var seconds = totalTime % 60
-        hours = parseInt(hours)
-        minutes = parseInt(minutes)
-        seconds = parseInt(seconds)
-        hours = hours < 10 ? '0' + hours : hours
-        minutes = minutes < 10 ? '0' + minutes : minutes
-        seconds = seconds < 10 ? '0' + seconds : seconds
-        let remainTime = '距离结束还有:' + hours + '时' + minutes + '分' + seconds + '秒'
-        totalTime -= 1
-        commit('setTimerInterval', { timerInterval, rollerInterval,isEnded: totalTime <= 0,remainTime})
+    if (res.status != 1202) return
+    await commit('destroyInterval')
+    let rollerInterval = setInterval(() => commit('setRollerInterval'), 7000)
+    let totalTime = res.duration * 3600 +  (res.createTime - res.sysTime) / 1000  
+    let timerInterval = setInterval(() => {
+      var hours = parseInt(totalTime / (60 * 60))
+      var minutes = parseInt((totalTime % (60 * 60)) / 60)
+      var seconds = totalTime % 60
+      hours = parseInt(hours)
+      minutes = parseInt(minutes)
+      seconds = parseInt(seconds)
+      hours = hours < 10 ? '0' + hours : hours
+      minutes = minutes < 10 ? '0' + minutes : minutes
+      seconds = seconds < 10 ? '0' + seconds : seconds
+      let remainTime = '距离结束还有:' + hours + '时' + minutes + '分' + seconds + '秒'
+      totalTime -= 1
+      commit('setTimerInterval', { timerInterval, rollerInterval,isEnded: totalTime <= 0,remainTime})
       }, 1000)
       //
     },
@@ -126,6 +134,21 @@ export default {
       console.log(res)
       if (!res) return
       commit('bindUserInfo', res) 
+    },
+    //设置分享信息
+    async setShareInfo({state,dispatch},{user, res}){
+      let currentUser  =  user.id == res.starterUid
+      let title = `我是${user.nickName}, ${currentUser?'我想免费':'正在帮朋友'}领取《${res.courseName}》,求助攻~` 
+      //拼装分享内容
+      let shareData = {
+        link:  window.location.href.split('#')[0]+`/#/praise/active/${res.courseId}/${res.id}?columnType=${state.columnType}`,
+        title,
+        desc: '你一定会爱上国学课...',
+        successCB: () => console.log('分享回调成功') ,
+        cancelCB: () =>  this.$toast('分享回调失败')
+      }
+      dispatch('setWxShareFriend',shareData,{root:true})
+      dispatch('setWxShareZone',shareData,{root:true}) 
     }
   },
   getters: {
@@ -137,14 +160,7 @@ export default {
       let praiseDesc = '帮我点赞免费领取，求助攻' //集赞提示信息
       let userList = state.praiseDetail.userList //点赞用户列表
       if (!userList)
-        return {
-          praiseUsers: [],
-          praised,
-          btnState,
-          praiseDesc,
-          isCurrentUser,
-          alreadyCount
-        }
+        return {praiseUsers: [],praised,btnState,praiseDesc,isCurrentUser,alreadyCount}
       let totalNums = new Array(state.praiseDetail.personCount).fill(
         require('../../assets/images/praise_header_bg.png')
       )

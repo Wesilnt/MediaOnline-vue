@@ -115,7 +115,7 @@ export default new Vuex.Store({
       })
     },
     async setWxShareFriend(
-      { state },
+      { state,dispatch },
       {
         title,
         desc='秦汉胡同国学，让我们的孩子成为一个有涵养的人',
@@ -131,7 +131,7 @@ export default new Vuex.Store({
         throw new Error('link error')
         return
       }
-        const nickname='Dorma';
+      const nickname= dispatch('getUserInfo').nickName
       const shareOptions = {
         title:title|| `${nickname}邀请您一起上课啦！`, // 分享标题
         desc, // 分享描述

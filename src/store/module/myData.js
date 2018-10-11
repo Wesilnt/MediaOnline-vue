@@ -21,8 +21,11 @@ const myData = {
   actions: {
     async queryNewMessageCount({ dispatch, commit, state }) {
       let response = await getNewMessageCount({ busiTypes: 3101 })
+      console.log(response)
       await commit('save',
-        {replyMessageCount:response})
+        {
+          replyMessageCount:response
+        })
     },
     async getMyUserInfo({ dispatch, commit, state }) {
       let response = await getMyUserInfo()
