@@ -60,7 +60,6 @@ const checkResponseCode = (url, response) => {
   error.name = 'code-error'
   error.response = response
   error.code = response.code
-  alert(response.code)
   // 1002: token过期 需重新申请 // 1001: token无效 需退出重新登录
   if (response.code === 1002 || response.code === 1001)
     return dispatch('getAccessToken')
