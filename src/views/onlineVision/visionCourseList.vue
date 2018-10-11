@@ -57,10 +57,8 @@ export default {
   },
   mounted() {
     this.getCategoryList(this.$route.params.courseId).then(() => {
-      console.log(this.categoryList)
       this.selectCate = this.categoryList[0].id
       this.categoryList.map(item => {
-        console.log(item)
         this.courseCount += item.lessonList.length
       })
     })
