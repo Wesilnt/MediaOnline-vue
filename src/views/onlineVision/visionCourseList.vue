@@ -11,7 +11,7 @@
       <div v-if="item.id != -1" @click="spreat(item.id)" :class="(item.id ===selectCate)&&spread?'categoryHeader selectShadow':'categoryHeader'" :style="{background:'url('+item.picUrl+')'}">
         <div class="categoryHeaderCount"> {{item.lessonCount}}期 </div>
       </div>
-      <SingleSetList v-show="item.id == selectCate && spread" :singletype="'OnlineVision'" class="categoryList" :list='item.lessonList' :coursename="courseName"></SingleSetList>
+      <SingleSetList v-show="item.id == selectCate && spread" :singletype="'OnlineVision'" class="categoryList" :list='item.lessonList' :coursename="courseName" :useraccessstatus="userAccessStatus"></SingleSetList>
     </div>
   </div>
 </template>
@@ -34,7 +34,7 @@ export default {
   },
   props: ['courseId'],
   computed: { 
-    ...mapState(['categoryList','courseName'])
+    ...mapState(['categoryList','courseName','userAccessStatus'])
   },
   components: {
     SingleSetList

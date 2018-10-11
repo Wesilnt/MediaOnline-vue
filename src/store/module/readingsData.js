@@ -15,6 +15,7 @@ export default {
         singleSetList: [], //单集列表
         singleFinished:false,
         singleLoaing:false,
+        userAccessStatus:0,
         courseName:""//专栏名称
     },
     mutations: {
@@ -36,6 +37,7 @@ export default {
         bindBookDetail(state, res) {
             state.bookDetail = res
             state.courseName = res.name
+            state.userAccessStatus = res.userAccessStatus
         },
         bindSingleSetList(state, {res,page,totalCount}) { 
           if(1==page) state.singleSetList = []
@@ -67,6 +69,8 @@ export default {
             const result = await getBookDetail(params) 
             console.log(result)
             commit("bindBookDetail", result)
+            //获取专栏课程列表
+            dispatch('getSingleSetList',true)
             const groupBuyId =  params.groupBuyId
             const courseId = params.courseId
             const profilePic = result.coverPic

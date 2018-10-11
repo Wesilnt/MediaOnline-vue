@@ -619,8 +619,7 @@ const groupManagerData = {
             if (result == null) return
             console.log('发起集赞成功')
             commit("toggolePraiseFlag",true)
-            dispatch('updateFatherData') 
-           
+            dispatch('updateFatherData')            
         },
         //领取集赞
         async getCollectLike({dispatch,commit},payload) {
@@ -653,6 +652,7 @@ const groupManagerData = {
                     // 支付成功后的回调函数
                     console.log("支付成功"); 
                     console.log(payType)
+                    dispatch('updateFatherData')
                     switch(payType){
                         case 0:
                             console.log('原价购买支付成功~~~')
@@ -721,7 +721,18 @@ const groupManagerData = {
         
         //从新获取专栏详情接口,刷新父组件显示
         async updateFatherData({dispatch,state}){
-            dispatch('videoColumnDetailData/getVideoColumnDetail',{"courseId" : state.courseId},{root:true})
+            switch(serviceType){
+                case "OnlineVision":
+                    dispatch('visionData/getVisionDetail',{"courseId" : state.courseId},{root:true})
+                break
+                case "OnlineCourse":
+                    dispatch('videoColumnDetailData/getVideoColumnDetail',{"courseId" : state.courseId},{root:true})
+                break
+                case "Readings":
+                    dispatch('readingsData/getBookDetail',{"courseId" : state.courseId},{root:true})
+                break
+            }
+
         },
     }
 }

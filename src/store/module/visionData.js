@@ -14,7 +14,8 @@ const visionData = {
         commentList:[],
         finished:false,
         isLoading:false,
-        courseName:''//专栏名称
+        courseName:'',//专栏名称
+        userAccessStatus:0,
     },
     actions:{
         reverse({commit,state}){
@@ -89,6 +90,7 @@ const visionData = {
         setVisionDetail(state, visionDetail){
             state.visionDetail = visionDetail;
             state.courseName = visionDetail.name
+            state.userAccessStatus = visionDetail.userAccessStatus
         },
         setCommentList(state, commentList){
             state.commentList = commentList;

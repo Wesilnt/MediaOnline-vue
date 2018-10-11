@@ -64,7 +64,7 @@
       :immediate-check="false"
       @load="scrollBottom"
       @offset="10">
-         <singleset-list :list="singleSetList" :play-id="playingId" :singletype="'Readings'" :coursename="courseName"/>
+         <singleset-list :list="singleSetList" :play-id="playingId" :singletype="'Readings'" :coursename="courseName" :useraccessstatus="userAccessStatus"/>
     </van-list>
     <!-- 6. 分页布局 -->
     <div class="load-more-container" v-if="singleFinished">
@@ -113,7 +113,8 @@ export default {
       'singleLoaing',
       'singleFinished',
       'singleSetList',
-      'courseName'
+      'courseName',
+      'userAccessStatus'
     ]),
     ...mapGetters(['playingId'])
   },
@@ -123,7 +124,6 @@ export default {
       courseId: this.courseId,
       groupBuyId: this.$route.query.groupBuyId
     })
-    this.getSingleSetList(true)
   },
   mounted(){  
     this.getUserInfo()

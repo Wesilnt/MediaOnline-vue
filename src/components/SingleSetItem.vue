@@ -23,10 +23,33 @@
 <script>
 export default {
   //singleset 单集  playing是否正在播放
-  props: ['item', 'playing','singletype','coursename'],
+  props: ['item', 'playing','singletype','coursename','useraccessstatus'],
   methods: {
     onItemClick(audio) {
-      if (audio.isFree) {
+      let unLock = false
+      switch(useraccessstatus){
+        case -3://拼团失败
+        break
+        case 0:
+        break
+        case 1001://单购成功
+          unLock = true
+        break
+        case 1003://拼团成功
+         unLock = true
+        break
+        case 1005://拼团中
+        break
+        case 1007://集赞成功未领取
+        break
+        case 1008://集赞成功已领取
+         unLock = true
+        break
+        case 1009://集赞中
+        break
+      }
+
+      if (audio.isFree || unLock) {
         this.$router.push({
           name: 'AudioPlay',
           params: { id: audio.id },
