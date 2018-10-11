@@ -18,7 +18,9 @@
 <script>
 import SingleSetList from '../../components/SingleSetList.vue'
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions,mapGetters } = createNamespacedHelpers('visionData')
+const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
+  'visionData'
+)
 export default {
   data() {
     return {
@@ -27,17 +29,19 @@ export default {
       ascDown: require('../../assets/images/vision_list_down.png'),
       ascUp: require('../../assets/images/vision_list_up.png'),
       Ascending: true,
-      courseCount:0
+      courseCount: 0
     }
   },
-  props:['courseId'],
-  computed: mapState(['categoryList']),
-  components: {
+  props: ['courseId'],
+  computed: {
     ...mapGetters(['courseName']),
+    ...mapState(['categoryList'])
+  },
+  components: {
     SingleSetList
   },
   methods: {
-    ...mapActions(['reverse','getCategoryList']),
+    ...mapActions(['reverse', 'getCategoryList']),
     spreat(id) {
       if (id === this.selectCate) {
         this.spread = !this.spread
@@ -51,17 +55,15 @@ export default {
       this.reverse()
     }
   },
-   mounted() {
-    this.getCategoryList(this.$route.params.courseId).then(()=>{
+  mounted() {
+    this.getCategoryList(this.$route.params.courseId).then(() => {
       console.log(this.categoryList)
-         this.selectCate =  this.categoryList[0].id
-    this.categoryList.map(item=>{
-      console.log(item)
-      this.courseCount += item.lessonList.length
+      this.selectCate = this.categoryList[0].id
+      this.categoryList.map(item => {
+        console.log(item)
+        this.courseCount += item.lessonList.length
+      })
     })
-    })
-   
-   
   }
 }
 </script>
