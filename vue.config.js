@@ -1,12 +1,10 @@
-const EncodingPlugin = require('webpack-encoding-plugin');
-
+const uglifyJsPlugin = require('uglifyjs-webpack-plugin')
 module.exports = {
   lintOnSave: undefined,
-    /*configureWebpack: {
-        plugins: [
-            new EncodingPlugin({
-                encoding: 'UTF-8'
-            })
-        ]
-    }*/
+  configureWebpack: config => {
+    if (process.env.NODE_ENV === 'production') {
+      config.optimization.minimizer[0].options.extractComments = true
+      config.optimization.minimizer[0].options.uglifyOptions.output.comments = false
+    }
+  }
 }
