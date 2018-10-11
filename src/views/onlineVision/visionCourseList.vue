@@ -33,9 +33,8 @@ export default {
     }
   },
   props: ['courseId'],
-  computed: {
-    ...mapGetters(['courseName']),
-    ...mapState(['categoryList'])
+  computed: { 
+    ...mapState(['categoryList','courseName'])
   },
   components: {
     SingleSetList

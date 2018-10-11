@@ -107,7 +107,7 @@ export default {
     })
     this.getCommentList(this.courseId)
   },
-  computed: {...mapGetters(['courseName']),...mapState(['visionDetail', 'commentList'])},
+  computed: {...mapState(['visionDetail','courseName', 'commentList'])},
   methods: {
     ...mapActions(['getVisionDetail', 'getCommentList']),
     ellipsis() {

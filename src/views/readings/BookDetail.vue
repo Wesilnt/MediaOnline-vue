@@ -111,9 +111,10 @@ export default {
       'bookDetail',
       'singleLoaing',
       'singleFinished',
-      'singleSetList'
+      'singleSetList',
+      'courseName'
     ]),
-    ...mapGetters(['playingId','courseName'])
+    ...mapGetters(['playingId'])
   },
   created() {
     this.initData(this.courseId)

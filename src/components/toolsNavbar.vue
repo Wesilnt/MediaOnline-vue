@@ -105,9 +105,10 @@ export default {
       'freeLesson', //试听对象
       'courseId', //专栏ID
       'startPraiseFlag',
-      'serviceType'
+      'serviceType',
+      'courseName'
     ]),
-    ...mapGetters(['courseName','isFromShare'])
+    ...mapGetters(['isFromShare'])
   },
   filters: {
     formatPrice: function(price) {
