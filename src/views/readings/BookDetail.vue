@@ -106,7 +106,7 @@ export default {
     'tools-navbar': toolsNavbar,
     GroupHeader
   },
-  computed: {
+  computed: {          
     ...mapState([
       'bookDetail',
       'singleLoaing',
