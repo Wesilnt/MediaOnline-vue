@@ -120,7 +120,7 @@ export default {
       //拼装分享内容
       this.shareData = {
         link: this.url + `/#/home/visionDetail/${this.courseId}`, 
-        title: `${this.courseName}`,
+        title: this.courseName,
         desc: '你一定会爱上国学课...',
         successCB: () => console.log('分享回调成功') ,
         cancelCB: () =>  console.log('分享回调失败')

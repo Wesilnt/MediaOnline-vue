@@ -98,7 +98,7 @@ export default {
         },
         //书单集列表
         async getSingleSetList({state, commit }, refresh) {
-            if(state.singleFinished || state.singleLoaing)return
+            // if(state.singleFinished || state.singleLoaing)return
             await commit('setSingleLaoding',true)
             let page = refresh?1:state.singlePage + 1
             let params = {

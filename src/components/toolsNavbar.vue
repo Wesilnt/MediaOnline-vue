@@ -22,7 +22,7 @@
         <Share :show="sharePageShow" :shareid="courseId" :shareInfo="shareData" @close="cancelSharePage"></Share>
         <PhoneVerif v-if="isShowMobileDialog" @callback="bindIsShowMobileDialog(false)"></PhoneVerif>
     </div>
-   
+
 </template>
 
 <script>
@@ -73,7 +73,7 @@ export default {
   components: {
     Share,
     PhoneVerif
-  }, 
+  },
   watch: {
     collectLikeId: function(newVal) {
       if (newVal != 0 && this.startPraiseFlag) {
@@ -92,17 +92,17 @@ export default {
         this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
       }
     },
-    userAccessStatus:function(value){ 
+    userAccessStatus:function(value){
     this.getUserInfo()
-    .then(user=>{ 
+    .then(user=>{
       let title = null
-      switch (this.userAccessStatus) {  
-        case 1005: //拼团中  
+      switch (this.userAccessStatus) {
+        case 1005: //拼团中
               title = `我正在参加《${this.courseName}》拼团活动,仅差${this.leavePerson}人,快来和我一起拼团吧!`
           break
           case 1009://集赞中
-             title = `我是${user.nickName}, ${true?'我想免费':'正在帮朋友'}领取《${this.courseName}》,求助攻~` 
-          break; 
+             title = `我是${user.nickName}, ${true?'我想免费':'正在帮朋友'}领取《${this.courseName}》,求助攻~`
+          break;
           default:
           title =this.courseName;
           break
@@ -121,17 +121,18 @@ export default {
        default:
           link =this.url+`/home/freezone`
           break
-      }  
+      }
+      console.log("设置分享地址：",link, "   设置分享标题：",title)
       this.shareData = {
-          link, 
+          link,
           title,
           desc: '你一定会爱上国学课...' ,
           successCB: () => console.log('分享回调成功') ,
           cancelCB: () =>  this.$toast('分享回调失败')
       }
       this.setWxShareFriend(this.shareData)
-      this.setWxShareZone(this.shareData) 
-    }) 
+      this.setWxShareZone(this.shareData)
+    })
     }
   },
   computed: {
@@ -160,7 +161,7 @@ export default {
     }
   },
   methods: {
-      ...rootActions(['getUserInfo','registerWxConfig', 'setWxShareFriend', 'setWxShareZone']), 
+      ...rootActions(['getUserInfo','registerWxConfig', 'setWxShareFriend', 'setWxShareZone']),
     ...mapMutations(['bindIsShowMobileDialog', 'toggolePraiseFlag']),
     ...mapActions([
       'startGroupBuy',
@@ -219,11 +220,11 @@ export default {
           }
           break
         case 1005:
-        alert('代码走到这里')
+        //alert('代码走到这里')
           //拼团中
           this.sharePageShow = true
           //拼装分享内容
-          this.setShareInfo() 
+          this.setShareInfo()
           break
       }
     },
@@ -286,12 +287,12 @@ export default {
        default:
           link =`/home/freezone`
           break
-      } 
+      }
       this.getUserInfo().then(user => {
           this.shareData = {
-            link, 
+            link,
             title: `我正在参加《${this.courseName}》拼团活动,仅差${2}人,快来和我一起拼团吧!`,
-            desc: '你一定会爱上国学课...' 
+            desc: '你一定会爱上国学课...'
           }
       })
     },

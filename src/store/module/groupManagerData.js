@@ -604,7 +604,7 @@ const groupManagerData = {
             dispatch("getPayment",{result,payType:1})
         },
         //参与拼团
-        async joinGroupBuy({dispatch},payload) {
+        async joinGroupBuy({dispatch,commit},payload) {
             const result = await joinGroupBuy(payload)
             console.log('参与拼团成功')
             console.log(result)
@@ -623,7 +623,7 @@ const groupManagerData = {
            
         },
         //领取集赞
-        async getCollectLike({commit},payload) {
+        async getCollectLike({dispatch,commit},payload) {
             const result = await getCollectLike(payload)
             console.log('领取集赞成功')
             console.log(result)

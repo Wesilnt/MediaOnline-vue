@@ -2,6 +2,7 @@
   <div class="video-bigimage-container">
     <div class="originImage">
       <img :src="src" class="img" @click="isExtend=true">
+      <img :src="require('../assets/images/onlinecourse_bigimage_search.png')" class="videocol-bigimage-search" @click="isExtend=true">
     </div>
     <transition enter-active-class="fadeIn" leave-active-class="fadeOut">
       <div v-if="isExtend&&src" class="imageExtend" @click="isExtend=false">
@@ -25,8 +26,16 @@ export default {
 
 <style lang="scss" scoped>
 .originImage {
+  position: relative;
   max-height: 800px;
   overflow: hidden;
+}
+.videocol-bigimage-search {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  right: 0px;
+  bottom: 0px;
 }
 .video-bigimage-container {
   display: inline-block;

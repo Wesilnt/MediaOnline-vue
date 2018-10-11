@@ -2,9 +2,10 @@
 const { NODE_ENV } = process.env
 
 // 调试选项，本地调试请改为 False
-export const IS_ONLINE = false
+export const IS_ONLINE = true
 // 测试 Token
-export const TEST_TOKEN = '57f870c2-0ebf-4e27-bb29-af5da6acbc7f'
+
+export const TEST_TOKEN = "05005abc-f9f9-438b-b1b6-86fe4b836934"
 
 // TODO router 设置未统一，后期需要统一格式
 export const courseType = {
@@ -16,7 +17,7 @@ export const courseType = {
 // 首页导航配置
 export const navbar = [
   {
-    name: '首页',
+    name: '发现',
     icon: require('../assets/images/nav_home_normal.png'),
     activeIcon: require('../assets/images/nav_home_selected.png'),
     path: '/home'
