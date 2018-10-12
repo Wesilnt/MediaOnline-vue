@@ -159,7 +159,6 @@ export default {
     ...mapState([
       'userList',
       'collectLikeId',
-      'isOwner',
       'isShowMobileDialog',
       'groupBuyId',
       'toolsObject',

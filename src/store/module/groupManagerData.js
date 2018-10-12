@@ -18,7 +18,7 @@ const groupManagerData = {
         achieveOriginBuy:false, //是否完成原价购买
 
         orderStatus:0,//当前订单状态
-        isOwner:true,    //是不是开团人 
+        isOwner:false,    //是不是开团人 
         isGroupCurrent:false, //当前用户是否在拼团列表
         isFullStaff:false,//拼团是否已满
         achievePayment:false,//当前用户是否完成支付
