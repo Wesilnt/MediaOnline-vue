@@ -63,21 +63,21 @@ export default {
     ...mapActions(['registerWxConfig', 'setWxShareFriend', 'setWxShareZone']),
     onShareItem(shareScore) {
       // this.isOpen = false
-      const nickname = 'nihao' 
-      const shareOption = {
-        link: this.url + this.shareInfo.link,
-        title: this.shareInfo.title,
-        desc: this.shareInfo.desc,
-        imgUrl:  this.shareInfo.imgUrl,
-        successCB: () => {
-          this.$toast('分享回调成功')
-        },
-        cancelCB: () => {
-          this.$toast('分享回调失败')
-        }
-      }
+      // const nickname = 'nihao' 
+      // const shareOption = {
+      //   link: this.url + this.shareInfo.link,
+      //   title: this.shareInfo.title,
+      //   desc: this.shareInfo.desc,
+      //   imgUrl:  this.shareInfo.imgUrl,
+      //   successCB: () => {
+      //     this.$toast('分享回调成功')
+      //   },
+      //   cancelCB: () => {
+      //     this.$toast('分享回调失败')
+      //   }
+      // }
       console.log('当前分享option:')
-      console.log(shareOption)
+      // console.log(shareOption)
       if (shareScore === 'poster') {
         this.$toast('分享海报')
       }
