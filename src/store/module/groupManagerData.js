@@ -267,16 +267,16 @@ const groupManagerData = {
                 case 1003:
                     console.log('拼团成功')
                     isShowGroupBuy = true
-                    dispatch("getGroupBuyDetail",groupData.groupBuyId)
-                    // toolsObject = {
-                    //     "originPrice":'',
-                    //     "groupPrice":'',
-                    //     "collageText":"我要学习",
-                    //     "collectText":"",
-                    //     "collect":false,
-                    //     "collage":true,
-                    //     "isShow":true
-                    // }
+                    // dispatch("getGroupBuyDetail",groupData.groupBuyId)
+                    toolsObject = {
+                        "originPrice":'',
+                        "groupPrice":'',
+                        "collageText":"我要学习",
+                        "collectText":"",
+                        "collect":false,
+                        "collage":true,
+                        "isShow":false
+                    }
                 break
                 case 1005:
                     console.log('拼团中')
@@ -315,7 +315,7 @@ const groupManagerData = {
                         "collectText":"集赞成功已领取",
                         "collect":true,
                         "collage":false,
-                        "isShow":true
+                        "isShow":false
                     }                
                 break
                 case 1009: 
@@ -396,7 +396,7 @@ const groupManagerData = {
                     toolsObject = {
                         "originPrice":'',
                         "groupPrice":'',
-                        "collageText":"我要开团",
+                        "collageText":"重新开团",
                         "collectText":"",
                         "collect":false,
                         "collage":true,
