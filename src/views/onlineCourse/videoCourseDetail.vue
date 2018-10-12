@@ -1,6 +1,13 @@
 <template>
     <div>
-        <video class="videoitem" ref="videoitem" :src="videoUrl" controls="controls" width="100vw" height='0px' preload="auto"></video>
+        <video class="videoitem" ref="videoitem" :src="videoUrl" controls="controls" width="100%" height='200px' preload="auto"
+               webkit-playsinline
+               playsinline="true"
+               x-webkit-airplay="allow"
+               x5-video-player-type="h5"
+               x5-video-player-fullscreen="true"
+               x5-video-orientation="portraint"
+               style="object-fit:fill"></video>
         <SkeletonFullScreen  v-show="loading"/>
         <div v-show="!loading" class="videocourse-detail-container" id="detailmain" ref="detailmain">
             <!-- 播放器封面 -->
@@ -56,6 +63,7 @@
 </template>
 
 <script>
+import enableInlineVideo from 'iphone-inline-video'
 import CommentList from '../../components/comment/CommentList.vue'
 import ScrollNavBar from '../../components/ScrollNavBar'
 import CourseIntroduce from '../../components/CourseIntroduce.vue'
@@ -160,7 +168,16 @@ export default {
   mounted() {
     //视频播放器相关监听
     const vid = this.$refs.videoitem
-    console.log(this)
+
+    vid.setAttribute('webkit-playsinline', 'true')
+    vid.setAttribute('x5-video-player-type', 'h5')
+    vid.setAttribute('x5-video-player-fullscreen', 'true')
+    vid.setAttribute('playsinline', 'true')
+    vid.setAttribute('x-webkit-airplay', 'true')
+    vid.setAttribute('x5-video-ignore-metadata', 'true')
+    vid.setAttribute('x5-videoO-orientation', 'portraint')
+    enableInlineVideo(vid)
+
     //视频进度
     vid.addEventListener('timeupdate', this.getVideoProgress)
     vid.addEventListener('play', this.clickPlayVideoBtn)
