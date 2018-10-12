@@ -1,30 +1,35 @@
 <template>
-  <div class="index">
-    <div>
-      <van-swipe :autoplay="4000" class="index-swiper">
-        <van-swipe-item v-for="list in bannerList" :key="list.url">
-          <i class="qhht-icon lazy-img-larger index-swiper-img" v-lazy:background-image="list.url" @click="routerToSwiperDetail(list.link)"></i>
-        </van-swipe-item>
+  <div>
+    <SkeletonFullScreen  v-if="loading"/>
+    <div class="index" v-else>
+      <div>
+        <van-swipe :autoplay="4000" class="index-swiper">
+          <van-swipe-item v-for="list in bannerList" :key="list.url">
+            <i class="qhht-icon lazy-img-larger index-swiper-img" v-lazy:background-image="list.url" @click="routerToSwiperDetail(list.link)"></i>
+          </van-swipe-item>
 
-      </van-swipe>
-      <!-- <div class="swiper_bottom"></div> -->
-    </div>
+        </van-swipe>
+        <!-- <div class="swiper_bottom"></div> -->
+      </div>
 
-    <Notice :message-count="newMessageCount" :fromAvatarUrl= "fromAvatarUrl"/>
-    <div class="index-container">
-      <Header v-if="false" :link="'/home/freezone'" title="免费专区" subtitle="探索更多" />
-      <FreeList v-if="false" :free-list="freeList" />
-      <Header :link="'/home/visionList'" title="少年视野" subtitle="探索更多" />
-      <DisCoverVisionList :vision-list="visionList" />
-      <Header :link="'/home/videoList'" title="少年必修" subtitle="探索更多" />
-      <DisCoverVideoList :video-list="videoList" />
-      <Header :link="'/home/readings'" title="中国少年读书会" subtitle="探索更多" />
-      <BookList :book-list="bookList" />
+      <Notice :message-count="newMessageCount" :fromAvatarUrl= "fromAvatarUrl"/>
+      <div class="index-container">
+        <Header v-if="false" :link="'/home/freezone'" title="免费专区" subtitle="探索更多" />
+        <FreeList v-if="false" :free-list="freeList" />
+        <Header :link="'/home/visionList'" title="少年视野" subtitle="探索更多" />
+        <DisCoverVisionList :vision-list="visionList" />
+        <Header :link="'/home/videoList'" title="少年必修" subtitle="探索更多" />
+        <DisCoverVideoList :video-list="videoList" />
+        <Header :link="'/home/readings'" title="中国少年读书会" subtitle="探索更多" />
+        <BookList :book-list="bookList" />
+      </div>
     </div>
   </div>
+ 
 </template>
 
 <script>
+import SkeletonFullScreen from '../components/SkeletonFullScreen'
 import Notice from '../components/homeComponents/Notice.vue'
 import Header from '../components/homeComponents/Header.vue'
 import FreeList from './FreeList.vue'
@@ -40,6 +45,7 @@ const { mapState, mapActions } = createNamespacedHelpers('homeData')
 export default {
   name: 'Homepage',
   components: {
+    SkeletonFullScreen,
     Notice,
     Header,
     FreeList,
@@ -48,6 +54,7 @@ export default {
     BookList
   },
   computed: mapState([
+    'loading',
     'bannerList',
     'newMessageCount',
     'fromAvatarUrl',
@@ -59,7 +66,6 @@ export default {
   methods: {
     ...mapActions(['getIndexPageData']),
     routerToSwiperDetail(url) {
-      console.log(url)
       if (!url) {
         return
       }
@@ -88,8 +94,8 @@ export default {
   /deep/.van-swipe__indicator {
     background-color: white;
   }
-  /deep/.van-swipe__indicator--active{
-    background-color: #D9D9D9;
+  /deep/.van-swipe__indicator--active {
+    background-color: #d9d9d9;
   }
 }
 .index-swiper {

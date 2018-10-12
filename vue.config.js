@@ -4,16 +4,18 @@ const isProd = NODE_ENV === 'production'
 module.exports = {
   lintOnSave: undefined,
   configureWebpack: {
-    plugins: [
-      new uglifyJsPlugin({
-        uglifyOptions: {
-          compress: {
-            warnings: false,
-            drop_console: isProd,
-            drop_debugger: isProd
-          }
-        }
-      })
-    ]
+    plugins: isProd
+      ? [
+          new uglifyJsPlugin({
+            uglifyOptions: {
+              compress: {
+                warnings: false,
+                drop_console: isProd,
+                drop_debugger: isProd
+              }
+            }
+          })
+        ]
+      : []
   }
 }

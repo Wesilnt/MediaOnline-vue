@@ -1,13 +1,18 @@
 <template>
-  <div class="anti-bottomBar">
-    <GroupHeader></GroupHeader>
-    <GroupContent></GroupContent>
-    <!-- 底部工具条 -->
-    <tools-navbar/>
+  <div>
+    <SkeletonFullScreen  v-if="loading"/>
+    <div class="anti-bottomBar" v-else>
+      <GroupHeader></GroupHeader>
+      <GroupContent></GroupContent>
+      <!-- 底部工具条 -->
+      <tools-navbar/>
+    </div>
   </div>
+
 </template>
 
 <script>
+    import SkeletonFullScreen from '../../components/SkeletonFullScreen'
 import GroupHeader from './components/GroupHeader'
 import GroupContent from './components/GroupContent'
 import toolsNavbar from '../../components/toolsNavbar.vue'
@@ -19,6 +24,7 @@ const { mapState, mapMutations, mapActions } = createNamespacedHelpers(
 export default {
   name: 'VideoColumnDetail',
   components: {
+      SkeletonFullScreen,
     'tools-navbar': toolsNavbar,
     GroupHeader,
     GroupContent
@@ -30,6 +36,7 @@ export default {
   computed: {
     ...rootState(['url']),
     ...mapState([
+        'loading',
       'freeLessonList', //试看课程数组
       'profilePic', //头图
       'description', //专栏介绍

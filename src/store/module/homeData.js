@@ -9,50 +9,64 @@ import {
 const homeData = {
   namespaced: true,
   state: {
+    loading: true,
     bannerList: [],
-    newMessageCount:0,
-    fromAvatarUrl:'',
+    newMessageCount: 0,
+    fromAvatarUrl: '',
     freeList: [],
     visionList: [],
     videoList: [],
     bookList: []
   },
   actions: {
-    async getIndexPageData({ dispatch }) {
+    async getIndexPageData({ dispatch,commit }) {
+      console.log(
+        '首页加载顺序为,轮播图和少年视野先加载（样式）,其他接口先返回数据就先加载'
+      )
       await dispatch('getBannerList')
-      await dispatch('getNewMessageCount')
-      await dispatch('getFreeList')
+      dispatch('getNewMessageCount')
+      // await dispatch('getFreeList')
       await dispatch('getVisionList')
-      await dispatch('getVideoList')
-      await dispatch('getBookList')
+      commit('setLoading', false)
+      dispatch('getVideoList')
+      dispatch('getBookList')
     },
     async getBannerList({ commit }) {
       let result = await getBannerList({ type: 0 })
+      console.log(1)
       commit('setBannerList', result)
     },
     async getFreeList({ commit }) {
       let result = await getFreeList({ pageSize: 2 })
+      console.log(2)
       commit('setFreeList', result.result)
     },
     async getNewMessageCount({ commit }) {
       let result = await getNewMessageCount()
+      console.log(3)
       commit('setNewMessageCount', result.count)
-      commit('setFromAvatarUrl',result.fromAvatarUrl)
+      commit('setFromAvatarUrl', result.fromAvatarUrl)
     },
     async getVisionList({ commit }) {
       let result = await getVisionList()
+      console.log(4)
       commit('setVisionList', result)
     },
     async getVideoList({ commit }) {
       let result = await getVideoList()
+      console.log(5)
       commit('setVideoList', result)
     },
     async getBookList({ commit }) {
       let result = await getBookList()
+      console.log(6)
       commit('setBookList', result)
     }
   },
   mutations: {
+    setLoading(state, loading) {
+      state.loading = loading
+    },
     setBannerList(state, bannerList) {
       state.bannerList = bannerList
     },

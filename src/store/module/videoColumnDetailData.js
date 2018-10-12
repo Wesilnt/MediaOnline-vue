@@ -6,6 +6,7 @@ import groupManagerData from './groupManagerData'
 const videoColumnDetailData = {
   namespaced: true,
   state: {
+    loading: true,
     freeLessonList: [], //试看课程数组
     profilePic: '', //头图
     description: '', //专栏介绍
@@ -15,20 +16,14 @@ const videoColumnDetailData = {
     commentCount: 0, //留言条数
     buyCount: 0, //购买数量
     courseId: 0, //专栏ID
-    courseName:'',//专栏名称
-    isFromShare:false,
-  },
-  getters: {
-    // //获取专栏名称
-    // courseName(state){
-    //   return state.name
-    // }
+    courseName: '', //专栏名称
+    isFromShare: false
   },
   mutations: {
     initDatas(state, courseId) {
       state.courseId = courseId
     },
-    bindVideoColumnDetail(state, {result,isFromShare}) {
+    bindVideoColumnDetail(state, { result, isFromShare }) {
       state.freeLessonList = result.freeLessonList
       state.description = result.description
       state.outlinePic = result.outlinePic
@@ -38,28 +33,37 @@ const videoColumnDetailData = {
       state.buyCount = result.buyCount
       state.courseName = result.name
       state.isFromShare = isFromShare
+      state.loading = false
     }
   },
   actions: {
     async getVideoColumnDetail({ commit, dispatch }, { courseId, groupBuyId }) {
       //获取视频专栏数据
       const result = await getVideoColumnDetail({ courseId })
-      
+
       //绑定专栏详情内容
       const profilePic = result.profilePic
       const freeLessonList = result.freeLessonList
-      const serviceType = "OnlineCourse"
+      const serviceType = 'OnlineCourse'
       //绑定与拼团相关的内容
-      dispatch('groupManagerData/initColumnInfo',{serviceType,courseId,profilePic,'freeLesson':freeLessonList})
-      
+      dispatch('groupManagerData/initColumnInfo', {
+        serviceType,
+        courseId,
+        profilePic,
+        freeLesson: freeLessonList
+      })
+
       console.log('视频专栏接口数据:')
       console.log(result)
-      commit('bindVideoColumnDetail', {result,isFromShare:groupBuyId?true:false})
+      commit('bindVideoColumnDetail', {
+        result,
+        isFromShare: groupBuyId ? true : false
+      })
       if (groupBuyId) {
-          //这里是分享链接进来的
+        //这里是分享链接进来的
         dispatch('groupManagerData/getGroupBuyDetail', groupBuyId)
       } else {
-          //这里是正常途径进来的
+        //这里是正常途径进来的
         const toolsData = {
           collectLikeDuration: result.collectLikeDuration,
           collectLikeId: result.collectLikeId,

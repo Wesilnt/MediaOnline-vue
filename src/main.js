@@ -7,7 +7,7 @@ import store from './store/store'
 
 import App from './App.vue'
 import VueQRCodeComponent from 'vue-qrcode-component'
-import Skeleton from './components/Skeleton'
+import SkeletonFullScreen from './components/SkeletonFullScreen'
 //导入全局时间过滤器，时间秒(s)格式化=> 00:00
 import { formatDuring, learntimeFormat } from './utils/utils.js'
 import { IS_ONLINE } from './utils/config'
@@ -23,7 +23,7 @@ new Vue({
   render: h => {
     if (noAccessToken() && IS_ONLINE) {
       store.dispatch('getAccessToken')
-      return h(Skeleton, {
+      return h(SkeletonFullScreen, {
         props: {
           loading: true,
           active: true

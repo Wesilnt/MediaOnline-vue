@@ -1,5 +1,6 @@
 <template>
     <div>
+        <SkeletonFullScreen />
         <div class="lazy-img-most wxconfig-header" v-lazy:background-image="null"></div>
         <ScrollNavBar />
         <div class="wxconfig-title" id="title">
@@ -11,6 +12,7 @@
             <van-button type="warning" size="large" @click="onOpenPupop">测试Picker</van-button>
             <van-button type="danger" size="large">待测试</van-button>
         </div>
+
         <div class="wxconfig-comment" id="describe">
             <p>模拟详情</p>
         </div>
@@ -44,10 +46,12 @@
 //tabBar头部黏贴 点击滚动到相应位置
 import { mapActions } from 'vuex'
 import ScrollNavBar from '../../components/ScrollNavBar'
+import SkeletonFullScreen from '../../components/SkeletonFullScreen'
 export default {
   name: 'wxConfig',
   components: {
-    ScrollNavBar
+    ScrollNavBar,
+      SkeletonFullScreen
   },
   data() {
     return {

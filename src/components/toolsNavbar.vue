@@ -31,11 +31,14 @@ import PhoneVerif from './PhoneVerif'
 import {
   createNamespacedHelpers,
   mapState as rootState,
-  mapActions as rootActions,
+  mapActions as rootActions
 } from 'vuex'
-const { mapState, mapActions, mapMutations,mapGetters } = createNamespacedHelpers(
-  'videoColumnDetailData/groupManagerData'
-)
+const {
+  mapState,
+  mapActions,
+  mapMutations,
+  mapGetters
+} = createNamespacedHelpers('videoColumnDetailData/groupManagerData')
 export default {
   name: 'ToolsNavbar',
   data() {
@@ -43,7 +46,7 @@ export default {
       //是否显示分享
       sharePageShow: false,
       //分享内容
-      shareData: null,
+      shareData: null
     }
   },
   props: {
@@ -74,8 +77,8 @@ export default {
     Share,
     PhoneVerif
   },
-  created(){
-  const { fullPath } = this.$route
+  created() {
+    const { fullPath } = this.$route
     this.registerWxConfig({
       fullPath,
       jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline']
@@ -87,7 +90,10 @@ export default {
         this.toggolePraiseFlag(false)
         this.$router.push({
           name: 'Praise',
-          params: {courseId: this.$route.params.courseId,collectLikeId: newVal},
+          params: {
+            courseId: this.$route.params.courseId,
+            collectLikeId: newVal
+          },
           query: { columnType: this.serviceType }
         })
       }
@@ -99,47 +105,56 @@ export default {
         this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
       }
     },
-    userAccessStatus:function(value){
-    this.getUserInfo()
-    .then(user=>{
-      let title = null
-      switch (this.userAccessStatus) {
-        case 1005: //拼团中
-              title = `我正在参加《${this.courseName}》拼团活动,仅差${this.leavePerson}人,快来和我一起拼团吧!`
-          break
-          case 1009://集赞中
-             title = `我是${user.nickName}, ${true?'我想免费':'正在帮朋友'}领取《${this.courseName}》,求助攻~`
-          break;
+    userAccessStatus: function(value) {
+      this.getUserInfo().then(user => {
+        let title = null
+        switch (this.userAccessStatus) {
+          case 1005: //拼团中
+            title = `我正在参加《${this.courseName}》拼团活动,仅差${
+              this.leavePerson
+            }人,快来和我一起拼团吧!`
+            break
+          case 1009: //集赞中
+            title = `我是${user.nickName}, ${
+              true ? '我想免费' : '正在帮朋友'
+            }领取《${this.courseName}》,求助攻~`
+            break
           default:
-          title =this.courseName;
-          break
-      }
-       let link = ""
-      switch (this.serviceType) {
-        case 'OnlineCourse':
-          link = this.url+`/#/videoColumnDetail/${this.courseId}?groupBuyId=${this.groupBuyId}`
-          break
-        case 'OnlineVision':
-          link =this.url+`/#/home/visionDetail/${this.courseId}`
-          break
-        case 'Readings':
-           link= this.url+`/#/home/readings/book/${this.courseId}?playType='Readings'`
-          break
-       default:
-          link =this.url+`/#/home/freezone`
-          break
-      }
-      console.log("设置分享地址：",link, "   设置分享标题：",title)
-      this.shareData = {
+            title = this.courseName
+            break
+        }
+        let link = ''
+        switch (this.serviceType) {
+          case 'OnlineCourse':
+            link =
+              this.url +
+              `/#/videoColumnDetail/${this.courseId}?groupBuyId=${
+                this.groupBuyId
+              }`
+            break
+          case 'OnlineVision':
+            link = this.url + `/#/home/visionDetail/${this.courseId}`
+            break
+          case 'Readings':
+            link =
+              this.url +
+              `/#/home/readings/book/${this.courseId}?playType='Readings'`
+            break
+          default:
+            link = this.url + `/#/home/freezone`
+            break
+        }
+        console.log('设置分享地址：', link, '   设置分享标题：', title)
+        this.shareData = {
           link,
           title,
-          desc: '你一定会爱上国学课...' ,
-          successCB: () => console.log('分享回调成功') ,
-          cancelCB: () =>  this.$toast('分享回调失败')
-      }
-      this.setWxShareFriend(this.shareData)
-      this.setWxShareZone(this.shareData)
-    })
+          desc: '你一定会爱上国学课...',
+          successCB: () => console.log('分享回调成功'),
+          cancelCB: () => this.$toast('分享回调失败')
+        }
+        this.setWxShareFriend(this.shareData)
+        this.setWxShareZone(this.shareData)
+      })
     }
   },
   computed: {
@@ -166,7 +181,7 @@ export default {
       'isAllPay',//拼团用户列表中的用户是否都完成支付
       'currUserStatus',//当前用户的支付状态
     ]),
-    ...mapGetters(['isFromShare','courseName'])
+    ...mapGetters(['isFromShare', 'courseName'])
   },
   filters: {
     formatPrice: function(price) {
@@ -176,7 +191,12 @@ export default {
     }
   },
   methods: {
-      ...rootActions(['getUserInfo','registerWxConfig', 'setWxShareFriend', 'setWxShareZone']),
+    ...rootActions([
+      'getUserInfo',
+      'registerWxConfig',
+      'setWxShareFriend',
+      'setWxShareZone'
+    ]),
     ...mapMutations(['bindIsShowMobileDialog', 'toggolePraiseFlag']),
     ...mapActions([
       'startGroupBuy',
@@ -196,7 +216,7 @@ export default {
     },
     //点击原价购买按钮
     clickOriginPriceBtn() {
-      let params = {courseId: this.courseId,payType: 0}
+      let params = { courseId: this.courseId, payType: 0 }
       switch (this.userAccessStatus) {
         //没有购买和集赞行为
         case 0:
@@ -349,28 +369,32 @@ export default {
     cancelSharePage() {
       this.sharePageShow = false
     },
-    setShareInfo(){
-     let link = ""
+    setShareInfo() {
+      let link = ''
       switch (this.serviceType) {
         case 'OnlineCourse':
-          link = `/#/videoColumnDetail/${this.courseId}?groupBuyId=${this.groupBuyId}`
+          link = `/#/videoColumnDetail/${this.courseId}?groupBuyId=${
+            this.groupBuyId
+          }`
           break
         case 'OnlineVision':
-          link =`/home/visionDetail/${this.courseId}`
+          link = `/home/visionDetail/${this.courseId}`
           break
         case 'Readings':
-           link= `/home/readings/book/${this.courseId}?playType='Readings'`
+          link = `/home/readings/book/${this.courseId}?playType='Readings'`
           break
-       default:
-          link =`/home/freezone`
+        default:
+          link = `/home/freezone`
           break
       }
       this.getUserInfo().then(user => {
-          this.shareData = {
-            link,
-            title: `我正在参加《${this.courseName}》拼团活动,仅差${2}人,快来和我一起拼团吧!`,
-            desc: '你一定会爱上国学课...'
-          }
+        this.shareData = {
+          link,
+          title: `我正在参加《${
+            this.courseName
+          }》拼团活动,仅差${2}人,快来和我一起拼团吧!`,
+          desc: '你一定会爱上国学课...'
+        }
       })
     },
     gotoInfoPage() {
@@ -388,14 +412,14 @@ export default {
           this.$router.push({
             name: 'AudioPlay',
             params: { id },
-            query: { playType: this.serviceType,courseName:this.courseName }
+            query: { playType: this.serviceType, courseName: this.courseName }
           })
           break
         case 'Readings':
           this.$router.push({
             name: 'AudioPlay',
             params: { id },
-            query: { playType: this.serviceType ,courseName:this.courseName}
+            query: { playType: this.serviceType, courseName: this.courseName }
           })
           break
       }
@@ -426,11 +450,12 @@ export default {
   line-height: 24px;
 }
 .audition-icon {
-  width: 52px;
-  height: 52px;
+  width: 40px;
+  height: 40px;
   background-image: url('../assets/images/onlinecourse-tabbar-try.png');
   background-position-y: top;
   background-size: 40px;
+  margin-bottom: 8px;
 }
 .under-text {
   font-size: 20px;
@@ -455,8 +480,8 @@ export default {
     rgb(254, 119, 0) 0,
     rgb(255, 79, 5) 100%
   );
-    border-radius: 80px;
-    padding: 10px 0;
+  border-radius: 80px;
+  padding: 10px 0;
   .toolbar-price-num {
     color: #fff;
   }

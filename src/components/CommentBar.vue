@@ -111,6 +111,7 @@ export default {
       this.recordTime = 0
     },
     toggleRecord() {
+        return this.$toast('语音留言暂未开放')
       this.record = !this.record
     },
     intervalRocrdTime() {

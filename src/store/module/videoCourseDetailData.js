@@ -24,7 +24,7 @@ const videoCourseDetailData = {
     isLike: 0,
     createTime: '',
     totalTime: 0, //服务器返回的视频总长度
-    description: '', //笔记
+    subTitle: '', //笔记
     learnTime: 0, //上次播放位置
     learnTotalTime: 0, //累计播放时长
     questionBOList: [], //自测题列表
@@ -60,7 +60,7 @@ const videoCourseDetailData = {
       state.isLike = payload.isLike
       state.totalTime = payload.totalTime
       state.createTime = payload.createTime
-      state.description = payload.description
+      state.subTitle = payload.subTitle
       state.title = payload.title
       state.questionBOList = payload.questionBOList
       state.grade = payload.grade

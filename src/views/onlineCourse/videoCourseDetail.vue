@@ -24,7 +24,7 @@
       <div id="desc" ref="desc" class="video-detail-sction-title">
           <h4>笔记</h4>
       </div>
-      <CourseIntroduce :courseinfo="description" />
+      <CourseIntroduce :courseinfo="subTitle" />
     </div>
     <div class="video-detail-base" v-if="haveQuestionBOList">
       <div class="video-detail-sction-title">
@@ -139,7 +139,7 @@ export default {
       'courseId', //专栏ID
       'id', //单集ID
       'singleComments',
-      'description', //笔记
+      'subTitle', //笔记
       'totalTime', //服务器返回的视频总长度
       'isFree',
       'isLike',

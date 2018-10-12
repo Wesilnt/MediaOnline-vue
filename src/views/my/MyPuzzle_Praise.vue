@@ -20,7 +20,11 @@
                                 :offset="60"
                                 :immediate-check="false"
                             >
-                                <div v-for="puzzle in puzzleList" :key="puzzle.id" class="my-puzzle-content-cell">
+                                <div v-for="puzzle in puzzleList"
+                                     :key="puzzle.id"
+                                     class="my-puzzle-content-cell"
+                                     @click="routerToDetail(puzzle.course)"
+                                >
                                     <p class="qhht-flex">
                                         <i class="qhht-icon my-puzzle-content-cell-icon"></i>
                                         <span class="my-puzzle-content-cell-date">{{pageName}}时间：{{puzzle.createTime}}</span>
@@ -50,7 +54,12 @@
 import { createNamespacedHelpers } from 'vuex'
 import Badge from '../../components/Badge'
 import Skeleton from '../../components/Skeleton'
-import { puzzleTabs, praiseTypes, puzzleTypes } from '../../utils/config'
+import {
+  puzzleTabs,
+  praiseTypes,
+  puzzleTypes,
+  courseType
+} from '../../utils/config'
 
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
   'myPuzzle_PraiseData'
@@ -94,7 +103,7 @@ export default {
   watch: {
     selected: function(currentType) {
       const { isPraise, productTypes, pageSize, currentPage } = this
-        console.log(productTypes);
+      console.log(productTypes)
       const Types = Object.values(productTypes)
       this.toggleCurrentType({
         pageSize,
@@ -134,6 +143,10 @@ export default {
         isPraise,
         loadType
       })
+    },
+    routerToDetail({ type, id }) {
+      console.log(type, id)
+      this.$router.push({ path: `/${courseType[type]}${id}` })
     },
     routerToHome() {
       this.$router.push({ path: '/home' })
