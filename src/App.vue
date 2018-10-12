@@ -33,23 +33,32 @@ export default {
 }
 .IIV::-webkit-media-controls-play-button,
 .IIV::-webkit-media-controls-start-playback-button {
-    /*opacity: 0;*/
-    /*pointer-events: none;*/
-    /*width: 5px;*/
+  /*opacity: 0;*/
+  /*pointer-events: none;*/
+  /*width: 5px;*/
+}
+.video-popup {
+  left: 0;
+  top: 0;
+  right: 0;
+  transform: none;
+  & ~ .van-modal {
+    background-color: #fff;
+  }
 }
 .videobox {
-    /*width: 4.78rem;*/
-    /*height: 7.8rem;*/
-    /*position: absolute;*/
-    /*top: 3.2rem;*/
-    /*left: 1.2rem;*/
+  /*width: 4.78rem;*/
+  /*height: 7.8rem;*/
+  /*position: absolute;*/
+  /*top: 3.2rem;*/
+  /*left: 1.2rem;*/
 }
-video{
-    /*width: 4.2rem;*/
-    /*height: 7.69rem;*/
-    /*position: absolute;*/
-    /*left: .22rem;*/
-    /*top: .7rem;*/
-    /*overflow: hidden;*/
+video {
+  /*width: 4.2rem;*/
+  /*height: 7.69rem;*/
+  /*position: absolute;*/
+  /*left: .22rem;*/
+  /*top: .7rem;*/
+  /*overflow: hidden;*/
 }
 </style>
