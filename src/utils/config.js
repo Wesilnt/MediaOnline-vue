@@ -2,14 +2,14 @@
 const { NODE_ENV } = process.env
 
 // 调试选项，本地调试请改为 False
-export const IS_ONLINE = true
+export const IS_ONLINE = false
 // 测试 Token
 
-export const TEST_TOKEN = "05005abc-f9f9-438b-b1b6-86fe4b836934"
+export const TEST_TOKEN = "c8138530-1905-494f-aefe-149681b022bc"
 
 // TODO router 设置未统一，后期需要统一格式
 export const courseType = {
-  '1007': 'home/readings/book?id=', // 读书会
+  '1007': 'home/readings/book/', // 读书会
   '1005': 'videoColumnDetail/', // 线上课程
   '1003': 'home/visionDetail/', // 少年视野
   '1001': 'home/freezone' // 免费专区
