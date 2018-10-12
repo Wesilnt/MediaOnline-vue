@@ -48,7 +48,7 @@
               <span>我要留言</span>
           </div>
       </div>
-      <CommentList  :regionid="id" :regiontype="2202" :haspadding="true" ></CommentList>
+      <CommentList  :regionid="lessonId" :regiontype="2202" :haspadding="true" ></CommentList>
       <!-- <CommentItem class="video-course-comment" v-for="item in singleComments" :key="item.id" :comment="item" :unindent="true" :regiontype="2202"/> -->
     </div>
       <CommentBar :show="commentBarShow" v-on:toggle="toggleKeyboard"/>

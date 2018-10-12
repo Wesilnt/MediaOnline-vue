@@ -4,7 +4,7 @@
           还没有评论，快来评论吧!
       </div>
       <van-list
-          class="commment-list"
+          class="comment-list"
           v-model="refreshing"
           :finished="finished"
           :immediate-check="false"
@@ -60,17 +60,17 @@ export default {
 .van-item{
   padding: 0px;
 }
-.commment-list {
+.comment-list {
   display: flex;
   flex-direction: column;
-  padding-bottom: 160px;
+  // padding-bottom: 160px;
   padding-top: 10px;
   // width: 100vw;
 }
 .nodata-container { 
   width: 100vw;
   text-align: center;
-  line-height: 80vh;
+  line-height: 30vh;
   font-size: 20px;
 }
 </style>

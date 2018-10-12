@@ -14,7 +14,7 @@
         </div>
         <div class="comment-detail-body">
           <div ref="content" v-if="comment.commentType==3301" class="comment-detail-content" :class="{'content-expand':isExpand}">
-            <p ref="contentChild">{{comment.content | getSingleCourseName(0)}}</p>
+            <span ref="contentChild">{{comment.content | getSingleCourseName(0)}}</span>
           </div>
           <div v-else class="voice-container">
             <img src="../../assets/images/cmt_voice_icon.png">
@@ -104,6 +104,7 @@ export default {
   margin-left: 32px;
   flex: 1;
   &-nickName {
+    min-height: 32px;
     font-size: 32px;
     font-weight: 700;
     color: #808080;
@@ -124,6 +125,7 @@ export default {
   &-content {
     max-height: 150px;
     overflow: hidden;
+    word-break: break-all;
     transition: height 0.4s linear;
     &.content-expand {
       max-height: inherit;

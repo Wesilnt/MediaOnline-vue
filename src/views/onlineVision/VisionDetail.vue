@@ -35,9 +35,10 @@
     <!-- message -->
     <div id="message" class="message bottomline" >
       <DetailHeader title="精选留言" link='/videoCourseCmts' :courseId="courseId" :subtitle="visionDetail.commentCount + '条'" />
-      <div v-for="item of commentList" :key="item.id" >
+      <!-- <div v-for="item of commentList" :key="item.id" >
         <comment-item :comment="item"  class="vision_comment_item"/>
-      </div>
+      </div> -->
+       <CommentList  :regionid="courseId" :regiontype="2201" :haspadding="true" ></CommentList>
     </div>
 
     <div class="noticeBuyArea">
@@ -66,7 +67,7 @@ import DetailHeader from '../../components/visionComponents/DetailHeader.vue'
 import arrowUp from '../../assets/images/vison_arrow_up.png'
 import arrowDown from '../../assets/images/vision_arrow_down.png'
 import SingleSetList from '../../components/SingleSetList.vue'
-import CommentItem from '../../components/comment/CommentItem.vue'
+import CommentList from '../../components/comment/CommentList.vue'
 import toolsNavbar from '../../components/toolsNavbar.vue'
 import GroupHeader from '../onlineCourse/components/GroupHeader'
 import videoBigimage from '../../components/videoBigimage.vue'
@@ -79,7 +80,7 @@ export default {
     ScrollNavBar,
     videoBigimage,
     SingleSetList,
-    CommentItem,
+    CommentList,
     toolsNavbar,
     GroupHeader,
     CourseIntroduce
