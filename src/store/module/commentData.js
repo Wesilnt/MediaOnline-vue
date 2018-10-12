@@ -20,8 +20,7 @@ export default {
     setCommentList(state, res) {
       state.currentPage = res.currentPage
       state.finished = res.list.length < state.pageSize
-      state.loading = false
-      console.log(res)
+      state.loading = false 
       if (1 == res.currentPage) state.commentList = []
       state.commentList = state.commentList.concat(res.list)
     },
@@ -30,7 +29,6 @@ export default {
     updateUserCommentLikeId(state, payload) {
       console.log("commentList",state.commentList)
       state.commentList.map(element => {
-        console.log("===",element, "=====", payload)
         if (element.id == payload) {
           element.userCommentLikeId = '1'
           element.likeCount = element.likeCount + 1
@@ -53,8 +51,9 @@ export default {
         currentPage,
         pageSize: state.pageSize
       }
-      console.log(params)
+      console.log("评论参数",params)
       let res = await getCommentList(params)
+      console.log("评论列表：",res)
       if (null == res.result) return
       commit('setCommentList', { list: res.result, currentPage })
     },

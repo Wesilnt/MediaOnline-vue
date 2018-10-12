@@ -7,6 +7,7 @@ import {
 } from '../../api/columnsApi.js'
 import { getCommentList, postComment } from '../../api/commentApi.js'
 import questionListData from './questionListData'
+import commentData from './commentData'
 import router from '../../router/router'
 import { Toast } from 'vant'
 const videoCourseDetailData = {
@@ -255,17 +256,19 @@ const videoCourseDetailData = {
 
     //发布评论
     async postComment({ state, commit, dispatch }, params) {
-      const res = await postComment(params)
-      if (!res) {
-        return Toast('评论失败')
-      }
-      Toast('评论成功')
-      dispatch('getCommentList', params)
+      dispatch('commentData/postComment',params)
+      // const res = await postComment(params)
+      // if (!res) {
+      //   return Toast('评论失败')
+      // }
+      // Toast('评论成功')
+      // dispatch('getCommentList', params)
     }
   },
 
   modules: {
-    questionListData
+    questionListData,
+    commentData,
   }
 }
 export default videoCourseDetailData

@@ -11,7 +11,7 @@
           @load="scrollBottom"
           @offset="10">
           <div>
-           <van-cell :class="{'van-item':unindent}"  v-for="(item,index) of commentList" :key="item.id">
+           <van-cell :class="{'van-item': false}"  v-for="(item,index) of commentList" :key="item.id">
                   <comment-item :comment="item" :lastindex="(commentList.length-1)==index" :unindent="haspadding"/>
            </van-cell>
           </div>

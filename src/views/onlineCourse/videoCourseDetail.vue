@@ -89,6 +89,7 @@ export default {
   },
   data() {
     return {
+      lessonId:this.$route.params.lessonId,
       navBars: [
         {
           title: '资料',

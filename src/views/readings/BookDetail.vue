@@ -3,7 +3,7 @@
      <GroupHeader></GroupHeader>
     <!-- 1. 头部 -->
     <div class="book-header-container" v-show="false">
-      <div class="book-cover" :style="{background:'url('+bookDetail.coverPic+')','background-size':'100%'}">
+      <div class="book-cover" :style="{background:`url(${bookDetail?bookDetail.coverPic:''})`,'background-size':'100%'}">
         <span v-if="new Date().getTime() - new Date(bookDetail.createTime).getTime()<30*24*3600*1000">上新</span>
       </div>
     </div>
