@@ -341,17 +341,32 @@ const groupManagerData = {
                 break
                 case 1203:
                     //拼团成功
-                    //显示我要学习
-                    headerType = 101
-                    toolsObject = {
-                        "originPrice":'',
-                        "groupPrice":'',
-                        "collageText":"我要学习",
-                        "collectText":"",
-                        "collect":false,
-                        "collage":true,
-                        "isShow":true
+                    //拼团成功&&在拼团列表中 显示我要学习
+                    //拼团成功&&不在拼团列表中 显示我要开团
+                    if(isGroupCurrent){
+                        headerType = 101
+                        toolsObject = {
+                            "originPrice":'',
+                            "groupPrice":'',
+                            "collageText":"我要学习",
+                            "collectText":"",
+                            "collect":false,
+                            "collage":true,
+                            "isShow":true
+                        }
+                    }else {
+                        headerType = 101
+                        toolsObject = {
+                            "originPrice":'',
+                            "groupPrice":'',
+                            "collageText":"我要开团",
+                            "collectText":"",
+                            "collect":false,
+                            "collage":true,
+                            "isShow":true
+                        }
                     }
+
                 break
                 case 1202:
                 //拼团中&&开团人  显示  邀请好友拼团
