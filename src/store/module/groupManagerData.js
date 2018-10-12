@@ -162,8 +162,50 @@ const groupManagerData = {
             switch(userAccessStatus) {
                 case -3:
                     //拼团失败
-                    isShowGroupBuy = true
-                    dispatch("getGroupBuyDetail",groupData.groupBuyId)
+                    // isShowGroupBuy = true
+                    // dispatch("getGroupBuyDetail",groupData.groupBuyId)
+                    isShowGroupBuy = false
+                    if(praiseData.collectLikeTemplateId && groupData.groupBuyTemplateId){
+                        toolsObject = {
+                            "originPrice":toolsData.price || 0,
+                            "groupPrice":toolsData.groupBuyPrice || 0,
+                            "collageText":personStr,
+                            "collectText":"集赞换",
+                            "collect":true,
+                            "collage":true,
+                            "isShow":true
+                        }
+                    }else if(praiseData.collectLikeTemplateId == "" && groupData.groupBuyTemplateId != ""){
+                        toolsObject = {
+                            "originPrice":toolsData.price || 0,
+                            "groupPrice":toolsData.groupBuyPrice || 0,
+                            "collageText":personStr,
+                            "collectText":"集赞换",
+                            "collect":false,
+                            "collage":true,
+                            "isShow":true
+                        }
+                    }else if(praiseData.collectLikeTemplateId && groupData.groupBuyTemplateId == ""){
+                        toolsObject = {
+                            "originPrice":toolsData.price || 0,
+                            "groupPrice":toolsData.groupBuyPrice || 0,
+                            "collageText":personStr,
+                            "collectText":"集赞换",
+                            "collect":true,
+                            "collage":false,
+                            "isShow":true
+                        }
+                    }else if(praiseData.collectLikeTemplateId == "" && groupData.groupBuyTemplateId ==""){
+                        toolsObject = {
+                            "originPrice":toolsData.price || 0,
+                            "groupPrice":toolsData.groupBuyPrice || 0,
+                            "collageText":personStr,
+                            "collectText":"集赞换",
+                            "collect":false,
+                            "collage":false,
+                            "isShow":true
+                        }
+                    }
                 break
                 case 0:
                     isShowGroupBuy = false
