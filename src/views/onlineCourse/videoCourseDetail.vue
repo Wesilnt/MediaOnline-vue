@@ -1,14 +1,20 @@
 <template>
     <div>
-        <SkeletonFullScreen  v-if="loading"/>
-        <div v-else class="videocourse-detail-container" id="detailmain" ref="detailmain">
+        <SkeletonFullScreen  v-show="loading"/>
+        <div v-show="!loading" class="videocourse-detail-container" id="detailmain" ref="detailmain">
+            <!-- 播放器封面 -->
+            <div class="video-detail-header lazy-img-most" v-lazy:background-image="coverPic">
+                <div class="video-detail-header-right-top">
+                    <img :src="isLike?collectIcon:unCollectIcon" class="video-detail-collect" alt="" @click="onCollectFavorite">
+                    <img :src="require('../../assets/images/onlinecourse-play_ic_share.png')" class="video-detail-share" alt="" @click="onShareAction">
+                </div>
+                <a class="video-playbtn-icon" @click="handleVideoPlay">
+                    开始播放
+                </a>
+                <!-- <img :src="require('../../assets/images/onlinecourse_video_ic_gift.png')" class="video-detail-header-gift" alt="">     -->
+            </div>
             <!-- 播放器 -->
-            <video class="videoitem" ref="videoitem" v-show="false" :src="videoUrl" controls="controls" width="100%" height='100%' preload="auto"></video>
-            <!-- Navbar -->
             <ScrollNavBar :bars="navBars" />
-            <!-- <div ref="navbar" :class="navbarFixed == true ? 'isFixed' : ''" class="video-detail-navbar">
-                <div v-for="(item,index) of navbar" :class="{'selected':selected == index }" :key="index" class="video-detail-navbar-item" @click="clickFnc(index)">{{item}}</div>
-            </div> -->
             <!-- 资料 -->
             <div class="video-detail-base">
                 <div id="desc" ref="desc" class="video-detail-sction-title">
@@ -43,11 +49,29 @@
             </div>
             <CommentBar :show="commentBarShow" v-on:toggle="toggleKeyboard"/>
             <Share :show="sharePageShow" :shareid="courseId" @close="cancelSharePage"></Share>
+            <van-popup :lazy-render="false"
+                       :click-overlay="handleVideoPause"
+                       v-model="videoShow" class="video-popup">
+                <video class="videoitem"
+                       ref="videoitem"
+                       :src="videoUrl"
+                       controls="controls"
+                       width="100%"
+                       preload="auto"
+                       webkit-playsinline
+                       playsinline="true"
+                       x-webkit-airplay="allow"
+                       x5-video-player-type="h5"
+                       x5-video-player-fullscreen="true"
+                       x5-video-orientation="portraint"
+                       style="object-fit:fill"></video>
+            </van-popup>
         </div>
     </div>
 </template>
 
 <script>
+import enableInlineVideo from 'iphone-inline-video'
 import CommentList from '../../components/comment/CommentList.vue'
 import ScrollNavBar from '../../components/ScrollNavBar'
 import CourseIntroduce from '../../components/CourseIntroduce.vue'
@@ -118,8 +142,9 @@ export default {
       commentBarShow: false,
       //分享页面显示
       sharePageShow: false,
-      //控制目录当前播放的状态
-      isPlaying: false
+      //控制播放的状态
+      videoShow: false,
+      videoElem: null
     }
   },
   computed: {
@@ -151,10 +176,12 @@ export default {
   },
   mounted() {
     //视频播放器相关监听
-    const vid = this.$refs.videoitem
+    this.videoElem = this.$refs.videoitem
+    enableInlineVideo(this.videoElem)
+
     //视频进度
-    vid.addEventListener('timeupdate', this.getVideoProgress)
-    vid.addEventListener('play', this.clickPlayVideoBtn)
+    this.videoElem.addEventListener('timeupdate', this.getVideoProgress)
+    this.videoElem.addEventListener('play', this.handleVideoPlay)
     this.getUserInfo().then(user => {
       //拼装分享内容
       this.shareData = {
@@ -169,10 +196,9 @@ export default {
     })
   },
   beforeDestroy() {
-    const vid = this.$refs.videoitem
-    vid.removeEventListener('timeupdate', this.getVideoProgress)
-    vid.removeEventListener('play', this.clickPlayVideoBtn)
-    this.resetLoading()
+    this.videoElem.removeEventListener('timeupdate', this.getVideoProgress)
+    this.videoElem.removeEventListener('play', this.handleVideoPlay)
+    this.resetLoading(true)
   },
   created() {
     const { lessonId } = this.$route.params
@@ -224,19 +250,25 @@ export default {
       })
     },
     //播放视频
-    clickPlayVideoBtn() {
-      const video = this.$refs.videoitem
-      //从本地获取当前播放单集历史播放位置
+    handleVideoPlay() {
       const videoData = JSON.parse(localStorage.getItem(this.id))
-      // console.log('play的回调')
-      // console.log("videoData--Play = ",videoData)
       const { historyPlayPosition } = videoData
-      video.play()
-      video.currentTime =
-        historyPlayPosition >= video.duration ? 0 : historyPlayPosition
+      const { paused } = this.videoElem
+      this.videoShow = true
+
+      if (paused) {
+        console.dir(this.videoElem)
+        this.videoElem.play()
+      }
+      this.videoElem.currentTime =
+        historyPlayPosition >= this.videoElem.duration ? 0 : historyPlayPosition
       // 记录当前播放时间戳
       this.playStartTime = new Date()
       this.loaclPlayTotalTime = Math.round(parseFloat(videoData.playTotalTime))
+    },
+    handleVideoPause() {
+      const { paused } = this.videoElem
+      if (!paused) this.videoElem.pause()
     },
     getVideoProgress({ target }) {
       const { currentTime, paused, duration, readyState } = target
@@ -334,49 +366,10 @@ export default {
     },
     //点击目录
     beActive(lessonId) {
-      this.resetLoading()
-      this.getVideoCourseDetail({ lessonId })
+      if (this.activeID !== lessonId) {
+        this.getVideoCourseDetail({ lessonId })
+      }
     }
-    // clickFnc(index) {
-    //   this.selected = index
-    //   let positionId
-    //   switch (index) {
-    //     case 0:
-    //       positionId = '#note'
-    //       break
-    //     case 1:
-    //       positionId = '#catalog'
-    //       break
-    //     case 2:
-    //       positionId = '#leavemessage'
-    //       break
-    //     default:
-    //       break
-    //   }
-
-    //   let anchor = this.$el.querySelector(positionId)
-    //   document.body.scrollTop = anchor.offsetHeight - 60
-    //   // // Firefox
-    //   document.documentElement.scrollTop = anchor.offsetTop - 60
-    //   // Safari
-    //   pageYOffset = anchor.offsetTop - 50
-    // },
-    // async handleScroll() {
-    //   //1.监听滚动
-    //   let scrollTop = Math.abs(
-    //     this.$refs.detailmain.getBoundingClientRect().top
-    //   )
-    //   let noteH = this.$el.querySelector('#note').offsetTop - 60
-    //   let catalogH = this.$el.querySelector('#catalog').offsetTop - 60
-    //   // let leavemessageH = this.$el.querySelector('#leavemessage').offsetTop -50
-    //   if (scrollTop < noteH) {
-    //     this.selected = 0
-    //   } else if (scrollTop < catalogH && scrollTop > noteH) {
-    //     this.selected = 1
-    //   } else if (scrollTop > catalogH) {
-    //     this.selected = 2
-    //   }
-    // }
   }
 }
 </script>
@@ -409,32 +402,20 @@ export default {
   height: 30px;
   margin-left: 24px;
 }
-.video-detail-header-left-bottom {
+.video-playbtn-icon {
   position: absolute;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
   left: 30px;
   bottom: 30px;
-  height: 60px;
-  border: 1px solid lightgray;
-  border-radius: 30px;
   width: 196px;
-
-  label {
-    color: white;
-    height: 28px;
-    line-height: 28px;
-    padding: 0;
-    margin: 0;
-    align-self: center;
-  }
-
-  img {
-    width: 20px;
-    height: 26px;
-    margin: 20px;
-  }
+  height: 60px;
+  line-height: 60px;
+  border: 2px solid #fff;
+  padding-left: 30px;
+  text-align: center;
+  border-radius: 60px;
+  color: #fff;
+  background: url('../../assets/images/onlinecourse-video-detail-header.jpg')
+    32px center/20px no-repeat;
 }
 .video-detail-header-gift {
   position: absolute;

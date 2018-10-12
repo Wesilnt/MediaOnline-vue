@@ -19,14 +19,14 @@ const homeData = {
     bookList: []
   },
   actions: {
-    async getIndexPageData({ dispatch,commit }) {
+    async getIndexPageData({ dispatch, commit }) {
       console.log(
         '首页加载顺序为,轮播图和少年视野先加载（样式）,其他接口先返回数据就先加载'
       )
       await dispatch('getBannerList')
       dispatch('getNewMessageCount')
       // await dispatch('getFreeList')
-      await dispatch('getVisionList')
+      dispatch('getVisionList')
       commit('setLoading', false)
       dispatch('getVideoList')
       dispatch('getBookList')
@@ -42,10 +42,11 @@ const homeData = {
       commit('setFreeList', result.result)
     },
     async getNewMessageCount({ commit }) {
-      let result = await getNewMessageCount()
+      const result = await getNewMessageCount()
+      const { count , fromAvatarUrl  } = result
       console.log(3)
-      commit('setNewMessageCount', result.count)
-      commit('setFromAvatarUrl', result.fromAvatarUrl)
+      commit('setNewMessageCount', count)
+      commit('setFromAvatarUrl', fromAvatarUrl)
     },
     async getVisionList({ commit }) {
       let result = await getVisionList()
@@ -60,7 +61,7 @@ const homeData = {
     async getBookList({ commit }) {
       let result = await getBookList()
       console.log(6)
-      commit('setBookList', result)
+        commit('setBookList', result)
     }
   },
   mutations: {
@@ -86,7 +87,7 @@ const homeData = {
       state.videoList = videoList
     },
     setBookList(state, bookList) {
-      state.bookList = bookList
+        state.bookList = bookList
     }
   }
 }

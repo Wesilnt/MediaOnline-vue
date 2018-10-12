@@ -18,7 +18,7 @@ const groupManagerData = {
         achieveOriginBuy:false, //是否完成原价购买
 
         orderStatus:0,//当前订单状态
-        isOwner:true,    //是不是开团人 
+        isOwner:false,    //是不是开团人 
         isGroupCurrent:false, //当前用户是否在拼团列表
         isFullStaff:false,//拼团是否已满
         achievePayment:false,//当前用户是否完成支付
@@ -69,8 +69,20 @@ const groupManagerData = {
             return nameStr
         },
         //是否来自分享
-        isFromShare(state,getters,{ videoColumnDetailData }) {
-            return videoColumnDetailData.isFromShare
+        isFromShare(state,getters,rootState) {
+            let isFromShareStatus = null
+            switch(state.serviceType){
+                case "OnlineVision":
+                    isFromShareStatus = rootState.visionData.isFromShare
+                break
+                case "OnlineCourse":
+                    isFromShareStatus = rootState.videoColumnDetailData.isFromShare
+                break
+                case "Readings":
+                    isFromShareStatus = rootState.readingsData.isFromShare   
+                break
+            }
+            return isFromShareStatus
         }
     },
     mutations:{
@@ -83,7 +95,6 @@ const groupManagerData = {
             state.leavePerson = payload.leavePerson
             state.countDownTime = payload.countDownTime
             state.headerType = payload.headerType
-            state.isOwner = payload.isOwner
             state.isSixGroup = payload.isSixGroup
         },
         bindAchieveOriginBuy(state,achieveOriginBuy){
@@ -380,6 +391,7 @@ const groupManagerData = {
             console.log('currUserStatus = '+currUserStatus)
             console.log('countTime = '+countTime)
             console.log("上面都是状态指标")
+
             //保存当前订单状态
             commit('checkOrderStatus',{orderStatus,isOwner,isFullStaff,achievePayment,isAllPay,isGroupCurrent,currUserStatus})
 
@@ -391,17 +403,32 @@ const groupManagerData = {
                 break
                 case 1204:
                     //拼团失败
-                    //显示原价购买和我要开团
-                    headerType = 102
-                    toolsObject = {
-                        "originPrice":'',
-                        "groupPrice":'',
-                        "collageText":"重新开团",
-                        "collectText":"",
-                        "collect":false,
-                        "collage":true,
-                        "isShow":true
+                    //拼团成功&&在拼团列表中 显示重新开团
+                    //拼团成功&&不在拼团列表中 显示我要开团
+                    if(isGroupCurrent){
+                        headerType = 102
+                        toolsObject = {
+                            "originPrice":'',
+                            "groupPrice":'',
+                            "collageText":"重新开团",
+                            "collectText":"",
+                            "collect":false,
+                            "collage":true,
+                            "isShow":true
+                        }
+                    }else{
+                        headerType = 102
+                        toolsObject = {
+                            "originPrice":'',
+                            "groupPrice":'',
+                            "collageText":"我要开团",
+                            "collectText":"",
+                            "collect":false,
+                            "collage":true,
+                            "isShow":true
+                        }
                     }
+
                 break
                 case 1203:
                     //拼团成功
@@ -574,7 +601,6 @@ const groupManagerData = {
                 "userListTop" : topList,
                 "userListBot" : botList || [],
                 "headerType" :headerType,
-                'isOwner':isOwner,
                 'isSixGroup':isSixGroup
             }) 
         },
@@ -800,7 +826,7 @@ const groupManagerData = {
         
         //从新获取专栏详情接口,刷新父组件显示
         async updateFatherData({dispatch,state}){
-            switch(serviceType){
+            switch(state.serviceType){
                 case "OnlineVision":
                     dispatch('visionData/getVisionDetail',{"courseId" : state.courseId},{root:true})
                 break

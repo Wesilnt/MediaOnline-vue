@@ -16,11 +16,11 @@
             </div>
             <div class="course-author">
                 <h2>作者介绍:</h2>
-                <p>{{getBookIntroduce.authorIntro||'暂无相关介绍'}}</p>
+                <p>{{getBookIntroduce.authorBriefIntro||'暂无相关介绍'}}</p>
             </div>
             <div class="course-speaker">
                 <h2>播讲者介绍:</h2>
-                <p>{{getBookIntroduce.commentatorIntro||'暂无相关介绍'}}</p>
+                <p>{{getBookIntroduce.radioIntro||'暂无相关介绍'}}</p>
             </div>
         </div>
 

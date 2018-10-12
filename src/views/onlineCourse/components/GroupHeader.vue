@@ -46,7 +46,7 @@
         </div>
            <!--2. 少年视野，少年必修-->
         <div v-else class="lazy-img-larger groupBuy-banner" v-lazy:background-image="profilePic">
-            <span class="groupBuy-banner-bottom" v-show="buyCount == 0 ? false : true">{{buyCount}}人已购买</span>
+            <span class="groupBuy-banner-bottom" v-show="buyCount == 0 ? false : true">{{serviceType}}{{buyCount}}人已购买</span>
         </div>
     </div>
 </template>
