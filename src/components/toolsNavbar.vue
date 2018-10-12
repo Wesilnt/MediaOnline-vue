@@ -128,17 +128,14 @@ export default {
           case 'OnlineCourse':
             link =
               this.url +
-              `/#/videoColumnDetail/${this.courseId}?groupBuyId=${
-                this.groupBuyId
-              }`
+              `/#/videoColumnDetail/${this.courseId}?groupBuyId=${this.groupBuyId}`
             break
           case 'OnlineVision':
-            link = this.url + `/#/home/visionDetail/${this.courseId}`
+            link = this.url + `/#/home/visionDetail/${this.courseId}?groupBuyId=${this.groupBuyId}`
             break
           case 'Readings':
             link =
-              this.url +
-              `/#/home/readings/book/${this.courseId}?playType='Readings'`
+              this.url + `/#/home/readings/book/${this.courseId}??groupBuyId=${this.groupBuyId}&playType='Readings'`
             break
           default:
             link = this.url + `/#/home/freezone`
