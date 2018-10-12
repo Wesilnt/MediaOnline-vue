@@ -1,4 +1,5 @@
-import { getMyUserInfo, getNewMessageCount } from '../../api/myApi'
+import { getNewMessageCount } from '../../api/myApi'
+import store from './../store'
 const myData = {
   namespaced: true,
   state: {
@@ -28,7 +29,7 @@ const myData = {
         })
     },
     async getMyUserInfo({ dispatch, commit, state }) {
-      let response = await getMyUserInfo()
+      const response = await store.dispatch('getUserInfo')
       // console.log(response)
       commit('saveUserInfo', response)
     }

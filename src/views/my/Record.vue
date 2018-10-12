@@ -30,7 +30,7 @@
         </div>
         <div>
             <div style="margin-bottom: 59px">
-                <div v-for="item,index in playRecordList" :key="item.id" class="playRecord-list">
+                <div v-for="item,index in playRecordList" :key="item.id" class="playRecord-list" @click="toPlay(item)">
 
                     <div class="playRecord-list-item">
                         <van-checkbox v-if="showCheck" class="playRecord-list-item-check" v-model="playRecordCheckList[index]"  >
@@ -73,7 +73,7 @@
 
 <script>
   import {createNamespacedHelpers} from 'vuex'
-  import {Toast} from 'vant'
+  import {courseType} from "../../utils/config";
   import {Vue} from 'vue'
 
   const {mapState, mapMutations,mapActions} = createNamespacedHelpers('myPlayRecordData')
@@ -102,6 +102,19 @@
     methods: {
       ...mapMutations(['modifyPlayRecordList']),
       ...mapActions(['queryList', 'delPlayRecord','batchDelPlayRecord']),
+      toPlay:function (item) {
+        console.log("courseType: " + item.courseType + '\t' + item.id)
+        if (item.courseType === '1003' || item.courseType === '1007' ) {
+          this.$router.push({
+            name: 'AudioPlay'
+            , params: {id: item.id}
+            , query: {playType: courseType[item.courseType], courseName: item.title}
+          })
+        } else if (item.courseType === '1005' ) {
+          this.$router.push({ name: 'videoCourseDetail', params: { lessonId: item.id} })
+        }
+
+      },
       handleMenu: function () {
         this.setCheckToList()
         this.showCheck = true
@@ -127,7 +140,6 @@
             }
           }
         }
-        console.log("idsStr:" + ids)
         if(ids === ''){
           return
         } else {

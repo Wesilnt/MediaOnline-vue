@@ -30,7 +30,7 @@
         </div>
         <div>
             <div style="margin-bottom: 59px">
-                <div v-for="item,index in likeList" :key="item.id" class="like-list">
+                <div v-for="item,index in likeList" :key="item.id" class="like-list" @click="toPlay(item)">
 
                     <div class="like-list-item">
                         <van-checkbox v-if="showCheck" class="like-list-item-check" v-model="likeCheckList[index]"  >
@@ -73,7 +73,7 @@
 
 <script>
   import {createNamespacedHelpers} from 'vuex'
-  import {Toast} from 'vant'
+  import { courseType} from "../../utils/config";
   import {Vue} from 'vue'
 
   const {mapState, mapMutations,mapActions} = createNamespacedHelpers('myLikeData')
@@ -102,6 +102,14 @@
     methods: {
       ...mapMutations(['modifyLikeList']),
       ...mapActions(['queryList', 'delMyLike','batchDelMyLike']),
+      toPlay:function (item) {
+        this.$router.push({
+          name: 'AudioPlay'
+          , params: {id: item.id}
+          , query: {playType: courseType[item.courseType], courseName: item.title}
+        })
+
+      },
       handleMenu: function () {
         this.setCheckToList()
         this.showCheck = true
@@ -111,7 +119,6 @@
         this.isShowDelete = true
       },
       handleDelete: function () {
-        console.log("handle" + this.deleteId)
         let id = this.deleteId
         this.delMyLike({id})
       },
@@ -127,7 +134,6 @@
             }
           }
         }
-        console.log("idsStr:" + ids)
         if(ids === ''){
           return
         } else {
@@ -160,9 +166,6 @@
       modifyCheckList( index) {
         if (this.likeCheckList.length > index) {
           this.likeCheckList[index] = !this.likeCheckList[index]
-          for(let i = 0; i < this.likeCheckList.length;i++) {
-            console.log("checkd" + this.likeCheckList[index])
-          }
         }
       }
     },
