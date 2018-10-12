@@ -281,7 +281,9 @@ export default {
             }
             //拼团中&&参团人&&当前拼团未满&&当前用户调起支付未支付完成   按钮显示:"继续支付"
             if(!isOwner && !isFullStaff && !achievePayment && currUserStatus == 2601){
+              console.log('代码走到这里')
               params = {groupBuyId: this.groupBuyId, payType: 2}
+              console.log(params)
               this.checkoutAuthorrization(params)
             }
             //拼团中&&参团人&&当前拼团已满&&当前用户未完成支付&&当前用户不在拼团用户列表中  按钮显示"我要开团"
@@ -291,8 +293,10 @@ export default {
             }
             //拼团中&&参团人&&当前拼团已满&&当前用户未完成支付&&当前用户在拼团用户列表中  按钮显示"继续支付"
             if(!isOwner && isFullStaff && !achievePayment && isGroupCurrent){
+              console.log('代码走到这里!!!!!!!!!')
               params = {groupBuyId: this.groupBuyId, payType: 2}
-              this.checkoutAuthorrization(params)                  
+              this.checkoutAuthorrization(params)
+              console.log(params)                  
             }
           break
         }
