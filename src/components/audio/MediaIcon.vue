@@ -1,6 +1,20 @@
 <template>
   <div v-show="forceHidenFloat&&showFloat" ref="mediaIcon" class="media-icon-container" :style="{left:x,top:y}">
-     <canvas width="68" height="68" ref="canvasArc"/>
+     <!-- <canvas width="68" height="68" ref="canvasArc"/> -->
+     <van-circle
+     class="circle_container"
+        v-model="progress"
+        color="#FFCD7D"
+        fill="#FDE7E7"
+        size="68px"
+        layer-color="#fff"  
+        :speed="1"
+        :clockwise="true"
+        :stroke-width="60"
+        :rate="1"
+      >
+     </van-circle>
+     <img :src="`${this.isPlaying?require('../../assets/images/audio_play_play.png'):require('../../assets/images/audio_play_pause.png')}`" class="play-icon">
   </div>
 </template>
 <script>
@@ -9,9 +23,12 @@ const { mapState, mapGetters } = createNamespacedHelpers('audiotaskData')
 export default {
   data() {
     return {
+      _canvas:null,
       _ctx: null, 
+      windowWidth: window.screen.width,
+      windowHeight: window.screen.height,
       x: (window.screen.width- 68 - 6) + 'px' ,
-      y: ((this.windowHeight - this.width ) * 3 / 4 ) + 'px',
+      y: (( window.screen.height - 68 ) * 3 / 4 ) + 'px',
       width: 68,
       height: 68,
       startX: 48,
@@ -19,8 +36,7 @@ export default {
       startTime: 0,
       outRingWidth: 6,
       progressgWidth: 4,
-      windowWidth: window.screen.width,
-      windowHeight: window.screen.height
+      progress:0,
     }
   },
   computed:{...mapState(['isPlaying'
@@ -130,19 +146,31 @@ export default {
     this.$refs.mediaIcon.addEventListener('touchstart', this._touchStart, true)
     this.$refs.mediaIcon.addEventListener('touchmove', this._touchMove, true)
     this.$refs.mediaIcon.addEventListener('touchend', this._touchEnd, true)
-    this._ctx = this.$refs.canvasArc.getContext('2d')
-    this._drawProgressColor()
-    this._drawPlayIconBg()
-    this._setProgress(10, 100)
-    this._togglePlay() 
+    // this._canvas = this.$refs.canvasArc
+    // this._ctx =  this._canvas.getContext('2d')
+    // if(window.devicePixelRatio){
+    //   this._canvas.style.width = this.width + "px";
+    //   this._canvas.style.height = height + "px";
+    //   this._canvas.height = height * window.devicePixelRatio;
+    //   this._canvas.width = width * window.devicePixelRatio;
+    // }
+    // this._drawProgressColor()
+    // this._drawPlayIconBg()
+    // this._setProgress(10, 100)
+    // this._togglePlay() 
+
+    // if(window.devicePixelRatio){
+    //   this._ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+    // }
   },
   watch:{
     isPlaying:function(value){
-      this._togglePlay(value)
+      // this._togglePlay(value)
       return value
     },
     currentTime: function(value) {
-      this._setProgress(this.currentTime,this.maxTime)
+      // this._setProgress(this.currentTime,this.maxTime)
+      this.progress = value*100/this.maxTime;
       return value
     }
   }
@@ -151,8 +179,24 @@ export default {
 <style lang="scss" scoped>
 .media-icon-container {
   position: fixed; 
-  width: 136px;
-  height: 136px;
-  z-index: 999999; 
+  width: 160px;
+  height: 160px;
+  z-index: 99999999; 
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center; 
+  padding: 12px;
+  background-color: white;
+  border-radius: 50%;
+  .circle_container{
+
+     position: absolute;
+  }
+  .play-icon{
+     position: absolute;
+     height: 32px;
+     width: 28px; 
+  }
 }
 </style>

@@ -231,6 +231,7 @@ export default {
     onShare() { 
       this.getUserInfo()
       .then(user=>{
+        let link = ''
           switch (this.playType) { 
             case 'OnlineVision':
               link = this.url +`/home/visionDetail/${this.courseId}`
@@ -309,8 +310,7 @@ export default {
   /**
    * 监听页面离开，设置本页面是否缓存起来， 如果跳转到评论页面, 设置本页面router:meta.keepAlive = true, 否则 = false
    */
-  beforeRouteLeave(to, from, next) { 
-    console.log("路由改变了",to)
+  beforeRouteLeave(to, from, next) {  
       this.toggleFloatButton(from.name =='AudioPlay')  //隐藏悬浮按钮
      // 设置下一个路由的 meta
       from.meta.keepAlive = (to.name === 'AudioCmts')  // 让 頁面缓存，即不刷新

@@ -131,7 +131,7 @@ export default {
       if (nextId) {
         dispatch('asyncPlay', { lessonId: state.audioDetail.nextLessonId })
       } else {
-        Toast('已经是最后一条')
+        // Toast('已经是最后一条')
       }
     },
     //上一集
@@ -140,7 +140,7 @@ export default {
       if (preId) {
         dispatch('asyncPlay', { lessonId: state.audioDetail.preLessonId })
       } else {
-        Toast('这是第一条')
+        // Toast('这是第一条')
       }
     },
     //上传音频进度

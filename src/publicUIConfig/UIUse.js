@@ -30,6 +30,7 @@ import {
   Picker,
   Checkbox,
   CheckboxGroup,
+  Circle
 } from 'vant'
 
 Vue.use(Cell)
@@ -47,6 +48,7 @@ Vue.use(Progress)
 Vue.use(Toast)
 Vue.use(Button)
 Vue.use(Tag)
+Vue.use(Circle)
 Vue.use(Tab).use(Tabs)
 Vue.use(Swipe).use(SwipeItem)
 Vue.use(Checkbox).use(CheckboxGroup)
