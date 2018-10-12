@@ -5,19 +5,21 @@ import groupManagerData from './groupManagerData'
 
 const videoColumnDetailData = {
   namespaced: true,
-  state: {
-    loading: true,
-    freeLessonList: [], //试看课程数组
-    profilePic: '', //头图
-    description: '', //专栏介绍
-    outlinePic: '', //课程列表下面的大图展示
-    buyIntro: '', //购买须知
-    lessonCount: 0, //专栏课集总数
-    commentCount: 0, //留言条数
-    buyCount: 0, //购买数量
-    courseId: 0, //专栏ID
-    courseName: '', //专栏名称
-    isFromShare: false
+  state: () => {
+    return {
+      loading: true,
+      freeLessonList: [], //试看课程数组
+      profilePic: '', //头图
+      description: '', //专栏介绍
+      outlinePic: '', //课程列表下面的大图展示
+      buyIntro: '', //购买须知
+      lessonCount: 0, //专栏课集总数
+      commentCount: 0, //留言条数
+      buyCount: 0, //购买数量
+      courseId: 0, //专栏ID
+      courseName: '', //专栏名称
+      isFromShare: false
+    }
   },
   mutations: {
     initDatas(state, courseId) {
@@ -34,6 +36,9 @@ const videoColumnDetailData = {
       state.courseName = result.name
       state.isFromShare = isFromShare
       state.loading = false
+    },
+    resetState(state) {
+      state.loading = true
     }
   },
   actions: {

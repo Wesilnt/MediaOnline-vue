@@ -1,59 +1,50 @@
 <template>
-  <div class="videocourse-detail-container" id="detailmain" ref="detailmain">  
-      <!-- 播放器封面 -->
-    <div class="video-detail-header lazy-img-most" v-lazy:background-image="coverPic">
-      <div class="video-detail-header-right-top">
-          <img :src="isLike?collectIcon:unCollectIcon" class="video-detail-collect" alt="" @click="onCollectFavorite">
-          <img :src="require('../../assets/images/onlinecourse-play_ic_share.png')" class="video-detail-share" alt="" @click="onShareAction">
-      </div>
-      <div class="video-detail-header-left-bottom" @click="clickPlayVideoBtn">
-          <img :src="require('../../assets/images/onlinecourse-video-detail-header.jpg')" alt="" >
-          <label>开始播放</label>
-      </div>
-          <!-- <img :src="require('../../assets/images/onlinecourse_video_ic_gift.png')" class="video-detail-header-gift" alt="">     -->
+    <div>
+        <SkeletonFullScreen  v-if="loading"/>
+        <div v-else class="videocourse-detail-container" id="detailmain" ref="detailmain">
+            <!-- 播放器 -->
+            <video class="videoitem" ref="videoitem" v-show="false" :src="videoUrl" controls="controls" width="100%" height='100%' preload="auto"></video>
+            <!-- Navbar -->
+            <ScrollNavBar :bars="navBars" />
+            <!-- <div ref="navbar" :class="navbarFixed == true ? 'isFixed' : ''" class="video-detail-navbar">
+                <div v-for="(item,index) of navbar" :class="{'selected':selected == index }" :key="index" class="video-detail-navbar-item" @click="clickFnc(index)">{{item}}</div>
+            </div> -->
+            <!-- 资料 -->
+            <div class="video-detail-base">
+                <div id="desc" ref="desc" class="video-detail-sction-title">
+                    <h4>笔记</h4>
+                </div>
+                <CourseIntroduce :courseinfo="subTitle" />
+            </div>
+            <div class="video-detail-base" v-if="haveQuestionBOList">
+                <div class="video-detail-sction-title">
+                    <h4>自测题</h4>
+                </div>
+                <QuestionList @update="getVideoCourseDetail"/>
+            </div>
+            <!-- 目录 -->
+            <div class="video-detail-base">
+                <div id="tryCourse" ref="tryCourse" class="video-detail-sction-title">
+                    <h4>目录</h4>
+                </div>
+                <playlist v-for="(item,index) of lessonList" :key="item.id" :iteminfo="item" :activeID="activeID" :lastindex="index == (lessonList.length - 1)" @jumpEvent="beActive"/>
+            </div>
+            <!-- 留言 -->
+            <div class="video-detail-base">
+                <div id="leaveMessage" ref="leaveMessage" class="video-detail-sction-title">
+                    <h4>留言</h4>
+                    <div class="video-detail-leavemessage" @click="toggleKeyboard(true)">
+                        <img src="../../assets/images/onlinecourse_video_detail_ic_editor.png" alt="">
+                        <span>我要留言</span>
+                    </div>
+                </div>
+                <CommentList  :regionid="lessonId" :regiontype="2202" :haspadding="true" ></CommentList>
+                <!-- <CommentItem class="video-course-comment" v-for="item in singleComments" :key="item.id" :comment="item" :unindent="true" :regiontype="2202"/> -->
+            </div>
+            <CommentBar :show="commentBarShow" v-on:toggle="toggleKeyboard"/>
+            <Share :show="sharePageShow" :shareid="courseId" @close="cancelSharePage"></Share>
+        </div>
     </div>
-    <!-- 播放器 -->
-    <video class="videoitem" ref="videoitem" v-show="false" :src="videoUrl" controls="controls" width="100%" height='100%' preload="auto"></video>
-    <!-- Navbar -->
-    <ScrollNavBar :bars="navBars" />
-    <!-- <div ref="navbar" :class="navbarFixed == true ? 'isFixed' : ''" class="video-detail-navbar">
-        <div v-for="(item,index) of navbar" :class="{'selected':selected == index }" :key="index" class="video-detail-navbar-item" @click="clickFnc(index)">{{item}}</div>
-    </div> -->
-    <!-- 资料 -->
-    <div class="video-detail-base">
-      <div id="desc" ref="desc" class="video-detail-sction-title">
-          <h4>笔记</h4>
-      </div>
-      <CourseIntroduce :courseinfo="subTitle" />
-    </div>
-    <div class="video-detail-base" v-if="haveQuestionBOList">
-      <div class="video-detail-sction-title">
-          <h4>自测题</h4>
-      </div>
-      <QuestionList @update="getVideoCourseDetail"/>
-    </div>
-    <!-- 目录 -->
-    <div class="video-detail-base">
-      <div id="tryCourse" ref="tryCourse" class="video-detail-sction-title">
-          <h4>目录</h4>
-      </div>
-      <playlist v-for="(item,index) of lessonList" :key="item.id" :iteminfo="item" :activeID="activeID" :lastindex="index == (lessonList.length - 1)" @jumpEvent="beActive"/>
-    </div>
-    <!-- 留言 -->
-    <div class="video-detail-base">
-      <div id="leaveMessage" ref="leaveMessage" class="video-detail-sction-title">
-          <h4>留言</h4>
-          <div class="video-detail-leavemessage" @click="toggleKeyboard(true)">
-              <img src="../../assets/images/onlinecourse_video_detail_ic_editor.png" alt="">
-              <span>我要留言</span>
-          </div>
-      </div>
-      <CommentList  :regionid="lessonId" :regiontype="2202" :haspadding="true" ></CommentList>
-      <!-- <CommentItem class="video-course-comment" v-for="item in singleComments" :key="item.id" :comment="item" :unindent="true" :regiontype="2202"/> -->
-    </div>
-      <CommentBar :show="commentBarShow" v-on:toggle="toggleKeyboard"/>
-      <Share :show="sharePageShow" :shareid="courseId" @close="cancelSharePage"></Share>
-  </div>
 </template>
 
 <script>
@@ -65,9 +56,10 @@ import CommentItem from '../../components/comment/CommentItem.vue'
 import videoComment from '../../components/video-comment.vue'
 import QuestionList from './QuestionList'
 import CommentBar from '../../components/CommentBar'
+import SkeletonFullScreen from '../../components/SkeletonFullScreen'
 import Share from '../../components/share/Share.vue'
 import { createNamespacedHelpers } from 'vuex'
-import { mapActions as mapRootActions ,mapState as rootState } from 'vuex'
+import { mapActions as mapRootActions, mapState as rootState } from 'vuex'
 const {
   mapState,
   mapGetters,
@@ -85,11 +77,12 @@ export default {
     CommentBar,
     Share,
     ScrollNavBar,
-    CommentList
+    CommentList,
+    SkeletonFullScreen
   },
   data() {
     return {
-      lessonId:this.$route.params.lessonId,
+      lessonId: this.$route.params.lessonId,
       navBars: [
         {
           title: '资料',
@@ -130,10 +123,11 @@ export default {
     }
   },
   computed: {
-     ...rootState(['url']),
+    ...rootState(['url']),
     ...mapState([
+      'loading',
       'lessonList', //目录课程
-      'coverPic',//视频背景图
+      'coverPic', //视频背景图
       'audioUrl', //音频地址
       'videoUrl', //视频地址
       'courseId', //专栏ID
@@ -161,24 +155,24 @@ export default {
     //视频进度
     vid.addEventListener('timeupdate', this.getVideoProgress)
     vid.addEventListener('play', this.clickPlayVideoBtn)
-        this.getUserInfo()
-    .then(user=>{ 
+    this.getUserInfo().then(user => {
       //拼装分享内容
       this.shareData = {
-        link: this.url + `/#/videoColumnDetail/${this.courseId}`, 
+        link: this.url + `/#/videoColumnDetail/${this.courseId}`,
         title: `${this.courseName}`,
         desc: '你一定会爱上国学课...',
-        successCB: () => console.log('分享回调成功') ,
-        cancelCB: () =>  console.log('分享回调失败')
-      } 
+        successCB: () => console.log('分享回调成功'),
+        cancelCB: () => console.log('分享回调失败')
+      }
       this.setWxShareFriend(this.shareData)
       this.setWxShareZone(this.shareData)
-    }) 
+    })
   },
   beforeDestroy() {
     const vid = this.$refs.videoitem
     vid.removeEventListener('timeupdate', this.getVideoProgress)
     vid.removeEventListener('play', this.clickPlayVideoBtn)
+    this.resetLoading()
   },
   created() {
     const { lessonId } = this.$route.params
@@ -194,7 +188,8 @@ export default {
     ...mapMutations([
       'updateLocalVideoData',
       'bindQuestionBymyself',
-      'bindActiveId'
+      'bindActiveId',
+      'resetLoading'
     ]),
     ...mapActions([
       'getVideoCourseDetail',
@@ -203,8 +198,14 @@ export default {
       'doCollectFavorite',
       'unCollectFavorite',
       'postComment'
-    ]), 
-    ...mapRootActions(['registerWxConfig','getUserInfo','registerWxConfig', 'setWxShareFriend', 'setWxShareZone']),
+    ]),
+    ...mapRootActions([
+      'registerWxConfig',
+      'getUserInfo',
+      'registerWxConfig',
+      'setWxShareFriend',
+      'setWxShareZone'
+    ]),
     handleRegisterWxConfig: function() {
       const { fullPath } = this.$route
       this.registerWxConfig({
@@ -333,6 +334,7 @@ export default {
     },
     //点击目录
     beActive(lessonId) {
+      this.resetLoading()
       this.getVideoCourseDetail({ lessonId })
     }
     // clickFnc(index) {

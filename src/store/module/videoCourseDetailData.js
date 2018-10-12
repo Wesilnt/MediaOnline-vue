@@ -13,6 +13,7 @@ import { Toast } from 'vant'
 const videoCourseDetailData = {
   namespaced: true,
   state: {
+    loading: true,
     //单集详情接口
     coverPic: '', //视频背景图
     vedioShowPic: '',
@@ -50,6 +51,9 @@ const videoCourseDetailData = {
     }
   },
   mutations: {
+    resetLoading(state){
+      state.loading=true
+    },
     bindVideoCourseDetail(state, payload) {
       state.coverPic = payload.coverPic
       state.audioUrl = payload.audioUrl
@@ -66,6 +70,7 @@ const videoCourseDetailData = {
       state.grade = payload.grade
       state.learnTotalTime = payload.learnTotalTime
       state.learnTime = payload.learnTime
+      state.loading = false
     },
     bindActiveId(state, lessonId) {
       state.activeID = lessonId
@@ -110,8 +115,8 @@ const videoCourseDetailData = {
           一:如果本地累计观看时长大于服务器存储的播放时长,就将本地的数据上传到服务器
           二:如果本地累计观看时长小于服务器存储的播放时长,就将服务器的数据拉下来并同步到本地
         */
-      //  console.log('代码走到这里了')
-      //  console.log(videoData)
+        //  console.log('代码走到这里了')
+        //  console.log(videoData)
         let loaclPlayTotalTime = Math.round(videoData.playTotalTime) || 0
         let loaclPlayPosition = Math.round(videoData.historyPlayPosition)
         // console.log('videoData = ',loaclPlayTotalTime,loaclPlayPosition)
@@ -223,7 +228,7 @@ const videoCourseDetailData = {
 
     async getCommentList(
       { commit },
-      { regionType, regionId, commentId, currentPage=1, pageSize=11 }
+      { regionType, regionId, commentId, currentPage = 1, pageSize = 11 }
     ) {
       const result = await getCommentList({
         regionType,
@@ -256,7 +261,7 @@ const videoCourseDetailData = {
 
     //发布评论
     async postComment({ state, commit, dispatch }, params) {
-      dispatch('commentData/postComment',params)
+      dispatch('commentData/postComment', params)
       // const res = await postComment(params)
       // if (!res) {
       //   return Toast('评论失败')
@@ -268,7 +273,7 @@ const videoCourseDetailData = {
 
   modules: {
     questionListData,
-    commentData,
+    commentData
   }
 }
 export default videoCourseDetailData

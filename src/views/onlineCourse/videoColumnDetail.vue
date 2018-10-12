@@ -12,11 +12,15 @@
 </template>
 
 <script>
-    import SkeletonFullScreen from '../../components/SkeletonFullScreen'
+import SkeletonFullScreen from '../../components/SkeletonFullScreen'
 import GroupHeader from './components/GroupHeader'
 import GroupContent from './components/GroupContent'
 import toolsNavbar from '../../components/toolsNavbar.vue'
-import { createNamespacedHelpers,mapState as rootState,mapActions as rootActions } from 'vuex'
+import {
+  createNamespacedHelpers,
+  mapState as rootState,
+  mapActions as rootActions
+} from 'vuex'
 const { mapState, mapMutations, mapActions } = createNamespacedHelpers(
   'videoColumnDetailData'
 )
@@ -24,7 +28,7 @@ const { mapState, mapMutations, mapActions } = createNamespacedHelpers(
 export default {
   name: 'VideoColumnDetail',
   components: {
-      SkeletonFullScreen,
+    SkeletonFullScreen,
     'tools-navbar': toolsNavbar,
     GroupHeader,
     GroupContent
@@ -36,7 +40,7 @@ export default {
   computed: {
     ...rootState(['url']),
     ...mapState([
-        'loading',
+      'loading',
       'freeLessonList', //试看课程数组
       'profilePic', //头图
       'description', //专栏介绍
@@ -50,8 +54,13 @@ export default {
     ])
   },
   methods: {
-    ...rootActions(['getUserInfo','registerWxConfig', 'setWxShareFriend', 'setWxShareZone']),  
-    ...mapMutations(['initDatas']),
+    ...rootActions([
+      'getUserInfo',
+      'registerWxConfig',
+      'setWxShareFriend',
+      'setWxShareZone'
+    ]),
+    ...mapMutations(['initDatas', 'resetState']),
     ...mapActions(['getVideoColumnDetail'])
   },
   created() {
@@ -66,20 +75,22 @@ export default {
       jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline']
     })
   },
-  mounted(){  
-    this.getUserInfo()
-    .then(user=>{ 
+  mounted() {
+    this.getUserInfo().then(user => {
       //拼装分享内容
       this.shareData = {
-        link: this.url + `/#/videoColumnDetail/${this.courseId}`, 
+        link: this.url + `/#/videoColumnDetail/${this.courseId}`,
         title: `${this.courseName}`,
         desc: '你一定会爱上国学课...',
-        successCB: () => console.log('分享回调成功') ,
-        cancelCB: () =>  console.log('分享回调失败')
-      } 
+        successCB: () => console.log('分享回调成功'),
+        cancelCB: () => console.log('分享回调失败')
+      }
       this.setWxShareFriend(this.shareData)
       this.setWxShareZone(this.shareData)
-    }) 
+    })
   },
+  beforeDestroy() {
+    this.resetState()
+  }
 }
 </script>
