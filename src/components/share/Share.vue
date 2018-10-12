@@ -63,8 +63,7 @@ export default {
     ...mapActions(['registerWxConfig', 'setWxShareFriend', 'setWxShareZone']),
     onShareItem(shareScore) {
       // this.isOpen = false
-      const nickname = 'nihao'
-      console.log("=----------==-",this.shareInfo)
+      const nickname = 'nihao' 
       const shareOption = {
         link: this.url + this.shareInfo.link,
         title: this.shareInfo.title,

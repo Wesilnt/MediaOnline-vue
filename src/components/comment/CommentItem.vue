@@ -109,7 +109,7 @@ export default {
     font-weight: 700;
     color: #808080;
     margin-right: 24px;
-    line-height: 32px;
+    line-height: 40px;
     align-self: flex-end;
   }
   &-time {

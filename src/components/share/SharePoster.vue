@@ -187,6 +187,7 @@ export default {
       color: #808080;
       padding-bottom: 40px;
       text-align: center;
+      color: white;
     }
   }
 
