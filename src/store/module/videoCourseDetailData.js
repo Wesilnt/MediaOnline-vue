@@ -51,8 +51,8 @@ const videoCourseDetailData = {
     }
   },
   mutations: {
-    resetLoading(state){
-      state.loading=true
+    resetLoading(state, loading) {
+      state.loading = loading
     },
     bindVideoCourseDetail(state, payload) {
       state.coverPic = payload.coverPic
@@ -70,7 +70,6 @@ const videoCourseDetailData = {
       state.grade = payload.grade
       state.learnTotalTime = payload.learnTotalTime
       state.learnTime = payload.learnTime
-      state.loading = false
     },
     bindActiveId(state, lessonId) {
       state.activeID = lessonId
@@ -115,7 +114,6 @@ const videoCourseDetailData = {
           一:如果本地累计观看时长大于服务器存储的播放时长,就将本地的数据上传到服务器
           二:如果本地累计观看时长小于服务器存储的播放时长,就将服务器的数据拉下来并同步到本地
         */
-        //  console.log('代码走到这里了')
         //  console.log(videoData)
         let loaclPlayTotalTime = Math.round(videoData.playTotalTime) || 0
         let loaclPlayPosition = Math.round(videoData.historyPlayPosition)
@@ -191,7 +189,8 @@ const videoCourseDetailData = {
       const result = await getVideoLessonDetail({ lessonId })
       console.log('视频单集详情接口')
       console.log('result = ', result)
-      if (result == null) return
+      if (!result) return
+      await commit('resetLoading', true)
       //绑定单集详情内容
       commit('bindVideoCourseDetail', result)
       //绑定目录列表哪一个单集处于播放状态
@@ -204,7 +203,7 @@ const videoCourseDetailData = {
         currentPage: 1,
         pageSize: 10
       }
-      dispatch('getLessonListByCourse', params)
+      await dispatch('getLessonListByCourse', params)
       //获取单集评论
       const commentParams = {
         regionType: 2202,
@@ -212,9 +211,10 @@ const videoCourseDetailData = {
         currentPage: 1,
         pageSize: 11
       }
-      dispatch('getCommentList', commentParams)
+      await dispatch('getCommentList', commentParams)
       //更新当前播放视频的播放数据
-      dispatch('updateVideoPlayData', lessonId)
+      await dispatch('updateVideoPlayData', lessonId)
+      await commit('resetLoading', false)
     },
 
     async getLessonListByCourse({ commit }, params) {

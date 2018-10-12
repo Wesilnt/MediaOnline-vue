@@ -1,5 +1,4 @@
 import { uploadAnswer } from '../../api/columnsApi'
-import { getMyUserInfo } from '../../api/myApi'
 
 const questionListData = {
   namespaced: true,
@@ -9,7 +8,6 @@ const questionListData = {
       answersChecked: false,
       questionIndex: 0,
       loading: false
-      // newGrade: ''
     }
   },
   getters: {
@@ -115,10 +113,6 @@ const questionListData = {
         questionIndex: nextIndex
       })
     },
-    async getUser() {
-      const response = await getMyUserInfo()
-      return response
-    }
   }
 }
 export default questionListData

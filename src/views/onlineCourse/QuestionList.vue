@@ -187,7 +187,7 @@ export default {
   },
   methods: {
     ...mapMainActions(['registerWxConfig', 'wxChooseImage']),
-    ...mapActions(['renderAnswers', 'handleNext', 'uploadAnswer', 'getUser']),
+    ...mapActions(['renderAnswers', 'handleNext', 'uploadAnswer']),
     async openQuestionAnswer() {
       if (!this.answersChecked) {
         await this.renderAnswers()
@@ -209,7 +209,7 @@ export default {
       })
       if (popup === 'settlementShow' && !this.shareImg) {
         this.cvsRenderLoading = true
-        const response = await this.getUser()
+        const response = await this.$store.dispatch('getUserInfo')
         if (!response) {
           this.cvsRenderLoading = false
           this.handlePopupHide('settlementShow')
@@ -275,9 +275,6 @@ export default {
         this.$emit('update', { lessonId })
       })
     }
-  },
-  mounted() {
-    this.getUser()
   }
 }
 </script>

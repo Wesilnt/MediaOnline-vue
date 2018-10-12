@@ -1,14 +1,22 @@
 <template>
     <div>
-        <SkeletonFullScreen  v-if="loading"/>
-        <div v-else class="videocourse-detail-container" id="detailmain" ref="detailmain">
+        <video class="videoitem" ref="videoitem" :src="videoUrl" controls="controls" width="100vw" height='0px' preload="auto"></video>
+        <SkeletonFullScreen  v-show="loading"/>
+        <div v-show="!loading" class="videocourse-detail-container" id="detailmain" ref="detailmain">
+            <!-- 播放器封面 -->
+            <div class="video-detail-header lazy-img-most" v-lazy:background-image="coverPic">
+                <div class="video-detail-header-right-top">
+                    <img :src="isLike?collectIcon:unCollectIcon" class="video-detail-collect" alt="" @click="onCollectFavorite">
+                    <img :src="require('../../assets/images/onlinecourse-play_ic_share.png')" class="video-detail-share" alt="" @click="onShareAction">
+                </div>
+                <div class="video-detail-header-left-bottom" @click="clickPlayVideoBtn">
+                    <img :src="require('../../assets/images/onlinecourse-video-detail-header.jpg')" alt="" >
+                    <label>开始播放</label>
+                </div>
+                <!-- <img :src="require('../../assets/images/onlinecourse_video_ic_gift.png')" class="video-detail-header-gift" alt="">     -->
+            </div>
             <!-- 播放器 -->
-            <video class="videoitem" ref="videoitem" v-show="false" :src="videoUrl" controls="controls" width="100%" height='100%' preload="auto"></video>
-            <!-- Navbar -->
             <ScrollNavBar :bars="navBars" />
-            <!-- <div ref="navbar" :class="navbarFixed == true ? 'isFixed' : ''" class="video-detail-navbar">
-                <div v-for="(item,index) of navbar" :class="{'selected':selected == index }" :key="index" class="video-detail-navbar-item" @click="clickFnc(index)">{{item}}</div>
-            </div> -->
             <!-- 资料 -->
             <div class="video-detail-base">
                 <div id="desc" ref="desc" class="video-detail-sction-title">
@@ -152,6 +160,7 @@ export default {
   mounted() {
     //视频播放器相关监听
     const vid = this.$refs.videoitem
+    console.log(this)
     //视频进度
     vid.addEventListener('timeupdate', this.getVideoProgress)
     vid.addEventListener('play', this.clickPlayVideoBtn)
@@ -169,12 +178,14 @@ export default {
     })
   },
   beforeDestroy() {
+    console.log('beforeDestroy')
     const vid = this.$refs.videoitem
     vid.removeEventListener('timeupdate', this.getVideoProgress)
     vid.removeEventListener('play', this.clickPlayVideoBtn)
-    this.resetLoading()
+    this.resetLoading(true)
   },
   created() {
+    console.log('create')
     const { lessonId } = this.$route.params
     this.getVideoCourseDetail({ lessonId })
     this.handleRegisterWxConfig()
@@ -334,49 +345,11 @@ export default {
     },
     //点击目录
     beActive(lessonId) {
-      this.resetLoading()
-      this.getVideoCourseDetail({ lessonId })
+      if (this.activeID !== lessonId) {
+        console.log('toggleCourse')
+        this.getVideoCourseDetail({ lessonId })
+      }
     }
-    // clickFnc(index) {
-    //   this.selected = index
-    //   let positionId
-    //   switch (index) {
-    //     case 0:
-    //       positionId = '#note'
-    //       break
-    //     case 1:
-    //       positionId = '#catalog'
-    //       break
-    //     case 2:
-    //       positionId = '#leavemessage'
-    //       break
-    //     default:
-    //       break
-    //   }
-
-    //   let anchor = this.$el.querySelector(positionId)
-    //   document.body.scrollTop = anchor.offsetHeight - 60
-    //   // // Firefox
-    //   document.documentElement.scrollTop = anchor.offsetTop - 60
-    //   // Safari
-    //   pageYOffset = anchor.offsetTop - 50
-    // },
-    // async handleScroll() {
-    //   //1.监听滚动
-    //   let scrollTop = Math.abs(
-    //     this.$refs.detailmain.getBoundingClientRect().top
-    //   )
-    //   let noteH = this.$el.querySelector('#note').offsetTop - 60
-    //   let catalogH = this.$el.querySelector('#catalog').offsetTop - 60
-    //   // let leavemessageH = this.$el.querySelector('#leavemessage').offsetTop -50
-    //   if (scrollTop < noteH) {
-    //     this.selected = 0
-    //   } else if (scrollTop < catalogH && scrollTop > noteH) {
-    //     this.selected = 1
-    //   } else if (scrollTop > catalogH) {
-    //     this.selected = 2
-    //   }
-    // }
   }
 }
 </script>
