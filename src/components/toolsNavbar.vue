@@ -229,7 +229,9 @@ export default {
     //点击拼团按钮
     clickCollageBtn() {
       let params = null
+      console.log('是否来自分享'+ this.isFromShare)
       if(this.isFromShare){
+        console.log('正常进入'+ this.orderStatus)
         //从分享进入
         switch(this.orderStatus){
           case 1201:
@@ -294,9 +296,10 @@ export default {
             }
           break
         }
-      }else {
+      }else{
         //正常进入
-        switch(this.userAccessStatus){
+        console.log('正常进入'+ this.userAccessStatus)
+        switch (this.userAccessStatus){
           case -3:
             //拼团失败,重新发起拼团 比如从我的拼团记录中点击一张失败的单子进入
             params = {courseId: this.courseId, payType: 1}
