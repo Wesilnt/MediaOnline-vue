@@ -156,7 +156,15 @@ export default {
       'courseId', //专栏ID
       'startPraiseFlag',
       'serviceType',
-      'leavePerson'
+      'leavePerson',
+      'isGroupCurrent',
+      'orderStatus',//当前订单状态
+      'isOwner',    //是不是开团人 
+      'isGroupCurrent', //当前用户是否在拼团列表
+      'isFullStaff',//拼团是否已满
+      'achievePayment',//当前用户是否完成支付
+      'isAllPay',//拼团用户列表中的用户是否都完成支付
+      'currUserStatus',//当前用户的支付状态
     ]),
     ...mapGetters(['isFromShare','courseName'])
   },
@@ -204,35 +212,97 @@ export default {
     //点击拼团按钮
     clickCollageBtn() {
       let params = null
-      if(this.isFromShare&&!this.isOwner){
-        //参与拼团
-        params = {groupBuyId: this.groupBuyId, payType: 2}
-      }else{
-        //发起拼团
-        params = {courseId: this.courseId, payType: 1}
-      }
-      switch (this.userAccessStatus) {
-        case -3:
-          //拼团失败,重新发起拼团
-          this.checkoutAuthorrization(params)
+      if(this.isFromShare){
+        //从分享进入
+        switch(this.orderStatus){
+          case 1201:
           break
-        //没有购买和集赞行为
-        case 0:
-          this.checkoutAuthorrization(params)
+          case 1204:
+            //拼团失败,重新发起拼团
+            params = {courseId: this.courseId, payType: 1}
+            this.checkoutAuthorrization(params)
           break
-        case 1003:
-          //拼团成功.解锁专栏,跳转到单集详情页
-          if (this.freeLesson && this.freeLesson.length > 0) {
-            this.gotoInfoPage()
-          }
+          case 1203:
+            //拼团成功
+            if(this.isGroupCurrent){
+              //当前用户在拼团用户列表中,显示我要学习,就解锁专栏,跳转到单集详情页
+              if (this.freeLesson && this.freeLesson.length > 0) {
+                this.gotoInfoPage()
+              }
+            }else {
+              //当前用户不在用户列表中,就重新发起拼团
+              params = {courseId: this.courseId, payType: 1}
+              this.checkoutAuthorrization(params)
+            }
           break
-        case 1005:
-        //alert('代码走到这里')
-          //拼团中
-          this.sharePageShow = true
-          //拼装分享内容
-          this.setShareInfo()
+          case 1202:
+            //拼团中
+            //拼团中&&开团人  显示  邀请好友拼团
+            if(this.isOwner){
+              this.sharePageShow = true
+              //拼装分享内容
+              this.setShareInfo()
+            }
+            //拼团中&& 参团人 && 如果拼团已满 && 当前用户已完成购买 && 存在其他人未完成支付  "立即邀请好友拼团"
+            if(!this.isOwner&&this.isFullStaff&&this.achievePayment&&!this.isAllPay){
+              this.sharePageShow = true
+              //拼装分享内容
+              this.setShareInfo()
+            }
+            //拼团中&&参团人&&当前拼团未满&&当前用户完成支付   按钮显示:"邀请好友拼团"
+            if (!this.isOwner && !this.isFullStaff && this.achievePayment){
+              this.sharePageShow = true
+              //拼装分享内容
+              this.setShareInfo()
+            }
+            //拼团中&&参团人&&当前拼团未满&&当前用户未调起支付   按钮显示:"参与拼团"
+            if(!this.isOwner && !this.isFullStaff && !this.achievePayment && this.currUserStatus == 0){
+              params = {groupBuyId: this.groupBuyId, payType: 2}
+              this.checkoutAuthorrization(params)
+            }
+            //拼团中&&参团人&&当前拼团未满&&当前用户调起支付未支付完成   按钮显示:"继续支付"
+            if(!isOwner && !isFullStaff && !achievePayment && currUserStatus == 2601){
+              params = {groupBuyId: this.groupBuyId, payType: 2}
+              this.checkoutAuthorrization(params)
+            }
+            //拼团中&&参团人&&当前拼团已满&&当前用户未完成支付&&当前用户不在拼团用户列表中  按钮显示"我要开团"
+            if(!isOwner && isFullStaff && !achievePayment && !isGroupCurrent){
+              params = {courseId: this.courseId, payType: 1}
+              this.checkoutAuthorrization(params)
+            }
+            //拼团中&&参团人&&当前拼团已满&&当前用户未完成支付&&当前用户在拼团用户列表中  按钮显示"继续支付"
+            if(!isOwner && isFullStaff && !achievePayment && isGroupCurrent){
+              params = {groupBuyId: this.groupBuyId, payType: 2}
+              this.checkoutAuthorrization(params)                  
+            }
           break
+        }
+      }else {
+        //正常进入
+        switch(this.userAccessStatus){
+          case -3:
+            //拼团失败,重新发起拼团 比如从我的拼团记录中点击一张失败的单子进入
+            params = {courseId: this.courseId, payType: 1}
+            this.checkoutAuthorrization(params)
+          break
+          case 0:
+            //没有购买和集赞行为
+            params = {courseId: this.courseId, payType: 1}
+            this.checkoutAuthorrization(params)
+          break
+          case 1003:
+            //拼团成功
+            if (this.freeLesson && this.freeLesson.length > 0) {
+              this.gotoInfoPage()
+            }
+          break
+          case 1005:
+            //拼团中
+            this.sharePageShow = true
+            //拼装分享内容
+            this.setShareInfo()
+          break
+        }
       }
     },
     //点击集赞按钮

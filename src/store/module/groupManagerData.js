@@ -2,6 +2,7 @@ import { wxConfig,getGroupBuyDetail,startGroupBuy,joinGroupBuy,startCollectLike,
 import {getMyUserInfo} from '../../api/myApi'
 import {Toast} from 'vant'
 import { WECHAT_SUBSCRIPTION_URL } from '../../utils/config'
+import { stat } from 'fs';
 
 const groupManagerData = {
     namespaced: true,
@@ -12,10 +13,17 @@ const groupManagerData = {
         countDownTime:0, //倒计时剩余时长
         collectLikeId:0,  //集赞ID
         isSixGroup:false,  //是否是六人团
-        headerType:0,       // 100倒计时  101拼团成功  102拼团失败  103拼团已满  
-        isOwner:true,    //是不是开团人 
-        achieveOriginBuy:false, //是否完成原价购买
+        headerType:0,       // 100倒计时  101拼团成功  102拼团失败  103拼团已满 
         isShowMobileDialog:false, //是否弹出手机号收集框
+        achieveOriginBuy:false, //是否完成原价购买
+
+        orderStatus:0,//当前订单状态
+        isOwner:true,    //是不是开团人 
+        isGroupCurrent:false, //当前用户是否在拼团列表
+        isFullStaff:false,//拼团是否已满
+        achievePayment:false,//当前用户是否完成支付
+        isAllPay:false,//拼团用户列表中的用户是否都完成支付
+        currUserStatus:0,//当前用户的支付状态
 
         profilePic:'',//专栏头图
         courseId:0,//专栏ID
@@ -85,11 +93,22 @@ const groupManagerData = {
             state.isShowMobileDialog = isShowMobileDialog
         },
 
-        bindOrderObject(state,{toolsObject,groupBuyId,isShowGroupBuy,userAccessStatus}){         
+        bindOrderObject(state,{toolsObject,groupBuyId,isShowGroupBuy,userAccessStatus}){
             state.toolsObject = toolsObject
             state.groupBuyId = groupBuyId
             state.isShowGroupBuy = isShowGroupBuy
             state.userAccessStatus = userAccessStatus
+        },
+
+        //控制团购订单状态
+        checkOrderStatus(state,{orderStatus,isOwner,isGroupCurrent,isFullStaff,achievePayment,isAllPay,currUserStatus}){
+            state.orderStatus = orderStatus
+            state.isOwner = isOwner
+            state.isGroupCurrent = isGroupCurrent
+            state.isFullStaff = isFullStaff
+            state.achievePayment = achievePayment
+            state.isAllPay = isAllPay
+            state.currUserStatus = currUserStatus
         },
 
         deleteCountTime(state) {
@@ -319,6 +338,9 @@ const groupManagerData = {
             console.log('currUserStatus = '+currUserStatus)
             console.log('countTime = '+countTime)
             console.log("上面都是状态指标")
+            //保存当前订单状态
+            commit('checkOrderStatus',{orderStatus,isOwner,isFullStaff,achievePayment,isAllPay,isGroupCurrent,currUserStatus})
+
             let toolsObject = null
             let headerType = 0
             let isShowGroupBuy = true
@@ -369,8 +391,7 @@ const groupManagerData = {
 
                 break
                 case 1202:
-                //拼团中&&开团人  显示  邀请好友拼团
-               
+                //拼团中&&开团人  显示  邀请好友拼团  
                     if(isOwner){
                         headerType = 100
                         toolsObject = {
@@ -467,6 +488,7 @@ const groupManagerData = {
            
             //更新工具条状态
             commit('bindOrderObject',{toolsObject,groupBuyId,isShowGroupBuy,userAccessStatus})
+
 
             //9.整理拼团用户数组
             let topList = []
