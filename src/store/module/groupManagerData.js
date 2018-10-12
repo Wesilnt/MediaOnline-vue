@@ -69,8 +69,20 @@ const groupManagerData = {
             return nameStr
         },
         //是否来自分享
-        isFromShare(state,getters,{ videoColumnDetailData }) {
-            return videoColumnDetailData.isFromShare
+        isFromShare(state,getters,rootState) {
+            let isFromShareStatus = null
+            switch(state.serviceType){
+                case "OnlineVision":
+                    isFromShareStatus = rootState.visionData.isFromShare
+                break
+                case "OnlineCourse":
+                    isFromShareStatus = rootState.videoColumnDetailData.isFromShare
+                break
+                case "Readings":
+                    isFromShareStatus = rootState.readingsData.isFromShare   
+                break
+            }
+            return isFromShareStatus
         }
     },
     mutations:{
@@ -379,7 +391,7 @@ const groupManagerData = {
             console.log('currUserStatus = '+currUserStatus)
             console.log('countTime = '+countTime)
             console.log("上面都是状态指标")
-            
+
             //保存当前订单状态
             commit('checkOrderStatus',{orderStatus,isOwner,isFullStaff,achievePayment,isAllPay,isGroupCurrent,currUserStatus})
 
@@ -814,7 +826,7 @@ const groupManagerData = {
         
         //从新获取专栏详情接口,刷新父组件显示
         async updateFatherData({dispatch,state}){
-            switch(serviceType){
+            switch(state.serviceType){
                 case "OnlineVision":
                     dispatch('visionData/getVisionDetail',{"courseId" : state.courseId},{root:true})
                 break

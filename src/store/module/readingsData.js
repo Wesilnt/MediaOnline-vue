@@ -17,7 +17,8 @@ export default {
         singleFinished:false,
         singleLoaing:false,
         userAccessStatus:0,
-        courseName:""//专栏名称
+        courseName:"",//专栏名称
+        isFromShare: false//是否来自分享
     },
     mutations: {
         initData(state,courseId){
@@ -35,10 +36,11 @@ export default {
             if(1==page) state.bookList = []
             state.bookList = state.bookList.concat(res.courseInfo.result)  
         },
-        bindBookDetail(state, res) {
+        bindBookDetail(state, {res,isFromShare}) {
             state.bookDetail = res
             state.courseName = res.name
             state.userAccessStatus = res.userAccessStatus
+            state.isFromShare = isFromShare
         },
         bindSingleSetList(state, {res,page,totalCount}) { 
           if(1==page) state.singleSetList = []
@@ -69,7 +71,10 @@ export default {
         async getBookDetail({dispatch, commit }, params) { 
             const result = await getBookDetail(params) 
             console.log(result)
-            commit("bindBookDetail", result)
+            commit("bindBookDetail", {
+                result,
+                isFromShare: groupBuyId ? true : false
+            })
             //获取专栏课程列表
             dispatch('getSingleSetList',true)
             const groupBuyId =  params.groupBuyId
@@ -77,6 +82,7 @@ export default {
             const profilePic = result.coverPic
             const freeLessonList = result.freeLessonList
             const serviceType = "Readings"
+            
             //绑定与拼团相关的内容
             dispatch('groupManagerData/initColumnInfo',{serviceType,courseId,profilePic,'freeLesson':freeLessonList})
             if (groupBuyId) {

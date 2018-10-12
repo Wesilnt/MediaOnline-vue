@@ -16,6 +16,7 @@ const visionData = {
         isLoading:false,
         courseName:'',//专栏名称
         userAccessStatus:0,
+        isFromShare:false
     },
     actions:{
         reverse({commit,state}){
@@ -44,7 +45,10 @@ const visionData = {
         },
         async getVisionDetail({dispatch,commit},{courseId,groupBuyId}){
             let result = await getVisionDetail({'courseId':courseId})
-            commit('setVisionDetail', result);
+            commit('setVisionDetail', {
+                result,
+                isFromShare: groupBuyId ? true : false
+            });
 
             const profilePic = result.profilePic
             const freeLessonList = result.freeLessonList
@@ -87,10 +91,11 @@ const visionData = {
         setCurrentPage(state, currentPage){
             state.currentPage = currentPage;
         },
-        setVisionDetail(state, visionDetail){
+        setVisionDetail(state, {visionDetail,isFromShare}){
             state.visionDetail = visionDetail;
             state.courseName = visionDetail.name
             state.userAccessStatus = visionDetail.userAccessStatus
+            state.isFromShare = isFromShare
         },
         setCommentList(state, commentList){
             state.commentList = commentList;
