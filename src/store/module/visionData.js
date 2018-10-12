@@ -91,10 +91,10 @@ const visionData = {
         setCurrentPage(state, currentPage){
             state.currentPage = currentPage;
         },
-        setVisionDetail(state, {visionDetail,isFromShare}){
-            state.visionDetail = visionDetail;
-            state.courseName = visionDetail.name
-            state.userAccessStatus = visionDetail.userAccessStatus
+        setVisionDetail(state, {result,isFromShare}){
+            state.visionDetail = result;
+            state.courseName = result.name
+            state.userAccessStatus = result.userAccessStatus
             state.isFromShare = isFromShare
         },
         setCommentList(state, commentList){

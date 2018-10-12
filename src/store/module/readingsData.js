@@ -36,10 +36,10 @@ export default {
             if(1==page) state.bookList = []
             state.bookList = state.bookList.concat(res.courseInfo.result)  
         },
-        bindBookDetail(state, {res,isFromShare}) {
-            state.bookDetail = res
-            state.courseName = res.name
-            state.userAccessStatus = res.userAccessStatus
+        bindBookDetail(state, {result,isFromShare}) {
+            state.bookDetail = result
+            state.courseName = result.name
+            state.userAccessStatus = result.userAccessStatus
             state.isFromShare = isFromShare
         },
         bindSingleSetList(state, {res,page,totalCount}) { 
@@ -71,6 +71,7 @@ export default {
         async getBookDetail({dispatch, commit }, params) { 
             const result = await getBookDetail(params) 
             console.log(result)
+
             //获取专栏课程列表
             dispatch('getSingleSetList',true)
             const groupBuyId =  params.groupBuyId
