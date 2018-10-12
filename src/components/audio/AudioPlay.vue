@@ -469,8 +469,7 @@ export default {
       img {
         vertical-align: middle;
         margin: 0;
-        width: 50px;
-        height: 46px;
+        width: 50px; 
       }
     }
     .btn-item:nth-child(2) {
@@ -485,19 +484,18 @@ export default {
       background-color: #ff8a1f;
       border-radius: 50%;
       justify-content: center;
-      padding: 26px 29px 26px 30px;
+      // padding: 26px 29px 26px 30px;
+      // padding: 26px 35px;
       img {
         margin-left: 4px;
-        width: 20px;
-        height: 38px;
+        width: 30px; 
       }
     }
     .play-btn-active {
-      padding: 26px 35px;
+      // padding: 26px 35px;
       img {
         margin-left: 4px;
-        width: 31px;
-        height: 38px;
+        width: 20px; 
       }
     }
   }
