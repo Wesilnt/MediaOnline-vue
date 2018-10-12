@@ -1,6 +1,6 @@
 <template>
   <div v-show="show" class="share-container" @click.self="onCancel">
-    <div class="share-tip">
+    <div v-show="showTip" class="share-tip">
     </div>
     <transition @after-leave="afterLeave">
       <div v-show="isOpen" class="share-content">
@@ -40,7 +40,8 @@ export default {
   props: ['show', 'sharetype', 'shareid', 'shareInfo'],
   data() {
     return {
-      isOpen: false
+      isOpen: false,
+      showTip:false
     }
   },
   watch: {
@@ -61,7 +62,7 @@ export default {
   methods: {
     ...mapActions(['registerWxConfig', 'setWxShareFriend', 'setWxShareZone']),
     onShareItem(shareScore) {
-      this.isOpen = false
+      // this.isOpen = false
       const nickname = 'nihao'
       console.log("=----------==-",this.shareInfo)
       const shareOption = {
@@ -82,11 +83,13 @@ export default {
         this.$toast('分享海报')
       }
       if (shareScore === 'friends') {
-        this.$toast('分享给朋友')
+        // this.$toast('分享给朋友')
+        this.showTip = true
         // this.setWxShareFriend(shareOption)
       }
       if (shareScore == 'circle') {
-        this.$toast('分享到朋友圈')
+        this.showTip = true
+        // this.$toast('分享到朋友圈')
         // this.setWxShareZone(shareOption)
       }
     },
@@ -94,7 +97,8 @@ export default {
      this.$router.push({path:'/share/poster',query:{shareUrl: this.url + this.shareInfo.link || '/#/home'}})
     },
     onCancel() {
-      this.isOpen = false
+      this.isOpen = false,
+      this.showTip = false
     },
     afterLeave(el) {
       this.$emit('close')
