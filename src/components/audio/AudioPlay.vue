@@ -300,13 +300,9 @@ export default {
     //列表Item点击事件
     onItemClick(audio) {
       this.isInit = true
-      this.popupVisible = false
-      if (audio.isFree) {
-        this.$router.push({ name: 'AudioPlay',params: { id: audio.id },query:{playType:this.playType}})
-        this.playAudio({ lessonId: audio.id })
-      } else {
-        this.$toast({duration: 2000, message: '你还未购买该专栏,请购买之后收听!'})
-      }
+      this.popupVisible = false 
+      this.$router.push({ name: 'AudioPlay',params: { id: audio.id },query:{playType:this.playType}})
+      this.playAudio({ lessonId: audio.id })
     }
   },
   /**
