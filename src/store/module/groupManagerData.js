@@ -148,12 +148,12 @@ const groupManagerData = {
     },
     actions:{
 
-        setupShareOption({state,dispatch,rootState},{courseName,courseId,groupBuyId,collectLikeId}){
+        setupShareOption({state,dispatch,rootState},{courseName,courseId,groupBuyId,collectLikeId,leavePerson}){
             dispatch('getUserInfo',null,{root:true}).then(user =>{
                 let title = null
                 switch (state.userAccessStatus) {
                   case 1005: //拼团中
-                    title = `我正在参加《${courseName}》拼团活动,仅差${state.leavePerson}人,快来和我一起拼团吧!`
+                    title = `我正在参加《${courseName}》拼团活动,仅差${leavePerson || 0}人,快来和我一起拼团吧!`
                     break
                   case 1009: //集赞中
                     title = `我是${user.nickName}, ${true ? '我想免费' : '正在帮朋友'}领取《${courseName}》,求助攻~`
@@ -429,11 +429,6 @@ const groupManagerData = {
             console.log(result)
             if(result == null) return
 
-            //设置分享
-            dispatch('setupShareOption',{'courseName':result.course.name,
-                'courseId':result.course.id,
-                'groupBuyId':result.id,})
-
             //1.获取当前订单状态
             let orderStatus = result.status;
             let userAccessStatus = result.userAccessStatus
@@ -459,6 +454,15 @@ const groupManagerData = {
             });
             //8.计算倒计时
             const countTime = (result.createTime + result.duration * 60 * 60 * 1000 - result.sysTime)/1000;
+
+            //设置分享
+            dispatch('setupShareOption',{
+                'courseName':result.course.name,
+                'courseId':result.course.id,
+                'groupBuyId':result.id,
+                'leavePerson':personNum
+            })
+
             console.log('orderStatus = '+orderStatus)
             console.log('currentUserId = '+currentUserId)
             console.log('isOwner = '+isOwner)
@@ -814,17 +818,6 @@ const groupManagerData = {
         },
         //调起微信支付
         async getPayment({commit,dispatch},{result,payType}){
-           //微信网页开发支付接口
-        //    let result0= await wxConfig({'url' : window.location.href})
-        //    let config = result0.js_config
-        //    wx.config({
-        //         debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-        //         appId: config.appid, // 必填，企业号的唯一标识，此处填写企业号corpid
-        //         timestamp:config.timestamp , // 必填，生成签名的时间戳
-        //         nonceStr: config.nonceStr, // 必填，生成签名的随机串
-        //         signature: config.signature,// 必填，签名，见附录1
-        //         jsApiList: ['chooseWXPay'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2 
-        //    })
             console.log('result ==',result)
             dispatch('wxPayment',{
                 timestamp: result.timestamp,
@@ -860,47 +853,6 @@ const groupManagerData = {
                     // Toast(errmsg)
                 }
             },{root:true})      
-            // wx.ready(function(){
-            //     console.log(result)
-            //         wx.chooseWXPay({
-            //             timestamp: result.timestamp,
-            //             nonceStr: result.nonceStr, // 支付签名随机串，不长于 32 位
-            //             package: result.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
-            //             signType: 'MD5', // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
-            //             paySign: result.paySign, // 支付签名
-            //             success: function (res) {
-            //                 // 支付成功后的回调函数
-            //                 console.log("支付成功"); 
-            //                 console.log(payType)
-            //                 switch(payType){
-            //                     case 0:
-            //                         console.log('原价购买支付成功~~~')
-            //                         commit('bindAchieveOriginBuy',true)
-            //                     break
-            //                     case 1:
-            //                         console.log('发起拼团支付成功~~~')
-            //                         //调起拼团详情
-            //                         dispatch('getGroupBuyDetail',result.groupBuyId)
-            //                     break
-            //                     case 2:
-            //                         console.log('参与拼团支付成功~~~')
-            //                         //调起拼团详情
-            //                         dispatch('getGroupBuyDetail',result.groupBuyId)
-            //                     break
-            //                 }
-                           
-            //             },
-            //             fail : function (errmsg) {
-            //                 console.log(errmsg)
-            //             },
-            //             complete : function (res) {
-            //                 if(res.errMsg == "chooseWXPay:cancel" ) {
-            //                     console.log('支付取消')
-            //                 } 
-            //             }
-
-            //         }); 
-        //    })
         },
         
         //从新获取专栏详情接口,刷新父组件显示
