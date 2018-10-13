@@ -34,7 +34,9 @@ export default {
     GroupContent
   },
   data() {
-    return {}
+    return {
+      courseId:this.$route.params.courseId
+    }
   },
   watch: {},
   computed: {
@@ -50,7 +52,8 @@ export default {
       'lessonCount', //专栏课集总数
       'commentCount', //留言总条数
       'buyCount',
-      'collectLikeId' //集赞ID
+      'collectLikeId', //集赞ID
+      'courseName'
     ])
   },
   methods: {
@@ -65,10 +68,10 @@ export default {
   },
   created() {
     //获取专栏Id
-    const courseId = this.$route.params.courseId
+    // const courseId = this.$route.params.courseId
     const groupBuyId = this.$route.query.groupBuyId
-    this.initDatas(courseId)
-    this.getVideoColumnDetail({ courseId: courseId, groupBuyId: groupBuyId })
+    this.initDatas(this.courseId)
+    this.getVideoColumnDetail({ courseId: this.courseId, groupBuyId: groupBuyId })
     const { fullPath } = this.$route
     this.registerWxConfig({
       fullPath,
