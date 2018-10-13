@@ -83,7 +83,10 @@
     </van-popup>
     <!-- 分享框 -->
     <share-pop :show="showShare" @close="closeShare" :shareInfo="shareData" />
-    <van-loading color="white" />
+     <!--loading-->
+     <div class="loading-container" v-show="isLoading == 'waiting'">
+        <van-loading color="white" />
+     </div>
   </div>
 </template>
 <script>
@@ -123,6 +126,7 @@ export default {
       singleSetList: 'singleSetList'
     }),
     ...mapGetters([
+      'isLoading',
       'audio',
       'audioId',
       'courseId',
@@ -608,5 +612,20 @@ export default {
   margin: 1px auto 12px;
   height: 28px;
   width: 28px;
+}
+//loading框
+.loading-container{
+   position: fixed;
+   z-index: 9999;
+   width: 180px;
+   height: 180px;
+   top: 50%;
+   left: 50%;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   transform: translate(-50%,-50%);
+   background-color: rgba($color: #000000, $alpha: 0.5);
+   border-radius: 5px;
 }
 </style>
