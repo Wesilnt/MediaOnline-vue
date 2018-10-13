@@ -87,6 +87,7 @@ const homeData = {
       state.videoList = videoList
     },
     setBookList(state, bookList) {
+        if(bookList.length % 3 == 2|| 1 == bookList.length % 3) bookList =bookList.concat({})
         state.bookList = bookList
     }
   }

@@ -1,6 +1,6 @@
 <template>
   <div class="qhht-flex list">
-      <BookCell :book="book" v-for="(book,index) in bookList" :key="index"/>
+      <BookCell :book="book" v-for="(book,index) in bookList" :key="index" :class="{emptyItem:!book.id}"/>
   </div>
 </template>
 
@@ -17,5 +17,9 @@ export default {
 <style lang="less" scoped>
 .list {
   flex-wrap: wrap;
+  justify-content: space-between;
 }
+.emptyItem { 
+  visibility: hidden;
+ }
 </style>
