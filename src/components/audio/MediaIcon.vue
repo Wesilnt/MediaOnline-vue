@@ -1,11 +1,14 @@
 <template>
   <div v-show="forceHidenFloat&&showFloat" ref="mediaIcon" class="media-icon-container" :style="{left:x,top:y}">
      <!-- <canvas width="68" height="68" ref="canvasArc"/> -->
+     <div class="image-icon-container" v-lazy:background-image ="coverPic">
+       <div class="icon-mask"></div>
+       <img :src="`${this.isPlaying?require('../../assets/images/audio_play_play.png'):require('../../assets/images/audio_play_pause.png')}`" class="play-icon">
+     </div>
      <van-circle
-     class="circle_container"
+        class="circle_container"
         v-model="progress"
-        color="#FFCD7D"
-        fill="#FDE7E7"
+        color="#FFCD7D" 
         size="68px"
         layer-color="#fff"  
         :speed="1"
@@ -14,10 +17,6 @@
         :rate="1"
       >
      </van-circle>
-     <div class="image-icon-container" v-lazy:background-image ="coverPic">
-       <div class="icon-mask"></div>
-       <img :src="`${this.isPlaying?require('../../assets/images/audio_play_play.png'):require('../../assets/images/audio_play_pause.png')}`" class="play-icon">
-     </div>
   </div>
 </template>
 <script>
@@ -194,10 +193,9 @@ export default {
   background-color: white;
   border-radius: 50%;
   .circle_container{ 
-     position: absolute;
+     position: absolute;  
   }
-  .image-icon-container{
-    position: absolute;
+  .image-icon-container{  
     display: flex;
     justify-content: center;
     align-items: center;
@@ -205,6 +203,7 @@ export default {
     height: 124px;
     border-radius: 50%; 
     background-size: 100%;
+    background-repeat: no-repeat;
   }
   .icon-mask{
     border-radius: 50%;

@@ -48,7 +48,7 @@ export default {
         case 1009://集赞中
         break
       }
-      console.log('============')
+      console.log('============',this.useraccessstatus)
       console.log(audio.isFree)
       console.log(unLock)
       if (audio.isFree || unLock) {
