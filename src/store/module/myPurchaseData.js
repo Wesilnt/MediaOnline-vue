@@ -1,74 +1,50 @@
 import { getMyPurchase } from '../../api/myApi'
+import { purchaseQueryType } from '../../utils/config'
+const totalCounts = {}
+const lists = Object.keys(purchaseQueryType).reduce((prev, item) => {
+  prev[item] = []
+  totalCounts[item] = 0
+  return prev
+}, {})
 const myPurchaseData = {
   namespaced: true,
-  state: {
-    onLineVisionByBoughtList: [],
-    onLineVideoByBoughtList: [],
-    onLineReadByBoughtList: [],
-    onLineVisionByLearnList: [],
-    onLineVideoByLearnList: [],
-    onLineReadByLearnList: [],
-    loading: false
-
+  state: { lists, totalCounts, loading: true },
+  getters: {
+    noPurChaseData({ lists }) {
+      return Object.values(lists).reduce((prev, item) => {
+        prev += item.length
+        return prev === 0
+      }, 0)
+    }
   },
   mutations: {
-    saveList(state, payload) {
-      Object.assign(state, payload)
+    saveList(state, { queryType, list, totalCount }) {
+      state.lists = { ...state.lists, ...{ [queryType]: list } }
+      state.totalCounts = {
+        ...state.totalCounts,
+        ...{ [queryType]: totalCount }
+      }
     },
     toggleLoading(state, { loading }) {
       state.loading = loading
     }
   },
   actions: {
-    async queryListByBought({ dispatch, commit, state },{ type }) {
+    async queryListItem({ dispatch, commit, state }, { type, orderBy }) {
       const response = await getMyPurchase({
-        type: type,
-        orderBy: 'lastBought',
+        type,
+        orderBy,
         currentPage: 1,
-        pageSize: 50
+        pageSize: 3
       })
-
-      if (type === 1003) {
-        await commit({
-          type: 'saveList',
-          onLineVisionByBoughtList: response.result
-        })
-      } else if (type === 1005) {
-        await commit({
-          type: 'saveList',
-          onLineVideoByBoughtList: response.result
-        })
-      } else if (type === 1007) {
-        await commit({
-          type: 'saveList',
-          onLineReadByBoughtList: response.result
-        })
-      }
-    },
-    async queryListByLearn({ dispatch, commit, state },{ type }) {
-      const response = await getMyPurchase({
-        type: type,
-        orderBy: 'lastLearn',
-        currentPage: 1,
-        pageSize: 50
+      const { totalCount, result: list } = response
+      await commit({
+        type: 'saveList',
+        list,
+        orderBy,
+        totalCount,
+        queryType: type
       })
-
-      if (type === 1003) {
-        await commit({
-          type: 'saveList',
-          onLineVisionByLearnList: response.result
-        })
-      } else if (type === 1005) {
-        await commit({
-          type: 'saveList',
-          onLineVideoByLearnList: response.result
-        })
-      } else if (type === 1007) {
-        await commit({
-          type: 'saveList',
-          onLineReadByLearnList: response.result
-        })
-      }
     }
   }
 }
