@@ -14,7 +14,7 @@
         :rate="1"
       >
      </van-circle>
-     <div class="image-icon-container" :style="{backgroundImage:`url(${coverPic})`}">
+     <div class="image-icon-container" v-lazy:background-image ="coverPic">
        <img :src="`${this.isPlaying?require('../../assets/images/audio_play_play.png'):require('../../assets/images/audio_play_pause.png')}`" class="play-icon">
      </div>
   </div>
