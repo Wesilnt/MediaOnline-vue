@@ -147,10 +147,10 @@ export default {
     //设置分享信息
     async setShareInfo({state,dispatch},{user, res}){
       let currentUser  =  user.id == res.starterUid
-      let title = `我是${user.nickName}, ${currentUser?'我想免费':'正在帮朋友'}领取《${res.courseName}》,求助攻~` 
+      let title = `我是${user.nickName}, ${currentUser?'我想免费':'正在帮朋友'}领取《${res.course.courseName}》,求助攻~` 
       //拼装分享内容
       let shareData = {
-        link:  window.location.href.split('#')[0]+`/#/praise/active/${res.courseId}/${res.id}?columnType=${state.columnType}`,
+        link:  window.location.href.split('#')[0]+`/#/praise/active/${res.course.courseId}/${res.id}?columnType=${state.columnType}`,
         title,
         desc: '你一定会爱上国学课...',
         successCB: () => console.log('分享回调成功') ,

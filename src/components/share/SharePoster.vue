@@ -42,6 +42,8 @@ export default {
               ...mapState(['loading', 'user','poster']) 
             },
   created(){
+         console.log("this.shareUrl ============ ",this.shareUrl)
+       console.log("this.columnType:",this.columnType) 
      //1. 传入分享地址
      if(this.shareUrl) return  
      //2. 有专栏详情和专栏类型
@@ -145,6 +147,8 @@ export default {
     },
     //設置海報分享地址
     setPosterConfig(){
+       console.log(this.columnDetail)
+       console.log("this.columnType:",this.columnType) 
        //1. 有专栏详情, 拼团中
      if(this.columnDetail && this.columnDetail.userAccessStatus==1005){  
       let link = ''

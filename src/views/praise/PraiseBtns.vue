@@ -109,8 +109,7 @@ export default {
           name: 'SharePoster',
           params,
           query: {
-                  shareUrl:( this.url + `#/praise/active?columnType=${this.columntype}`) || '/#/home',
-
+                  shareUrl:`${this.url}#/praise/active/${this.courseid}/${this.collectlikeid}?columnType=${this.columntype}`,
                  }
         })
       }
