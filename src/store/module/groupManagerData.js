@@ -148,11 +148,11 @@ const groupManagerData = {
     },
     actions:{
 
-        setupShareOption({state,dispatch,rootState},{courseName,courseId,groupBuyId,collectLikeId,leavePerson,orderStatus}){
+        setupShareOption({state,getters,dispatch,rootState},{courseName,courseId,groupBuyId,collectLikeId,leavePerson,orderStatus}){
             console.log('isFromShare =',state.isFromShare)
             console.log('orderStatus =',orderStatus)
             console.log('userAccessStatus =',state.userAccessStatus)
-            if(state.isFromShare){
+            if(getters.isFromShare){
                 dispatch('getUserInfo',null,{root:true}).then(user =>{
                     let title = null
                     switch (orderStatus) {
