@@ -25,12 +25,9 @@ import mobileData from './module/mobileData'
 
 import { getToken, getUserByToken } from '../api/accessTokenApi'
 import { noAccessToken } from '../utils/userAuth'
-import { wxConfig as wxConfigApi } from '../api/groupBuyApi.js'
-<<<<<<< Updated upstream
-=======
+import { wxConfig as wxConfigApi } from '../api/groupBuyApi.js' 
 import { wxConfigUrl } from './../utils/config'
-import { stat } from 'fs';
->>>>>>> Stashed changes
+import { stat } from 'fs'; 
 
 Vue.use(Vuex)
 export default new Vuex.Store({
