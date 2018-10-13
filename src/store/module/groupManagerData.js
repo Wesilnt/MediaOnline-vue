@@ -125,6 +125,11 @@ const groupManagerData = {
         deleteCountTime(state) {
             state.countDownTime = 0
         },
+
+        updateUserAccessStatus(state) {
+            state.userAccessStatus = 0
+        },
+
         toggolePraiseFlag(state,flag) {
             state.startPraiseFlag = flag
         },

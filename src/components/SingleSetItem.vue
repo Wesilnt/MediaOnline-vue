@@ -48,7 +48,9 @@ export default {
         case 1009://集赞中
         break
       }
-
+      console.log('============')
+      console.log(audio.isFree)
+      console.log(unLock)
       if (audio.isFree || unLock) {
         this.$router.push({
           name: 'AudioPlay',
