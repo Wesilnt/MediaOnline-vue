@@ -1,11 +1,18 @@
-import FreeList from '../views/FreeList'
-import VisionList from '../views/onlineVision/VisionList'
-import VideoList from '../views/onlineCourse/VideoList'
-import BookList from '../views/BookList'
-import VisionDetail from '../views/onlineVision/VisionDetail'
-import visionCourseList from '../views/onlineVision/visionCourseList'
+const FreeList = () => import(/* webpackChunkName: "index" */ '../views/FreeList')
+const VisionList = () => import(/* webpackChunkName: "index" */ '../views/onlineVision/VisionList')
+const VideoList = () => import(/* webpackChunkName: "index" */ '../views/onlineCourse/VideoList')
+const BookList = () => import(/* webpackChunkName: "index" */ '../views/BookList')
+const VisionDetail = () => import(/* webpackChunkName: "index" */ '../views/onlineVision/VisionDetail')
+const visionCourseList = () => import(/* webpackChunkName: "index" */ '../views/onlineVision/visionCourseList')
+const FreeZone = () => import(/* webpackChunkName: "index" */ '../views/freezone/FreeZone')
+
 
 const PageInfo_From_Home = [
+  {
+    path: '/home/freezone',
+    name: 'FreeZone',
+    component: FreeZone
+  },
   {
     path: '/home/freeList',
     name: 'FreeList',
