@@ -96,10 +96,9 @@ export default {
   margin: 12px 0;
 }
 .audition-btn {
-  display: inline-block;
   border-radius: 8px;
   background-color: #ed6c67;
-  padding: 6px 20px;
+  padding: 7px 20px;
   color: white;
   margin-right: 20px;
 }

@@ -97,8 +97,7 @@ export default {
 .cell-footer-btn {
   width: 132px;
   height: 60px;
-
-  line-height: 60px;
+  padding: 14px 0px;
   border-radius: 30px;
   background-color: #ffa32f;
   color: #fff;
