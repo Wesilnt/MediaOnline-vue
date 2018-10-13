@@ -109,49 +109,7 @@ export default {
       }
     },
     userAccessStatus: function(value) {
-      this.getUserInfo().then(user => {
-        let title = null
-        switch (this.userAccessStatus) {
-          case 1005: //拼团中
-            title = `我正在参加《${this.courseName}》拼团活动,仅差${this.leavePerson}人,快来和我一起拼团吧!`
-            break
-          case 1009: //集赞中
-            title = `我是${user.nickName}, ${true ? '我想免费' : '正在帮朋友'}领取《${this.courseName}》,求助攻~`
-            break
-          default:
-            title = this.courseName
-            break
-        }
-        let link = ''
-        alert(this.serviceType)
-        switch (this.serviceType) {
-          case 'OnlineCourse':
-            link =
-              this.url +
-              `/#/videoColumnDetail/${this.courseId}?groupBuyId=${this.groupBuyId}`
-            break
-          case 'OnlineVision':
-            link = this.url + `/#/home/visionDetail/${this.courseId}?groupBuyId=${this.groupBuyId}`
-            break
-          case 'Readings':
-            link =
-              this.url + `/#/home/readings/book/${this.courseId}??groupBuyId=${this.groupBuyId}&playType='Readings'`
-            break
-          default:
-            link = this.url + `/#/home/freezone`
-            break
-        }
-        console.log('设置分享地址：', link, '   设置分享标题：', title)
-        this.shareData = {
-          link,
-          title,
-          desc: '你一定会爱上国学课...',
-          successCB: () => console.log('分享回调成功'),
-          cancelCB: () => this.$toast('分享回调失败')
-        }
-        this.setWxShareFriend(this.shareData)
-        this.setWxShareZone(this.shareData)
-      })
+     
     }
   },
   computed: {

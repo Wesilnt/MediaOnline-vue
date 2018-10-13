@@ -148,12 +148,80 @@ const groupManagerData = {
     },
     actions:{
 
+        setupShareOption({state,dispatch,rootState},{courseName,courseId,groupBuyId,collectLikeId}){
+            dispatch('getUserInfo',null,{root:true}).then(user =>{
+                let title = null
+                switch (state.userAccessStatus) {
+                  case 1005: //拼团中
+                    title = `我正在参加《${courseName}》拼团活动,仅差${state.leavePerson}人,快来和我一起拼团吧!`
+                    break
+                  case 1009: //集赞中
+                    title = `我是${user.nickName}, ${true ? '我想免费' : '正在帮朋友'}领取《${courseName}》,求助攻~`
+                    break
+                  default:
+                    title = courseName
+                    break
+                }
+                let link = ''
+                if(1005==state.userAccessStatus){
+                    switch (state.serviceType) {
+                        case 'OnlineCourse':
+                          link = `${rootState.url}/#/videoColumnDetail/${courseId}?groupBuyId=${groupBuyId}`
+                          break
+                        case 'OnlineVision':
+                          link = `${rootState.url}/#/home/visionDetail/${courseId}?groupBuyId=${groupBuyId}`
+                          break
+                        case 'Readings':
+                          link = `${rootState.url}/#/home/readings/book/${courseId}?groupBuyId=${groupBuyId}&playType='Readings'`
+                          break
+                        default:
+                          link = `${rootState.url}/#/home/freezone`
+                          break
+                      }
+                }else if(1009==state.userAccessStatus) {
+                    link =  `${rootState.url}/#/praise/active/${courseId}/${collectLikeId}?columnType=${state.serviceType}` 
+                }else {
+                    switch (state.serviceType) {
+                        case 'OnlineCourse':
+                          link = `${rootState.url}/#/videoColumnDetail/${courseId}`
+                          break
+                        case 'OnlineVision':
+                          link = `${rootState.url}/#/home/visionDetail/${courseId}`
+                          break
+                        case 'Readings':
+                          link = `${rootState.url}/#/home/readings/book/${courseId}?playType='Readings'`
+                          break
+                        default:
+                          link = `${rootState.url}/#/home/freezone`
+                          break
+                      }
+                }
+                  
+                console.log('设置分享地址：', link, '   设置分享标题：', title)
+                let shareData = {
+                  link,
+                  title,
+                  desc: '你一定会爱上国学课...',
+                  successCB: () => console.log('分享回调成功'),
+                  cancelCB: () => console.log('分享回调失败')
+                }
+                dispatch('setWxShareFriend',shareData,{root:true})
+                dispatch('setWxShareZone',shareData,{root:true})
+            })
+
+        },
+
         initColumnInfo({commit},{serviceType,courseId,profilePic,freeLesson}){
             commit('bindColunmnInfo',{serviceType,courseId,profilePic,freeLesson})
         },
 
         //初始化工具条
         initToolsBar({commit,dispatch},toolsData){
+            //设置分享
+            dispatch('setupShareOption',{'courseName':toolsData.courseName,
+                'courseId':toolsData.courseId,
+                'groupBuyId':toolsData.groupBuyId,
+                'collectLikeId':toolsData.collectLikeId})
             //集赞状态
             const praiseData = {
                 "collectLikeDuration" : toolsData.collectLikeDuration || 0,
@@ -360,6 +428,12 @@ const groupManagerData = {
             console.log('获取拼团详情成功')
             console.log(result)
             if(result == null) return
+
+            //设置分享
+            dispatch('setupShareOption',{'courseName':result.course.name,
+                'courseId':result.course.id,
+                'groupBuyId':result.id,})
+
             //1.获取当前订单状态
             let orderStatus = result.status;
             let userAccessStatus = result.userAccessStatus

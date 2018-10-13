@@ -167,7 +167,7 @@ export default {
      }
      //2. 有专栏详情, 集赞中
      if(this.columnDetail && this.columnDetail.userAccessStatus==1009){ 
-      this.shareUrl = this.url + `#/praise/active?columnType=${this.columntype}` 
+      this.shareUrl = this.url + `/#/praise/active/${courseId}/${collectLikeId}?columnType=${this.columnType}` 
       return
      }
      //3. 有专栏详情, 非集赞中和拼团中
