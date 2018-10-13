@@ -10,7 +10,7 @@
                 <img class="like-head-default-left-icon" :src="require('../../assets/images/my_record_play.png')"/>
                 <p class="like-head-default-record-text">播放全部</p>
                 <div class="like-head-default-record-number">(共{{likeList.length}}条记录)</div>
-                <img class="like-head-default-right-icon" :src="require('../../assets/images/my_sys_menu.png')"
+                <img class="like-head-default-right-icon" :src="require('../../assets/images/my_menu_list.png')"
                      @click="handleMenu">
             </div>
             <div v-else="showCheck" class="like-head-check">

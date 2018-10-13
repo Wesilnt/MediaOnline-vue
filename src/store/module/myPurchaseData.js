@@ -5,14 +5,14 @@ const myPurchaseData = {
     onLineVisionByBoughtList: [],
     onLineVideoByBoughtList: [],
     onLineReadByBoughtList: [],
-    onLineVisionByLearntList: [],
+    onLineVisionByLearnList: [],
     onLineVideoByLearnList: [],
     onLineReadByLearnList: [],
     loading: false
+
   },
   mutations: {
     saveList(state, payload) {
-      console.log(payload)
       Object.assign(state, payload)
     },
     toggleLoading(state, { loading }) {

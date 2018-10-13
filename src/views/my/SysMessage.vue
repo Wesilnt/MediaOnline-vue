@@ -9,7 +9,7 @@
             <div v-if="showCheck === false" class="sysmessage-head-default">
                 <img class="sysmessage-head-default-left-icon" :src="require('../../assets/images/my_record_play.png')"/>
                 <p class="sysmessage-head-default-record-text">最近播放</p>
-                <img class="sysmessage-head-default-right-icon" :src="require('../../assets/images/my_sys_menu.png')"
+                <img class="sysmessage-head-default-right-icon" :src="require('../../assets/images/my_menu_list.png')"
                      @click="handleMenu">
             </div>
             <div v-else="showCheck" class="sysmessage-head-check">
