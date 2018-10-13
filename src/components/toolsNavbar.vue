@@ -111,9 +111,6 @@ export default {
     userAccessStatus: function(value) {
       this.getUserInfo().then(user => {
         let title = null
-        console.log('监控到userAccessStatus发生了改变')
-        console.log('userAccessStatus ===',this.userAccessStatus)
-        console.log('leavePerson =',this.leavePerson)
         switch (this.userAccessStatus) {
           case 1005: //拼团中
             title = `我正在参加《${this.courseName}》拼团活动,仅差${this.leavePerson}人,快来和我一起拼团吧!`
@@ -126,6 +123,7 @@ export default {
             break
         }
         let link = ''
+        alert(this.serviceType)
         switch (this.serviceType) {
           case 'OnlineCourse':
             link =
@@ -261,19 +259,19 @@ export default {
             if(this.isOwner){
               this.sharePageShow = true
               //拼装分享内容
-              this.setShareInfo()
+              // this.setShareInfo()
             }
             //拼团中&& 参团人 && 如果拼团已满 && 当前用户已完成购买 && 存在其他人未完成支付  "立即邀请好友拼团"
             if(!this.isOwner&&this.isFullStaff&&this.achievePayment&&!this.isAllPay){
               this.sharePageShow = true
               //拼装分享内容
-              this.setShareInfo()
+              // this.setShareInfo()
             }
             //拼团中&&参团人&&当前拼团未满&&当前用户完成支付   按钮显示:"邀请好友拼团"
             if (!this.isOwner && !this.isFullStaff && this.achievePayment){
               this.sharePageShow = true
               //拼装分享内容
-              this.setShareInfo()
+              // this.setShareInfo()
             }
             //拼团中&&参团人&&当前拼团未满&&当前用户未调起支付   按钮显示:"参与拼团"
             if(!this.isOwner && !this.isFullStaff && !this.achievePayment && this.currUserStatus == 0){
@@ -325,7 +323,7 @@ export default {
             //拼团中
             this.sharePageShow = true
             //拼装分享内容
-            this.setShareInfo()
+            // this.setShareInfo()
           break
         }
       }

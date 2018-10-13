@@ -42,6 +42,7 @@ const videoColumnDetailData = {
     }
   },
   actions: {
+
     async getVideoColumnDetail({ commit, dispatch }, { courseId, groupBuyId }) {
       //获取视频专栏数据
       const result = await getVideoColumnDetail({ courseId })
