@@ -69,6 +69,8 @@ const videoColumnDetailData = {
       } else {
         //这里是正常途径进来的
         const toolsData = {
+          courseName:result.name,
+          courseId:result.id,
           collectLikeDuration: result.collectLikeDuration,
           collectLikeId: result.collectLikeId,
           collectLikePersonCount: result.collectLikePersonCount,

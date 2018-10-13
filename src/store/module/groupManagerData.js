@@ -1,4 +1,5 @@
 import { wxConfig,getGroupBuyDetail,startGroupBuy,joinGroupBuy,startCollectLike,getCollectLike,unlockCourse,wechatSubscribed } from '../../api/groupBuyApi.js'
+import {getLessonListByCourse} from '../../api/columnsApi.js'
 import {getMyUserInfo} from '../../api/myApi'
 import {Toast} from 'vant'
 import { WECHAT_SUBSCRIPTION_URL } from '../../utils/config'
@@ -43,6 +44,8 @@ const groupManagerData = {
         serviceType:"",    //"FreeZone" "OnlineVision" "OnlineCourse" "Readings"
 
         isLoading:false,   //发起拼团  原价购买  发起集赞 防止重复操作
+
+        lessonsArray:[] //专栏下的所有课程
     },
     getters:{
         //专栏头图
@@ -103,6 +106,9 @@ const groupManagerData = {
         bindIsShowMobileDialog(state,isShowMobileDialog){
             state.isShowMobileDialog = isShowMobileDialog
         },
+        bindLessonsArray(state,lessons){
+            state.lessonsArray = lessons
+        },
 
         bindOrderObject(state,{toolsObject,groupBuyId,isShowGroupBuy,userAccessStatus}){
             state.toolsObject = toolsObject
@@ -149,9 +155,6 @@ const groupManagerData = {
     actions:{
 
         setupShareOption({state,getters,dispatch,rootState},{courseName,courseId,groupBuyId,collectLikeId,leavePerson,orderStatus}){
-            console.log('isFromShare =',state.isFromShare)
-            console.log('orderStatus =',orderStatus)
-            console.log('userAccessStatus =',state.userAccessStatus)
             if(getters.isFromShare){
                 dispatch('getUserInfo',null,{root:true}).then(user =>{
                     let title = null
@@ -272,8 +275,15 @@ const groupManagerData = {
             }          
         },
 
-        initColumnInfo({commit},{serviceType,courseId,profilePic,freeLesson}){
+        initColumnInfo({commit,dispatch},{serviceType,courseId,profilePic,freeLesson}){
             commit('bindColunmnInfo',{serviceType,courseId,profilePic,freeLesson})
+            //获取专栏下所有课程
+            let params = {
+                'courseId' :courseId,
+                'currentPage':1,
+                'pageSize':10
+              }
+            dispatch('getAllLessons',params)
         },
 
         //初始化工具条
@@ -932,6 +942,16 @@ const groupManagerData = {
             }
 
         },
+
+        //获取专栏下所有课程
+        async getAllLessons({commit},params){
+            const reponse = await getLessonListByCourse(params)
+            console.log('代码走到这里-=-=-=-=-=-=-=-=-=-=-=-=-=')
+            console.log(reponse)
+            if(!reponse) return
+            const lessons = reponse.result
+            commit('bindLessonsArray',lessons)
+        }
     }
 }
 

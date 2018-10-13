@@ -134,6 +134,7 @@ export default {
       'achievePayment',//当前用户是否完成支付
       'isAllPay',//拼团用户列表中的用户是否都完成支付
       'currUserStatus',//当前用户的支付状态
+      'lessonsArray'//专栏下所有课程
     ]),
     ...mapGetters(['isFromShare', 'courseName'])
   },
@@ -158,12 +159,14 @@ export default {
       'startCollectLike',
       'updateFatherData',
       'unlockCourse',
-      'checkoutAuthorrization'
+      'checkoutAuthorrization',
+      'getAllLessons'
     ]),
     //点击试听按钮 跳转
     clickAuditionBtn() {
       if (this.freeLesson && this.freeLesson.length > 0) {
-        this.gotoInfoPage()
+        const { id } = this.freeLesson[0]
+        this.gotoInfoPage(id)
       } else {
         this.$toast('暂无试听课程')
       }
@@ -177,8 +180,9 @@ export default {
           this.checkoutAuthorrization(params)
           break
         case 1001:
-          if (this.freeLesson && this.freeLesson.length > 0) {
-            this.gotoInfoPage()
+          if (this.lessonsArray && this.lessonsArray.length > 0) {
+            const { id } = this.lessonsArray[0]
+            this.gotoInfoPage(id)
           }
           break
       }
@@ -202,8 +206,9 @@ export default {
             //拼团成功
             if(this.isGroupCurrent){
               //当前用户在拼团用户列表中,显示我要学习,就解锁专栏,跳转到单集详情页
-              if (this.freeLesson && this.freeLesson.length > 0) {
-                this.gotoInfoPage()
+              if (this.lessonsArray && this.lessonsArray.length > 0) {
+                   const { id } = this.lessonsArray[0]
+                   this.gotoInfoPage(id)
               }
             }else {
               //当前用户不在用户列表中,就重新发起拼团
@@ -273,8 +278,9 @@ export default {
           break
           case 1003:
             //拼团成功
-            if (this.freeLesson && this.freeLesson.length > 0) {
-              this.gotoInfoPage()
+            if (this.lessonsArray && this.lessonsArray.length > 0) {
+                  const { id } = this.lessonsArray[0]
+                  this.gotoInfoPage(id)
             }
           break
           case 1005:
@@ -299,8 +305,9 @@ export default {
           break
         case 1008:
           //集赞成功已领取  解锁专栏 跳转到单集详情页
-          if (this.freeLesson && this.freeLesson.length > 0) {
-            this.gotoInfoPage()
+          if (this.lessonsArray && this.lessonsArray.length > 0) {
+                   const { id } = this.lessonsArray[0]
+                  this.gotoInfoPage(id)
           }
           break
         case 1009:
@@ -362,8 +369,7 @@ export default {
       })
 
     },
-    gotoInfoPage() {
-      const { id } = this.freeLesson[0]
+    gotoInfoPage(id){   
       switch (this.serviceType) {
         case 'OnlineCourse':
           this.$router.push({
