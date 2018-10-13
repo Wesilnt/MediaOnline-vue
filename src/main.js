@@ -23,12 +23,7 @@ new Vue({
   render: h => {
     if (noAccessToken() && IS_ONLINE) {
       store.dispatch('getAccessToken')
-      return h(SkeletonFullScreen, {
-        props: {
-          loading: true,
-          active: true
-        }
-      })
+      return h(SkeletonFullScreen)
     }
     return h(App)
   }

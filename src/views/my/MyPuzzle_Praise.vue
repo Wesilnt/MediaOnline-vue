@@ -145,7 +145,6 @@ export default {
       })
     },
     routerToDetail({ type, id }) {
-      console.log(type, id)
       this.$router.push({ path: `/${courseType[type]}${id}` })
     },
     routerToHome() {

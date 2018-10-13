@@ -3,6 +3,7 @@ const { NODE_ENV } = process.env
 const isProd = NODE_ENV === 'production'
 module.exports = {
   lintOnSave: undefined,
+    css:{extract:true},
   configureWebpack: {
     plugins: isProd
       ? [

@@ -25,7 +25,9 @@ import mobileData from './module/mobileData'
 
 import { getToken, getUserByToken } from '../api/accessTokenApi'
 import { noAccessToken } from '../utils/userAuth'
-import { wxConfig as wxConfigApi } from '../api/groupBuyApi.js'
+import { wxConfig as wxConfigApi } from '../api/groupBuyApi.js' 
+import { wxConfigUrl } from './../utils/config'
+import { stat } from 'fs'; 
 
 Vue.use(Vuex)
 export default new Vuex.Store({
@@ -33,15 +35,23 @@ export default new Vuex.Store({
   state: {
     // url: encodeURIComponent(location.href.split('#')[0])
     url: window.location.href.split('#')[0],
-    wxRegisterPath: '',
-    userInfo: null
+    wxRegisterPath: '', 
+    userInfo: null ,
+    columnDetail: {},
+    columnType: null 
   },
   mutations: {
     saveWxRegisterPath(state, { wxRegisterPath }) {
       state.wxRegisterPath = wxRegisterPath
-    },
+    }, 
     saveUserInfo(state, { userInfo }) {
       state.userInfo = userInfo
+    },
+    //设置当前用户选中专栏columnDetail  ,
+    //专栏类型 columnType : FreeZone 免费专区 OnlineCourse 在线课堂  OnlineVision 在线视野  Readings 读书会
+    bindCurrentColumn(state, {columnType , columnDetail}){
+      state.columnType = columnType
+      state.columnDetail =  columnDetail 
     }
   },
   actions: {

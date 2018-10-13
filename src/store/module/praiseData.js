@@ -6,7 +6,8 @@ import {
   getCollectLike,
   getPoster,
   startCollectLike,
-  joinCollectLike
+  joinCollectLike,
+  getColumnDetail
 } from '../../api/praiseApi'
 import { WECHAT_SUBSCRIPTION_URL } from './../../utils/config'
 export default {
@@ -74,38 +75,39 @@ export default {
       // }
     },
     //积攒状态检查
-    async checkStatus({ commit }, params) {
+    async checkStatus({ commit ,dispatch}, params) {
       const res = await checkStatus(params)
       console.log(res)
       if (res) commit('bindPraiseStatus', res)
     },
     //集赞详情
     async getCollectDetail({ state, commit,dispatch }, params) {
-    const res = await getCollectDetail(params)
-    await dispatch('getUserInfo',null,{root:true})
-    .then(user=>{
-      commit('bindUserInfo', user)
-      dispatch('setShareInfo',{user, res})
-    })
-    commit('bindPraiseDetail', res) 
-    if (res.status != 1202) return
-    await commit('destroyInterval')
-    let rollerInterval = setInterval(() => commit('setRollerInterval'), 7000)
-    let totalTime = res.duration * 3600 +  (res.createTime - res.sysTime) / 1000  
-    let timerInterval = setInterval(() => {
-      var hours = parseInt(totalTime / (60 * 60))
-      var minutes = parseInt((totalTime % (60 * 60)) / 60)
-      var seconds = totalTime % 60
-      hours = parseInt(hours)
-      minutes = parseInt(minutes)
-      seconds = parseInt(seconds)
-      hours = hours < 10 ? '0' + hours : hours
-      minutes = minutes < 10 ? '0' + minutes : minutes
-      seconds = seconds < 10 ? '0' + seconds : seconds
-      let remainTime = '距离结束还有:' + hours + '时' + minutes + '分' + seconds + '秒'
-      totalTime -= 1
-      commit('setTimerInterval', { timerInterval, rollerInterval,isEnded: totalTime <= 0,remainTime})
-      }, 1000)
+      const res = await getCollectDetail(params)
+      await dispatch('getUserInfo',null,{root:true})
+      .then(user=>{
+        commit('bindUserInfo', user)
+        dispatch('setShareInfo',{user, res})
+      })
+      console.log(res)
+      commit('bindPraiseDetail', res) 
+      if (res.status != 1202) return
+      await commit('destroyInterval')
+      let rollerInterval = setInterval(() => commit('setRollerInterval'), 7000)
+      let totalTime = res.duration * 3600 +  (res.createTime - res.sysTime) / 1000  
+      let timerInterval = setInterval(() => {
+        var hours = parseInt(totalTime / (60 * 60))
+        var minutes = parseInt((totalTime % (60 * 60)) / 60)
+        var seconds = totalTime % 60
+        hours = parseInt(hours)
+        minutes = parseInt(minutes)
+        seconds = parseInt(seconds)
+        hours = hours < 10 ? '0' + hours : hours
+        minutes = minutes < 10 ? '0' + minutes : minutes
+        seconds = seconds < 10 ? '0' + seconds : seconds
+        let remainTime = '距离结束还有:' + hours + '时' + minutes + '分' + seconds + '秒'
+        totalTime -= 1
+        commit('setTimerInterval', { timerInterval, rollerInterval,isEnded: totalTime <= 0,remainTime})
+        }, 1000)
       //
     },
     //领取集赞
@@ -134,6 +136,13 @@ export default {
       console.log(res)
       if (!res) return
       commit('bindUserInfo', res) 
+    },
+    //获取专栏详情
+    async getColumnDetail({dispatch, commit }, params) { 
+      const result = await getColumnDetail(params) 
+      console.log(result)
+      commit('bindCurrentColumn', {columnType: params.columnType , columnDetail:result},{root:true})
+      return result
     },
     //设置分享信息
     async setShareInfo({state,dispatch},{user, res}){
@@ -168,9 +177,7 @@ export default {
         totalNums[index] = item.avatarUrl
         praised = !praised && item.id == state.userId
       })
-      isCurrentUser = state.userId == state.praiseDetail.starterUid
-      console.log('state.userId',state.userId)
-      console.log('state.praiseDetail.starterUid',state.praiseDetail.starterUid)
+      isCurrentUser = state.userId == state.praiseDetail.starterUid 
       alreadyCount = state.praiseDetail.alreadyCount
       let code = state.praiseDetail.code ? parseInt(state.praiseDetail.code) : 0
       let status = state.praiseDetail.status ? parseInt(state.praiseDetail.status): 0

@@ -1,6 +1,7 @@
-import videoColumnDetail from '../views/onlineCourse/videoColumnDetail.vue'
-import videoCourseDetail from '../views/onlineCourse/videoCourseDetail'
-import videoCourseComment from '../views/onlineCourse/VideoCourseCmts.vue'
+const videoColumnDetail = () => import(/* webpackChunkName: "index" */ '../views/onlineCourse/videoColumnDetail')
+const videoCourseDetail = () => import(/* webpackChunkName: "index" */ '../views/onlineCourse/videoCourseDetail')
+const videoCourseComment = () => import(/* webpackChunkName: "index" */ '../views/onlineCourse/VideoCourseCmts')
+
 
 const PageInfo_From_onlineCourse = [
   {

@@ -108,12 +108,15 @@ export default {
         this.$router.push({
           name: 'SharePoster',
           params,
-          query: {shareUrl:( this.url + `#/praise/active/${this.courseid}/${this.collectlikeid}?columnType=${this.columntype}`) || '/#/home'}
+          query: {
+                  shareUrl:( this.url + `#/praise/active?columnType=${this.columntype}`) || '/#/home',
+
+                 }
         })
       }
       if (2 == this.state) {
         //我也要集赞
-         this.goColumnDetail()
+        this.goColumnDetail()
       }
     },
     goColumnDetail(){  

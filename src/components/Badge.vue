@@ -13,7 +13,6 @@ export default {
   computed: {
     badge: function() {
       let text = '中'
-        console.log(this.status);
         if (this.status === 1203||this.status === 1205 ) {
         text = '成功'
       } else if (this.status === 1204) {

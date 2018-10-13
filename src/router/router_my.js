@@ -1,15 +1,14 @@
-const purchase = () => import('../views/my/Purchase')
-const record = () => import('../views/my/Record')
-const like = () => import('../views/my/Like')
-const reply = () => import('../views/my/Reply')
-const myPuzzle_Praise = () =>
-  import(/* webpackChunkName: "myPuzzle_Praise" */ '../views/my/MyPuzzle_Praise')
-const sysMessage = () => import('../views/my/SysMessage')
-const feedback = () => import('../views/my/Feedback')
-const editUserPhone = () => import('../views/my/EditUserPhone')
-const editUserInfo = () => import('../views/my/EditUserInfo')
-const displayUserInfo = () => import('../views/my/DisplayUserInfo')
-const WxConfig = () => import('../views/my/WxConfig')
+const purchase = () => import(/* webpackChunkName: "index" */ '../views/my/Purchase')
+const record = () => import(/* webpackChunkName: "index" */ '../views/my/Record')
+const like = () => import(/* webpackChunkName: "index" */ '../views/my/Like')
+const reply = () => import(/* webpackChunkName: "index" */ '../views/my/Reply')
+const myPuzzle_Praise = () =>import(/* webpackChunkName: "index" */ '../views/my/MyPuzzle_Praise')
+const sysMessage = () => import(/* webpackChunkName: "index" */ '../views/my/SysMessage')
+const feedback = () => import(/* webpackChunkName: "index" */ '../views/my/Feedback')
+const editUserPhone = () => import(/* webpackChunkName: "index" */ '../views/my/EditUserPhone')
+const editUserInfo = () => import(/* webpackChunkName: "index" */ '../views/my/EditUserInfo')
+const displayUserInfo = () => import(/* webpackChunkName: "index" */ '../views/my/DisplayUserInfo')
+const WxConfig = () => import(/* webpackChunkName: "index" */ '../views/my/WxConfig')
 const PageInfo_From_My = [
   {
     path: '/my/Purchase',

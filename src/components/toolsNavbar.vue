@@ -84,6 +84,9 @@ export default {
       jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline']
     })
   },
+  beforeDestroy(){
+    this.updateUserAccessStatus()
+  },
   watch: {
     collectLikeId: function(newVal) {
       if (newVal != 0 && this.startPraiseFlag) {
@@ -108,16 +111,15 @@ export default {
     userAccessStatus: function(value) {
       this.getUserInfo().then(user => {
         let title = null
+        console.log('监控到userAccessStatus发生了改变')
+        console.log('userAccessStatus ===',this.userAccessStatus)
+        console.log('leavePerson =',this.leavePerson)
         switch (this.userAccessStatus) {
           case 1005: //拼团中
-            title = `我正在参加《${this.courseName}》拼团活动,仅差${
-              this.leavePerson
-            }人,快来和我一起拼团吧!`
+            title = `我正在参加《${this.courseName}》拼团活动,仅差${this.leavePerson}人,快来和我一起拼团吧!`
             break
           case 1009: //集赞中
-            title = `我是${user.nickName}, ${
-              true ? '我想免费' : '正在帮朋友'
-            }领取《${this.courseName}》,求助攻~`
+            title = `我是${user.nickName}, ${true ? '我想免费' : '正在帮朋友'}领取《${this.courseName}》,求助攻~`
             break
           default:
             title = this.courseName
@@ -193,7 +195,7 @@ export default {
       'setWxShareFriend',
       'setWxShareZone'
     ]),
-    ...mapMutations(['bindIsShowMobileDialog', 'toggolePraiseFlag']),
+    ...mapMutations(['bindIsShowMobileDialog', 'toggolePraiseFlag','updateUserAccessStatus']),
     ...mapActions([
       'startGroupBuy',
       'getCollectLike',
@@ -376,29 +378,33 @@ export default {
       let link = ''
       switch (this.serviceType) {
         case 'OnlineCourse':
-          link = `/#/videoColumnDetail/${this.courseId}?groupBuyId=${
+          link =this.url + `/#/videoColumnDetail/${this.courseId}?groupBuyId=${
             this.groupBuyId
           }`
           break
         case 'OnlineVision':
-          link = `/home/visionDetail/${this.courseId}`
+          link =this.url + `/#/home/visionDetail/${this.courseId}`
           break
         case 'Readings':
-          link = `/home/readings/book/${this.courseId}?playType='Readings'`
+          link =this.url + `/#/home/readings/book/${this.courseId}?playType='Readings'`
           break
         default:
-          link = `/home/freezone`
+          link = this.url +`/#/home/freezone`
           break
       }
+      console.log(`我正在参加《${
+            this.courseName
+          }》拼团活动,仅差${this.leavePerson}人,快来和我一起拼团吧!`)
       this.getUserInfo().then(user => {
         this.shareData = {
           link,
-          title: `我正在参加《${
-            this.courseName
-          }》拼团活动,仅差${2}人,快来和我一起拼团吧!`,
+          title: `我正在参加《${ this.courseName}》拼团活动,仅差${this.leavePerson}人,快来和我一起拼团吧!`,
           desc: '你一定会爱上国学课...'
         }
+        this.setWxShareFriend(this.shareData)
+        this.setWxShareZone(this.shareData)
       })
+
     },
     gotoInfoPage() {
       const { id } = this.freeLesson[0]

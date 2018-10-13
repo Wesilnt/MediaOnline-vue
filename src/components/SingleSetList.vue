@@ -1,7 +1,7 @@
 <template>
   <div class="singleset-list-conteiner">
     <div v-for="item of list" :key="item.id" class="singleset-list">
-      <singleset :item="item" :playing="item.id==playId" :singletype='singletype' :coursename='coursename'/>
+      <singleset :item="item" :playing="item.id==playId" :singletype='singletype' :coursename='coursename' :useraccessstatus = 'useraccessstatus' />
     </div>
   </div>
 
@@ -12,7 +12,7 @@ import SingleSet from './SingleSetItem.vue'
 export default {
   components: { singleset: SingleSet },
   //list 单集列表数据
-  props: ['list', 'playId','singletype','coursename'],
+  props: ['list', 'playId','singletype','coursename','useraccessstatus'],
   data() {
     return { playingIndex: 0 }
   }

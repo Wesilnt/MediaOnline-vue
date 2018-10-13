@@ -88,8 +88,7 @@ export default {
   },
   created: function() {
     this._setBtnAndTips({ status: 1202 }, false, true) 
-    // this.getUserByToken()
-    this.getCollectDetail({ collectLikeId: this.collectLikeId }) 
+    this.getCollectDetail({ collectLikeId: this.collectLikeId,columnType:this.columnType })  
     const { fullPath } = this.$route
     this.registerWxConfig({
       fullPath,
@@ -116,6 +115,7 @@ export default {
   methods: {
     ...rootActions(['getUserInfo','registerWxConfig', 'setWxShareFriend', 'setWxShareZone']), 
     ...mapActions([
+      'checkStatus',
       'getUserByToken',
       'startCollectLike',
       'joinCollectLike',

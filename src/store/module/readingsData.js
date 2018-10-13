@@ -70,8 +70,9 @@ export default {
         //书详情
         async getBookDetail({dispatch, commit }, params) { 
             const result = await getBookDetail(params) 
-            console.log(result)
-
+            console.log(result) 
+            //绑定全局专栏当前详情
+            commit('bindCurrentColumn', {columnType:"OnlineVision" , columnDetail:result},{root:true})
             //获取专栏课程列表
             dispatch('getSingleSetList',true)
             const groupBuyId =  params.groupBuyId
@@ -79,10 +80,7 @@ export default {
             const profilePic = result.coverPic
             const freeLessonList = result.freeLessonList
             const serviceType = "Readings"
-            commit("bindBookDetail", {
-                result,
-                isFromShare: groupBuyId ? true : false
-            })
+            commit("bindBookDetail", { result,isFromShare: groupBuyId ? true : false})
             //绑定与拼团相关的内容
             dispatch('groupManagerData/initColumnInfo',{serviceType,courseId,profilePic,'freeLesson':freeLessonList})
             if (groupBuyId) {

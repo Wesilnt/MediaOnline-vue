@@ -12,11 +12,12 @@ export default {
     audioDetail: {}, //音频数据
     audioId: 0, //播放音频ID
     audioUrl: '', //播放音频地址
+    coverPic:'',  //封面地址
     currentTime: 0, //播放进度
     maxTime: 0, //音频总时长
     playMode: 'order', // order:顺序播放  single：单曲播放
     isPlaying: false, //是否正在播放
-    playType: "FreeZone", // //RreeZone 免费专区  OnlineVision 在线视野  Readings 读书会
+    playType: "FreeZone", //FreeZone 免费专区 OnlineCourse 在线课堂  OnlineVision 在线视野  Readings 读书会
     courseName:"", //专栏名
     courseId:-1,
     throttle: null,
@@ -39,6 +40,7 @@ export default {
       state.audioUrl = res.audioUrl
       state.audioId = res.id
       state.courseId = res.courseId
+      state.coverPic = res.coverPic
     },
     //音频播放同步方法
     syncPlay(state, params) {

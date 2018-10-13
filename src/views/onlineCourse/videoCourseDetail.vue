@@ -3,7 +3,7 @@
         <SkeletonFullScreen  v-show="loading"/>
         <div v-show="!loading" class="videocourse-detail-container" id="detailmain" ref="detailmain">
             <!-- 播放器封面 -->
-            <div class="video-detail-header lazy-img-most" v-lazy:background-image="coverPic">
+            <div class="video-detail-header lazy-img-most" v-lazy:background-image="`${coverPic|''}`">
                 <div class="video-detail-header-right-top">
                     <img :src="isLike?collectIcon:unCollectIcon" class="video-detail-collect" alt="" @click="onCollectFavorite">
                     <img :src="require('../../assets/images/onlinecourse-play_ic_share.png')" class="video-detail-share" alt="" @click="onShareAction">
@@ -102,7 +102,7 @@ export default {
     Share,
     ScrollNavBar,
     CommentList,
-    SkeletonFullScreen
+    SkeletonFullScreen, 
   },
   data() {
     return {

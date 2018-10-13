@@ -44,12 +44,10 @@ const visionData = {
             commit('setIsLoading',false);
         },
         async getVisionDetail({dispatch,commit},{courseId,groupBuyId}){
-            let result = await getVisionDetail({'courseId':courseId})
-            commit('setVisionDetail', {
-                result,
-                isFromShare: groupBuyId ? true : false
-            });
-
+            let result = await getVisionDetail({'courseId':courseId}) 
+            commit('setVisionDetail', {result,isFromShare: groupBuyId ? true : false});  
+            //绑定全局专栏当前详情
+            commit('bindCurrentColumn', {columnType:"Readings" , columnDetail:result},{root:true}) 
             const profilePic = result.profilePic
             const freeLessonList = result.freeLessonList
             const serviceType = "OnlineVision"

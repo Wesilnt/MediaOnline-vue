@@ -48,7 +48,9 @@ export default {
         case 1009://集赞中
         break
       }
-
+      console.log('============')
+      console.log(audio.isFree)
+      console.log(unLock)
       if (audio.isFree || unLock) {
         this.$router.push({
           name: 'AudioPlay',
@@ -129,11 +131,10 @@ export default {
   .bottom-container span {
     background-color: #ea605c;
     color: white;
-    padding: 3px 10px;
+    padding: 4px 12px;
     border-radius: 10px;
     font-size: 26px;
     margin-right: 20px;
-    line-height: 36px;
   }
   .bottom-container p {
 
