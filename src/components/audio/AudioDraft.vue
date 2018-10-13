@@ -28,6 +28,9 @@ export default {
   font-size: 32px;
   color: rgb(51, 51, 51);
   padding: 0 40px;
+  .draft-content{
+    padding: 10px;
+  }
 
   .detail-text {
     line-height: 56px;

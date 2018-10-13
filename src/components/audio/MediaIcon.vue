@@ -15,6 +15,7 @@
       >
      </van-circle>
      <div class="image-icon-container" v-lazy:background-image ="coverPic">
+       <div class="icon-mask"></div>
        <img :src="`${this.isPlaying?require('../../assets/images/audio_play_play.png'):require('../../assets/images/audio_play_pause.png')}`" class="play-icon">
      </div>
   </div>
@@ -200,10 +201,16 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 120px;
-    height: 120px;
+    width: 124px;
+    height: 124px;
     border-radius: 50%; 
     background-size: 100%;
+  }
+  .icon-mask{
+    border-radius: 50%;
+    background-color: rgba(43, 43, 43, 0.3);
+    width: 100%;
+    height: 100%;
   }
   .play-icon{
      position: absolute;
