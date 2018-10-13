@@ -17,8 +17,8 @@
             <div v-if="onLineVisionByBoughtList.length !== 0" class="purchase-container">
                 <p class="purchase-container-head">{{tab[0]}}</p>
                 <div v-if="isVertical" v-for="item in onLineVisionByBoughtList" :key="item.id">
-                    <div class="purchase-container-item" @click='toPlayAudio(item.newestLessonId)'>
-                        <img :src='item.coverPic' class="purchase-container-item-avatar"/>
+                    <div class="purchase-container-item" @click='toPlayAudio(item)'>
+                        <div class="purchase-container-item-avatar " v-lazy:background-image="item.coverPic"></div>
                         <div class="purchase-container-item-content">
                             <div class="purchase-container-item-content-name">{{item.name}}</div>
                             <div class="purchase-container-item-content-playto">播放至：{{item.readto}}</div>
@@ -27,8 +27,8 @@
                     </div>
                 </div>
                 <div v-if="!isVertical" v-for="item in onLineVisionByBoughtList" :key="item.id">
-                    <div class="purchase-container-item" @click='toPlayAudio(item.newestLessonId)'>
-                        <img :src='item.coverPic' class="purchase-container-item-avatar"/>
+                    <div class="purchase-container-item" @click='toPlayAudio(item)'>
+                        <div class="purchase-container-item-avatar " v-lazy:background-image="item.coverPic"></div>
                         <div class="purchase-container-item-content">
                             <div class="purchase-container-item-content-name">{{item.name}}</div>
                         </div>
@@ -38,8 +38,8 @@
             <div v-if="onLineVideoByBoughtList.length !== 0" class="purchase-container">
                 <p class="purchase-container-head">{{tab[1]}}</p>
                 <div  v-if="isVertical" v-for="item in onLineVideoByBoughtList" :key="item.id">
-                    <div class="purchase-container-item" @click='toPlayVideo(item.newestLessonId)'>
-                        <img :src='item.coverPic' class="purchase-container-item-avatar"/>
+                    <div class="purchase-container-item" @click='toPlayVideo(item)'>
+                        <div class="purchase-container-item-avatar " v-lazy:background-image="item.coverPicH"></div>
                         <div class="purchase-container-item-content">
                             <div class="purchase-container-item-content-name">{{item.name}}</div>
                             <div class="purchase-container-item-content-playto">播放至：{{item.readto}}</div>
@@ -48,8 +48,8 @@
                     </div>
                 </div>
                 <div v-if="!isVertical" v-for="item in onLineVideoByBoughtList" :key="item.id">
-                    <div class="purchase-container-item" @click='toPlayVideo(item.newestLessonId)'>
-                        <img :src='item.coverPic' class="purchase-container-item-avatar"/>
+                    <div class="purchase-container-item" @click='toPlayVideo(item)'>
+                        <div class="purchase-container-item-avatar " v-lazy:background-image="item.coverPicH"></div>
                         <div class="purchase-container-item-content">
                             <div class="purchase-container-item-content-name">{{item.name}}</div>
                         </div>
@@ -59,8 +59,8 @@
             <div v-if="onLineReadByBoughtList.length !== 0" class="purchase-container">
                 <p class="purchase-container-head">{{tab[2]}}</p>
                 <div  v-if="isVertical" v-for="item in onLineReadByBoughtList" :key="item.id">
-                    <div class="purchase-container-item" @click='toPlayAudio(item.newestLessonId)'>
-                        <img :src='item.coverPic' class="purchase-container-item-avatar"/>
+                    <div class="purchase-container-item" @click='toPlayAudio(item)'>
+                        <div class="purchase-container-item-avatar " v-lazy:background-image="item.coverPic"></div>
                         <div class="purchase-container-item-content">
                             <div class="purchase-container-item-content-name">{{item.name}}</div>
                             <div class="purchase-container-item-content-playto">播放至：{{ item.availLessonCount }} |  {{ item.lastViewLessonTitle }}</div>
@@ -69,8 +69,8 @@
                     </div>
                 </div>
                 <div  v-if="!isVertical" v-for="item in onLineReadByBoughtList" :key="item.id">
-                    <div class="purchase-container-item" @click='toPlayAudio(item.newestLessonId)'>
-                        <img :src='item.coverPic' class="purchase-container-item-avatar"/>
+                    <div class="purchase-container-item" @click='toPlayAudio(item)'>
+                        <div class="purchase-container-item-avatar " v-lazy:background-image="item.coverPic"></div>
                         <div class="purchase-container-item-content">
                             <div class="purchase-container-item-content-name">{{item.name}}</div>
                         </div>
@@ -83,6 +83,7 @@
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
+import {courseType} from "../../utils/config";
 
 const { mapState, mapActions } = createNamespacedHelpers('myPurchaseData')
 export default {
@@ -118,12 +119,10 @@ export default {
       this.isVertical = !this.isVertical
     },
     toPlayAudio: function(item) {
-      this.$router.push({ name: 'AudioPlay'
-      , params: { id:item.newestLessonId }
-       ,query:{playType:"OnlineVision",courseName:item.name}})
+      this.$router.push({ path: '/home/visionDetail/' + item.id })
     },
-    toPlayVideo: function(id) {
-      console.log(id)
+    toPlayVideo: function(item) {
+      this.$router.push({ name: 'videoCourseDetail', params: { lessonId: item.id} })
     }
   },
   created() {
