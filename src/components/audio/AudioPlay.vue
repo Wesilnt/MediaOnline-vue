@@ -83,6 +83,7 @@
     </van-popup>
     <!-- 分享框 -->
     <share-pop :show="showShare" @close="closeShare" :shareInfo="shareData" />
+    <van-loading color="white" />
   </div>
 </template>
 <script>
