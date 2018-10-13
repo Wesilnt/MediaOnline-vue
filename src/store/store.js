@@ -50,7 +50,7 @@ export default new Vuex.Store({
     saveUserInfo(state, { userInfo }) {
       state.userInfo = userInfo
     },
-    //设置当前用户选中专栏columnDetail ,
+    //设置当前用户选中专栏columnDetail  ,
     //专栏类型 columnType : FreeZone 免费专区 OnlineCourse 在线课堂  OnlineVision 在线视野  Readings 读书会
     bindCurrentColumn(state, {columnType , columnDetail}){
       state.columnType = columnType
