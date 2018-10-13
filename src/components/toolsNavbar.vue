@@ -110,14 +110,10 @@ export default {
         let title = null
         switch (this.userAccessStatus) {
           case 1005: //拼团中
-            title = `我正在参加《${this.courseName}》拼团活动,仅差${
-              this.leavePerson
-            }人,快来和我一起拼团吧!`
+            title = `我正在参加《${this.courseName}》拼团活动,仅差${this.leavePerson}人,快来和我一起拼团吧!`
             break
           case 1009: //集赞中
-            title = `我是${user.nickName}, ${
-              true ? '我想免费' : '正在帮朋友'
-            }领取《${this.courseName}》,求助攻~`
+            title = `我是${user.nickName}, ${true ? '我想免费' : '正在帮朋友'}领取《${this.courseName}》,求助攻~`
             break
           default:
             title = this.courseName
@@ -376,26 +372,22 @@ export default {
       let link = ''
       switch (this.serviceType) {
         case 'OnlineCourse':
-          link = `/#/videoColumnDetail/${this.courseId}?groupBuyId=${
-            this.groupBuyId
-          }`
+          link = `/#/home/videoColumnDetail/${this.courseId}?groupBuyId=${this.groupBuyId}`
           break
         case 'OnlineVision':
-          link = `/home/visionDetail/${this.courseId}`
+          link = `/#/home/visionDetail/${this.courseId}`
           break
         case 'Readings':
-          link = `/home/readings/book/${this.courseId}?playType='Readings'`
+          link = `/#/home/readings/book/${this.courseId}?playType='Readings'`
           break
         default:
-          link = `/home/freezone`
+          link = `/#/home/freezone`
           break
       }
       this.getUserInfo().then(user => {
         this.shareData = {
           link,
-          title: `我正在参加《${
-            this.courseName
-          }》拼团活动,仅差${2}人,快来和我一起拼团吧!`,
+          title: `我正在参加《${ this.courseName}》拼团活动,仅差${this.leavePerson}人,快来和我一起拼团吧!`,
           desc: '你一定会爱上国学课...'
         }
       })

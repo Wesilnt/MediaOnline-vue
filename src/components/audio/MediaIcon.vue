@@ -14,7 +14,9 @@
         :rate="1"
       >
      </van-circle>
-     <img :src="`${this.isPlaying?require('../../assets/images/audio_play_play.png'):require('../../assets/images/audio_play_pause.png')}`" class="play-icon">
+     <div class="image-icon-container" :style="{backgroundImage:`url(${coverPic})`}">
+       <img :src="`${this.isPlaying?require('../../assets/images/audio_play_play.png'):require('../../assets/images/audio_play_pause.png')}`" class="play-icon">
+     </div>
   </div>
 </template>
 <script>
@@ -43,6 +45,7 @@ export default {
   ,'currentTime'
   ,'maxTime'
   ,'audioId'
+  ,'coverPic'
   ,'forceHidenFloat'
   ,'showFloat'
   , 'playType'
@@ -189,9 +192,18 @@ export default {
   padding: 12px;
   background-color: white;
   border-radius: 50%;
-  .circle_container{
-
+  .circle_container{ 
      position: absolute;
+  }
+  .image-icon-container{
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%; 
+    background-size: 100%;
   }
   .play-icon{
      position: absolute;

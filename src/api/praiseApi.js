@@ -24,3 +24,6 @@ export function joinCollectLike(params) {
 export function getUserByToken(params) {
   return request(`/user/getUserByToken${stringify(params)}`)
 }
+export function getColumnDetail(params) {
+  return request(`/course/detail?${stringify(params)}`)
+}

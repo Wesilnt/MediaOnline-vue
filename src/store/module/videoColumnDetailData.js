@@ -57,13 +57,11 @@ const videoColumnDetailData = {
         profilePic,
         freeLesson: freeLessonList
       })
-
+      //绑定全局专栏当前详情
+      commit('bindCurrentColumn', {columnType:"OnlineCourse" , columnDetail:result},{root:true})
       console.log('视频专栏接口数据:')
       console.log(result)
-      commit('bindVideoColumnDetail', {
-        result,
-        isFromShare: groupBuyId ? true : false
-      })
+      commit('bindVideoColumnDetail', {result,isFromShare: groupBuyId ? true : false})
       if (groupBuyId) {
         //这里是分享链接进来的
         dispatch('groupManagerData/getGroupBuyDetail', groupBuyId)

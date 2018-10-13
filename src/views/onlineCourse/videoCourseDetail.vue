@@ -102,7 +102,7 @@ export default {
     Share,
     ScrollNavBar,
     CommentList,
-    SkeletonFullScreen
+    SkeletonFullScreen, 
   },
   data() {
     return {

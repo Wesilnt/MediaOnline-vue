@@ -9,17 +9,16 @@
     </div> 
     <a v-show="false" ref="download"  download="poster"/>
     <loading-dialog v-if="loading"></loading-dialog>
-    <qr-code  :style="{display:'none',}" v-if="showQrcode" :text="shareUrl" error-level="Q" />
+    <qr-code  :style="{display:'none'}" v-if="showQrcode"  :text="shareUrl" error-level="Q" />
   </div>
 </template> 
 <script>
 import LoadingDialog from '../LoadingDialog.vue'
-import { createNamespacedHelpers } from 'vuex'
+import { createNamespacedHelpers ,mapState as rootState,mapActions as rootActions} from 'vuex'
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers('shareData')
 export default {
   name: 'shareposter', 
-  data() {
-    console.log(this.$route.query)
+  data() { 
     return {
       showQrcode:true,
       shareUrl: this.$route.query.shareUrl,
@@ -35,12 +34,29 @@ export default {
       ctx: null,
       canvasData: null,
       posterData: {}
-    }
+    }  
   },
   components: { 'loading-dialog': LoadingDialog },
-  computed: { ...mapState(['loading', 'user','poster']) },
+  computed: { 
+              ...rootState(['url','columnDetail','columnType']),
+              ...mapState(['loading', 'user','poster']) 
+            },
   created(){
-    // this.getUserInfo() 
+     //1. 传入分享地址
+     if(this.shareUrl) return  
+     //2. 有专栏详情和专栏类型
+     if(this.columnType && this.columnDetail) {
+        this.setPosterConfig()    //设置分享地址
+       return
+     }
+     //3. 没有专栏详情 , 有专栏ID
+     if(this.id){
+        this.getColumnDetail({courseId:this.id}) 
+        .then(()=>{
+          this.setPosterConfig()    //设置分享地址
+          this.drawBottomMap()      //重新生成图片
+        })
+      } 
   },
   mounted: function() {
     var canvasData = this.$refs.canvasId
@@ -52,8 +68,8 @@ export default {
     this.ctx.imageSmoothingEnabled = false 
      this.getUserInfo().then(()=> this.drawBottomMap())
   },
-  methods: {
-    ...mapActions(['getUserInfo','getPosterInfo', 'getPosterforPraise']),
+  methods: { 
+    ...mapActions(['getUserInfo','getPosterInfo', 'getPosterforPraise','getColumnDetail']),
     //将canvas生成的二维码保存为图片
     saveImg() {
       this.$refs.download.href = this.canvasData.toDataURL('images/png')
@@ -77,11 +93,10 @@ export default {
       this.ctx.fillStyle = '#ffffff'
       this.ctx.fillRect(0, this.bottomY, this.canvasW, this.bottomH)
       var cover = new Image()
-      cover.src = require('../../assets/images/poster_header_bg.jpg')
-      cover.onload = () => {
-        this.ctx.drawImage(cover, 0, 0, this.canvasW, this.canvasH)
-        resolve()
-      }
+      console.log(this)
+      cover.setAttribute('crossOrigin', 'anonymous') 
+      cover.src = this.columnDetail.sharePostUrl
+      cover.onload = () => {this.ctx.drawImage(cover, 0, 0, this.canvasW, this.canvasH);resolve()}
     },
     //绘制头像
     drawHeadImage() {
@@ -94,14 +109,7 @@ export default {
         let y = 920
         this.ctx.save()
         this.ctx.beginPath()
-        this.ctx.arc(
-          x + this.headImageW / 2,
-          y + this.headImageW / 2,
-          this.headImageW / 2,
-          0,
-          Math.PI * 2,
-          false
-        )
+        this.ctx.arc(x + this.headImageW / 2,y + this.headImageW / 2,this.headImageW / 2,0,Math.PI * 2,false)
         this.ctx.clip()
         this.ctx.drawImage(header, x, y, this.headImageW, this.headImageW)
         this.ctx.restore()
@@ -118,25 +126,13 @@ export default {
       this.$refs.saveimage.src = this.canvasData.toDataURL('images/png')
     },
     //绘制二维码
-    drawQrcode() {
-      // let temp = this.poster.qrCodeUrl //"https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=676587443,820607910&fm=111&gp=0.jpg";
-      //   if(this.type=='praise'){
-      //     temp = this.poster.xcxUrl
-      //   }
-      // var qrcode = new Image()
-      // qrcode.setAttribute('crossOrigin', 'anonymous')
-      // qrcode.src = temp +"?timeStamp="+Date.now()
-      // qrcode.onload =  () => {
-      //   this.ctx.drawImage(qrcode, 440, 880, 200, 200)
-      //   this.$refs.saveimage.src = this.canvasData.toDataURL('images/png')
-      // } 
-      console.log(this.$children[0].$el.children[1])
+    drawQrcode() { 
       this.ctx.drawImage(this.$children[0].$el.children[1],440, 880, 200, 200) 
-      // this.showQrcode = false
-      // Qrcode.toCanvas(this.ctx, 'http://www.baidu.com', function(error) {
-      //   if (error) console.error(error)
-      //   console.log('success!')
-      // })
+      let currentSrc =  this.$children[0].$el.children[1].currentSrc
+      if("" !== currentSrc && this.shareUrl === currentSrc) return
+      this.$children[0].$el.children[1].onload = ()=>{
+        this.ctx.drawImage(this.$children[0].$el.children[1],440, 880, 200, 200) 
+      } 
     },
     //底部描述
     drawBottomText() {
@@ -146,15 +142,61 @@ export default {
       let text = '长按扫描，和我一起听课吧!'
       this.ctx.fillText(text, 70, this.bottomY + 94 / 2 + 19)
       this.$refs.saveimage.src = this.canvasData.toDataURL('images/png')
+    },
+    //設置海報分享地址
+    setPosterConfig(){
+       //1. 有专栏详情, 拼团中
+     if(this.columnDetail && this.columnDetail.userAccessStatus==1005){  
+      let link = ''
+      switch (this.columnType) {
+         case 'OnlineCourse':
+          link = this.url + `/#/home/videoColumnDetail/${this.columnDetail.id}?groupBuyId=${this.columnDetail.groupBuyId}`
+          break
+        case 'OnlineVision':
+          link = this.url + `/#/home/visionDetail/${this.columnDetail.id}?groupBuyId=${this.columnDetail.groupBuyId}`
+          break
+        case 'Readings':
+          link = this.url + `/#/home/readings/book/${this.columnDetail.id}?groupBuyId=${this.columnDetail.groupBuyId}&playType='Readings'`
+          break
+        default:
+          link =this.url +  `/#/home/freezone`
+          break
+        }
+      this.shareUrl = link
+      return
+     }
+     //2. 有专栏详情, 集赞中
+     if(this.columnDetail && this.columnDetail.userAccessStatus==1009){ 
+      this.shareUrl = this.url + `#/praise/active?columnType=${this.columntype}` 
+      return
+     }
+     //3. 有专栏详情, 非集赞中和拼团中
+     if(this.columnDetail) { 
+        switch (this.columnType) {
+          case 'OnlineCourse':
+            this.shareUrl = this.url +  `/#/home/videoColumnDetail/${this.columnDetail.id}`
+            break
+          case 'OnlineVision':
+            this.shareUrl = this.url +  `/#/home/visionDetail/${this.columnDetail.id}`
+            break
+          case 'Readings':
+            this.shareUrl = this.url +  `/#/home/readings/book/${this.columnDetail.id}playType='Readings'`
+            break
+          default:
+            this.shareUrl = this.url +  `/#/home/freezone`
+            break
+          } 
+      }
+      //==================
     }
+    //================= setPosterConfig
   }
 }
 </script>
 <style lang="scss" scoped>
 .poster-container {
   .poster-pic-container {
-    position: relative;
-    height: 100vh;
+    position: relative; 
     width: 100%;
     canvas {
       height: 100%;
@@ -171,7 +213,7 @@ export default {
     }
     .top-container img {
       z-index: 999;
-      top: 0;
+      top: 0; 
       left: 0;
       position: absolute;
       height: auto;
@@ -184,31 +226,10 @@ export default {
       left: 0;
       font-size: 30px;
       position: absolute;
-      color: #808080;
-      padding-bottom: 40px;
+      color: #808080; 
       text-align: center;
       color: white;
     }
   }
-
-  // .poster-save-btn {
-  //   position: fixed;
-  //   bottom: 0;
-  //   text-align: center;
-  //   font-size: 38px;
-  //   width: 100%;
-  //   padding: 20px;
-  //   button {
-  //     line-height: 96px;
-  //     border-radius: 96px;
-  //     height: 96px;
-  //     width: 100%;
-  //     box-sizing: border-box;
-  //     background-color: rgb(255, 163, 47);
-  //     color: white;
-  //     border: none;
-  //     outline: none;
-  //   }
-  // }
 }
 </style>

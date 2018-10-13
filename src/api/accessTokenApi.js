@@ -13,3 +13,6 @@ export async function getToken() {
 export async function getUserByToken(params) {
   return request(`/user/getUserByToken${stringify(params)}`)
 }
+export function getColumnDetail(params) {
+  return request(`/course/detail?${stringify(params)}`)
+}

@@ -82,7 +82,7 @@
       </div>
     </van-popup>
     <!-- 分享框 -->
-    <share-pop :show="showShare" @close="closeShare" :shareInfo="shareData"/>
+    <share-pop :show="showShare" @close="closeShare" :shareInfo="shareData" />
   </div>
 </template>
 <script>
@@ -138,10 +138,7 @@ export default {
     this.toggleFloatButton(false)  //隐藏悬浮按钮
     this.playAudio({ lessonId: this.lessonId ,playType:this.playType})
     const { fullPath } = this.$route
-    this.registerWxConfig({
-      fullPath,
-      jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline']
-    })
+    this.registerWxConfig({fullPath,jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline']})
   },
   mounted(){  
      this.getUserInfo()
@@ -157,8 +154,8 @@ export default {
       } 
       //拼装分享内容
       this.shareData = {
-        link: this.url + `/#/audio/audioplay/${this.lessonId}`, 
-        title: `我是${user.nickName}, 我想免费领取《${this.courseName}》,来帮我点赞吧`,
+        link, 
+        title: `${this.courseName}`,
         desc: '你一定会爱上国学课...',
         successCB: () => console.log('分享回调成功') ,
         cancelCB: () =>  this.$toast('分享回调失败')
