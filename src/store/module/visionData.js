@@ -16,7 +16,8 @@ const visionData = {
         isLoading:false,
         courseName:'',//专栏名称
         userAccessStatus:0,
-        isFromShare:false
+        isFromShare:false,
+        renderLoading:true
     },
     actions:{
         reverse({commit,state}){
@@ -35,19 +36,21 @@ const visionData = {
           commit('setTotalCount',result.courseInfo.totalCount)
         },
         async getMoreData({commit, state}){
-            commit('setIsLoading',true);
-            await commit('setCurrentPage', state.currentPage + 1); 
+            commit('setIsLoading',{isLoading:true});
+            await commit('setCurrentPage', state.currentPage + 1);
             let result = await getVisionList({currentPage:state.currentPage, pageSize:state.pageSize, type:1003})
             let newList =state.visionList.concat(result.courseInfo.result);
             await commit('setFinished',newList.length>= state.totalCount);
             commit('setVisionList', newList)
-            commit('setIsLoading',false);
+            commit('setIsLoading',{isLoading:false});
         },
-        async getVisionDetail({dispatch,commit},{courseId,groupBuyId}){
-            let result = await getVisionDetail({'courseId':courseId}) 
-            commit('setVisionDetail', {result,isFromShare: groupBuyId ? true : false});  
+        async getVisionDetail({state,dispatch,commit},{courseId,groupBuyId}){
+            !state.renderLoading && commit('setIsLoading',{renderLoading:true});
+            let result = await getVisionDetail({'courseId':courseId})
+            commit('setVisionDetail', {result,isFromShare: groupBuyId ? true : false});
+            commit('setIsLoading',{renderLoading:false});
             //绑定全局专栏当前详情
-            commit('bindCurrentColumn', {columnType:"Readings" , columnDetail:result},{root:true}) 
+            commit('bindCurrentColumn', {columnType:"Readings" , columnDetail:result},{root:true})
             const profilePic = result.profilePic
             const freeLessonList = result.freeLessonList
             const serviceType = "OnlineVision"
@@ -109,8 +112,8 @@ const visionData = {
         setTotalCount(state,totalCount){
             state.totalCount = totalCount;
         },
-        setIsLoading(state,isLoading){
-            state.isLoading = isLoading;
+        setIsLoading(state,payload){
+            Object.assign(state,payload)
         }
     },
     modules:{

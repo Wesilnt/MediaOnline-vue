@@ -9,7 +9,7 @@ export default {
         singlePage:1,
         currentPage:1,
         finished:false,  //分页数据是否加载完成
-        loading:false,   //加载中
+        loading:true,   //加载中
         bannerPic: {}, //专栏头图
         bookList: [], //书列表 
         bookDetail: {}, //书详情
@@ -18,7 +18,7 @@ export default {
         singleLoaing:false,
         userAccessStatus:0,
         courseName:"",//专栏名称
-        isFromShare: false//是否来自分享
+        isFromShare: false,//是否来自分享
     },
     mutations: {
         initData(state,courseId){
@@ -104,7 +104,6 @@ export default {
                 userAccessStatus: result.userAccessStatus,
                 price: result.price
               }
-              
               dispatch('groupManagerData/initToolsBar', toolsData)
             }
         },

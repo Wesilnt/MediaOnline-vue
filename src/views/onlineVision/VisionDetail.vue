@@ -1,5 +1,7 @@
 <template>
-  <div id="detailmain" ref="detailmain">
+  <div>
+    <SkeletonFullScreen  v-if="renderLoading"/>
+    <div v-else id="detailmain" ref="detailmain">
     <GroupHeader />
     <!-- <img :src="visionDetail.coverPic" class="head" alt=""> -->
 
@@ -58,7 +60,7 @@
         :collect='true'
         :collage='true'/>
   </div>
-
+</div>
 </template>
 
 <script>
@@ -72,8 +74,15 @@ import toolsNavbar from '../../components/toolsNavbar.vue'
 import GroupHeader from '../onlineCourse/components/GroupHeader'
 import videoBigimage from '../../components/videoBigimage.vue'
 import CourseIntroduce from '../../components/CourseIntroduce.vue'
-import { createNamespacedHelpers ,mapState as rootState,mapActions as rootActions} from 'vuex'
-const { mapState, mapActions ,mapGetters} = createNamespacedHelpers('visionData')
+import SkeletonFullScreen from '../../components/SkeletonFullScreen.vue'
+import {
+  createNamespacedHelpers,
+  mapState as rootState,
+  mapActions as rootActions
+} from 'vuex'
+const { mapState, mapActions } = createNamespacedHelpers(
+  'visionData'
+)
 export default {
   components: {
     DetailHeader,
@@ -83,7 +92,8 @@ export default {
     CommentList,
     toolsNavbar,
     GroupHeader,
-    CourseIntroduce
+    CourseIntroduce,
+      SkeletonFullScreen
   },
   props: ['courseId'],
   data() {
@@ -120,24 +130,31 @@ export default {
       jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline']
     })
   },
-  mounted(){  
-    this.getUserInfo()
-    .then(user=>{ 
+  mounted() {
+    this.getUserInfo().then(user => {
       //拼装分享内容
       this.shareData = {
-        link: this.url + `/#/home/visionDetail/${this.courseId}`, 
+        link: this.url + `/#/home/visionDetail/${this.courseId}`,
         title: this.courseName,
         desc: '你一定会爱上国学课...',
-        successCB: () => console.log('分享回调成功') ,
-        cancelCB: () =>  console.log('分享回调失败')
-      } 
+        successCB: () => console.log('分享回调成功'),
+        cancelCB: () => console.log('分享回调失败')
+      }
       this.setWxShareFriend(this.shareData)
       this.setWxShareZone(this.shareData)
-    }) 
+    })
   },
-  computed: { ...rootState(['url']), ...mapState(['visionDetail','courseName', 'commentList'])},
+  computed: {
+    ...rootState(['url']),
+    ...mapState(['visionDetail', 'courseName', 'commentList','renderLoading'])
+  },
   methods: {
-    ...rootActions(['getUserInfo','registerWxConfig', 'setWxShareFriend', 'setWxShareZone']),  
+    ...rootActions([
+      'getUserInfo',
+      'registerWxConfig',
+      'setWxShareFriend',
+      'setWxShareZone'
+    ]),
     ...mapActions(['getVisionDetail', 'getCommentList']),
     ellipsis() {
       this.showall = !this.showall
@@ -175,7 +192,7 @@ export default {
   text-overflow: ellipsis;
   overflow: hidden;
 }
-.text-margin{
+.text-margin {
   margin: 0 40px;
 }
 .detault {
