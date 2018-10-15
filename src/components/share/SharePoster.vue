@@ -43,7 +43,7 @@ export default {
             },
   created(){
        console.log("this.shareUrl ============ ",this.shareUrl)
-       console.log("this.columnType:",this.columnType) 
+       console.log("this.columnType1:",this.columnType) 
      //1. 传入分享地址
      if(this.shareUrl) return  
      //2. 有专栏详情和专栏类型
@@ -94,8 +94,7 @@ export default {
     drawBackground(resolve) {
       this.ctx.fillStyle = '#ffffff'
       this.ctx.fillRect(0, this.bottomY, this.canvasW, this.bottomH)
-      var cover = new Image()
-      console.log(this)
+      var cover = new Image() 
       cover.setAttribute('crossOrigin', 'anonymous') 
       cover.src = this.columnDetail.sharePostUrl
       cover.onload = () => {this.ctx.drawImage(cover, 0, 0, this.canvasW, this.canvasH);resolve()}
