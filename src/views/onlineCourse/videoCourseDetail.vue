@@ -16,8 +16,8 @@
             <!-- 播放器 -->
             <ScrollNavBar :bars="navBars" />
             <!-- 资料 -->
-            <div class="video-detail-base">
-                <div id="desc" ref="desc" class="video-detail-sction-title">
+            <div class="video-detail-base" id="desc">
+                <div  ref="desc" class="video-detail-sction-title">
                     <h4>笔记</h4>
                 </div>
                 <CourseIntroduce :courseinfo="manuscript" />
@@ -29,15 +29,15 @@
                 <QuestionList @update="getVideoCourseDetail"/>
             </div>
             <!-- 目录 -->
-            <div class="video-detail-base">
-                <div id="tryCourse" ref="tryCourse" class="video-detail-sction-title">
+            <div class="video-detail-base" id="tryCourse">
+                <div  ref="tryCourse" class="video-detail-sction-title">
                     <h4>目录</h4>
                 </div>
                 <playlist v-for="(item,index) of lessonList" :key="item.id" :iteminfo="item" :activeID="activeID" :lastindex="index == (lessonList.length - 1)" @jumpEvent="beActive"/>
             </div>
             <!-- 留言 -->
-            <div class="video-detail-base">
-                <div id="leaveMessage" ref="leaveMessage" class="video-detail-sction-title">
+            <div class="video-detail-base" id="leaveMessage">
+                <div  ref="leaveMessage" class="video-detail-sction-title">
                     <h4>留言</h4>
                     <div class="video-detail-leavemessage" @click="toggleKeyboard(true)">
                         我要留言
@@ -476,7 +476,7 @@ export default {
   font-size: 32px;
   text-align: left;
   color: rgb(62, 62, 83);
-  margin-top: 48px;
+  padding-top: 48px;
 
   h4 {
     font-size: 32px;

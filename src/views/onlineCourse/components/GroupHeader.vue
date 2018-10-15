@@ -40,7 +40,7 @@
         <!--1. 读书会头图-->
         <div v-if="serviceType ==='Readings'">
           <div class="book-header-container lazy-img-larger">
-            <div class="book-cover" v-lazy:background-image="profilePic" :style="{'background-size':'100%',backgroundPosition:'center',backgroundRepeat:'no-repeat'}">
+            <div class="book-cover" v-lazy:background-image="profilePic">
             </div>
           </div>
         </div>
@@ -163,11 +163,10 @@ export default {
 }
 .groupBuy-banner {
   height: 300px;
-  background: #f6f6f6 center/cover no-repeat;
   padding: 0 40px;
-  box-sizing: border-box;
   text-align: left;
   position: relative;
+    background: #f6f6f6 center/cover no-repeat;
   span {
     position: absolute;
     bottom: 20px;
@@ -199,7 +198,7 @@ export default {
     position: relative;
     height: 350px;
     width: 268px;
-    background-color: #fde3e3;
+    background: #f6f6f6 center/cover no-repeat;
     span {
       border-top-right-radius: 20px;
       background-color: red;

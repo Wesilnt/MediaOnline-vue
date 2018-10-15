@@ -1,6 +1,6 @@
 <template>
   <div id="detailmain" ref="detailmain">
-    <GroupHeader></GroupHeader>
+    <GroupHeader />
     <!-- <img :src="visionDetail.coverPic" class="head" alt=""> -->
 
     <ScrollNavBar :bars="navBars" />
