@@ -4,7 +4,8 @@ import {
   getNewMessageCount,
   getVisionList,
   getVideoList,
-  getBookList
+  getBookList,
+  getAllList,
 } from '../../api/homeApi'
 const homeData = {
   namespaced: true,
@@ -26,10 +27,11 @@ const homeData = {
       await dispatch('getBannerList')
       dispatch('getNewMessageCount')
       // await dispatch('getFreeList')
-      dispatch('getVisionList')
+      // dispatch('getVisionList')
       commit('setLoading', false)
-      dispatch('getVideoList')
-      dispatch('getBookList')
+      // dispatch('getVideoList')
+      // dispatch('getBookList')
+      dispatch('getAllList')
     },
     async getBannerList({ commit }) {
       let result = await getBannerList({ type: 0 })
@@ -48,6 +50,12 @@ const homeData = {
       console.log(result)
       commit('setNewMessageCount', count)
       commit('setFromAvatarUrl', fromAvatarUrl)
+    },
+    async getAllList({commit}){
+      let result = await getAllList()
+      commit('setVisionList', result.visionList)
+      commit('setVideoList', result.videoList)
+      commit('setBookList', result.bookList)
     },
     async getVisionList({ commit }) {
       let result = await getVisionList()

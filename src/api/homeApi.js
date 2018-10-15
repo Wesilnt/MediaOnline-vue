@@ -5,6 +5,9 @@ function getList(params) {
   return request(`/index/getCourseIndexBOList?${stringify(params)}`)
 }
 
+export function getAllList(){
+  return request('/index/getCourseIndexBOList')
+}
 export function getFreeList(params) {
   return request(`/index/getFreeLessonList?${stringify(params)}`)
 }
