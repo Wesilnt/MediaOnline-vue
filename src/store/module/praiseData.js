@@ -51,7 +51,7 @@ export default {
         state.timerInterval = timerInterval
         state.rollerInterval = rollerInterval
         state.remainTime = remainTime
-        if(Date.now()-time>5000){
+        if(Date.now()-state.time>6000){
           state.rollerFlag = !state.rollerFlag
           state.time= Date.now()
         }
@@ -112,7 +112,7 @@ export default {
         seconds = seconds < 10 ? '0' + seconds : seconds
         let remainTime = '距离结束还有:' + hours + '时' + minutes + '分' + seconds + '秒'
         totalTime -= 1
-        commit('setTimerInterval', { timerInterval, rollerInterval,isEnded: totalTime <= 0,remainTime})
+        commit('setTimerInterval', { timerInterval, isEnded: totalTime <= 0,remainTime})
         }, 1000)
       //
     },
