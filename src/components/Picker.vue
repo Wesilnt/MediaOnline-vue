@@ -52,8 +52,7 @@ export default {
     background-color: white;
 }
 .van-picker__confirm {
-    color:white;
-    background-color: #ffa32f;
+    color:#ffa32f;
     border-radius: 5px;
     margin-bottom: 20px;
 }
