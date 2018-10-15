@@ -23,7 +23,7 @@ export default {
       showQrcode:true,
       shareUrl: this.$route.query.shareUrl,
       type: this.$route.query.sharetype,
-      courseId: this.$route.params.courseId,
+      courseId: this.$route.query.courseId,
       centerX: 355 / 2, //canvas中心X坐标
       canvasW: 750, //canvas宽度
       canvasH: 1334, //canvas高度

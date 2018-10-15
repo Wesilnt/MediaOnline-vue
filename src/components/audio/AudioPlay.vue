@@ -69,7 +69,7 @@
       </div>
     </van-popup>
     <!-- 分享框 -->
-    <share-pop :show="showShare" @close="closeShare" :shareInfo="shareData" />
+    <share-pop :show="showShare" @close="closeShare" :courseId="courseId" />
      <!--loading-->
      <div class="loading-container" v-show="isLoading == 'waiting'">
         <van-loading color="white" />

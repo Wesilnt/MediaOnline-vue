@@ -8,8 +8,7 @@ import {
   startCollectLike,
   joinCollectLike,
   getColumnDetail
-} from '../../api/praiseApi'
-import { WECHAT_SUBSCRIPTION_URL } from './../../utils/config'
+} from '../../api/praiseApi' 
 export default {
   namespaced: true,
   state: {

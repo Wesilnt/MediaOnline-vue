@@ -102,15 +102,15 @@ export default {
     },
     onRight() {
       if (0 == this.state) { 
-        let params = { courseId:  this.courseid,collectLikeId :this.collectlikeid, }
+        // let params = { courseId:  this.courseid,collectLikeId :this.collectlikeid, }
         //分享海报
         //专栏类型columnType：  FreeZone 免费专区 OnlineCourse 在线课堂  OnlineVision 在线视野  Readings 读书会
         this.$router.push({
-          name: 'PraiseActive',
-          params,
+          name: 'SharePoster',
+          params:{},
           query: {
                   // shareUrl:`${this.url}#/praise/active/${this.courseid}/${this.collectlikeid}?columnType=${this.columntype}`,
-                  columnType:this.columnType
+                  courseId:this.courseid
                  }
         })
       }

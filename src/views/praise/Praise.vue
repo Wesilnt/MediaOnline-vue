@@ -49,7 +49,7 @@
     <!-- 集赞说明框 -->
     <PraiseExplain v-if="showExplain" @close="closeExplain"/>
     <!-- 分享框 --> 
-    <share-pop :show="showShare" @close="closeShare" :sharetype="'praise'" :shareInfo="shareData" :shareid="collectLikeId"/> 
+    <share-pop :show="showShare" @close="closeShare" :sharetype="'praise'" :courseId="courseId" :shareid="collectLikeId"/> 
   </div>
 </template>
 <script>
