@@ -67,8 +67,7 @@ export default {
   padding-top: 10px;
   // width: 100vw;
 }
-.nodata-container { 
-  width: 100vw;
+.nodata-container {  
   text-align: center;
   line-height: 30vh;
   font-size: 20px;

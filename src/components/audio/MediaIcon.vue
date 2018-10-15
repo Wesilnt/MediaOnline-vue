@@ -1,9 +1,10 @@
 <template>
   <div v-show="forceHidenFloat&&showFloat" ref="mediaIcon" class="media-icon-container" :style="{left:x,top:y}">
      <!-- <canvas width="68" height="68" ref="canvasArc"/> -->
-     <div class="image-icon-container" v-lazy:background-image ="coverPic">
+     <div class="image-icon-container" v-lazy:background-image ="`${coverPic}?imageView2/1/w/100/h/100/format/jpg/q/50`">
        <div class="icon-mask"></div>
-       <img :src="`${this.isPlaying?require('../../assets/images/audio_play_play.png'):require('../../assets/images/audio_play_pause.png')}`" class="play-icon">
+       <img :src="`${this.isPlaying?require('../../assets/images/audio_play_play.png')
+                                   :require('../../assets/images/audio_play_pause.png')}`" class="play-icon">
      </div>
      <van-circle
         class="circle_container"
