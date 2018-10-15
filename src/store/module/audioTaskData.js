@@ -44,6 +44,7 @@ export default {
     },
     //音频播放同步方法
     syncPlay(state, params) {
+      const {paused}=state._at 
       if (params)  {
         state._at.src = params.audioUrl
         state.columnType = params.columnType || state.columnType
@@ -55,7 +56,7 @@ export default {
         state.currentTime = state._at.currentTime = parseFloat(currentTime)
         state.maxTime = JSON.parse(localCache).maxTime
       }
-      state._at.play()
+      paused && state._at.play()
     },
     //音频播放同步方法
     syncPause(state) {
@@ -63,6 +64,8 @@ export default {
     },
     //音频播放同步方法
     seekTo(state, progress) {  
+      console.log("progress:",progress)
+      if(isNaN(progress))return
       state.currentTime = progress
       state._at.currentTime = progress 
     },
@@ -130,7 +133,7 @@ export default {
     //下一集
     async playNext({ state, dispatch }) {
       let nextId = state.audioDetail.nextLessonId
-      if (nextId) {
+      if (nextId&&-1!=nextId) {
         dispatch('asyncPlay', { lessonId: state.audioDetail.nextLessonId })
       } else {
         // Toast('已经是最后一条')
@@ -139,7 +142,7 @@ export default {
     //上一集
     async playPre({ state, dispatch }) {
       let preId = state.audioDetail.preLessonId
-      if (preId) {
+      if (preId&&-1!=preId) {
         dispatch('asyncPlay', { lessonId: state.audioDetail.preLessonId })
       } else {
         // Toast('这是第一条')
@@ -184,7 +187,7 @@ export default {
           commit('syncPlay', { audioUrl: state.audioDetail.audioUrl })
         }
         if (state.playMode == 'order') {
-          data.currentTime = state._at.duration+1
+          data.currentTime = 0
           dispatch('playNext') //播放下一集
         }
         localStorage.setItem('learntime-' + state.audioDetail.id,JSON.stringify(data))

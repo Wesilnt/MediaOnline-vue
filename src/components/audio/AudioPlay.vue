@@ -126,8 +126,7 @@ export default {
   },
   created() {
     this.isInit = true
-    this.bindCourseName(this.courseName)
-    this.toggleFloatButton(false) //隐藏悬浮按钮
+    this.bindCourseName(this.courseName) 
     this.playAudio({ lessonId: this.lessonId, columnType: this.columnType })
     const { fullPath } = this.$route
     this.registerWxConfig({
@@ -179,7 +178,6 @@ export default {
       'seekTo',
       'pre',
       'next',
-      'toggleFloatButton',
       'bindCourseName' 
     ]),
     //拖动进度改变进度
@@ -245,7 +243,7 @@ export default {
       if (!this.audio) return
       let nextId = this.audio.nextLessonId
       if (nextId && -1 != nextId) {
-        this.pre({ lessonId: nextId })
+        this.next({ lessonId: nextId })
       } else {
         this.$toast.fail('已经是最后一条')
       }
@@ -273,14 +271,18 @@ export default {
   /**
    * 监听页面离开，设置本页面是否缓存起来， 如果跳转到评论页面, 设置本页面router:meta.keepAlive = true, 否则 = false
    */
-  beforeRouteLeave(to, from, next) {
-    this.toggleFloatButton(from.name == 'AudioPlay') //隐藏悬浮按钮
+  beforeRouteLeave(to, from, next) {  
     // 设置下一个路由的 meta
     from.meta.keepAlive = to.name === 'AudioCmts' // 让 頁面缓存，即不刷新
     next()
   },
-  beforeDestroy() {
-    //  this.toggleFloatButton(true)  //隐藏悬浮按钮
+  
+  /**
+   * 监听页面进入，设置本页面是否缓存起来， 如果跳转到评论页面, 设置本页面router:meta.keepAlive = true, 否则 = false
+   */
+  beforeRouteEnter(to, from, next) {   
+    from.meta.keepAlive = to.name === 'AudioCmts' // 让 頁面缓存，即不刷新
+    next()
   }
 }
 </script>

@@ -1,5 +1,6 @@
 <template>
   <div v-show="forceHidenFloat&&showFloat" ref="mediaIcon" class="media-icon-container" :style="{left:x,top:y}">
+  
      <!-- <canvas width="68" height="68" ref="canvasArc"/> -->
      <div class="image-icon-container" v-lazy:background-image ="`${coverPic}?imageView2/1/w/100/h/100/format/jpg/q/50`">
        <div class="icon-mask"></div>
@@ -22,7 +23,7 @@
 </template>
 <script>
 import { createNamespacedHelpers } from 'vuex' 
-const { mapState, mapGetters } = createNamespacedHelpers('audiotaskData')
+const { mapState, mapGetters ,mapMutations} = createNamespacedHelpers('audiotaskData')
 export default {
   data() {
     return {
@@ -52,6 +53,7 @@ export default {
   , 'columnType'
   , 'courseName'])},
   methods: {
+    ...mapMutations(['setFloatButton']),
     //触摸开始
     _touchStart: function(e) {
       this.startTime = new Date().getTime()
@@ -145,8 +147,10 @@ export default {
       this._ctx.stroke()
       this._ctx.closePath()
     },
+    
   },
   mounted() { 
+    if(this.$route.path)
     this.$refs.mediaIcon.addEventListener('touchstart', this._touchStart, true)
     this.$refs.mediaIcon.addEventListener('touchmove', this._touchMove, true)
     this.$refs.mediaIcon.addEventListener('touchend', this._touchEnd, true)
@@ -166,16 +170,20 @@ export default {
     // if(window.devicePixelRatio){
     //   this._ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
     // }
-  },
+  }, 
   watch:{
     isPlaying:function(value){
       // this._togglePlay(value)
       return value
     },
     currentTime: function(value) {
+      // console.log(this.$route.path)
       // this._setProgress(this.currentTime,this.maxTime)
       this.progress = value*100/this.maxTime;
       return value
+    },
+    $route(to) {
+      this.setFloatButton(!to.path.includes('/audio/audioplay'))
     }
   }
 }

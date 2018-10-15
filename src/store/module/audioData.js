@@ -70,11 +70,11 @@ export default {
       dispatch('audiotaskData/playNext', params, { root: true })
     },
     //上一集
-    async pre({ commit }, params) {
+    async pre({ dispatch }, params) {
       dispatch('audiotaskData/playPre', params, { root: true })
     },
     //悬浮按钮是否显示
-    toggleFloatButton({commit},isShow){ 
+    async toggleFloatButton({commit},isShow){ 
       commit('audiotaskData/setFloatButton', isShow, { root: true })
     },
     //绑定专栏名

@@ -23,7 +23,12 @@ export default {
   },
   methods: {
     ...mapActions(['initAudio'])
-  }
+  },
+   watch: {
+    $route(to) {
+      console.log("app.vue",to)
+    }
+  },
 }
 </script>
 <style lang="scss">
