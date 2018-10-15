@@ -1,5 +1,6 @@
 import { getMyUserInfo } from '../../api/myApi'
 import { postUserInfo } from '../../api/myApi'
+import store from "../store";
 const userInfoData = {
   namespaced: true,
   state: {
@@ -22,16 +23,11 @@ const userInfoData = {
   },
   actions: {
     async getMyUserInfo({ dispatch, commit, state }) {
-      await commit('toggleLoading', {
-        loading: true
-      })
-      const response = await getMyUserInfo()
+      const response = await store.dispatch('getUserInfo')
+      // console.log(response)
       await commit({
         type: 'saveUserInfo',
         userInfo: response
-      })
-      commit('toggleLoading', {
-        loading: false
       })
     },
     async updateUserInfo({ dispatch, commit, state }, { role, gender, grade }) {
