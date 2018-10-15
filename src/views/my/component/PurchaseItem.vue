@@ -2,7 +2,7 @@
   <div class="purchase-item">
     <div class="qhht-flex">
       <h3 class="purchase-item-title">{{title}}</h3>
-      <span @click="displayMore">{{list.length > 3 ? '已展示全部': `查看全部${list.length}个`}}</span>
+      <span @click="displayMore">{{list.length > 3 ? '已展示全部': `查看全部${total}个`}}</span>
     </div>
     <ul :class="{'display-grid':grid}">
       <li v-for="item in list" :key="item.id" class="qhht-flex purchase-list-cell" @click="routerToDetail(item)">
