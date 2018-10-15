@@ -9,7 +9,7 @@
                 <div class="purchase-head-btn-sort">{{purchaseSortType[orderBy]}}</div>
                 <i class="purchase-head-btn-listDisplay" :class="{gridDisplay:isGridDisplay}" @click="handleMenuToggle"></i>
             </div>
-            <PurchaseItem  v-for="list in Object.entries(lists)" :key="list[0]" :title="purchaseQueryType[list[0]]" :total="totalCounts[list[0]]" :list="list[1]" :grid="isGridDisplay" :type="list[0]"/>
+            <PurchaseItem  v-for="list in Object.entries(lists)" :key="list[0]" :title="purchaseQueryType[list[0]]" :total="totalCounts[list[0]]" :list="list[1]" :grid="isGridDisplay" :type="list[0]" v-on:toggle="toggle"/>
         </div>
     </section>
 </template>
@@ -18,6 +18,7 @@
 import { createNamespacedHelpers } from 'vuex'
 import PurchaseItem from './component/PurchaseItem'
 import { purchaseQueryType, purchaseSortType } from '../../utils/config'
+import {log} from "../../store/module/typeData";
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
   'myPurchaseData'
 )
@@ -49,7 +50,15 @@ export default {
     getAllPurchase: function() {
       const { orderBy } = this
       Object.keys(purchaseQueryType).forEach(type => {
-        this.queryListItem({ orderBy, type })
+        this.queryListItem({ orderBy, type, currentPage:1, pageSize:3 })
+      })
+    },
+    toggle: function({currentType, currentPage, pageSize}) {
+      const { orderBy } = this
+      Object.keys(purchaseQueryType).forEach(type => {
+        if(type === currentType) {
+          this.queryListItem({orderBy, type, currentPage, pageSize})
+        }
       })
     },
     handleSortToggle: function() {

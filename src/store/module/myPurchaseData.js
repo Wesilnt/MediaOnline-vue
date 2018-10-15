@@ -30,12 +30,12 @@ const myPurchaseData = {
     }
   },
   actions: {
-    async queryListItem({ dispatch, commit, state }, { type, orderBy }) {
+    async queryListItem({ dispatch, commit, state }, { type, orderBy, currentPage , pageSize }) {
       const response = await getMyPurchase({
         type,
         orderBy,
-        currentPage: 1,
-        pageSize: 3
+        currentPage,
+        pageSize
       })
       const { totalCount, result: list } = response
       await commit({

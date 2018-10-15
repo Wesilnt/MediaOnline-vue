@@ -39,34 +39,22 @@ export default {
 
 <style lang="less">
 .van-picker {
-  height: 250px;
+  height: 300px;
 }
 .van-hairline--top-bottom van-picker__toolbar {
     padding-bottom: 10px;
 }
 .van-picker__cancel {
-    margin: 5px 10px 0px 10px;
-    border-radius: 5px;
-    background-color: white;
+    height: 20px;
     color:#ffa32f;
     border: 0.3px solid #ffa32f;
+    border-radius: 5px;
+    background-color: white;
 }
 .van-picker__confirm {
-    background-color: #ffa32f;
-    margin: 5px 10px 0px 0px;
-    padding-bottom: 5px;
-    border-radius: 5px;
-    border-radius: 5px;
     color:white;
-
-}
-.van-picker__columns {
-    overflow: hidden;
-}
-.van-picker-column {
-    overflow: visible;
-}
-.van-picker-column__item {
-  width: 100vw;
+    background-color: #ffa32f;
+    border-radius: 5px;
+    margin-bottom: 20px;
 }
 </style>

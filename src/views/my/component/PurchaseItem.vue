@@ -2,7 +2,7 @@
   <div class="purchase-item">
     <div class="qhht-flex">
       <h3 class="purchase-item-title">{{title}}</h3>
-      <span>{{total>3?`查看全部${total}个`:'已展示全部'}}</span>
+      <span @click="displayMore">{{list.length > 3 ? '已展示全部': `查看全部${list.length}个`}}</span>
     </div>
     <ul :class="{'display-grid':grid}">
       <li v-for="item in list" :key="item.id" class="qhht-flex purchase-list-cell" @click="routerToDetail(item)">
@@ -22,11 +22,6 @@ import { courseType } from '../../../utils/config'
 export default {
   name: 'PurchaseItem',
   props: ['type', 'title', 'total', 'list', 'grid'],
-  data() {
-    return {
-      pic: ''
-    }
-  },
   methods: {
     onItemClick() {
       if (this.type === '1003' || this.type === '1007') {
@@ -42,7 +37,15 @@ export default {
     },
     routerToDetail({ id }) {
       this.$router.push({ path: `/${courseType[this.type]}${id}` })
-    }
+    },
+    displayMore() {
+      console.log(this.list.length + "\t" + this.type)
+      if (this.list.length > 3) {
+        this.$emit('toggle', {currentType: this.type, currentPage: 1, pageSize: 3})
+      } else {
+        this.$emit('toggle', {currentType: this.type, currentPage: 1, pageSize: 100 })
+      }
+    },
   }
 }
 </script>

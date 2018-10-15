@@ -3,17 +3,17 @@
         <div class="display-user-info-column" @click="handleUpdateUserInfo('gender')">
             <p class="display-user-info-column-label">性别</p>
             <p class="display-user-info-column-content">{{userInfo.gender === '0' ? '男': '女'}}</p>
-            <img class="display-user-info-column-image-arraw" src="../../assets/images/onlinecourse_arrow_right.png"/>
+            <img class="display-user-info-column-image-arraw" :src="require('../../assets/images/onlinecourse_arrow_right.png')"/>
         </div>
         <div class="display-user-info-column" @click="handleUpdateUserInfo('grade')">
             <p class="display-user-info-column-label">年级</p>
             <p class="display-user-info-column-content">{{userInfo.grade|gradeFilter}}</p>
-            <img class="display-user-info-column-image-arraw" src="../../assets/images/onlinecourse_arrow_right.png"/>
+            <img class="display-user-info-column-image-arraw" :src="require('../../assets/images/onlinecourse_arrow_right.png')"/>
         </div>
         <div class="display-user-info-column" @click="handleUpdateUserInfo('phone')">
             <p class="display-user-info-column-label">手机号码</p>
             <p class="display-user-info-column-content">{{ userInfo.mobileNo === null ? '没有手机号码' : userInfo.mobileNo }}</p>
-            <img class="display-user-info-column-image-lock" src="../../assets/images/my_userinfo_lock.png"/>
+            <img class="display-user-info-column-image-lock" :src="require('../../assets/images/my_userinfo_lock.png')"/>
         </div>
         <Picker :columns="whichPicker ==='gender' ? genders : grades" :isShow="isShow" v-on:toggle="toggleConfirm" v-on:close="closePicker"/>
     </div>
