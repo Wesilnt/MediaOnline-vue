@@ -45,6 +45,7 @@ const homeData = {
       const result = await getNewMessageCount()
       const { count , fromAvatarUrl  } = result
       console.log(3)
+      console.log(result)
       commit('setNewMessageCount', count)
       commit('setFromAvatarUrl', fromAvatarUrl)
     },
@@ -60,8 +61,8 @@ const homeData = {
     },
     async getBookList({ commit }) {
       let result = await getBookList()
-      console.log(6)
-        commit('setBookList', result)
+      console.log(6) 
+      commit('setBookList', result)
     }
   },
   mutations: {
@@ -87,7 +88,7 @@ const homeData = {
       state.videoList = videoList
     },
     setBookList(state, bookList) {
-        if(bookList.length % 3 == 2|| 1 == bookList.length % 3) bookList =bookList.concat({})
+        if(bookList&&(bookList.length % 3 == 2|| 1 == bookList.length % 3)) bookList =bookList.concat({})
         state.bookList = bookList
     }
   }

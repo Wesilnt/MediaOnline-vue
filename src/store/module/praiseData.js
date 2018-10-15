@@ -85,6 +85,7 @@ export default {
       const res = await getCollectDetail(params)
       await dispatch('getUserInfo',null,{root:true})
       .then(user=>{
+        console.log("开始设置集赞信息",res)
         commit('bindUserInfo', user)
         dispatch('setShareInfo',{user, res})
       })
@@ -147,7 +148,7 @@ export default {
     //设置分享信息
     async setShareInfo({state,dispatch},{user, res}){
       let currentUser  =  user.id == res.starterUid
-      let title = `我是${user.nickName}, ${currentUser?'我想免费':'正在帮朋友'}领取《${res.course.courseName}》,求助攻~` 
+      let title = `我是${user.nickName}, ${currentUser?'我想免费':'正在帮朋友'}领取《${res.course.name}》,求助攻~` 
       //拼装分享内容
       let shareData = {
         link:  window.location.href.split('#')[0]+`/#/praise/active/${res.course.courseId}/${res.id}?columnType=${state.columnType}`,
