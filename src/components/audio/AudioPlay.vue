@@ -1,5 +1,5 @@
 <template>
-  <div class="lazy-img-most audioplay-container" v-lazy:background-image="audio.coverPic">
+  <div class="lazy-img-most audioplay-container" v-lazy:background-image="`${audio.coverPic}?imageView2/1/w/750/h/750/format/webp/interlace/1`">
     <!-- 封面 -->
     <div class="controller-container">
       <!-- 主，副标题 -->
@@ -91,8 +91,17 @@
 </template>
 <script>
 import SharePop from '../share/Share.vue'
-import { createNamespacedHelpers ,mapState as rootState, mapActions as rootActions} from 'vuex'
-const { mapState,mapMutations, mapActions, mapGetters } = createNamespacedHelpers('audiotaskData/audioData')
+import {
+  createNamespacedHelpers,
+  mapState as rootState,
+  mapActions as rootActions
+} from 'vuex'
+const {
+  mapState,
+  mapMutations,
+  mapActions,
+  mapGetters
+} = createNamespacedHelpers('audiotaskData/audioData')
 
 export default {
   components: { 'share-pop': SharePop },
@@ -101,14 +110,14 @@ export default {
       shareData: null, //分享数据
       lessonId: this.$route.params.id,
       hiddenDraft: this.$route.query.hiddenDraft,
-      playType: this.$route.query.playType,       //播放类型 FreeZone 免费专区  OnlineVision 在线视野  Readings 读书会
-      courseName: this.$route.query.courseName,   //专栏名
+      playType: this.$route.query.playType, //播放类型 FreeZone 免费专区  OnlineVision 在线视野  Readings 读书会
+      courseName: this.$route.query.courseName, //专栏名
       isInit: true,
-      play: true, 
-      popupVisible: false, //是否显示音频列表弹框 
+      play: true,
+      popupVisible: false, //是否显示音频列表弹框
       showShare: false, //是否显示分享框
       touching: false, //slider触摸
-      progress: 0,     
+      progress: 0
     }
   },
   computed: {
@@ -138,48 +147,55 @@ export default {
     ])
   },
   created() {
-    this.isInit = true 
+    this.isInit = true
     this.bindCourseName(this.courseName)
-    this.toggleFloatButton(false)  //隐藏悬浮按钮
-    this.playAudio({ lessonId: this.lessonId ,playType:this.playType})
+    this.toggleFloatButton(false) //隐藏悬浮按钮
+    this.playAudio({ lessonId: this.lessonId, playType: this.playType })
     const { fullPath } = this.$route
-    this.registerWxConfig({fullPath,jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline']})
+    this.registerWxConfig({
+      fullPath,
+      jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline']
+    })
   },
-  mounted(){  
-     this.getUserInfo()
-    .then(user=>{ 
+  mounted() {
+    this.getUserInfo().then(user => {
       let link = ''
-      switch (this.playType) { 
+      switch (this.playType) {
         case 'OnlineVision':
-          link = this.url +`/#/home/visionDetail/${this.courseId}`
+          link = this.url + `/#/home/visionDetail/${this.courseId}`
           break
         case 'Readings':
-           link=this.url + `/#/home/readings/book/${this.courseId}`
-          break 
-      } 
+          link = this.url + `/#/home/readings/book/${this.courseId}`
+          break
+      }
       //拼装分享内容
       this.shareData = {
-        link, 
+        link,
         title: `${this.courseName}`,
         desc: '你一定会爱上国学课...',
-        successCB: () => console.log('分享回调成功') ,
-        cancelCB: () =>  this.$toast('分享回调失败')
-      } 
+        successCB: () => console.log('分享回调成功'),
+        cancelCB: () => this.$toast('分享回调失败')
+      }
       this.setWxShareFriend(this.shareData)
       this.setWxShareZone(this.shareData)
-    }) 
+    })
   },
   watch: {
     audioId: function(id) {
       this.lessonId = id
     },
     currentTime: function(value) {
-      this.progress = (value * 100) / this.maxTime 
+      this.progress = (value * 100) / this.maxTime
       return value
     }
   },
   methods: {
-      ...rootActions(['getUserInfo','registerWxConfig', 'setWxShareFriend', 'setWxShareZone']), 
+    ...rootActions([
+      'getUserInfo',
+      'registerWxConfig',
+      'setWxShareFriend',
+      'setWxShareZone'
+    ]),
     ...mapActions([
       'getAudioDetail',
       'postFavorite',
@@ -192,7 +208,7 @@ export default {
       'next',
       'toggleFloatButton',
       'bindCourseName'
-    ]), 
+    ]),
     //拖动进度改变进度
     onInputChange(e) {
       this.progress = e.target.value
@@ -223,15 +239,21 @@ export default {
     },
     //查看文稿
     onDraft() {
-      this.$router.push({name: 'AudioDraft',params: { lessonid: this.lessonId }})
+      this.$router.push({
+        name: 'AudioDraft',
+        params: { lessonid: this.lessonId }
+      })
     },
     //评论
     toComment() {
-      this.$router.push({name: 'AudioCmts',params: { lessonid: this.lessonId }})
+      this.$router.push({
+        name: 'AudioCmts',
+        params: { lessonid: this.lessonId }
+      })
     },
     //分享
-    onShare() { 
-      this.showShare = true 
+    onShare() {
+      this.showShare = true
     },
     //分享框关闭
     closeShare() {
@@ -278,21 +300,25 @@ export default {
     //列表Item点击事件
     onItemClick(audio) {
       this.isInit = true
-      this.popupVisible = false 
-      this.$router.push({ name: 'AudioPlay',params: { id: audio.id },query:{playType:this.playType}})
+      this.popupVisible = false
+      this.$router.push({
+        name: 'AudioPlay',
+        params: { id: audio.id },
+        query: { playType: this.playType }
+      })
       this.playAudio({ lessonId: audio.id })
     }
   },
   /**
    * 监听页面离开，设置本页面是否缓存起来， 如果跳转到评论页面, 设置本页面router:meta.keepAlive = true, 否则 = false
    */
-  beforeRouteLeave(to, from, next) {  
-      this.toggleFloatButton(from.name =='AudioPlay')  //隐藏悬浮按钮
-     // 设置下一个路由的 meta
-      from.meta.keepAlive = (to.name === 'AudioCmts')  // 让 頁面缓存，即不刷新
-      next()
+  beforeRouteLeave(to, from, next) {
+    this.toggleFloatButton(from.name == 'AudioPlay') //隐藏悬浮按钮
+    // 设置下一个路由的 meta
+    from.meta.keepAlive = to.name === 'AudioCmts' // 让 頁面缓存，即不刷新
+    next()
   },
-  beforeDestroy(){
+  beforeDestroy() {
     //  this.toggleFloatButton(true)  //隐藏悬浮按钮
   }
 }
@@ -324,7 +350,6 @@ export default {
     margin: 40px 0 0 0;
   }
   h4 {
-
     line-height: 24px;
     color: rgb(118, 118, 118);
     text-align: center;
@@ -411,24 +436,26 @@ export default {
       width: 32px;
       transform: translateY(0px);
       /*background: none repeat scroll 0 0 #5891f5;*/
-      background: url(../../assets/images/audio_play_slider.png) center/32px no-repeat;
+      background: url(../../assets/images/audio_play_slider.png) center/32px
+        no-repeat;
       border-radius: 15px;
       // border: 5px solid #006eb3;
       /*-webkit-box-shadow: 0 -1px 1px #fc7701 inset;*/
     }
     .van-slider {
-      background-color: #E5E5E5;
+      background-color: #e5e5e5;
       /deep/.van-slider__bar {
         max-width: 100%;
       }
       .van-slider__button {
-        background: url(../../assets/images/audio_play_slider.png) center/18px no-repeat;
+        background: url(../../assets/images/audio_play_slider.png) center/18px
+          no-repeat;
         border-radius: 15px;
         width: 18px;
         height: 18px;
       }
-      .van-slider__bar{
-        background-color: #FFCD7D;
+      .van-slider__bar {
+        background-color: #ffcd7d;
       }
     }
   }
@@ -445,7 +472,7 @@ export default {
       img {
         vertical-align: middle;
         margin: 0;
-        width: 50px; 
+        width: 50px;
       }
     }
     .btn-item:nth-child(2) {
@@ -464,14 +491,14 @@ export default {
       // padding: 26px 35px;
       img {
         margin-left: 4px;
-        width: 30px; 
+        width: 30px;
       }
     }
     .play-btn-active {
       // padding: 26px 35px;
       img {
         margin-left: 4px;
-        width: 20px; 
+        width: 20px;
       }
     }
   }
@@ -588,18 +615,18 @@ export default {
   width: 28px;
 }
 //loading框
-.loading-container{
-   position: fixed;
-   z-index: 9999;
-   width: 180px;
-   height: 180px;
-   top: 50%;
-   left: 50%;
-   display: flex;
-   justify-content: center;
-   align-items: center;
-   transform: translate(-50%,-50%);
-   background-color: rgba($color: #000000, $alpha: 0.5);
-   border-radius: 5px;
+.loading-container {
+  position: fixed;
+  z-index: 9999;
+  width: 180px;
+  height: 180px;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: translate(-50%, -50%);
+  background-color: rgba($color: #000000, $alpha: 0.5);
+  border-radius: 5px;
 }
 </style>

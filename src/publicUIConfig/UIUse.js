@@ -56,6 +56,6 @@ Vue.use(Lazyload, {
   error: loading,
   loading: loading,
     lazyComponent: true,
-    attempt:1
+    // attempt:1
 })
 Vue.use(PullRefresh)
