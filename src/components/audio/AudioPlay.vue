@@ -231,29 +231,7 @@ export default {
     },
     //分享
     onShare() { 
-      this.getUserInfo()
-      .then(user=>{
-        let link = ''
-          switch (this.playType) { 
-            case 'OnlineVision':
-              link = this.url +`/home/visionDetail/${this.courseId}`
-              break
-            case 'Readings':
-              link=this.url + `/home/readings/book/${this.courseId}`
-              break 
-          } 
-          //拼装分享内容
-          this.shareData = {
-            link: this.url + `/#/audio/audioplay/${this.lessonId}`, 
-            title: `我是${user.nickName}, 我想免费领取《${this.courseName}》,来帮我点赞吧`,
-            desc: '你一定会爱上国学课...',
-            successCB: () => console.log('分享回调成功') ,
-            cancelCB: () =>  this.$toast('分享回调失败')
-          } 
-          this.setWxShareFriend(this.shareData)
-          this.setWxShareZone(this.shareData)
-          this.showShare = true
-      })
+      this.showShare = true 
     },
     //分享框关闭
     closeShare() {

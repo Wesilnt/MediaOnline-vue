@@ -132,17 +132,17 @@ export default {
     },
     //设置分享参数
     onShare() {
-     this.getUserInfo()
-      .then(user=>{
-        //显示分享框
-        this.showShare = true
-        //拼装分享内容
-        this.shareData = {
-          link:  `/#/praise/active/${this.courseId}/${this.collectLikeId}?columnType=${this.columnType}`,
-          title: `我是${user.nickName}, 我想免费领取《${this.praiseDetail?this.praiseDetail.course.name:'国学课'}》,求助攻~`,
-          desc: '你一定会爱上国学课...',
-        }
-      }) 
+      //显示分享框
+      this.showShare = true
+    //  this.getUserInfo()
+    //   .then(user=>{
+    //     //拼装分享内容
+    //     this.shareData = {
+    //       link:  `/#/praise/active/${this.courseId}/${this.collectLikeId}?columnType=${this.columnType}`,
+    //       title: `我是${user.nickName}, 我想免费领取《${this.praiseDetail?this.praiseDetail.course.name:'国学课'}》,求助攻~`,
+    //       desc: '你一定会爱上国学课...',
+    //     }
+    //   }) 
     },
     closeShare() {
       //关闭分享框
