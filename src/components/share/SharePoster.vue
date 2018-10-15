@@ -42,7 +42,7 @@ export default {
               ...mapState(['loading', 'user','poster']) 
             },
   created(){
-         console.log("this.shareUrl ============ ",this.shareUrl)
+       console.log("this.shareUrl ============ ",this.shareUrl)
        console.log("this.columnType:",this.columnType) 
      //1. 传入分享地址
      if(this.shareUrl) return  

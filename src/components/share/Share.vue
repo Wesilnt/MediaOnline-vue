@@ -95,9 +95,9 @@ export default {
     toPoster(){
      this.$router.push({
      name: 'SharePoster',
-     query: { 
-              shareUrl:( this.url + `#/praise/active?columnType=${this.columntype}`) || '/#/home'
-            }
+    //  query: { 
+    //           shareUrl:( this.url + `#/praise/active?columnType=${this.columntype}`) || '/#/home'
+    //         }
       })
     },
     onCancel() {
