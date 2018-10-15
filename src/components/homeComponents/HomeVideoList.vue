@@ -1,6 +1,6 @@
 <template>
     <div class="home_video_bottom">
-        <VideoCell :video="item"  v-for="(item, index) in videoList" :key="index" />
+        <VideoCell v-for="item in videoList" :key="item.id" :video="item"/>
     </div>
 </template>
 

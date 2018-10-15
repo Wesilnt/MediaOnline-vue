@@ -42,9 +42,9 @@ export default {
   top: 0;
   right: 0;
   transform: none;
-  & ~ .van-modal {
+}
+.popup-modal-white {
     background-color: #fff;
-  }
 }
 .videobox {
   /*width: 4.78rem;*/

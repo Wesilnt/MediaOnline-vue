@@ -21,11 +21,11 @@ export default {
       isExpand: false,
       imgDown: {
         backgroundImage:
-          'url(' + require('../assets/images/onlinecourse_arrow_down.png') + ')'
+          'url(' + require('../assets/images/arrow_down.png') + ')'
       },
       imgUp: {
         backgroundImage:
-          'url(' + require('../assets/images/onlinecourse_arrow_up.png') + ')'
+          'url(' + require('../assets/images/arrow_up.png') + ')'
       }
     }
   },

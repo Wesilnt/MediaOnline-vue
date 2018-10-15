@@ -72,11 +72,11 @@ export default {
   top: 0;
   width: 100px;
   height: 100px;
-  background-image: url('../../../assets/images/onlinecourse_play_ic_pause.png');
+  background-image: url('../../../assets/images/icon_pause_shadow.png');
   background-size: 36px;
   &.playItem-item-badge-active {
     background-size: 48px;
-    background-image: url('../../../assets/images/onlinecourse_ic_playing.png');
+    background-image: url('../../../assets/images/icon_playing_shadow.png');
   }
 }
 .playItem-content {

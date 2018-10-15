@@ -8,7 +8,7 @@
           :immediate-check="false"
           @load="scrollBottom"
           @offset="10">
-            <videolistitem v-for="item of columns" :key="item.id" :iteminfo="item" @jumpEvent="jumpToVideoDetail(item.id)"/>
+            <VideoCell   v-for="item in columns" :key="item.id" :video="item"/>
         </van-list>
         <!-- <div class="home-video">
             <videolistitem v-for="item of columns" :key="item.id" :iteminfo="item" @jumpEvent="jumpToVideoDetail(item.id)"/>
@@ -17,7 +17,7 @@
     </div>
 </template>
 <script>
-import videoListItem from './components/videoListItem.vue'
+import VideoCell from '../../components/homeComponents/VideoCell'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState, mapActions } = createNamespacedHelpers('columnInfoData')
 export default {
@@ -42,19 +42,13 @@ export default {
     ])
   },
   components: {
-    videolistitem: videoListItem
+    VideoCell
   },
   created() {
     this.getColumnList({ type: 1005, pageSize: 10, currentPage: 1 })
   },
   methods: {
     ...mapActions(['getColumnList']),
-    //点击具体的一个视频专栏
-    jumpToVideoDetail(courseId) {
-      console.log('路由跳转 courseID = ' + courseId)
-      let obj = { name: 'videoColumnDetail', params: { courseId } }
-      this.$router.push(obj)
-    },
     scrollBottom() {
       this.getColumnList({ type: 1005, pageSize: 10 })
     }
@@ -73,7 +67,7 @@ export default {
   }
 }
 .home-video {
-  padding: 0 40px;
+  padding: 0 28px;
 }
 .home-warnTip {
   text-align: center;

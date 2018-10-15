@@ -1,8 +1,6 @@
 <template>
   <ul class="qhht-flex header">
-    <li  class="qhht-icon headertitle-icon">
-    </li>
-    <li class="headertitle">
+    <li class="header-title">
       {{title}}
     </li>
     <li @click="enterList">{{subtitle}}</li>
@@ -23,18 +21,26 @@ export default {
 <style lang="less" scoped>
 .header {
   // border-top: 2px solid #F1F1F1;
-  padding: 48px 0 30px;
+  margin: 48px 0 30px;
 }
-.headertitle {
+.header-title {
+  position: relative;
   font-size: 36px;
-  color: rgb(39, 51, 75);
   font-weight: bolder;
   flex-grow: 1;
-}
-.headertitle-icon {
-  width: 8px;
-  height: 33px;
-  background-image: url(../../assets/images/home_title_line.png);
-  margin-right: 20px;
+  padding-left: 20px;
+  color: #27334b;
+  &:before {
+    content: '';
+    position: absolute;
+    top:50%;
+    bottom: 0;
+    left: 0;
+    width: 8px;
+    height: 32px;
+    border-radius: 32px;
+    background-color: #ffa32f;
+    transform: translate(0,-50%);
+  }
 }
 </style>
