@@ -23,7 +23,8 @@ export default {
     timerInterval: null, //倒计时定时器
     pageBgUrl: '',
     courseName: '',
-    columnType: 'Readings'
+    columnType: 'Readings',
+    time:0
   },
   mutations: {
     bindPraiseDetail(state, res) {
@@ -50,6 +51,10 @@ export default {
         state.timerInterval = timerInterval
         state.rollerInterval = rollerInterval
         state.remainTime = remainTime
+        if(Date.now()-time>5000){
+          state.rollerFlag = !state.rollerFlag
+          state.time= Date.now()
+        }
       }
     },
     //绑定集赞状态
@@ -93,7 +98,7 @@ export default {
       commit('bindPraiseDetail', res) 
       if (res.status != 1202) return
       await commit('destroyInterval')
-      let rollerInterval = setInterval(() => commit('setRollerInterval'), 7000)
+      // let rollerInterval = setInterval(() => commit('setRollerInterval'), 7000)
       let totalTime = res.duration * 3600 +  (res.createTime - res.sysTime) / 1000  
       let timerInterval = setInterval(() => {
         var hours = parseInt(totalTime / (60 * 60))
