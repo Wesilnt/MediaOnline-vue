@@ -426,7 +426,7 @@ export default {
   background-image: url('../assets/images/onlinecourse-tabbar-try.png');
   background-position-y: top;
   background-size: 40px;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 .under-text {
   font-size: 20px;

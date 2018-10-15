@@ -3,7 +3,7 @@
         <SkeletonFullScreen  v-show="loading"/>
         <div v-show="!loading" class="videocourse-detail-container" id="detailmain" ref="detailmain">
             <!-- 播放器封面 -->
-            <div class="video-detail-header lazy-img-most" v-lazy:background-image="`${coverPic|''}`">
+            <div class="video-detail-header lazy-img-most" v-lazy:background-image="`${coverPic}`">
                 <div class="video-detail-header-right-top">
                     <img :src="isLike?collectIcon:unCollectIcon" class="video-detail-collect" alt="" @click="onCollectFavorite">
                     <img :src="require('../../assets/images/onlinecourse-play_ic_share.png')" class="video-detail-share" alt="" @click="onShareAction">
@@ -20,7 +20,7 @@
                 <div id="desc" ref="desc" class="video-detail-sction-title">
                     <h4>笔记</h4>
                 </div>
-                <CourseIntroduce :courseinfo="subTitle" />
+                <CourseIntroduce :courseinfo="manuscript" />
             </div>
             <div class="video-detail-base" v-if="haveQuestionBOList">
                 <div class="video-detail-sction-title">
@@ -40,8 +40,7 @@
                 <div id="leaveMessage" ref="leaveMessage" class="video-detail-sction-title">
                     <h4>留言</h4>
                     <div class="video-detail-leavemessage" @click="toggleKeyboard(true)">
-                        <img src="../../assets/images/onlinecourse_video_detail_ic_editor.png" alt="">
-                        <span>我要留言</span>
+                        我要留言
                     </div>
                 </div>
                 <CommentList  :regionid="lessonId" :regiontype="2202" :haspadding="true" ></CommentList>
@@ -102,7 +101,7 @@ export default {
     Share,
     ScrollNavBar,
     CommentList,
-    SkeletonFullScreen, 
+    SkeletonFullScreen
   },
   data() {
     return {
@@ -158,7 +157,7 @@ export default {
       'courseId', //专栏ID
       'id', //单集ID
       'singleComments',
-      'subTitle', //笔记
+      'manuscript', //笔记
       'totalTime', //服务器返回的视频总长度
       'isFree',
       'isLike',
@@ -407,8 +406,7 @@ export default {
   left: 30px;
   bottom: 30px;
   width: 196px;
-  height: 60px;
-  line-height: 60px;
+  padding: 16px 0;
   border: 2px solid #fff;
   padding-left: 30px;
   text-align: center;
@@ -490,20 +488,11 @@ export default {
 }
 .video-detail-leavemessage {
   width: 220px;
-  height: 60px;
-  border-radius: 30px;
-  background-color: rgb(247, 247, 247);
-  display: flex;
-  align-items: center;
-  img {
-    width: 30px;
-    height: 30px;
-    margin: 16px 12px 16px 30px;
-  }
-
-  input {
-    font-size: 32px;
-    color: rgb(255, 163, 47);
-  }
+  border-radius: 80px;
+  padding: 8px 0 8px 70px;
+  background: #f7f7f7
+    url('../../assets/images/onlinecourse_video_detail_ic_editor.png') 30px
+    center/30px no-repeat;
+  color: #ffa32f;
 }
 </style>
