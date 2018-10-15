@@ -3,12 +3,12 @@
         <div class="display-user-info-column" @click="handleUpdateUserInfo('gender')">
             <p class="display-user-info-column-label">性别</p>
             <p class="display-user-info-column-content">{{userInfo.gender === '0' ? '男': '女'}}</p>
-            <img class="display-user-info-column-image-arraw" :src="require('../../assets/images/onlinecourse_arrow_right.png')"/>
+            <img class="display-user-info-column-image-arraw" :src="require('../../assets/images/arrow_right.png')"/>
         </div>
         <div class="display-user-info-column" @click="handleUpdateUserInfo('grade')">
             <p class="display-user-info-column-label">年级</p>
             <p class="display-user-info-column-content">{{userInfo.grade|gradeFilter}}</p>
-            <img class="display-user-info-column-image-arraw" :src="require('../../assets/images/onlinecourse_arrow_right.png')"/>
+            <img class="display-user-info-column-image-arraw" :src="require('../../assets/images/arrow_right.png')"/>
         </div>
         <div class="display-user-info-column" @click="handleUpdateUserInfo('phone')">
             <p class="display-user-info-column-label">手机号码</p>
