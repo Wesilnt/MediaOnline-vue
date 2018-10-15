@@ -62,9 +62,9 @@ export default {
       state._at.pause()
     },
     //音频播放同步方法
-    seekTo(state, progress) {
+    seekTo(state, progress) {  
       state.currentTime = progress
-      state._at.currentTime = progress
+      state._at.currentTime = progress 
     },
     // 播放进度更新
     timeUpdate(state) {

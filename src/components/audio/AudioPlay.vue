@@ -21,23 +21,10 @@
       <!-- 进度条 -->
       <div class="slider-container"> 
         <div slot="start">{{currentTime | formatDuring}}</div>
-      <!-- <input type="range" 
-        @input="onInputChange" 
-        :value="touching?progress:currentTime(touching,progress)" 
-        :min="0" 
-        :max="maxTime"  
-        :style="{background:touching
-        ?'linear-gradient(to right,#FFCD7D ' + parseInt(progress * 100 / maxTime) + '%,  #E5E5E5 1%, #E5E5E5'
-        : 'linear-gradient(to right,#FFCD7D ' + parseInt(currentTime(touching,progress) * 100 / maxTime) + '%,  #E5E5E5 1%, #E5E5E5'}"
-        @touchstart="handleTouchStart"
-        @touchcancel="handleTouchCancel"
-        @touchmove="handleTouchMove"
-        @touchend="handleTouchEnd"/> -->
         <van-slider style="width:80%;" 
           v-model="progress"
           :max="maxTime" 
           :min="0"
-          :step="100/maxTime" 
           bar-height="2px" 
           @change="onSliderChnage"/>
         <div slot="end">{{ maxTime | formatDuring}}</div>
@@ -112,12 +99,12 @@ export default {
       hiddenDraft: this.$route.query.hiddenDraft,
       playType: this.$route.query.playType, //播放类型 FreeZone 免费专区  OnlineVision 在线视野  Readings 读书会
       courseName: this.$route.query.courseName, //专栏名
-      isInit: true,
+      isInit: true, 
       play: true,
       popupVisible: false, //是否显示音频列表弹框
       showShare: false, //是否显示分享框
       touching: false, //slider触摸
-      progress: 0
+      progress: 0 ,     
     }
   },
   computed: {
@@ -207,27 +194,16 @@ export default {
       'pre',
       'next',
       'toggleFloatButton',
-      'bindCourseName'
+      'bindCourseName' 
     ]),
     //拖动进度改变进度
     onInputChange(e) {
       this.progress = e.target.value
-    },
+    },  
     onSliderChnage() {
-      this.seekTo(this.progress)
-    },
-    handleTouchStart(e) {
-      this.touching = true
-      console.log(e)
-    },
-    handleTouchMove() {},
-    handleTouchEnd(e) {
-      this.touching = false
-      this.seekTo(this.progress)
-    },
-    handleTouchCancel() {
-      this.touching = false
-    },
+      console.log("progress",this.progress)
+      this.seekTo(this.progress*this.maxTime/100)
+    }, 
     //收藏
     onCollect() {
       this.isInit = false
@@ -487,18 +463,21 @@ export default {
       background-color: #ff8a1f;
       border-radius: 50%;
       justify-content: center;
+      display: flex; 
+      align-items: center;
+
       // padding: 26px 29px 26px 30px;
-      // padding: 26px 35px;
+      // padding: 26px 35px; 
       img {
         margin-left: 4px;
-        width: 30px;
+        width: 30px; 
       }
     }
     .play-btn-active {
-      // padding: 26px 35px;
+      // padding: 26px 35px; 
       img {
         margin-left: 4px;
-        width: 20px;
+        width: 20px; 
       }
     }
   }
