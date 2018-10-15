@@ -23,7 +23,7 @@ export default {
       showQrcode:true,
       shareUrl: this.$route.query.shareUrl,
       type: this.$route.query.sharetype,
-      id: this.$route.params.id,
+      courseId: this.$route.params.courseId,
       centerX: 355 / 2, //canvas中心X坐标
       canvasW: 750, //canvas宽度
       canvasH: 1334, //canvas高度
@@ -52,8 +52,8 @@ export default {
        return
      }
      //3. 没有专栏详情 , 有专栏ID
-     if(this.id){
-        this.getColumnDetail({courseId:this.id}) 
+     if(this.courseId){
+        this.getColumnDetail({courseId}) 
         .then(()=>{
           this.setPosterConfig()    //设置分享地址
           this.drawBottomMap()      //重新生成图片
