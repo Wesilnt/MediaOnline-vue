@@ -11,7 +11,7 @@
                 <h4>课程列表 <label>(共{{lessonCount}}讲)</label></h4>
             </div>
             <videoBigimage :src="outlinePic"/>   
-            <!-- <img :src="require('../../../assets/images/onlinecourse_bigimage_search.png')" class="videocol-bigimage-search"> -->
+            <!-- <img :src="require('../../../assets/images/icon_zoom.png')" class="videocol-bigimage-search"> -->
         </div>
         <!-- 试看课程 -->
         <div class="videocol-base">
@@ -19,7 +19,7 @@
                 <h4>试看课程</h4>
                 <div class="videocol-all" @click="allFunc()">
                     <span class="videocol-allbtn">全部</span>
-                    <img :src="require('../../../assets/images/onlinecourse_arrow_right.png')" class="videocol-allbtn-icon">
+                    <img :src="require('../../../assets/images/arrow_right.png')" class="videocol-allbtn-icon">
                 </div>
             </div>
             <playlist v-for="(item,index) of freeLessonList" :key="item.id" :iteminfo="item" :lastindex="index === (freeLessonList.length - 1)" @jumpEvent="gotoVideoCourseDetailPage(item.id)"/>
@@ -30,7 +30,7 @@
                 <h4>精选留言</h4>
                 <div class="videocol-all" @click="allFunc">
                     <span class="videocol-allbtn">{{commentCount}}条</span>
-                    <img :src="require('../../../assets/images/onlinecourse_arrow_right.png')" class="videocol-allbtn-icon">
+                    <img :src="require('../../../assets/images/arrow_right.png')" class="videocol-allbtn-icon">
                 </div>
             </div>
             <CommentItem class="video-column-comment" v-for="(item,index) of commentsList" :key="index" :comment="item" :regiontype="2201"/>

@@ -38,8 +38,8 @@
   </div>
 </template>
 <script>
-import praised from '../../assets/images/cmt_praise_selected.png'
-import unPraise from '../../assets/images/cmt_praise_normal.png'
+import praised from '../../assets/images/icon_praise_selected.png'
+import unPraise from '../../assets/images/icon_praise_normal.png'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState, mapActions } = createNamespacedHelpers('commentData')
 export default {

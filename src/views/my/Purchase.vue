@@ -84,7 +84,7 @@ export default {
     border-bottom: 1px solid #e3e3e3;
     &-btn-sort {
       width: 150px;
-      background: url('../../assets/images/onlinecourse_arrow_down.png') right
+      background: url('../../assets/images/arrow_down.png') right
         center/30px no-repeat;
     }
     &-btn-listDisplay {

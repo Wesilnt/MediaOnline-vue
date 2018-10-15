@@ -1,5 +1,5 @@
 <template>
-    <div class="lazy-img-larger cl-videolist-container"  v-lazy:background-image="iteminfo.coverPicH" @click="$emit('jumpEvent')">
+    <div class="lazy-img-larger videolist-container"  v-lazy:background-image="iteminfo.coverPicH" @click="$emit('jumpEvent')">
         <p class="cl-videolist-item-title">{{iteminfo.name}}</p>
         <p>{{iteminfo.briefIntro}}</p>
         <p class="cl-videolist-item-teacher">
@@ -22,7 +22,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.cl-videolist-container {
+.videolist-container {
   position: relative;
   padding-top: 32px;
   padding-left: 36px;
@@ -39,7 +39,7 @@ export default {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-image: url('../../../assets/images/onlinecourse-video-course-play.png');
+  background-image: url('../../../assets/images/btn-play.png');
 }
 .cl-videolist-item-title {
   font-size: 32px;

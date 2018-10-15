@@ -9,7 +9,7 @@
       <div class="tab-container">
         <div class="tab-container-collect" @click="onCollect"
          :style="{backgroundImage:isLike
-         ? 'url('+require('../../assets/images/audio_love_collect.png')+')'
+         ? 'url('+require('../../assets/images/love_collect.png')+')'
          : 'url('+require('../../assets/images/audio_love_normal.png')+')'}">
         </div>
         <div v-if="'Readings'!=columnType" class="tab-container-draft" @click="onDraft"/>
@@ -38,7 +38,7 @@
           <img src="../../assets/images/audio_play_prv.png">
         </div>
         <div :class="{'play-btn-active':playing}" class="btn-item" @click="onPlayPause">
-          <img :src="playing?require('../../assets/images/audio_play_play.png'):require('../../assets/images/audio_play_pause.png')">
+          <img :src="playing?require('../../assets/images/audio_play_play.png'):require('../../assets/images/icon_pause.png')">
         </div>
         <div class="btn-item" @click="onPlayNext">
           <img src="../../assets/images/audio_play_next.png">
@@ -550,7 +550,7 @@ export default {
 
 .van-toast {
   /deep/.van-icon-success {
-    background-image: url('../../assets/images/audio_love_collect.png');
+    background-image: url('../../assets/images/love_collect.png');
     background-size: 28px;
     background-repeat: no-repeat;
     margin: 1px auto 12px;

@@ -4,7 +4,7 @@
      <div class="image-icon-container" v-lazy:background-image ="`${coverPic}?imageView2/1/w/100/h/100/format/jpg/q/50`">
        <div class="icon-mask"></div>
        <img :src="`${this.isPlaying?require('../../assets/images/audio_play_play.png')
-                                   :require('../../assets/images/audio_play_pause.png')}`" class="play-icon">
+                                   :require('../../assets/images/icon_pause.png')}`" class="play-icon">
      </div>
      <van-circle
         class="circle_container"
@@ -92,7 +92,7 @@ export default {
       if(this.isPlaying){
         playIcon.src =  require('../../assets/images/audio_play_play.png')
       }else{
-        playIcon.src =  require('../../assets/images/audio_play_pause.png')
+        playIcon.src =  require('../../assets/images/icon_pause.png')
       }
       playIcon.onload = ()=>{
         this._ctx.drawImage(playIcon,this.width/2-5, this.height/2-8, 10,16);
@@ -193,7 +193,7 @@ export default {
   padding: 12px;
   background-color: white;
   border-radius: 20px;
-    box-shadow: 0 0 12px rgba(255, 163, 47, 0.6);
+    box-shadow: 0 0 12px #f7f7f7;
   .circle_container{ 
      position: absolute;  
   }

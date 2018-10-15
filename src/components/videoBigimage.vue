@@ -2,7 +2,7 @@
   <div class="video-bigimage-container">
     <div class="originImage">
       <img :src="src" class="img" @click="isExtend=true">
-      <img :src="require('../assets/images/onlinecourse_bigimage_search.png')" class="videocol-bigimage-search" @click="isExtend=true">
+      <img :src="require('../assets/images/icon_zoom.png')" class="videocol-bigimage-search" @click="isExtend=true">
     </div>
     <transition enter-active-class="fadeIn" leave-active-class="fadeOut">
       <div v-if="isExtend&&src" class="imageExtend" @click="isExtend=false">

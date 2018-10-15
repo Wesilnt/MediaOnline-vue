@@ -2,7 +2,7 @@
     <div class="singleset-item-container" tag="div" @click="onItemClick(item)">
       <div class="item-content">
         <div :class="{'icon-playing':playing}" class="item-icon" v-lazy:background-image="`${item.coverPic}?imageView2/1/w/100/h/100/format/jpg/q/50`">
-          <img :src="playing?require('../assets/images/readings_detail_play.png'):require('../assets/images/readings_detail_pause.png')">
+          <img :src="playing?require('../assets/images/icon_playing_shadow.png'):require('../assets/images/icon_pause_shadow.png')">
         </div>
         <div class="item-describe">
           <h3 :class="{'item-playing':playing}">

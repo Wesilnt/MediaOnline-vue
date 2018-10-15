@@ -37,6 +37,10 @@ export default {
   /deep/ p {
     width: 100%;
     flex-grow: 1;
+    max-width: 620px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
 }
 .videoPlayTringle {

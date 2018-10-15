@@ -50,7 +50,8 @@
             <Share :show="sharePageShow" :courseId="courseId" :columnType ="OnlineCourse" @close="cancelSharePage"></Share>
             <van-popup :lazy-render="false"
                        :click-overlay="handleVideoPause"
-                       v-model="videoShow" class="video-popup">
+                       v-model="videoShow" class="video-popup"
+                       overlay-class="popup-modal-white">
                 <video class="videoitem"
                        ref="videoitem"
                        :src="videoUrl"
@@ -127,7 +128,7 @@ export default {
       inputValue: '',
       lockIcon: require('../../assets/images/onlinecourse_lock.jpg'), //未解锁
       unlockIcon: require('../../assets/images/onlinecourse_unlock.jpg'), //已解锁
-      collectIcon: require('../../assets/images/onlinecourse_love_highlight.png'), //已收藏
+      collectIcon: require('../../assets/images/love_collect.png'), //已收藏
       unCollectIcon: require('../../assets/images/onlinecourse_love_normal.png'), //未搜藏
       //视频播放相关属性
       timer: 0, //定时器
@@ -412,7 +413,7 @@ export default {
   text-align: center;
   border-radius: 60px;
   color: #fff;
-  background: url('../../assets/images/onlinecourse-video-detail-header.jpg')
+  background: url('../../assets/images/icon_pause.png')
     32px center/20px no-repeat;
 }
 .video-detail-header-gift {

@@ -47,8 +47,8 @@ export default {
   },
   data() {
     return {
-      praiseNormal: require('../assets/images/onlinecourse_praise_highlight.png'),
-      praiseHighlight: require('../assets/images/onlinecourse_praise_normal.png'),
+      praiseNormal: require('../assets/images/icon_praise_selected.png'),
+      praiseHighlight: require('../assets/images/icon_praise_normal.png'),
       isPraise: false,
       regionType: 2201, //2201 专栏评论  2202 单集评论
       showTotal: true, //是否显示所有文本内容
