@@ -25,7 +25,7 @@ export default {
   //singleset 单集  playing是否正在播放
   props: ['item', 'playing','singletype','coursename','useraccessstatus'],
   methods: {
-    onItemClick(audio) {
+    onItemClick(item) {
       let unLock = false
       switch(this.useraccessstatus){
         case -3://拼团失败
@@ -49,14 +49,22 @@ export default {
         break
       }
       console.log('============',this.useraccessstatus)
-      console.log(audio.isFree)
+      console.log(item.isFree)
       console.log(unLock)
-      if (audio.isFree || unLock) {
+      if (item.isFree || unLock) {
+     
+        if(this.singletype == 'OnlineCourse'){
+           console.log(this.singletype)
+          this.$router.push({
+           path: `/videoCourseDetail/${item.id}`
+          })
+        }else{
         this.$router.push({
           name: 'AudioPlay',
-          params: { id: audio.id },
+          params: { id: item.id },
           query:{columnType:this.singletype,courseName:this.coursename}
         })
+        }
       } else {
         this.$toast.fail('您还未购买该专栏')
       }

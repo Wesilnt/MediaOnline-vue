@@ -17,7 +17,7 @@
         <div class="videocol-base">
             <div class="videocol-sction-title" id="tryCourse">
                 <h4>试看课程</h4>
-                <div class="videocol-all" @click="allFunc()">
+                <div class="videocol-all" @click="enterAllVideoList()">
                     <span class="videocol-allbtn">全部</span>
                     <img :src="require('../../../assets/images/arrow_right.png')" class="videocol-allbtn-icon">
                 </div>
@@ -28,7 +28,7 @@
         <div class="videocol-base">
             <div class="videocol-sction-title" id="leaveMessage">
                 <h4>精选留言</h4>
-                <div class="videocol-all" @click="allFunc">
+                <div class="videocol-all" @click="enterVideoCommentsList">
                     <span class="videocol-allbtn">{{commentCount}}条</span>
                     <img :src="require('../../../assets/images/arrow_right.png')" class="videocol-allbtn-icon">
                 </div>
@@ -102,6 +102,12 @@ export default {
   },
   methods: {
     ...mapActions(['getCommentList', 'likeComment']),
+    enterAllVideoList(){
+       this.$router.push(`/videoInnerList/${this.courseId}`)
+    },
+    enterVideoCommentsList(){
+      this.$router.push(`/videoCourseCmts/${this.courseId}`)
+    },
     allFunc() {
       if (this.freeLessonList && this.freeLessonList.length > 0){
         const lessonId = this.freeLessonList[0].id

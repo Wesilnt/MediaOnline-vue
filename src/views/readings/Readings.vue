@@ -12,7 +12,7 @@
           <div  class="read-list-container">
             <div v-for="item of bookList" :key="item.id"  @click="toDetail(item.id)" class="list-item">
                 <div class="top-container" v-lazy:background-image="item.coverPic">
-                    <span>上新</span>
+                    <span v-if="new Date().getTime() - new Date(bookDetail.lastModifyTime).getTime()<30*24*3600*1000">上新</span>
                     <img src="../../assets/images/btn-play.png">
                 </div>
                 <div class="bottom-container">

@@ -1,4 +1,6 @@
-import { getVideoColumnDetail } from '../../api/columnsApi.js'
+import { getVideoColumnDetail,
+  getLessonListByCourse
+} from '../../api/columnsApi.js'
 
 import groupContentData from './groupContentData'
 import groupManagerData from './groupManagerData'
@@ -18,7 +20,9 @@ const videoColumnDetailData = {
       buyCount: 0, //购买数量
       courseId: 0, //专栏ID
       courseName: '', //专栏名称
-      isFromShare: false
+      isFromShare: false,
+      userAccessStatus:0,
+      videoCourseList:[]
     }
   },
   mutations: {
@@ -39,14 +43,24 @@ const videoColumnDetailData = {
     },
     resetState(state) {
       state.loading = true
+    },
+    setVideoCourseList(state,videoCourseList){
+      state.videoCourseList = videoCourseList
+    },
+    setUserAccessStatus(state, userAccessStatus){
+      state.userAccessStatus = userAccessStatus
     }
   },
   actions: {
-
+    async getVideoCourseList({commit},courseId){
+      let result = await getLessonListByCourse({'courseId':courseId,currentPage:1, pageSize:500})
+      console.log(result)
+      commit('setVideoCourseList',result.result)
+    },
     async getVideoColumnDetail({ commit, dispatch }, { courseId, groupBuyId }) {
       //获取视频专栏数据
       const result = await getVideoColumnDetail({ courseId })
-
+      commit('setUserAccessStatus', result.setUserAccessStatus)
       //绑定专栏详情内容
       const profilePic = result.profilePic
       const freeLessonList = result.freeLessonList
