@@ -11,3 +11,6 @@ export function getUserInfo(params) {
 export function getPosterforPraise(params) {
   return request(`/collectLike/getPoster?${stringify(params)}`)
 }
+export function getColumnDetail(params) {
+  return request(`/course/detail?${stringify(params)}`)
+}

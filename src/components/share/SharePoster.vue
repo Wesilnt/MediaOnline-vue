@@ -53,7 +53,7 @@ export default {
      }
      //3. 没有专栏详情 , 有专栏ID
      if(this.courseId){
-        this.getColumnDetail({courseId}) 
+        this.getColumnDetail({courseId:this.courseId}) 
         .then(()=>{
           this.setPosterConfig()    //设置分享地址
           this.drawBottomMap()      //重新生成图片
@@ -149,23 +149,21 @@ export default {
        console.log(this.columnDetail)
        console.log("this.columnType:",this.columnType) 
        //1. 有专栏详情, 拼团中
-     if(this.columnDetail && this.columnDetail.userAccessStatus==1005){  
-      let link = ''
+     if(this.columnDetail && this.columnDetail.userAccessStatus==1005){   
       switch (this.columnType) {
          case 'OnlineCourse':
-          link =  `${this.url}#/home/videoColumnDetail/${this.columnDetail.id}?groupBuyId=${this.columnDetail.groupBuyId}`
+          this.shareUrl =  `${this.url}#/home/videoColumnDetail/${this.columnDetail.id}?groupBuyId=${this.columnDetail.groupBuyId}`
           break
         case 'OnlineVision':
-          link =  `${this.url}#/home/visionDetail/${this.columnDetail.id}?groupBuyId=${this.columnDetail.groupBuyId}`
+          this.shareUrl =  `${this.url}#/home/visionDetail/${this.columnDetail.id}?groupBuyId=${this.columnDetail.groupBuyId}`
           break
         case 'Readings':
-          link =  `${this.url}#/home/readings/book/${this.columnDetail.id}?groupBuyId=${this.columnDetail.groupBuyId}&playType='Readings'`
+          this.shareUrl =  `${this.url}#/home/readings/book/${this.columnDetail.id}?groupBuyId=${this.columnDetail.groupBuyId}&columnType='Readings'`
           break
         default:
-          link = `${this.url}#/home/freezone`
+          this.shareUrl = `${this.url}#/home/freezone`
           break
-        }
-      this.shareUrl = link
+        } 
       return
      }
      //2. 有专栏详情, 集赞中
@@ -183,7 +181,7 @@ export default {
             this.shareUrl =   `${this.url}/#/home/visionDetail/${this.columnDetail.id}`
             break
           case 'Readings':
-            this.shareUrl =   `${this.url}/#/home/readings/book/${this.columnDetail.id}playType='Readings'`
+            this.shareUrl =   `${this.url}/#/home/readings/book/${this.columnDetail.id}columnType='Readings'`
             break
           default:
             this.shareUrl = `${this.url}/#/home/freezone`

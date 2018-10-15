@@ -17,7 +17,7 @@ export default {
     maxTime: 0, //音频总时长
     playMode: 'order', // order:顺序播放  single：单曲播放
     isPlaying: false, //是否正在播放
-    playType: "FreeZone", //FreeZone 免费专区 OnlineCourse 在线课堂  OnlineVision 在线视野  Readings 读书会
+    columnType: "FreeZone", //FreeZone 免费专区 OnlineCourse 在线课堂  OnlineVision 在线视野  Readings 读书会
     courseName:"", //专栏名
     courseId:-1,
     throttle: null,
@@ -46,7 +46,7 @@ export default {
     syncPlay(state, params) {
       if (params)  {
         state._at.src = params.audioUrl
-        state.playType = params.playType || state.playType
+        state.columnType = params.columnType || state.columnType
       }
       let localCache = localStorage.getItem('learntime-' + state.audioDetail.id)
       if (localCache) {
@@ -116,7 +116,7 @@ export default {
       }
       if (params) {
         const res = await dispatch('getAudioDetail', params)
-        commit('syncPlay', { audioUrl: res.audioUrl,playType:params.playType })
+        commit('syncPlay', { audioUrl: res.audioUrl,columnType:params.columnType })
         return res
       } else {
         commit(state.isPlaying ? 'syncPause' : 'syncPlay')

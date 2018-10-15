@@ -55,7 +55,7 @@ export default {
         this.$router.push({
           name: 'AudioPlay',
           params: { id: audio.id },
-          query:{playType:this.singletype,courseName:this.coursename}
+          query:{columnType:this.singletype,courseName:this.coursename}
         })
       } else {
         this.$toast.fail('您还未购买该专栏')

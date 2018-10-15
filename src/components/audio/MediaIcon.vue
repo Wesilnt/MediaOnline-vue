@@ -49,7 +49,7 @@ export default {
   ,'coverPic'
   ,'forceHidenFloat'
   ,'showFloat'
-  , 'playType'
+  , 'columnType'
   , 'courseName'])},
   methods: {
     //触摸开始
@@ -82,7 +82,7 @@ export default {
         this.$router.push({
           name:'AudioPlay',
           params:{id:this.audioId},
-          query:{playType:this.playType,courseName:this.courseName}})
+          query:{columnType:this.columnType,courseName:this.courseName}})
       }
       e.preventDefault()
     },

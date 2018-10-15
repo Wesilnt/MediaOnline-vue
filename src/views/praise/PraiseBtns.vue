@@ -108,9 +108,9 @@ export default {
         this.$router.push({
           name: 'SharePoster',
           params:{},
-          query: {
-                  // shareUrl:`${this.url}#/praise/active/${this.courseid}/${this.collectlikeid}?columnType=${this.columntype}`,
-                  courseId:this.courseid
+          query: { 
+                  courseId:this.courseid,
+                  columnType:this.columntype
                  }
         })
       }

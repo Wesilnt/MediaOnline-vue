@@ -12,7 +12,7 @@
          ? 'url('+require('../../assets/images/audio_love_collect.png')+')'
          : 'url('+require('../../assets/images/audio_love_normal.png')+')'}">
         </div>
-        <div v-if="'Readings'!=playType" class="tab-container-draft" @click="onDraft"/>
+        <div v-if="'Readings'!=columnType" class="tab-container-draft" @click="onDraft"/>
         <div  class="tab-container-comment" @click="toComment">
           <span>{{audio.commentCount}}</span>
         </div>
@@ -69,7 +69,7 @@
       </div>
     </van-popup>
     <!-- 分享框 -->
-    <share-pop :show="showShare" @close="closeShare" :courseId="courseId" />
+    <share-pop :show="showShare" @close="closeShare" :courseId="courseId" :columnType ="columnType"/>
      <!--loading-->
      <div class="loading-container" v-show="isLoading == 'waiting'">
         <van-loading color="white" />
@@ -97,7 +97,7 @@ export default {
       shareData: null, //分享数据
       lessonId: this.$route.params.id,
       hiddenDraft: this.$route.query.hiddenDraft,
-      playType: this.$route.query.playType, //播放类型 FreeZone 免费专区  OnlineVision 在线视野  Readings 读书会
+      columnType: this.$route.query.columnType, //播放类型 FreeZone 免费专区  OnlineCourse 在线课堂 OnlineVision 在线视野  Readings 读书会 
       courseName: this.$route.query.courseName, //专栏名
       isInit: true, 
       play: true,
@@ -137,7 +137,7 @@ export default {
     this.isInit = true
     this.bindCourseName(this.courseName)
     this.toggleFloatButton(false) //隐藏悬浮按钮
-    this.playAudio({ lessonId: this.lessonId, playType: this.playType })
+    this.playAudio({ lessonId: this.lessonId, columnType: this.columnType })
     const { fullPath } = this.$route
     this.registerWxConfig({
       fullPath,
@@ -147,7 +147,7 @@ export default {
   mounted() {
     this.getUserInfo().then(user => {
       let link = ''
-      switch (this.playType) {
+      switch (this.columnType) {
         case 'OnlineVision':
           link = this.url + `/#/home/visionDetail/${this.courseId}`
           break
@@ -280,7 +280,7 @@ export default {
       this.$router.push({
         name: 'AudioPlay',
         params: { id: audio.id },
-        query: { playType: this.playType }
+        query: { columnType: this.columnType }
       })
       this.playAudio({ lessonId: audio.id })
     }

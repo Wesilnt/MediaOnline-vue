@@ -170,31 +170,31 @@ const groupManagerData = {
                     if(1202==orderStatus){
                         switch (state.serviceType) {
                             case 'OnlineCourse':
-                              link = `${rootState.url}/#/videoColumnDetail/${courseId}?groupBuyId=${groupBuyId}`
+                              link = `${rootState.url}#/videoColumnDetail/${courseId}?groupBuyId=${groupBuyId}`
                               break
                             case 'OnlineVision':
-                              link = `${rootState.url}/#/home/visionDetail/${courseId}?groupBuyId=${groupBuyId}`
+                              link = `${rootState.url}#/home/visionDetail/${courseId}?groupBuyId=${groupBuyId}`
                               break
                             case 'Readings':
-                              link = `${rootState.url}/#/home/readings/book/${courseId}?groupBuyId=${groupBuyId}&playType='Readings'`
+                              link = `${rootState.url}#/home/readings/book/${courseId}?groupBuyId=${groupBuyId}&columnType='Readings'`
                               break
                             default:
-                              link = `${rootState.url}/#/home/freezone`
+                              link = `${rootState.url}#/home/freezone`
                               break
                           }
                     }else {
                         switch (state.serviceType) {
                             case 'OnlineCourse':
-                              link = `${rootState.url}/#/videoColumnDetail/${courseId}`
+                              link = `${rootState.url}#/videoColumnDetail/${courseId}`
                               break
                             case 'OnlineVision':
-                              link = `${rootState.url}/#/home/visionDetail/${courseId}`
+                              link = `${rootState.url}#/home/visionDetail/${courseId}`
                               break
                             case 'Readings':
-                              link = `${rootState.url}/#/home/readings/book/${courseId}?playType='Readings'`
+                              link = `${rootState.url}#/home/readings/book/${courseId}?columnType='Readings'`
                               break
                             default:
-                              link = `${rootState.url}/#/home/freezone`
+                              link = `${rootState.url}#/home/freezone`
                               break
                           }
                     }
@@ -229,33 +229,33 @@ const groupManagerData = {
                     if(1005==state.userAccessStatus){
                         switch (state.serviceType) {
                             case 'OnlineCourse':
-                              link = `${rootState.url}/#/videoColumnDetail/${courseId}?groupBuyId=${groupBuyId}`
+                              link = `${rootState.url}#/videoColumnDetail/${courseId}?groupBuyId=${groupBuyId}`
                               break
                             case 'OnlineVision':
-                              link = `${rootState.url}/#/home/visionDetail/${courseId}?groupBuyId=${groupBuyId}`
+                              link = `${rootState.url}#/home/visionDetail/${courseId}?groupBuyId=${groupBuyId}`
                               break
                             case 'Readings':
-                              link = `${rootState.url}/#/home/readings/book/${courseId}?groupBuyId=${groupBuyId}&playType='Readings'`
+                              link = `${rootState.url}#/home/readings/book/${courseId}?groupBuyId=${groupBuyId}`
                               break
                             default:
-                              link = `${rootState.url}/#/home/freezone`
+                              link = `${rootState.url}#/home/freezone`
                               break
                           }
                     }else if(1009==state.userAccessStatus) {
-                        link =  `${rootState.url}/#/praise/active/${courseId}/${collectLikeId}?columnType=${state.serviceType}` 
+                        link =  `${rootState.url}#/praise/active/${courseId}/${collectLikeId}?columnType=${state.serviceType}` 
                     }else {
                         switch (state.serviceType) {
                             case 'OnlineCourse':
-                              link = `${rootState.url}/#/videoColumnDetail/${courseId}`
+                              link = `${rootState.url}#/videoColumnDetail/${courseId}`
                               break
                             case 'OnlineVision':
-                              link = `${rootState.url}/#/home/visionDetail/${courseId}`
+                              link = `${rootState.url}#/home/visionDetail/${courseId}`
                               break
                             case 'Readings':
-                              link = `${rootState.url}/#/home/readings/book/${courseId}?playType='Readings'`
+                              link = `${rootState.url}#/home/readings/book/${courseId}`
                               break
                             default:
-                              link = `${rootState.url}/#/home/freezone`
+                              link = `${rootState.url}#/home/freezone`
                               break
                           }
                     }
