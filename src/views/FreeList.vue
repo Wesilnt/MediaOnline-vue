@@ -19,7 +19,7 @@ export default {
       this.$router.push({
         name: 'AudioPlay',
         params: { id },
-        query: { playType: 'freezone' }
+        query: { columnType: 'freezone' }
       })
     }
   }

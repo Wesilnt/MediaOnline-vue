@@ -3,7 +3,7 @@ import {
   postUnFavorite,
   getAudioDesc,
   getSingleSetList,
-  getCommentList
+  getCommentList,
 } from '../../api/audioApi'
 
 export default {
@@ -14,12 +14,14 @@ export default {
     currentPage: 1,           //音频列表分页-页码
     pageSize: 20,             //分页-记录条数
     commentList: [],          //评论列表
-    draftContent: { manuscript: '' }
+    draftContent: { manuscript: '' },
+    courseId:0
   },
   mutations: {
-    bindAudioDetail(state, res) {
+    bindAudioDetail(state, {res,courseId}) {
       state.audioDetail = res
       state.isLike = state.audioDetail.isLike
+      state.courseId = courseId
     },
     bindFavorite(state, res) {
       state.audioDetail.isLike = !state.audioDetail.isLike
@@ -37,12 +39,15 @@ export default {
   },
   actions: {
     //播放音频
-    async playAudio({ getters, commit, dispatch }, params) {
+    async playAudio({state, getters, commit, dispatch }, params) {
       if (params && params.lessonId) {
         dispatch('audiotaskData/asyncPlay', params, { root: true })
         .then(res => {
-          dispatch('getSingleSetList', { courseId: res.courseId, pageSize: getters.pageSize })
-          commit('bindAudioDetail', res)
+          let id = state.courseId
+          let courseId = res.courseId
+          commit('bindAudioDetail', {res,courseId})
+          if(id === courseId) return
+          dispatch('getSingleSetList', { courseId, pageSize: getters.pageSize })
         })
       } else {
         dispatch('audiotaskData/asyncPlay', params, { root: true })

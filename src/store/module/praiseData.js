@@ -8,8 +8,7 @@ import {
   startCollectLike,
   joinCollectLike,
   getColumnDetail
-} from '../../api/praiseApi'
-import { WECHAT_SUBSCRIPTION_URL } from './../../utils/config'
+} from '../../api/praiseApi' 
 export default {
   namespaced: true,
   state: {
@@ -156,7 +155,7 @@ export default {
       let title = `我是${user.nickName}, ${currentUser?'我想免费':'正在帮朋友'}领取《${res.course.name}》,求助攻~` 
       //拼装分享内容
       let shareData = {
-        link:  window.location.href.split('#')[0]+`/#/praise/active/${res.course.courseId}/${res.id}?columnType=${state.columnType}`,
+        link:  window.location.href.split('#')[0]+`/#/praise/active/${res.course.id}/${res.id}?columnType=${state.columnType}`,
         title,
         desc: '你一定会爱上国学课...',
         successCB: () => console.log('分享回调成功') ,

@@ -108,7 +108,7 @@
           this.$router.push({
             name: 'AudioPlay'
             , params: {id: item.id}
-            , query: {playType: courseType[item.courseType], courseName: item.title}
+            , query: {columnType: courseType[item.courseType], courseName: item.title}
           })
         } else if (item.courseType === '1005' ) {
           this.$router.push({ name: 'videoCourseDetail', params: { lessonId: item.id} })

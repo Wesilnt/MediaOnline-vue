@@ -49,7 +49,7 @@ export default {
   ,'coverPic'
   ,'forceHidenFloat'
   ,'showFloat'
-  , 'playType'
+  , 'columnType'
   , 'courseName'])},
   methods: {
     //触摸开始
@@ -82,7 +82,7 @@ export default {
         this.$router.push({
           name:'AudioPlay',
           params:{id:this.audioId},
-          query:{playType:this.playType,courseName:this.courseName}})
+          query:{columnType:this.columnType,courseName:this.courseName}})
       }
       e.preventDefault()
     },
@@ -183,16 +183,17 @@ export default {
 <style lang="scss" scoped>
 .media-icon-container {
   position: fixed; 
-  width: 160px;
-  height: 160px;
-  z-index: 99999999; 
+  width: 148px;
+  height: 148px;
+  z-index: 99999;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center; 
   padding: 12px;
   background-color: white;
-  border-radius: 50%;
+  border-radius: 20px;
+    box-shadow: 0 0 12px rgba(255, 163, 47, 0.6);
   .circle_container{ 
      position: absolute;  
   }

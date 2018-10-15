@@ -19,7 +19,7 @@
                 <div>{{toolsObject&&toolsObject.collectText}}</div>
             </div>
         </div>
-        <Share :show="sharePageShow" :shareid="courseId"  @close="cancelSharePage"></Share>
+        <Share :show="sharePageShow" :courseId="courseId" :columnType ="serviceType"  @close="cancelSharePage"></Share>
         <PhoneVerif v-if="isShowMobileDialog" @callback="bindIsShowMobileDialog(false)"></PhoneVerif>
     </div>
 
@@ -341,18 +341,16 @@ export default {
       let link = ''
       switch (this.serviceType) {
         case 'OnlineCourse':
-          link =this.url + `/#/videoColumnDetail/${this.courseId}?groupBuyId=${
-            this.groupBuyId
-          }`
+          link =  `${this.url}#/videoColumnDetail/${this.courseId}?groupBuyId=${this.groupBuyId}`
           break
         case 'OnlineVision':
-          link =this.url + `/#/home/visionDetail/${this.courseId}`
+          link =  `${this.url}#/home/visionDetail/${this.courseId}`
           break
         case 'Readings':
-          link =this.url + `/#/home/readings/book/${this.courseId}?playType='Readings'`
+          link = `${this.url}/#/home/readings/book/${this.courseId}`
           break
         default:
-          link = this.url +`/#/home/freezone`
+          link =  `${this.url}/#/home/freezone`
           break
       }
       console.log(`我正在参加《${
@@ -383,14 +381,14 @@ export default {
           this.$router.push({
             name: 'AudioPlay',
             params: { id },
-            query: { playType: this.serviceType, courseName: this.courseName }
+            query: { columnType: this.serviceType, courseName: this.courseName }
           })
           break
         case 'Readings':
           this.$router.push({
             name: 'AudioPlay',
             params: { id },
-            query: { playType: this.serviceType, courseName: this.courseName }
+            query: { columnType: this.serviceType, courseName: this.courseName }
           })
           break
       }

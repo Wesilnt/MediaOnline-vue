@@ -23,7 +23,7 @@ export default {
       showQrcode:true,
       shareUrl: this.$route.query.shareUrl,
       type: this.$route.query.sharetype,
-      id: this.$route.params.id,
+      courseId: this.$route.query.courseId,
       centerX: 355 / 2, //canvas中心X坐标
       canvasW: 750, //canvas宽度
       canvasH: 1334, //canvas高度
@@ -42,8 +42,8 @@ export default {
               ...mapState(['loading', 'user','poster']) 
             },
   created(){
-         console.log("this.shareUrl ============ ",this.shareUrl)
-       console.log("this.columnType:",this.columnType) 
+       console.log("this.shareUrl ============ ",this.shareUrl)
+       console.log("this.columnType1:",this.columnType) 
      //1. 传入分享地址
      if(this.shareUrl) return  
      //2. 有专栏详情和专栏类型
@@ -52,8 +52,8 @@ export default {
        return
      }
      //3. 没有专栏详情 , 有专栏ID
-     if(this.id){
-        this.getColumnDetail({courseId:this.id}) 
+     if(this.courseId){
+        this.getColumnDetail({courseId:this.courseId}) 
         .then(()=>{
           this.setPosterConfig()    //设置分享地址
           this.drawBottomMap()      //重新生成图片
@@ -94,8 +94,7 @@ export default {
     drawBackground(resolve) {
       this.ctx.fillStyle = '#ffffff'
       this.ctx.fillRect(0, this.bottomY, this.canvasW, this.bottomH)
-      var cover = new Image()
-      console.log(this)
+      var cover = new Image() 
       cover.setAttribute('crossOrigin', 'anonymous') 
       cover.src = this.columnDetail.sharePostUrl
       cover.onload = () => {this.ctx.drawImage(cover, 0, 0, this.canvasW, this.canvasH);resolve()}
@@ -150,44 +149,42 @@ export default {
        console.log(this.columnDetail)
        console.log("this.columnType:",this.columnType) 
        //1. 有专栏详情, 拼团中
-     if(this.columnDetail && this.columnDetail.userAccessStatus==1005){  
-      let link = ''
+     if(this.columnDetail && this.columnDetail.userAccessStatus==1005){   
       switch (this.columnType) {
          case 'OnlineCourse':
-          link = this.url + `/#/home/videoColumnDetail/${this.columnDetail.id}?groupBuyId=${this.columnDetail.groupBuyId}`
+          this.shareUrl =  `${this.url}#/home/videoColumnDetail/${this.columnDetail.id}?groupBuyId=${this.columnDetail.groupBuyId}`
           break
         case 'OnlineVision':
-          link = this.url + `/#/home/visionDetail/${this.columnDetail.id}?groupBuyId=${this.columnDetail.groupBuyId}`
+          this.shareUrl =  `${this.url}#/home/visionDetail/${this.columnDetail.id}?groupBuyId=${this.columnDetail.groupBuyId}`
           break
         case 'Readings':
-          link = this.url + `/#/home/readings/book/${this.columnDetail.id}?groupBuyId=${this.columnDetail.groupBuyId}&playType='Readings'`
+          this.shareUrl =  `${this.url}#/home/readings/book/${this.columnDetail.id}?groupBuyId=${this.columnDetail.groupBuyId}&columnType='Readings'`
           break
         default:
-          link =this.url +  `/#/home/freezone`
+          this.shareUrl = `${this.url}#/home/freezone`
           break
-        }
-      this.shareUrl = link
+        } 
       return
      }
      //2. 有专栏详情, 集赞中
      if(this.columnDetail && this.columnDetail.userAccessStatus==1009){ 
-      this.shareUrl = this.url + `/#/praise/active/${courseId}/${collectLikeId}?columnType=${this.columnType}` 
+      this.shareUrl =  `${this.url}#/praise/active/${this.columnDetail.id}/${this.columnDetail.collectLikeId}?columnType=${this.columnType}` 
       return
      }
      //3. 有专栏详情, 非集赞中和拼团中
      if(this.columnDetail) { 
         switch (this.columnType) {
           case 'OnlineCourse':
-            this.shareUrl = this.url +  `/#/home/videoColumnDetail/${this.columnDetail.id}`
+            this.shareUrl =   `${this.url}/#/home/videoColumnDetail/${this.columnDetail.id}`
             break
           case 'OnlineVision':
-            this.shareUrl = this.url +  `/#/home/visionDetail/${this.columnDetail.id}`
+            this.shareUrl =   `${this.url}/#/home/visionDetail/${this.columnDetail.id}`
             break
           case 'Readings':
-            this.shareUrl = this.url +  `/#/home/readings/book/${this.columnDetail.id}playType='Readings'`
+            this.shareUrl =   `${this.url}/#/home/readings/book/${this.columnDetail.id}columnType='Readings'`
             break
           default:
-            this.shareUrl = this.url +  `/#/home/freezone`
+            this.shareUrl = `${this.url}/#/home/freezone`
             break
           } 
       }

@@ -1,4 +1,4 @@
-import { getPosterInfo,getUserInfo, getPosterforPraise } from '../../api/shareApi'
+import { getPosterInfo,getUserInfo, getPosterforPraise ,getColumnDetail} from '../../api/shareApi'
 
 export default {
   namespaced: true,
@@ -34,6 +34,13 @@ export default {
       const res = await getPosterforPraise(params)
       console.log(res)
       commit('bindPosterInfo', res)
+    },
+    //专栏详情
+    async getColumnDetail({dispatch, commit }, {courseId,columnType}) { 
+      const result = await getColumnDetail({courseId})  
+      //绑定全局专栏当前详情
+      commit('bindCurrentColumn', {columnType, columnDetail:result},{root:true})
+      return result
     }
   },
   getters: {}

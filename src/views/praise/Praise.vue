@@ -49,7 +49,7 @@
     <!-- 集赞说明框 -->
     <PraiseExplain v-if="showExplain" @close="closeExplain"/>
     <!-- 分享框 --> 
-    <share-pop :show="showShare" @close="closeShare" :sharetype="'praise'" :shareInfo="shareData" :shareid="collectLikeId"/> 
+    <share-pop :show="showShare" @close="closeShare" :columnType ="columnType" :courseId="courseId"/> 
   </div>
 </template>
 <script>
@@ -94,24 +94,7 @@ export default {
       fullPath,
       jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline']
     })
-  },
-  // mounted(){  
-  //   this.getUserInfo()
-  //   this.bindColumnTYpe(this.columnType)
-  //   .then(user=>{ 
-  //     let title = `我是${user.nickName}, ${true?'我想免费':'正在帮朋友'}领取《${this.praiseDetail.course.name}》,求助攻~` 
-  //     //拼装分享内容
-  //     this.shareData = {
-  //       link: this.url+`/#/praise/active/${this.courseId}/${this.collectLikeId}?columnType=${this.columnType}`,
-  //       title,
-  //       desc: '你一定会爱上国学课...',
-  //       successCB: () => console.log('分享回调成功') ,
-  //       cancelCB: () =>  this.$toast('分享回调失败')
-  //     }
-  //       this.setWxShareFriend(this.shareData)
-  //       this.setWxShareZone(this.shareData) 
-  //   }) 
-  // },
+  }, 
   methods: {
     ...rootActions(['getUserInfo','registerWxConfig', 'setWxShareFriend', 'setWxShareZone']), 
     ...mapActions([
