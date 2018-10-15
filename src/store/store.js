@@ -65,9 +65,7 @@ export default new Vuex.Store({
       const { userInfo } = state
       if (userInfo) return userInfo
       const response = await getUserByToken()
-      commit('saveUserInfo', {
-          userInfo: response
-      })
+      commit('saveUserInfo', {userInfo: response})
       return response
     },
     /** 注入配置信息 */

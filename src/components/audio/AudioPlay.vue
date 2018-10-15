@@ -78,17 +78,8 @@
 </template>
 <script>
 import SharePop from '../share/Share.vue'
-import {
-  createNamespacedHelpers,
-  mapState as rootState,
-  mapActions as rootActions
-} from 'vuex'
-const {
-  mapState,
-  mapMutations,
-  mapActions,
-  mapGetters
-} = createNamespacedHelpers('audiotaskData/audioData')
+import {createNamespacedHelpers,mapState as rootState, mapActions as rootActions} from 'vuex'
+const {mapState,mapMutations, mapActions,mapGetters} = createNamespacedHelpers('audiotaskData/audioData')
 
 export default {
   components: { 'share-pop': SharePop },
@@ -161,7 +152,7 @@ export default {
         title: `${this.courseName}`,
         desc: '你一定会爱上国学课...',
         successCB: () => console.log('分享回调成功'),
-        cancelCB: () => this.$toast('分享回调失败')
+        cancelCB: () => console.log('分享回调失败')
       }
       this.setWxShareFriend(this.shareData)
       this.setWxShareZone(this.shareData)
@@ -177,12 +168,7 @@ export default {
     }
   },
   methods: {
-    ...rootActions([
-      'getUserInfo',
-      'registerWxConfig',
-      'setWxShareFriend',
-      'setWxShareZone'
-    ]),
+    ...rootActions(['getUserInfo','registerWxConfig','setWxShareFriend','setWxShareZone']),
     ...mapActions([
       'getAudioDetail',
       'postFavorite',
@@ -200,8 +186,7 @@ export default {
     onInputChange(e) {
       this.progress = e.target.value
     },  
-    onSliderChnage() {
-      console.log("progress",this.progress)
+    onSliderChnage() { 
       this.seekTo(this.progress*this.maxTime/100)
     }, 
     //收藏

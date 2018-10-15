@@ -14,7 +14,7 @@
         <textarea v-else v-model="commentContent" rows="1" placeholder="写评论" @keyup.enter="onKeyUp"/>
       </div>
       <div v-if="!isSpeak" class="comment-send" @click="onSendComment">
-        <img :src="commentContent.length<=0?require('../../assets/images/cmt_send_unable.png'):require('../../assets/images/cmt_send_abled.png')">
+        <img :src="require('../../assets/images/cmt_send_abled.png')" :style="{opacity:commentContent.length<=0?'0.5':'1'}">
       </div>
     </div>
   </div>

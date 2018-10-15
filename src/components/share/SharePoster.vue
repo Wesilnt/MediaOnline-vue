@@ -9,7 +9,12 @@
     </div> 
     <a v-show="false" ref="download"  download="poster"/>
     <loading-dialog v-if="loading"></loading-dialog>
+    <!-- 二维码生成组件 -->
     <qr-code  :style="{display:'none'}" v-if="showQrcode"  :text="shareUrl" error-level="Q" />
+     <!--loading-->
+     <div class="loading-container" v-show="isLoading">
+        <van-loading color="white" />
+     </div>
   </div>
 </template> 
 <script>
@@ -20,8 +25,9 @@ export default {
   name: 'shareposter', 
   data() { 
     return {
+      user:{},
       showQrcode:true,
-      shareUrl: this.$route.query.shareUrl,
+      shareUrl: this.$route.query.shareUrl||`${location.href.split('#')[0]}#/home`,
       type: this.$route.query.sharetype,
       courseId: this.$route.query.courseId,
       centerX: 355 / 2, //canvas中心X坐标
@@ -33,22 +39,27 @@ export default {
       qrcodeW: 50, //二维码宽度
       ctx: null,
       canvasData: null,
-      posterData: {}
+      posterData: {},
+      isLoading:true
     }  
   },
   components: { 'loading-dialog': LoadingDialog },
   computed: { 
               ...rootState(['url','columnDetail','columnType']),
-              ...mapState(['loading', 'user','poster']) 
+              ...mapState(['loading','poster']) 
             },
   created(){
        console.log("this.shareUrl ============ ",this.shareUrl)
-       console.log("this.columnType1:",this.columnType) 
+       console.log("this.columnType:",this.columnType) 
      //1. 传入分享地址
-     if(this.shareUrl) return  
+     if(this.shareUrl&&this.shareUrl != `${location.href.split('#')[0]}#/home`) {
+        this.drawBottomMap()      //重新生成图片
+       return  
+     }
      //2. 有专栏详情和专栏类型
      if(this.columnType && this.columnDetail) {
         this.setPosterConfig()    //设置分享地址
+         this.drawBottomMap()      //重新生成图片
        return
      }
      //3. 没有专栏详情 , 有专栏ID
@@ -68,10 +79,11 @@ export default {
     this.ctx.webkitImageSmoothingEnabled = false
     this.ctx.msImageSmoothingEnabled = false
     this.ctx.imageSmoothingEnabled = false 
-     this.getUserInfo().then(()=> this.drawBottomMap())
+    
   },
   methods: { 
-    ...mapActions(['getUserInfo','getPosterInfo', 'getPosterforPraise','getColumnDetail']),
+    ...rootActions(['getUserInfo']),
+    ...mapActions(['getPosterInfo', 'getPosterforPraise','getColumnDetail']),
     //将canvas生成的二维码保存为图片
     saveImg() {
       this.$refs.download.href = this.canvasData.toDataURL('images/png')
@@ -79,28 +91,40 @@ export default {
       this.$refs.saveimage.src = this.canvasData.toDataURL('images/png')
     },
     //1. 绘制图片模板的 底图
-    drawBottomMap: function() {
-      var promise = new Promise((resolve, reject) => {
-        this.drawBackground(resolve)
-        // this.drawBottomText()
-      }).then(() => {
-        this.drawQrcode()
-        this.drawHeadImage()
-        this.drawUserName()
-      })
+    drawBottomMap:  function() { 
+      this.getUserInfo() 
+      .then((user)=>{
+        this.user = user
+         return new Promise((resolve,reject)=>{
+             this.drawBackground(resolve) 
+        })
+      }).then(p=>{
+          return new Promise((resolve)=>{
+                this.drawHeadImage(resolve)  
+            })
+        }).then(()=>{
+             this.drawUserName()
+             this.drawQrcode()
+        }) .then(()=>this.isLoading = false,()=>this.isLoading = false).catch(()=>this.isLoading = false) 
+      
     },
 
     //绘制背景图和颜色
-    drawBackground(resolve) {
+     async drawBackground(resolve) {
       this.ctx.fillStyle = '#ffffff'
       this.ctx.fillRect(0, this.bottomY, this.canvasW, this.bottomH)
       var cover = new Image() 
       cover.setAttribute('crossOrigin', 'anonymous') 
       cover.src = this.columnDetail.sharePostUrl
-      cover.onload = () => {this.ctx.drawImage(cover, 0, 0, this.canvasW, this.canvasH);resolve()}
+      cover.onload = () => {
+        this.ctx.save()
+        this.ctx.drawImage(cover, 0, 0, this.canvasW, this.canvasH)
+        this.ctx.restore()
+        console.log("背景");resolve()} 
+        
     },
     //绘制头像
-    drawHeadImage() {
+    async drawHeadImage(resolve) {
       var header = new Image()
       header.setAttribute('crossOrigin', 'anonymous')
       header.src = this.user.avatarUrl + '?timeStamp=' + Date.now()
@@ -115,25 +139,28 @@ export default {
         this.ctx.drawImage(header, x, y, this.headImageW, this.headImageW)
         this.ctx.restore()
         this.$refs.saveimage.src = this.canvasData.toDataURL('images/png')
+        resolve()
+        console.log("头像")
       }
     },
     //绘制名字
-    drawUserName() {
+    async drawUserName() {
       let username = this.user.nickName
       this.ctx.fillStyle = '#262626'
       this.ctx.font = '30px Georgia'
       let textWidth = this.ctx.measureText(username).width
       this.ctx.fillText(username, 102 + 72 + 20, 930 + 25)
       this.$refs.saveimage.src = this.canvasData.toDataURL('images/png')
+      console.log("名字") 
     },
     //绘制二维码
-    drawQrcode() { 
+    async drawQrcode() { 
       this.ctx.drawImage(this.$children[0].$el.children[1],440, 880, 200, 200) 
       let currentSrc =  this.$children[0].$el.children[1].currentSrc
       if("" !== currentSrc && this.shareUrl === currentSrc) return
-      this.$children[0].$el.children[1].onload = ()=>{
-        this.ctx.drawImage(this.$children[0].$el.children[1],440, 880, 200, 200) 
-      } 
+      this.$children[0].$el.children[1].onload = ()=>this.ctx.drawImage(this.$children[0].$el.children[1],440, 880, 200, 200) 
+      this.$refs.saveimage.src = this.canvasData.toDataURL('images/png')
+      console.log("二维码") 
     },
     //底部描述
     drawBottomText() {
@@ -145,9 +172,7 @@ export default {
       this.$refs.saveimage.src = this.canvasData.toDataURL('images/png')
     },
     //設置海報分享地址
-    setPosterConfig(){
-       console.log(this.columnDetail)
-       console.log("this.columnType:",this.columnType) 
+    setPosterConfig(){ 
        //1. 有专栏详情, 拼团中
      if(this.columnDetail && this.columnDetail.userAccessStatus==1005){   
       switch (this.columnType) {
@@ -218,6 +243,7 @@ export default {
       left: 0;
       position: absolute;
       height: auto;
+      display: block;
       width: 100%;
     }
     .top-container p {
