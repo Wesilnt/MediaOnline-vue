@@ -30,7 +30,7 @@
         </div>
         <div>
             <div style="margin-bottom: 59px">
-                <div v-for="item,index in playRecordList" :key="item.id" class="playRecord-list" @click="toPlay(item)">
+                <div v-for="item,index in playRecordList" :key="item.id" class="playRecord-list" >
 
                     <div class="playRecord-list-item">
                         <van-checkbox v-if="showCheck" class="playRecord-list-item-check" v-model="playRecordCheckList[index]"  >
@@ -42,7 +42,7 @@
                             >
                         </van-checkbox>
                         <p v-if="!showCheck" class="playRecord-list-item-content-order-number">{{index + 1}}</p>
-                        <div class="playRecord-list-item-content">
+                        <div class="playRecord-list-item-content" @click="toPlay(item)">
 
                             <div class="playRecord-list-item-content-info">
                                 <p class="playRecord-list-item-content-info-name">{{item.title}}</p>

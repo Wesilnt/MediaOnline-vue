@@ -30,7 +30,7 @@
         </div>
         <div>
             <div style="margin-bottom: 59px">
-                <div v-for="item,index in likeList" :key="item.id" class="like-list" @click="toPlay(item)">
+                <div v-for="item,index in likeList" :key="item.id" class="like-list">
 
                     <div class="like-list-item">
                         <van-checkbox v-if="showCheck" class="like-list-item-check" v-model="likeCheckList[index]"  >
@@ -42,7 +42,7 @@
                             >
                         </van-checkbox>
                         <p v-if="!showCheck" class="like-list-item-content-order-number">{{index + 1}}</p>
-                        <div class="like-list-item-content">
+                        <div class="like-list-item-content" @click="toPlay(item)">
 
                             <div class="like-list-item-content-info">
                                 <p class="like-list-item-content-info-name">{{item.title}}</p>
@@ -56,11 +56,11 @@
                         </div>
 
                     </div>
-                    <van-popup v-model="isShowDelete" position="bottom" >
+                    <van-popup v-model="isShowDelete" position="bottom">
                         <img class="del-icon" :src="require('../../assets/images/my_alter_delete.png')" @click="handleDelete"/>
                         <p class="del-text">删除</p>
                     </van-popup>
-                    <van-popup v-model="showCheck" position="bottom" :overlay="false" :lock-scroll="false">
+                    <van-popup v-model="showCheck" position="bottom" :lock-scroll="false">
                         <img class="del-icon"  :src="require('../../assets/images/my_alter_delete.png')" @click="handleDeleteAll"/>
                         <p class="del-text">删除</p>
                     </van-popup>
@@ -125,7 +125,7 @@
       handleDeleteAll: function () {
         this.showCheck = false
         this.checked = false
-        //  to do delete select like
+        // To delete select like
         let ids = ''
         if (this.likeCheckList.length > 0) {
           for (let i = 0; i < this.likeCheckList.length; i++) {
@@ -341,13 +341,13 @@
     }
 
     .del-icon {
-        width: 55px;
-        height: 55px;
+        width: 45px;
+        height: 45px;
         margin: 15px 0px 10px 0px;
         align-content: center;
     }
     .del-text {
-        font-size: 28px;
+        font-size: 24px;
         color: #808080;
     }
     .check-img {

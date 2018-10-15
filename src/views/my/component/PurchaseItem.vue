@@ -39,7 +39,6 @@ export default {
       this.$router.push({ path: `/${courseType[this.type]}${id}` })
     },
     displayMore() {
-      console.log(this.list.length + "\t" + this.type)
       if (this.list.length > 3) {
         this.$emit('toggle', {currentType: this.type, currentPage: 1, pageSize: 3})
       } else {
