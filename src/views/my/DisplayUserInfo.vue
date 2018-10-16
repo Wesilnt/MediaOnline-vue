@@ -15,22 +15,24 @@
             <p class="display-user-info-column-content">{{ userInfo.mobileNo === null ? '没有手机号码' : userInfo.mobileNo }}</p>
             <img class="display-user-info-column-image-lock" :src="require('../../assets/images/my_userinfo_lock.png')"/>
         </div>
-        <Picker :columns="whichPicker ==='gender' ? genders : grades" :isShow="isShow" v-on:toggle="toggleConfirm" v-on:close="closePicker"/>
+        <van-popup v-model="isShow" position="bottom" >
+            <van-picker
+                    show-toolbar
+                    :columns="whichPicker ==='gender' ? genders : grades"
+                    @confirm="onConfirm"
+                    @cancel="onCancel"
+            />
+        </van-popup>
     </div>
 </template>
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
-import Picker from '../../components/Picker'
 import { getGradeStr, getGradeNum } from './../../utils/utils'
-import { Toast } from 'vant'
 
 const { mapState, mapActions } = createNamespacedHelpers('userInfoData')
 export default {
   name: 'DisplayUserInfo',
-  components: {
-    Picker
-  },
   data: function() {
     return {
       whichPicker: '',
@@ -70,14 +72,13 @@ export default {
         this.whichPicker = 'grade'
         this.isShow = true
       } else if (type === 'phone') {
-        Toast.fail('电话号码无法编辑')
+        this.$toast.fail('电话号码无法编辑')
       }
     },
-    closePicker: function(value) {
+    onCancel: function() {
       this.isShow = false
     },
-    toggleConfirm: function(value) {
-      console.log(value)
+    onConfirm: function(value) {
       this.isShow = false
       if (this.genders.indexOf(value) != -1) {
         if (!(value === this.userInfo.gender)) {
