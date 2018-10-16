@@ -185,12 +185,10 @@ const videoCourseDetailData = {
       commit('bindQuestionBymyself', { progress, deblockQuestion })
     },
     //获取单集详情
-    async getVideoCourseDetail({ commit, dispatch, state }, { lessonId }) {
+    async getVideoCourseDetail({ commit, dispatch, state }, { lessonId,loading=false }) {
       const result = await getVideoLessonDetail({ lessonId })
-      console.log('视频单集详情接口')
-      console.log('result = ', result)
       if (!result) return
-      await commit('resetLoading', true)
+        if(loading) await commit('resetLoading', loading)
       //绑定单集详情内容
       commit('bindVideoCourseDetail', result)
       //绑定目录列表哪一个单集处于播放状态
@@ -214,7 +212,7 @@ const videoCourseDetailData = {
       await dispatch('getCommentList', commentParams)
       //更新当前播放视频的播放数据
       await dispatch('updateVideoPlayData', lessonId)
-      await commit('resetLoading', false)
+        if(loading) await commit('resetLoading', false)
     },
 
     async getLessonListByCourse({ commit }, params) {

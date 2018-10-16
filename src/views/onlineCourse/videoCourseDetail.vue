@@ -58,12 +58,6 @@
                        controls="controls"
                        width="100%"
                        preload="auto"
-                       webkit-playsinline
-                       playsinline="true"
-                       x-webkit-airplay="allow"
-                       x5-video-player-type="h5"
-                       x5-video-player-fullscreen="true"
-                       x5-video-orientation="portraint"
                        style="object-fit:fill"></video>
             </van-popup>
         </div>
@@ -71,7 +65,6 @@
 </template>
 
 <script>
-import enableInlineVideo from 'iphone-inline-video'
 import CommentList from '../../components/comment/CommentList.vue'
 import ScrollNavBar from '../../components/ScrollNavBar'
 import CourseIntroduce from '../../components/CourseIntroduce.vue'
@@ -177,17 +170,18 @@ export default {
   mounted() {
     //视频播放器相关监听
     this.videoElem = this.$refs.videoitem
-    enableInlineVideo(this.videoElem)
-
     //视频进度
     this.videoElem.addEventListener('timeupdate', this.getVideoProgress)
     this.videoElem.addEventListener('play', this.handleVideoPlay)
+    this.videoElem.addEventListener('contextmenu', () => {
+      return false
+    })
     this.getUserInfo().then(user => {
       //拼装分享内容
       this.shareData = {
         link: this.url + `/#/videoColumnDetail/${this.courseId}`,
         title: `${this.courseName}`,
-        desc: '你一定会爱上国学课...',
+        desc: '你一定会爱上国学课...'
         // successCB: () => console.log('分享回调成功'),
         // cancelCB: () => console.log('分享回调失败')
       }
@@ -202,7 +196,7 @@ export default {
   },
   created() {
     const { lessonId } = this.$route.params
-    this.getVideoCourseDetail({ lessonId })
+    this.getVideoCourseDetail({ lessonId, loading: true })
   },
   methods: {
     ...mapMutations([
@@ -219,11 +213,7 @@ export default {
       'unCollectFavorite',
       'postComment'
     ]),
-    ...mapRootActions([
-      'getUserInfo',
-      'setWxShareFriend',
-      'setWxShareZone'
-    ]),
+    ...mapRootActions(['getUserInfo', 'setWxShareFriend', 'setWxShareZone']),
     //播放视频
     handleVideoPlay() {
       const videoData = JSON.parse(localStorage.getItem(this.id))
@@ -231,10 +221,7 @@ export default {
       const { paused } = this.videoElem
       this.videoShow = true
 
-      if (paused) {
-        console.dir(this.videoElem)
-        this.videoElem.play()
-      }
+      paused && this.videoElem.play()
       this.videoElem.currentTime =
         historyPlayPosition >= this.videoElem.duration ? 0 : historyPlayPosition
       // 记录当前播放时间戳
@@ -247,28 +234,27 @@ export default {
     },
     getVideoProgress({ target }) {
       const { currentTime, paused, duration, readyState } = target
-      // console.dir(target.networkState)
-      // console.dir(target.readyState)
-      // console.dir(target.error)
       /*
       视频存储数据逻辑
       */
-
       // 获取播放累计时长
       if (readyState == 4 || readyState == 3) {
         // console.log('代码是否能走到这里~~~~~~~~')
-        const durationPlayingTime = this.playStartTime
-          ? (new Date() - this.playStartTime) / 1000
-          : 0
         // console.log(this.playStartTime)
         // this.loaclPlayTotalTime += durationPlayingTime
         // const newVideoData = JSON.parse(localStorage.getItem(this.id))
-        const newTotalTime = this.loaclPlayTotalTime + durationPlayingTime
         // const newTotalTime =
         //   durationPlayingTime + Math.round(parseFloat(newVideoData.playTotalTime))
-        let newPosition = currentTime
         // let newPosition = durationPlayingTime + Math.round(parseFloat(newVideoData.historyPlayPosition))
         //累计播放时长大于视频总长度.将历史播放进度置为0
+        const durationPlayingTime = this.playStartTime
+          ? (new Date() - this.playStartTime) / 1000
+          : 0
+
+        const newTotalTime = this.loaclPlayTotalTime + durationPlayingTime
+
+        let newPosition = currentTime
+
         if (newPosition > this.totalTime) {
           newPosition = 0
         }
@@ -298,6 +284,7 @@ export default {
       }
       if (paused) {
         // 进度条 未解锁就动态显示
+        console.log(paused)
         if (!this.deblockQuestion && duration) {
           const percent = (this.loaclPlayTotalTime / duration) * 100
           let progress = percent <= 100 ? percent : 100
@@ -339,7 +326,7 @@ export default {
     //点击目录
     beActive(lessonId) {
       if (this.activeID !== lessonId) {
-        this.getVideoCourseDetail({ lessonId })
+        this.getVideoCourseDetail({ lessonId, loading: true })
       }
     }
   }
@@ -385,8 +372,8 @@ export default {
   text-align: center;
   border-radius: 60px;
   color: #fff;
-  background: url('../../assets/images/icon_pause.png')
-    32px center/20px no-repeat;
+  background: url('../../assets/images/icon_pause.png') 32px center/20px
+    no-repeat;
 }
 .video-detail-header-gift {
   position: absolute;
