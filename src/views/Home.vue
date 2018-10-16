@@ -5,7 +5,7 @@
       <div>
         <van-swipe :autoplay="4000" class="index-swiper">
           <van-swipe-item v-for="list in bannerList" :key="list.url">
-            <i class="qhht-icon lazy-img-larger index-swiper-img" v-lazy:background-image="`${list.url}?imageView2/1/format/webp`" @click="routerToSwiperDetail(list.link)"></i>
+            <i class="qhht-icon lazy-img-larger index-swiper-img" v-lazy:background-image="`${list.url}?imageView2/1/format/jpg`" @click="routerToSwiperDetail(list.link)"></i>
           </van-swipe-item>
 
         </van-swipe>

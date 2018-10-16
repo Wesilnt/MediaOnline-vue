@@ -1,5 +1,5 @@
 <template>
-  <div class="lazy-img-most audioplay-container" v-lazy:background-image="`${audio.coverPic}?imageView2/1/w/750/h/750/format/webp/interlace/1`">
+  <div class="lazy-img-most audioplay-container" v-lazy:background-image="`${audio.coverPic}?imageView2/1/w/750/h/750/format/jpg/interlace/1`">
     <!-- 封面 -->
     <div class="controller-container">
       <!-- 主，副标题 -->

@@ -1,6 +1,6 @@
 <template>
     <div class="home-container">
-        <div class="lazy-img-larger home-header-img" v-lazy:background-image="`${columnHeaderImage}?imageView2/1/format/webp`"></div>
+        <div class="lazy-img-larger home-header-img" v-lazy:background-image="`${columnHeaderImage}?imageView2/1/format/jpg`"></div>
         <van-list
           class="home-video"
           v-model="refreshing"
