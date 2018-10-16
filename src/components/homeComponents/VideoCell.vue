@@ -1,5 +1,5 @@
 <template>
-  <div v-lazy:background-image="video.coverPicH" @click="onItemClick" class="qhht-flex lazy-img-larger cell">
+  <div v-lazy:background-image="`${video.coverPicH}?imageView2/1/format/webp`" @click="onItemClick" class="qhht-flex lazy-img-larger cell">
       <i class="qhht-icon videoPlayTringle" ></i>
     <p class="videoTitle">{{video.name}}</p>
     <p>{{video.briefIntro}}</p>

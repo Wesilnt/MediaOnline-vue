@@ -243,7 +243,6 @@ export default {
             }
             //拼团中&&参团人&&当前拼团未满&&当前用户调起支付未支付完成   按钮显示:"继续支付"
             if(!this.isOwner && !this.isFullStaff && !this.achievePayment && this.currUserStatus == 2601){
-              console.log('代码走到这里')
               params = {groupBuyId: this.groupBuyId, payType: 2}
               console.log(params)
               this.checkoutAuthorrization(params)

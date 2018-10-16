@@ -135,7 +135,6 @@
 
       },
       allChecked: function () {
-        console.log("all checked")
         const status = !this.checked
         this.setCheckList(status)
       }

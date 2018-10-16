@@ -3,7 +3,7 @@
         <SkeletonFullScreen  v-show="loading"/>
         <div v-show="!loading" class="videocourse-detail-container" id="detailmain" ref="detailmain">
             <!-- 播放器封面 -->
-            <div class="video-detail-header lazy-img-most" v-lazy:background-image="`${coverPic}`">
+            <div class="lazy-img-most video-detail-header" v-lazy:background-image="`${coverPic}?imageView2/1/format/webp`">
                 <div class="video-detail-header-right-top">
                     <img :src="isLike?collectIcon:unCollectIcon" class="video-detail-collect" alt="" @click="onCollectFavorite">
                     <img :src="require('../../assets/images/onlinecourse-play_ic_share.png')" class="video-detail-share" alt="" @click="onShareAction">
@@ -188,8 +188,8 @@ export default {
         link: this.url + `/#/videoColumnDetail/${this.courseId}`,
         title: `${this.courseName}`,
         desc: '你一定会爱上国学课...',
-        successCB: () => console.log('分享回调成功'),
-        cancelCB: () => console.log('分享回调失败')
+        // successCB: () => console.log('分享回调成功'),
+        // cancelCB: () => console.log('分享回调失败')
       }
       this.setWxShareFriend(this.shareData)
       this.setWxShareZone(this.shareData)
@@ -272,7 +272,6 @@ export default {
     },
     getVideoProgress({ target }) {
       const { currentTime, paused, duration, readyState } = target
-      // console.log('0-0-0-0-9-9--9-')
       // console.dir(target.networkState)
       // console.dir(target.readyState)
       // console.dir(target.error)
@@ -357,11 +356,9 @@ export default {
       }
     },
     onShareAction() {
-      console.log('点击分享')
       this.sharePageShow = true
     },
     cancelSharePage(data) {
-      console.log('关闭分享页面')
       this.sharePageShow = false
     },
     //点击目录

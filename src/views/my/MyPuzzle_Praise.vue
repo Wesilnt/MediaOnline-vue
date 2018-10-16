@@ -31,7 +31,7 @@
                                         <Badge :status="isPraise?puzzle.collectLikeStatus:puzzle.groupBuyStatus">{{pageName}}</Badge>
                                     </p>
                                     <div class="qhht-flex">
-                                        <div v-lazy:background-image="puzzle.course.coverPic" class="my-puzzle-content-img"></div>
+                                        <div v-lazy:background-image="`${puzzle.course.coverPic}?imageView2/1/format/webp`" class="my-puzzle-content-img"></div>
                                         <ul class="my-puzzle-display">
                                             <li><h3> {{puzzle.course.name}}</h3></li>
                                             <li>{{puzzle.course.priefIntro?puzzle.course.priefIntro:'暂无简介'}}</li>

@@ -1,7 +1,7 @@
 <template>
   <!-- <div v-infinite-scroll="loadMore" class="myScroll" infinite-scroll-disabled="loading" infinite-scroll-distance="30"> -->
   <div>
-    <div class="lazy-img-larger head" v-lazy:background-image="bannerPic"></div>
+    <div class="lazy-img-larger head" v-lazy:background-image="`${bannerPic}?imageView2/1/format/webp`"></div>
     <van-list class="view-list" v-model="refreshing" :finished="finished" @load="loadMore" @offset="10">
       <div v-for="(item, index) in visionList" :key="index" class="view-list-cell">
         <VisionCell :vision="item"  />

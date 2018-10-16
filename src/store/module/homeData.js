@@ -21,9 +21,6 @@ const homeData = {
   },
   actions: {
     async getIndexPageData({ dispatch, commit }) {
-      console.log(
-        '首页加载顺序为,轮播图和少年视野先加载（样式）,其他接口先返回数据就先加载'
-      )
       await dispatch('getBannerList')
       dispatch('getNewMessageCount')
       // await dispatch('getFreeList')
@@ -35,18 +32,15 @@ const homeData = {
     },
     async getBannerList({ commit }) {
       let result = await getBannerList({ type: 0 })
-      console.log(1)
       commit('setBannerList', result)
     },
     async getFreeList({ commit }) {
       let result = await getFreeList({ pageSize: 2 })
-      console.log(2)
       commit('setFreeList', result.result)
     },
     async getNewMessageCount({ commit }) {
       const result = await getNewMessageCount()
       const { count , fromAvatarUrl  } = result
-      console.log(3)
       console.log(result)
       commit('setNewMessageCount', count)
       commit('setFromAvatarUrl', fromAvatarUrl)
@@ -59,17 +53,14 @@ const homeData = {
     },
     async getVisionList({ commit }) {
       let result = await getVisionList()
-      console.log(4)
       commit('setVisionList', result)
     },
     async getVideoList({ commit }) {
       let result = await getVideoList()
-      console.log(5)
       commit('setVideoList', result)
     },
     async getBookList({ commit }) {
       let result = await getBookList()
-      console.log(6) 
       commit('setBookList', result)
     }
   },

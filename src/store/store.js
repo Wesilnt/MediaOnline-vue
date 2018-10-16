@@ -76,7 +76,6 @@ export default new Vuex.Store({
         return
       }
       if (wxRegisterPath === fullPath) {
-        console.log('微信config已启用成功')
         return
       }
       const response = await wxConfigApi({
