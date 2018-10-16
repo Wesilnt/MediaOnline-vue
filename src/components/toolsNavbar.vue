@@ -190,9 +190,10 @@ export default {
     clickCollageBtn() {
       if(this.isQuiklyClick())return
       if(this.isLoading) {
-        Toast("正在调起支付...")
+        this.$toast("正在调起支付...")
         return
       }
+      console.log("支付事件")
       let params = null
       console.log('是否来自分享'+ this.isFromShare)
       if(this.isFromShare){
@@ -338,7 +339,7 @@ export default {
     },
     isQuiklyClick(){
       if(Date.now()-this.lastClickTime < 1000){
-        this.$toast('支付过快,请稍后再试...')
+        this.$toast('支付过快,请稍后...')
         this.lastClickTime = Date.now()
         return true
       }
