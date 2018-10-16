@@ -56,7 +56,7 @@ export default {
         state.currentTime = state._at.currentTime = parseFloat(currentTime)
         state.maxTime = JSON.parse(localCache).maxTime
       }
-      paused && state._at.play()
+      state._at.play()
     },
     //音频播放同步方法
     syncPause(state) {

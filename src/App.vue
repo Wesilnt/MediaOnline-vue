@@ -2,9 +2,9 @@
       <div> 
         <keep-alive>
           <!-- 这里是会被缓存的视图组件，比如 AudioPlay！ -->
-          <router-view  v-show="$route.meta.keepAlive" class="router-view"/>
+          <router-view  v-if="$route.meta.keepAlive" class="router-view"/>
         </keep-alive>
-        <router-view  v-show="!$route.meta.keepAlive" class="router-view"/>
+        <router-view  v-if="!$route.meta.keepAlive" class="router-view"/>
         <MediaIcon></MediaIcon>
       </div> 
 </template>
@@ -64,21 +64,6 @@ export default {
   transform: none;
 }
 .popup-modal-white {
-  background-color: #fff;
-}
-.videobox {
-  /*width: 4.78rem;*/
-  /*height: 7.8rem;*/
-  /*position: absolute;*/
-  /*top: 3.2rem;*/
-  /*left: 1.2rem;*/
-}
-video {
-  /*width: 4.2rem;*/
-  /*height: 7.69rem;*/
-  /*position: absolute;*/
-  /*left: .22rem;*/
-  /*top: .7rem;*/
-  /*overflow: hidden;*/
+  background-color: rgba(255, 255, 255, 0.89);
 }
 </style>

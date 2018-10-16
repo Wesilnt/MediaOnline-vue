@@ -41,8 +41,9 @@ const visionData = {
             let result = await getVisionList({currentPage:state.currentPage, pageSize:state.pageSize, type:1003})
             let newList =state.visionList.concat(result.courseInfo.result);
             await commit('setFinished',newList.length>= state.totalCount);
-            commit('setVisionList', newList)
             commit('setIsLoading',{isLoading:false});
+            if (newList.length>= state.totalCount) return
+            commit('setVisionList', newList)
         },
         async getVisionDetail({state,dispatch,commit},{courseId,groupBuyId}){
             !state.renderLoading && commit('setIsLoading',{renderLoading:true});

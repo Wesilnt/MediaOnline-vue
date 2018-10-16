@@ -10,10 +10,10 @@
                     <p>{{correct}}</p>
                     <span>答对</span>
                 </div>
-                <div class="question-to-review-item">
+                <!--<div class="question-to-review-item">
                     <p>3</p>
                     <span>排行</span>
-                </div>
+                </div>-->
             </div>
             <div class="qhht-flex">
                 <a class="qhht-blockButton question-inner-btn" @click="handlePopupShow('reviewShow')">回顾自测题</a>
@@ -186,7 +186,7 @@ export default {
     ])
   },
   methods: {
-    ...mapMainActions([ 'wxChooseImage']),
+    ...mapMainActions(['wxChooseImage']),
     ...mapActions(['renderAnswers', 'handleNext', 'uploadAnswer']),
     async openQuestionAnswer() {
       if (!this.answersChecked) {
@@ -231,7 +231,7 @@ export default {
           }).then(canvas => {
             const image = new Image()
             const canvasImg = canvas.toDataURL('image/png')
-            image.src = canvasImg
+              image.src = canvasImg
             image.onload = () => {
               this.shareImg = canvasImg
               this.cvsRenderLoading = false
@@ -262,11 +262,8 @@ export default {
       }
     },
     handleAnswerClick(answer) {
-      if (
-        this.questionIndex === Object.keys(this.answers).length &&
-        this.userSelect
-      )
-        return
+      if (this.questionList[this.questionIndex].answer)
+        return this.$toast('您已经回答过此问题')
       const { lessonId } = this.$route.params
       this.uploadAnswer({
         lessonId,
@@ -456,7 +453,7 @@ export default {
   left: 50%;
   width: 702px;
   transform: translate(-50%, -50%);
-  border-radius: 8px;
+  /*border-radius: 8px;*/
   padding: 20px 32px 60px;
   background-color: #fff;
   text-align: center;

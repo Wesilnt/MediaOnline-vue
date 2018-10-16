@@ -49,7 +49,7 @@ const groupContentData = {
   actions: {
     async getCommentList({ commit }, params) {
       const result = await getCommentList(params)
-      console.log('视频专栏留言数据:')
+      console.log('groupContent视频专栏留言数据:')
       console.log(result)
       commit('bindCommentList', result)
     },

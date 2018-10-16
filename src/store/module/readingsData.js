@@ -75,6 +75,7 @@ export default {
         async getBookDetail({dispatch, commit }, params) { 
             commit('setDataLoading',true)
             const result = await getBookDetail(params) 
+            console.log('读书会详情数据')
             console.log(result) 
             //绑定全局专栏当前详情
             commit('bindCurrentColumn', {columnType:"OnlineVision" , columnDetail:result},{root:true})

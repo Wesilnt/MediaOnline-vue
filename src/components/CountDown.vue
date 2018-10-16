@@ -29,7 +29,6 @@ export default {
     ...mapMutations(['deleteCountTime'])
   },
   beforeDestroy() {
-    console.log('zoudaozheli@@@@@')
     if (this.countdown) {
       clearInterval(this.countdown)
       this.countdown = null
@@ -45,7 +44,7 @@ export default {
       if (this.countdown) clearInterval(this.countdown)
       if (tempDuration > 0) {
         this.countdown = startCountDown(this.duration, times => {
-          (this.times = times),console.log(times)
+          (this.times = times)
         })
       } 
       return tempDuration
