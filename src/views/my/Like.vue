@@ -13,7 +13,7 @@
                 <img class="like-head-default-right-icon" :src="require('../../assets/images/my_menu_list.png')"
                      @click="handleMenu">
             </div>
-            <div v-else="showCheck" class="like-head-check">
+            <div v-else-if="showCheck" class="like-head-check">
                 <div class="like-head-check-all-check">
                     <van-checkbox v-model="checked" >
                         <img slot="icon"
@@ -30,7 +30,7 @@
         </div>
         <div>
             <div style="margin-bottom: 59px">
-                <div v-for="item,index in likeList" :key="item.id" class="like-list">
+                <div v-for="(item,index) in likeList" :key="item.id" class="like-list">
 
                     <div class="like-list-item">
                         <van-checkbox v-if="showCheck" class="like-list-item-check" v-model="likeCheckList[index]"  >

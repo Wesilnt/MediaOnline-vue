@@ -13,7 +13,7 @@
                 <img class="playRecord-head-default-right-icon" :src="require('../../assets/images/my_menu_list.png')"
                      @click="handleMenu">
             </div>
-            <div v-else="showCheck" class="playRecord-head-check">
+            <div v-else-if="showCheck" class="playRecord-head-check">
                 <div class="playRecord-head-check-all-check">
                     <van-checkbox v-model="checked" >
                         <img slot="icon"
@@ -30,7 +30,7 @@
         </div>
         <div>
             <div style="margin-bottom: 59px">
-                <div v-for="item,index in playRecordList" :key="item.id" class="playRecord-list" >
+                <div v-for="(item,index) in playRecordList" :key="item.id" class="playRecord-list" >
 
                     <div class="playRecord-list-item">
                         <van-checkbox v-if="showCheck" class="playRecord-list-item-check" v-model="playRecordCheckList[index]"  >
