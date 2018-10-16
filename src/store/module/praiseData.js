@@ -146,7 +146,6 @@ export default {
       if(rootState.columnDetail.id) return rootState.columnDetail
       const result = await getColumnDetail(params)  
       commit('bindCurrentColumn', {columnType: params.columnType , columnDetail:result},{root:true})
-      console.log('user',"详情=================================================================",result)
       return result
     },
     //设置分享信息
@@ -165,6 +164,7 @@ export default {
           successCB: () => console.log('分享回调成功') ,
           cancelCB: () =>  console.log('分享回调失败')
         }
+        console.log('user',"详情=================================================================",shareData)
         dispatch('setWxShareFriend',shareData,{root:true})
         dispatch('setWxShareZone',shareData,{root:true}) 
       }) 

@@ -150,7 +150,7 @@ export default {
       commit('syncPause')
     },
     //下一集
-    async playNext({ state,commit, dispatch }) {
+    async playNext({ state,commit,rootState, dispatch }) {
      if(rootState.columnType
         &&(rootState.columnType == "OnlineVision" 
         || rootState.columnType == "Readings")
