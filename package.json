@@ -37,8 +37,8 @@
     },
     "dependencies": {
         "amfe-flexible": "^2.2.1",
+        "dom-to-image": "^2.6.0",
         "es6-promise": "^4.2.5",
-        "html2canvas": "^1.0.0-alpha.12",
         "iphone-inline-video": "^2.2.2",
         "postcss-px-to-viewport": "0.0.3",
         "postcss-theme-variables": "^1.0.0",
