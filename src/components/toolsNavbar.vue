@@ -7,7 +7,7 @@
         <hr class="vertical-line"/>
         <div v-show="toolsObject&&toolsObject.originPrice" :disabled="isLoading" class="toolbar-price" :class="{'toolbar-price-active':toolsObject&&!toolsObject.collage&&!toolsObject.collect }"  @click="clickOriginPriceBtn">
             <p class="toolbar-price-num">￥{{toolsObject&&toolsObject.originPrice | formatPrice}}</p>
-            <span class="under-text">{{isLoading?'支付中...':'原价购买'}}</span>
+            <span class="under-text">{{isLoading && isClickOriginPriceBtn?'支付中...':'原价购买'}}</span>
         </div>
         <div v-show="toolsObject&&(toolsObject.collage || toolsObject.collect)" class="toolbar-btnGroup">
             <div v-show="toolsObject&&toolsObject.collage" class="toolbar-btn toolbar-btn-left" :disabled="isLoading" @click="clickCollageBtn">
@@ -19,7 +19,7 @@
                 <div>{{toolsObject&&toolsObject.collectText}}</div>
             </div>
         </div>
-        <Share :show="sharePageShow" :courseId="courseId" :columnType ="serviceType" :disabled="isLoading"  @close="cancelSharePage"></Share>
+        <Share :show="sharePageShow" :courseId="courseId" :columnType ="serviceType"  @close="cancelSharePage"></Share>
         <PhoneVerif v-if="isShowMobileDialog" @callback="bindIsShowMobileDialog(false)"></PhoneVerif>
     </div>
 
@@ -47,7 +47,8 @@ export default {
       sharePageShow: false,
       //分享内容
       shareData: null,
-      lastClickTime:0
+      lastClickTime:0,
+      isClickOriginPriceBtn:false
     }
   },
   props: {
@@ -167,8 +168,9 @@ export default {
     },
     //点击原价购买按钮
     clickOriginPriceBtn() {
-      if(this.isQuiklyClick())return
+      if(this.isQuiklyClick())return 
       if(this.isLoading) {
+        this.isClickOriginPriceBtn = true
         this.$toast("正在调起支付...")
         return
       }
@@ -190,6 +192,7 @@ export default {
     clickCollageBtn() {
       if(this.isQuiklyClick())return
       if(this.isLoading) {
+        this.isClickOriginPriceBtn = false
         this.$toast("正在调起支付...")
         return
       }
