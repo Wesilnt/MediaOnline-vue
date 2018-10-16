@@ -5,12 +5,12 @@
             <p class="under-text">{{serviceType == "OnlineCourse"?'试看':'试听'}}</p>
         </div>
         <hr class="vertical-line"/>
-        <div v-show="toolsObject&&toolsObject.originPrice" class="toolbar-price" :class="{'toolbar-price-active':toolsObject&&!toolsObject.collage&&!toolsObject.collect }"  @click="clickOriginPriceBtn">
+        <div v-show="toolsObject&&toolsObject.originPrice" :disabled="isLoading" class="toolbar-price" :class="{'toolbar-price-active':toolsObject&&!toolsObject.collage&&!toolsObject.collect }"  @click="clickOriginPriceBtn">
             <p class="toolbar-price-num">￥{{toolsObject&&toolsObject.originPrice | formatPrice}}</p>
             <span class="under-text">原价购买</span>
         </div>
         <div v-show="toolsObject&&(toolsObject.collage || toolsObject.collect)" class="toolbar-btnGroup">
-            <div v-show="toolsObject&&toolsObject.collage" class="toolbar-btn toolbar-btn-left" @click="clickCollageBtn">
+            <div v-show="toolsObject&&toolsObject.collage" class="toolbar-btn toolbar-btn-left" :disabled="isLoading" @click="clickCollageBtn">
                 <div v-show="toolsObject&&toolsObject.groupPrice"  class="toolbar-btn-price">￥{{toolsObject&&toolsObject.groupPrice | formatPrice}}</div>
                 <div>{{toolsObject&&toolsObject.collageText}}</div>
             </div>
@@ -19,7 +19,7 @@
                 <div>{{toolsObject&&toolsObject.collectText}}</div>
             </div>
         </div>
-        <Share :show="sharePageShow" :courseId="courseId" :columnType ="serviceType"  @close="cancelSharePage"></Share>
+        <Share :show="sharePageShow" :courseId="courseId" :columnType ="serviceType" :disabled="isLoading"  @close="cancelSharePage"></Share>
         <PhoneVerif v-if="isShowMobileDialog" @callback="bindIsShowMobileDialog(false)"></PhoneVerif>
     </div>
 
@@ -46,7 +46,8 @@ export default {
       //是否显示分享
       sharePageShow: false,
       //分享内容
-      shareData: null
+      shareData: null,
+      lastClickTime:0
     }
   },
   props: {
@@ -108,6 +109,7 @@ export default {
   computed: {
     ...rootState(['url']),
     ...mapState([
+      'isLoading',
       'userList',
       'collectLikeId',
       'isShowMobileDialog',
@@ -165,6 +167,11 @@ export default {
     },
     //点击原价购买按钮
     clickOriginPriceBtn() {
+      if(this.isQuiklyClick())return
+      if(this.isLoading) {
+        this.$toast("正在调起支付...")
+        return
+      }
       let params = { courseId: this.courseId, payType: 0 }
       switch (this.userAccessStatus) {
         //没有购买和集赞行为
@@ -181,6 +188,11 @@ export default {
     },
     //点击拼团按钮
     clickCollageBtn() {
+      if(this.isQuiklyClick())return
+      if(this.isLoading) {
+        Toast("正在调起支付...")
+        return
+      }
       let params = null
       console.log('是否来自分享'+ this.isFromShare)
       if(this.isFromShare){
@@ -323,6 +335,15 @@ export default {
           this.checkoutAuthorrization(params)
           break
       }
+    },
+    isQuiklyClick(){
+      if(Date.now()-this.lastClickTime < 1000){
+        this.$toast('支付过快,请稍后再试...')
+        this.lastClickTime = Date.now()
+        return true
+      }
+      this.lastClickTime = Date.now()
+      return false
     },
     //邀请好友拼团
     cancelSharePage() {
