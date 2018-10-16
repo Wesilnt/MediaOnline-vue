@@ -249,7 +249,6 @@ export default {
             //拼团中&&参团人&&当前拼团未满&&当前用户调起支付未支付完成   按钮显示:"继续支付"
             if(!this.isOwner && !this.isFullStaff && !this.achievePayment && this.currUserStatus == 2601){
               params = {groupBuyId: this.groupBuyId, payType: 2}
-              console.log(params)
               this.checkoutAuthorrization(params)
             }
             //拼团中&&参团人&&当前拼团已满&&当前用户未完成支付&&当前用户不在拼团用户列表中  按钮显示"我要开团"
@@ -259,10 +258,8 @@ export default {
             }
             //拼团中&&参团人&&当前拼团已满&&当前用户未完成支付&&当前用户在拼团用户列表中  按钮显示"继续支付"
             if(!this.isOwner && this.isFullStaff && !this.achievePayment && this.isGroupCurrent){
-              console.log('代码走到这里!!!!!!!!!')
               params = {groupBuyId: this.groupBuyId, payType: 2}
-              this.checkoutAuthorrization(params)
-              console.log(params)                  
+              this.checkoutAuthorrization(params)                 
             }
           break
         }
@@ -366,9 +363,6 @@ export default {
           link =  `${this.url}/#/home/freezone`
           break
       }
-      console.log(`我正在参加《${
-            this.courseName
-          }》拼团活动,仅差${this.leavePerson}人,快来和我一起拼团吧!`)
       this.getUserInfo().then(user => {
         this.shareData = {
           link,
