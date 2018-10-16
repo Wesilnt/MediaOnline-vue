@@ -118,7 +118,7 @@
             display: flex;
             justify-content: flex-start;
             height: 322px;
-            background: rgb(247, 202, 118);
+            background: url("./../assets/images/my_head_bg.png");
             z-index: 2;
 
             &-avatar {
@@ -177,6 +177,7 @@
             &-title {
                 font-size: 26px;
                 padding-top: 24px;
+                color: #596880;
             }
         }
     }
