@@ -63,7 +63,7 @@
     <!-- 分享框 -->
     <share-pop :show="showShare" @close="closeShare" :courseId="courseId" :columnType ="columnType"/>
      <!--loading-->
-     <div class="loading-container" v-show="isLoading == 'waiting'">
+     <div class="loading-container" v-show="isBuffering">
         <van-loading color="white" />
      </div>
   </div>
@@ -85,7 +85,6 @@ export default {
       playIcon:require('../../assets/images/audio_play_play.png'),
       pauseIcon:require('../../assets/images/icon_pause.png'),
       lessonId: this.$route.params.id, 
-      lessonId: this.$route.params.id, 
       columnType: this.$route.query.columnType, //播放类型 FreeZone 免费专区  OnlineCourse 在线课堂 OnlineVision 在线视野  Readings 读书会 
       courseName: this.$route.query.courseName, //专栏名
       isInit: true, 
@@ -97,7 +96,7 @@ export default {
     }
   },
   computed: {
-    ...rootState(['url']),
+    ...rootState(['url','columnDetail']),
     ...mapState({
       isLike(state) {
         let like = state.isLike
@@ -112,6 +111,7 @@ export default {
     }),
     ...mapGetters([
       'isLoading',
+      'isBuffering',
       'audio',
       'audioId',
       'courseId',
@@ -132,17 +132,18 @@ export default {
       let link = ''
       switch (this.columnType) {
         case 'OnlineVision':
-          link = this.url + `/#/home/visionDetail/${this.courseId}`
+          link = `${this.url}/#/home/visionDetail/${this.columnDetail.courseId}`
           break
         case 'Readings':
-          link = this.url + `/#/home/readings/book/${this.courseId}`
+          link = `${this.url}/#/home/readings/book/${this.columnDetail.courseId}`
           break
       }
       //拼装分享内容
       let shareData = {
         link,
-        title: `${this.courseName}`,
+        title: `${this.columnDetail.name}`,
         desc: '你一定会爱上国学课...',
+        imageUrl:`${this.columnDetail.sharePostUrl}?imageView2/1/w/100/h/100/format/jpg`,
         successCB: () => console.log('分享回调成功'),
         cancelCB: () => console.log('分享回调失败')
       }

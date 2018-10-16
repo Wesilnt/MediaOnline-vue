@@ -81,8 +81,7 @@ export default {
     PraiseExplain,
     'share-pop': Share
   },
-  computed: {
-    ...rootState(['url']),
+  computed: { 
     ...mapState(['praiseDetail', 'rollerFlag', 'remainTime']),
     ...mapGetters(['praiseData','isCurrentUser'])
   },
@@ -90,8 +89,7 @@ export default {
     this._setBtnAndTips({ status: 1202 }, false, true) 
     this.getCollectDetail({ collectLikeId: this.collectLikeId,columnType:this.columnType })
   }, 
-  methods: {
-    ...rootActions(['getUserInfo', 'setWxShareFriend', 'setWxShareZone']),
+  methods: { 
     ...mapActions([
       'checkStatus',
       'getUserByToken',
@@ -107,21 +105,8 @@ export default {
     praiseExplain() {
       //显示集赞说明框
       this.showExplain = true
-    },
-    //设置分享参数
-    onShare() {
-      //显示分享框
-      this.showShare = true
-    //  this.getUserInfo()
-    //   .then(user=>{
-    //     //拼装分享内容
-    //     this.shareData = {
-    //       link:  `/#/praise/active/${this.courseId}/${this.collectLikeId}?columnType=${this.columnType}`,
-    //       title: `我是${user.nickName}, 我想免费领取《${this.praiseDetail?this.praiseDetail.course.name:'国学课'}》,求助攻~`,
-    //       desc: '你一定会爱上国学课...',
-    //     }
-    //   }) 
-    },
+    }, 
+    onShare(){},
     closeShare() {
       //关闭分享框
       this.showShare = false
@@ -202,7 +187,7 @@ export default {
 .praise-container {
   display: flex;
   flex-direction: column;
-  background: url(../../assets/images/praise_bg.png) center 20%/100%;
+  background: url('http://qiniu.shbaoyuantech.com/FoonQymQNhQIIHH65SS8CNADpgvH?imageView2/1/format/jpg/interlace/1') center 20%/100%;
   min-height: 100vh;
   //1. 头部封面
   .praise-header {
@@ -210,7 +195,7 @@ export default {
     width: 100%;
     top: -10vh; 
     height: 98%;
-    background: url(../../assets/images/praise_bg.png) center 20%/100% repeat-y;
+    background: url('http://qiniu.shbaoyuantech.com/FoonQymQNhQIIHH65SS8CNADpgvH?imageView2/1/format/jpg/interlace/1') center 20%/100% repeat-y;
   }
   //2. 中间点赞详情 2.66666667%  = 20px/750px
   .thumbs-detail {

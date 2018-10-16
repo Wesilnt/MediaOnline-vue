@@ -132,6 +132,7 @@ export default {
         link: this.url + `/#/home/visionDetail/${this.courseId}`,
         title: this.courseName,
         desc: '你一定会爱上国学课...',
+        imageUrl:`${this.visionDetail.sharePostUrl}?imageView2/1/w/100/h/100/format/jpg`,
         successCB: () => console.log('分享回调成功'),
         cancelCB: () => console.log('分享回调失败')
       }

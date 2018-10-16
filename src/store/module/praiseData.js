@@ -73,31 +73,28 @@ export default {
       const result = await wechatSubscribed()  
       // if(result && result==1){
           dispatch('checkStatus',params)
-          return dispatch('getUserByToken').then(()=>dispatch('getCollectDetail',params))
+          return dispatch('getCollectDetail',params)
       // }else{          //跳转去关注公众号
       //     window.location.href = WECHAT_SUBSCRIPTION_URL
       // }
     },
     //积攒状态检查
     async checkStatus({ commit ,dispatch}, params) {
-      const res = await checkStatus(params)
-      console.log(res)
+      const res = await checkStatus(params) 
       if (res) commit('bindPraiseStatus', res)
+      return dispatch('getCollectDetail',params)
     },
     //集赞详情
     async getCollectDetail({ state, commit,dispatch }, params) {
       const res = await getCollectDetail(params)
       await dispatch('getUserInfo',null,{root:true})
-      .then(user=>{
-        console.log("开始设置集赞信息",res)
-        commit('bindUserInfo', user)
-        dispatch('setShareInfo',{user, res})
+      .then(user=>{ commit('bindUserInfo', user)
+                    dispatch('setShareInfo',{user, res})
       })
       console.log(res)
       commit('bindPraiseDetail', res) 
-      if (res.status != 1202) return
+      if (res.status != 1202) return res
       await commit('destroyInterval')
-      // let rollerInterval = setInterval(() => commit('setRollerInterval'), 7000)
       let totalTime = res.duration * 3600 +  (res.createTime - res.sysTime) / 1000  
       let timerInterval = setInterval(() => {
         var hours = parseInt(totalTime / (60 * 60))
@@ -114,6 +111,7 @@ export default {
         commit('setTimerInterval', { timerInterval, isEnded: totalTime <= 0,remainTime})
         }, 1000)
       //
+      return res
     },
     //领取集赞
     async getCollectLike({ commit }, params) {
@@ -143,26 +141,30 @@ export default {
       commit('bindUserInfo', res) 
     },
     //获取专栏详情
-    async getColumnDetail({dispatch, commit }, params) { 
-      const result = await getColumnDetail(params) 
-      console.log(result)
+    async getColumnDetail({commit,rootState }, params) { 
+      if(rootState.columnDetail) return rootState.columnDetail
+      const result = await getColumnDetail(params)  
       commit('bindCurrentColumn', {columnType: params.columnType , columnDetail:result},{root:true})
       return result
     },
     //设置分享信息
     async setShareInfo({state,dispatch},{user, res}){
-      let currentUser  =  user.id == res.starterUid
-      let title = `我是${user.nickName}, ${currentUser?'我想免费':'正在帮朋友'}领取《${res.course.name}》,求助攻~` 
-      //拼装分享内容
-      let shareData = {
-        link:  window.location.href.split('#')[0]+`/#/praise/active/${res.course.id}/${res.id}?columnType=${state.columnType}`,
-        title,
-        desc: '你一定会爱上国学课...',
-        successCB: () => console.log('分享回调成功') ,
-        cancelCB: () =>  this.$toast('分享回调失败')
-      }
-      dispatch('setWxShareFriend',shareData,{root:true})
-      dispatch('setWxShareZone',shareData,{root:true}) 
+      dispatch('getColumnDetail',{courseId:res.course.id})
+      .then(columnDetail=>{
+        let currentUser  =  user.id == res.starterUid
+        let title = `我是${user.nickName}, ${currentUser?'我想免费':'正在帮朋友'}领取《${columnDetail.name}》,求助攻~` 
+        //拼装分享内容
+        let shareData = {
+          link:  window.location.href.split('#')[0]+`/#/praise/active/${columnDetail.id}/${res.id}?columnType=${state.columnType}`,
+          title,
+          desc: '你一定会爱上国学课...',
+          imageUrl:`${columnDetail.sharePostUrl}?imageView2/1/w/100/h/100/format/jpg`,
+          successCB: () => console.log('分享回调成功') ,
+          cancelCB: () =>  this.$toast('分享回调失败')
+        }
+        dispatch('setWxShareFriend',shareData,{root:true})
+        dispatch('setWxShareZone',shareData,{root:true}) 
+      }) 
     }
   },
   getters: {

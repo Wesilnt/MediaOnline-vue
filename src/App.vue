@@ -14,7 +14,6 @@ import MediaIcon from './components/audio/MediaIcon'
 export default {
   name: 'App',
   components: { MediaIcon },
-  mounted() {},
   methods: {
     ...mapActions(['registerWxConfig', 'setWxShareFriend', 'setWxShareZone']),
     handleWxShare: function(link) {
@@ -25,6 +24,7 @@ export default {
         imgUrl:
           'http://qiniu.shbaoyuantech.com/FsvTsNINf5rPwNOmQTfe-WSxTSF1?imageView2/1/w/100/h/100/format/jpg'
       }
+      console.log('App分享数据:', options)
       this.setWxShareFriend(options)
       this.setWxShareZone(options)
     }
@@ -47,7 +47,8 @@ export default {
           'hideMenuItems'
         ]
       })
-      this.handleWxShare(window.location.href)
+        console.log(window.location.href);
+        this.handleWxShare(window.location.href)
     }
   }
 }

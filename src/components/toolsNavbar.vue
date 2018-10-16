@@ -7,12 +7,12 @@
         <hr class="vertical-line"/>
         <div v-show="toolsObject&&toolsObject.originPrice" :disabled="isLoading" class="toolbar-price" :class="{'toolbar-price-active':toolsObject&&!toolsObject.collage&&!toolsObject.collect }"  @click="clickOriginPriceBtn">
             <p class="toolbar-price-num">￥{{toolsObject&&toolsObject.originPrice | formatPrice}}</p>
-            <span class="under-text">原价购买</span>
+            <span class="under-text">{{isLoading?'支付中...':'原价购买'}}</span>
         </div>
         <div v-show="toolsObject&&(toolsObject.collage || toolsObject.collect)" class="toolbar-btnGroup">
             <div v-show="toolsObject&&toolsObject.collage" class="toolbar-btn toolbar-btn-left" :disabled="isLoading" @click="clickCollageBtn">
                 <div v-show="toolsObject&&toolsObject.groupPrice"  class="toolbar-btn-price">￥{{toolsObject&&toolsObject.groupPrice | formatPrice}}</div>
-                <div>{{toolsObject&&toolsObject.collageText}}</div>
+                <div>{{isLoading?'支付中...':toolsObject&&toolsObject.collageText}}</div>
             </div>
             <div v-show="toolsObject&&toolsObject.collect" class="toolbar-btn toolbar-btn-right" @click="clickCollectBtn">
                 <div v-show="toolsObject&&toolsObject.originPrice" class="toolbar-btn-price">￥0.00</div>
@@ -107,7 +107,7 @@ export default {
     }
   },
   computed: {
-    ...rootState(['url']),
+    ...rootState(['url','columnDetail']),
     ...mapState([
       'isLoading',
       'userList',
@@ -347,33 +347,34 @@ export default {
     cancelSharePage() {
       this.sharePageShow = false
     },
-    setShareInfo() {
-      let link = ''
-      switch (this.serviceType) {
-        case 'OnlineCourse':
-          link =  `${this.url}#/videoColumnDetail/${this.courseId}?groupBuyId=${this.groupBuyId}`
-          break
-        case 'OnlineVision':
-          link =  `${this.url}#/home/visionDetail/${this.courseId}`
-          break
-        case 'Readings':
-          link = `${this.url}/#/home/readings/book/${this.courseId}`
-          break
-        default:
-          link =  `${this.url}/#/home/freezone`
-          break
-      }
-      this.getUserInfo().then(user => {
-        this.shareData = {
-          link,
-          title: `我正在参加《${ this.courseName}》拼团活动,仅差${this.leavePerson}人,快来和我一起拼团吧!`,
-          desc: '你一定会爱上国学课...'
-        }
-        this.setWxShareFriend(this.shareData)
-        this.setWxShareZone(this.shareData)
-      })
+    // setShareInfo() {
+    //   let link = ''
+    //   switch (this.serviceType) {
+    //     case 'OnlineCourse':
+    //       link =  `${this.url}#/videoColumnDetail/${this.courseId}?groupBuyId=${this.groupBuyId}`
+    //       break
+    //     case 'OnlineVision':
+    //       link =  `${this.url}#/home/visionDetail/${this.courseId}`
+    //       break
+    //     case 'Readings':
+    //       link = `${this.url}/#/home/readings/book/${this.courseId}`
+    //       break
+    //     default:
+    //       link =  `${this.url}/#/home/freezone`
+    //       break
+    //   }
+    //   this.getUserInfo().then(user => {
+    //     this.shareData = {
+    //       link,
+    //       title: `我正在参加《${ this.courseName}》拼团活动,仅差${this.leavePerson}人,快来和我一起拼团吧!`,
+    //       imageUrl:`${this.columnDetail.sharePostUrl}?imageView2/1/w/100/h/100/format/jpg`,
+    //       desc: '你一定会爱上国学课...'
+    //     }
+    //     this.setWxShareFriend(this.shareData)
+    //     this.setWxShareZone(this.shareData)
+    //   })
 
-    },
+    // },
     gotoInfoPage(id){   
       switch (this.serviceType) {
         case 'OnlineCourse':

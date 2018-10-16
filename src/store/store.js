@@ -158,7 +158,8 @@ export default new Vuex.Store({
           success: res => successCB(res),
           cancel: res => cancelCB(res)
         }
-        console.log('设置分享信息：', shareOptions)
+        // console.log('store')
+        // console.log('store.js设置分享信息：', shareOptions)
         wx.ready(() => {
           // 分享给朋友
           wx.onMenuShareAppMessage(shareOptions)
