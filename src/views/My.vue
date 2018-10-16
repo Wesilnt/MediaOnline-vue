@@ -77,11 +77,11 @@
           image: sys,
           title: '系统消息'
         },*/
-          {
+         /* {
             name: '/my/wx-config',
             image: require('../assets/images/logo.png'),
             title: '组件测试'
-          }
+          }*/
         ]
       }
     },

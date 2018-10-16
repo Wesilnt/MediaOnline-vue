@@ -186,7 +186,7 @@ export default {
     ])
   },
   methods: {
-    ...mapMainActions(['registerWxConfig', 'wxChooseImage']),
+    ...mapMainActions([ 'wxChooseImage']),
     ...mapActions(['renderAnswers', 'handleNext', 'uploadAnswer']),
     async openQuestionAnswer() {
       if (!this.answersChecked) {

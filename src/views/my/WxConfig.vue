@@ -60,7 +60,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['registerWxConfig', 'setWxShareFriend', 'setWxShareZone']),
+    ...mapActions([ 'setWxShareFriend', 'setWxShareZone']),
     handleWxShare: function() {
       const options = {
         title: '分享',
