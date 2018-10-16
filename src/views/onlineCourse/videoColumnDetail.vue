@@ -73,21 +73,7 @@ export default {
     this.getVideoColumnDetail({ courseId: this.courseId, groupBuyId: groupBuyId })
   },
   mounted() {
-    this.getUserInfo().then(user => {
-      //拼装分享内容
-      this.shareData = {
-        link: this.url + `/#/videoColumnDetail/${this.courseId}`,
-        title: `${this.courseName}`,
-        desc: '你一定会爱上国学课...',
-        imageUrl:`${this.profilePic}?imageView2/1/w/100/h/100/format/jpg`,
-        successCB: () => console.log('分享回调成功'),
-        cancelCB: () => console.log('分享回调失败')
-      }
-      console.log('videoColumn----mounted')
-      console.log(this.shareData)
-      this.setWxShareFriend(this.shareData)
-      this.setWxShareZone(this.shareData)
-    })
+
   },
   beforeDestroy() {
     this.resetState()

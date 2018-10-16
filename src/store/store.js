@@ -151,7 +151,7 @@ export default new Vuex.Store({
         const shareOptions = {
           title: title || `${nickname}邀请您一起上课啦！`, // 分享标题
           desc, // 分享描述
-          link: link || state.url + '/#/home', // 分享链接,，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+          link: link || window.location.href, // 分享链接,，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
           imgUrl, // 分享图标
           type, //  分享类型,music、video或link，不填默认为link       *****只对分享给朋友有效*****
           dataUrl, // 如果type是music或video，则要提供数据链接，默认为空      *****只对分享给朋友有效*****
