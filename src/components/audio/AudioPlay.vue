@@ -85,9 +85,7 @@ export default {
   components: { 'share-pop': SharePop },
   data() {
     return {
-      shareData: null, //分享数据
-      lessonId: this.$route.params.id,
-      hiddenDraft: this.$route.query.hiddenDraft,
+      lessonId: this.$route.params.id, 
       columnType: this.$route.query.columnType, //播放类型 FreeZone 免费专区  OnlineCourse 在线课堂 OnlineVision 在线视野  Readings 读书会 
       courseName: this.$route.query.courseName, //专栏名
       isInit: true, 
@@ -146,15 +144,16 @@ export default {
           break
       }
       //拼装分享内容
-      this.shareData = {
+      let shareData = {
         link,
         title: `${this.courseName}`,
         desc: '你一定会爱上国学课...',
         successCB: () => console.log('分享回调成功'),
         cancelCB: () => console.log('分享回调失败')
       }
-      this.setWxShareFriend(this.shareData)
-      this.setWxShareZone(this.shareData)
+      this.setWxShareFriend(shareData)
+      this.setWxShareZone(shareData)
+      console.log('AudioPlay分享数据:', shareData)
     })
   },
   watch: {

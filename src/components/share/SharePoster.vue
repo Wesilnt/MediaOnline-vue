@@ -28,7 +28,7 @@ export default {
       user:{},
       showQrcode:true,
       shareUrl: this.$route.query.shareUrl||`${location.href.split('#')[0]}#/home`,
-      type: this.$route.query.sharetype,
+      shareType: this.$route.query.columnType,
       courseId: this.$route.query.courseId,
       centerX: 355 / 2, //canvas中心X坐标
       canvasW: 750, //canvas宽度
@@ -49,15 +49,17 @@ export default {
               ...mapState(['loading','poster']) 
             },
   created(){
-       console.log("this.shareUrl ============ ",this.shareUrl)
-       console.log("this.columnType:",this.columnType) 
+    console.log("this.shareType:",this.shareType) 
+    this.shareType = this.shareType || this.columnType
+    console.log("this.shareUrl ============ ",this.shareUrl)
+    console.log("this.shareType:",this.shareType) 
      //1. 传入分享地址
      if(this.shareUrl&&this.shareUrl != `${location.href.split('#')[0]}#/home`) {
-        this.drawBottomMap()      //重新生成图片
+        this.drawBottomMap()       //重新生成图片
        return  
      }
      //2. 有专栏详情和专栏类型
-     if(this.columnType && this.columnDetail) {
+     if(this.shareType && this.columnDetail) {
         this.setPosterConfig()    //设置分享地址
          this.drawBottomMap()      //重新生成图片
        return
@@ -94,6 +96,7 @@ export default {
     drawBottomMap:  function() { 
       this.getUserInfo() 
       .then((user)=>{
+        console.log("海報地址:",this.shareUrl) 
         this.user = user
          return new Promise((resolve,reject)=>{
              this.drawBackground(resolve) 
@@ -175,7 +178,7 @@ export default {
     setPosterConfig(){ 
        //1. 有专栏详情, 拼团中
      if(this.columnDetail && this.columnDetail.userAccessStatus==1005){   
-      switch (this.columnType) {
+      switch (this.shareType) {
          case 'OnlineCourse':
           this.shareUrl =  `${this.url}#/home/videoColumnDetail/${this.columnDetail.id}?groupBuyId=${this.columnDetail.groupBuyId}`
           break
@@ -183,7 +186,7 @@ export default {
           this.shareUrl =  `${this.url}#/home/visionDetail/${this.columnDetail.id}?groupBuyId=${this.columnDetail.groupBuyId}`
           break
         case 'Readings':
-          this.shareUrl =  `${this.url}#/home/readings/book/${this.columnDetail.id}?groupBuyId=${this.columnDetail.groupBuyId}&columnType='Readings'`
+          this.shareUrl =  `${this.url}#/home/readings/book/${this.columnDetail.id}?groupBuyId=${this.columnDetail.groupBuyId}`
           break
         default:
           this.shareUrl = `${this.url}#/home/freezone`
@@ -193,12 +196,12 @@ export default {
      }
      //2. 有专栏详情, 集赞中
      if(this.columnDetail && this.columnDetail.userAccessStatus==1009){ 
-      this.shareUrl =  `${this.url}#/praise/active/${this.columnDetail.id}/${this.columnDetail.collectLikeId}?columnType=${this.columnType}` 
+      this.shareUrl =  `${this.url}#/praise/active/${this.columnDetail.id}/${this.columnDetail.collectLikeId}?columnType=${this.shareType}` 
       return
      }
      //3. 有专栏详情, 非集赞中和拼团中
      if(this.columnDetail) { 
-        switch (this.columnType) {
+        switch (this.shareType) {
           case 'OnlineCourse':
             this.shareUrl =   `${this.url}/#/home/videoColumnDetail/${this.columnDetail.id}`
             break
@@ -206,7 +209,7 @@ export default {
             this.shareUrl =   `${this.url}/#/home/visionDetail/${this.columnDetail.id}`
             break
           case 'Readings':
-            this.shareUrl =   `${this.url}/#/home/readings/book/${this.columnDetail.id}columnType='Readings'`
+            this.shareUrl =   `${this.url}/#/home/readings/book/${this.columnDetail.id}`
             break
           default:
             this.shareUrl = `${this.url}/#/home/freezone`
