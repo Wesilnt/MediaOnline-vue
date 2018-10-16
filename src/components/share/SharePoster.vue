@@ -178,39 +178,39 @@ export default {
      if(this.columnDetail && this.columnDetail.userAccessStatus==1005){   
       switch (this.shareType) {
          case 'OnlineCourse':
-          this.shareUrl =  `${this.url}#/home/videoColumnDetail/${this.columnDetail.id}?groupBuyId=${this.columnDetail.groupBuyId}`
+          this.shareUrl =  `${this.url}/#/videoColumnDetail/${this.columnDetail.id}?groupBuyId=${this.columnDetail.groupBuyId}`
           break
         case 'OnlineVision':
-          this.shareUrl =  `${this.url}#/home/visionDetail/${this.columnDetail.id}?groupBuyId=${this.columnDetail.groupBuyId}`
+          this.shareUrl =  `${this.url}/#/home/visionDetail/${this.columnDetail.id}?groupBuyId=${this.columnDetail.groupBuyId}`
           break
         case 'Readings':
-          this.shareUrl =  `${this.url}#/home/readings/book/${this.columnDetail.id}?groupBuyId=${this.columnDetail.groupBuyId}`
+          this.shareUrl =  `${this.url}/#/readings/book/${this.columnDetail.id}?groupBuyId=${this.columnDetail.groupBuyId}`
           break
         default:
-          this.shareUrl = `${this.url}#/home/freezone`
+          this.shareUrl = `${this.url}/#/freezone`
           break
         } 
       return
      }
      //2. 有专栏详情, 集赞中
      if(this.columnDetail && this.columnDetail.userAccessStatus==1009){ 
-      this.shareUrl =  `${this.url}#/praise/active/${this.columnDetail.id}/${this.columnDetail.collectLikeId}?columnType=${this.shareType}` 
+      this.shareUrl =  `${this.url}/#/praise/active/${this.columnDetail.id}/${this.columnDetail.collectLikeId}?columnType=${this.shareType}` 
       return
      }
      //3. 有专栏详情, 非集赞中和拼团中
      if(this.columnDetail) { 
         switch (this.shareType) {
           case 'OnlineCourse':
-            this.shareUrl =   `${this.url}/#/home/videoColumnDetail/${this.columnDetail.id}`
+            this.shareUrl =   `${this.url}/#/videoColumnDetail/${this.columnDetail.id}`
             break
           case 'OnlineVision':
             this.shareUrl =   `${this.url}/#/home/visionDetail/${this.columnDetail.id}`
             break
           case 'Readings':
-            this.shareUrl =   `${this.url}/#/home/readings/book/${this.columnDetail.id}`
+            this.shareUrl =   `${this.url}/#/readings/book/${this.columnDetail.id}`
             break
           default:
-            this.shareUrl = `${this.url}/#/home/freezone`
+            this.shareUrl = `${this.url}/#/freezone`
             break
           } 
       }

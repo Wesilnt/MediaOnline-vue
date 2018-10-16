@@ -1,5 +1,6 @@
 <template>
   <div class="book-detail-container">
+     <SkeletonFullScreen  v-if="dataLoading"/>
      <GroupHeader></GroupHeader>
     <!-- 1. 头部 -->
     <div class="book-header-container" v-show="false">
@@ -64,14 +65,14 @@
       :immediate-check="false"
       @load="scrollBottom"
       @offset="10">
-         <singleset-list :list="singleSetList" :play-id="playingId" :singletype="'Readings'" :coursename="courseName" :useraccessstatus="userAccessStatus"/>
+         <SingleSetList :list="singleSetList" :play-id="playingId" :singletype="'Readings'" :coursename="courseName" :useraccessstatus="userAccessStatus"/>
     </van-list>
     <!-- 6. 分页布局 -->
     <div class="load-more-container" v-if="singleFinished">
       <span>没有更多了，不要再拉啦～</span>
     </div>
     <!-- 7. 底部工具条 -->
-    <tools-navbar 
+    <toolsNavbar 
       :originPrice="'100'"
       :groupPrice="'10'"
       collageText="拼团"
@@ -82,6 +83,7 @@
   </div>
 </template>
 <script>
+import SkeletonFullScreen from '../../components/SkeletonFullScreen'
 import toolsNavbar from '../../components/toolsNavbar.vue'
 import GroupHeader from '../onlineCourse/components/GroupHeader'
 import SingleSetList from '../../components/SingleSetList.vue'
@@ -102,13 +104,15 @@ export default {
     }
   },
   components: {
-    'singleset-list': SingleSetList,
-    'tools-navbar': toolsNavbar,
-    GroupHeader
+     SingleSetList,
+    toolsNavbar,
+    GroupHeader,
+    SkeletonFullScreen
   },
   computed: {     
       ...rootState(['url']),     
     ...mapState([
+      'dataLoading',
       'bookDetail',
       'singleLoaing',
       'singleFinished',

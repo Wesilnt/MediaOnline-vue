@@ -4,6 +4,7 @@ import groupManagerData from './groupManagerData'
 export default {
     namespaced: true,
     state: {
+        dataLoading:true,
         courseId:0,
         pageSize : 10,
         singlePage:1,
@@ -49,7 +50,10 @@ export default {
           state.singleSetList = state.singleSetList.concat(res.result) 
           state.singleFinished = state.singleSetList.length >= totalCount
         },
-        toggleLoading(state, isLoading){
+        setDataLoading(state,loading){
+          state.dataLoading = loading
+        },
+        toggleBookLoading(state, isLoading){
            state.loading = isLoading
         },
         setSingleLaoding(state, isLoading){
@@ -60,7 +64,7 @@ export default {
         //读书会-书列表
         async getReadingsList({state, commit },refresh) {
           if(state.loading || state.finished)return
-           commit('toggleLoading',true)
+           commit('toggleBookLoading',true)
             let page  = refresh ? 1 : state.currentPage + 1
             const res = await getReadingsList({ type: 1007, currentPage: page, pageSize: state.pageSize })
             console.log(res)
@@ -69,6 +73,7 @@ export default {
         },
         //书详情
         async getBookDetail({dispatch, commit }, params) { 
+            commit('setDataLoading',true)
             const result = await getBookDetail(params) 
             console.log(result) 
             //绑定全局专栏当前详情
@@ -80,6 +85,7 @@ export default {
             const profilePic = result.coverPic
             const freeLessonList = result.freeLessonList
             const serviceType = "Readings"
+            commit('setDataLoading',false)
             commit("bindBookDetail", { result,isFromShare: groupBuyId ? true : false})
             //绑定与拼团相关的内容
             dispatch('groupManagerData/initColumnInfo',{serviceType,courseId,profilePic,'freeLesson':freeLessonList})
