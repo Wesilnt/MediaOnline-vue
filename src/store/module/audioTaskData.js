@@ -85,10 +85,17 @@ export default {
       console.log("status",status)
       state.status = status
       state.isPlaying = !state._at.paused
-      if(status == "loadstart" || status == "seeking" || status == "waiting"){
+      if(status == "loadstart" 
+         || status == "seeking" 
+         || status == "waiting"){
         state.isBuffering = true
       }
-      if(status == "play" || status == "pause" || status == "canplaythrough"){
+      if(status == "play" 
+      || status == "pause" 
+      || status == "canplaythrough" 
+      || status == "seeked" 
+      || status == "error"
+      || status == "abort"){
         state.isBuffering = false
       }
       state.showFloat = true
