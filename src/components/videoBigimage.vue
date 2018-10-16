@@ -1,13 +1,13 @@
 <template>
   <div class="video-bigimage-container">
     <div class="originImage">
-      <img :src="`${src}?imageView2/1/format/webp`" class="lazy-img-larger img" @click="isExtend=true">
+      <img :src="`${src}?imageView2/1/format/jpg`" class="lazy-img-larger img" @click="isExtend=true">
       <!--<img :src="require('../assets/images/icon_zoom.png')" class="videocol-bigimage-search" @click="isExtend=true">-->
     </div>
     <transition enter-active-class="fadeIn" leave-active-class="fadeOut">
       <div v-if="isExtend&&src" class="imageExtend" @click="isExtend=false">
         <div class="extend-back"/>
-        <img :src="`${src}?imageView2/1/format/webp`"  class="extend-img">
+        <img :src="`${src}?imageView2/1/format/jpg`"  class="extend-img">
       </div>
     </transition>
   </div>

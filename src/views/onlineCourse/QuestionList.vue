@@ -10,10 +10,10 @@
                     <p>{{correct}}</p>
                     <span>答对</span>
                 </div>
-                <div class="question-to-review-item">
+                <!--<div class="question-to-review-item">
                     <p>3</p>
                     <span>排行</span>
-                </div>
+                </div>-->
             </div>
             <div class="qhht-flex">
                 <a class="qhht-blockButton question-inner-btn" @click="handlePopupShow('reviewShow')">回顾自测题</a>
