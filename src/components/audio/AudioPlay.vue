@@ -31,21 +31,13 @@
       </div>
       <!-- 播放按钮 -->
       <div class="play-btns">
-        <div class="btn-item" @click="onPlayMode">
-          <img :src="'single'==playMode?require('../../assets/images/audio_play_single.png'):require('../../assets/images/audio_play_sort.png')">
+        <div class="btn-item" :style="{backgroundImage:`url(${'single'==playMode?singleIcon:orderIcon})`}" @click="onPlayMode" />
+        <div class="btn-item" :style="{backgroundImage:`url(${preIcon})`}" @click="onPlayPrv"/> 
+        <div :class="{'btn-item':true,'play-btn-active':playing}"  @click="onPlayPause">
+          <span :style="{backgroundImage:`url(${playing?playIcon:pauseIcon})`}"/>
         </div>
-        <div class="btn-item" @click="onPlayPrv">
-          <img src="../../assets/images/audio_play_prv.png">
-        </div>
-        <div :class="{'play-btn-active':playing}" class="btn-item" @click="onPlayPause">
-          <img :src="playing?require('../../assets/images/audio_play_play.png'):require('../../assets/images/icon_pause.png')">
-        </div>
-        <div class="btn-item" @click="onPlayNext">
-          <img src="../../assets/images/audio_play_next.png">
-        </div>
-        <div class="btn-item" @click="onPlayList">
-          <img src="../../assets/images/audio_play_list.png">
-        </div>
+        <div class="btn-item" :style="{backgroundImage:`url(${nextIcon})`}" @click="onPlayNext"/>  
+        <div class="btn-item" :style="{backgroundImage:`url(${listIcon})`}" @click="onPlayList"/>
       </div>
     </div>
     <!-- 音频列表弹框 -->
@@ -85,6 +77,14 @@ export default {
   components: { 'share-pop': SharePop },
   data() {
     return {
+      singleIcon:require('../../assets/images/audio_play_single.png'),
+      orderIcon:require('../../assets/images/audio_play_sort.png'),
+      listIcon:require('../../assets/images/audio_play_list.png'),
+      preIcon:require('../../assets/images/audio_play_prv.png'),
+      nextIcon:require('../../assets/images/audio_play_next.png'),
+      playIcon:require('../../assets/images/audio_play_play.png'),
+      pauseIcon:require('../../assets/images/icon_pause.png'),
+      lessonId: this.$route.params.id, 
       lessonId: this.$route.params.id, 
       columnType: this.$route.query.columnType, //播放类型 FreeZone 免费专区  OnlineCourse 在线课堂 OnlineVision 在线视野  Readings 读书会 
       courseName: this.$route.query.courseName, //专栏名
@@ -428,14 +428,14 @@ export default {
     margin-top: 58px;
     padding: 0 36px 70px;
     box-sizing: content-box;
+    align-items: center;
     .btn-item {
       display: flex;
       align-items: center;
-      img {
-        vertical-align: middle;
-        margin: 0;
-        width: 50px;
-      }
+      background-size: 50px;
+      width: 50px;
+      height: 50px;
+      background-repeat: no-repeat;   
     }
     .btn-item:nth-child(2) {
       margin-left: 40px;
@@ -454,16 +454,19 @@ export default {
 
       // padding: 26px 29px 26px 30px;
       // padding: 26px 35px; 
-      img {
+      span {
         margin-left: 4px;
-        width: 30px; 
+        width: 31px; 
+        height: 38px;
+        background-size: 31px 38px;
+        background-repeat: no-repeat;
       }
     }
     .play-btn-active {
       // padding: 26px 35px; 
-      img {
-        margin-left: 4px;
-        width: 20px; 
+      span {
+        margin-left: 2px; 
+        background-repeat: no-repeat; 
       }
     }
   }

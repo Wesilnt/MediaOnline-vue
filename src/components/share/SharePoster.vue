@@ -48,10 +48,8 @@ export default {
               ...rootState(['url','columnDetail','columnType']),
               ...mapState(['loading','poster']) 
             },
-  created(){
-    console.log("this.shareType:",this.shareType) 
-    this.shareType = this.shareType || this.columnType
-    console.log("this.shareUrl ============ ",this.shareUrl)
+  created(){ 
+    this.shareType = this.shareType || this.columnType 
     console.log("this.shareType:",this.shareType) 
      //1. 传入分享地址
      if(this.shareUrl&&this.shareUrl != `${location.href.split('#')[0]}#/home`) {
