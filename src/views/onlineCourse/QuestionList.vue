@@ -139,7 +139,7 @@
 </template>
 
 <script>
-import html2canvas from 'html2canvas'
+import domtoimage from 'dom-to-image'
 import { createNamespacedHelpers } from 'vuex'
 import { mapActions as mapMainActions } from 'vuex'
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
@@ -218,25 +218,22 @@ export default {
         }
         const { nickName } = await response
         this.nickName = await nickName
+
         setTimeout(() => {
-          html2canvas(this.$refs.settlement, {
-            backgroundColor: '#4C4C4C',
-            allowTaint: true,
-            width: window.innerWidth,
-            height: window.innerHeight,
-            x: 0,
-            y: 0,
-            scrollX: 0,
-            scrollY: 0
-          }).then(canvas => {
-            const image = new Image()
-            const canvasImg = canvas.toDataURL('image/png')
-              image.src = canvasImg
-            image.onload = () => {
-              this.shareImg = canvasImg
-              this.cvsRenderLoading = false
-            }
-          })
+            const {settlement}=this.$refs
+          domtoimage
+            .toJpeg(settlement, {
+              height: settlement.clientHeight,
+              width: settlement.clientWidth
+            })
+            .then(imgUrl => {
+              const image = new Image()
+              image.src = imgUrl
+              image.onload = () => {
+                this.shareImg = imgUrl
+                this.cvsRenderLoading = false
+              }
+            })
         }, 300)
       }
     },
@@ -437,7 +434,8 @@ export default {
   z-index: 10;
 }
 .share-img {
-  width: 100%;
+  width: 88%;
+  margin-top: 4%;
 }
 .share-img_close {
   position: absolute;
@@ -448,12 +446,12 @@ export default {
   border-radius: 0;
 }
 .settlement-canvas {
-  position: absolute;
-  top: 46%;
-  left: 50%;
-  width: 702px;
-  transform: translate(-50%, -50%);
-  /*border-radius: 8px;*/
+  /*position: absolute;*/
+  /*top: 46%;*/
+  /*left: 50%;*/
+  /*width: 702px;*/
+  /*transform: translate(-50%, -50%);*/
+  border-radius: 8px;
   padding: 20px 32px 60px;
   background-color: #fff;
   text-align: center;
@@ -504,7 +502,7 @@ export default {
   margin: 0 auto 32px;
   width: 200px;
   height: 200px;
-  background-color: #c8d3ff;
+  background-color: #ffffff;
   /deep/ img {
     width: 100%;
   }
