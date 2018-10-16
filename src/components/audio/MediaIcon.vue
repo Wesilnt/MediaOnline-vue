@@ -23,7 +23,7 @@
 </template>
 <script>
 import { createNamespacedHelpers } from 'vuex' 
-const { mapState, mapGetters ,mapMutations} = createNamespacedHelpers('audiotaskData')
+const { mapState, mapGetters,mapActions ,mapMutations} = createNamespacedHelpers('audiotaskData')
 export default {
   data() {
     return {
@@ -52,8 +52,12 @@ export default {
   ,'showFloat'
   , 'columnType'
   , 'courseName'])},
+  created(){
+    this.initAudio()
+  },
   methods: {
     ...mapMutations(['setFloatButton']),
+    ...mapActions(['initAudio']),
     //触摸开始
     _touchStart: function(e) {
       this.startTime = new Date().getTime()

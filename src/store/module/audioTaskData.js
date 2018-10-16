@@ -154,7 +154,7 @@ export default {
       const res = await postLearnRate(params)
     },
     //初始化播放器
-    initAudio({ state, getters, commit, dispatch }) {
+    async initAudio({ state, getters, commit, dispatch }) {
       commit('initThrottle') 
       state._at = document.createElement('AUDIO')
       state._at.style.display = 'none'

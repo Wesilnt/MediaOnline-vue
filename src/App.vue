@@ -11,19 +11,9 @@
 <script>
 // import { mapActions } from 'vuex'
 import MediaIcon from './components/audio/MediaIcon'
-import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapMutations, mapActions } = createNamespacedHelpers(
-  'audiotaskData'
-)
 export default {
   name: 'App',
-  components: { MediaIcon },
-  created() {
-    this.initAudio()
-  },
-  methods: {
-    ...mapActions(['initAudio'])
-  },
+  components: { MediaIcon }, 
    watch: {
     $route(to) {
       console.log("app.vue",to)
