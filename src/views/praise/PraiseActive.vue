@@ -21,7 +21,7 @@ export default {
   },
   computed: { ...mapState(['userId','pageBgUrl', 'courseName','praiseDetail','isPraised']) },
   created() {
-    let response = this.checkoutAuthorrization({ collectLikeId: this.collectLikeId })
+    let response = this.checkStatus({ collectLikeId: this.collectLikeId })
     if(response)response.then(()=>{
        this.isNewUser = this.userId == this.praiseDetail.starterUid||this.isPraised
        if(this.isNewUser) this.toHelp()

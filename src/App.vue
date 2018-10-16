@@ -24,6 +24,7 @@ export default {
         imgUrl:
           'http://qiniu.shbaoyuantech.com/FsvTsNINf5rPwNOmQTfe-WSxTSF1?imageView2/1/w/100/h/100/format/jpg'
       }
+      console.log('App分享数据:', options)
       this.setWxShareFriend(options)
       this.setWxShareZone(options)
     }

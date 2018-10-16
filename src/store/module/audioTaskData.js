@@ -2,6 +2,7 @@ import { getAudioDetail, postLearnRate } from '../../api/audioApi'
 import { throttle } from '../../utils/utils' 
 import {Toast} from 'vant'
 import audioData from './audioData'
+import { stat } from 'fs';
 
 export default {
   namespaced:true,
@@ -17,6 +18,7 @@ export default {
     maxTime: 0, //音频总时长
     playMode: 'order', // order:顺序播放  single：单曲播放
     isPlaying: false, //是否正在播放
+    isBuffering: false, //是否处于缓冲中
     columnType: "FreeZone", //FreeZone 免费专区 OnlineCourse 在线课堂  OnlineVision 在线视野  Readings 读书会
     courseName:"", //专栏名
     courseId:-1,
@@ -44,7 +46,6 @@ export default {
     },
     //音频播放同步方法
     syncPlay(state, params) {
-      const {paused}=state._at 
       if (params)  {
         state._at.src = params.audioUrl
         state.columnType = params.columnType || state.columnType
@@ -56,15 +57,16 @@ export default {
         state.currentTime = state._at.currentTime = parseFloat(currentTime)
         state.maxTime = JSON.parse(localCache).maxTime
       }
-      state._at.play()
+      state._at.play().catch(function (e) {
+        console.log("a.play catch>", e)
+     })
     },
     //音频播放同步方法
     syncPause(state) {
       state._at.pause()
     },
     //音频播放同步方法
-    seekTo(state, progress) {  
-      console.log("progress:",progress)
+    seekTo(state, progress) {   
       if(isNaN(progress))return
       state.currentTime = progress
       state._at.currentTime = progress 
@@ -74,12 +76,21 @@ export default {
       state.currentTime = state._at.currentTime
       state.maxTime = state._at.duration 
       if (state.throttle)
-        state.throttle(state.audioDetail.id, state.currentTime, state.maxTime)
+        {
+          state.throttle(state.audioDetail.id, state.currentTime, state.maxTime)
+        }
     },
     //播放状态更新
     statusUpdate(state, status) {
+      console.log("status",status)
       state.status = status
       state.isPlaying = !state._at.paused
+      if(status == "loadstart" || status == "seeking" || status == "waiting"){
+        state.isBuffering = true
+      }
+      if(status == "play" || status == "pause" || status == "canplaythrough"){
+        state.isBuffering = false
+      }
       state.showFloat = true
     },
     //设置播放模式
@@ -131,18 +142,20 @@ export default {
       commit('syncPause')
     },
     //下一集
-    async playNext({ state, dispatch }) {
+    async playNext({ state,commit, dispatch }) {
       let nextId = state.audioDetail.nextLessonId
       if (nextId&&-1!=nextId) {
+        commit('syncPause')
         dispatch('asyncPlay', { lessonId: state.audioDetail.nextLessonId })
       } else {
         // Toast('已经是最后一条')
       }
     },
     //上一集
-    async playPre({ state, dispatch }) {
+    async playPre({ state,commit, dispatch }) {
       let preId = state.audioDetail.preLessonId
       if (preId&&-1!=preId) {
+        commit('syncPause')
         dispatch('asyncPlay', { lessonId: state.audioDetail.preLessonId })
       } else {
         // Toast('这是第一条')

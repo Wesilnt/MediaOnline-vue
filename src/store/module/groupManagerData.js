@@ -264,6 +264,7 @@ const groupManagerData = {
                       link,
                       title,
                       desc: '你一定会爱上国学课...',
+                      imageUrl:`${rootState.columnDetail}?imageView2/1/w/100/h/100/format/jpg`,
                       successCB: () => console.log('分享回调成功'),
                       cancelCB: () => console.log('分享回调失败')
                     }

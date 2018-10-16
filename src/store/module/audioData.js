@@ -120,6 +120,7 @@ export default {
   },
   getters: {
     isLoading:(state,getters,rootState) => rootState.audiotaskData.status,
+    isBuffering:(state,getters,rootState) => rootState.audiotaskData.isBuffering,
     audio: (state, getters, rootState) => rootState.audiotaskData.audioDetail,
     audioId: (state, getters, rootState) => rootState.audiotaskData.audioId,
     courseId: (state, getters, rootState) => rootState.audiotaskData.courseId,
