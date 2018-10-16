@@ -1,5 +1,7 @@
 <template>
-   <SingleSetList :singletype="'OnlineCourse'"  :list='videoCourseList' :coursename="courseName" :useraccessstatus="userAccessStatus"></SingleSetList>
+  <div>
+    <SingleSetList :singletype="'OnlineCourse'"  :list='videoCourseList' :coursename="courseName" :useraccessstatus="userAccessStatus"></SingleSetList>
+  </div>
 </template>
 
 <script>

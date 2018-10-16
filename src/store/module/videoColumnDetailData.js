@@ -59,8 +59,8 @@ const videoColumnDetailData = {
     },
     async getVideoColumnDetail({ commit, dispatch }, { courseId, groupBuyId }) {
       //获取视频专栏数据
-      const result = await getVideoColumnDetail({ courseId })
-      commit('setUserAccessStatus', result.setUserAccessStatus)
+      const result = await getVideoColumnDetail({ courseId })     
+      commit('setUserAccessStatus', result.userAccessStatus)
       //获取专栏下所有单集
       dispatch('getVideoCourseList',courseId)
       //绑定专栏详情内容

@@ -48,9 +48,9 @@ export default {
         case 1009://集赞中
         break
       }
-      // console.log('============',this.useraccessstatus)
-      // console.log(item.isFree)
-      // console.log(unLock)
+      console.log('============',this.useraccessstatus)
+      console.log(item.isFree)
+      console.log(unLock)
       if (item.isFree || unLock) {
      
         if(this.singletype == 'OnlineCourse'){
