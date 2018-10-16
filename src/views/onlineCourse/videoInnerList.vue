@@ -20,7 +20,7 @@ export default{
     ...mapActions(['getVideoCourseList'])
   },
   mounted(){
-    this.getVideoCourseList(this.$route.params.courseId)
+  //   this.getVideoCourseList(this.$route.params.courseId)
   }
 }
  

@@ -61,6 +61,8 @@ const videoColumnDetailData = {
       //获取视频专栏数据
       const result = await getVideoColumnDetail({ courseId })
       commit('setUserAccessStatus', result.setUserAccessStatus)
+      //获取专栏下所有单集
+      dispatch('getVideoCourseList',courseId)
       //绑定专栏详情内容
       const profilePic = result.profilePic
       const freeLessonList = result.freeLessonList
