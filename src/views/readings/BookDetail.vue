@@ -125,11 +125,6 @@ export default {
   created() {
     this.initData(this.courseId)
     this.getBookDetail({courseId: this.courseId, groupBuyId: this.$route.query.groupBuyId})
-    const { fullPath } = this.$route
-    this.registerWxConfig({
-      fullPath,
-      jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline']
-    })
   },
   mounted(){  
     this.getUserInfo()
@@ -152,7 +147,7 @@ export default {
     }
   },
   methods: {
-    ...rootActions(['getUserInfo','registerWxConfig', 'setWxShareFriend', 'setWxShareZone']),  
+    ...rootActions(['getUserInfo', 'setWxShareFriend', 'setWxShareZone']),
     ...mapMutations(['initData']),
     ...mapActions(['getBookDetail', 'getSingleSetList']),
     toLookWhole() {

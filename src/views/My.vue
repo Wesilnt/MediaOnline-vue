@@ -19,7 +19,6 @@
 
 <script>
   import {createNamespacedHelpers} from 'vuex'
-
   const {mapState, mapActions} = createNamespacedHelpers('myData')
 
   import purchase from '../assets/images/my_purchase.png'
@@ -72,17 +71,17 @@
             name: '/my/Feedback',
             image: feedback,
             title: '意见反馈'
-          }
+          },
           /* {
           name: '/my/SysMessage',
           image: sys,
           title: '系统消息'
         },*/
-          /*{
+          {
             name: '/my/wx-config',
             image: require('../assets/images/logo.png'),
             title: '组件测试'
-          }*/
+          }
         ]
       }
     },

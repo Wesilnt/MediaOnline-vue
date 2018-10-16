@@ -88,15 +88,10 @@ export default {
   },
   created: function() {
     this._setBtnAndTips({ status: 1202 }, false, true) 
-    this.getCollectDetail({ collectLikeId: this.collectLikeId,columnType:this.columnType })  
-    const { fullPath } = this.$route
-    this.registerWxConfig({
-      fullPath,
-      jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline']
-    })
+    this.getCollectDetail({ collectLikeId: this.collectLikeId,columnType:this.columnType })
   }, 
   methods: {
-    ...rootActions(['getUserInfo','registerWxConfig', 'setWxShareFriend', 'setWxShareZone']), 
+    ...rootActions(['getUserInfo', 'setWxShareFriend', 'setWxShareZone']),
     ...mapActions([
       'checkStatus',
       'getUserByToken',

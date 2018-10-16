@@ -77,13 +77,6 @@ export default {
     Share,
     PhoneVerif
   },
-  created() {
-    const { fullPath } = this.$route
-    this.registerWxConfig({
-      fullPath,
-      jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline']
-    })
-  },
   beforeDestroy(){
     this.updateUserAccessStatus()
   },
@@ -148,7 +141,6 @@ export default {
   methods: {
     ...rootActions([
       'getUserInfo',
-      'registerWxConfig',
       'setWxShareFriend',
       'setWxShareZone'
     ]),

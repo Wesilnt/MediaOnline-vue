@@ -1,9 +1,9 @@
 <template>
     <section>
-        <div class="lazy-img-most skeleton-giant" v-lazy:background-image="null"></div>
+        <div class="skeleton-giant active"></div>
         <div  v-for="row in 3" :key="row">
             <div class="skeleton-container">
-                <i class="qhht-icon skeleton-avatar" v-lazy:background-image="null"></i>
+                <i class="qhht-icon skeleton-avatar active"></i>
                 <div class="skeleton-paragraphs" >
                     <p  class="skeleton-header skeleton-paragraph active">
                     </p>
@@ -12,7 +12,7 @@
             </div>
         </div>
         <div class="qhht-flex skeleton-grid">
-            <i v-for="item in 4" class="qhht-icon skeleton-grid-item"  v-lazy:background-image="null"></i>
+            <i v-for="item in 4" class="qhht-icon skeleton-grid-item active"></i>
         </div>
     </section>
 </template>
@@ -33,7 +33,7 @@ export default {
 }
 .skeleton-giant {
   height: 360px;
-    margin-bottom: 20px;
+  margin-bottom: 20px;
   background: #fff center no-repeat;
 }
 .skeleton-avatar {
@@ -61,7 +61,7 @@ export default {
   }
 }
 .active {
-  background: linear-gradient(90deg, #f2f2f2 25%, #e6e6e6 37%, #f2f2f2 63%);
+  background: linear-gradient(90deg, #f9f9f9 25%, #f0f0f0 37%, #f9f9f9 63%);
   animation: ant-skeleton-loading 1.4s ease infinite;
   background-size: 400% 100%;
 }

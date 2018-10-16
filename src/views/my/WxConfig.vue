@@ -1,13 +1,12 @@
 <template>
     <div>
         <SkeletonFullScreen />
-        <div class="lazy-img-most wxconfig-header" v-lazy:background-image="null"></div>
+        <div class="lazy-img-most wxconfig-header"  lazy="error"></div>
         <ScrollNavBar />
         <div class="wxconfig-title" id="title">
             <p>模拟标题</p>
         </div>
         <div  class="btn-wrapper">
-            <van-button type="default" size="large" @click="handleRegisterWxConfig">注册微信</van-button>
             <van-button type="primary" size="large"  @click="handleWxShare">分享按钮</van-button>
             <van-button type="warning" size="large" @click="onOpenPupop">测试Picker</van-button>
             <van-button type="danger" size="large">待测试</van-button>
@@ -62,13 +61,6 @@ export default {
   },
   methods: {
     ...mapActions(['registerWxConfig', 'setWxShareFriend', 'setWxShareZone']),
-    handleRegisterWxConfig: function() {
-      const { fullPath } = this.$route
-      this.registerWxConfig({
-        fullPath,
-        jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline']
-      })
-    },
     handleWxShare: function() {
       const options = {
         title: '分享',

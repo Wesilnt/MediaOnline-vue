@@ -126,11 +126,6 @@ export default {
     this.isInit = true
     this.bindCourseName(this.courseName) 
     this.playAudio({ lessonId: this.lessonId, columnType: this.columnType })
-    const { fullPath } = this.$route
-    this.registerWxConfig({
-      fullPath,
-      jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline']
-    })
   },
   mounted() {
     this.getUserInfo().then(user => {
@@ -166,7 +161,7 @@ export default {
     }
   },
   methods: {
-    ...rootActions(['getUserInfo','registerWxConfig','setWxShareFriend','setWxShareZone']),
+    ...rootActions(['getUserInfo','setWxShareFriend','setWxShareZone']),
     ...mapActions([
       'getAudioDetail',
       'postFavorite',

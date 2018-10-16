@@ -47,20 +47,13 @@ export default {
   watch: {
     show(value) {
       this.isOpen = value
-      if (value) {
-        const { fullPath } = this.$route
-        this.registerWxConfig({
-          fullPath,
-          jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline']
-        })
-      }
     }
   },
   computed: {
     ...mapState(['url'])
   },
   methods: {
-    ...mapActions(['registerWxConfig', 'setWxShareFriend', 'setWxShareZone']),
+    ...mapActions([ 'setWxShareFriend', 'setWxShareZone']),
     onShareItem(shareScore) {
       // this.isOpen = false
       // const nickname = 'nihao' 

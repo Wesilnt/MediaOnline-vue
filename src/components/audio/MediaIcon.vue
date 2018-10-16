@@ -22,17 +22,22 @@
   </div>
 </template>
 <script>
-import { createNamespacedHelpers } from 'vuex' 
-const { mapState, mapGetters,mapActions ,mapMutations} = createNamespacedHelpers('audiotaskData')
+import { createNamespacedHelpers } from 'vuex'
+const {
+  mapState,
+  mapGetters,
+  mapActions,
+  mapMutations
+} = createNamespacedHelpers('audiotaskData')
 export default {
   data() {
     return {
-      _canvas:null,
-      _ctx: null, 
+      _canvas: null,
+      _ctx: null,
       windowWidth: window.screen.width,
       windowHeight: window.screen.height,
-      x: (window.screen.width- 68 - 6) + 'px' ,
-      y: (( window.screen.height - 68 ) * 3 / 4 ) + 'px',
+      x: window.screen.width - 68 - 6 + 'px',
+      y: ((window.screen.height - 68) * 3) / 4 + 'px',
       width: 68,
       height: 68,
       startX: 48,
@@ -40,19 +45,23 @@ export default {
       startTime: 0,
       outRingWidth: 6,
       progressgWidth: 4,
-      progress:0,
+      progress: 0
     }
   },
-  computed:{...mapState(['isPlaying'
-  ,'currentTime'
-  ,'maxTime'
-  ,'audioId'
-  ,'coverPic'
-  ,'forceHidenFloat'
-  ,'showFloat'
-  , 'columnType'
-  , 'courseName'])},
-  created(){
+  computed: {
+    ...mapState([
+      'isPlaying',
+      'currentTime',
+      'maxTime',
+      'audioId',
+      'coverPic',
+      'forceHidenFloat',
+      'showFloat',
+      'columnType',
+      'courseName'
+    ])
+  },
+  created() {
     this.initAudio()
   },
   methods: {
@@ -72,9 +81,9 @@ export default {
       left = left < 0 ? 0 : left
       top = top < 0 ? 0 : top
       let maxLeft = this.windowWidth - this.width
-      let maxTop =   (this.windowHeight - this.width ) * 3 / 4 
-      left = left > maxLeft    ? maxLeft  : left
-      top =  top > maxTop   ? maxTop : top
+      let maxTop = ((this.windowHeight - this.width) * 3) / 4
+      left = left > maxLeft ? maxLeft : left
+      top = top > maxTop ? maxTop : top
       this.x = left + 'px'
       this.y = top + 'px'
       e.preventDefault()
@@ -84,24 +93,35 @@ export default {
       let offsetTime = new Date().getTime() - this.startTime
       let offsetX = e.changedTouches[0].clientX - this.startX
       let offsetY = e.changedTouches[0].clientY - this.startY
-      if (offsetTime < 800 && Math.abs(offsetX) < 50 && Math.abs(offsetY) < 50) {
+      if (
+        offsetTime < 800 &&
+        Math.abs(offsetX) < 50 &&
+        Math.abs(offsetY) < 50
+      ) {
         this.$router.push({
-          name:'AudioPlay',
-          params:{id:this.audioId},
-          query:{columnType:this.columnType,courseName:this.courseName}})
+          name: 'AudioPlay',
+          params: { id: this.audioId },
+          query: { columnType: this.columnType, courseName: this.courseName }
+        })
       }
       e.preventDefault()
     },
-    _togglePlay(){
-       this._drawPlayIconBg()
+    _togglePlay() {
+      this._drawPlayIconBg()
       let playIcon = new Image()
-      if(this.isPlaying){
-        playIcon.src =  require('../../assets/images/audio_play_play.png')
-      }else{
-        playIcon.src =  require('../../assets/images/icon_pause.png')
+      if (this.isPlaying) {
+        playIcon.src = require('../../assets/images/audio_play_play.png')
+      } else {
+        playIcon.src = require('../../assets/images/icon_pause.png')
       }
-      playIcon.onload = ()=>{
-        this._ctx.drawImage(playIcon,this.width/2-5, this.height/2-8, 10,16);
+      playIcon.onload = () => {
+        this._ctx.drawImage(
+          playIcon,
+          this.width / 2 - 5,
+          this.height / 2 - 8,
+          10,
+          16
+        )
       }
     },
     //设置进度
@@ -109,53 +129,84 @@ export default {
       this._drawProgress(progress, max)
     },
     //绘制进度底色
-    _drawProgressColor: function() { 
+    _drawProgressColor: function() {
       this._ctx.beginPath()
-      this._ctx.arc(this.width/2, this.height/2 , this.height/2, 0, 2* Math.PI, 1)
-      this._ctx.fillStyle = 'white' 
-      this._ctx.fill() 
- 
-      // this._ctx.fillStyle = '#EB852A'; 
+      this._ctx.arc(
+        this.width / 2,
+        this.height / 2,
+        this.height / 2,
+        0,
+        2 * Math.PI,
+        1
+      )
+      this._ctx.fillStyle = 'white'
+      this._ctx.fill()
+
+      // this._ctx.fillStyle = '#EB852A';
       // this._ctx.shadowOffsetX = 15; // 阴影Y轴偏移
       // this._ctx.shadowOffsetY = 15; // 阴影X轴偏移
       // this._ctx.shadowBlur = 14; // 模糊尺寸
       // this._ctx.shadowColor = 'rgba(0, 0, 0, 0.5)'; // 颜色
-      // this._ctx.beginPath(); 
-      // this._ctx.arc(this.width/2, this.height/2 , this.height/2, 0, 2 * Math.PI, false); 
+      // this._ctx.beginPath();
+      // this._ctx.arc(this.width/2, this.height/2 , this.height/2, 0, 2 * Math.PI, false);
       // this._ctx.fill();
     },
     //绘制按鈕底色
-    _drawPlayIconBg: function() { 
+    _drawPlayIconBg: function() {
       this._ctx.beginPath()
-      this._ctx.arc(this.width/2, this.height/2, this.width/2- this.outRingWidth - this.progressgWidth+2, 0, 2* Math.PI, 1)
-      this._ctx.fillStyle = '#FDE7E7' 
-      this._ctx.fill() 
+      this._ctx.arc(
+        this.width / 2,
+        this.height / 2,
+        this.width / 2 - this.outRingWidth - this.progressgWidth + 2,
+        0,
+        2 * Math.PI,
+        1
+      )
+      this._ctx.fillStyle = '#FDE7E7'
+      this._ctx.fill()
     },
     //绘制进度
     _drawProgress: function(progress, duration) {
-      let angle = -1/2* Math.PI + progress / duration *2 *Math.PI
+      let angle = (-1 / 2) * Math.PI + (progress / duration) * 2 * Math.PI
       let max = parseInt(duration)
-      let value = parseInt(progress) 
+      let value = parseInt(progress)
       //1. 进度条
       this._ctx.beginPath()
       this._ctx.lineWidth = this.progressgWidth
       this._ctx.strokeStyle = '#FFCD7D'
-      this._ctx.arc(this.width/2, this.height/2, this.height/2 - this.outRingWidth, -1/2* Math.PI , angle, 0)
+      this._ctx.arc(
+        this.width / 2,
+        this.height / 2,
+        this.height / 2 - this.outRingWidth,
+        (-1 / 2) * Math.PI,
+        angle,
+        0
+      )
       this._ctx.stroke()
       this._ctx.closePath()
       //2. 底色部分
       this._ctx.beginPath()
       this._ctx.lineWidth = this.progressgWidth
       this._ctx.strokeStyle = 'white'
-      this._ctx.arc(this.width/2, this.height/2, this.height/2 - this.outRingWidth, angle , 3/2*Math.PI, 0)
+      this._ctx.arc(
+        this.width / 2,
+        this.height / 2,
+        this.height / 2 - this.outRingWidth,
+        angle,
+        (3 / 2) * Math.PI,
+        0
+      )
       this._ctx.stroke()
       this._ctx.closePath()
-    },
-    
+    }
   },
-  mounted() { 
-    if(this.$route.path)
-    this.$refs.mediaIcon.addEventListener('touchstart', this._touchStart, true)
+  mounted() {
+    if (this.$route.path)
+      this.$refs.mediaIcon.addEventListener(
+        'touchstart',
+        this._touchStart,
+        true
+      )
     this.$refs.mediaIcon.addEventListener('touchmove', this._touchMove, true)
     this.$refs.mediaIcon.addEventListener('touchend', this._touchEnd, true)
     // this._canvas = this.$refs.canvasArc
@@ -169,21 +220,21 @@ export default {
     // this._drawProgressColor()
     // this._drawPlayIconBg()
     // this._setProgress(10, 100)
-    // this._togglePlay() 
+    // this._togglePlay()
 
     // if(window.devicePixelRatio){
     //   this._ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
     // }
-  }, 
-  watch:{
-    isPlaying:function(value){
+  },
+  watch: {
+    isPlaying: function(value) {
       // this._togglePlay(value)
       return value
     },
     currentTime: function(value) {
       // console.log(this.$route.path)
       // this._setProgress(this.currentTime,this.maxTime)
-      this.progress = value*100/this.maxTime;
+      this.progress = (value * 100) / this.maxTime
       return value
     },
     $route(to) {
@@ -194,41 +245,41 @@ export default {
 </script>
 <style lang="scss" scoped>
 .media-icon-container {
-  position: fixed; 
+  position: fixed;
   width: 148px;
   height: 148px;
   z-index: 99999;
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: center; 
+  align-items: center;
   padding: 12px;
   background-color: white;
   border-radius: 20px;
-    box-shadow: 0 0 12px #f7f7f7;
-  .circle_container{ 
-     position: absolute;  
+  box-shadow: 0 0 12px #f7f7f7;
+  .circle_container {
+    position: absolute;
   }
-  .image-icon-container{  
+  .image-icon-container {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 124px;
     height: 124px;
-    border-radius: 50%; 
+    border-radius: 50%;
     background-size: 100%;
     background-repeat: no-repeat;
   }
-  .icon-mask{
+  .icon-mask {
     border-radius: 50%;
     background-color: rgba(43, 43, 43, 0.3);
     width: 100%;
     height: 100%;
   }
-  .play-icon{
-     position: absolute;
-     height: 32px;
-     width: 28px; 
+  .play-icon {
+    position: absolute;
+    height: 32px;
+    width: 28px;
   }
 }
 </style>

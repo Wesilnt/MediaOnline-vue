@@ -203,12 +203,6 @@ export default {
   created() {
     const { lessonId } = this.$route.params
     this.getVideoCourseDetail({ lessonId })
-    this.handleRegisterWxConfig()
-    const { fullPath } = this.$route
-    this.registerWxConfig({
-      fullPath,
-      jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline']
-    })
   },
   methods: {
     ...mapMutations([
@@ -226,29 +220,10 @@ export default {
       'postComment'
     ]),
     ...mapRootActions([
-      'registerWxConfig',
       'getUserInfo',
-      'registerWxConfig',
       'setWxShareFriend',
       'setWxShareZone'
     ]),
-    handleRegisterWxConfig: function() {
-      const { fullPath } = this.$route
-      this.registerWxConfig({
-        fullPath,
-        jsApiList: [
-          'startRecord',
-          'stopRecord',
-          'onVoiceRecordEnd',
-          'playVoice',
-          'pauseVoice',
-          'stopVoice',
-          'onVoicePlayEnd',
-          'uploadVoice',
-          'translateVoice'
-        ]
-      })
-    },
     //播放视频
     handleVideoPlay() {
       const videoData = JSON.parse(localStorage.getItem(this.id))

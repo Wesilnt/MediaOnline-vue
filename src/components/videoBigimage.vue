@@ -1,13 +1,13 @@
 <template>
   <div class="video-bigimage-container">
     <div class="originImage">
-      <img :src="src" class="img" @click="isExtend=true">
-      <img :src="require('../assets/images/icon_zoom.png')" class="videocol-bigimage-search" @click="isExtend=true">
+      <img :src="`${src}?imageView2/1/format/webp`" class="lazy-img-larger img" @click="isExtend=true">
+      <!--<img :src="require('../assets/images/icon_zoom.png')" class="videocol-bigimage-search" @click="isExtend=true">-->
     </div>
     <transition enter-active-class="fadeIn" leave-active-class="fadeOut">
       <div v-if="isExtend&&src" class="imageExtend" @click="isExtend=false">
         <div class="extend-back"/>
-        <img :src="src" class="extend-img">
+        <img :src="`${src}?imageView2/1/format/webp`"  class="extend-img">
       </div>
     </transition>
   </div>
@@ -15,7 +15,7 @@
 <script>
 export default {
   name: 'Bigimage',
-  props: ['src', 'imgerr'],
+  props: ['src'],
   data() {
     return {
       isExtend: false
@@ -34,8 +34,8 @@ export default {
   position: absolute;
   width: 80px;
   height: 80px;
-  right: 0px;
-  bottom: 0px;
+  right: 0;
+  bottom: 0;
 }
 .video-bigimage-container {
   display: inline-block;

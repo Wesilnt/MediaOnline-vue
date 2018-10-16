@@ -59,7 +59,6 @@ export default {
   methods: {
     ...rootActions([
       'getUserInfo',
-      'registerWxConfig',
       'setWxShareFriend',
       'setWxShareZone'
     ]),
@@ -72,11 +71,6 @@ export default {
     const groupBuyId = this.$route.query.groupBuyId
     this.initDatas(this.courseId)
     this.getVideoColumnDetail({ courseId: this.courseId, groupBuyId: groupBuyId })
-    const { fullPath } = this.$route
-    this.registerWxConfig({
-      fullPath,
-      jsApiList: ['onMenuShareAppMessage', 'onMenuShareTimeline']
-    })
   },
   mounted() {
     this.getUserInfo().then(user => {

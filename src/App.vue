@@ -2,35 +2,60 @@
       <div> 
         <keep-alive>
           <!-- 这里是会被缓存的视图组件，比如 AudioPlay！ -->
-          <router-view  v-if="$route.meta.keepAlive" class="router-view"/>  
+          <router-view  v-show="$route.meta.keepAlive" class="router-view"/>
         </keep-alive>
-        <router-view  v-if="!$route.meta.keepAlive" class="router-view"/>   
+        <router-view  v-show="!$route.meta.keepAlive" class="router-view"/>
         <MediaIcon></MediaIcon>
       </div> 
 </template>
 <script>
-// import { mapActions } from 'vuex'
+import { mapActions } from 'vuex'
 import MediaIcon from './components/audio/MediaIcon'
 export default {
   name: 'App',
-  components: { MediaIcon }, 
-   watch: {
-    $route(to) {
-      console.log("app.vue",to)
+  components: { MediaIcon },
+  mounted() {},
+  methods: {
+    ...mapActions(['registerWxConfig', 'setWxShareFriend', 'setWxShareZone']),
+    handleWxShare: function(link) {
+      const options = {
+        title: '秦汉胡同在线',
+        desc: '你一定会爱上的国学课',
+        link,
+        imgUrl:
+          'http://qiniu.shbaoyuantech.com/FsvTsNINf5rPwNOmQTfe-WSxTSF1?imageView2/1/w/100/h/100/format/jpg'
+      }
+      this.setWxShareFriend(options)
+      this.setWxShareZone(options)
     }
   },
+  watch: {
+    $route({ fullPath }) {
+      this.registerWxConfig({
+        fullPath,
+        jsApiList: [
+          'onMenuShareAppMessage',
+          'onMenuShareTimeline',
+          'startRecord',
+          'stopRecord',
+          'onVoiceRecordEnd',
+          'playVoice',
+          'pauseVoice',
+          'stopVoice',
+          'onVoicePlayEnd',
+          'translateVoice',
+          'hideMenuItems'
+        ]
+      })
+      this.handleWxShare(window.location.href)
+    }
+  }
 }
 </script>
 <style lang="scss">
 @import 'publicUIConfig/common';
 .router-view {
   font-size: 24px;
-}
-.IIV::-webkit-media-controls-play-button,
-.IIV::-webkit-media-controls-start-playback-button {
-  /*opacity: 0;*/
-  /*pointer-events: none;*/
-  /*width: 5px;*/
 }
 .video-popup {
   left: 0;
@@ -39,7 +64,7 @@ export default {
   transform: none;
 }
 .popup-modal-white {
-    background-color: #fff;
+  background-color: #fff;
 }
 .videobox {
   /*width: 4.78rem;*/
