@@ -284,7 +284,6 @@ export default {
       }
       if (paused) {
         // 进度条 未解锁就动态显示
-        console.log(paused)
         if (!this.deblockQuestion && duration) {
           const percent = (this.loaclPlayTotalTime / duration) * 100
           let progress = percent <= 100 ? percent : 100

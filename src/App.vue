@@ -14,7 +14,6 @@ import MediaIcon from './components/audio/MediaIcon'
 export default {
   name: 'App',
   components: { MediaIcon },
-  mounted() {},
   methods: {
     ...mapActions(['registerWxConfig', 'setWxShareFriend', 'setWxShareZone']),
     handleWxShare: function(link) {
@@ -47,7 +46,8 @@ export default {
           'hideMenuItems'
         ]
       })
-      this.handleWxShare(window.location.href)
+        console.log(window.location.href);
+        this.handleWxShare(window.location.href)
     }
   }
 }
