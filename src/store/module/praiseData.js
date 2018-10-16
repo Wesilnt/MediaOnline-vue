@@ -88,7 +88,8 @@ export default {
     async getCollectDetail({ state, commit,dispatch }, params) {
       const res = await getCollectDetail(params)
       await dispatch('getUserInfo',null,{root:true})
-      .then(user=>{ commit('bindUserInfo', user)
+      .then(user=>{
+                    commit('bindUserInfo', user)
                     dispatch('setShareInfo',{user, res})
       })
       console.log(res)
@@ -142,15 +143,17 @@ export default {
     },
     //获取专栏详情
     async getColumnDetail({commit,rootState }, params) { 
-      if(rootState.columnDetail) return rootState.columnDetail
+      if(rootState.columnDetail.id) return rootState.columnDetail
       const result = await getColumnDetail(params)  
       commit('bindCurrentColumn', {columnType: params.columnType , columnDetail:result},{root:true})
+      console.log('user',"详情=================================================================",result)
       return result
     },
     //设置分享信息
     async setShareInfo({state,dispatch},{user, res}){
+     
       dispatch('getColumnDetail',{courseId:res.course.id})
-      .then(columnDetail=>{
+      .then(columnDetail=>{ 
         let currentUser  =  user.id == res.starterUid
         let title = `我是${user.nickName}, ${currentUser?'我想免费':'正在帮朋友'}领取《${columnDetail.name}》,求助攻~` 
         //拼装分享内容
@@ -158,9 +161,9 @@ export default {
           link:  window.location.href.split('#')[0]+`/#/praise/active/${columnDetail.id}/${res.id}?columnType=${state.columnType}`,
           title,
           desc: '你一定会爱上国学课...',
-          imageUrl:`${columnDetail.sharePostUrl}?imageView2/1/w/100/h/100/format/jpg`,
+          imgUrl:`${columnDetail.sharePostUrl}?imageView2/1/w/100/h/100/format/jpg`,
           successCB: () => console.log('分享回调成功') ,
-          cancelCB: () =>  this.$toast('分享回调失败')
+          cancelCB: () =>  console.log('分享回调失败')
         }
         dispatch('setWxShareFriend',shareData,{root:true})
         dispatch('setWxShareZone',shareData,{root:true}) 

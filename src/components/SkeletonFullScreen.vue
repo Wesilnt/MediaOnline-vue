@@ -12,7 +12,7 @@
             </div>
         </div>
         <div class="qhht-flex skeleton-grid">
-            <i v-for="item in 4" class="qhht-icon skeleton-grid-item active"></i>
+            <i v-for="(item,index) in 4" :key="index" class="qhht-icon skeleton-grid-item active"></i>
         </div>
     </section>
 </template>

@@ -349,7 +349,7 @@ export default {
     //邀请好友拼团
     cancelSharePage() {
       this.sharePageShow = false
-    },
+    }, 
     // setShareInfo() {
     //   let link = ''
     //   switch (this.serviceType) {
@@ -375,7 +375,7 @@ export default {
     //     }
     //     this.setWxShareFriend(this.shareData)
     //     this.setWxShareZone(this.shareData)
-    //   })
+    //   })  
 
     // },
     gotoInfoPage(id){   

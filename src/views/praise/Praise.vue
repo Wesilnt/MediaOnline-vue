@@ -106,7 +106,9 @@ export default {
       //显示集赞说明框
       this.showExplain = true
     }, 
-    onShare(){},
+    onShare(){
+      this.showShare = true
+    },
     closeShare() {
       //关闭分享框
       this.showShare = false

@@ -72,8 +72,7 @@ export default {
     this.initDatas(this.courseId)
     this.getVideoColumnDetail({ courseId: this.courseId, groupBuyId: groupBuyId })
   },
-  mounted() {
-
+  mounted() { 
   },
   beforeDestroy() {
     this.resetState()

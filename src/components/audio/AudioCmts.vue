@@ -68,7 +68,15 @@ export default {
     onKeyUp(key) {
       this.onSendComment()
     }
-  }
+  },
+    /**
+   * 监听页面离开，设置本页面是否缓存起来， 如果跳转到评论页面, 设置本页面router:meta.keepAlive = true, 否则 = false
+   */
+  // beforeRouteLeave(to, from, next) {  
+  //   // 设置下一个路由的 meta
+  //   to.meta.keepAlive = true // 让 頁面缓存，即不刷新
+  //   next()
+  // }, 
 }
 </script>
 <style lang='scss' scoped>

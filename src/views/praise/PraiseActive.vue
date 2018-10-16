@@ -3,7 +3,7 @@
         <!-- <div v-for="(item,i) of picList" :key="i" class="active-item">
             <img :src="item">
         </div> -->
-        <div class="active-item" v-lazy:background-image="pageBgUrl" :style="{marginBottom:!isNewUser?'48px':'0px'}"></div>
+        <div class="active-item" v-lazy:background-image="`${pageBgUrl}?imageView2/1/format/jpg`" :style="{marginBottom:!isNewUser?'48px':'0px'}"></div>
         <div class="help-btn" @click="toHelp">为TA助力，免费领取《{{courseName}}》
         </div>
     </div>

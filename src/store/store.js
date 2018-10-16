@@ -61,7 +61,7 @@ export default new Vuex.Store({
     async checkToken({ dispatch }) {
       noAccessToken() && dispatch('getAccessToken')
     },
-    async getUserInfo({ state, commit }) {
+    async getUserInfo({ state, commit }) { 
       const { userInfo } = state
       if (userInfo) return userInfo
       const response = await getUserByToken()
@@ -157,9 +157,7 @@ export default new Vuex.Store({
           dataUrl, // 如果type是music或video，则要提供数据链接，默认为空      *****只对分享给朋友有效*****
           success: res => successCB(res),
           cancel: res => cancelCB(res)
-        }
-        // console.log('store')
-        // console.log('store.js设置分享信息：', shareOptions)
+        }  
         wx.ready(() => {
           // 分享给朋友
           wx.onMenuShareAppMessage(shareOptions)

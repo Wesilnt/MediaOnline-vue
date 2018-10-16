@@ -1,5 +1,5 @@
 <template>
-  <div class="lazy-img-most audioplay-container" v-lazy:background-image="`${audio.coverPic}?imageView2/1/w/750/h/750/format/jpg/interlace/1`">
+  <div class="lazy-img-most audioplay-container" v-lazy:background-image="`${audio.coverPic}?imageView2/1/w/750/h/750/interlace/1`">
     <!-- 封面 -->
     <div class="controller-container">
       <!-- 主，副标题 -->
@@ -143,7 +143,7 @@ export default {
         link,
         title: `${this.columnDetail.name}`,
         desc: '你一定会爱上国学课...',
-        imageUrl:`${this.columnDetail.sharePostUrl}?imageView2/1/w/100/h/100/format/jpg`,
+        imgUrl:`${this.columnDetail.sharePostUrl}?imageView2/1/w/100/h/100/format/jpg`,
         successCB: () => console.log('分享回调成功'),
         cancelCB: () => console.log('分享回调失败')
       }
@@ -266,19 +266,22 @@ export default {
   /**
    * 监听页面离开，设置本页面是否缓存起来， 如果跳转到评论页面, 设置本页面router:meta.keepAlive = true, 否则 = false
    */
-  beforeRouteLeave(to, from, next) {  
-    // 设置下一个路由的 meta
-    from.meta.keepAlive = to.name === 'AudioCmts' // 让 頁面缓存，即不刷新
-    next()
-  },
-  
+  // beforeRouteLeave(to, from, next) {  
+  //     console.log("updated")
+  //   // 设置下一个路由的 meta
+  //   from.meta.keepAlive = false // 让 頁面缓存，即不刷新
+  //   next()
+  // }, 
   /**
    * 监听页面进入，设置本页面是否缓存起来， 如果跳转到评论页面, 设置本页面router:meta.keepAlive = true, 否则 = false
    */
-  beforeRouteEnter(to, from, next) {   
-    from.meta.keepAlive = to.name === 'AudioCmts' // 让 頁面缓存，即不刷新
-    next()
-  }
+  // beforeRouteEnter(to, from, next) {   
+  //   next(vm => {
+  //   console.log(to,from)
+  //     // 通过 `vm` 访问组件实例
+  //     to.meta.keepAlive = false // 让 頁面缓存，即不刷新
+  //   }) 
+  // }
 }
 </script>
 <style lang="scss" >
