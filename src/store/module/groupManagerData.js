@@ -197,8 +197,8 @@ const groupManagerData = {
                               break
                           }
                     }
-                      
-                    console.log('设置分享地址：', link, '   设置分享标题：', title)
+                   
+                    console.log('groupmanager来自分享设置分享地址：', link, '   设置分享标题：', title)
                     let shareData = {
                       link,
                       title,
@@ -258,8 +258,10 @@ const groupManagerData = {
                               break
                           }
                     }
-                      
-                    console.log('设置分享地址：', link, '   设置分享标题：', title)
+                    
+                    
+                    console.log('groupmanager正常设置设置分享地址：', link, '   设置分享标题：', title)
+                    console.log(rootState.url)
                     let shareData = {
                       link,
                       title,
@@ -268,6 +270,7 @@ const groupManagerData = {
                       successCB: () => console.log('分享回调成功'),
                       cancelCB: () => console.log('分享回调失败')
                     }
+                    console.log(shareData)
                     dispatch('setWxShareFriend',shareData,{root:true})
                     dispatch('setWxShareZone',shareData,{root:true})
                 })

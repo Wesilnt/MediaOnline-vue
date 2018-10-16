@@ -83,6 +83,8 @@ export default {
         successCB: () => console.log('分享回调成功'),
         cancelCB: () => console.log('分享回调失败')
       }
+      console.log('videoColumn----mounted')
+      console.log(this.shareData)
       this.setWxShareFriend(this.shareData)
       this.setWxShareZone(this.shareData)
     })

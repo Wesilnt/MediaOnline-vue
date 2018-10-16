@@ -347,34 +347,34 @@ export default {
     cancelSharePage() {
       this.sharePageShow = false
     },
-    setShareInfo() {
-      let link = ''
-      switch (this.serviceType) {
-        case 'OnlineCourse':
-          link =  `${this.url}#/videoColumnDetail/${this.courseId}?groupBuyId=${this.groupBuyId}`
-          break
-        case 'OnlineVision':
-          link =  `${this.url}#/home/visionDetail/${this.courseId}`
-          break
-        case 'Readings':
-          link = `${this.url}/#/home/readings/book/${this.courseId}`
-          break
-        default:
-          link =  `${this.url}/#/home/freezone`
-          break
-      }
-      this.getUserInfo().then(user => {
-        this.shareData = {
-          link,
-          title: `我正在参加《${ this.courseName}》拼团活动,仅差${this.leavePerson}人,快来和我一起拼团吧!`,
-          imageUrl:`${this.columnDetail.sharePostUrl}?imageView2/1/w/100/h/100/format/jpg`,
-          desc: '你一定会爱上国学课...'
-        }
-        this.setWxShareFriend(this.shareData)
-        this.setWxShareZone(this.shareData)
-      })
+    // setShareInfo() {
+    //   let link = ''
+    //   switch (this.serviceType) {
+    //     case 'OnlineCourse':
+    //       link =  `${this.url}#/videoColumnDetail/${this.courseId}?groupBuyId=${this.groupBuyId}`
+    //       break
+    //     case 'OnlineVision':
+    //       link =  `${this.url}#/home/visionDetail/${this.courseId}`
+    //       break
+    //     case 'Readings':
+    //       link = `${this.url}/#/home/readings/book/${this.courseId}`
+    //       break
+    //     default:
+    //       link =  `${this.url}/#/home/freezone`
+    //       break
+    //   }
+    //   this.getUserInfo().then(user => {
+    //     this.shareData = {
+    //       link,
+    //       title: `我正在参加《${ this.courseName}》拼团活动,仅差${this.leavePerson}人,快来和我一起拼团吧!`,
+    //       imageUrl:`${this.columnDetail.sharePostUrl}?imageView2/1/w/100/h/100/format/jpg`,
+    //       desc: '你一定会爱上国学课...'
+    //     }
+    //     this.setWxShareFriend(this.shareData)
+    //     this.setWxShareZone(this.shareData)
+    //   })
 
-    },
+    // },
     gotoInfoPage(id){   
       switch (this.serviceType) {
         case 'OnlineCourse':
