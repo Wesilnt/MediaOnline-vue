@@ -113,6 +113,7 @@ export default {
     //音频单集详情
     async getAudioDetail({ getters, commit, dispatch }, params) {
       const res = await getAudioDetail(params)
+      if(!res)return
       let localCache = localStorage.getItem('learntime-' + res.id)
       if (localCache) {
         //提交本地缓存
@@ -150,6 +151,16 @@ export default {
     },
     //下一集
     async playNext({ state,commit, dispatch }) {
+     if(rootState.columnType
+        &&(rootState.columnType == "OnlineVision" 
+        || rootState.columnType == "Readings")
+        &&rootState.columnDetail){
+          let useraccessstatus = rootState.columnDetail.useraccessstatus
+       if(1001 != useraccessstatus 
+         && 1003 != useraccessstatus 
+         && 1008 != useraccessstatus) 
+         return
+      }
       let nextId = state.audioDetail.nextLessonId
       if (nextId&&-1!=nextId) {
         commit('syncPause')
@@ -159,14 +170,24 @@ export default {
       }
     },
     //上一集
-    async playPre({ state,commit, dispatch }) {
+    async playPre({ state,commit,rootState, dispatch }) {
+      if(rootState.columnType
+           &&(rootState.columnType == "OnlineVision" 
+           || rootState.columnType == "Readings")
+           &&rootState.columnDetail){
+             let useraccessstatus = rootState.columnDetail.useraccessstatus
+          if(1001 != useraccessstatus 
+            && 1003 != useraccessstatus 
+            && 1008 != useraccessstatus) 
+            return
+      } 
       let preId = state.audioDetail.preLessonId
       if (preId&&-1!=preId) {
         commit('syncPause')
         dispatch('asyncPlay', { lessonId: state.audioDetail.preLessonId })
       } else {
         // Toast('这是第一条')
-      }
+      } 
     },
     //上传音频进度
     async postLearnRate({ commit }, params) {

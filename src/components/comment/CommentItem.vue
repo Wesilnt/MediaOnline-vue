@@ -78,9 +78,10 @@ export default {
       this.isExpand = true
     }
   },
-  mounted() {
-    this.needExpand =
-      this.$refs.content.clientHeight < this.$refs.contentChild.clientHeight
+  mounted() { 
+    let frameHeight = this.$refs.content.clientHeight<=0?  this.$refs.content.scrollHeight :this.$refs.content.clientHeight
+    let contentHeight   =  this.$refs.contentChild.offsetHeight<=0? this.$refs.contentChild.scrollHeight :this.$refs.contentChild.offsetHeight
+    this.needExpand = frameHeight < contentHeight
   }
 }
 </script>
