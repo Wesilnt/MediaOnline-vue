@@ -10,10 +10,13 @@ module.exports = {
           new uglifyJsPlugin({
             uglifyOptions: {
               compress: {
+                  join_vars: true,
                 warnings: false,
                 drop_console: isProd,
                 drop_debugger: isProd
-              }
+              },
+                toplevel: false,
+                ie8: false,
             }
           })
         ]

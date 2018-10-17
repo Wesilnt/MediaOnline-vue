@@ -8,7 +8,7 @@ import PageInfo_From_Readings from './router_readings'
 import PageInfo_From_Audio from './router_audio'
 import PageInfo_From_Praise from './router_praise'
 
-const Home = () => import(/* webpackChunkName: "index" */ '../views/Home')
+const Home = () => import(/* webpackChunkName: "home" */ '../views/Home')
 const My = () => import(/* webpackChunkName: "index" */ '../views/My')
 
 Vue.use(Router)

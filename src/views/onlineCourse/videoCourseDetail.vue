@@ -3,15 +3,18 @@
         <SkeletonFullScreen  v-show="loading"/>
         <div v-show="!loading" class="videocourse-detail-container" id="detailmain" ref="detailmain">
             <!-- 播放器封面 -->
-            <div class="lazy-img-most video-detail-header" v-lazy:background-image="`${coverPic}?imageView2/1/format/jpg`">
-                <div class="video-detail-header-right-top">
-                    <img :src="isLike?collectIcon:unCollectIcon" class="video-detail-collect" alt="" @click="onCollectFavorite">
-                    <img :src="require('../../assets/images/onlinecourse-play_ic_share.png')" class="video-detail-share" alt="" @click="onShareAction">
+            <div class="lazy-img-most  video-detail-header"  v-lazy:background-image="`${coverPic}?imageView2/1/format/jpg`">
+                <div class="video-detail-header-bg">
+                    <div class="video-detail-header-right-top">
+                        <img :src="isLike?collectIcon:unCollectIcon" class="video-detail-collect" alt="" @click="onCollectFavorite">
+                        <img :src="require('../../assets/images/onlinecourse-play_ic_share.png')" class="video-detail-share" alt="" @click="onShareAction">
+                    </div>
+                    <a class="video-playbtn-icon" @click="handleVideoPlay">
+                        开始播放
+                    </a>
+                    <!-- <img :src="require('../../assets/images/onlinecourse_video_ic_gift.png')" class="video-detail-header-gift" alt="">     -->
                 </div>
-                <a class="video-playbtn-icon" @click="handleVideoPlay">
-                    开始播放
-                </a>
-                <!-- <img :src="require('../../assets/images/onlinecourse_video_ic_gift.png')" class="video-detail-header-gift" alt="">     -->
+
             </div>
             <!-- navbar -->
             <ScrollNavBar :bars="navBars" />
@@ -141,7 +144,7 @@ export default {
     }
   },
   computed: {
-    ...rootState(['url','columnDetail']),
+    ...rootState(['url', 'columnDetail']),
     ...mapState([
       'loading',
       'lessonList', //目录课程
@@ -324,17 +327,23 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 .videocourse-detail-container {
   background-color: #fff;
 }
 //header
 .video-detail-header {
-  width: 100%;
   height: 422px;
-  // background-color: rgb(198, 72, 172);
   position: relative;
   background: #f6f6f6 center/cover no-repeat;
+  &-bg {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.28);
+  }
 }
 .video-detail-header-right-top {
   position: absolute;
