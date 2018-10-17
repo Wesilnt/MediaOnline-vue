@@ -68,8 +68,7 @@ export default {
       //   cancelCB: () => {
       //     this.$toast('分享回调失败')
       //   }
-      // }
-      console.log('当前分享option:')
+      // } 
       // console.log(shareOption)
       if (shareScore === 'poster') {
         this.$toast('分享海报')

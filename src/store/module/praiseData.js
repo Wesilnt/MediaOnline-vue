@@ -23,6 +23,7 @@ export default {
     pageBgUrl: '',
     courseName: '',
     columnType: 'Readings',
+    userInfo:{},
     time:0
   },
   mutations: {
@@ -32,6 +33,7 @@ export default {
     },
     bindUserInfo(state, res) {
       state.userId = res.id
+      state.userInfo = res
     },
     bindColumnTYpe(state, columnType) {
       state.columnType = columnType
@@ -87,13 +89,11 @@ export default {
     //集赞详情
     async getCollectDetail({ state, commit,dispatch }, params) {
       const res = await getCollectDetail(params)
-      await dispatch('getUserInfo',null,{root:true})
-      .then(user=>{
-                    commit('bindUserInfo', user)
-                    dispatch('setShareInfo',{user, res})
-      })
+      const user = await dispatch('getUserInfo',null,{root:true}) 
+      await commit('bindUserInfo', user)
+      await dispatch('setShareInfo',{user, res}) 
+      await commit('bindPraiseDetail', res) 
       console.log(res)
-      commit('bindPraiseDetail', res) 
       if (res.status != 1202) return res
       await commit('destroyInterval')
       let totalTime = res.duration * 3600 +  (res.createTime - res.sysTime) / 1000  
