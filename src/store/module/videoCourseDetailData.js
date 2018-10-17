@@ -189,6 +189,7 @@ const videoCourseDetailData = {
       const result = await getVideoLessonDetail({ lessonId })
       if (!result) return
         if(loading) await commit('resetLoading', loading)
+        dispatch('setShareOption',{courseId:result.courseId})
       //绑定单集详情内容
       commit('bindVideoCourseDetail', result)
       //绑定目录列表哪一个单集处于播放状态
@@ -269,7 +270,19 @@ const videoCourseDetailData = {
     },
 
     //设置自定义分享
-    setShareOption({state,dispatch,rootState}){
+   async setShareOption({state,dispatch,rootState},{courseId}){
+      const course = await dispatch('getColumnDetail',{courseId,columnType:'1005',useCache:true},{root:true}) 
+      if(!course) return
+      let shareData = {
+        link:  `${rootState.url}/#/${courseType['1005']}${courseId}`,
+        title: `${rootState.columnDetail.name}`,
+        desc: '你一定会爱上国学课...',
+        imgUrl:`${rootState.columnDetail.sharePostUrl}?imageView2/1/w/100/h/100/format/jpg`,
+        successCB: () => console.log('分享回调成功'),
+        cancelCB: () => console.log('分享回调失败')
+      }
+      dispatch('setWxShareFriend',shareData,{root:true})
+      dispatch('setWxShareZone',shareData,{root:true})   
       // dispatch('getUserInfo',null,{root:true}).then(user => {
       //   //拼装分享内容
       //   let shareData = {
