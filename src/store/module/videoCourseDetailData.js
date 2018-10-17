@@ -5,6 +5,7 @@ import {
   unFavorite,
   lessonListenForVedio
 } from '../../api/columnsApi.js'
+import { courseType } from '../../utils/config'
 import { getCommentList, postComment } from '../../api/commentApi.js'
 import questionListData from './questionListData'
 import commentData from './commentData'
@@ -185,11 +186,13 @@ const videoCourseDetailData = {
       commit('bindQuestionBymyself', { progress, deblockQuestion })
     },
     //获取单集详情
-    async getVideoCourseDetail({ commit, dispatch, state }, { lessonId,loading=false }) {
+    async getVideoCourseDetail({ commit, dispatch, state }, { lessonId,loading=false }) { 
       const result = await getVideoLessonDetail({ lessonId })
       if (!result) return
+   
         if(loading) await commit('resetLoading', loading)
         dispatch('setShareOption',{courseId:result.courseId})
+       
       //绑定单集详情内容
       commit('bindVideoCourseDetail', result)
       //绑定目录列表哪一个单集处于播放状态
@@ -204,13 +207,13 @@ const videoCourseDetailData = {
       }
       await dispatch('getLessonListByCourse', params)
       //获取单集评论
-      const commentParams = {
-        regionType: 2202,
-        regionId: lessonId,
-        currentPage: 1,
-        pageSize: 11
-      }
-      await dispatch('getCommentList', commentParams)
+      // const commentParams = {
+      //   regionType: 2202,
+      //   regionId: lessonId,
+      //   currentPage: 1,
+      //   pageSize: 11
+      // }
+      // await dispatch('getCommentList', commentParams)
       //更新当前播放视频的播放数据
       await dispatch('updateVideoPlayData', lessonId)
         if(loading) await commit('resetLoading', false)
@@ -235,7 +238,7 @@ const videoCourseDetailData = {
         commentId,
         currentPage,
         pageSize
-      })
+      }) 
       if (result == null) return
       commit('bindCommentList', result)
     },

@@ -129,7 +129,7 @@ export default {
       //视频播放相关属性
       timer: 0, //定时器
 
-      loaclPlayTotalTime: 0, //本地累计播放时长
+      localPlayTotalTime: 0, //本地累计播放时长
       localPlayTime: 0, //本地播放位置
       playStartTime: null,
 
@@ -217,7 +217,7 @@ export default {
         historyPlayPosition >= this.videoElem.duration ? 0 : historyPlayPosition
       // 记录当前播放时间戳
       this.playStartTime = new Date()
-      this.loaclPlayTotalTime = Math.round(parseFloat(videoData.playTotalTime))
+      this.localPlayTotalTime = Math.round(parseFloat(videoData.playTotalTime))
     },
     handleVideoPause() {
       const { paused } = this.videoElem
@@ -236,7 +236,7 @@ export default {
       if (readyState == 4 || readyState == 3) {
         // console.log('代码是否能走到这里~~~~~~~~')
         // console.log(this.playStartTime)
-        // this.loaclPlayTotalTime += durationPlayingTime
+        // this.localPlayTotalTime += durationPlayingTime
         // const newVideoData = JSON.parse(localStorage.getItem(this.id))
         // const newTotalTime =
         //   durationPlayingTime + Math.round(parseFloat(newVideoData.playTotalTime))
@@ -246,7 +246,7 @@ export default {
           ? (new Date() - this.playStartTime) / 1000
           : 0
 
-        const newTotalTime = this.loaclPlayTotalTime + durationPlayingTime
+        const newTotalTime = this.localPlayTotalTime + durationPlayingTime
 
         let newPosition = currentTime
 
@@ -273,17 +273,19 @@ export default {
         this.playStartTime = new Date()
         console.log('0-0-0-0-0-0-0-0-0-0')
         console.log(videoData)
-        this.loaclPlayTotalTime = Math.round(
-          parseFloat(videoData.playTotalTime)
-        )
+        if(videoData){
+          this.localPlayTotalTime = Math.round(
+              parseFloat(videoData.playTotalTime)
+          )
+        } 
       }
       if (paused) {
         // 进度条 未解锁就动态显示
         if (!this.deblockQuestion && duration) {
-          const percent = (this.loaclPlayTotalTime / duration) * 100
+          const percent = (this.localPlayTotalTime / duration) * 100
           let progress = percent <= 100 ? percent : 100
           this.bindQuestionBymyself({ progress })
-          console.log('loaclPlayTotalTime ===', this.loaclPlayTotalTime)
+          console.log('localPlayTotalTime ===', this.localPlayTotalTime)
           console.log('progress ===', progress)
         }
       }
