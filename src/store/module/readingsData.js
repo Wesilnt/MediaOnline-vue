@@ -91,7 +91,6 @@ export default {
             //绑定与拼团相关的内容
             dispatch('groupManagerData/initColumnInfo',{serviceType,courseId,profilePic,'freeLesson':freeLessonList})
             if (groupBuyId) {
-                console.log('代码走到这里i')
                 //这里是分享链接进来的
               dispatch('groupManagerData/getGroupBuyDetail', groupBuyId)
             } else {

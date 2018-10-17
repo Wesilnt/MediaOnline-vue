@@ -8,6 +8,5 @@ export function getBookDetail(params) {
   return request(`/course/detail?${stringify(params)}`)
 }
 export function getSingleSetList(params) {
-  console.error(params)
   return request(`/lesson/getLessonListByCourse?${stringify(params)}`)
 }

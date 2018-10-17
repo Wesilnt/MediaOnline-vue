@@ -12,7 +12,7 @@
         <div v-show="toolsObject&&(toolsObject.collage || toolsObject.collect)" class="toolbar-btnGroup">
             <div v-show="toolsObject&&toolsObject.collage" class="toolbar-btn toolbar-btn-left" :disabled="isLoading" @click="clickCollageBtn">
                 <div v-show="toolsObject&&toolsObject.groupPrice"  class="toolbar-btn-price">￥{{toolsObject&&toolsObject.groupPrice | formatPrice}}</div>
-                <div>{{isLoading?'支付中...':toolsObject&&toolsObject.collageText}}</div>
+                <div>{{isLoading&&isClickCollageBtn?'支付中...':toolsObject&&toolsObject.collageText}}</div>
             </div>
             <div v-show="toolsObject&&toolsObject.collect" class="toolbar-btn toolbar-btn-right" @click="clickCollectBtn">
                 <div v-show="toolsObject&&toolsObject.originPrice" class="toolbar-btn-price">￥0.00</div>
@@ -48,7 +48,10 @@ export default {
       //分享内容
       shareData: null,
       lastClickTime:0,
-      isClickOriginPriceBtn:false
+      //点击原价购买按钮
+      isClickOriginPriceBtn:false,
+      //点击拼团按钮
+      isClickCollageBtn:false,
     }
   },
   props: {
@@ -174,6 +177,7 @@ export default {
         this.$toast("正在调起支付...")
         return
       }
+      this.isClickOriginPriceBtn = false
       let params = { courseId: this.courseId, payType: 0 }
       switch (this.userAccessStatus) {
         //没有购买和集赞行为
@@ -192,10 +196,11 @@ export default {
     clickCollageBtn() {
       if(this.isQuiklyClick())return
       if(this.isLoading) {
-        this.isClickOriginPriceBtn = false
+        this.isClickCollageBtn = true
         this.$toast("正在调起支付...")
         return
       }
+      this.isClickCollageBtn = false
       console.log("支付事件")
       let params = null
       console.log('是否来自分享'+ this.isFromShare)
@@ -329,7 +334,15 @@ export default {
           break
         case 0:
           //没有购买和集赞行为
-          let params = {
+          params = {
+            courseId: this.courseId,
+            payType: 3
+          }
+          this.checkoutAuthorrization(params)
+          break
+        case -3:
+          //拼团失败后,此时工具条标准显示,此时可以发起集赞
+          params = {
             courseId: this.courseId,
             payType: 3
           }

@@ -266,6 +266,23 @@ const videoCourseDetailData = {
       // }
       // Toast('评论成功')
       // dispatch('getCommentList', params)
+    },
+
+    //设置自定义分享
+    setShareOption({state,dispatch,rootState}){
+      // dispatch('getUserInfo',null,{root:true}).then(user => {
+      //   //拼装分享内容
+      //   let shareData = {
+      //     link:  `${rootState.url}/#/home/videoColumnDetail/${this.courseId}`,
+      //     title: `${this.courseName}`, 
+      //     desc: '你一定会爱上国学课...',
+      //     imgUrl:`${this.columnDetail.sharePostUrl}?imageView2/1/w/100/h/100/format/jpg`, 
+      //     // successCB: () => console.log('分享回调成功'),
+      //     // cancelCB: () => console.log('分享回调失败')
+      //   }
+      //   dispatch('setWxShareFriend',shareData,{root:true})
+      //   dispatch('setWxShareZone',shareData,{root:true})
+      // })
     }
   },
 
