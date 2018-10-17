@@ -156,6 +156,7 @@ export default {
     },
     //绘制二维码
     async drawQrcode() { 
+      console.log("海报地址：",this.shareUrl)
       this.ctx.drawImage(this.$children[0].$el.children[1],440, 880, 200, 200) 
       let currentSrc =  this.$children[0].$el.children[1].currentSrc
       if("" !== currentSrc && this.shareUrl === currentSrc) return
@@ -184,7 +185,7 @@ export default {
           this.shareUrl =  `${this.url}/#/home/visionDetail/${this.columnDetail.id}?groupBuyId=${this.columnDetail.groupBuyId}`
           break
         case 'Readings':
-          this.shareUrl =  `${this.url}/#/readings/book/${this.columnDetail.id}?groupBuyId=${this.columnDetail.groupBuyId}`
+          this.shareUrl =  `${this.url}/#/home/readings/book/${this.columnDetail.id}?groupBuyId=${this.columnDetail.groupBuyId}`
           break
         default:
           this.shareUrl = `${this.url}/#/freezone`
@@ -207,7 +208,7 @@ export default {
             this.shareUrl =   `${this.url}/#/home/visionDetail/${this.columnDetail.id}`
             break
           case 'Readings':
-            this.shareUrl =   `${this.url}/#/readings/book/${this.columnDetail.id}`
+            this.shareUrl =   `${this.url}/#/home/readings/book/${this.columnDetail.id}`
             break
           default:
             this.shareUrl = `${this.url}/#/freezone`

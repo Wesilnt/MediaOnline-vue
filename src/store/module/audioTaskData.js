@@ -50,15 +50,14 @@ export default {
         state._at.src = params.audioUrl
         state.columnType = params.columnType || state.columnType
       }
-      let localCache = localStorage.getItem('learntime-' + state.audioDetail.id)
-      if (localCache) {
-        let currentTime = JSON.parse(localCache).currentTime
-        if (!currentTime || currentTime >= state._at.duration) currentTime = 0
+      let localCache = localStorage.getItem('learntime-' + state.audioDetail.id) 
+      if(localCache) state.maxTime = parseInt(JSON.parse(localCache).maxTime) 
+      state._at.play().catch(e=> { 
+        if (!localCache) return
+        let currentTime = JSON.parse(localCache).currentTime 
+        if (!currentTime || currentTime >= state._at.duration - 5) currentTime = 0
         state.currentTime = state._at.currentTime = parseFloat(currentTime)
-        state.maxTime = JSON.parse(localCache).maxTime
-      }
-      state._at.play().catch(function (e) {
-        console.log("a.play catch>", e)
+        state.maxTime = state._at.duration 
      })
     },
     //音频播放同步方法
@@ -97,6 +96,9 @@ export default {
       || status == "error"
       || status == "abort"){
         state.isBuffering = false
+      }
+      if(status == 'loadedmetadata'){//獲取音频总长度
+
       }
       state.showFloat = true
     },
@@ -210,9 +212,9 @@ export default {
       state._at.addEventListener('abort', () => commit('statusUpdate', 'abort'))
       //寻找中，
       state._at.addEventListener('seeking', () =>commit('statusUpdate', 'seeking'))
-      //可以播放，歌曲全部加载完毕
+      //成功获取资源长度 
       state._at.addEventListener('loadedmetadata', () =>commit('statusUpdate', 'loadedmetadata'))
-      //成功获取资源长度
+      //可以播放，歌曲全部加载完毕 
       state._at.addEventListener('canplaythrough', () =>commit('statusUpdate', 'canplaythrough'))
       //寻找完毕
       state._at.addEventListener('seeked', () =>commit('statusUpdate', 'seeked'))
