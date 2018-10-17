@@ -51,14 +51,12 @@ export default {
   created(){ 
     this.shareType = this.shareType || this.columnType 
     console.log("this.shareType:",this.shareType) 
-     //1. 传入分享地址
-            console.log("//////////////////////////////////////////////////////分享地址：",this.shareUrl)
+     //1. 传入分享地址 
      if(this.shareUrl&&this.shareUrl != `${location.href.split('#')[0]}#/home`) {
         this.drawBottomMap()       //重新生成图片
        return  
      }
-     //2.  有专栏ID
-       console.log("//////////////////////////////////////////////////////专栏id：",this.courseId)
+     //2.  有专栏ID 
      if(this.courseId){
         this.getColumnDetail({courseId:this.courseId}) 
         .then(()=>{

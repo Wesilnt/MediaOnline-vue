@@ -12,15 +12,15 @@
         <div class="course-detail">
             <div class="course-content">
                 <h2>内容介绍:</h2>
-                <p>{{getBookIntroduce.description||'暂无相关介绍'}}</p>
+                <p v-html= "getBookIntroduce.description"/>
             </div>
             <div class="course-author">
                 <h2>作者介绍:</h2>
-                <p>{{getBookIntroduce.authorBriefIntro||'暂无相关介绍'}}</p>
+                <p v-html= "getBookIntroduce.authorBriefIntro"/>
             </div>
             <div class="course-speaker">
                 <h2>播讲者介绍:</h2>
-                <p>{{getBookIntroduce.radioIntro||'暂无相关介绍'}}</p>
+                <p v-html="getBookIntroduce.radioIntro" />
             </div>
         </div>
 

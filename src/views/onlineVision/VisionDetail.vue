@@ -46,9 +46,7 @@
     <div class="noticeBuyArea">
       <div class="noticeBuyText">
         购买须知
-        <p class="noticeBuyTextDetail">
-          {{visionDetail.buyIntro}}
-        </p>
+        <p v-html="visionDetail.buyIntro"/>
       </div>
     </div>
    <tools-navbar
@@ -126,8 +124,7 @@ export default {
     this.getCommentList(this.courseId)
   },
   mounted() {
-    this.getUserInfo().then(user => {
-      console.log("====================================",this.visionDetail.sharePostUrl)
+    // this.getUserInfo().then(user => { 
       //拼装分享内容
       this.shareData = {
         link: this.url + `/#/home/visionDetail/${this.courseId}`,
@@ -139,7 +136,7 @@ export default {
       }
       this.setWxShareFriend(this.shareData)
       this.setWxShareZone(this.shareData)
-    })
+    // })
   },
   computed: {
     ...rootState(['url']),

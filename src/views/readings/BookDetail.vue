@@ -38,7 +38,7 @@
     </div>
     <!-- 3. 作品属性 -->
     <div class="book-properties-container">
-      <p>{{bookDetail.radioIntro}}</p> 
+      <p v-html="bookDetail.radioIntro"></p> 
     </div>
     <hr>
 
@@ -49,9 +49,7 @@
         <span>共{{bookDetail.availLessonCount}}集</span>
       </div>
       <div class="introduce-content">
-        <p>
-           {{bookDetail.description}}
-        </p>
+        <p v-html="bookDetail.description"/>
         <div class="intoduce-whole">
           <span @click="toLookWhole">查看全部</span>
         </div>
