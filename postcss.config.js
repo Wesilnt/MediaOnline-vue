@@ -1,18 +1,5 @@
 module.exports = {
   plugins: [
-    /*require('postcss-theme-variables')({
-      vars: {
-        red: '#E93423',
-        gray: '#CCC',
-        green: '#76C282',
-        orange: '#FEA32F',
-        blue: '#3175F6',
-        'button-primary-background-color': '#FEA32F',
-        'button-primary-border-color': '#FEA32F',
-        'active-color': '#FEA32F'
-      },
-      prefix: '$'
-    }),*/
     require('precss')(),
     require('postcss-calc')(),
     require('autoprefixer')({
