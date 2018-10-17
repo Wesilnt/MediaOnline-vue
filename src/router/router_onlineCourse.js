@@ -12,17 +12,17 @@ const PageInfo_From_onlineCourse = [
     component: videoColumnDetail
   },
   {
-    path: '/home/videoCourseDetail/:lessonId',
+    path: '/videoCourseDetail/:lessonId',
     name: 'videoCourseDetail',
     component: videoCourseDetail
   },
   {
-    path: '/home/videoCourseCmts/:courseId',
+    path: '/videoCourseCmts/:courseId',
     name: 'videoCourseCmts',
     component: videoCourseComment
   },
   {
-    path: '/home/videoInnerList/:courseId',
+    path: '/videoInnerList/:courseId',
     name: 'videoInnerList',
     component: videoInnerList
   }

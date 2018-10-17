@@ -29,11 +29,11 @@
             <div class="videocol-sction-title" id="leaveMessage">
                 <h4>精选留言</h4>
                 <div class="videocol-all" @click="enterVideoCommentsList">
-                    <span class="videocol-allbtn">{{commentCount}}条</span>
+                    <span class="videocol-allbtn">{{commentsTotalCount}}条</span>
                     <img :src="require('../../../assets/images/arrow_right.png')" class="videocol-allbtn-icon">
                 </div>
             </div>
-            <CommentItem class="video-column-comment" v-for="(item,index) of commentsList" :key="index" :comment="item" :regiontype="2201"/>
+            <CommentItem class="video-column-comment" v-for="(item,index) of videoColumnComments" :key="index" :comment="item" :regiontype="2201"/>
         </div>
         <!-- 购买须知 -->
         <div class="videocol-base">
@@ -88,15 +88,14 @@ export default {
     ScrollNavBar
   },
   computed: {
+    ...mapState(['videoColumnComments','commentsTotalCount']),
     ...mapGetters([
       'description',
       'lessonCount',
       'outlinePic',
       'buyIntro',
-      'commentCount',
       'buyCount',
       'freeLessonList',
-      'commentsList',
       'courseId'
     ])
   },
@@ -107,12 +106,6 @@ export default {
     },
     enterVideoCommentsList(){
       this.$router.push(`/videoCourseCmts/${this.courseId}`)
-    },
-    allFunc() {
-      if (this.freeLessonList && this.freeLessonList.length > 0){
-        const lessonId = this.freeLessonList[0].id
-        this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
-      }
     },
     gotoVideoCourseDetailPage(lessonId) {
       this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })

@@ -115,8 +115,8 @@ const videoCourseDetailData = {
           二:如果本地累计观看时长小于服务器存储的播放时长,就将服务器的数据拉下来并同步到本地
         */
         //  console.log(videoData)
-        let loaclPlayTotalTime = Math.round(videoData.playTotalTime) || 0
-        let loaclPlayPosition = Math.round(videoData.historyPlayPosition)
+        let loaclPlayTotalTime = parseInt(videoData.playTotalTime) || 0
+        let loaclPlayPosition = parseInt(videoData.historyPlayPosition)
         // console.log('videoData = ',loaclPlayTotalTime,loaclPlayPosition)
         if (
           loaclPlayTotalTime > servicePlayTotalTime &&

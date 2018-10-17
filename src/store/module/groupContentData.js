@@ -2,7 +2,8 @@ import { getCommentList, likeComment } from '../../api/commentApi.js'
 const groupContentData = {
   namespaced: true,
   state: {
-    videoColumnComments: [] //视频专栏留言数组
+    videoColumnComments: [], //视频专栏留言数组
+    commentsTotalCount:0//精选留言总数
   },
   getters: {
     description(state, getters, { videoColumnDetailData }) {
@@ -26,9 +27,6 @@ const groupContentData = {
     freeLessonList(state, getters, { videoColumnDetailData }) {
       return videoColumnDetailData.freeLessonList
     },
-    commentsList(state, getters, { videoColumnDetailData }) {
-      return state.videoColumnComments
-    },
     courseId(state, getters, { videoColumnDetailData }) {
       return videoColumnDetailData.courseId
     }
@@ -36,6 +34,7 @@ const groupContentData = {
   mutations: {
     bindCommentList(state, payload) {
       state.videoColumnComments = payload.result
+      state.commentsTotalCount = payload.totalCount
     },
     //更新播放列表是否点赞字段
     updateUserCommentLikeId(state, payload) {

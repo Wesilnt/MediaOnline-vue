@@ -36,15 +36,18 @@ export default {
       // }else {
       //   用服务器的播放数据计算进度
       // }
+      console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
       let videoData = JSON.parse(window.localStorage.getItem(lessonId))
       console.log(videoData)
       let curTime = 0
       let percent = 0
       if (videoData && videoData.historyPlayPosition > 0) {
-        curTime = videoData.historyPlayPosition
+        curTime = parseInt(videoData.historyPlayPosition)
+        console.log('curTime =',curTime)
         if (!curTime || curTime <= 1) return '未收听'
         percent = parseInt((curTime * 100) / totalTime)
       }else{
+         console.log('~~~~~~~909090~~~~~~~~~~~~~~~~~~~~~')
         curTime = learnTime
         if (!curTime || curTime <= 1) return '未收听'
         percent = parseInt((curTime * 100) / totaltime)

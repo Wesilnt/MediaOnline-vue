@@ -1,28 +1,35 @@
 <template>
   <div>
-    <SingleSetList :singletype="'OnlineCourse'"  :list='videoCourseList' :coursename="courseName" :useraccessstatus="userAccessStatus"></SingleSetList>
+    <playlist v-for="(item,index) of videoCourseList" :key="item.id" :iteminfo="item" :lastindex="index == (videoCourseList.length - 1)" @jumpEvent="gotoVideoCourseDetailPage(item.id)"/>
   </div>
 </template>
 
 <script>
-import SingleSetList from '../../components/SingleSetList.vue'
+import playlist from './components/playlist.vue'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
   'videoColumnDetailData'
 )
 
 export default{
-   computed: { 
+  data(){
+    return{
+
+    }
+  },
+  computed: { 
     ...mapState(['videoCourseList','courseName', 'userAccessStatus'])
   },
   components: {
-    SingleSetList
+    playlist
   },
   methods: {
-    ...mapActions(['getVideoCourseList'])
+    gotoVideoCourseDetailPage(lessonId) {
+      this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
+    },
   },
   mounted(){
-  //   this.getVideoCourseList(this.$route.params.courseId)
+
   }
 }
  

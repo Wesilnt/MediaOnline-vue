@@ -1,6 +1,6 @@
 <template>
     <div class="courseIntroduce">
-        <div ref="content" class="courseIntroduce-content" :class="{'content-expand':isExpand}" >
+        <div ref="content" id='fid' class="courseIntroduce-content" :class="{'content-expand':isExpand}" >
            <div ref="contentChild" v-html="courseinfo"></div>
         </div>
         <div class="arrow-container" :class="{'arrow-container-expand':isExpand}" v-if="needExpand" @click="handleExpand">
@@ -24,13 +24,14 @@ export default {
       this.isExpand = !this.isExpand
     },
     ExpandWatched() {
-      this.$nextTick(function() {
-        // console.log(this.$refs.content.clientHeight)
-        // console.log(this.$refs.contentChild.clientHeight)
+      setTimeout(()=>{
+        this.$nextTick( ()=> {
         this.needExpand =
-          this.$refs.contentChild.clientHeight > (64 / 375) * window.innerWidth
+          this.$refs.contentChild.offsetHeight > (64 / 375) * window.innerWidth
         // this.$refs.content.clientHeight < this.$refs.contentChild.clientHeight
       })
+      },300)
+      
     }
   },
   /*
