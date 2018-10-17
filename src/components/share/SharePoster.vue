@@ -52,24 +52,28 @@ export default {
     this.shareType = this.shareType || this.columnType 
     console.log("this.shareType:",this.shareType) 
      //1. 传入分享地址
+            console.log("//////////////////////////////////////////////////////分享地址：",this.shareUrl)
      if(this.shareUrl&&this.shareUrl != `${location.href.split('#')[0]}#/home`) {
         this.drawBottomMap()       //重新生成图片
        return  
      }
-     //2. 有专栏详情和专栏类型
-     if(this.shareType && this.columnDetail) {
-        this.setPosterConfig()    //设置分享地址
-         this.drawBottomMap()      //重新生成图片
-       return
-     }
-     //3. 没有专栏详情 , 有专栏ID
+     //2.  有专栏ID
+       console.log("//////////////////////////////////////////////////////专栏id：",this.courseId)
      if(this.courseId){
         this.getColumnDetail({courseId:this.courseId}) 
         .then(()=>{
           this.setPosterConfig()    //设置分享地址
           this.drawBottomMap()      //重新生成图片
         })
+        return
       } 
+     //3. 有专栏详情和专栏类型
+     if(this.shareType && this.columnDetail) {
+        this.setPosterConfig()    //设置分享地址
+         this.drawBottomMap()      //重新生成图片
+       return
+     }
+ 
   },
   mounted: function() {
     var canvasData = this.$refs.canvasId
