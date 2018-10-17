@@ -19,7 +19,7 @@ export async function postBatchDellayRecord(params) {
 }
 //我喜欢的(我的收藏)
 export async function getMyLike() {
-  return request.post(`/favorite/getLessonListByFavorite?`, true)
+  return request.post(`/favorite/getLessonListByFavorite`)
 }
 //我喜欢的 删除
 export async function postDelMyLike(params) {
