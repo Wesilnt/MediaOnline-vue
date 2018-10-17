@@ -169,7 +169,7 @@ const groupManagerData = {
                     if(1202==orderStatus){
                         switch (state.serviceType) {
                             case 'OnlineCourse':
-                              link = `${rootState.url}/#/videoColumnDetail/${courseId}?groupBuyId=${groupBuyId}`
+                              link = `${rootState.url}/#/home/videoColumnDetail/${courseId}?groupBuyId=${groupBuyId}`
                               break
                             case 'OnlineVision':
                               link = `${rootState.url}/#/home/visionDetail/${courseId}?groupBuyId=${groupBuyId}`
@@ -184,7 +184,7 @@ const groupManagerData = {
                     }else {
                         switch (state.serviceType) {
                             case 'OnlineCourse':
-                              link = `${rootState.url}/#/videoColumnDetail/${courseId}`
+                              link = `${rootState.url}/#/home/videoColumnDetail/${courseId}`
                               break
                             case 'OnlineVision':
                               link = `${rootState.url}/#/home/visionDetail/${courseId}`
@@ -229,7 +229,7 @@ const groupManagerData = {
                     if(1005==state.userAccessStatus){
                         switch (state.serviceType) {
                             case 'OnlineCourse':
-                              link = `${rootState.url}/#/videoColumnDetail/${courseId}?groupBuyId=${groupBuyId}`
+                              link = `${rootState.url}/#/home/videoColumnDetail/${courseId}?groupBuyId=${groupBuyId}`
                               break
                             case 'OnlineVision':
                               link = `${rootState.url}/#/home/visionDetail/${courseId}?groupBuyId=${groupBuyId}`
@@ -246,7 +246,7 @@ const groupManagerData = {
                     }else {
                         switch (state.serviceType) {
                             case 'OnlineCourse':
-                              link = `${rootState.url}/#/videoColumnDetail/${courseId}`
+                              link = `${rootState.url}/#/home/videoColumnDetail/${courseId}`
                               break
                             case 'OnlineVision':
                               link = `${rootState.url}/#/home/visionDetail/${courseId}`

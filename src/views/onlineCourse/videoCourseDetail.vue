@@ -13,7 +13,7 @@
                 </a>
                 <!-- <img :src="require('../../assets/images/onlinecourse_video_ic_gift.png')" class="video-detail-header-gift" alt="">     -->
             </div>
-            <!-- 播放器 -->
+            <!-- navbar -->
             <ScrollNavBar :bars="navBars" />
             <!-- 资料 -->
             <div class="video-detail-base" id="desc">
@@ -49,7 +49,7 @@
             <CommentBar :show="commentBarShow" v-on:toggle="toggleKeyboard"/>
             <Share :show="sharePageShow" :courseId="courseId" :columnType ="'OnlineCourse'" @close="cancelSharePage"></Share>
             <van-popup :lazy-render="false"
-                       :click-overlay="handleVideoPause"
+                       @click-overlay="handleVideoPause"
                        v-model="videoShow" class="video-popup"
                        overlay-class="popup-modal-white">
                 <video class="videoitem"
@@ -232,6 +232,10 @@ export default {
     handleVideoPause() {
       const { paused } = this.videoElem
       if (!paused) this.videoElem.pause()
+      //刷新页面
+      console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+      const { lessonId } = this.$route.params
+      this.getVideoCourseDetail({ lessonId, loading: true })
     },
     getVideoProgress({ target }) {
       const { currentTime, paused, duration, readyState } = target
@@ -256,15 +260,13 @@ export default {
 
         let newPosition = currentTime
 
-        if (newPosition > this.totalTime) {
-          newPosition = 0
-        }
+        // if (newPosition > this.totalTime) {
+        //   newPosition = 0
+        // }
         const obj = {
           playTotalTime: newTotalTime,
           historyPlayPosition: newPosition
         }
-        // console.log('代码走到这里这阿发0=0=0=00=')
-        // console.log(obj)
         localStorage.setItem(this.id, JSON.stringify(obj))
         /*
         自测题逻辑
@@ -279,6 +281,8 @@ export default {
       } else {
         const videoData = JSON.parse(localStorage.getItem(this.id))
         this.playStartTime = new Date()
+        console.log('0-0-0-0-0-0-0-0-0-0')
+        console.log(videoData)
         this.loaclPlayTotalTime = Math.round(
           parseFloat(videoData.playTotalTime)
         )

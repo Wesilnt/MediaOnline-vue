@@ -8,8 +8,8 @@
             <p class="playItem-info">{{iteminfo.subTitle}}</p>
             <p>
                 <a v-if="iteminfo.isFree" class="audition-btn">试听</a>
-                <span>{{iteminfo.createTime | handleDate() }}</span> |
-                <span>{{ studyProgress |getProgress(iteminfo.learnTime,iteminfo.totalTime) }}</span>
+                <span>{{iteminfo.totalTime | formatDuring}}</span> |
+                <span>{{ iteminfo.learnTime |getProgress(iteminfo.totalTime,iteminfo.id) }}</span>
             </p>
         </div>
     </div>
@@ -30,14 +30,26 @@ export default {
       return value.substr(11, 8)
     },
     //计算收听进度
-    getProgress(learnTime, totalTime) {
-      if (learnTime === '') {
-        return '未收听'
-      } else {
-        return (
-          '已收听' + Math.round((learnTime / totalTime) * 10000) / 100.0 + '%'
-        )
+    getProgress(learnTime,totalTime,lessonId) {
+      // if(本地有播放数据){
+      //   用本地播放数据计算进度
+      // }else {
+      //   用服务器的播放数据计算进度
+      // }
+      let videoData = JSON.parse(window.localStorage.getItem(lessonId))
+      console.log(videoData)
+      let curTime = 0
+      let percent = 0
+      if (videoData && videoData.historyPlayPosition > 0) {
+        curTime = videoData.historyPlayPosition
+        if (!curTime || curTime <= 1) return '未收听'
+        percent = parseInt((curTime * 100) / totalTime)
+      }else{
+        curTime = learnTime
+        if (!curTime || curTime <= 1) return '未收听'
+        percent = parseInt((curTime * 100) / totaltime)
       }
+      return '已收听' + (percent < 1 ? 1 : percent) + '%'
     }
   },
   methods: {

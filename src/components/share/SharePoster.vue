@@ -181,7 +181,7 @@ export default {
      if(this.columnDetail && this.columnDetail.userAccessStatus==1005){   
       switch (this.shareType) {
          case 'OnlineCourse':
-          this.shareUrl =  `${this.url}/#/videoColumnDetail/${this.columnDetail.id}?groupBuyId=${this.columnDetail.groupBuyId}`
+          this.shareUrl =  `${this.url}/#/home/videoColumnDetail/${this.columnDetail.id}?groupBuyId=${this.columnDetail.groupBuyId}`
           break
         case 'OnlineVision':
           this.shareUrl =  `${this.url}/#/home/visionDetail/${this.columnDetail.id}?groupBuyId=${this.columnDetail.groupBuyId}`
@@ -204,7 +204,7 @@ export default {
      if(this.columnDetail) { 
         switch (this.shareType) {
           case 'OnlineCourse':
-            this.shareUrl =   `${this.url}/#/videoColumnDetail/${this.columnDetail.id}`
+            this.shareUrl =   `${this.url}/#/home/videoColumnDetail/${this.columnDetail.id}`
             break
           case 'OnlineVision':
             this.shareUrl =   `${this.url}/#/home/visionDetail/${this.columnDetail.id}`

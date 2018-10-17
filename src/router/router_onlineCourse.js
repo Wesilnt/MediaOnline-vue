@@ -7,22 +7,22 @@ const videoInnerList = () => import(/* webpackChunkName: "index" */ '../views/on
 
 const PageInfo_From_onlineCourse = [
   {
-    path: '/videoColumnDetail/:courseId',
+    path: '/home/videoColumnDetail/:courseId',
     name: 'videoColumnDetail',
     component: videoColumnDetail
   },
   {
-    path: '/videoCourseDetail/:lessonId',
+    path: '/home/videoCourseDetail/:lessonId',
     name: 'videoCourseDetail',
     component: videoCourseDetail
   },
   {
-    path: '/videoCourseCmts/:courseId',
+    path: '/home/videoCourseCmts/:courseId',
     name: 'videoCourseCmts',
     component: videoCourseComment
   },
   {
-    path: '/videoInnerList/:courseId',
+    path: '/home/videoInnerList/:courseId',
     name: 'videoInnerList',
     component: videoInnerList
   }
