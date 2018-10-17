@@ -32,7 +32,10 @@
     <!-- try -->
     <div id="try" class="try bottomline">
       <DetailHeader title="试看课程" subtitle="全部" link='/home/visionDetail/visionCourseList' :courseId="courseId" :coursename="courseName"/>
-      <SingleSetList :list='visionDetail.freeLessonList' :singletype="'OnlineVision'"></SingleSetList>
+      <SingleSetList 
+        :courseid="courseId"
+        :list='visionDetail.freeLessonList' 
+        :singletype="'1003'"/>
     </div>
     <!-- message -->
     <div id="message" class="message bottomline" >

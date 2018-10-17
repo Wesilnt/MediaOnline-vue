@@ -2,7 +2,7 @@ import { wxConfig,getGroupBuyDetail,startGroupBuy,joinGroupBuy,startCollectLike,
 import {getLessonListByCourse} from '../../api/columnsApi.js'
 import {getMyUserInfo} from '../../api/myApi'
 import {Toast} from 'vant'
-import { WECHAT_SUBSCRIPTION_URL } from '../../utils/config'
+import { WECHAT_SUBSCRIPTION_URL, courseType } from '../../utils/config'
 import { stat } from 'fs';
 
 const groupManagerData = {
@@ -41,7 +41,7 @@ const groupManagerData = {
         startPraiseFlag:false,
 
         //业务类型
-        serviceType:"",    //"FreeZone" "OnlineVision" "OnlineCourse" "Readings"
+        serviceType:"",    ////播放类型 FreeZone(1001) 免费专区  OnlineCourse(1005) 在线课堂 OnlineVision(1003) 在线视野  Readings(1007) 读书会 
 
         isLoading:false,   //发起拼团  原价购买  发起集赞 防止重复操作
 
@@ -59,13 +59,13 @@ const groupManagerData = {
         courseName(state,getters,rootState) {
             let nameStr = ""
             switch(state.serviceType){
-                case "OnlineVision":
+                case "1003":
                     nameStr = rootState.visionData.courseName
                 break
-                case "OnlineCourse":
+                case "1005":
                     nameStr = rootState.videoColumnDetailData.courseName
                 break
-                case "Readings":
+                case "1007":
                     nameStr = rootState.readingsData.courseName
                 break
             }
@@ -75,13 +75,13 @@ const groupManagerData = {
         isFromShare(state,getters,rootState) {
             let isFromShareStatus = null
             switch(state.serviceType){
-                case "OnlineVision":
+                case "1003":
                     isFromShareStatus = rootState.visionData.isFromShare
                 break
-                case "OnlineCourse":
+                case "1005":
                     isFromShareStatus = rootState.videoColumnDetailData.isFromShare
                 break
-                case "Readings":
+                case "1007":
                     isFromShareStatus = rootState.readingsData.isFromShare   
                 break
             }
@@ -167,35 +167,9 @@ const groupManagerData = {
                     }
                     let link = ''
                     if(1202==orderStatus){
-                        switch (state.serviceType) {
-                            case 'OnlineCourse':
-                              link = `${rootState.url}/#/home/videoColumnDetail/${courseId}?groupBuyId=${groupBuyId}`
-                              break
-                            case 'OnlineVision':
-                              link = `${rootState.url}/#/home/visionDetail/${courseId}?groupBuyId=${groupBuyId}`
-                              break
-                            case 'Readings':
-                              link = `${rootState.url}/#/home/readings/book/${courseId}?groupBuyId=${groupBuyId}&columnType='Readings'`
-                              break
-                            default:
-                              link = `${rootState.url}/#/home/freezone`
-                              break
-                          }
+                      link = `${rootState.url}/#${courseType[state.serviceType]}${courseId}?groupBuyId=${groupBuyId}`
                     }else {
-                        switch (state.serviceType) {
-                            case 'OnlineCourse':
-                              link = `${rootState.url}/#/home/videoColumnDetail/${courseId}`
-                              break
-                            case 'OnlineVision':
-                              link = `${rootState.url}/#/home/visionDetail/${courseId}`
-                              break
-                            case 'Readings':
-                              link = `${rootState.url}/#/home/readings/book/${courseId}?columnType='Readings'`
-                              break
-                            default:
-                              link = `${rootState.url}/#/home/freezone`
-                              break
-                          }
+                      link = `${rootState.url}/#${courseType[state.serviceType]}${courseId}`
                     }
                    
                     console.log('groupmanager来自分享设置分享地址：', link, '   设置分享标题：', title)
@@ -227,40 +201,12 @@ const groupManagerData = {
                     }
                     let link = ''
                     if(1005==state.userAccessStatus){
-                        switch (state.serviceType) {
-                            case 'OnlineCourse':
-                              link = `${rootState.url}/#/home/videoColumnDetail/${courseId}?groupBuyId=${groupBuyId}`
-                              break
-                            case 'OnlineVision':
-                              link = `${rootState.url}/#/home/visionDetail/${courseId}?groupBuyId=${groupBuyId}`
-                              break
-                            case 'Readings':
-                              link = `${rootState.url}/#/home/readings/book/${courseId}?groupBuyId=${groupBuyId}`
-                              break
-                            default:
-                              link = `${rootState.url}/#/home/freezone`
-                              break
-                          }
+                      link = `${rootState.url}/#${courseType[state.serviceType]}${courseId}?groupBuyId=${groupBuyId}`
                     }else if(1009==state.userAccessStatus) {
-                        link =  `${rootState.url}/#/praise/active/${courseId}/${collectLikeId}?columnType=${state.serviceType}` 
+                      link =  `${rootState.url}/#/praise/active/${courseId}/${collectLikeId}?columnType=${state.serviceType}` 
                     }else {
-                        switch (state.serviceType) {
-                            case 'OnlineCourse':
-                              link = `${rootState.url}/#/home/videoColumnDetail/${courseId}`
-                              break
-                            case 'OnlineVision':
-                              link = `${rootState.url}/#/home/visionDetail/${courseId}`
-                              break
-                            case 'Readings':
-                              link = `${rootState.url}/#/home/readings/book/${courseId}`
-                              break
-                            default:
-                              link = `${rootState.url}/#/home/freezone`
-                              break
-                          }
-                    }
-                    
-                    
+                      link = `${rootState.url}/#${courseType[state.serviceType]}${courseId}`
+                    } 
                     console.log('groupmanager正常设置设置分享地址：', link, '   设置分享标题：', title)
                     console.log(rootState.url)
                     let shareData = {
@@ -934,13 +880,13 @@ const groupManagerData = {
         //从新获取专栏详情接口,刷新父组件显示
         async updateFatherData({dispatch,state}){
             switch(state.serviceType){
-                case "OnlineVision":
+                case "1003":
                     dispatch('visionData/getVisionDetail',{"courseId" : state.courseId},{root:true})
                 break
-                case "OnlineCourse":
+                case "1005":
                     dispatch('videoColumnDetailData/getVideoColumnDetail',{"courseId" : state.courseId},{root:true})
                 break
-                case "Readings":
+                case "1007":
                     dispatch('readingsData/getBookDetail',{"courseId" : state.courseId},{root:true})
                 break
             }

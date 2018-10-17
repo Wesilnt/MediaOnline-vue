@@ -104,7 +104,7 @@ export default {
       if (0 == this.state) { 
         // let params = { courseId:  this.courseid,collectLikeId :this.collectlikeid, }
         //分享海报
-        //专栏类型columnType：  FreeZone 免费专区 OnlineCourse 在线课堂  OnlineVision 在线视野  Readings 读书会
+        //专栏类型columnType：  FreeZone(1001) 免费专区  OnlineCourse(1005) 在线课堂 OnlineVision(1003) 在线视野  Readings(1007) 读书会 
         this.$router.push({
           name: 'SharePoster',
           params:{},
@@ -120,11 +120,11 @@ export default {
       }
     },
     goColumnDetail(){  
-      //专栏类型  FreeZone 免费专区 OnlineCourse 在线课堂  OnlineVision 在线视野  Readings 读书会
-      let columnName = this.columntype == "OnlineCourse" ? 
-                'videoColumnDetail':this.columntype == 'OnlineVision'?
-                'VisionDetail':this.columntype == 'FreeZone'? 
-                'FreeZone':'BookDetail'
+      //专栏类型  FreeZone(1001) 免费专区  OnlineCourse(1005) 在线课堂 OnlineVision(1003) 在线视野  Readings(1007) 读书会 
+      let columnName = this.columntype == "1005" ? 
+                'videoColumnDetail':this.columntype == '1003'?
+                'VisionDetail':this.columntype == '1007'? 
+                '1001':'BookDetail'
       this.$router.push({name: columnName, params: { courseId: this.courseid }})
     }
   }

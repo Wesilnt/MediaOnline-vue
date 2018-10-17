@@ -68,7 +68,7 @@ const videoColumnDetailData = {
       //绑定专栏详情内容
       const profilePic = result.profilePic
       const freeLessonList = result.freeLessonList
-      const serviceType = 'OnlineCourse'
+      const serviceType = '1005'
       //绑定与拼团相关的内容
       dispatch('groupManagerData/initColumnInfo', {
         serviceType,
@@ -77,7 +77,7 @@ const videoColumnDetailData = {
         freeLesson: freeLessonList
       })
       //绑定全局专栏当前详情
-      commit('bindCurrentColumn', {columnType:"OnlineCourse" , columnDetail:result},{root:true})
+      commit('bindCurrentColumn', {columnType:"1005" , columnDetail:result},{root:true})
       commit('bindVideoColumnDetail', {result,isFromShare: groupBuyId ? true : false})
       if (groupBuyId) {
         //这里是分享链接进来的

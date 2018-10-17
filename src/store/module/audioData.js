@@ -1,3 +1,4 @@
+import { courseType } from '../../utils/config'
 import { 
   postFavorite,
   postUnFavorite,
@@ -15,13 +16,12 @@ export default {
     pageSize: 20,             //分页-记录条数
     commentList: [],          //评论列表
     draftContent: { manuscript: '' },
-    courseId:0
+    courseId:-1
   },
   mutations: {
-    bindAudioDetail(state, {res,courseId}) {
+    bindAudioDetail(state, {res}) {
       state.audioDetail = res
       state.isLike = state.audioDetail.isLike
-      state.courseId = courseId
     },
     bindFavorite(state, res) {
       state.audioDetail.isLike = !state.audioDetail.isLike
@@ -35,22 +35,26 @@ export default {
     },
     bindDraftContnet(state, res) {
       state.draftContent = res
+    },
+    clearData(state, res) {
+      state.courseId = -1
     }
   },
   actions: {
     //播放音频
-    async playAudio({state, getters, commit, dispatch }, params) {
-      if (params && params.lessonId) {
+    async playAudio({rootState, getters, commit, dispatch }, params) {
+      if (params && params.lessonId) { 
         dispatch('audiotaskData/asyncPlay', params, { root: true })
-        .then(res => {
-          let id = state.courseId
-          let courseId = res.courseId
-          commit('bindAudioDetail', {res,courseId})
-          if(id === courseId) return
-          dispatch('getSingleSetList', { courseId, pageSize: getters.pageSize })
+        .then(res => { 
+          commit('bindAudioDetail', {res})                                        //绑定音频数据
+          let courseId = res.courseId 
+          if(getters.courseId === courseId) return
+          dispatch('getSingleSetList', { courseId, pageSize: getters.pageSize })  //获取单集列表
+          let columnType = params.columnType || rootState.columnType
+          dispatch('setShareInfo', { courseId, columnType })                      //设置分享信息
         })
-      } else {
-        dispatch('audiotaskData/asyncPlay', params, { root: true })
+      } else { 
+        dispatch('audiotaskData/asyncPlay', params, { root: true })               //暂停、播放
       }
     },
     //播放音频
@@ -80,15 +84,7 @@ export default {
     //绑定专栏名
     async bindCourseName({commit}, courseName){
       commit('audiotaskData/bindCourseName', courseName, { root: true })
-    },
-    //音频单集详情
-    async getAudioDetail({ getters, commit, dispatch }, params) {
-      dispatch('audiotaskData/getAudioDetail', params, { root: true })
-      .then(res => {
-        commit('bindAudioDetail', res)
-        dispatch('getSingleSetList', {courseId: res.courseId, pageSize: getters.pageSize})
-      })
-    },
+    }, 
     //音频收藏 我喜欢的
     async postFavorite({ commit }, params) {
       const res = await postFavorite(params)
@@ -116,6 +112,21 @@ export default {
       params.currentPage = (params.currentPage | 1) + 1
       const res = await getCommentList(params)
       commit('bindCommentList', res)
+    },
+    //设置分享信息
+    async setShareInfo({dispatch,rootState},{courseId,columnType}){  
+      const course = await dispatch('getColumnDetail',{courseId,columnType,useCache:true},{root:true}) 
+      if(!course) return
+      let shareData = {
+        link:  `${rootState.url}/#/${courseType[columnType]}${courseId}`,
+        title: `${rootState.columnDetail.name}`,
+        desc: '你一定会爱上国学课...',
+        imgUrl:`${rootState.columnDetail.sharePostUrl}?imageView2/1/w/100/h/100/format/jpg`,
+        successCB: () => console.log('分享回调成功'),
+        cancelCB: () => console.log('分享回调失败')
+      }
+      dispatch('setWxShareFriend',shareData,{root:true})
+      dispatch('setWxShareZone',shareData,{root:true})  
     }
   },
   getters: {

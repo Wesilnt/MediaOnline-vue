@@ -23,7 +23,7 @@
 <script>
 export default {
   //singleset 单集  playing是否正在播放
-  props: ['item', 'playing','singletype','coursename','useraccessstatus'],
+  props: ['item', 'playing','singletype','courseid','coursename','useraccessstatus'],
   methods: {
     onItemClick(item) {
       let unLock = false
@@ -53,7 +53,7 @@ export default {
       console.log(unLock)
       if (item.isFree || unLock) {
      
-        if(this.singletype == 'OnlineCourse'){
+        if(this.singletype == '1005'){
            console.log(this.singletype)
           this.$router.push({
            path: `/videoCourseDetail/${item.id}`
@@ -61,8 +61,8 @@ export default {
         }else{
         this.$router.push({
           name: 'AudioPlay',
-          params: { id: item.id },
-          query:{columnType:this.singletype,courseName:this.coursename}
+          params: {id: item.id },
+          query:{courseId: this.courseid, columnType:this.singletype,courseName:this.coursename}
         })
         }
       } else {

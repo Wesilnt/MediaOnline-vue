@@ -38,7 +38,7 @@
             <div class="groupBuy-circleline" v-show="false"></div>
         </div>
         <!--1. 读书会头图-->
-        <div v-if="serviceType ==='Readings'">
+        <div v-if="serviceType ==='1007'">
           <div class="book-header-container lazy-img-larger">
             <div class="book-cover" v-lazy:background-image="`${profilePic}?imageView2/1/format/jpg`">
             </div>

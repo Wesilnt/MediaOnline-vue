@@ -1,8 +1,7 @@
 import { getAudioDetail, postLearnRate } from '../../api/audioApi'
 import { throttle } from '../../utils/utils' 
 import {Toast} from 'vant'
-import audioData from './audioData'
-import { stat } from 'fs';
+import audioData from './audioData' 
 
 export default {
   namespaced:true,
@@ -19,7 +18,6 @@ export default {
     playMode: 'order', // order:顺序播放  single：单曲播放
     isPlaying: false, //是否正在播放
     isBuffering: false, //是否处于缓冲中
-    columnType: "FreeZone", //FreeZone 免费专区 OnlineCourse 在线课堂  OnlineVision 在线视野  Readings 读书会
     courseName:"", //专栏名
     courseId:-1,
     throttle: null,
@@ -152,13 +150,14 @@ export default {
       commit('syncPause')
     },
     //下一集
-    async playNext({ state,commit,rootState, dispatch }) {
+    async playNext({ state,commit,rootState, dispatch }) { 
      if(rootState.columnType
-        &&(rootState.columnType == "OnlineVision" 
-        || rootState.columnType == "Readings")
+        &&(rootState.columnType == "1003" 
+        || rootState.columnType == "1007")
         &&rootState.columnDetail){
-          let useraccessstatus = rootState.columnDetail.useraccessstatus
-       if(1001 != useraccessstatus 
+        let useraccessstatus = rootState.columnDetail.userAccessStatus
+       if(useraccessstatus
+         && 1001 != useraccessstatus 
          && 1003 != useraccessstatus 
          && 1008 != useraccessstatus) 
          return
@@ -172,13 +171,14 @@ export default {
       }
     },
     //上一集
-    async playPre({ state,commit,rootState, dispatch }) {
+    async playPre({ state,commit,rootState, dispatch }) { 
       if(rootState.columnType
-           &&(rootState.columnType == "OnlineVision" 
-           || rootState.columnType == "Readings")
-           &&rootState.columnDetail){
-             let useraccessstatus = rootState.columnDetail.useraccessstatus
-          if(1001 != useraccessstatus 
+           &&(rootState.columnType == "1007" 
+           || rootState.columnType == "1003")
+           && rootState.columnDetail){
+          let useraccessstatus = rootState.columnDetail.userAccessStatus
+          if(useraccessstatus
+            && 1001 != useraccessstatus 
             && 1003 != useraccessstatus 
             && 1008 != useraccessstatus) 
             return
@@ -253,7 +253,9 @@ export default {
   },
   getters: {
     pageSize: state => state.pageSize,
-    currentPage: state => state.currentPage
+    currentPage: state => state.currentPage,
+    //FreeZone(1001) 免费专区 OnlineCourse(1003) 在线课堂  OnlineVision(1005) 在线视野  Readings(1007) 读书会
+    columnType: (state,getters,rootState)=>rootState.columnType, 
   },
   modules:{
     audioData

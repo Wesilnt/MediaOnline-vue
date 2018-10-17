@@ -47,7 +47,8 @@ export default {
       }else{
         curTime = learnTime
         if (!curTime || curTime <= 1) return '未收听'
-        percent = parseInt((curTime * 100) / totaltime)
+
+        percent = parseInt((curTime * 100) / totalTime)
       }
       return '已收听' + (percent < 1 ? 1 : percent) + '%'
     }

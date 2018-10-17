@@ -62,30 +62,28 @@ export default {
     },
     actions: {
         //读书会-书列表
-        async getReadingsList({state, commit },refresh) {
-          if(state.loading || state.finished)return
+        async getReadingsList({state, commit },refresh) { 
            commit('toggleBookLoading',true)
             let page  = refresh ? 1 : state.currentPage + 1
-            const res = await getReadingsList({ type: 1007, currentPage: page, pageSize: state.pageSize })
-            console.log(res)
+            const res = await getReadingsList({ type: 1007, currentPage: page, pageSize: state.pageSize }) 
+            console.log("res",res)
             let totalCount = res.totalCount
             commit("bindReadingsList", {res, page,totalCount})
         },
         //书详情
         async getBookDetail({dispatch, commit }, params) { 
             commit('setDataLoading',true)
-            const result = await getBookDetail(params) 
-            console.log('读书会详情数据')
-            console.log(result) 
+            const result = await dispatch('getColumnDetail',{...params,useCache:true},{root:true}) 
+            console.log('读书会详情数据',result) 
             //绑定全局专栏当前详情
-            commit('bindCurrentColumn', {columnType:"OnlineVision" , columnDetail:result},{root:true})
+            commit('bindCurrentColumn', {columnType:"1003" , columnDetail:result},{root:true})
             //获取专栏课程列表
             dispatch('getSingleSetList',true)
             const groupBuyId =  params.groupBuyId
             const courseId = params.courseId
             const profilePic = result.coverPic
             const freeLessonList = result.freeLessonList
-            const serviceType = "Readings"
+            const serviceType = "1007"
             commit('setDataLoading',false)
             commit("bindBookDetail", { result,isFromShare: groupBuyId ? true : false})
             //绑定与拼团相关的内容

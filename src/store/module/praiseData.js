@@ -22,7 +22,7 @@ export default {
     timerInterval: null, //倒计时定时器
     pageBgUrl: '',
     courseName: '',
-    columnType: 'Readings',
+    columnType: '1007',
     userInfo:{},
     time:0
   },
@@ -149,8 +149,7 @@ export default {
       return result
     },
     //设置分享信息
-    async setShareInfo({state,dispatch},{user, res}){
-     
+    async setShareInfo({state,dispatch},{user, res}){ 
       dispatch('getColumnDetail',{courseId:res.course.id})
       .then(columnDetail=>{ 
         let currentUser  =  user.id == res.starterUid
@@ -163,8 +162,7 @@ export default {
           imgUrl:`${columnDetail.sharePostUrl}?imageView2/1/w/100/h/100/format/jpg`,
           successCB: () => console.log('分享回调成功') ,
           cancelCB: () =>  console.log('分享回调失败')
-        }
-        console.log('user',"详情=================================================================",shareData)
+        } 
         dispatch('setWxShareFriend',shareData,{root:true})
         dispatch('setWxShareZone',shareData,{root:true}) 
       }) 

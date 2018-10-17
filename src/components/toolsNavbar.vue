@@ -2,7 +2,7 @@
     <div class="purchase-toolbar" v-show="toolsObject&&toolsObject.isShow">
         <div class="toolbar-audition" @click="clickAuditionBtn">
             <i class="qhht-icon audition-icon"></i>
-            <p class="under-text">{{serviceType == "OnlineCourse"?'试看':'试听'}}</p>
+            <p class="under-text">{{serviceType == "1005"?'试看':'试听'}}</p>
         </div>
         <hr class="vertical-line"/>
         <div v-show="toolsObject&&toolsObject.originPrice" :disabled="isLoading" class="toolbar-price" :class="{'toolbar-price-active':toolsObject&&!toolsObject.collage&&!toolsObject.collect }"  @click="clickOriginPriceBtn">
@@ -366,13 +366,13 @@ export default {
     // setShareInfo() {
     //   let link = ''
     //   switch (this.serviceType) {
-    //     case 'OnlineCourse':
+    //     case '1003':
     //       link =  `${this.url}#/videoColumnDetail/${this.courseId}?groupBuyId=${this.groupBuyId}`
     //       break
-    //     case 'OnlineVision':
+    //     case '1003':
     //       link =  `${this.url}#/home/visionDetail/${this.courseId}`
     //       break
-    //     case 'Readings':
+    //     case '1007':
     //       link = `${this.url}/#/home/readings/book/${this.courseId}`
     //       break
     //     default:
@@ -393,7 +393,7 @@ export default {
     // },
     gotoInfoPage(id){   
       switch (this.serviceType) {
-        case 'OnlineCourse':
+        case '1005':
           this.$router.push({
             name: 'videoCourseDetail',
             params: { lessonId: id }
@@ -401,18 +401,18 @@ export default {
           break
         case 'FreeZone':
           break
-        case 'OnlineVision':
+        case '1003':
           this.$router.push({
             name: 'AudioPlay',
             params: { id },
-            query: { columnType: this.serviceType, courseName: this.courseName }
+            query: {courseId: this.courseId,  columnType: this.serviceType, courseName: this.courseName }
           })
           break
-        case 'Readings':
+        case '1007':
           this.$router.push({
             name: 'AudioPlay',
             params: { id },
-            query: { columnType: this.serviceType, courseName: this.courseName }
+            query: {courseId: this.courseId,  columnType: this.serviceType, courseName: this.courseName }
           })
           break
       }

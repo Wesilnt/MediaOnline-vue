@@ -33,8 +33,8 @@ export default {
       }
       this.$router.push({
         name: 'AudioPlay',
-        params: { id: freeLessonList[0].id },
-        query:{columnType:'OnlineVision',courseName:this.vision.name}
+        params: {id: freeLessonList[0].id },
+        query:{courseId: this.vision.id, columnType:'1003',courseName:this.vision.name}
       })
     }
   }

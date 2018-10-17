@@ -47,7 +47,7 @@
                 <!-- <CommentItem class="video-course-comment" v-for="item in singleComments" :key="item.id" :comment="item" :unindent="true" :regiontype="2202"/> -->
             </div>
             <CommentBar :show="commentBarShow" v-on:toggle="toggleKeyboard"/>
-            <Share :show="sharePageShow" :courseId="courseId" :columnType ="'OnlineCourse'" @close="cancelSharePage"></Share>
+            <Share :show="sharePageShow" :courseId="courseId" :columnType ="'1005'" @close="cancelSharePage"></Share>
             <van-popup :lazy-render="false"
                        @click-overlay="handleVideoPause"
                        v-model="videoShow" class="video-popup"

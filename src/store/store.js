@@ -22,8 +22,9 @@ import audiotaskData from './module/audioTaskData'
 import shareData from './module/shareData'
 import praiseData from './module/praiseData'
 import mobileData from './module/mobileData'
+import columnActions from './column'
 
-import { getToken, getUserByToken } from '../api/accessTokenApi'
+import { getToken, getUserByToken ,getColumnDetail} from '../api/accessTokenApi'
 import { noAccessToken } from '../utils/userAuth'
 import { wxConfig as wxConfigApi } from '../api/groupBuyApi.js' 
 import { wxConfigUrl } from './../utils/config'
@@ -48,9 +49,12 @@ export default new Vuex.Store({
       state.userInfo = userInfo
     },
     //设置当前用户选中专栏columnDetail  ,
-    //专栏类型 columnType : FreeZone 免费专区 OnlineCourse 在线课堂  OnlineVision 在线视野  Readings 读书会
-    bindCurrentColumn(state, {columnType , columnDetail}){
-      state.columnType = columnType
+    //专栏类型 columnType : FreeZone(1007) 免费专区 OnlineCourse(1005) 在线课堂  OnlineVision(1003) 在线视野  Readings(1001) 读书会
+    bindColumnType(state, {columnType}){
+      state.columnType = columnType  
+    },
+    //设置当前用户选中专栏columnDetail  ,
+    bindCurrentColumn(state, {columnDetail}){ 
       state.columnDetail =  columnDetail 
     }
   },
@@ -208,7 +212,16 @@ export default new Vuex.Store({
           const localIds = res.localIds // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
         }
       })
-    }
+    },
+    //获取专栏详情
+    // async getColumnDetail({commit,state }, {courseId,columnType,forceFresh=true}) { 
+    //   let cacheId = state.columnDetail && state.columnDetail.id
+    //   if(cacheId && cacheId === courseId&&!forceFresh) return state.columnDetail
+    //   const result = await getColumnDetail({courseId})  
+    //   commit('bindCurrentColumn', {columnType, columnDetail:result})
+    //   return result
+    // },
+    ...columnActions
   },
   modules: {
     myPuzzle_PraiseData,

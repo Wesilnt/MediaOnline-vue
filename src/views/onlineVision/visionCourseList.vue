@@ -11,7 +11,14 @@
       <div v-if="item.id != -1" @click="spreat(item.id)" :class="(item.id ===selectCate)&&spread?'categoryHeader selectShadow':'categoryHeader'" :style="{background:'url('+item.picUrl+')'}">
         <div class="categoryHeaderCount"> {{item.lessonCount}}期 </div>
       </div>
-      <SingleSetList v-show="item.id == selectCate && spread" :singletype="'OnlineVision'" class="categoryList" :list='item.lessonList' :coursename="courseName" :useraccessstatus="userAccessStatus"></SingleSetList>
+      <SingleSetList
+        v-show="item.id == selectCate && spread" 
+        :courseid="courseId"
+        :singletype="'1003'" 
+        class="categoryList" 
+        :list='item.lessonList' 
+        :coursename="courseName" 
+        :useraccessstatus="userAccessStatus"></SingleSetList>
     </div>
   </div>
 </template>
@@ -24,6 +31,7 @@ const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
 export default {
   data() {
     return {
+      courseId:this.$route.params.courseId,
       selectCate: 0,
       spread: true,
       ascDown: require('../../assets/images/vision_list_down.png'),

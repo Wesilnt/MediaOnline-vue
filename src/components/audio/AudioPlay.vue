@@ -86,7 +86,8 @@ export default {
       playIcon:require('../../assets/images/audio_play_play.png'),
       pauseIcon:require('../../assets/images/icon_pause.png'),
       lessonId: this.$route.params.id, 
-      columnType: this.$route.query.columnType, //播放类型 FreeZone 免费专区  OnlineCourse 在线课堂 OnlineVision 在线视野  Readings 读书会 
+      courseId:this.$route.query.courseId,
+      columnType: this.$route.query.columnType, //播放类型 FreeZone(1001) 免费专区  OnlineCourse(1005) 在线课堂 OnlineVision(1003) 在线视野  Readings(1007) 读书会 
       courseName: this.$route.query.courseName, //专栏名
       isInit: true, 
       play: true,
@@ -114,8 +115,7 @@ export default {
       'isLoading',
       'isBuffering',
       'audio',
-      'audioId',
-      'courseId',
+      'audioId', 
       'currentTime',
       'maxTime',
       'playMode',
@@ -127,22 +127,22 @@ export default {
     this.isInit = true
     this.bindCourseName(this.courseName) 
     this.playAudio({ lessonId: this.lessonId, columnType: this.columnType })
+    this.setShareInfo({courseId:this.courseId,columnType: this.columnType})
   },
   mounted() {
-    this.getUserInfo().then(user => { 
-      //拼装分享内容
-      let shareData = {
-        link:`${this.url}/#/${courseType[this.columnType]}/${this.columnDetail.courseId}`,
-        title: `${this.columnDetail.name}`,
-        desc: '你一定会爱上国学课...',
-        imgUrl:`${this.columnDetail.sharePostUrl}?imageView2/1/w/100/h/100/format/jpg`,
-        successCB: () => console.log('分享回调成功'),
-        cancelCB: () => console.log('分享回调失败')
-      }
-      this.setWxShareFriend(shareData)
-      this.setWxShareZone(shareData)
-      console.log('AudioPlay分享数据:', shareData)
-    })
+    // this.getUserInfo().then(user => { 
+    //   //拼装分享内容
+    //   let shareData = {
+    //     link:`${this.url}/#/${courseType[this.columnType]}${this.columnDetail.courseId}`,
+    //     title: `${this.columnDetail.name}`,
+    //     desc: '你一定会爱上国学课...',
+    //     imgUrl:`${this.columnDetail.sharePostUrl}?imageView2/1/w/100/h/100/format/jpg`,
+    //     successCB: () => console.log('分享回调成功'),
+    //     cancelCB: () => console.log('分享回调失败')
+    //   }
+    //   this.setWxShareFriend(shareData)
+    //   this.setWxShareZone(shareData) 
+    // })
   },
   watch: {
     audioId: function(id) {
@@ -155,8 +155,8 @@ export default {
   },
   methods: {
     ...rootActions(['getUserInfo','setWxShareFriend','setWxShareZone']),
-    ...mapActions([
-      'getAudioDetail',
+    ...mapActions([ 
+      'setShareInfo',
       'postFavorite',
       'postUnFavorite',
       'playAudio',
@@ -167,6 +167,7 @@ export default {
       'next',
       'bindCourseName' 
     ]),
+    ...mapMutations(['clearData']),
     //拖动进度改变进度
     onInputChange(e) {
       this.progress = e.target.value
@@ -216,7 +217,7 @@ export default {
       this.playAudio()
     },
     //上一首
-    onPlayPrv() { 
+    onPlayPrv() {  
       if (!this.audio) return
       let preId = this.audio.preLessonId
       if (preId && -1 != preId) {
@@ -226,10 +227,10 @@ export default {
       }
     },
     //下一首
-    onPlayNext() {
+    onPlayNext() { 
       if (!this.audio) return
       let nextId = this.audio.nextLessonId
-      if (nextId && -1 != nextId) {
+      if (nextId && -1 != nextId) {  
         this.next({ lessonId: nextId })
       } else {
         this.$toast.fail('已经是最后一条')
@@ -249,10 +250,10 @@ export default {
       this.popupVisible = false
       this.$router.push({
         name: 'AudioPlay',
-        params: { id: audio.id },
+        params: {courseId: this.courseId, id: audio.id },
         query: { columnType: this.columnType }
       })
-      this.playAudio({ lessonId: audio.id })
+      this.playAudio({ lessonId: audio.id, columnType: this.columnType })
     }
   },
   /**
@@ -274,6 +275,9 @@ export default {
   //     to.meta.keepAlive = false // 让 頁面缓存，即不刷新
   //   }) 
   // }
+  beforeDestroy(){
+    this.clearData()
+  }
 }
 </script>
 <style lang="scss" >

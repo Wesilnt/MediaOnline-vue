@@ -54,7 +54,7 @@ const visionData = {
             commit('bindCurrentColumn', {columnType:"Readings" , columnDetail:result},{root:true})
             const profilePic = result.profilePic
             const freeLessonList = result.freeLessonList
-            const serviceType = "OnlineVision"
+            const serviceType = "1003"
             //绑定与拼团相关的内容
             dispatch('groupManagerData/initColumnInfo',{serviceType,courseId,profilePic,'freeLesson':freeLessonList})
             if (groupBuyId) {

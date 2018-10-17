@@ -59,7 +59,7 @@ export default {
      }
      //2.  有专栏ID 
      if(this.courseId){
-        this.getColumnDetail({courseId:this.courseId}) 
+        this.getColumnDetail({courseId:this.courseId,columnType:this.columnType,useCache:true}) 
         .then(()=>{
           this.setPosterConfig()    //设置分享地址
           this.drawBottomMap()      //重新生成图片
@@ -180,20 +180,7 @@ export default {
     setPosterConfig(){ 
        //1. 有专栏详情, 拼团中
      if(this.columnDetail && this.columnDetail.userAccessStatus==1005){   
-      switch (this.shareType) {
-         case 'OnlineCourse':
-          this.shareUrl =  `${this.url}/#/home/videoColumnDetail/${this.columnDetail.id}?groupBuyId=${this.columnDetail.groupBuyId}`
-          break
-        case 'OnlineVision':
-          this.shareUrl =  `${this.url}/#/home/visionDetail/${this.columnDetail.id}?groupBuyId=${this.columnDetail.groupBuyId}`
-          break
-        case 'Readings':
-          this.shareUrl =  `${this.url}/#/home/readings/book/${this.columnDetail.id}?groupBuyId=${this.columnDetail.groupBuyId}`
-          break
-        default:
-          this.shareUrl = `${this.url}/#/freezone`
-          break
-        } 
+       this.shareUrl =  `${this.url}/#${courseType[this.shareType]}${this.columnDetail.id}?groupBuyId=${this.columnDetail.groupBuyId}`
       return
      }
      //2. 有专栏详情, 集赞中
@@ -203,20 +190,7 @@ export default {
      }
      //3. 有专栏详情, 非集赞中和拼团中
      if(this.columnDetail) { 
-        switch (this.shareType) {
-          case 'OnlineCourse':
-            this.shareUrl =   `${this.url}/#/home/videoColumnDetail/${this.columnDetail.id}`
-            break
-          case 'OnlineVision':
-            this.shareUrl =   `${this.url}/#/home/visionDetail/${this.columnDetail.id}`
-            break
-          case 'Readings':
-            this.shareUrl =   `${this.url}/#/home/readings/book/${this.columnDetail.id}`
-            break
-          default:
-            this.shareUrl = `${this.url}/#/freezone`
-            break
-          } 
+       this.shareUrl =   `${this.url}/#${courseType[this.shareType]}${this.columnDetail.id}`
       }
       //==================
     }

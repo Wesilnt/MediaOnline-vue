@@ -63,7 +63,13 @@
       :immediate-check="false"
       @load="scrollBottom"
       @offset="10">
-         <SingleSetList :list="singleSetList" :play-id="playingId" :singletype="'Readings'" :coursename="courseName" :useraccessstatus="userAccessStatus"/>
+         <SingleSetList 
+            :courseid="courseId"
+            :list="singleSetList" 
+            :play-id="playingId" 
+            :singletype="'1007'" 
+            :coursename="courseName" 
+            :useraccessstatus="userAccessStatus"/>
     </van-list>
     <!-- 6. 分页布局 -->
     <div class="load-more-container" v-if="singleFinished">

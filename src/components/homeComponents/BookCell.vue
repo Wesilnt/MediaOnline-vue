@@ -19,15 +19,15 @@ export default {
       this.$router.push({
         name: 'BookDetail',
         params: { courseId: this.book.id},
-        query:{columnType:"Readings"}
+        query:{columnType:"1007"}
       })
     },
     onPlayClick() { 
       if(this.book.freeLessonList&&this.book.freeLessonList.length>0){
         this.$router.push({
           name: 'AudioPlay',
-          params: { id: this.book.freeLessonList[0].id },
-          query:{columnType:"Readings",courseName:this.book.name}
+          params: {id: this.book.freeLessonList[0].id },
+          query:{courseId: this.book.id,columnType:"1007",courseName:this.book.name}
         })
       }else{
         this.$toast('本书籍暂时不支持试听')

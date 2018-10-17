@@ -106,7 +106,7 @@
         this.$router.push({
           name: 'AudioPlay'
           , params: {id: item.id}
-          , query: {columnType: courseType[item.courseType], courseName: item.title}
+          , query: {courseId:-1,columnType: courseType[item.courseType], courseName: item.title}
         })
 
       },

@@ -67,7 +67,7 @@ export default {
   name: 'Praise',
   data() {
     return {
-      columnType: this.$route.query.columnType, //专栏类型  FreeZone 免费专区 OnlineCourse 在线课堂  OnlineVision 在线视野  Readings 读书会
+      columnType: this.$route.query.columnType, //专栏类型 FreeZone(1001) 免费专区  OnlineCourse(1005) 在线课堂 OnlineVision(1003) 在线视野  Readings(1007) 读书会 
       interval: null,
       courseId: this.$route.params.courseId,
       collectLikeId: this.$route.params.collectLikeId,

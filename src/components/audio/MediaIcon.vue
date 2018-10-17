@@ -57,9 +57,10 @@ export default {
       'coverPic',
       'forceHidenFloat',
       'showFloat',
-      'columnType',
+      'courseId', 
       'courseName'
-    ])
+    ]),
+    ...mapGetters(['columnType'])
   },
   created() {
     this.initAudio()
@@ -97,7 +98,7 @@ export default {
         this.$router.push({
           name: 'AudioPlay',
           params: { id: this.audioId },
-          query: { columnType: this.columnType, courseName: this.courseName }
+          query: {courseId: this.courseId, columnType: this.columnType, courseName: this.courseName }
         })
       }
       e.preventDefault()
@@ -221,7 +222,7 @@ export default {
       return value
     },
     $route(to) {
-      this.setFloatButton(!to.path.includes('/audio/audioplay'))
+      this.setFloatButton(to.name&&!to.name.includes('AudioPlay'))
     }
   }
 }
