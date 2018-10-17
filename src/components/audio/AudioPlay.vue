@@ -12,7 +12,7 @@
          ? 'url('+require('../../assets/images/love_collect.png')+')'
          : 'url('+require('../../assets/images/audio_love_normal.png')+')'}">
         </div>
-        <div v-if="'Readings'!=columnType" class="tab-container-draft" @click="onDraft"/>
+        <div v-if="'1007'!=columnType" class="tab-container-draft" @click="onDraft"/>
         <div  class="tab-container-comment" @click="toComment">
           <span>{{audio.commentCount}}</span>
         </div>
@@ -69,6 +69,7 @@
   </div>
 </template>
 <script>
+import { courseType } from '../../utils/config'
 import SharePop from '../share/Share.vue'
 import {createNamespacedHelpers,mapState as rootState, mapActions as rootActions} from 'vuex'
 const {mapState,mapMutations, mapActions,mapGetters} = createNamespacedHelpers('audiotaskData/audioData')
@@ -128,19 +129,10 @@ export default {
     this.playAudio({ lessonId: this.lessonId, columnType: this.columnType })
   },
   mounted() {
-    this.getUserInfo().then(user => {
-      let link = ''
-      switch (this.columnType) {
-        case 'OnlineVision':
-          link = `${this.url}/#/home/visionDetail/${this.columnDetail.courseId}`
-          break
-        case 'Readings':
-          link = `${this.url}/#/home/readings/book/${this.columnDetail.courseId}`
-          break
-      }
+    this.getUserInfo().then(user => { 
       //拼装分享内容
       let shareData = {
-        link,
+        link:`${this.url}/#/${courseType[this.columnType]}/${this.columnDetail.courseId}`,
         title: `${this.columnDetail.name}`,
         desc: '你一定会爱上国学课...',
         imgUrl:`${this.columnDetail.sharePostUrl}?imageView2/1/w/100/h/100/format/jpg`,
@@ -224,7 +216,7 @@ export default {
       this.playAudio()
     },
     //上一首
-    onPlayPrv() {
+    onPlayPrv() { 
       if (!this.audio) return
       let preId = this.audio.preLessonId
       if (preId && -1 != preId) {

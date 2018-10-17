@@ -93,11 +93,7 @@ export default {
       let offsetTime = new Date().getTime() - this.startTime
       let offsetX = e.changedTouches[0].clientX - this.startX
       let offsetY = e.changedTouches[0].clientY - this.startY
-      if (
-        offsetTime < 800 &&
-        Math.abs(offsetX) < 50 &&
-        Math.abs(offsetY) < 50
-      ) {
+      if (offsetTime < 800 && Math.abs(offsetX) < 50 &&Math.abs(offsetY) < 50) {
         this.$router.push({
           name: 'AudioPlay',
           params: { id: this.audioId },
@@ -115,13 +111,7 @@ export default {
         playIcon.src = require('../../assets/images/icon_pause.png')
       }
       playIcon.onload = () => {
-        this._ctx.drawImage(
-          playIcon,
-          this.width / 2 - 5,
-          this.height / 2 - 8,
-          10,
-          16
-        )
+        this._ctx.drawImage(playIcon,this.width / 2 - 5,this.height / 2 - 8,10,16)
       }
     },
     //设置进度
@@ -131,14 +121,7 @@ export default {
     //绘制进度底色
     _drawProgressColor: function() {
       this._ctx.beginPath()
-      this._ctx.arc(
-        this.width / 2,
-        this.height / 2,
-        this.height / 2,
-        0,
-        2 * Math.PI,
-        1
-      )
+      this._ctx.arc(this.width / 2,this.height / 2,this.height / 2,0,2 * Math.PI,1)
       this._ctx.fillStyle = 'white'
       this._ctx.fill()
 

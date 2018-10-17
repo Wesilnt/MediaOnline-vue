@@ -18,6 +18,7 @@
   </div>
 </template> 
 <script>
+import { courseType } from '../../utils/config'
 import LoadingDialog from '../LoadingDialog.vue'
 import { createNamespacedHelpers ,mapState as rootState,mapActions as rootActions} from 'vuex'
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers('shareData')
