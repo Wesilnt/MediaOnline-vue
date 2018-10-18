@@ -504,8 +504,6 @@ const groupManagerData = {
             let headerType = 0
             let isShowGroupBuy = true
             switch(orderStatus){
-                case 1201:
-                break
                 case 1204:
                     //拼团失败
                     //拼团成功&&在拼团列表中 显示重新开团
@@ -564,6 +562,7 @@ const groupManagerData = {
                     }
 
                 break
+                case 1201:
                 case 1202:
                 //拼团中&&开团人  显示  邀请好友拼团  
                     if(isOwner){
