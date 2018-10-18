@@ -63,6 +63,15 @@ export default {
   transform: none;
 }
 .popup-modal-white {
-  background-color: rgba(255, 255, 255, 0.89);
+  background-color: #fff;
+    &:after{
+        content: '点击此处返回';
+        position: absolute;
+        bottom: 72px;
+        left: 0;
+        right: 0;
+        text-align: center;
+        color: #9a9a9a;
+    }
 }
 </style>

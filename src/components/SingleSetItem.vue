@@ -63,7 +63,8 @@ export default {
         })
         }
       } else {
-        this.$toast.fail('您还未购买该专栏')
+          console.log(this.singletype);
+          this.$toast.fail('您还未购买该专栏')
       }
     }
   }

@@ -34,7 +34,6 @@ export default {
     togglePath: function(path) {
       if (path !== this.currentPath) {
         this.currentPath = path
-
         this.$router.push({ path })
       }
     }

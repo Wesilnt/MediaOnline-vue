@@ -54,6 +54,7 @@
             <CommentBar :show="commentBarShow" v-on:toggle="toggleKeyboard"/>
             <Share :show="sharePageShow" :courseId="courseId" :columnType ="'1005'" @close="cancelSharePage"></Share>
             <van-popup :lazy-render="false"
+                       position="top"
                        @click-overlay="handleVideoPause"
                        v-model="videoShow" class="video-popup"
                        overlay-class="popup-modal-white">
