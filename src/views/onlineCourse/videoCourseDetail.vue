@@ -187,6 +187,7 @@ export default {
   beforeDestroy() {
     this.videoElem.removeEventListener('timeupdate', this.getVideoProgress)
     this.videoElem.removeEventListener('play', this.handleVideoPlay)
+    this.videoElem.removeEventListener('error',this.catchError)
     this.resetLoading(true)
   },
   created() {
