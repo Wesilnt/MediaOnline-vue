@@ -181,7 +181,6 @@ export default {
         return
       } 
       let params = { courseId: this.courseId, payType: 0 }
-      console.log("this.userAccessStatus>>>>>>>>>>>>>>>>",this.userAccessStatus)
       switch (this.userAccessStatus) {
         //没有购买和集赞行为
         case 0:
@@ -358,7 +357,7 @@ export default {
     },
     isQuiklyClick(){
       if(Date.now()-this.lastClickTime < 1000){
-        this.$toast('支付过快,请稍后...')
+        // this.$toast('按钮点击频率太高了...')
         this.lastClickTime = Date.now()
         return true
       }
