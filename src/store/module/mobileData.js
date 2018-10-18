@@ -1,4 +1,5 @@
 import { sendMobileCode, validateMobileCode } from '../../api/mobileApi'
+import store from "../store";
 
 export default {
   name: 'mobile',
@@ -63,6 +64,9 @@ export default {
       const res = await validateMobileCode(params)
       if (!res) return
       commit('setValidateResult', res)
+
+      // 更新本地用户信息
+      await store.dispatch('getUserInfo',true)
     }
   },
   getters: {}

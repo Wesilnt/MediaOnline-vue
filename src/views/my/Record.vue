@@ -350,13 +350,13 @@
     }
 
     .del-icon {
-        width: 55px;
-        height: 55px;
+        width: 45px;
+        height: 45px;
         margin: 15px 0px 10px 0px;
         align-content: center;
     }
     .del-text {
-        font-size: 28px;
+        font-size: 24px;
         color: #808080;
     }
     .check-img {

@@ -29,7 +29,7 @@ const myData = {
         })
     },
     async getMyUserInfo({ dispatch, commit, state }) {
-      const response = await store.dispatch('getUserInfo')
+      const response = await store.dispatch('getUserInfo',true)
       // console.log(response)
       commit('saveUserInfo', response)
     }

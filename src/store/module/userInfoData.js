@@ -23,7 +23,7 @@ const userInfoData = {
   },
   actions: {
     async getMyUserInfo({ dispatch, commit, state }) {
-      const response = await store.dispatch('getUserInfo')
+      const response =  await store.dispatch('getUserInfo',true)
       // console.log(response)
       await commit({
         type: 'saveUserInfo',
@@ -39,6 +39,8 @@ const userInfoData = {
       commit('toggleLoading', {
         loading: false
       })
+      // 更新本地用户信息
+      await store.dispatch('getUserInfo',true)
     },
     async updateUserInfoGender({ dispatch, commit, state }, { gender }) {
       //更新性别
@@ -47,7 +49,8 @@ const userInfoData = {
       commit('updateGender', {
         gender: gender
       })
-
+      // 更新本地用户信息
+      await store.dispatch('getUserInfo',true)
     },
     async updateUserInfoGrade({ dispatch, commit, state }, { grade }) {
       //更新年级
@@ -57,6 +60,8 @@ const userInfoData = {
       commit('updateGrade', {
         grade: grade
       })
+      // 更新本地用户信息
+      await store.dispatch('getUserInfo',true)
     }
   }
 }

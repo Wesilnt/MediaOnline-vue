@@ -26,9 +26,9 @@ import columnActions from './column'
 
 import { getToken, getUserByToken ,getColumnDetail} from '../api/accessTokenApi'
 import { noAccessToken } from '../utils/userAuth'
-import { wxConfig as wxConfigApi } from '../api/groupBuyApi.js' 
+import { wxConfig as wxConfigApi } from '../api/groupBuyApi.js'
 import { wxConfigUrl } from './../utils/config'
-import { stat } from 'fs'; 
+import { stat } from 'fs';
 
 Vue.use(Vuex)
 export default new Vuex.Store({
@@ -36,26 +36,26 @@ export default new Vuex.Store({
   state: {
     // url: encodeURIComponent(location.href.split('#')[0])
     url: window.location.href.split('#')[0],
-    wxRegisterPath: '', 
+    wxRegisterPath: '',
     userInfo: null ,
     columnDetail: {},
-    columnType: null 
+    columnType: null
   },
   mutations: {
     saveWxRegisterPath(state, { wxRegisterPath }) {
       state.wxRegisterPath = wxRegisterPath
-    }, 
+    },
     saveUserInfo(state, { userInfo }) {
       state.userInfo = userInfo
     },
     //设置当前用户选中专栏columnDetail  ,
     //专栏类型 columnType : FreeZone(1007) 免费专区 OnlineCourse(1005) 在线课堂  OnlineVision(1003) 在线视野  Readings(1001) 读书会
     bindColumnType(state, {columnType}){
-      state.columnType = columnType  
+      state.columnType = columnType
     },
     //设置当前用户选中专栏columnDetail  ,
-    bindCurrentColumn(state, {columnDetail}){ 
-      state.columnDetail =  columnDetail 
+    bindCurrentColumn(state, {columnDetail}){
+      state.columnDetail =  columnDetail
     }
   },
   actions: {
@@ -65,9 +65,9 @@ export default new Vuex.Store({
     async checkToken({ dispatch }) {
       noAccessToken() && dispatch('getAccessToken')
     },
-    async getUserInfo({ state, commit }) { 
+    async getUserInfo({ state, commit },forceUpdate=false ) {
       const { userInfo } = state
-      if (userInfo) return userInfo
+      if (userInfo && !forceUpdate) return userInfo
       const response = await getUserByToken()
       commit('saveUserInfo', {userInfo: response})
       return response
@@ -161,7 +161,7 @@ export default new Vuex.Store({
           dataUrl, // 如果type是music或video，则要提供数据链接，默认为空      *****只对分享给朋友有效*****
           success: res => successCB(res),
           cancel: res => cancelCB(res)
-        }  
+        }
         wx.ready(() => {
           // 分享给朋友
           wx.onMenuShareAppMessage(shareOptions)
@@ -214,10 +214,10 @@ export default new Vuex.Store({
       })
     },
     //获取专栏详情
-    // async getColumnDetail({commit,state }, {courseId,columnType,forceFresh=true}) { 
+    // async getColumnDetail({commit,state }, {courseId,columnType,forceFresh=true}) {
     //   let cacheId = state.columnDetail && state.columnDetail.id
     //   if(cacheId && cacheId === courseId&&!forceFresh) return state.columnDetail
-    //   const result = await getColumnDetail({courseId})  
+    //   const result = await getColumnDetail({courseId})
     //   commit('bindCurrentColumn', {columnType, columnDetail:result})
     //   return result
     // },

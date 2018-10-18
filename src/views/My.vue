@@ -92,9 +92,16 @@
       ...mapActions(['queryNewMessageCount', 'getMyUserInfo']),
       editUserInfo: function () {
         if (this.userInfo.gender && this.userInfo.grade && this.userInfo.role && this.userInfo.mobileNo) {
+          // 用户信息都填写完整
           this.$router.push({path: './my/DisplayUserInfo'})
         } else {
-          this.$router.push({path: './my/EditUserPhone'})
+          if (this.userInfo.mobileNo) {
+            // 填写了电话号码则直接跳到其他信息填写页面
+            this.$router.push({path: './my/EditUserInfo'})
+            // 所有的信息都没有填写则从电话验证开始填写
+          } else {
+            this.$router.push({path: './my/EditUserPhone'})
+          }
         }
       },
       itemClick: function (name) {

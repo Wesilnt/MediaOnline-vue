@@ -60,7 +60,7 @@
                         <img class="del-icon" :src="require('../../assets/images/my_alter_delete.png')" @click="handleDelete"/>
                         <p class="del-text">删除</p>
                     </van-popup>
-                    <van-popup v-model="showCheck" position="bottom" :lock-scroll="false">
+                    <van-popup v-model="showCheck" position="bottom" :overlay="false" :lock-scroll="false">
                         <img class="del-icon"  :src="require('../../assets/images/my_alter_delete.png')" @click="handleDeleteAll"/>
                         <p class="del-text">删除</p>
                     </van-popup>
@@ -103,11 +103,15 @@
       ...mapMutations(['modifyLikeList']),
       ...mapActions(['queryList', 'delMyLike','batchDelMyLike']),
       toPlay:function (item) {
-        this.$router.push({
-          name: 'AudioPlay'
-          , params: {id: item.id}
-          , query: {courseId:-1,columnType: courseType[item.courseType], courseName: item.title}
-        })
+        if (item.courseType === '1003' || item.courseType === '1007' ) {
+          this.$router.push({
+            name: 'AudioPlay'
+            , params: {id: item.id}
+            , query: {courseId:-1,columnType: courseType[item.courseType], courseName: item.title}
+          })
+        } else if (item.courseType === '1005' ) {
+          this.$router.push({ name: 'videoCourseDetail', params: { lessonId: item.id} })
+        }
 
       },
       handleMenu: function () {
