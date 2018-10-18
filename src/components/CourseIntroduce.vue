@@ -1,6 +1,6 @@
 <template>
     <div class="courseIntroduce">
-        <div ref="content" id='fid' class="courseIntroduce-content" :class="{'content-expand':isExpand}" >
+        <div ref="content" class="courseIntroduce-content" :class="{'content-expand':isExpand}" >
            <div ref="contentChild" v-html="courseinfo"></div>
         </div>
         <div class="arrow-container" :class="{'arrow-container-expand':isExpand}" v-if="needExpand" @click="handleExpand">
@@ -10,6 +10,7 @@
 </template>
 
 <script>
+let inter = null
 export default {
   name: 'CourseIntroduce',
   props: ['courseinfo'],
@@ -24,20 +25,29 @@ export default {
       this.isExpand = !this.isExpand
     },
     ExpandWatched() {
-      setTimeout(()=>{
-        this.$nextTick( ()=> {
-        this.needExpand =
-          this.$refs.contentChild.offsetHeight > (64 / 375) * window.innerWidth
-        // this.$refs.content.clientHeight < this.$refs.contentChild.clientHeight
-      })
-      },300)
-      
+        clearTimeout(inter)
+        inter = setTimeout(() => {
+            this.$nextTick(() => {
+                const { content, contentChild } = this.$refs
+                const { clientHeight: contentClientHeight } = content
+                const { clientHeight: contentChildClientHeight } = contentChild
+
+                if (!contentChildClientHeight) {
+                    return
+                }
+                console.log('正在判定介绍高度',contentClientHeight,contentChildClientHeight)
+                if (!contentClientHeight) {
+                    return this.ExpandWatched()
+                }
+                this.needExpand = contentChildClientHeight > contentClientHeight
+                console.log('介绍高度判定结束')
+                // this.$refs.content.clientHeight < this.$refs.contentChild.clientHeight
+            })
+        }, 100)
     }
   },
-  /*
-    * */
   watch: {
-    courseinfo: {
+      courseinfo: {
       handler: 'ExpandWatched',
       immediate: true
     }
@@ -95,6 +105,6 @@ export default {
   margin-top: 80px;
   background: url('../assets/images/arrow_down.png') center no-repeat;
   background-size: 80%;
-    transition: transform .1s linear;
+  transition: transform 0.1s linear;
 }
 </style>

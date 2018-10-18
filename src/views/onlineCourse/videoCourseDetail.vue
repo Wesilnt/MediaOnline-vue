@@ -19,17 +19,19 @@
             <!-- navbar -->
             <ScrollNavBar :bars="navBars" />
             <!-- 资料 -->
-            <div class="video-detail-base" id="desc">
-                <div  ref="desc" class="video-detail-sction-title">
-                    <h4>笔记</h4>
+            <div id="desc">
+                <div class="video-detail-base" v-if="manuscript">
+                    <div class="video-detail-sction-title">
+                        <h4>笔记</h4>
+                    </div>
+                    <CourseIntroduce :courseinfo="manuscript"/>
                 </div>
-                <CourseIntroduce :courseinfo="manuscript" />
-            </div>
-            <div class="video-detail-base" v-if="haveQuestionBOList">
-                <div class="video-detail-sction-title">
-                    <h4>自测题</h4>
+                <div class="video-detail-base" v-if="haveQuestionBOList">
+                    <div class="video-detail-sction-title">
+                        <h4>自测题</h4>
+                    </div>
+                    <QuestionList @update="getVideoCourseDetail"/>
                 </div>
-                <QuestionList @update="getVideoCourseDetail"/>
             </div>
             <!-- 目录 -->
             <div class="video-detail-base" id="tryCourse">
