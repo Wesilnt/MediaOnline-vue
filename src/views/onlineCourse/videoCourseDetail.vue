@@ -179,6 +179,7 @@ export default {
     //视频进度
     this.videoElem.addEventListener('timeupdate', this.getVideoProgress)
     this.videoElem.addEventListener('play', this.handleVideoPlay)
+    this.videoElem.addEventListener('error',this.catchError)
     this.videoElem.addEventListener('contextmenu', () => {
       return false
     })
@@ -208,6 +209,10 @@ export default {
       'postComment'
     ]),
     ...mapRootActions(['getUserInfo', 'setWxShareFriend', 'setWxShareZone']),
+    catchError(error){
+      console.log('抓取错误')
+      console.log(error)
+    },
     //播放视频
     handleVideoPlay() {
       const videoData = JSON.parse(localStorage.getItem(this.id))
