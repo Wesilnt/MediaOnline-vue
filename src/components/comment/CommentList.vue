@@ -11,8 +11,8 @@
           @load="scrollBottom"
           @offset="10">
           <div>
-           <van-cell :class="{'van-item': false}"  v-for="(item,index) of commentList" :key="item.id">
-                  <comment-item :comment="item" :lastindex="(commentList.length-1)==index" :unindent="haspadding"/>
+           <van-cell :class="{'van-item': unindent}"  v-for="(item,index) of commentList" :key="item.id">
+                  <comment-item :comment="item" :lastindex="(commentList.length-1)==index" />
            </van-cell>
           </div>
       </van-list>
@@ -31,7 +31,7 @@ export default {
   },
   // regionid   专栏: courseId ,单集: lessonId
   // regiontype 2201:专栏,2202:单集
-  props: ['regionid', 'regiontype','haspadding'],
+  props: ['regionid', 'regiontype','unindent'],
   components: { 'comment-item': CommentItem },
   watch: {
     loading: function(loading) {
@@ -40,7 +40,7 @@ export default {
   },
   created() {
     let regionType = this.regiontype
-    let regionId = this.regionid
+    let regionId = this.regionid 
     this.getCommentList({ regionId, regionType, isLoadMore: false })
   },
   computed: { ...mapState(['commentList', 'finished', 'loading']) },
@@ -58,7 +58,7 @@ export default {
   width: 100%;
 }
 .van-item{
-  padding: 0px;
+  padding: 20px 0px;
 }
 .comment-list {
   display: flex;

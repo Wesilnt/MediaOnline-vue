@@ -33,7 +33,8 @@
                     <img :src="require('../../../assets/images/arrow_right.png')" class="videocol-allbtn-icon">
                 </div>
             </div>
-            <CommentItem class="video-column-comment" v-for="(item,index) of videoColumnComments" :key="index" :comment="item" :regiontype="2201"/>
+             <CommentList  :regionid="courseId" :regiontype="2201" :unindent="true" ></CommentList>
+            <!-- <CommentItem class="video-column-comment" v-for="(item,index) of videoColumnComments" :key="index" :comment="item" :regiontype="2201"/> -->
         </div>
         <!-- 购买须知 -->
         <div class="videocol-base">
@@ -48,6 +49,7 @@
 </template>
 
 <script>
+import CommentList from '../../../components/comment/CommentList.vue'
 import ScrollNavBar from '../../../components/ScrollNavBar'
 import CourseIntroduce from '../../../components/CourseIntroduce.vue'
 import playlist from './playlist.vue'
@@ -85,7 +87,8 @@ export default {
     videoComment,
     CommentItem,
     videoBigimage,
-    ScrollNavBar
+    ScrollNavBar,
+    CommentList
   },
   computed: {
     ...mapState(['videoColumnComments','commentsTotalCount']),
@@ -95,7 +98,7 @@ export default {
       'outlinePic',
       'buyIntro',
       'buyCount',
-      'freeLessonList',
+      'freeLessonList', 
       'courseId'
     ])
   },
