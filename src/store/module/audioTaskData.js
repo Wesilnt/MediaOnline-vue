@@ -124,8 +124,7 @@ export default {
         //更新本地缓存
         let data = JSON.stringify({currentTIme: res.learnTime,maxTime: res.totalTime})
         localStorage.setItem('learntime-' + res.id, data)
-      }
-      console.log(res)
+      } 
       commit('bindAudioDetail', res)
       return res
     },
@@ -137,6 +136,7 @@ export default {
       }
       if (params) {
         const res = await dispatch('getAudioDetail', params)
+        if(!res) return 
         commit('syncPlay', { audioUrl: res.audioUrl,columnType:params.columnType })
         return res
       } else {
@@ -150,6 +150,7 @@ export default {
     },
     //下一集
     async playNext({ state,commit,rootState, dispatch }) { 
+      console.log("下一集，已购买！！！",rootState.columnDetail)
      if(rootState.columnType
         &&(rootState.columnType == "1003" 
         || rootState.columnType == "1007")
@@ -161,6 +162,7 @@ export default {
          && 1008 != useraccessstatus) 
          return
       }
+      console.log("下一集，已购买！！！",rootState.columnDetail.userAccessStatus)
       let nextId = state.audioDetail.nextLessonId
       if (nextId&&-1!=nextId) {
         commit('syncPause')
@@ -171,6 +173,7 @@ export default {
     },
     //上一集
     async playPre({ state,commit,rootState, dispatch }) { 
+      console.log("上一集，已购买！！！",rootState.columnDetail)
       if(rootState.columnType
            &&(rootState.columnType == "1007" 
            || rootState.columnType == "1003")
@@ -182,6 +185,7 @@ export default {
             && 1008 != useraccessstatus) 
             return
       } 
+      console.log("上一集，已购买！！！",rootState.columnDetail.userAccessStatus)
       let preId = state.audioDetail.preLessonId
       if (preId&&-1!=preId) {
         commit('syncPause')
