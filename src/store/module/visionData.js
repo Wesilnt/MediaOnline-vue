@@ -48,6 +48,9 @@ const visionData = {
         async getVisionDetail({state,dispatch,commit},{courseId,groupBuyId}){
             !state.renderLoading && commit('setIsLoading',{renderLoading:true});
             let result = await dispatch('getColumnDetail',{courseId,columnType:'1003'},{root:true})
+            console.log('groupBuyId ==',groupBuyId)
+            console.log('少年视野专栏数据:')
+            console.log(result)
             commit('setVisionDetail', {result,isFromShare: groupBuyId ? true : false})
             commit('setIsLoading',{renderLoading:false});
             //绑定全局专栏当前详情

@@ -56,7 +56,7 @@ export default {
       return arr[index]
     }
   },
-  props: ['comment', 'unindent', 'regiontype', 'lastindex'],
+  props: {'comment':{default:{}}, 'unindent':{default:false}, 'regiontype':{default:2202}, 'lastindex':{default:false}},
   data() {
     return {
       needExpand: false,
