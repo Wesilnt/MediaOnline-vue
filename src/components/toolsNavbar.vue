@@ -181,9 +181,11 @@ export default {
         return
       } 
       let params = { courseId: this.courseId, payType: 0 }
+      console.log("this.userAccessStatus>>>>>>>>>>>>>>>>",this.userAccessStatus)
       switch (this.userAccessStatus) {
         //没有购买和集赞行为
         case 0:
+        case -3:
           this.checkoutAuthorrization(params)
           break
         case 1001:
