@@ -7,11 +7,13 @@
         <hr class="vertical-line"/>
         <div v-show="toolsObject&&toolsObject.originPrice" :disabled="isLoading" class="toolbar-price" :class="{'toolbar-price-active':toolsObject&&!toolsObject.collage&&!toolsObject.collect }"  @click="clickOriginPriceBtn">
             <p class="toolbar-price-num">￥{{toolsObject&&toolsObject.originPrice | formatPrice}}</p>
+            <!-- <van-loading v-show="isLoading&&isClickOriginPriceBtn" class="pay_loading" color="black" /> -->
             <span class="under-text">{{isLoading && isClickOriginPriceBtn?'支付中...':'原价购买'}}</span>
         </div>
         <div v-show="toolsObject&&(toolsObject.collage || toolsObject.collect)" class="toolbar-btnGroup">
             <div v-show="toolsObject&&toolsObject.collage" class="toolbar-btn toolbar-btn-left" :disabled="isLoading" @click="clickCollageBtn">
                 <div v-show="toolsObject&&toolsObject.groupPrice"  class="toolbar-btn-price">￥{{toolsObject&&toolsObject.groupPrice | formatPrice}}</div>
+                <!-- <van-loading v-show="isLoading&&isClickCollageBtn" class="pay_loading" color="black" /> -->
                 <div>{{isLoading&&isClickCollageBtn?'支付中...':toolsObject&&toolsObject.collageText}}</div>
             </div>
             <div v-show="toolsObject&&toolsObject.collect" class="toolbar-btn toolbar-btn-right" @click="clickCollectBtn">
@@ -172,12 +174,12 @@ export default {
     //点击原价购买按钮
     clickOriginPriceBtn() {
       if(this.isQuiklyClick())return 
+      this.isClickCollageBtn = false
+      this.isClickOriginPriceBtn = true
       if(this.isLoading) {
-        this.isClickOriginPriceBtn = true
         this.$toast("正在调起支付...")
         return
-      }
-      this.isClickOriginPriceBtn = false
+      } 
       let params = { courseId: this.courseId, payType: 0 }
       switch (this.userAccessStatus) {
         //没有购买和集赞行为
@@ -195,12 +197,12 @@ export default {
     //点击拼团按钮
     clickCollageBtn() {
       if(this.isQuiklyClick())return
-      if(this.isLoading) {
-        this.isClickCollageBtn = true
+      this.isClickCollageBtn = true
+      this.isClickOriginPriceBtn = false
+      if(this.isLoading) { 
         this.$toast("正在调起支付...")
         return
-      }
-      this.isClickCollageBtn = false
+      } 
       console.log("支付事件")
       let params = null
       console.log('是否来自分享'+ this.isFromShare)
@@ -303,6 +305,8 @@ export default {
     },
     //点击集赞按钮
     clickCollectBtn() {
+      this.isClickCollageBtn = false
+      this.isClickOriginPriceBtn = false
       let params = null
       switch (this.userAccessStatus) {
         case 1007:
@@ -501,6 +505,7 @@ export default {
   color: #fff;
 }
 .toolbar-btn {
+  position: relative;
   height: 100%;
   flex-grow: 1;
   display: flex;
@@ -528,5 +533,11 @@ export default {
   & + div {
     font-size: 20px;
   }
+}
+.van-loading{
+  position: absolute;
+  left: 10px;
+  width: 18px;
+  height: 18px;
 }
 </style>
