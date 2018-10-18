@@ -239,14 +239,14 @@ export default {
       const { paused } = this.videoElem
       if (!paused) this.videoElem.pause()
       //刷新页面
-      console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+      // console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
       const { lessonId } = this.$route.params
       this.getVideoCourseDetail({ lessonId })
     },
     getVideoProgress({ target }) {
       const { currentTime, paused, duration, readyState } = target
-      console.log(target)
-      console.log(this.videoElem.error)
+      // console.log(target)
+      // console.log(this.videoElem.error)
       /*
       视频存储数据逻辑
       */
