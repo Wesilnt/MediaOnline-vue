@@ -167,9 +167,9 @@ const groupManagerData = {
                     }
                     let link = ''
                     if(1202==orderStatus){
-                      link = `${rootState.url}/#${courseType[state.serviceType]}${courseId}?groupBuyId=${groupBuyId}`
+                      link = `${rootState.url}/#/${courseType[state.serviceType]}${courseId}?groupBuyId=${groupBuyId}`
                     }else {
-                      link = `${rootState.url}/#${courseType[state.serviceType]}${courseId}`
+                      link = `${rootState.url}/#/${courseType[state.serviceType]}${courseId}`
                     }
                    
                     console.log('groupmanager来自分享设置分享地址：', link, '   设置分享标题：', title)
@@ -201,11 +201,11 @@ const groupManagerData = {
                     }
                     let link = ''
                     if(1005==state.userAccessStatus){
-                      link = `${rootState.url}/#${courseType[state.serviceType]}${courseId}?groupBuyId=${groupBuyId}`
+                      link = `${rootState.url}/#/${courseType[state.serviceType]}${courseId}?groupBuyId=${groupBuyId}`
                     }else if(1009==state.userAccessStatus) {
                       link =  `${rootState.url}/#/praise/active/${courseId}/${collectLikeId}?columnType=${state.serviceType}` 
                     }else {
-                      link = `${rootState.url}/#${courseType[state.serviceType]}${courseId}`
+                      link = `${rootState.url}/#/${courseType[state.serviceType]}${courseId}`
                     } 
                     console.log('groupmanager正常设置设置分享地址：', link, '   设置分享标题：', title)
                     console.log(rootState.url)
