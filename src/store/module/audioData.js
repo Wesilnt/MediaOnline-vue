@@ -5,7 +5,7 @@ import {
   getAudioDesc,
   getSingleSetList,
   getCommentList,
-} from '../../api/audioApi'
+} from '../../api/audioApi' 
 
 export default {
   namespaced: true,
@@ -27,7 +27,8 @@ export default {
       state.audioDetail.isLike = !state.audioDetail.isLike
       state.isLike = state.audioDetail.isLike
     },
-    bindSingleSetList(state, res) {
+    bindSingleSetList(state, {courseId,res}) {
+      state.courseId = courseId
       state.singleSetList = res.result
     },
     bindCommentList(state, res) {
@@ -42,13 +43,13 @@ export default {
   },
   actions: {
     //播放音频
-    async playAudio({rootState, getters, commit, dispatch }, params) {
+    async playAudio({state, getters, commit, dispatch }, params) {
       if (params && params.lessonId) { 
         dispatch('audiotaskData/asyncPlay', params, { root: true })
         .then(res => { 
           commit('bindAudioDetail', {res})                                        //绑定音频数据
-          let courseId = res.courseId 
-          if(getters.courseId === courseId) return
+          let courseId = res.courseId  
+          if(state.courseId === courseId) return
           dispatch('getSingleSetList', { courseId, pageSize: getters.pageSize })  //获取单集列表
           let columnType = params.columnType || rootState.columnType
           dispatch('setShareInfo', { courseId, columnType })                      //设置分享信息
@@ -105,7 +106,7 @@ export default {
     async getSingleSetList({ commit }, params) {
       params.currentPage = (params.currentPage | 1) + 1
       const res = await getSingleSetList(params)
-      commit('bindSingleSetList', res)
+      commit('bindSingleSetList', {courseId:params.courseId,res})
     },
     //音频单集列表
     async getCommentList({ commit }, params) {

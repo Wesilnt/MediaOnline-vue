@@ -73,7 +73,7 @@ export default {
         //书详情
         async getBookDetail({dispatch, commit }, params) { 
             commit('setDataLoading',true)
-            const result = await dispatch('getColumnDetail',{...params,useCache:true},{root:true}) 
+            const result = await dispatch('getColumnDetail',{...params,useCache:false},{root:true}) 
             console.log('读书会详情数据',result) 
             //绑定全局专栏当前详情
             commit('bindCurrentColumn', {columnType:"1003" , columnDetail:result},{root:true})
