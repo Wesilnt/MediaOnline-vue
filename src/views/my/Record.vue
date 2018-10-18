@@ -170,6 +170,9 @@
         }
       },
       modifyCheckList( index) {
+        if(this.playRecordCheckList[index] === true && this.checked === true) {
+          this.checked = false
+        }
         if (this.playRecordCheckList.length > index) {
           this.playRecordCheckList[index] = !this.playRecordCheckList[index]
           for(let i = 0; i < this.playRecordCheckList.length;i++) {

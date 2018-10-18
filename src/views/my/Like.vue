@@ -168,6 +168,9 @@
         }
       },
       modifyCheckList( index) {
+        if(this.likeCheckList[index] === true && this.checked === true) {
+          this.checked = false
+        }
         if (this.likeCheckList.length > index) {
           this.likeCheckList[index] = !this.likeCheckList[index]
         }
