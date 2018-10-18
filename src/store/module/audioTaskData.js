@@ -1,6 +1,5 @@
-import { getAudioDetail, postLearnRate } from '../../api/audioApi'
-import { throttle } from '../../utils/utils' 
-import {Toast} from 'vant'
+import { getAudioDetail, postLearnRate,getSingleSetList } from '../../api/audioApi'
+import { throttle } from '../../utils/utils'  
 import audioData from './audioData' 
 
 export default {
@@ -21,6 +20,8 @@ export default {
     courseName:"", //专栏名
     courseId:-1,
     throttle: null,
+    pageSize: 20,
+    singleSetList:[],
     statusFunc: (commit, status) => commit('statusUpdate', status),
     saveProgress: (id, currentTime, maxTime) => {
       localStorage.setItem('learntime-' + id,JSON.stringify({ currentTime, maxTime }))
@@ -106,13 +107,16 @@ export default {
     //悬浮按钮是否显示
     setFloatButton(state,isShow){ 
       state.forceHidenFloat = isShow
-    }
+    },
+    bindSingleSetList(state, res) { 
+      state.singleSetList = res.result
+    },
   },
   actions: {
     //音频单集详情
-    async getAudioDetail({ getters, commit, dispatch }, params) {
+    async getAudioDetail({ state, commit, dispatch }, params) {
       const res = await getAudioDetail(params)
-      if(!res)return
+      if(!res) return
       let localCache = localStorage.getItem('learntime-' + res.id)
       if (localCache) {
         //提交本地缓存
@@ -125,7 +129,10 @@ export default {
         let data = JSON.stringify({currentTIme: res.learnTime,maxTime: res.totalTime})
         localStorage.setItem('learntime-' + res.id, data)
       } 
-      commit('bindAudioDetail', res)
+      let courseId = state.courseId
+      commit('bindAudioDetail', res)                                                                   //更新单集详情
+      if(courseId == res.courseId) return res
+      dispatch('getSingleSetList', { courseId:res.courseId, pageSize: state.pageSize })                //获取单集列表
       return res
     },
     //音频播放异步方式
@@ -135,7 +142,7 @@ export default {
         return state.audioDetail
       }
       if (params) {
-        const res = await dispatch('getAudioDetail', params)
+        const res = await dispatch('getAudioDetail', params) 
         if(!res) return 
         commit('syncPlay', { audioUrl: res.audioUrl,columnType:params.columnType })
         return res
@@ -150,21 +157,21 @@ export default {
     },
     //下一集
     async playNext({ state,commit,rootState, dispatch }) { 
-      console.log("下一集，已购买！！！",rootState.columnDetail)
+     let nextId = state.audioDetail.nextLessonId
      if(rootState.columnType
         &&(rootState.columnType == "1003" 
         || rootState.columnType == "1007")
         &&rootState.columnDetail){
         let useraccessstatus = rootState.columnDetail.userAccessStatus
-       if(useraccessstatus
+       if(useraccessstatus 
          && 1001 != useraccessstatus 
          && 1003 != useraccessstatus 
          && 1008 != useraccessstatus) 
-         return
+         state.singleSetList.some(item=>{
+            if(item.id == state.audioDetail.id&&!item.isFree)return
+         }) 
       }
-      console.log("下一集，已购买！！！",rootState.columnDetail.userAccessStatus)
-      let nextId = state.audioDetail.nextLessonId
-      if (nextId&&-1!=nextId) {
+      if (nextId && -1 != nextId) {
         commit('syncPause')
         dispatch('asyncPlay', { lessonId: state.audioDetail.nextLessonId })
       } else {
@@ -173,7 +180,6 @@ export default {
     },
     //上一集
     async playPre({ state,commit,rootState, dispatch }) { 
-      console.log("上一集，已购买！！！",rootState.columnDetail)
       if(rootState.columnType
            &&(rootState.columnType == "1007" 
            || rootState.columnType == "1003")
@@ -183,9 +189,10 @@ export default {
             && 1001 != useraccessstatus 
             && 1003 != useraccessstatus 
             && 1008 != useraccessstatus) 
-            return
+            state.singleSetList.some(item=>{
+              if(item.id == state.audioDetail.id&&!item.isFree)return
+           }) 
       } 
-      console.log("上一集，已购买！！！",rootState.columnDetail.userAccessStatus)
       let preId = state.audioDetail.preLessonId
       if (preId&&-1!=preId) {
         commit('syncPause')
@@ -198,6 +205,12 @@ export default {
     async postLearnRate({ commit }, params) {
       if (params && params.listenTime <= 1) return
       const res = await postLearnRate(params)
+    },
+    //音频单集列表
+    async getSingleSetList({ commit }, params) {
+      params.currentPage = (params.currentPage | 1) + 1
+      const res = await getSingleSetList(params)
+      commit('bindSingleSetList', res)
     },
     //初始化播放器
     async initAudio({ state, getters, commit, dispatch }) {

@@ -23,6 +23,7 @@ export default {
     },
     endSendCode(state) {
       state.sending = false
+      state.remainTime = '发送失败'
     },
     countDownTime(state, time) {
       state.sending = false
@@ -39,8 +40,8 @@ export default {
     //发送手机号验证码
     async sendMobileCode({ commit }, params) {
       await commit('startSendCode')
-      const res = await sendMobileCode(params)
-      if (!res) {
+      const res = await sendMobileCode(params) 
+      if (0 != res) {
         await commit('endSendCode')
         return
       }
@@ -61,7 +62,7 @@ export default {
     },
     //校验手机验证码
     async validateMobileCode({ commit }, params) {
-      const res = await validateMobileCode(params)
+      const res = await validateMobileCode(params) 
       if (!res) return
       commit('setValidateResult', res)
 

@@ -19,7 +19,7 @@ export default {
     courseId:-1
   },
   mutations: {
-    bindAudioDetail(state, {res}) {
+    bindAudioDetail(state, res) {
       state.audioDetail = res
       state.isLike = state.audioDetail.isLike
     },
@@ -47,10 +47,10 @@ export default {
       if (params && params.lessonId) { 
         dispatch('audiotaskData/asyncPlay', params, { root: true })
         .then(res => { 
-          commit('bindAudioDetail', {res})                                        //绑定音频数据
+          commit('bindAudioDetail', res)                                          //绑定音频数据
           let courseId = res.courseId  
           if(state.courseId === courseId) return
-          dispatch('getSingleSetList', { courseId, pageSize: getters.pageSize })  //获取单集列表
+          // dispatch('getSingleSetList', { courseId, pageSize: getters.pageSize })  //获取单集列表
           let columnType = params.columnType  
           dispatch('setShareInfo', { courseId, columnType })                      //设置分享信息
         })
@@ -104,13 +104,13 @@ export default {
     },
     //音频单集列表
     async getSingleSetList({ commit }, params) {
-      params.currentPage = (params.currentPage | 1) + 1
+      params.currentPage = (params.currentPage || 1) + 1
       const res = await getSingleSetList(params)
       commit('bindSingleSetList', {courseId:params.courseId,res})
     },
     //音频单集列表
     async getCommentList({ commit }, params) {
-      params.currentPage = (params.currentPage | 1) + 1
+      params.currentPage = (params.currentPage || 1) + 1
       const res = await getCommentList(params)
       commit('bindCommentList', res)
     },
@@ -141,6 +141,7 @@ export default {
     playMode: (state, getters, rootState) => rootState.audiotaskData.playMode,
     status: (state, getters, rootState) => rootState.audiotaskData.status,
     playing: (state, getters, rootState) => rootState.audiotaskData.isPlaying,
+    singleSetList:(state,getters,rootState)=> rootState.audiotaskData.singleSetList,
     pageSize: state => state.pageSize,
     currentPage: state => state.currentPage
   }

@@ -22,7 +22,7 @@
             </div>
         </div>
         <Share :show="sharePageShow" :courseId="courseId" :columnType ="serviceType"  @close="cancelSharePage"></Share>
-        <PhoneVerif v-if="isShowMobileDialog" @callback="bindIsShowMobileDialog(false)"></PhoneVerif>
+        <PhoneVerif :style="{'z-index':100}" v-if="isShowMobileDialog" @callback="bindIsShowMobileDialog(false)"></PhoneVerif>
     </div>
 
 </template>
@@ -442,7 +442,7 @@ export default {
   border-top: 2px solid #efefef;
   text-align: center;
   background-color: #fff;
-  z-index: 3000;
+  z-index: 100;
 }
 .toolbar-audition {
   margin: 0 16px;
