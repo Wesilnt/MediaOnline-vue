@@ -25,29 +25,32 @@ export default {
       this.isExpand = !this.isExpand
     },
     ExpandWatched() {
-        clearTimeout(inter)
-        inter = setTimeout(() => {
-            this.$nextTick(() => {
-                const { content, contentChild } = this.$refs
-                const { clientHeight: contentClientHeight } = content
-                const { clientHeight: contentChildClientHeight } = contentChild
+      clearTimeout(inter)
+      inter = setTimeout(() => {
+        // this.$nextTick(() => {
+        const { content, contentChild } = this.$refs
+        const { clientHeight: contentClientHeight } = content
+        const { clientHeight: contentChildClientHeight } = contentChild
 
-                if (!contentChildClientHeight) {
-                    return
-                }
-                console.log('正在判定介绍高度',contentClientHeight,contentChildClientHeight)
-                if (!contentClientHeight) {
-                    return this.ExpandWatched()
-                }
-                this.needExpand = contentChildClientHeight > contentClientHeight
-                console.log('介绍高度判定结束')
-                // this.$refs.content.clientHeight < this.$refs.contentChild.clientHeight
-            })
-        }, 100)
+        if (!contentChildClientHeight) {
+          return
+        }
+        console.log(
+          '正在判定介绍高度',
+          contentClientHeight,
+          contentChildClientHeight
+        )
+        if (!contentClientHeight) {
+          return this.ExpandWatched()
+        }
+        this.needExpand = contentChildClientHeight > contentClientHeight
+        console.log('介绍高度判定结束')
+        // })
+      }, 100)
     }
   },
   watch: {
-      courseinfo: {
+    courseinfo: {
       handler: 'ExpandWatched',
       immediate: true
     }
