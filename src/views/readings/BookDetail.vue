@@ -1,6 +1,7 @@
 <template>
   <div class="book-detail-container">
      <SkeletonFullScreen  v-if="dataLoading"/>
+    <div class="data-content" v-else>
      <GroupHeader></GroupHeader>
     <!-- 1. 头部 -->
     <div class="book-header-container" v-show="false">
@@ -83,7 +84,7 @@
       collectText="集赞"
       :collect='true'
       :collage='true'/>
-
+     </div>
   </div>
 </template>
 <script>

@@ -179,12 +179,12 @@ export default {
       if(this.isLoading) {
         this.$toast("正在调起支付...")
         return
-      } 
-      let params = { courseId: this.courseId, payType: 0 }
+      }  
+      let params = { courseId: this.courseId, payType: 0 } 
       switch (this.userAccessStatus) {
         //没有购买和集赞行为
         case 0:
-        case -3:
+        case -3://拼团失败
           this.checkoutAuthorrization(params)
           break
         case 1001:

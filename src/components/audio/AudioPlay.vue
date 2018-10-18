@@ -219,6 +219,7 @@ export default {
     //上一首
     onPlayPrv() {  
       if (!this.audio) return
+      console.log("上一首")
       let preId = this.audio.preLessonId
       if (preId && -1 != preId) {
         this.pre({ lessonId: preId })
@@ -229,6 +230,7 @@ export default {
     //下一首
     onPlayNext() { 
       if (!this.audio) return
+       console.log("下一首")
       let nextId = this.audio.nextLessonId
       if (nextId && -1 != nextId) {  
         this.next({ lessonId: nextId })
