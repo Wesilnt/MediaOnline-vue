@@ -46,6 +46,7 @@ export default {
   },
   watch: {
     show(value) {
+      console.log(value)
       this.isOpen = value
     }
   },
@@ -105,8 +106,12 @@ export default {
 </script>
  <style lang="scss" scoped>
 .share-container {
-  top: 0;
   position: fixed;
+  top: 0;
+  left:0;
+  right:0;
+  bottom:0;
+  
   z-index: 2004;
   width: 100%;
   background-color: rgba(00, 00, 00, 0.5);
