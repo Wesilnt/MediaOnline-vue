@@ -4,7 +4,7 @@ import {getColumnDetail} from '../api/accessTokenApi'
 export default{
   //获取专栏详情
   async getColumnDetail({commit,state}, {courseId,columnType,useCache = false}) { 
-    commit('bindColumnType',{columnType})
+    if(columnType)commit('bindColumnType',{columnType})
     if(!courseId||-1 == courseId) return null
     let cacheId = state.columnDetail && state.columnDetail.id 
     if(cacheId && cacheId === courseId && useCache) return state.columnDetail

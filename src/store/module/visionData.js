@@ -47,11 +47,11 @@ const visionData = {
         },
         async getVisionDetail({state,dispatch,commit},{courseId,groupBuyId}){
             !state.renderLoading && commit('setIsLoading',{renderLoading:true});
-            let result = await getVisionDetail({'courseId':courseId})
-            commit('setVisionDetail', {result,isFromShare: groupBuyId ? true : false});
+            let result = await dispatch('getColumnDetail',{courseId,columnType:'1003'},{root:true})
+            commit('setVisionDetail', {result,isFromShare: groupBuyId ? true : false})
             commit('setIsLoading',{renderLoading:false});
             //绑定全局专栏当前详情
-            commit('bindCurrentColumn', {columnType:"Readings" , columnDetail:result},{root:true})
+            commit('bindCurrentColumn', {columnType:"1003" , columnDetail:result},{root:true})
             const profilePic = result.profilePic
             const freeLessonList = result.freeLessonList
             const serviceType = "1003"

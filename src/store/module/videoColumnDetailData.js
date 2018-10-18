@@ -59,7 +59,7 @@ const videoColumnDetailData = {
     },
     async getVideoColumnDetail({ commit, dispatch }, { courseId, groupBuyId }) {
       //获取视频专栏数据
-      const result = await getVideoColumnDetail({ courseId }) 
+      const result = await dispatch('getColumnDetail',{courseId,columnType:'1005'},{root:true}) 
       console.log('专栏数据')   
       console.log(result) 
       commit('setUserAccessStatus', result.userAccessStatus)

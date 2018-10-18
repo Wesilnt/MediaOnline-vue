@@ -37,10 +37,7 @@ export default {
     },
     //专栏详情
     async getColumnDetail({dispatch, commit }, {courseId,columnType}) { 
-      const result = await getColumnDetail({courseId})  
-      //绑定全局专栏当前详情
-      commit('bindCurrentColumn', {columnType, columnDetail:result},{root:true})
-      return result
+      return await dispatch('getColumnDetail',{courseId,columnType},{root:true})    
     }
   },
   getters: {}

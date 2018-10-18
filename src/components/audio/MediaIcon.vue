@@ -22,7 +22,7 @@
   </div>
 </template>
 <script>
-import { createNamespacedHelpers } from 'vuex'
+import { createNamespacedHelpers,mapState as rootState } from 'vuex'
 const {
   mapState,
   mapGetters,
@@ -36,7 +36,7 @@ export default {
       _ctx: null,
       windowWidth: window.screen.width,
       windowHeight: window.screen.height,
-      x: window.screen.width - 68 - 6 + 'px',
+      x: window.screen.width - 74 - 12 + 'px',
       y: ((window.screen.height - 68) * 3) / 4 + 'px',
       width: 68,
       height: 68,
@@ -60,7 +60,7 @@ export default {
       'courseId', 
       'courseName'
     ]),
-    ...mapGetters(['columnType'])
+    ...rootState(['columnType'])
   },
   created() {
     this.initAudio()
@@ -95,6 +95,7 @@ export default {
       let offsetX = e.changedTouches[0].clientX - this.startX
       let offsetY = e.changedTouches[0].clientY - this.startY
       if (offsetTime < 800 && Math.abs(offsetX) < 50 &&Math.abs(offsetY) < 50) {
+        console.log("columnType:=",this.columnType)
         this.$router.push({
           name: 'AudioPlay',
           params: { id: this.audioId },
@@ -221,8 +222,8 @@ export default {
       this.progress = (value * 100) / this.maxTime
       return value
     },
-    $route(to) {
-      this.setFloatButton(to.name&&!to.name.includes('AudioPlay'))
+    $route(to) { 
+      this.setFloatButton(!to.name || (to.name&&!to.name.includes('AudioPlay')))
     }
   }
 }

@@ -51,7 +51,7 @@ export default {
           let courseId = res.courseId  
           if(state.courseId === courseId) return
           dispatch('getSingleSetList', { courseId, pageSize: getters.pageSize })  //获取单集列表
-          let columnType = params.columnType || rootState.columnType
+          let columnType = params.columnType  
           dispatch('setShareInfo', { courseId, columnType })                      //设置分享信息
         })
       } else { 
@@ -115,7 +115,7 @@ export default {
       commit('bindCommentList', res)
     },
     //设置分享信息
-    async setShareInfo({dispatch,rootState},{courseId,columnType}){  
+    async setShareInfo({dispatch,rootState},{courseId,columnType}){   
       const course = await dispatch('getColumnDetail',{courseId,columnType,useCache:true},{root:true}) 
       if(!course) return
       let shareData = {

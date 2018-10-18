@@ -79,7 +79,6 @@ export default {
     },
     //播放状态更新
     statusUpdate(state, status) {
-      console.log("status",status)
       state.status = status
       state.isPlaying = !state._at.paused
       if(status == "loadstart" 
