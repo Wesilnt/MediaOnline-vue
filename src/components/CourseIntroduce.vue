@@ -27,25 +27,25 @@ export default {
     ExpandWatched() {
       clearTimeout(inter)
       inter = setTimeout(() => {
-        // this.$nextTick(() => {
-        const { content, contentChild } = this.$refs
-        const { clientHeight: contentClientHeight } = content
-        const { clientHeight: contentChildClientHeight } = contentChild
+        this.$nextTick(() => {
+          const { content, contentChild } = this.$refs
+          const { clientHeight: contentClientHeight } = content
+          const { clientHeight: contentChildClientHeight } = contentChild
 
-        if (!contentChildClientHeight) {
-          return
-        }
-        console.log(
-          '正在判定介绍高度',
-          contentClientHeight,
-          contentChildClientHeight
-        )
-        if (!contentClientHeight) {
-          return this.ExpandWatched()
-        }
-        this.needExpand = contentChildClientHeight > contentClientHeight
-        console.log('介绍高度判定结束')
-        // })
+          if (!contentChildClientHeight) {
+            return
+          }
+          console.log(
+            '正在判定介绍高度',
+            contentClientHeight,
+            contentChildClientHeight
+          )
+          if (!contentClientHeight) {
+            return this.ExpandWatched()
+          }
+          this.needExpand = contentChildClientHeight > contentClientHeight
+          console.log('介绍高度判定结束')
+        })
       }, 100)
     }
   },
@@ -108,6 +108,6 @@ export default {
   margin-top: 80px;
   background: url('../assets/images/arrow_down.png') center no-repeat;
   background-size: 80%;
-  transition: transform 0.1s linear;
+  transition: transform 0.2s linear;
 }
 </style>
