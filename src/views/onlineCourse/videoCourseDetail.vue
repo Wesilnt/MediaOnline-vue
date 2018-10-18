@@ -223,13 +223,16 @@ export default {
       const { historyPlayPosition } = videoData
       const { paused } = this.videoElem
       this.videoShow = true
-
-      paused && this.videoElem.play()
+      // 有些苹果手机 弹窗和视频同时进行会在视频上面有背景色遮罩(微信浏览器)
+      setTimeout(()=>{
+        paused && this.videoElem.play()
       this.videoElem.currentTime =
         historyPlayPosition >= this.videoElem.duration ? 0 : historyPlayPosition
       // 记录当前播放时间戳
       this.playStartTime = new Date()
       this.localPlayTotalTime = Math.round(parseFloat(videoData.playTotalTime))
+      },100)
+      
     },
     handleVideoPause() {
       this.videoShow=false

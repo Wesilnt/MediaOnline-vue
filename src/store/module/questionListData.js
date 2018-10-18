@@ -27,7 +27,7 @@ const questionListData = {
       videoCourseDetailData.progress,
     deblockTime: (state, getters, { videoCourseDetailData }) => {
       const { totalTime, progress } = videoCourseDetailData
-      return Math.round((0.7 - progress / 100) * totalTime)
+      return parseInt((0.7 - progress / 100) * totalTime)
     },
     grade: (state, getters, { videoCourseDetailData }) => videoCourseDetailData.grade,
     title: (state, getters, { videoCourseDetailData }) => videoCourseDetailData.title,
