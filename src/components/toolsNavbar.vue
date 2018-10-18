@@ -21,7 +21,7 @@
                 <div>{{toolsObject&&toolsObject.collectText}}</div>
             </div>
         </div>
-        <Share :show="sharePageShow" :courseId="courseId" :columnType ="serviceType"  @close="cancelSharePage"></Share>
+        <Share :show="true" :courseId="courseId" :columnType ="serviceType"  @close="cancelSharePage"></Share>
         <PhoneVerif v-if="isShowMobileDialog" @callback="bindIsShowMobileDialog(false)"></PhoneVerif>
     </div>
 
