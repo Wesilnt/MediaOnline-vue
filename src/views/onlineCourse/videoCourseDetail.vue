@@ -30,7 +30,7 @@
                     <div class="video-detail-sction-title">
                         <h4>自测题</h4>
                     </div>
-                    <QuestionList @update="getVideoCourseDetail"/>
+                    <QuestionList @update="getVideoCourseDetail" :key="id"/>
                 </div>
             </div>
             <!-- 目录 -->
@@ -346,7 +346,7 @@ export default {
     top: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.28);
+    background: rgba(0, 0, 0, 0.4);
   }
 }
 .video-detail-header-right-top {

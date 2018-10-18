@@ -31,10 +31,6 @@ export default {
           const { content, contentChild } = this.$refs
           const { clientHeight: contentClientHeight } = content
           const { clientHeight: contentChildClientHeight } = contentChild
-
-          if (!contentChildClientHeight) {
-            return
-          }
           console.log(
             '正在判定介绍高度',
             contentClientHeight,
