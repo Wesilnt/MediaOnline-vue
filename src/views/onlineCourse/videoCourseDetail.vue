@@ -237,6 +237,9 @@ export default {
     },
     getVideoProgress({ target }) {
       const { currentTime, paused, duration, readyState } = target
+      console.log(target)
+      console.log(this.videoElem.error)
+      console.log(this.videoElem.error.code)
       /*
       视频存储数据逻辑
       */
