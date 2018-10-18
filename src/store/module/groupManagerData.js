@@ -15,7 +15,7 @@ const groupManagerData = {
         collectLikeId:0,  //集赞ID
         isSixGroup:false,  //是否是六人团
         headerType:0,       // 100倒计时  101拼团成功  102拼团失败  103拼团已满 
-        isShowMobileDialog:true, //是否弹出手机号收集框
+        isShowMobileDialog:false, //是否弹出手机号收集框
         achieveOriginBuy:false, //是否完成原价购买
 
         orderStatus:0,//当前订单状态
