@@ -53,19 +53,22 @@
             </div>
             <CommentBar :show="commentBarShow" v-on:toggle="toggleKeyboard"/>
             <Share :show="sharePageShow" :courseId="courseId" :columnType ="'1005'" @close="cancelSharePage"></Share>
-            <van-popup :lazy-render="false"
-                       position="top"
-                       @click-overlay="handleVideoPause"
-                       v-model="videoShow" class="video-popup"
-                       overlay-class="popup-modal-white">
-                <video class="videoitem"
+            <div v-show="videoShow" class='video-wrapper popup-modal-white' @click="handleVideoPause">
+               <video class="videoitem"
                        ref="videoitem"
                        :src="videoUrl"
                        controls="controls"
                        width="100%"
                        preload="auto"
                        style="object-fit:fill"></video>
-            </van-popup>
+            </div>
+            <!-- <van-popup :lazy-render="false"
+                       position="top"
+                       @click-overlay="handleVideoPause"
+                       v-model="videoShow" class="video-popup"
+                       overlay-class="popup-modal-white">
+               
+            </van-popup> -->
         </div>
     </div>
 </template>
@@ -229,12 +232,13 @@ export default {
       this.localPlayTotalTime = Math.round(parseFloat(videoData.playTotalTime))
     },
     handleVideoPause() {
+      this.videoShow=false
       const { paused } = this.videoElem
       if (!paused) this.videoElem.pause()
       //刷新页面
       console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
       const { lessonId } = this.$route.params
-      this.getVideoCourseDetail({ lessonId, loading: true })
+      this.getVideoCourseDetail({ lessonId })
     },
     getVideoProgress({ target }) {
       const { currentTime, paused, duration, readyState } = target
@@ -467,5 +471,13 @@ export default {
     url('../../assets/images/onlinecourse_video_detail_ic_editor.png') 30px
     center/30px no-repeat;
   color: #ffa32f;
+}
+.video-wrapper{
+  position: fixed;
+  top:0;
+  left: 0;
+  bottom: 0;
+  right:0;
+  z-index:400;
 }
 </style>
