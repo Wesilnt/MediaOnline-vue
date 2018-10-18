@@ -298,7 +298,7 @@ export default {
           case 1005:
             //拼团中
             this.sharePageShow = true
-            console.log('sharePageShow =',sharePageShow)
+            console.log('sharePageShow =',this.sharePageShow)
             //拼装分享内容
             // this.setShareInfo()
           break
