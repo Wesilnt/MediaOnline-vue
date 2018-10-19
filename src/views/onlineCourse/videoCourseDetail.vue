@@ -183,7 +183,7 @@ export default {
     this.videoElem.addEventListener('timeupdate', this.getVideoProgress)
     this.videoElem.addEventListener('canplay', this.canplay)
     this.videoElem.addEventListener('play', this.handleVideoPlay)
-    this.videoElem.addEventListener('error',this.catchError)
+    this.videoElem.addEventListener('error', this.catchError)
     this.videoElem.addEventListener('contextmenu', () => {
       return false
     })
@@ -192,7 +192,7 @@ export default {
     this.videoElem.removeEventListener('timeupdate', this.getVideoProgress)
     this.videoElem.removeEventListener('play', this.handleVideoPlay)
     this.videoElem.removeEventListener('canplay', this.canplay)
-    this.videoElem.removeEventListener('error',this.catchError)
+    this.videoElem.removeEventListener('error', this.catchError)
     this.resetLoading(true)
   },
   created() {
@@ -215,42 +215,33 @@ export default {
       'postComment'
     ]),
     ...mapRootActions(['getUserInfo', 'setWxShareFriend', 'setWxShareZone']),
-    canplay(){
-        // console.log('canplay')
-        //   const videoData = JSON.parse(localStorage.getItem(this.id))
-        //   const { historyPlayPosition } = videoData
-        //   this.videoElem.currentTime =
-        //   historyPlayPosition >= this.totalTime ? 0 : historyPlayPosition
+    canplay() {
+      console.log('canplay')
+      const videoData = JSON.parse(localStorage.getItem(this.id))
+      const { historyPlayPosition } = videoData
+      this.videoElem.currentTime =
+        historyPlayPosition >= this.totalTime ? 0 : historyPlayPosition
+      console.log(this.videoElem.readyState)
+      console.log('historyPlayPosition =', historyPlayPosition)
+      console.log('totalTime =', this.totalTime)
+      console.log('videoElem.currentTime ==', this.videoElem.currentTime)
+      // 记录当前播放时间戳
+      this.localPlayTotalTime = Math.round(parseFloat(videoData.playTotalTime))
+      this.playStartTime = new Date()
     },
-    catchError(error){
+    catchError(error) {
       console.log('抓取错误')
       console.log(error)
     },
     //播放视频
     handleVideoPlay() {
-      console.log('play')
-      // 有些苹果手机 弹窗和视频同时进行会在视频上面有背景色遮罩(微信浏览器)
-      setTimeout(async()=>{
-        const videoData = JSON.parse(localStorage.getItem(this.id))
-        const { historyPlayPosition } = videoData
-        const { paused } = this.videoElem
-        this.videoShow = true
-       this.videoElem.currentTime =
-       await historyPlayPosition >= this.totalTime ? 0 : historyPlayPosition
-        console.log('historyPlayPosition =',historyPlayPosition)
-        console.log('totalTime =',this.totalTime)
-      console.log('videoElem.currentTime ==',this.videoElem.currentTime)
-      // 记录当前播放时间戳
-      this.localPlayTotalTime =await Math.round(parseFloat(videoData.playTotalTime))
-      this.playStartTime =await new Date()
-      if(paused){
+      this.videoShow = true
+      setTimeout(() => {
         this.videoElem.play()
-      }  
-      },100)
-      
+      }, 100)
     },
     handleVideoPause() {
-      this.videoShow=false
+      this.videoShow = false
       const { paused } = this.videoElem
       if (!paused) this.videoElem.pause()
       //刷新页面
@@ -294,11 +285,11 @@ export default {
         this.playStartTime = new Date()
         console.log('0-0-0-0-0-0-0-0-0-0')
         console.log(videoData)
-        if(videoData){
+        if (videoData) {
           this.localPlayTotalTime = Math.round(
-              parseFloat(videoData.playTotalTime)
+            parseFloat(videoData.playTotalTime)
           )
-        } 
+        }
       }
       if (paused) {
         // 进度条 未解锁就动态显示
@@ -478,12 +469,12 @@ export default {
     center/30px no-repeat;
   color: #ffa32f;
 }
-.video-wrapper{
+.video-wrapper {
   position: fixed;
-  top:0;
+  top: 0;
   left: 0;
   bottom: 0;
-  right:0;
-  z-index:400;
+  right: 0;
+  z-index: 400;
 }
 </style>

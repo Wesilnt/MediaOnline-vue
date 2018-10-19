@@ -102,7 +102,7 @@ const videoCourseDetailData = {
       let storage = window.localStorage
       //根据单集ID来存储视频播放数据对象
       let videoData = JSON.parse(storage.getItem(lessonId))
-      console.log('------------- videoData.historyPlayPosition',videoData.historyPlayPosition)
+      // console.log('------------- videoData.historyPlayPosition',videoData.historyPlayPosition)
       console.log(videoData)
       //服务器数据
       let servicePlayTotalTime = state.learnTotalTime || 0
