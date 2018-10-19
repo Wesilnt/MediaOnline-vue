@@ -222,7 +222,7 @@ export default {
           const { historyPlayPosition } = videoData
           this.videoElem.currentTime =
           historyPlayPosition >= this.totalTime ? 0 : historyPlayPosition
-        },100)
+        },300)
 
     },
     catchError(error){
