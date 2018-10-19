@@ -227,9 +227,9 @@ export default {
       setTimeout(()=>{
         console.log('-------------duration-------------------')
         console.log(this.totalTime)
-        paused && this.videoElem.play()
       this.videoElem.currentTime =
         historyPlayPosition >= this.totalTime ? 0 : historyPlayPosition
+      paused && this.videoElem.play()
       // 记录当前播放时间戳
       this.playStartTime = new Date()
       this.localPlayTotalTime = Math.round(parseFloat(videoData.playTotalTime))
