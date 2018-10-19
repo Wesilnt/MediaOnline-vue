@@ -245,7 +245,7 @@ export default {
      
       this.localPlayTotalTime = Math.round(parseFloat(videoData.playTotalTime))
       this.playStartTime = new Date()
-      },100)
+      },300)
       
     },
     handleVideoPause() {
