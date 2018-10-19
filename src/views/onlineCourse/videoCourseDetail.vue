@@ -216,6 +216,11 @@ export default {
     ...mapRootActions(['getUserInfo', 'setWxShareFriend', 'setWxShareZone']),
     canplay(){
         console.log('canplay')
+        const videoData = JSON.parse(localStorage.getItem(this.id))
+        const { historyPlayPosition } = videoData
+        const { paused } = this.videoElem
+        this.videoElem.currentTime =
+        historyPlayPosition >= this.totalTime ? 0 : historyPlayPosition
     },
     catchError(error){
       console.log('抓取错误')
@@ -229,6 +234,7 @@ export default {
         const videoData = JSON.parse(localStorage.getItem(this.id))
         const { historyPlayPosition } = videoData
         const { paused } = this.videoElem
+        console.log(paused)
         this.videoShow = true
         this.videoElem.currentTime =
         historyPlayPosition >= this.totalTime ? 0 : historyPlayPosition
@@ -237,6 +243,7 @@ export default {
       console.log('videoElem.currentTime ==',this.videoElem.currentTime)
       // 记录当前播放时间戳
       paused && this.videoElem.play()
+     
       this.localPlayTotalTime = Math.round(parseFloat(videoData.playTotalTime))
       this.playStartTime = new Date()
       },100)
