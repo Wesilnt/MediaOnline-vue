@@ -182,7 +182,7 @@ export default {
     //视频进度
     this.videoElem.addEventListener('timeupdate', this.getVideoProgress)
     this.videoElem.addEventListener('canplay', this.canplay)
-    // this.videoElem.addEventListener('play', this.handleVideoPlay)
+    this.videoElem.addEventListener('play', this.handleVideoPlay)
     this.videoElem.addEventListener('error',this.catchError)
     this.videoElem.addEventListener('contextmenu', () => {
       return false
@@ -190,7 +190,7 @@ export default {
   },
   beforeDestroy() {
     this.videoElem.removeEventListener('timeupdate', this.getVideoProgress)
-    // this.videoElem.removeEventListener('play', this.handleVideoPlay)
+    this.videoElem.removeEventListener('play', this.handleVideoPlay)
     this.videoElem.removeEventListener('canplay', this.canplay)
     this.videoElem.removeEventListener('error',this.catchError)
     this.resetLoading(true)
@@ -216,11 +216,11 @@ export default {
     ]),
     ...mapRootActions(['getUserInfo', 'setWxShareFriend', 'setWxShareZone']),
     canplay(){
-        console.log('canplay')
-          const videoData = JSON.parse(localStorage.getItem(this.id))
-          const { historyPlayPosition } = videoData
-          this.videoElem.currentTime =
-          historyPlayPosition >= this.totalTime ? 0 : historyPlayPosition
+        // console.log('canplay')
+        //   const videoData = JSON.parse(localStorage.getItem(this.id))
+        //   const { historyPlayPosition } = videoData
+        //   this.videoElem.currentTime =
+        //   historyPlayPosition >= this.totalTime ? 0 : historyPlayPosition
     },
     catchError(error){
       console.log('抓取错误')
@@ -235,17 +235,19 @@ export default {
         const { historyPlayPosition } = videoData
         const { paused } = this.videoElem
         this.videoShow = true
-      //   this.videoElem.currentTime =
-      //   historyPlayPosition >= this.totalTime ? 0 : historyPlayPosition
-      //   console.log('historyPlayPosition =',historyPlayPosition)
-      //   console.log('totalTime =',this.totalTime)
-      // console.log('videoElem.currentTime ==',this.videoElem.currentTime)
+
       // 记录当前播放时间戳
-      paused && this.videoElem.play()
+      this.videoElem.play().then(()=>{
+          this.videoElem.currentTime =
+          historyPlayPosition >= this.totalTime ? 0 : historyPlayPosition
+          console.log('historyPlayPosition =',historyPlayPosition)
+          console.log('totalTime =',this.totalTime)
+        console.log('videoElem.currentTime ==',this.videoElem.currentTime)
+      })
      
       this.localPlayTotalTime = Math.round(parseFloat(videoData.playTotalTime))
       this.playStartTime = new Date()
-      },300)
+      },100)
       
     },
     handleVideoPause() {
