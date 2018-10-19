@@ -16,16 +16,16 @@
       <div class="index-container">
         <Header v-if="false" :link="'/home/freezone'" title="免费专区" subtitle="探索更多" />
         <FreeList v-if="false" :free-list="freeList" />
-        <Header :link="'/home/visionList'" title="少年视野" subtitle="探索更多" />
+        <Header :link="'/home/visionList'" title="音频课程" subtitle="探索更多" />
         <DisCoverVisionList :vision-list="visionList" />
-        <Header :link="'/home/videoList'" title="少年必修" subtitle="探索更多" />
+        <Header :link="'/home/videoList'" title="视频课程" subtitle="探索更多" />
         <DisCoverVideoList :video-list="videoList" />
-        <Header :link="'/home/readings'" title="中国少年读书会" subtitle="探索更多" />
+        <Header :link="'/home/readings'" title="少年读书会" subtitle="探索更多" />
         <BookList :book-list="bookList" />
       </div>
     </div>
   </div>
- 
+
 </template>
 
 <script>
