@@ -308,7 +308,7 @@ export default {
   display: flex;
   flex-direction: column;
   background: #000 center/100% no-repeat;
-  height: 375px;
+  height: 750px;
   .cover {
     height: 750px;
     background-color: #d5d8de;
