@@ -199,7 +199,7 @@ export default {
            state.singleSetList.some(item=>{ 
               if(item.id == nextId && !item.isFree){
                 listenable = false
-                Toast('已经是最后一条')
+                // Toast('已经是最后一条')
                 return
               }
             }) 

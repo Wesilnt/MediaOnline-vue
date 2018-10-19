@@ -1,7 +1,9 @@
 <template>
-  <div class="lazy-img-most audioplay-container" v-lazy:background-image="`${audio.coverPic}?imageView2/1/w/750/h/750/interlace/1`">
+<div>
+   <div class="lazy-img-most audioplay-container" v-lazy:background-image="`${audio.coverPic}?imageView2/1/w/750/h/750`" ref='container'>
+  
     <!-- 封面 -->
-    <div class="controller-container">
+    <div class="controller-container" ref='controller'>
       <!-- 主，副标题 -->
       <h3> {{audio.title}}</h3>
       <h4> {{audio.subTitle}}</h4>
@@ -67,6 +69,8 @@
         <van-loading color="white" />
      </div>
   </div>
+</div>
+
 </template>
 <script>
 import { courseType } from '../../utils/config'
@@ -289,6 +293,11 @@ export default {
   //     to.meta.keepAlive = false // 让 頁面缓存，即不刷新
   //   }) 
   // }
+  mounted(){
+     const {offsetHeight,offsetTop}=this.$refs.controller
+     const {innerHeight,clientWidth}=window;
+     if(offsetTop>=375*750/clientWidth)  this.$refs.container.style.height=offsetTop+'px'
+  },
   beforeDestroy(){
     this.clearData()
   }
@@ -298,18 +307,17 @@ export default {
 .audioplay-container {
   display: flex;
   flex-direction: column;
-  background: transparent center no-repeat;
-  background-size: 100vw 100vw;
-  height: 0px;
-  padding-bottom: 100%;
+  background: #000 center/100% no-repeat;
+  height: 375px;
   .cover {
     height: 750px;
-    width: 100%;
     background-color: #d5d8de;
   }
   .controller-container {
     position: fixed;
     bottom: 0;
+    left: 0;
+    right: 0;
     width: 100%;
     background-color: white;
   }
@@ -318,19 +326,19 @@ export default {
     font-size: 32px;
     color: rgb(38, 38, 38);
     text-align: center;
-    margin: 40px 0 0 0;
+    padding-top: 40px;
   }
   h4 {
     line-height: 24px;
     color: rgb(118, 118, 118);
     text-align: center;
-    margin: 18px 0 0 0;
+    padding-top: 18px;
   }
   .tab-container {
     display: flex;
     justify-content: space-between;
     flex-direction: row;
-    margin: 60px 120px 0;
+    padding: 60px 120px 0;
     &-collect {
       width: 48px;
       height: 41px;
@@ -373,7 +381,7 @@ export default {
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-top: 32px;
+    padding-top: 32px;
 
     > :nth-child(1) {
       margin-right: 30px;
@@ -434,8 +442,7 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin-top: 58px;
-    padding: 0 36px 70px;
+    padding: 58px 36px 70px;
     box-sizing: content-box;
     align-items: center;
     .btn-item {
