@@ -1,6 +1,7 @@
 import { getAudioDetail, postLearnRate,getSingleSetList } from '../../api/audioApi'
 import { throttle } from '../../utils/utils'  
 import audioData from './audioData' 
+import {Toast} from 'vant'
 
 export default {
   namespaced:true,
@@ -46,18 +47,14 @@ export default {
     },
     //音频播放同步方法
     syncPlay(state, params) {
-      if (params)  {
-        state._at.src = params.audioUrl
-        state.columnType = params.columnType || state.columnType
-      }
-      let localCache = localStorage.getItem('learntime-' + state.audioDetail.id) 
-      let listenJson = localCache? JSON.parse(localCache): null 
-      if(listenJson){
-        state.maxTime = parseInt(listenJson.maxTime) 
-        if(listenJson.currentTime + 3 > listenJson.maxTime) listenJson.currentTime = 0
-        state.currentTime = state._at.currentTime = parseInt(listenJson.currentTime)
-      } 
+      if (params) state._at.src = params.audioUrl  
       state._at.play().then(()=>{
+        let localCache = localStorage.getItem('learntime-' + state.audioDetail.id) 
+        let listenJson = localCache? JSON.parse(localCache): null 
+        if(listenJson){ 
+          if(listenJson.currentTime + 3 > listenJson.maxTime) listenJson.currentTime = 0
+         state._at.currentTime = parseInt(listenJson.currentTime)
+        } 
       }).catch(e=> { 
         console.error(state.audioDetail,'音频播放出错了')
      })
@@ -98,8 +95,14 @@ export default {
       || status == "abort"){
         state.isBuffering = false
       }
-      if(status == 'loadedmetadata'){//獲取音频总长度
-
+      if(status == 'canplay'){      //设置播放进度
+        // let localCache = localStorage.getItem('learntime-' + state.audioDetail.id) 
+        // let listenJson = localCache? JSON.parse(localCache): null 
+        // if(listenJson){
+        //   state.maxTime = parseInt(listenJson.maxTime) 
+        //   if(listenJson.currentTime + 3 > listenJson.maxTime) listenJson.currentTime = 0
+        //   state.currentTime = state._at.currentTime = parseInt(listenJson.currentTime)
+        // } 
       }
       state.showFloat = true
     },
@@ -170,7 +173,7 @@ export default {
       if (params) {
         const res = await dispatch('getAudioDetail', params) 
         if(!res) return 
-        commit('syncPlay', { audioUrl: res.audioUrl,columnType:params.columnType })
+        commit('syncPlay', { audioUrl: res.audioUrl })
         return res
       } else {
         commit(state.isPlaying ? 'syncPause' : 'syncPlay')
@@ -182,20 +185,26 @@ export default {
       commit('syncPause')
     },
     //下一集
-    async playNext({ state,commit,rootState, dispatch }) { 
-     let nextId = state.audioDetail.nextLessonId
+    async playNext({ state,commit,rootState, dispatch },params) { 
+     let nextId = params && params.learnId? params.lessonId : state.audioDetail.nextLessonId 
      if(rootState.columnType
         &&(rootState.columnType == "1003" 
         || rootState.columnType == "1007")
         &&rootState.columnDetail){
-        let useraccessstatus = rootState.columnDetail.userAccessStatus
-       if(useraccessstatus 
-         && 1001 != useraccessstatus 
+        let useraccessstatus = rootState.columnDetail.userAccessStatus 
+       if(1001 != useraccessstatus 
          && 1003 != useraccessstatus 
-         && 1008 != useraccessstatus) 
-         state.singleSetList.some(item=>{
-            if(item.id == state.audioDetail.id&&!item.isFree)return
-         }) 
+         && 1008 != useraccessstatus) {
+           let listenable  = true
+           state.singleSetList.some(item=>{ 
+              if(item.id == nextId && !item.isFree){
+                listenable = false
+                Toast('已经是最后一条')
+                return
+              }
+            }) 
+            if(!listenable)return
+         }
       }
       if (nextId && -1 != nextId) {
         commit('syncPause')
@@ -205,7 +214,8 @@ export default {
       }
     },
     //上一集
-    async playPre({ state,commit,rootState, dispatch }) { 
+    async playPre({ state,commit,rootState, dispatch },params) { 
+      let preId = params && params.learnId? params.lessonId :state.audioDetail.preLessonId
       if(rootState.columnType
            &&(rootState.columnType == "1007" 
            || rootState.columnType == "1003")
@@ -214,12 +224,18 @@ export default {
           if(useraccessstatus
             && 1001 != useraccessstatus 
             && 1003 != useraccessstatus 
-            && 1008 != useraccessstatus) 
-            state.singleSetList.some(item=>{
-              if(item.id == state.audioDetail.id&&!item.isFree)return
-           }) 
+            && 1008 != useraccessstatus) {
+            let listenable  = true
+            state.singleSetList.some(item=>{ 
+               if(item.id == preId && !item.isFree){
+                 listenable = false 
+                 return
+               }
+             }) 
+             if(!listenable)return
+          }
       } 
-      let preId = state.audioDetail.preLessonId
+
       if (preId && -1 != preId) {
         commit('syncPause')
         dispatch('asyncPlay', { lessonId: state.audioDetail.preLessonId })
@@ -231,8 +247,7 @@ export default {
     async postLearnRate({commit}, params) {
       if (params && params.listenTime <= 0) return 
       if(isNaN(params.listenTime))return
-      const res = await postLearnRate(params)
-      console.log("结果",res,  params)  
+      const res = await postLearnRate(params) 
       commit('updateListenTime', {learnId: params.lessonId,listenTime : params.listenTime,maxTime : params.maxTime})
     },
     //音频单集列表

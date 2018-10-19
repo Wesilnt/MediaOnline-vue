@@ -102,8 +102,7 @@ export default {
       isLike(state) {
         let like = state.isLike
         if (!this.isInit) {
-          if (like)
-            this.$toast.success({ duration: 2000, message: '已添加到我喜欢的' })
+          if (like)this.$toast.success({ duration: 2000, message: '已添加到我喜欢的' })
           else this.$toast.fail({ duration: 2000, message: '已取消喜欢' })
         }
         return state.isLike
@@ -201,9 +200,24 @@ export default {
     },
     //上一首
     onPlayPrv() {  
-      if (!this.audio) return
-      console.log("上一首")
+      if (!this.audio) return 
       let preId = this.audio.preLessonId
+      // let useraccessstatus =this.columnDetail ? this.columnDetail.userAccessStatus : 1001
+      // if(this.singleSetList
+      //   && 1001 != useraccessstatus 
+      //   && 1003 != useraccessstatus 
+      //   && 1008 != useraccessstatus) {
+      //   let listenable  = true
+      //   this.singleSetList.some(item=>{ 
+      //       if(item.id == preId && !item.isFree){
+      //         listenable = false   
+      //         this.$toast.fail('这是第一条')
+      //         return
+      //       }
+      //     }) 
+      //     if(!listenable)return
+      // } 
+ 
       if (preId && -1 != preId) {
         this.pre({ lessonId: preId })
       } else {
@@ -212,9 +226,24 @@ export default {
     },
     //下一首
     onPlayNext() { 
-      if (!this.audio) return
-       console.log("下一首")
+      if (!this.audio) return 
       let nextId = this.audio.nextLessonId
+      // let useraccessstatus =this.columnDetail ? this.columnDetail.userAccessStatus : 1001
+      // if( this.singleSetList
+      //   && 1001 != useraccessstatus 
+      //   && 1003 != useraccessstatus 
+      //   && 1008 != useraccessstatus) {
+      //     let listenable  = true 
+      //     this.singleSetList.some(item=>{ 
+      //       if(item.id == nextId && !item.isFree){
+      //         listenable = false
+      //         this.$toast.fail('已经是最后一条')
+      //         return
+      //       }
+      //     }) 
+      //   if(!listenable)return
+      // } 
+        
       if (nextId && -1 != nextId) {  
         this.next({ lessonId: nextId })
       } else {
