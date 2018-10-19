@@ -294,14 +294,13 @@ export default {
   //   }) 
   // }
   mounted(){
-     const {offsetHeight,offsetTop}=this.$refs.controller
-     const {innerHeight,clientWidth}=window;
+    
      this.$nextTick(()=>{
-       console.log( this.$refs.controller.getBoundingClientRect())
-       console.dir(this.$refs.controller)
-        console.log(this.$refs.controller)
+        const {height,top,bottom}=this.$refs.controller.getBoundingClientRect()
+        const {innerHeight,innerWidth}=window;
+          if(top<innerWidth)  this.$refs.container.style.height=top+'px'
      })
-     if(offsetTop>=375*750/clientWidth)  this.$refs.container.style.height=offsetTop+'px'
+    
   },
   beforeDestroy(){
     this.clearData()
@@ -310,9 +309,7 @@ export default {
 </script>
 <style lang="scss" >
 .audioplay-container {
-  display: flex;
-  flex-direction: column;
-  background: #000 center/100% no-repeat;
+  background: #fff center/100% no-repeat;
   height: 750px;
   .cover {
     height: 750px;
