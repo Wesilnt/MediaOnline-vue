@@ -182,7 +182,7 @@ export default {
     //视频进度
     this.videoElem.addEventListener('timeupdate', this.getVideoProgress)
     this.videoElem.addEventListener('canplay', this.canplay)
-    this.videoElem.addEventListener('play', this.handleVideoPlay)
+    // this.videoElem.addEventListener('play', this.handleVideoPlay)
     this.videoElem.addEventListener('error',this.catchError)
     this.videoElem.addEventListener('contextmenu', () => {
       return false
@@ -190,7 +190,8 @@ export default {
   },
   beforeDestroy() {
     this.videoElem.removeEventListener('timeupdate', this.getVideoProgress)
-    this.videoElem.removeEventListener('play', this.handleVideoPlay)
+    // this.videoElem.removeEventListener('play', this.handleVideoPlay)
+    this.videoElem.removeEventListener('canplay', this.canplay)
     this.videoElem.removeEventListener('error',this.catchError)
     this.resetLoading(true)
   },
@@ -231,16 +232,16 @@ export default {
       console.log('play')
       // 有些苹果手机 弹窗和视频同时进行会在视频上面有背景色遮罩(微信浏览器)
       setTimeout(()=>{
-        const videoData = JSON.parse(localStorage.getItem(this.id))
-        const { historyPlayPosition } = videoData
+        // const videoData = JSON.parse(localStorage.getItem(this.id))
+        // const { historyPlayPosition } = videoData
         const { paused } = this.videoElem
         console.log(paused)
         this.videoShow = true
-        this.videoElem.currentTime =
-        historyPlayPosition >= this.totalTime ? 0 : historyPlayPosition
-        console.log('historyPlayPosition =',historyPlayPosition)
-        console.log('totalTime =',this.totalTime)
-      console.log('videoElem.currentTime ==',this.videoElem.currentTime)
+      //   this.videoElem.currentTime =
+      //   historyPlayPosition >= this.totalTime ? 0 : historyPlayPosition
+      //   console.log('historyPlayPosition =',historyPlayPosition)
+      //   console.log('totalTime =',this.totalTime)
+      // console.log('videoElem.currentTime ==',this.videoElem.currentTime)
       // 记录当前播放时间戳
       paused && this.videoElem.play()
      
