@@ -54,6 +54,7 @@ export default {
       let listenJson = localCache? JSON.parse(localCache): null 
       if(listenJson){
         state.maxTime = parseInt(listenJson.maxTime) 
+        if(listenJson.currentTime + 3 > listenJson.maxTime) listenJson.currentTime = 0
         state.currentTime = state._at.currentTime = parseInt(listenJson.currentTime)
       } 
       state._at.play().then(()=>{
