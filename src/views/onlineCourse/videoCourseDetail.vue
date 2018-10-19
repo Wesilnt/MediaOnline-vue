@@ -217,12 +217,12 @@ export default {
     ...mapRootActions(['getUserInfo', 'setWxShareFriend', 'setWxShareZone']),
     canplay(){
         console.log('canplay')
-        // setTimeout(()=>{
+        setTimeout(()=>{
           const videoData = JSON.parse(localStorage.getItem(this.id))
           const { historyPlayPosition } = videoData
           this.videoElem.currentTime =
           historyPlayPosition >= this.totalTime ? 0 : historyPlayPosition
-        // },100)
+        },100)
 
     },
     catchError(error){
