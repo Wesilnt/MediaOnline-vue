@@ -9,7 +9,7 @@ const videoColumnDetailData = {
   namespaced: true,
   state: () => {
     return {
-      loading: true,
+      loading: true,//控制骨架屏的显示
       freeLessonList: [], //试看课程数组
       profilePic: '', //头图
       description: '', //专栏介绍
@@ -20,16 +20,17 @@ const videoColumnDetailData = {
       buyCount: 0, //购买数量
       courseId: 0, //专栏ID
       courseName: '', //专栏名称
-      isFromShare: false,
-      userAccessStatus:0,
-      videoCourseList:[]
+      isFromShare: false,//判断打开专栏页是否来自分享链接
+      userAccessStatus:0,//用户和专栏的关系
+      videoCourseList:[]//专栏的全部课集列表
     }
   },
   mutations: {
-    initDatas(state, courseId) {
+    initDatas(state, { courseId, groupBuyId }) {
       state.courseId = courseId
+      state.isFromShare = groupBuyId ? true : false
     },
-    bindVideoColumnDetail(state, { result, isFromShare }) {
+    bindVideoColumnDetail(state, result) {
       state.freeLessonList = result.freeLessonList
       state.description = result.description
       state.outlinePic = result.outlinePic
@@ -38,7 +39,7 @@ const videoColumnDetailData = {
       state.commentCount = result.commentCount
       state.buyCount = result.buyCount
       state.courseName = result.name
-      state.isFromShare = isFromShare
+      state.userAccessStatus = result.userAccessStatus
       state.loading = false
     },
     resetState(state) {
@@ -46,9 +47,6 @@ const videoColumnDetailData = {
     },
     setVideoCourseList(state,videoCourseList){
       state.videoCourseList = videoCourseList
-    },
-    setUserAccessStatus(state, userAccessStatus){
-      state.userAccessStatus = userAccessStatus
     }
   },
   actions: {
@@ -57,14 +55,14 @@ const videoColumnDetailData = {
       console.log(result)
       commit('setVideoCourseList',result.result)
     },
-    async getVideoColumnDetail({ commit, dispatch }, { courseId, groupBuyId }) {
+    async getVideoColumnDetail({ state, commit, dispatch }, { courseId, groupBuyId }) {
       //获取视频专栏数据
       const result = await dispatch('getColumnDetail',{courseId,columnType:'1005'},{root:true}) 
       console.log('专栏数据')   
       console.log(result) 
-      commit('setUserAccessStatus', result.userAccessStatus)
       //获取专栏下所有单集
       dispatch('getVideoCourseList',courseId)
+      if(!result) return
       //绑定专栏详情内容
       const profilePic = result.profilePic
       const freeLessonList = result.freeLessonList
@@ -76,10 +74,8 @@ const videoColumnDetailData = {
         profilePic,
         freeLesson: freeLessonList
       })
-      //绑定全局专栏当前详情
-      commit('bindCurrentColumn', {columnType:"1005" , columnDetail:result},{root:true})
-      commit('bindVideoColumnDetail', {result,isFromShare: groupBuyId ? true : false})
-      if (groupBuyId) {
+      commit('bindVideoColumnDetail', result)
+      if (state.isFromShare) {
         //这里是分享链接进来的
         dispatch('groupManagerData/getGroupBuyDetail', groupBuyId)
       } else {
@@ -99,7 +95,6 @@ const videoColumnDetailData = {
           userAccessStatus: result.userAccessStatus,
           price: result.price
         }
-
         dispatch('groupManagerData/initToolsBar', toolsData)
       }
     }

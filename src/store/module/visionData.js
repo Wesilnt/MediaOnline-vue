@@ -51,16 +51,14 @@ const visionData = {
             console.log('groupBuyId ==',groupBuyId)
             console.log('少年视野专栏数据:')
             console.log(result)
-            commit('setVisionDetail', {result,isFromShare: groupBuyId ? true : false})
+            commit('setVisionDetail', result)
             commit('setIsLoading',{renderLoading:false});
-            //绑定全局专栏当前详情
-            commit('bindCurrentColumn', {columnType:"1003" , columnDetail:result},{root:true})
             const profilePic = result.profilePic
             const freeLessonList = result.freeLessonList
             const serviceType = "1003"
             //绑定与拼团相关的内容
             dispatch('groupManagerData/initColumnInfo',{serviceType,courseId,profilePic,'freeLesson':freeLessonList})
-            if (groupBuyId) {
+            if (state.isFromShare) {
                 //这里是分享链接进来的
               dispatch('groupManagerData/getGroupBuyDetail', groupBuyId)
             } else {
@@ -102,6 +100,10 @@ const visionData = {
         }
     },
     mutations:{
+        initDatas(state, { courseId, groupBuyId }) {
+            state.courseId = courseId
+            state.isFromShare = groupBuyId ? true : false
+        },
         setVisionList(state, visionList){
             state.visionList = visionList;
         },
@@ -111,11 +113,10 @@ const visionData = {
         setCurrentPage(state, currentPage){
             state.currentPage = currentPage;
         },
-        setVisionDetail(state, {result,isFromShare}){
+        setVisionDetail(state, result){
             state.visionDetail = result;
             state.courseName = result.name
             state.userAccessStatus = result.userAccessStatus
-            state.isFromShare = isFromShare
         },
         setCommentList(state, commentList){
             state.commentList = commentList;

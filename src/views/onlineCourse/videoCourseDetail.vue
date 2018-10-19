@@ -245,8 +245,6 @@ export default {
     },
     getVideoProgress({ target }) {
       const { currentTime, paused, duration, readyState } = target
-      // console.log(target)
-      // console.log(this.videoElem.error)
       /*
       视频存储数据逻辑
       */
@@ -265,16 +263,13 @@ export default {
           : 0
 
         const newTotalTime = this.localPlayTotalTime + durationPlayingTime
-
         let newPosition = currentTime
-
-        // if (newPosition > this.totalTime) {
-        //   newPosition = 0
-        // }
         const obj = {
           playTotalTime: newTotalTime,
           historyPlayPosition: newPosition
         }
+        console.log('实时存储的播放数据 = ')
+        console.log(obj)
         localStorage.setItem(this.id, JSON.stringify(obj))
         /*
         自测题逻辑

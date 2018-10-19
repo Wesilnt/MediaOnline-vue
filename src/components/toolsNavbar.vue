@@ -299,8 +299,6 @@ export default {
             //拼团中
             this.sharePageShow = true
             console.log('sharePageShow =',this.sharePageShow)
-            //拼装分享内容
-            // this.setShareInfo()
           break
         }
       }
@@ -369,34 +367,6 @@ export default {
     cancelSharePage() {
       this.sharePageShow = false
     }, 
-    // setShareInfo() {
-    //   let link = ''
-    //   switch (this.serviceType) {
-    //     case '1003':
-    //       link =  `${this.url}#/videoColumnDetail/${this.courseId}?groupBuyId=${this.groupBuyId}`
-    //       break
-    //     case '1003':
-    //       link =  `${this.url}#/home/visionDetail/${this.courseId}`
-    //       break
-    //     case '1007':
-    //       link = `${this.url}/#/home/readings/book/${this.courseId}`
-    //       break
-    //     default:
-    //       link =  `${this.url}/#/home/freezone`
-    //       break
-    //   }
-    //   this.getUserInfo().then(user => {
-    //     this.shareData = {
-    //       link,
-    //       title: `我正在参加《${ this.courseName}》拼团活动,仅差${this.leavePerson}人,快来和我一起拼团吧!`,
-    //       imageUrl:`${this.columnDetail.sharePostUrl}?imageView2/1/w/100/h/100/format/jpg`,
-    //       desc: '你一定会爱上国学课...'
-    //     }
-    //     this.setWxShareFriend(this.shareData)
-    //     this.setWxShareZone(this.shareData)
-    //   })  
-
-    // },
     gotoInfoPage(id){   
       switch (this.serviceType) {
         case '1005':

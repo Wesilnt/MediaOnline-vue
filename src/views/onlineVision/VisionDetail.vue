@@ -81,7 +81,7 @@ import {
   mapState as rootState,
   mapActions as rootActions
 } from 'vuex'
-const { mapState, mapActions } = createNamespacedHelpers(
+const { mapState, mapActions,mapMutations } = createNamespacedHelpers(
   'visionData'
 )
 export default {
@@ -120,6 +120,10 @@ export default {
     }
   },
   created() {
+    this.initDatas({
+      courseId: this.courseId,
+      groupBuyId: this.$route.query.groupById
+    })
     this.getVisionDetail({
       courseId: this.courseId,
       groupBuyId: this.$route.query.groupById
@@ -152,6 +156,7 @@ export default {
       'setWxShareZone'
     ]),
     ...mapActions(['getVisionDetail', 'getCommentList']),
+    ...mapMutations(['initDatas']),
     ellipsis() {
       this.showall = !this.showall
     },

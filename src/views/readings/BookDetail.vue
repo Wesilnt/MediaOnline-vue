@@ -128,7 +128,7 @@ export default {
     ...mapGetters(['playingId'])
   },
   created() {
-    this.initData(this.courseId)
+    this.initData({courseId: this.courseId, groupBuyId: this.$route.query.groupBuyId})
     this.getBookDetail({courseId: this.courseId, groupBuyId: this.$route.query.groupBuyId})
   },
   mounted(){  

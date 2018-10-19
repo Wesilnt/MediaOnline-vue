@@ -102,8 +102,8 @@ const videoCourseDetailData = {
       let storage = window.localStorage
       //根据单集ID来存储视频播放数据对象
       let videoData = JSON.parse(storage.getItem(lessonId))
-      // console.log('------------- videoData.playTotalTime',videoData.historyPlayPosition)
-      // console.log(videoData)
+      console.log('------------- videoData.historyPlayPosition',videoData.historyPlayPosition)
+      console.log(videoData)
       //服务器数据
       let servicePlayTotalTime = state.learnTotalTime || 0
       let servicePlayPosition = state.learnTime
@@ -215,6 +215,7 @@ const videoCourseDetailData = {
       // }
       // await dispatch('getCommentList', commentParams)
       //更新当前播放视频的播放数据
+      console.log('代码走到这里了~~~~~~~~~~~~~~~')
       await dispatch('updateVideoPlayData', lessonId)
         if(loading) await commit('resetLoading', false)
     },

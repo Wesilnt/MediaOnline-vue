@@ -8,7 +8,6 @@
       <tools-navbar/>
     </div>
   </div>
-
 </template>
 
 <script>
@@ -16,11 +15,7 @@ import SkeletonFullScreen from '../../components/SkeletonFullScreen'
 import GroupHeader from './components/GroupHeader'
 import GroupContent from './components/GroupContent'
 import toolsNavbar from '../../components/toolsNavbar.vue'
-import {
-  createNamespacedHelpers,
-  mapState as rootState,
-  mapActions as rootActions
-} from 'vuex'
+import { createNamespacedHelpers } from 'vuex'
 const { mapState, mapMutations, mapActions } = createNamespacedHelpers(
   'videoColumnDetailData'
 )
@@ -35,46 +30,27 @@ export default {
   },
   data() {
     return {
-      courseId:this.$route.params.courseId
+      courseId:this.$route.params.courseId,
+      groupBuyId:this.$route.query.groupBuyId
     }
   },
-  watch: {},
   computed: {
-    ...rootState(['url']),
     ...mapState([
-      'loading',
-      'freeLessonList', //试看课程数组
-      'profilePic', //头图
-      'description', //专栏介绍
-      'outlinePic', //课程列表下面的大图展示
-      'videoColumnComments', //视频专栏的留言
-      'buyIntro', //购买须知
-      'lessonCount', //专栏课集总数
-      'commentCount', //留言总条数
-      'buyCount',
-      'collectLikeId', //集赞ID
-      'courseName'
+      'loading'
     ])
   },
   methods: {
-    ...rootActions([
-      'getUserInfo',
-      'setWxShareFriend',
-      'setWxShareZone'
-    ]),
     ...mapMutations(['initDatas', 'resetState']),
     ...mapActions(['getVideoColumnDetail'])
   },
   created() {
-    //获取专栏Id
-    // const courseId = this.$route.params.courseId
-    const groupBuyId = this.$route.query.groupBuyId
-    this.initDatas(this.courseId)
-    this.getVideoColumnDetail({ courseId: this.courseId, groupBuyId: groupBuyId })
-  },
-  mounted() { 
+    //初始化页面数据(将路由中带过来的专栏ID存储到仓库)
+    this.initDatas({ courseId: this.courseId, groupBuyId: this.groupBuyId })
+    //获取专栏详情
+    this.getVideoColumnDetail({ courseId: this.courseId, groupBuyId: this.groupBuyId })
   },
   beforeDestroy() {
+    //页面销毁前将loading状态还原
     this.resetState()
   }
 }
