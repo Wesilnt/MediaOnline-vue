@@ -225,11 +225,10 @@ export default {
       this.videoShow = true
       // 有些苹果手机 弹窗和视频同时进行会在视频上面有背景色遮罩(微信浏览器)
       setTimeout(()=>{
-        console.log('-------------duration-------------------')
-        console.log(this.totalTime)
+      paused && this.videoElem.play()
       this.videoElem.currentTime =
         historyPlayPosition >= this.totalTime ? 0 : historyPlayPosition
-      paused && this.videoElem.play()
+      console.log('videoElem.currentTime ==',this.videoElem.currentTime)
       // 记录当前播放时间戳
       this.playStartTime = new Date()
       this.localPlayTotalTime = Math.round(parseFloat(videoData.playTotalTime))
@@ -252,13 +251,6 @@ export default {
       */
       // 获取播放累计时长
       if (readyState == 4 || readyState == 3) {
-        // console.log('代码是否能走到这里~~~~~~~~')
-        // console.log(this.playStartTime)
-        // this.localPlayTotalTime += durationPlayingTime
-        // const newVideoData = JSON.parse(localStorage.getItem(this.id))
-        // const newTotalTime =
-        //   durationPlayingTime + Math.round(parseFloat(newVideoData.playTotalTime))
-        // let newPosition = durationPlayingTime + Math.round(parseFloat(newVideoData.historyPlayPosition))
         //累计播放时长大于视频总长度.将历史播放进度置为0
         const durationPlayingTime = this.playStartTime
           ? (new Date() - this.playStartTime) / 1000
@@ -270,8 +262,8 @@ export default {
           playTotalTime: newTotalTime,
           historyPlayPosition: newPosition
         }
-        console.log('实时存储的播放数据 = ')
-        console.log(obj)
+        // console.log('实时存储的播放数据 = ')
+        // console.log(obj)
         localStorage.setItem(this.id, JSON.stringify(obj))
         /*
         自测题逻辑
