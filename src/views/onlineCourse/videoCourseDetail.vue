@@ -225,6 +225,8 @@ export default {
       this.videoShow = true
       // 有些苹果手机 弹窗和视频同时进行会在视频上面有背景色遮罩(微信浏览器)
       setTimeout(()=>{
+        console.log('-------------duration-------------------')
+        console.log(this.videoElem.duration)
         paused && this.videoElem.play()
       this.videoElem.currentTime =
         historyPlayPosition >= this.videoElem.duration ? 0 : historyPlayPosition
