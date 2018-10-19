@@ -217,13 +217,10 @@ export default {
     ...mapRootActions(['getUserInfo', 'setWxShareFriend', 'setWxShareZone']),
     canplay(){
         console.log('canplay')
-        setTimeout(()=>{
           const videoData = JSON.parse(localStorage.getItem(this.id))
           const { historyPlayPosition } = videoData
           this.videoElem.currentTime =
           historyPlayPosition >= this.totalTime ? 0 : historyPlayPosition
-        },300)
-
     },
     catchError(error){
       console.log('抓取错误')
