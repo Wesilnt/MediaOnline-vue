@@ -3,7 +3,7 @@
         <div class="my-user-info" @click="editUserInfo">
             <i class="qhht-icon my-user-info-avatar" :style="{backgroundImage:`url(${userInfo.avatarUrl})`}"></i>
             <span class="my-user-info-nickname">{{ userInfo.nickName }}</span>
-            <div class="my-user-info-edit">编辑个人资料</div>
+            <div v-if="showEdit" class="my-user-info-edit">编辑个人资料</div>
         </div>
 
         <div class="my-grid-list">
@@ -36,6 +36,7 @@
       return {
         nickName: '',
         avatarUrl: praise,
+        showEdit:true,
         list: [
           {
             name: '/my/Purchase',
@@ -93,6 +94,7 @@
       editUserInfo: function () {
         if (this.userInfo.gender && this.userInfo.grade && this.userInfo.role && this.userInfo.mobileNo) {
           // 用户信息都填写完整
+          this.showEdit = false
           this.$router.push({path: './my/DisplayUserInfo'})
         } else {
           if (this.userInfo.mobileNo) {
@@ -111,6 +113,9 @@
     created() {
       this.queryNewMessageCount()
       this.getMyUserInfo()
+      if (this.userInfo.gender && this.userInfo.grade && this.userInfo.role && this.userInfo.mobileNo) {
+        this.showEdit = false
+      }
     }
   }
 </script>
