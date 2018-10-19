@@ -27,7 +27,6 @@ import columnActions from './column'
 import { getToken, getUserByToken ,getColumnDetail} from '../api/accessTokenApi'
 import { noAccessToken } from '../utils/userAuth'
 import { wxConfig as wxConfigApi } from '../api/groupBuyApi.js'
-import { wxConfigUrl } from './../utils/config'
 import { stat } from 'fs';
 
 Vue.use(Vuex)

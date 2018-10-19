@@ -1,9 +1,9 @@
 import 'whatwg-fetch'
-import { Toast } from 'vant'
+import { Toast,Dialog } from 'vant'
 import { isUrl, json2formData } from './utils'
 import { getAccessToken, getCookie } from './userAuth'
 import store from '../store/store'
-import { IS_ONLINE, TEST_TOKEN, api, isProdVersion } from './config'
+import { IS_ONLINE, TEST_TOKEN, api, isProdVersion, originUrl } from './config'
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -27,17 +27,18 @@ function checkStatus(url, response) {
   if (response.status >= 200 && response.status < 300) {
     return response
   }
-
   const errortext = codeMessage[response.status] || response.statusText
   const error = new Error(errortext)
   error.url = response.url
   error.name = response.status
   error.response = response
-  if(isProdVersion) {
-    Toast.fail({
-      duration: 3000, // 持续展示 toast
-      message: '网络异常'
-    })
+  if (isProdVersion) {
+      Dialog.alert({
+          title: '网络异常',
+          message: '网络环境异常，请重新加载页面'
+      }).then(() => {
+          window.location.href = originUrl
+      })
   } else {
     Toast.fail({
       duration: 3000,
@@ -56,7 +57,7 @@ const checkResponseCode = (url, response) => {
     return response
   }
   if (response.code == 0) {
-    if(parseInt(response.data)=== 0){
+    if (parseInt(response.data) === 0) {
       return response.data
     }
     return response.data || response
@@ -71,10 +72,12 @@ const checkResponseCode = (url, response) => {
   // 1002: token过期 需重新申请 // 1001: token无效 需退出重新登录
   if (response.code === 1002 || response.code === 1001)
     return dispatch('getAccessToken')
-  if(isProdVersion) {
-    Toast.fail({
-      duration: 3000, // 持续展示 toast
-      message: '网络异常'
+  if (isProdVersion) {
+    Dialog.alert({
+      title: '网络异常',
+      message: '网络环境异常，请重新加载页面'
+    }).then(() => {
+      window.location.href = originUrl
     })
   } else {
     Toast.fail({
@@ -132,7 +135,7 @@ function request(url, options) {
     .catch(e => {
       const status = e.name
       if (status === 403) {
-        if(isProdVersion) {
+        if (isProdVersion) {
           Toast.fail('网络异常')
         } else {
           Toast.fail('403')
@@ -141,8 +144,9 @@ function request(url, options) {
         return
       }
       if (status <= 504 && status >= 500) {
-        if(isProdVersion) {
-          Toast.fail('网络异常')
+        if (isProdVersion) {
+
+            Toast.fail('网络异常')
         } else {
           Toast.fail('500')
         }
@@ -150,7 +154,7 @@ function request(url, options) {
         return
       }
       if (status >= 404 && status < 422) {
-        if(isProdVersion) {
+        if (isProdVersion) {
           Toast.fail('网络异常')
         } else {
           Toast.fail('404')
