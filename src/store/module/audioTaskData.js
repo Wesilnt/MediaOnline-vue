@@ -24,7 +24,8 @@ export default {
     singleSetList:[],
     statusFunc: (commit, status) => commit('statusUpdate', status),
     saveProgress: (id, currentTime, maxTime) => {
-      localStorage.setItem('learntime-' + id,JSON.stringify({ currentTime, maxTime }))
+      localStorage.setItem('learntime-' + id,
+      JSON.stringify({lessonId: id,currentTime,maxTime,uploaded: 'no' }))
     }
   },
   mutations: {
@@ -50,13 +51,14 @@ export default {
         state.columnType = params.columnType || state.columnType
       }
       let localCache = localStorage.getItem('learntime-' + state.audioDetail.id) 
-      if(localCache) state.maxTime = parseInt(JSON.parse(localCache).maxTime) 
-      state._at.play().catch(e=> { 
-        if (!localCache) return
-        let currentTime = JSON.parse(localCache).currentTime 
-        if (!currentTime || currentTime >= state._at.duration - 5) currentTime = 0
-        state.currentTime = state._at.currentTime = parseFloat(currentTime)
-        state.maxTime = state._at.duration 
+      let listenJson = localCache? JSON.parse(localCache): null 
+      if(listenJson){
+        state.maxTime = parseInt(listenJson.maxTime) 
+        state.currentTime = state._at.currentTime = parseInt(listenJson.currentTime)
+      } 
+      state._at.play().then(()=>{
+      }).catch(e=> { 
+        console.error(state.audioDetail,'音频播放出错了')
      })
     },
     //音频播放同步方法
@@ -111,6 +113,27 @@ export default {
     bindSingleSetList(state, res) { 
       state.singleSetList = res.result
     },
+    //本地缓存音频播放进度
+    setListenTime(state,params){
+      let data = JSON.stringify(params)
+      localStorage.setItem('learntime-' + params.lessonId, data)
+    },
+    //更新本地音频进度
+    updateListenTime(state, params){
+      let localCache = localStorage.getItem('learntime-' + params.lessonId) 
+      let listenJson = localCache? JSON.parse(localCache):{}
+      if(listenJson){
+        listenJson.uploaded = 'yes' 
+      }else{
+        listenJson = {
+          lessonId:params.learnId,
+          uploaded:'yes',
+          currentTime : params.learnTime,
+          maxTime : params.maxTime
+        }
+      }
+      localStorage.setItem('learntime-' + params.lessonId,JSON.stringify(listenJson))
+    }
   },
   actions: {
     //音频单集详情
@@ -118,16 +141,16 @@ export default {
       const res = await getAudioDetail(params)
       if(!res) return
       let localCache = localStorage.getItem('learntime-' + res.id)
-      if (localCache) {
-        //提交本地缓存
-        let data = JSON.parse(localCache)
-        let listenTime = parseInt(data.currentTime)
-        let lessonId = res.id
-        dispatch('postLearnRate', { lessonId, listenTime })
+      let listenJson = localCache ? JSON.parse(localCache):{} 
+      //更新本地缓存
+      if (listenJson.uploaded && listenJson.uploaded === 'yes') { 
+        await commit('updateListenTime',{lessonId: res.id, learnTime: res.learnTime,maxTime: res.totalTime}) 
       } else {
-        //更新本地缓存
-        let data = JSON.stringify({currentTIme: res.learnTime,maxTime: res.totalTime})
-        localStorage.setItem('learntime-' + res.id, data)
+        //提交本地缓存 
+        let listenTime = parseInt(listenJson.currentTime)
+        let maxTime = parseInt(listenJson.maxTime)
+        let lessonId = res.id
+        dispatch('postLearnRate', { lessonId, listenTime, maxTime})
       } 
       let courseId = state.courseId
       commit('bindAudioDetail', res)                                                                   //更新单集详情
@@ -137,10 +160,12 @@ export default {
     },
     //音频播放异步方式
     async asyncPlay({ state, commit, dispatch }, params) {
+      //1. 如果播放的是当前音频，则直接播放
       if (params && params.lessonId == state.audioDetail.id) {
         if (!state.isPlaying) commit('syncPlay')
         return state.audioDetail
-      }
+      } 
+      //2. 异步转同步播放
       if (params) {
         const res = await dispatch('getAudioDetail', params) 
         if(!res) return 
@@ -194,7 +219,7 @@ export default {
            }) 
       } 
       let preId = state.audioDetail.preLessonId
-      if (preId&&-1!=preId) {
+      if (preId && -1 != preId) {
         commit('syncPause')
         dispatch('asyncPlay', { lessonId: state.audioDetail.preLessonId })
       } else {
@@ -202,9 +227,12 @@ export default {
       } 
     },
     //上传音频进度
-    async postLearnRate({ commit }, params) {
-      if (params && params.listenTime <= 1) return
+    async postLearnRate({commit}, params) {
+      if (params && params.listenTime <= 0) return 
+      if(isNaN(params.listenTime))return
       const res = await postLearnRate(params)
+      console.log("结果",res,  params)  
+      commit('updateListenTime', {learnId: params.lessonId,listenTime : params.listenTime,maxTime : params.maxTime})
     },
     //音频单集列表
     async getSingleSetList({ commit }, params) {
@@ -213,7 +241,7 @@ export default {
       commit('bindSingleSetList', res)
     },
     //初始化播放器
-    async initAudio({ state, getters, commit, dispatch }) {
+    async initAudio({ state,  commit, dispatch }) {
       commit('initThrottle') 
       state._at = document.createElement('AUDIO')
       state._at.style.display = 'none'
@@ -237,19 +265,19 @@ export default {
       //客户端正在请求数据
       state._at.addEventListener('progress', () =>commit('statusUpdate', 'progress'))
       state._at.addEventListener('ended', () => {
-        commit('statusUpdate', 'ended')
-        let currentTime = 0
+        commit('statusUpdate', 'ended') 
         let maxTime = state._at.duration
-        let data = { currentTime, maxTime }
+        let data = { currentTime :0, maxTime } 
         if (state.playMode == 'single') {
-          data.currentTime = 0
           commit('syncPlay', { audioUrl: state.audioDetail.audioUrl })
         }
-        if (state.playMode == 'order') {
-          data.currentTime = 0
+        if (state.playMode == 'order') { 
           dispatch('playNext') //播放下一集
         }
         localStorage.setItem('learntime-' + state.audioDetail.id,JSON.stringify(data))
+        //更新播放时间
+        let lessonId = state.audioDetail.id 
+        dispatch('postLearnRate', { lessonId, listenTime: parseInt(maxTime)})
       })
       //可以播放，但中途可能因为加载而暂停
       state._at.addEventListener('canplay', () =>commit('statusUpdate', 'canplay'))
@@ -262,9 +290,7 @@ export default {
       //网速失速
       state._at.addEventListener('stalled', () =>commit('statusUpdate', 'stalled'))
     },
-    onDestroy({state}) {
-      // state._at.removeEventListener()
-
+    onDestroy({state}) { 
     }
   },
   getters: {
