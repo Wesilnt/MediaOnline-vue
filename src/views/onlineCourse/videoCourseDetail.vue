@@ -228,6 +228,8 @@ export default {
       paused && this.videoElem.play()
       this.videoElem.currentTime =
         historyPlayPosition >= this.totalTime ? 0 : historyPlayPosition
+        console.log('totalTime =',this.totalTime)
+        console.log('historyPlayPosition =',historyPlayPosition)
       console.log('videoElem.currentTime ==',this.videoElem.currentTime)
       // 记录当前播放时间戳
       this.playStartTime = new Date()
