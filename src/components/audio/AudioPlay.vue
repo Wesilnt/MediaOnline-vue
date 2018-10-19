@@ -73,7 +73,6 @@ import { courseType } from '../../utils/config'
 import SharePop from '../share/Share.vue'
 import {createNamespacedHelpers,mapState as rootState, mapActions as rootActions} from 'vuex'
 const {mapState,mapMutations, mapActions,mapGetters} = createNamespacedHelpers('audiotaskData/audioData')
-
 export default {
   components: { 'share-pop': SharePop },
   data() {
@@ -108,8 +107,7 @@ export default {
           else this.$toast.fail({ duration: 2000, message: '已取消喜欢' })
         }
         return state.isLike
-      },
-      singleSetList: 'singleSetList'
+      }
     }),
     ...mapGetters([
       'isLoading',
@@ -120,7 +118,8 @@ export default {
       'maxTime',
       'playMode',
       'status',
-      'playing'
+      'playing',
+      'singleSetList'
     ])
   },
   created() {
@@ -128,22 +127,7 @@ export default {
     this.bindCourseName(this.courseName) 
     this.playAudio({ lessonId: this.lessonId, columnType: this.columnType })
     this.setShareInfo({courseId:this.courseId,columnType: this.columnType})
-  },
-  mounted() {
-    // this.getUserInfo().then(user => { 
-    //   //拼装分享内容
-    //   let shareData = {
-    //     link:`${this.url}/#/${courseType[this.columnType]}${this.columnDetail.courseId}`,
-    //     title: `${this.columnDetail.name}`,
-    //     desc: '你一定会爱上国学课...',
-    //     imgUrl:`${this.columnDetail.sharePostUrl}?imageView2/1/w/100/h/100/format/jpg`,
-    //     successCB: () => console.log('分享回调成功'),
-    //     cancelCB: () => console.log('分享回调失败')
-    //   }
-    //   this.setWxShareFriend(shareData)
-    //   this.setWxShareZone(shareData) 
-    // })
-  },
+  }, 
   watch: {
     audioId: function(id) {
       this.lessonId = id
@@ -153,8 +137,7 @@ export default {
       return value
     }
   },
-  methods: {
-    ...rootActions(['getUserInfo','setWxShareFriend','setWxShareZone']),
+  methods: { 
     ...mapActions([ 
       'setShareInfo',
       'postFavorite',
@@ -250,10 +233,10 @@ export default {
     onItemClick(audio) {
       this.isInit = true
       this.popupVisible = false
-      this.$router.push({
+      this.$router.replace({
         name: 'AudioPlay',
-        params: {courseId: this.courseId, id: audio.id },
-        query: { columnType: this.columnType }
+        params: { id: audio.id },
+        query: { courseId: this.courseId,columnType: this.columnType }
       })
       this.playAudio({ lessonId: audio.id, columnType: this.columnType })
     }

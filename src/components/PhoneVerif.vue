@@ -19,6 +19,7 @@
   </div>
 </template>
 <script>
+import {Toast} from 'vant'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers('mobileData')
 export default {
@@ -49,12 +50,12 @@ export default {
     sendCode() {
       if (!this.clickable) return
       if (this.mobileNumber.trim() === '') {
-          this.$toast('请输入手机号')
+         Toast({position:'bottom',message:'请输入手机号'})
           this.numberError = '请输入手机号'
         return
       }
       if(!this.isPoneAvailable(this.mobileNumber)){
-          this.$toast('手机号格式不正确')
+          this.$toast({position:'bottom',message:'手机号格式不正确'})
           this.numberError = '手机号格式不正确'
          return
       }
@@ -62,7 +63,7 @@ export default {
     },
     onConfirm() {
       if (this.validateCode === '') {
-        this.$toast('请输入正确的验证码')
+        this.$toast({position:'bottom',message:'请输入正确的验证码'})
         this.codeError = '请输入正确的验证码'
         return
       }
@@ -105,6 +106,7 @@ export default {
   border-radius: 20px;
   display: flex;
   flex-direction: column;
+  z-index: 100;
 }
 .number-container {
   display: flex;
@@ -196,7 +198,11 @@ export default {
   background-image: url('../assets/images/close.png');
   background-size: 68px;
 }
-/deep/.van-toast{
-  z-index: 99999;
+.van-toast{
+  z-index: 3000;
+  /deep/.van-toast--text
+  {
+    z-index: 3000;
+  }
 }
 </style>

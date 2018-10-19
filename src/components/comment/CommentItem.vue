@@ -14,7 +14,7 @@
         </div>
         <div class="comment-detail-body">
           <div ref="content" v-if="comment.commentType==3301" class="comment-detail-content" :class="{'content-expand':isExpand}">
-            <span ref="contentChild">{{comment.content | getSingleCourseName(0)}}</span>
+            <span ref="contentChild">{{comment.content | getSingleCourseName(false)}}</span>
           </div>
           <div v-else class="voice-container">
             <img src="../../assets/images/cmt_voice_icon.png">
@@ -27,7 +27,7 @@
         </div>
         <div v-if="regiontype==2201" class="comment-detail-footer">
           <!-- <font>{{comment.content | getSingleCourseName()}}</font> -->
-          {{comment.content | getSingleCourseName(1)}}
+          {{comment.content | getSingleCourseName(true)}}
         </div>
         <div class="comment-detail-footer" v-else-if="regiontype===2202 && comment.childComment">
           <span class="comment-replyer">{{ comment.childComment.fromNickName}}</span>回复<span class="comment-replyer">{{comment && comment.fromNickName}}：</span>
@@ -51,9 +51,18 @@ export default {
       const d = date.getDate()
       return y + '-' + (m < 10 ? '0' + m : m) + '-' + (d < 10 ? '0' + d : d)
     },
-    getSingleCourseName: function(value, index) {
-      let arr = value.split('=>')
-      return arr[index]
+    getSingleCourseName: function(value, isCourseName) {
+      const arr = value.split('=>')
+      const lastIndex=arr.length-1
+      if(isCourseName){
+        return arr[lastIndex]
+      }else{
+        if(arr.length===1)return arr[0]
+        return arr.reduce((prev,item,index)=>{
+          return prev+=lastIndex===index?'':(0===index?'':'=>')+item
+        },'')
+
+      }
     }
   },
   props: {'comment':{default:{}}, 'unindent':{default:false}, 'regiontype':{default:2202}, 'lastindex':{default:false}},
@@ -124,10 +133,12 @@ export default {
     padding-top: 20px;
   }
   &-content {
-    max-height: 150px;
+    max-height: 160px;
     overflow: hidden;
     word-break: break-all;
     transition: height 0.4s linear;
+    font-size: 24px;
+    line-height: 42px;
     &.content-expand {
       max-height: inherit;
       overflow: visible;

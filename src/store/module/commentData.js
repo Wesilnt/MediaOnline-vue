@@ -54,7 +54,7 @@ export default {
       console.log("评论参数",params)
       let res = await getCommentList(params)
       console.log("评论列表：",res)
-      if (null == res.result) return
+      if (!res.result) return
       commit('setCommentList', { list: res.result, currentPage })
     },
     //发布评论
