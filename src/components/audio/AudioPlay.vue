@@ -296,6 +296,11 @@ export default {
   mounted(){
      const {offsetHeight,offsetTop}=this.$refs.controller
      const {innerHeight,clientWidth}=window;
+     this.$nextTick(()=>{
+       console.log( this.$refs.controller.getBoundingClientRect())
+       console.dir(this.$refs.controller)
+        console.log(this.$refs.controller)
+     })
      if(offsetTop>=375*750/clientWidth)  this.$refs.container.style.height=offsetTop+'px'
   },
   beforeDestroy(){
