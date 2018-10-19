@@ -217,12 +217,12 @@ export default {
     ...mapRootActions(['getUserInfo', 'setWxShareFriend', 'setWxShareZone']),
     canplay(){
         console.log('canplay')
-        setTimeout(()=>{
+        // setTimeout(()=>{
           const videoData = JSON.parse(localStorage.getItem(this.id))
           const { historyPlayPosition } = videoData
           this.videoElem.currentTime =
           historyPlayPosition >= this.totalTime ? 0 : historyPlayPosition
-        },100)
+        // },100)
 
     },
     catchError(error){
@@ -233,9 +233,9 @@ export default {
     handleVideoPlay() {
       console.log('play')
       // 有些苹果手机 弹窗和视频同时进行会在视频上面有背景色遮罩(微信浏览器)
-      // setTimeout(()=>{
-        // const videoData = JSON.parse(localStorage.getItem(this.id))
-        // const { historyPlayPosition } = videoData
+      setTimeout(()=>{
+        const videoData = JSON.parse(localStorage.getItem(this.id))
+        const { historyPlayPosition } = videoData
         const { paused } = this.videoElem
         this.videoShow = true
       //   this.videoElem.currentTime =
@@ -248,7 +248,7 @@ export default {
      
       this.localPlayTotalTime = Math.round(parseFloat(videoData.playTotalTime))
       this.playStartTime = new Date()
-      // },100)
+      },100)
       
     },
     handleVideoPause() {
