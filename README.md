@@ -19,10 +19,7 @@ http://qiniu.shbaoyuantech.com/Fu_BKxSVHcXFaC-03oEqBQua5r7L?imageView2/1/w/100/h
 
 [二维码说明文档](https://gerardreches.github.io/vue-qrcode-component/)
 
-
-___
-
-
+ 
 
 
 

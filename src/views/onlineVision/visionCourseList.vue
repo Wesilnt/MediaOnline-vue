@@ -40,7 +40,7 @@ export default {
       courseCount: 0
     }
   },
-  props: ['courseId'],
+  // props: ['courseId'],
   computed: { 
     ...mapState(['categoryList','courseName','userAccessStatus'])
   },
