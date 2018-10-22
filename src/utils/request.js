@@ -1,9 +1,26 @@
 import 'whatwg-fetch'
-import { Toast,Dialog } from 'vant'
+import { Toast, Dialog } from 'vant'
 import { isUrl, json2formData } from './utils'
 import { getAccessToken, getCookie } from './userAuth'
 import store from '../store/store'
-import { IS_ONLINE, TEST_TOKEN, api, isProdVersion, originUrl } from './config'
+import { IS_ONLINE, TEST_TOKEN, api, originUrl } from './config'
+
+const ErrorHandler = response => {
+  const errorText = response.message || response.error || response.code
+  if (IS_ONLINE) {
+    return errorText === '系统异常'
+      ? Dialog.alert({
+          title: '网络异常',
+          message: '网络环境异常，请重新加载页面'
+        }).then(() => {
+          window.location.href = originUrl
+        })
+      : Toast.fail(errorText)
+  }
+  const error = new Error(response)
+  console.error(error)
+  throw error
+}
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -27,32 +44,15 @@ function checkStatus(url, response) {
   if (response.status >= 200 && response.status < 300) {
     return response
   }
-  const errortext = codeMessage[response.status] || response.statusText
-  const error = new Error(errortext)
-  error.url = response.url
-  error.name = response.status
-  error.response = response
-  if (isProdVersion) {
-      Dialog.alert({
-          title: '网络异常',
-          message: '网络环境异常，请重新加载页面'
-      }).then(() => {
-          window.location.href = originUrl
-      })
-  } else {
-    Toast.fail({
-      duration: 3000,
-      message: response.error
-    })
-    console.error('返回错误状态码' + error)
-    console.dir(error)
-    console.error('接口名称  ' + url)
-  }
-
-  throw error
+  ErrorHandler(response)
 }
 
 const checkResponseCode = (url, response) => {
+  // 1002: token过期 需重新申请 // 1001: token无效 需退出重新登录
+  if (response.code === 1002 || response.code === 1001) {
+    return store.dispatch('getAccessToken')
+  }
+
   if (typeof response.code === 'undefined') {
     return response
   }
@@ -62,34 +62,7 @@ const checkResponseCode = (url, response) => {
     }
     return response.data || response
   }
-  const { dispatch } = store
-
-  const errorText = response.message || response.error || response.code
-  const error = new Error(errorText)
-  error.name = 'code-error'
-  error.response = response
-  error.code = response.code
-  // 1002: token过期 需重新申请 // 1001: token无效 需退出重新登录
-  if (response.code === 1002 || response.code === 1001)
-    return dispatch('getAccessToken')
-  if (isProdVersion) {
-    Dialog.alert({
-      title: '网络异常',
-      message: '网络环境异常，请重新加载页面'
-    }).then(() => {
-      window.location.href = originUrl
-    })
-  } else {
-    Toast.fail({
-      duration: 3000, // 持续展示 toast
-      message: response.error
-    })
-    console.error('返回响应错误' + error)
-    console.dir(error)
-    console.error('接口名称  ' + url)
-  }
-
-  throw error
+  ErrorHandler(response)
 }
 /**
  * Requests a URL, returning a promise.
@@ -135,30 +108,17 @@ function request(url, options) {
     .catch(e => {
       const status = e.name
       if (status === 403) {
-        if (isProdVersion) {
-          Toast.fail('网络异常')
-        } else {
-          Toast.fail('403')
-        }
+        Toast.fail('网络异常')
         // dispatch(routerRedux.push("/exception/403"));
         return
       }
       if (status <= 504 && status >= 500) {
-        if (isProdVersion) {
-
-            Toast.fail('网络异常')
-        } else {
-          Toast.fail('500')
-        }
+        Toast.fail('网络异常')
         // dispatch(routerRedux.push('/exception/500'));
         return
       }
       if (status >= 404 && status < 422) {
-        if (isProdVersion) {
-          Toast.fail('网络异常')
-        } else {
-          Toast.fail('404')
-        }
+        Toast.fail('网络异常')
         // dispatch(routerRedux.push("/exception/404"));
       }
     })

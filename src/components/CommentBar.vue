@@ -73,6 +73,9 @@ export default {
   watch: {
     show: function(show) {
       this.showPop = show
+      show
+        ? window.addEventListener('contextmenu', this.preventDefault)
+        : window.removeEventListener('contextmenu', this.preventDefault)
     }
   },
   methods: {
@@ -111,7 +114,7 @@ export default {
       this.recordTime = 0
     },
     toggleRecord() {
-        return this.$toast('语音留言暂未开放')
+      return this.$toast('语音留言暂未开放')
       this.record = !this.record
     },
     intervalRocrdTime() {
@@ -153,7 +156,6 @@ export default {
     }
   },
   mounted() {
-    window.addEventListener('contextmenu', this.preventDefault)
     voiceRecord = this.$refs.voiceRecord
     voiceRecord.addEventListener('touchstart', this.touchstart)
     voiceRecord.addEventListener('touchend', this.touchend)
@@ -172,7 +174,6 @@ export default {
     })
   },
   destroyed() {
-    window.removeEventListener('contextmenu', this.preventDefault)
     voiceRecord.removeEventListener('touchstart', this.touchstart)
     voiceRecord.removeEventListener('touchend', this.touchend)
   }
