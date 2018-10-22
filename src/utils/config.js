@@ -60,7 +60,7 @@ if (NODE_ENV === 'development') {
     wxConfigUrl = 'http://tencent.test.shbaoyuantech.com/wechat-js-config/online'
 }
 
-export { api, originUrl, wxConfigUrl, isProdVersion }
+export { api, originUrl, wxConfigUrl }
 
 export const puzzleTabs = {
     all: '全部',
