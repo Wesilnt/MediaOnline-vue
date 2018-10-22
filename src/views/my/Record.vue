@@ -73,7 +73,7 @@
 
 <script>
   import {createNamespacedHelpers} from 'vuex'
-  import {courseType} from "../../utils/config";
+  import {columnType} from "../../utils/config";
   import {Vue} from 'vue'
 
   const {mapState, mapMutations,mapActions} = createNamespacedHelpers('myPlayRecordData')
@@ -103,14 +103,14 @@
       ...mapMutations(['modifyPlayRecordList']),
       ...mapActions(['queryList', 'delPlayRecord','batchDelPlayRecord']),
       toPlay:function (item) {
-        console.log("courseType: " + item.courseType + '\t' + item.id)
-        if (item.courseType === '1003' || item.courseType === '1007' ) {
+        console.log("columnType: " + item.columnType + '\t' + item.id)
+        if (item.columnType === '1003' || item.columnType === '1007' ) {
           this.$router.push({
             name: 'AudioPlay'
             , params: {id: item.id}
-            , query: {courseId:-1,columnType: courseType[item.courseType], courseName: item.title}
+            , query: {courseId:-1,columnType: columnType[item.columnType], courseName: item.title}
           })
-        } else if (item.courseType === '1005' ) {
+        } else if (item.columnType === '1005' ) {
           this.$router.push({ name: 'videoCourseDetail', params: { lessonId: item.id} })
         }
 

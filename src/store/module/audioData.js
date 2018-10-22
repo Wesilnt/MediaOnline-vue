@@ -1,4 +1,4 @@
-import { courseType } from '../../utils/config'
+import { columnType } from '../../utils/config'
 import { 
   postFavorite,
   postUnFavorite,
@@ -119,7 +119,7 @@ export default {
       const course = await dispatch('getColumnDetail',{courseId,columnType,useCache:true},{root:true}) 
       if(!course) return
       let shareData = {
-        link:  `${rootState.url}/#/${courseType[columnType]}${courseId}`,
+        link:  `${rootState.url}/#/${columnType[columnType]}${courseId}`,
         title: `${rootState.columnDetail.name}`,
         desc: '你一定会爱上国学课...',
         imgUrl:`${rootState.columnDetail.sharePostUrl}?imageView2/1/w/100/h/100/format/jpg`,

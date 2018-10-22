@@ -73,7 +73,7 @@
 
 </template>
 <script>
-import { courseType } from '../../utils/config'
+import { columnType } from '../../utils/config'
 import SharePop from '../share/Share.vue'
 import {createNamespacedHelpers,mapState as rootState, mapActions as rootActions} from 'vuex'
 const {mapState,mapMutations, mapActions,mapGetters} = createNamespacedHelpers('audiotaskData/audioData')

@@ -18,7 +18,7 @@
 
 </template>
 <script>
-import { courseType } from '../../../utils/config'
+import { columnType } from '../../../utils/config'
 export default {
   name: 'PurchaseItem',
   props: ['type', 'title', 'total', 'list', 'grid'],
@@ -36,7 +36,7 @@ export default {
       }
     },
     routerToDetail({ id }) {
-      this.$router.push({ path: `/${courseType[this.type]}${id}` })
+      this.$router.push({ path: `/${columnType[this.type]}${id}` })
     },
     displayMore() {
       if (this.list.length > 3) {

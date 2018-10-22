@@ -7,7 +7,7 @@ export const IS_ONLINE = true
 export const TEST_TOKEN = "b441dc5a-c00f-49b3-89fb-f40e77aa15a2"
 
 // TODO router 设置未统一，后期需要统一格式
-export const courseType = {
+export const columnType = {
     '1007': 'home/readings/book/', // 读书会
     '1005': 'home/videoColumnDetail/', // 线上课程
     '1003': 'home/visionDetail/', // 少年视野
