@@ -21,6 +21,7 @@ export default {
   mutations: {
     bindAudioDetail(state, res) {
       state.audioDetail = res
+      if(res && res.audioDetail)
       state.isLike = state.audioDetail.isLike
     },
     bindFavorite(state, res) {
