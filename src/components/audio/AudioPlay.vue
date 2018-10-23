@@ -5,7 +5,7 @@
     <!-- 封面 -->
     <div class="controller-container" ref='controller'>
       <!-- 主，副标题 -->
-      <h3> {{audio.title}}</h3>
+      <h3> {{audio.title}}0000000000000</h3>
       <h4> {{audio.subTitle}}</h4>
       <!-- 中间tabbar -->
       <div class="tab-container">
