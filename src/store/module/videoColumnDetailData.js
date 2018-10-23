@@ -63,17 +63,17 @@ const videoColumnDetailData = {
       //获取专栏下所有单集
       dispatch('getVideoCourseList',courseId)
       if(!result) return
-      //绑定专栏详情内容
+      //绑定业务类型,专栏头图,试听列表,专栏ID到拼团仓库中
       const profilePic = result.profilePic
       const freeLessonList = result.freeLessonList
       const serviceType = '1005'
-      //绑定与拼团相关的内容
       dispatch('groupManagerData/initColumnInfo', {
         serviceType,
         courseId,
         profilePic,
         freeLesson: freeLessonList
       })
+      //绑定专栏详情
       commit('bindVideoColumnDetail', result)
       if (state.isFromShare) {
         //这里是分享链接进来的

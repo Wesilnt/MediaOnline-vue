@@ -3,7 +3,6 @@ import {getLessonListByCourse} from '../../api/columnsApi.js'
 import {getMyUserInfo} from '../../api/myApi'
 import {Toast} from 'vant'
 import { WECHAT_SUBSCRIPTION_URL, courseType } from '../../utils/config'
-import { stat } from 'fs';
 
 const groupManagerData = {
     namespaced: true,
@@ -154,24 +153,43 @@ const groupManagerData = {
     actions:{
 
         setupShareOption({state,getters,dispatch,rootState},{courseName,courseId,groupBuyId,collectLikeId,leavePerson,orderStatus}){
-            if(getters.isFromShare){
                 dispatch('getUserInfo',null,{root:true}).then(user =>{
                     let title = null
-                    switch (orderStatus) {
-                      case 1202: //拼团中
-                        title = `我正在参加《${courseName}》拼团活动,仅差${leavePerson || 0}人,快来和我一起拼团吧!`
-                        break
-                      default:
-                        title = courseName
-                        break
-                    }
                     let link = ''
-                    if(1202==orderStatus){
-                      link = `${rootState.url}/#/${courseType[state.serviceType]}${courseId}?groupBuyId=${groupBuyId}`
-                    }else {
-                      link = `${rootState.url}/#/${courseType[state.serviceType]}${courseId}`
+                    if(getters.isFromShare){
+                        switch (orderStatus) {
+                            case 1202: //拼团中
+                              title = `我正在参加《${courseName}》拼团活动,仅差${leavePerson || 0}人,快来和我一起拼团吧!`
+                              break
+                            default:
+                              title = courseName
+                              break
+                          }                          
+                          if(1202==orderStatus){
+                            link = `${rootState.url}/#/${courseType[state.serviceType]}${courseId}?groupBuyId=${groupBuyId}`
+                          }else {
+                            link = `${rootState.url}/#/${courseType[state.serviceType]}${courseId}`
+                          }
+                    }else{
+                        switch (state.userAccessStatus) {
+                            case 1005: //拼团中
+                              title = `我正在参加《${courseName}》拼团活动,仅差${leavePerson || 0}人,快来和我一起拼团吧!`
+                              break
+                            case 1009: //集赞中
+                              title = `我是${user.nickName}, ${true ? '我想免费' : '正在帮朋友'}领取《${courseName}》,求助攻~`
+                              break
+                            default:
+                              title = courseName
+                              break
+                          }
+                          if(1005==state.userAccessStatus){
+                            link = `${rootState.url}/#/${courseType[state.serviceType]}${courseId}?groupBuyId=${groupBuyId}`
+                          }else if(1009==state.userAccessStatus) {
+                            link =  `${rootState.url}/#/praise/active/${courseId}/${collectLikeId}?columnType=${state.serviceType}` 
+                          }else {
+                            link = `${rootState.url}/#/${courseType[state.serviceType]}${courseId}`
+                          } 
                     }
-                   
                     console.log('groupmanager来自分享设置分享地址：', link, '   设置分享标题：', title)
                     let shareData = {
                       link,
@@ -183,46 +201,7 @@ const groupManagerData = {
                     }
                     dispatch('setWxShareFriend',shareData,{root:true})
                     dispatch('setWxShareZone',shareData,{root:true})
-                })
-    
-            }else{
-                dispatch('getUserInfo',null,{root:true}).then(user =>{
-                    let title = null
-                    switch (state.userAccessStatus) {
-                      case 1005: //拼团中
-                        title = `我正在参加《${courseName}》拼团活动,仅差${leavePerson || 0}人,快来和我一起拼团吧!`
-                        break
-                      case 1009: //集赞中
-                        title = `我是${user.nickName}, ${true ? '我想免费' : '正在帮朋友'}领取《${courseName}》,求助攻~`
-                        break
-                      default:
-                        title = courseName
-                        break
-                    }
-                    let link = ''
-                    if(1005==state.userAccessStatus){
-                      link = `${rootState.url}/#/${courseType[state.serviceType]}${courseId}?groupBuyId=${groupBuyId}`
-                    }else if(1009==state.userAccessStatus) {
-                      link =  `${rootState.url}/#/praise/active/${courseId}/${collectLikeId}?columnType=${state.serviceType}` 
-                    }else {
-                      link = `${rootState.url}/#/${courseType[state.serviceType]}${courseId}`
-                    } 
-                    console.log('groupmanager正常设置设置分享地址：', link, '   设置分享标题：', title)
-                    console.log(rootState.url)
-                    let shareData = {
-                      link,
-                      title,
-                      desc: '你一定会爱上国学课...',
-                      imgUrl:`${rootState.columnDetail.sharePostUrl}?imageView2/1/w/100/h/100/format/jpg`,
-                      successCB: () => console.log('分享回调成功'),
-                      cancelCB: () => console.log('分享回调失败')
-                    }
-                    console.log(shareData)
-                    dispatch('setWxShareFriend',shareData,{root:true})
-                    dispatch('setWxShareZone',shareData,{root:true})
-                })
-    
-            }          
+                })         
         },
 
         initColumnInfo({commit,dispatch},{serviceType,courseId,profilePic,freeLesson}){
@@ -259,186 +238,76 @@ const groupManagerData = {
                 "groupBuyTemplateId" : toolsData.groupBuyTemplateId || ""
             }
 
-            //订单状态
             const userAccessStatus = toolsData.userAccessStatus
             let isShowGroupBuy;
-            let toolsObject;
             const personStr = groupData.groupBuyPersonCount > 3 ? "六人拼团" : "三人拼团"
+            let toolsObject = {
+                "originPrice":toolsData.price || 0,
+                "groupPrice":groupData.groupBuyPrice || 0,
+                "collageText":personStr,
+                "collectText":"集赞换",
+                "collect":true,
+                "collage":true,
+                "isShow":true
+            }
             switch(userAccessStatus) {
                 case -3:
                     //拼团失败
-                    // isShowGroupBuy = true
-                    // dispatch("getGroupBuyDetail",groupData.groupBuyId)
                     isShowGroupBuy = false
                     if(praiseData.collectLikeTemplateId && groupData.groupBuyTemplateId){
-                        toolsObject = {
-                            "originPrice":toolsData.price || 0,
-                            "groupPrice":toolsData.groupBuyPrice || 0,
-                            "collageText":personStr,
-                            "collectText":"集赞换",
-                            "collect":true,
-                            "collage":true,
-                            "isShow":true
-                        }
+                        Object.assign(toolsObject)
                     }else if(praiseData.collectLikeTemplateId == "" && groupData.groupBuyTemplateId != ""){
-                        toolsObject = {
-                            "originPrice":toolsData.price || 0,
-                            "groupPrice":toolsData.groupBuyPrice || 0,
-                            "collageText":personStr,
-                            "collectText":"集赞换",
-                            "collect":false,
-                            "collage":true,
-                            "isShow":true
-                        }
+                        Object.assign(toolsObject,{ "collect":false})
                     }else if(praiseData.collectLikeTemplateId && groupData.groupBuyTemplateId == ""){
-                        toolsObject = {
-                            "originPrice":toolsData.price || 0,
-                            "groupPrice":toolsData.groupBuyPrice || 0,
-                            "collageText":personStr,
-                            "collectText":"集赞换",
-                            "collect":true,
-                            "collage":false,
-                            "isShow":true
-                        }
+                        Object.assign(toolsObject,{ "collage":false})
                     }else if(praiseData.collectLikeTemplateId == "" && groupData.groupBuyTemplateId ==""){
-                        toolsObject = {
-                            "originPrice":toolsData.price || 0,
-                            "groupPrice":toolsData.groupBuyPrice || 0,
-                            "collageText":personStr,
-                            "collectText":"集赞换",
-                            "collect":false,
-                            "collage":false,
-                            "isShow":true
-                        }
+                        Object.assign(toolsObject,{ "collect":false,"collage":false,})
                     }
                 break
                 case 0:
                     isShowGroupBuy = false
-                    if(praiseData.collectLikeTemplateId && groupData.groupBuyTemplateId){
-                        toolsObject = {
-                            "originPrice":toolsData.price || 0,
-                            "groupPrice":toolsData.groupBuyPrice || 0,
-                            "collageText":personStr,
-                            "collectText":"集赞换",
-                            "collect":true,
-                            "collage":true,
-                            "isShow":true
-                        }
+                    if(praiseData.collectLikeTemplateId && groupData.groupBuyTemplateId){                        
+                        Object.assign(toolsObject)
                     }else if(praiseData.collectLikeTemplateId == "" && groupData.groupBuyTemplateId != ""){
-                        toolsObject = {
-                            "originPrice":toolsData.price || 0,
-                            "groupPrice":toolsData.groupBuyPrice || 0,
-                            "collageText":personStr,
-                            "collectText":"集赞换",
-                            "collect":false,
-                            "collage":true,
-                            "isShow":true
-                        }
+                        Object.assign(toolsObject,{ "collect":false})
                     }else if(praiseData.collectLikeTemplateId && groupData.groupBuyTemplateId == ""){
-                        toolsObject = {
-                            "originPrice":toolsData.price || 0,
-                            "groupPrice":toolsData.groupBuyPrice || 0,
-                            "collageText":personStr,
-                            "collectText":"集赞换",
-                            "collect":true,
-                            "collage":false,
-                            "isShow":true
-                        }
+                        Object.assign(toolsObject,{ "collage":false})
                     }else if(praiseData.collectLikeTemplateId == "" && groupData.groupBuyTemplateId ==""){
-                        toolsObject = {
-                            "originPrice":toolsData.price || 0,
-                            "groupPrice":toolsData.groupBuyPrice || 0,
-                            "collageText":personStr,
-                            "collectText":"集赞换",
-                            "collect":false,
-                            "collage":false,
-                            "isShow":true
-                        }
+                        Object.assign(toolsObject,{ "collect":false,"collage":false,})
                     }
                 break
                 case 1001:
                     console.log('单购成功')
                     isShowGroupBuy = false
-                    toolsObject = {
-                        "originPrice":'',
-                        "groupPrice":'',
-                        "collageText":"",
-                        "collectText":"",
-                        "collect":true,
-                        "collage":false,
-                        "isShow":false
-                    }  
+                    Object.assign(toolsObject,{ "isShow":false })
                 break
                 case 1003:
                     console.log('拼团成功')
                     isShowGroupBuy = true
-                    // dispatch("getGroupBuyDetail",groupData.groupBuyId)
-                    toolsObject = {
-                        "originPrice":'',
-                        "groupPrice":'',
-                        "collageText":"我要学习",
-                        "collectText":"",
-                        "collect":false,
-                        "collage":true,
-                        "isShow":false
-                    }
+                    Object.assign(toolsObject,{ "isShow":false })
                 break
                 case 1005:
                     console.log('拼团中')
                     isShowGroupBuy = true
                     dispatch("getGroupBuyDetail",groupData.groupBuyId)
-                    // toolsObject = {
-                    //     "originPrice":'',
-                    //     "groupPrice":'',
-                    //     "collageText":"立即邀请好友拼团",
-                    //     "collectText":"",
-                    //     "collect":false,
-                    //     "collage":true,
-                    //     "isShow":true
-                    // }
                 break
                 case 1007:
                     console.log('集赞成功未领取')
                     isShowGroupBuy = false
-                    toolsObject = {
-                        "originPrice":'',
-                        "groupPrice":'',
-                        "collageText":"",
-                        "collectText":"集赞成功未领取",
-                        "collect":true,
-                        "collage":false,
-                        "isShow":true
-                    }
+                    Object.assign(toolsObject,{ "collage":false })
                 break
                 case 1008:
                     console.log('集赞成功已领取')
                     isShowGroupBuy = false
-                    toolsObject = {
-                        "originPrice":'',
-                        "groupPrice":'',
-                        "collageText":"",
-                        "collectText":"集赞成功已领取",
-                        "collect":true,
-                        "collage":false,
-                        "isShow":false
-                    }                
+                    Object.assign(toolsObject,{ "isShow":false })               
                 break
                 case 1009: 
                     isShowGroupBuy = false
-                    toolsObject = {
-                        "originPrice":'',
-                        "groupPrice":'',
-                        "collageText":"",
-                        "collectText":"集赞中",
-                        "collect":true,
-                        "collage":false,
-                        "isShow":true
-                    }                 
+                    Object.assign(toolsObject,{ "collage":false })                
                 break
             }
             const groupBuyId = groupData.groupBuyId
             const collectLikeId = praiseData.collectLikeId
-            console.log(toolsObject)
             commit('bindOrderObject',{toolsObject,groupBuyId,isShowGroupBuy,userAccessStatus})
             commit('bindCollectLikeId',collectLikeId)
 
@@ -500,7 +369,15 @@ const groupManagerData = {
             //保存当前订单状态
             commit('checkOrderStatus',{orderStatus,isOwner,isFullStaff,achievePayment,isAllPay,isGroupCurrent,currUserStatus})
 
-            let toolsObject = null
+            let toolsObject = {
+                "originPrice":'',
+                "groupPrice":'',
+                "collageText":"立即邀请好友拼团",
+                "collectText":"",
+                "collect":false,
+                "collage":true,
+                "isShow":true
+            }
             let headerType = 0
             let isShowGroupBuy = true
             switch(orderStatus){
@@ -510,28 +387,11 @@ const groupManagerData = {
                     //拼团成功&&不在拼团列表中 显示我要开团
                     if(isGroupCurrent){
                         headerType = 102
-                        toolsObject = {
-                            "originPrice":'',
-                            "groupPrice":'',
-                            "collageText":"重新开团",
-                            "collectText":"",
-                            "collect":false,
-                            "collage":true,
-                            "isShow":true
-                        }
+                        Object.assign(toolsObject,{'collageText':"重新开团"})
                     }else{
                         headerType = 102
-                        toolsObject = {
-                            "originPrice":'',
-                            "groupPrice":'',
-                            "collageText":"我要开团",
-                            "collectText":"",
-                            "collect":false,
-                            "collage":true,
-                            "isShow":true
-                        }
+                        Object.assign(toolsObject,{'collageText':"我要开团"})
                     }
-
                 break
                 case 1203:
                     //拼团成功
@@ -539,26 +399,10 @@ const groupManagerData = {
                     //拼团成功&&不在拼团列表中 显示我要开团
                     if(isGroupCurrent){
                         headerType = 101
-                        toolsObject = {
-                            "originPrice":'',
-                            "groupPrice":'',
-                            "collageText":"我要学习",
-                            "collectText":"",
-                            "collect":false,
-                            "collage":true,
-                            "isShow":true
-                        }
+                        Object.assign(toolsObject,{'collageText':"我要学习"})
                     }else {
                         headerType = 101
-                        toolsObject = {
-                            "originPrice":'',
-                            "groupPrice":'',
-                            "collageText":"我要开团",
-                            "collectText":"",
-                            "collect":false,
-                            "collage":true,
-                            "isShow":true
-                        }
+                        Object.assign(toolsObject,{'collageText':"我要开团"})
                     }
 
                 break
@@ -567,93 +411,37 @@ const groupManagerData = {
                 //拼团中&&开团人  显示  邀请好友拼团  
                     if(isOwner){
                         headerType = 100
-                        toolsObject = {
-                            "originPrice":'',
-                            "groupPrice":'',
-                            "collageText":"立即邀请好友拼团",
-                            "collectText":"",
-                            "collect":false,
-                            "collage":true,
-                            "isShow":true
-                        }
+                        Object.assign(toolsObject)
                     }
                 //拼团中&& 参团人 && 如果拼团已满 && 当前用户已完成购买 && 存在其他人未完成支付  "立即邀请好友拼团"
                     if(!isOwner&&isFullStaff&&achievePayment&&!isAllPay){
                         headerType = 103
-                        toolsObject = {
-                            "originPrice":'',
-                            "groupPrice":'',
-                            "collageText":"立即邀请好友拼团",
-                            "collectText":"",
-                            "collect":false,
-                            "collage":true,
-                            "isShow":true
-                        }
+                        Object.assign(toolsObject)
                     }
                 //拼团中&&参团人&&当前拼团未满&&当前用户完成支付   按钮显示:"邀请好友拼团"
                 if (!isOwner && !isFullStaff && achievePayment){
                         headerType = 100
-                        toolsObject = {
-                            "originPrice":'',
-                            "groupPrice":'',
-                            "collageText":"立即邀请好友拼团",
-                            "collectText":"",
-                            "collect":false,
-                            "collage":true,
-                            "isShow":true
-                        }
+                        Object.assign(toolsObject)
                 }
                 //拼团中&&参团人&&当前拼团未满&&当前用户未调起支付   按钮显示:"参与拼团"
                 if(!isOwner && !isFullStaff && !achievePayment && currUserStatus == 0){
                         headerType = 100
-                        toolsObject = {
-                            "originPrice":'',
-                            "groupPrice":'',
-                            "collageText":"参与拼团",
-                            "collectText":"",
-                            "collect":false,
-                            "collage":true,
-                            "isShow":true
-                        }
+                        Object.assign(toolsObject,{'collageText':"参与拼团"})
                 }
                 //拼团中&&参团人&&当前拼团未满&&当前用户调起支付未支付完成   按钮显示:"继续支付"
                 if(!isOwner && !isFullStaff && !achievePayment && currUserStatus == 2601){
                         headerType = 100
-                        toolsObject = {
-                            "originPrice":'',
-                            "groupPrice":'',
-                            "collageText":"继续支付",
-                            "collectText":"",
-                            "collect":false,
-                            "collage":true,
-                            "isShow":true
-                        }  
+                        Object.assign(toolsObject,{'collageText':"继续支付"})
                 }
                 //拼团中&&参团人&&当前拼团已满&&当前用户未完成支付&&当前用户不在拼团用户列表中  按钮显示"我要开团"
                 if(!isOwner && isFullStaff && !achievePayment && !isGroupCurrent){
                         headerType = 103
-                        toolsObject = {
-                            "originPrice":'',
-                            "groupPrice":'',
-                            "collageText":"我要开团",
-                            "collectText":"",
-                            "collect":false,
-                            "collage":true,
-                            "isShow":true
-                        }  
+                        Object.assign(toolsObject,{'collageText':"我要开团"})
                 }
                 //拼团中&&参团人&&当前拼团已满&&当前用户未完成支付&&当前用户在拼团用户列表中  按钮显示"继续支付"
                 if(!isOwner && isFullStaff && !achievePayment && isGroupCurrent){
                         headerType = 103
-                        toolsObject = {
-                            "originPrice":'',
-                            "groupPrice":'',
-                            "collageText":"继续支付",
-                            "collectText":"",
-                            "collect":false,
-                            "collage":true,
-                            "isShow":true
-                        }                     
+                        Object.assign(toolsObject,{'collageText':"继续支付"})                   
                 }
                 break
             }
@@ -661,7 +449,6 @@ const groupManagerData = {
            
             //更新工具条状态
             commit('bindOrderObject',{toolsObject,groupBuyId,isShowGroupBuy,userAccessStatus})
-
 
             //9.整理拼团用户数组
             let topList = []
