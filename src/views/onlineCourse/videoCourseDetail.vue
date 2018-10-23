@@ -57,18 +57,18 @@
                <video class="videoitem"
                        ref="videoitem"
                        :src="videoUrl"
-                       controls="controls"
+                       controls
                        width="100%"
                        preload="auto"
+                      webkit-playsinline
+                      playsinline
+
+                      x-webkit-airplay="allow"
+                      x5-video-player-type="h5"
+                      x5-video-player-fullscreen="true"
+                      x5-video-orientation="portraint"
                        style="object-fit:fill"></video>
             </div>
-            <!-- <van-popup :lazy-render="false"
-                       position="top"
-                       @click-overlay="handleVideoPause"
-                       v-model="videoShow" class="video-popup"
-                       overlay-class="popup-modal-white">
-               
-            </van-popup> -->
         </div>
     </div>
 </template>
@@ -123,9 +123,6 @@ export default {
           ref: 'leaveMessage'
         }
       ],
-      // navbar: ['资料', '目录', '留言'],
-      // navbarFixed: false, //控制navbar是否吸顶
-      // selected: 0,
       currentVideoTime: 0,
       inputValue: '',
       lockIcon: require('../../assets/images/onlinecourse_lock.jpg'), //未解锁
@@ -183,7 +180,6 @@ export default {
     this.videoElem.addEventListener('timeupdate', this.getVideoProgress)
     this.videoElem.addEventListener('canplay', this.canplay)
     this.videoElem.addEventListener('play', this.handleVideoPlay)
-    this.videoElem.addEventListener('error', this.catchError)
     this.videoElem.addEventListener('contextmenu', () => {
       return false
     })
@@ -191,8 +187,7 @@ export default {
   beforeDestroy() {
     this.videoElem.removeEventListener('timeupdate', this.getVideoProgress)
     this.videoElem.removeEventListener('play', this.handleVideoPlay)
-    this.videoElem.removeEventListener('canplay', this.canplay)
-    this.videoElem.removeEventListener('error', this.catchError)
+
     this.resetLoading(true)
   },
   created() {
@@ -216,7 +211,6 @@ export default {
     ]),
     ...mapRootActions(['getUserInfo', 'setWxShareFriend', 'setWxShareZone']),
     canplay() {
-      console.log('canplay')
       const videoData = JSON.parse(localStorage.getItem(this.id))
       const { historyPlayPosition } = videoData
       this.videoElem.currentTime =
@@ -225,13 +219,10 @@ export default {
       console.log('historyPlayPosition =', historyPlayPosition)
       console.log('totalTime =', this.totalTime)
       console.log('videoElem.currentTime ==', this.videoElem.currentTime)
-      // 记录当前播放时间戳
       this.localPlayTotalTime = Math.round(parseFloat(videoData.playTotalTime))
+      // 记录当前播放时间戳
       this.playStartTime = new Date()
-    },
-    catchError(error) {
-      console.log('抓取错误')
-      console.log(error)
+      this.videoElem.removeEventListener('canplay', this.canplay)
     },
     //播放视频
     handleVideoPlay() {
@@ -244,8 +235,6 @@ export default {
       this.videoShow = false
       const { paused } = this.videoElem
       if (!paused) this.videoElem.pause()
-      //刷新页面
-      // console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
       const { lessonId } = this.$route.params
       this.getVideoCourseDetail({ lessonId })
     },
@@ -283,8 +272,6 @@ export default {
       } else {
         const videoData = JSON.parse(localStorage.getItem(this.id))
         this.playStartTime = new Date()
-        console.log('0-0-0-0-0-0-0-0-0-0')
-        console.log(videoData)
         if (videoData) {
           this.localPlayTotalTime = Math.round(
             parseFloat(videoData.playTotalTime)

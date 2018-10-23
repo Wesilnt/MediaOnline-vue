@@ -6,20 +6,16 @@ import store from '../store/store'
 import { IS_ONLINE, TEST_TOKEN, api, originUrl } from './config'
 
 const ErrorHandler = response => {
+  console.error(response)
   const errorText = response.message || response.error || response.code
-  if (IS_ONLINE) {
-    return errorText === '系统异常'
-      ? Dialog.alert({
-          title: '网络异常',
-          message: '网络环境异常，请重新加载页面'
-        }).then(() => {
-          window.location.href = originUrl
-        })
-      : Toast.fail(errorText)
-  }
-  const error = new Error(response)
-  console.dir(error)
-  throw error
+  return errorText === '系统异常'
+    ? Dialog.alert({
+        title: '网络异常',
+        message: '网络环境异常，请重新加载页面'
+      }).then(() => {
+        window.location.href = originUrl
+      })
+    : Toast(errorText)
 }
 
 const codeMessage = {
