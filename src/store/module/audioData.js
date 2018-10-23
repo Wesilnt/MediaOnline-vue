@@ -48,6 +48,7 @@ export default {
       if (params && params.lessonId) { 
         dispatch('audiotaskData/asyncPlay', params, { root: true })
         .then(res => { 
+          if(!res)  return
           commit('bindAudioDetail', res)                                          //绑定音频数据
             console.log(res);
             let courseId = res.courseId
