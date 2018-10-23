@@ -140,18 +140,44 @@ export default {
     ...mapActions(['getPosterInfo', 'getPosterforPraise', 'getColumnDetail']),
    async setPosterImage(){
       const user = await this.getUserInfo()
-      this.user = user 
-      let header = new Image()
-      header.src = user.avatarUrl 
-      //  header.setAttribute('crossOrigin', 'anonymous')
-      header.onload = () =>  {
+      this.user = user
+      
+     const a= new Promise(resolve=>{
+         let header = new Image()
+       header.onload=()=>{
+          resolve()
+       }
+        header.src = user.avatarUrl 
+       
+     }).then(()=>{
+       console.log('頭像加載完成')
+     })
+      const b= new Promise(resolve=>{
+          const bg = new Image()
+       bg.onload=()=>{
+          resolve()
+       }
+        bg.src =  this.columnDetail.sharePostUrl 
+     }).then(()=>{
+       console.log('背景加載完成')
+     })
+     Promise.all([a,b]).then(()=>{
+        console.log('all加載完成')
         this.updateShareImage()
-        console.log(header.src)
-        console.log(this.columnDetail.sharePostUrl)
-        // let bg = new Image()
-        // bg.src =  this.columnDetail.sharePostUrl
-        // bg.onload =  () =>  this.updateShareImage()
-      } 
+     })
+      // const user = await this.getUserInfo()
+      // this.user = user 
+      // let header = new Image()
+      // header.src = user.avatarUrl 
+      // //  header.setAttribute('crossOrigin', 'anonymous')
+      //  header.onload = async () =>  {
+      //   // this.updateShareImage()
+      //   console.log(header.src)
+      //   console.log(this.columnDetail.sharePostUrl)
+      //   let bg = new Image()
+      //   bg.src =  this.columnDetail.sharePostUrl
+      //   bg.onload =  () =>  this.updateShareImage()
+      // } 
    },
    //
    updateShareImage(){
@@ -159,8 +185,9 @@ export default {
         const {PreviewImage}=this.$refs
         domtoimage
           .toJpeg(PreviewImage, {
-            height: PreviewImage.clientHeight,
-            width: PreviewImage.clientWidth
+            height: window.innerHeight,
+            width: window.innerWidth,
+            bgcolor:'#f2f2f2'
           })
           .then(imgUrl => {
             const image = new Image()
