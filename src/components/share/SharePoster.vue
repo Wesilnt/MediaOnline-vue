@@ -18,7 +18,7 @@
   </div>
 </template> 
 <script>
-import { columnType } from '../../utils/config'
+import { courseType } from '../../utils/config'
 import LoadingDialog from '../LoadingDialog.vue'
 import { createNamespacedHelpers ,mapState as rootState,mapActions as rootActions} from 'vuex'
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers('shareData')
@@ -179,7 +179,7 @@ export default {
     setPosterConfig(){ 
        //1. 有专栏详情, 拼团中
      if(this.columnDetail && this.columnDetail.userAccessStatus==1005){   
-       this.shareUrl =  `${this.url}/#${columnType[this.shareType]}${this.columnDetail.id}?groupBuyId=${this.columnDetail.groupBuyId}`
+       this.shareUrl =  `${this.url}/#${courseType[this.shareType]}${this.columnDetail.id}?groupBuyId=${this.columnDetail.groupBuyId}`
       return
      }
      //2. 有专栏详情, 集赞中
@@ -189,7 +189,7 @@ export default {
      }
      //3. 有专栏详情, 非集赞中和拼团中
      if(this.columnDetail) { 
-       this.shareUrl =   `${this.url}/#${columnType[this.shareType]}${this.columnDetail.id}`
+       this.shareUrl =   `${this.url}/#${courseType[this.shareType]}${this.columnDetail.id}`
       }
       //==================
     }

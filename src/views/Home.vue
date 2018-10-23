@@ -39,7 +39,7 @@ import BookList from './BookList.vue'
 import homeData from '../store/module/homeData.js'
 
 import { createNamespacedHelpers } from 'vuex'
-import { columnType } from '../utils/config'
+import { courseType } from '../utils/config'
 const { mapState, mapActions } = createNamespacedHelpers('homeData')
 
 export default {
@@ -71,7 +71,7 @@ export default {
       }
       if (url.includes('&/&')) {
         const [type, id] = url.split('&/&')
-        this.$router.push({ path: `/${columnType[type]}${id}` })
+        this.$router.push({ path: `/${courseType[type]}${id}` })
       } else {
         console.log(url)
         window.location.href = url

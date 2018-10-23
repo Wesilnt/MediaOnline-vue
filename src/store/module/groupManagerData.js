@@ -2,7 +2,7 @@ import { wxConfig,getGroupBuyDetail,startGroupBuy,joinGroupBuy,startCollectLike,
 import {getLessonListByCourse} from '../../api/columnsApi.js'
 import {getMyUserInfo} from '../../api/myApi'
 import {Toast} from 'vant'
-import { WECHAT_SUBSCRIPTION_URL, columnType } from '../../utils/config'
+import { WECHAT_SUBSCRIPTION_URL, courseType } from '../../utils/config'
 import { stat } from 'fs';
 
 const groupManagerData = {
@@ -167,9 +167,9 @@ const groupManagerData = {
                     }
                     let link = ''
                     if(1202==orderStatus){
-                      link = `${rootState.url}/#/${columnType[state.serviceType]}${courseId}?groupBuyId=${groupBuyId}`
+                      link = `${rootState.url}/#/${courseType[state.serviceType]}${courseId}?groupBuyId=${groupBuyId}`
                     }else {
-                      link = `${rootState.url}/#/${columnType[state.serviceType]}${courseId}`
+                      link = `${rootState.url}/#/${courseType[state.serviceType]}${courseId}`
                     }
                    
                     console.log('groupmanager来自分享设置分享地址：', link, '   设置分享标题：', title)
@@ -201,11 +201,11 @@ const groupManagerData = {
                     }
                     let link = ''
                     if(1005==state.userAccessStatus){
-                      link = `${rootState.url}/#/${columnType[state.serviceType]}${courseId}?groupBuyId=${groupBuyId}`
+                      link = `${rootState.url}/#/${courseType[state.serviceType]}${courseId}?groupBuyId=${groupBuyId}`
                     }else if(1009==state.userAccessStatus) {
                       link =  `${rootState.url}/#/praise/active/${courseId}/${collectLikeId}?columnType=${state.serviceType}` 
                     }else {
-                      link = `${rootState.url}/#/${columnType[state.serviceType]}${courseId}`
+                      link = `${rootState.url}/#/${courseType[state.serviceType]}${courseId}`
                     } 
                     console.log('groupmanager正常设置设置分享地址：', link, '   设置分享标题：', title)
                     console.log(rootState.url)

@@ -5,7 +5,7 @@ import {
   unFavorite,
   lessonListenForVedio
 } from '../../api/columnsApi.js'
-import { columnType } from '../../utils/config'
+import { courseType } from '../../utils/config'
 import { getCommentList, postComment } from '../../api/commentApi.js'
 import questionListData from './questionListData'
 import commentData from './commentData'
@@ -278,7 +278,7 @@ const videoCourseDetailData = {
       const course = await dispatch('getColumnDetail',{courseId,columnType:'1005',useCache:true},{root:true}) 
       if(!course) return
       let shareData = {
-        link:  `${rootState.url}/#/${columnType['1005']}${courseId}`,
+        link:  `${rootState.url}/#/${courseType['1005']}${courseId}`,
         title: `${rootState.columnDetail.name}`,
         desc: '你一定会爱上国学课...',
         imgUrl:`${rootState.columnDetail.sharePostUrl}?imageView2/1/w/100/h/100/format/jpg`,
