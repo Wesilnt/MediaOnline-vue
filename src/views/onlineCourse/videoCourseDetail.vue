@@ -173,12 +173,21 @@ export default {
     ]),
     ...mapGetters(['haveQuestionBOList'])
   },
+  watch: {
+    videoUrl: {
+      handler() {
+        this.$nextTick(() => {
+          this.videoElem.addEventListener('canplay', this.canplay)
+        })
+      },
+      immediate: true
+    }
+  },
   mounted() {
     //视频播放器相关监听
     this.videoElem = this.$refs.videoitem
     //视频进度
     this.videoElem.addEventListener('timeupdate', this.getVideoProgress)
-    this.videoElem.addEventListener('canplay', this.canplay)
     this.videoElem.addEventListener('play', this.handleVideoPlay)
     this.videoElem.addEventListener('contextmenu', () => {
       return false
