@@ -49,7 +49,8 @@ export default {
         dispatch('audiotaskData/asyncPlay', params, { root: true })
         .then(res => { 
           commit('bindAudioDetail', res)                                          //绑定音频数据
-          let courseId = res.courseId  
+            console.log(res);
+            let courseId = res.courseId
           if(state.courseId === courseId) return
           // dispatch('getSingleSetList', { courseId, pageSize: getters.pageSize })  //获取单集列表
           let columnType = params.columnType  

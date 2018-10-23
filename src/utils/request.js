@@ -18,7 +18,7 @@ const ErrorHandler = response => {
       : Toast.fail(errorText)
   }
   const error = new Error(response)
-  console.error(error)
+  console.dir(error)
   throw error
 }
 
