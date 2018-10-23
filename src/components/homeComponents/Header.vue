@@ -1,10 +1,10 @@
 <template>
-  <div class="header">
-    <div class="headerContent">
-      <span class="headertitle">{{title}}</span>
-      <span class="headermore" @click="enterList">{{subtitle}}</span>
-    </div>
-  </div>
+  <ul class="qhht-flex header">
+    <li class="header-title">
+      {{title}}
+    </li>
+    <li @click="enterList">{{subtitle}}</li>
+  </ul>
 </template>
 
 <script>
@@ -20,29 +20,27 @@ export default {
 
 <style lang="less" scoped>
 .header {
-  box-sizing: border-box;
-  width: 100%;
-  padding: 56px 28px 40px;
-  .headerContent {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    background: white url(../../assets/home_title_line.png) no-repeat left;
-    background-size: 8px 33px;
-    padding-left: 28px;
-    box-sizing: border-box;
-  }
+  // border-top: 2px solid #F1F1F1;
+  margin: 48px 0 30px;
 }
-.headertitle {
+.header-title {
+  position: relative;
   font-size: 36px;
-  color: rgb(39, 51, 75);
   font-weight: bolder;
-}
-.headermore {
-  margin-top: 16px;
-  font-size: 24px;
-  line-height: 24px;
-  color: rgb(41, 53, 76);
-  text-decoration: none;
+  flex-grow: 1;
+  padding-left: 20px;
+  color: #27334b;
+  &:before {
+    content: '';
+    position: absolute;
+    top:50%;
+    bottom: 0;
+    left: 0;
+    width: 8px;
+    height: 32px;
+    border-radius: 32px;
+    background-color: #ffa32f;
+    transform: translate(0,-50%);
+  }
 }
 </style>

@@ -1,54 +1,63 @@
-const purchase = () => import("../views/my/Purchase")
-const record = () => import("../views/my/Record")
-const like = () => import("../views/my/Like")
-const reply = () => import("../views/my/Reply")
-const myPuzzle_Praise = () =>
-  import(/* webpackChunkName: "myPuzzle_Praise" */ '../views/my/MyPuzzle_Praise')
-const sysMessage = () => import("../views/my/SysMessage")
-const help = () => import("../views/my/Help")
-
+const purchase = () => import(/* webpackChunkName: "index" */ '../views/my/Purchase')
+const record = () => import(/* webpackChunkName: "index" */ '../views/my/Record')
+const like = () => import(/* webpackChunkName: "index" */ '../views/my/Like')
+const reply = () => import(/* webpackChunkName: "index" */ '../views/my/Reply')
+const myPuzzle_Praise = () =>import(/* webpackChunkName: "index" */ '../views/my/MyPuzzle_Praise')
+const sysMessage = () => import(/* webpackChunkName: "index" */ '../views/my/SysMessage')
+const feedback = () => import(/* webpackChunkName: "index" */ '../views/my/Feedback')
+const editUserPhone = () => import(/* webpackChunkName: "index" */ '../views/my/EditUserPhone')
+const editUserInfo = () => import(/* webpackChunkName: "index" */ '../views/my/EditUserInfo')
+const displayUserInfo = () => import(/* webpackChunkName: "index" */ '../views/my/DisplayUserInfo')
+const WxConfig = () => import(/* webpackChunkName: "index" */ '../views/my/WxConfig')
 const PageInfo_From_My = [
   {
     path: '/my/Purchase',
-    // name: "MyPurchase",
-    // component: purchase
     component: purchase
   },
   {
     path: '/my/Record',
-    // name: "VisionList",
     component: record
   },
   {
     path: '/my/Like',
-    // name: "VisionDetail",
     component: like,
     props: true
   },
   {
     path: '/my/my-puzzle',
-    // name: "VideoList",
     component: myPuzzle_Praise
   },
   {
     path: '/my/Reply',
-    // name: "BookList",
     component: reply
   },
   {
     path: '/my/my-praise',
-    // name: "BookList",
     component: myPuzzle_Praise
   },
   {
     path: '/my/SysMessage',
-    // name: "BookList",
     component: sysMessage
   },
   {
-    path: '/my/Help',
-    // name: "BookList",
-    component: help
+    path: '/my/Feedback',
+    component: feedback
+  },
+  {
+    path: '/my/EditUserInfo',
+    component: editUserInfo
+  },
+  {
+    path: '/my/EditUserPhone',
+    component: editUserPhone
+  },
+  {
+    path: '/my/DisplayUserInfo',
+    component: displayUserInfo
+  },
+  {
+    path: '/my/wx-config',
+    component: WxConfig
   }
 ]
 

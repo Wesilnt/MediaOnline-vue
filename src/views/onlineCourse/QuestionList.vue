@@ -7,13 +7,13 @@
                     <span>题数</span>
                 </div>
                 <div class="question-to-review-item">
-                    <p>3</p>
+                    <p>{{correct}}</p>
                     <span>答对</span>
                 </div>
-                <div class="question-to-review-item">
+                <!--<div class="question-to-review-item">
                     <p>3</p>
                     <span>排行</span>
-                </div>
+                </div>-->
             </div>
             <div class="qhht-flex">
                 <a class="qhht-blockButton question-inner-btn" @click="handlePopupShow('reviewShow')">回顾自测题</a>
@@ -30,7 +30,7 @@
                         color="#FFA32F"
                         :percentage="progress"
                 />
-                <p class="questions-footer-text">再学习{{remainTime}}秒可解锁自测题</p>
+                <p class="questions-footer-text">再学习{{deblockTime}}秒可解锁自测题</p>
             </div>
         </div>
         <van-popup v-model="questionShow" position="right" class="answer-container" >
@@ -77,10 +77,6 @@
         </van-popup>
         <van-popup v-model="reviewShow" position="left" class="answer-container" >
             <div class="answer-wrapper">
-                <div  class="answer-btn-close">
-                    <a @click="handlePopupHide('reviewShow')">关闭</a>
-                </div>
-
                 <van-swipe :loop="false" class="review-swipe" :show-indicators="false">
                     <van-swipe-item v-for="questionItem in questionList" :key="questionItem.id">
                         <p class="answer-title">
@@ -107,47 +103,51 @@
                     </van-swipe-item>
                 </van-swipe>
             </div>
-
-            <a  class="qhht-blockButton answer-btn-next" @click="handlePopupShow('settlementShow')">
-                查看成绩单
+            <a  class="qhht-blockButton answer-btn-next" @click="handlePopupHide('reviewShow')">
+                关闭回顾
             </a>
         </van-popup>
-        <van-popup v-model="settlementShow" position="bottom" class="settlement-container" @click="handlePopupHide('settlementShow')">
+        <van-popup  v-model="settlementShow" position="bottom" class="settlement-container" @click="handlePopupHide('settlementShow')">
             <div class="settlement-wrapper">
+                <div v-show="cvsRenderLoading" class="loading-wrapper">
+                    <van-loading />
+                    <p>正在生成分享图片</p>
+                </div>
+                <div v-show="!cvsRenderLoading">
+                    <img class="share-img"  :src="shareImg" alt="">
+                    <a class="qhht-blockButton share-img_close" @click="handlePopupHide('settlementShow')">关闭分享</a>
+                </div>
+            </div>
+            <div class="settlement-canvas" ref="settlement">
                 <div class="settlement-title">成绩单</div>
                 <hr class="settlement-title-underline">
                 <strong class="answer-name">
-                    XXX同学，你在
+                   {{nickName}}同学，你在
                 </strong>
                 <p>《{{title}}》</p>
                 <p>课程自测中获得</p>
                 <strong class="settlement-grade">
-                    {{newGrade?newGrade:grade}}
+                    {{grade}}
                 </strong>
                 <p>请继续加油</p>
                 <hr class="settlement-dashed-underline">
-                <i class="settlement-qr"></i>
+                <qr-code  class="settlement-qr" :text="qrCode" error-level="Q" />
                 <p>分享二维码，邀请好友一起试听</p>
             </div>
-            <a  class="qhht-blockButton answer-btn-next" @click="handlePopupHide('settlementShow')">
-                保存图片
-            </a>
         </van-popup>
     </div>
 </template>
 
 <script>
+import domtoimage from 'dom-to-image'
 import { createNamespacedHelpers } from 'vuex'
+import { mapActions as mapMainActions } from 'vuex'
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
-  'videoCourseDetail/questionList'
+  'videoCourseDetailData/questionListData'
 )
 let timeInter = ''
 export default {
   name: 'QuestionList',
-  props: {
-    progress: 0,
-    deblock: false
-  },
   data: function() {
     return {
       lockIcon: require('../../assets/images/onlinecourse_lock.jpg'), //未解锁
@@ -158,7 +158,11 @@ export default {
       reviewShow: false,
       questionShow: false,
       settlementShow: false,
-      remainTime: 0
+      shareImg: null,
+      nickName: null,
+      qrCode: window.location.href,
+      qrCodeWidth: window.innerWidth * 0.2,
+      cvsRenderLoading: false
     }
   },
   computed: {
@@ -166,35 +170,24 @@ export default {
       'questionIndex',
       'answers',
       'loading',
-      'answersChecked',
-      'newGrade'
+      'answersChecked'
+      // 'newGrade'
     ]),
     ...mapGetters([
       'questionList',
       'questionLength',
-      'videoTime',
-      'delockTime',
+      'correct',
+      'deblockTime',
+      'progress',
+      'deblock',
       'questionInfo',
       'grade',
       'title'
     ])
   },
-  watch: {
-    progress: function(progress) {
-      console.log(progress)
-      console.log(this.delockTime)
-      this.remainTime = Math.round(
-        this.delockTime - (this.videoTime * progress) / 100
-      )
-    }
-  },
   methods: {
-    ...mapActions([
-      'renderAnswers',
-      'handleNext',
-      'uploadAnswer',
-      'resetQuestionList'
-    ]),
+    ...mapMainActions(['wxChooseImage']),
+    ...mapActions(['renderAnswers', 'handleNext', 'uploadAnswer']),
     async openQuestionAnswer() {
       if (!this.answersChecked) {
         await this.renderAnswers()
@@ -209,15 +202,46 @@ export default {
         this.handlePopupShow('questionShow')
       }
     },
-    handlePopupShow(popup) {
-      if (this.reviewShow) this.reviewShow = false
-      this[popup] = true
+    async handlePopupShow(popup) {
+      const array = ['reviewShow', 'questionShow', 'settlementShow']
+      array.forEach(item => {
+        this[item] = popup === item
+      })
+      if (popup === 'settlementShow' && !this.shareImg) {
+        this.cvsRenderLoading = true
+        const response = await this.$store.dispatch('getUserInfo')
+        if (!response) {
+          this.cvsRenderLoading = false
+          this.handlePopupHide('settlementShow')
+          this.$toast('分享图片获取失败')
+          return
+        }
+        const { nickName } = await response
+        this.nickName = await nickName
+
+        setTimeout(() => {
+            const {settlement}=this.$refs
+          domtoimage
+            .toJpeg(settlement, {
+              height: settlement.clientHeight,
+              width: settlement.clientWidth
+            })
+            .then(imgUrl => {
+              const image = new Image()
+              image.src = imgUrl
+              image.onload = () => {
+                this.shareImg = imgUrl
+                this.cvsRenderLoading = false
+              }
+            })
+        }, 300)
+      }
     },
     handlePopupHide(popup) {
       this[popup] = false
     },
     handleNextClick() {
-      const { questionIndex, questionList, answers, questionInfo } = this
+      const { questionIndex, questionList, questionInfo } = this
       const { userSelect } = questionInfo
       if (!userSelect) {
         clearTimeout(timeInter)
@@ -228,17 +252,6 @@ export default {
       }
       const nextIndex = questionIndex + 1
       if (nextIndex + 1 > questionList.length) {
-        // const answersArr = Object.entries(answers)
-        /*const corrects = questionList.reduce((prev, item, index) => {
-          const answerItem = answersArr[index]
-          if (
-            item.id === answerItem[0] &&
-            `opt${item.rightOpt}` === answerItem[1]
-          ) {
-            prev.push(true)
-          }
-          return prev
-        }, [])*/
         this.handlePopupHide('questionShow')
         this.handlePopupShow('settlementShow')
       } else {
@@ -246,20 +259,16 @@ export default {
       }
     },
     handleAnswerClick(answer) {
-      if (
-        this.questionIndex === Object.keys(this.answers).length &&
-        this.userSelect
-      )
-        return
-        const {lessonId}=this.$route.params
+      if (this.questionList[this.questionIndex].answer)
+        return this.$toast('您已经回答过此问题')
+      const { lessonId } = this.$route.params
       this.uploadAnswer({
         lessonId,
         answer
+      }).then(() => {
+        this.$emit('update', { lessonId })
       })
     }
-  },
-  destroyed: function() {
-    this.resetQuestionList()
   }
 }
 </script>
@@ -278,7 +287,7 @@ export default {
 }
 .questions-length {
   margin: 30px auto 56px;
-  font-size: 24px;
+
   color: #666;
 }
 .questions-footer-text {
@@ -296,7 +305,7 @@ export default {
   border-right: 1px solid lightgray;
   flex-grow: 1;
   margin-bottom: 56px;
-  font-size: 24px;
+
   color: #6b6363;
   &:last-child {
     border: none;
@@ -320,6 +329,7 @@ export default {
   border-radius: 8px;
   font-size: 28px;
   overflow: hidden;
+  background: #fff;
 }
 .answer-wrapper {
   padding: 40px 30px 52px;
@@ -416,18 +426,39 @@ export default {
 }
 .settlement-wrapper {
   position: absolute;
-  top: 46%;
-  left: 50%;
-  width: 702px;
-  padding-bottom: 60px;
-  transform: translate(-50%, -50%);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #000;
+  z-index: 10;
+}
+.share-img {
+  width: 88%;
+  margin-top: 4%;
+}
+.share-img_close {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  border-radius: 0;
+}
+.settlement-canvas {
+  /*position: absolute;*/
+  /*top: 46%;*/
+  /*left: 50%;*/
+  /*width: 702px;*/
+  /*transform: translate(-50%, -50%);*/
   border-radius: 8px;
+  padding: 20px 32px 60px;
   background-color: #fff;
   text-align: center;
   color: #818181;
 }
 .settlement-title {
-  margin-top: 64px;
+  margin-top: 56px;
   font-size: 90px;
   font-weight: 600;
   color: #8297ea;
@@ -469,9 +500,22 @@ export default {
 .settlement-qr {
   display: block;
   margin: 0 auto 32px;
-  width: 152px;
-  height: 152px;
-  background-color: #20c997;
+  width: 200px;
+  height: 200px;
+  background-color: #ffffff;
+  /deep/ img {
+    width: 100%;
+  }
+}
+.loading-wrapper {
+  margin: 47% auto 0;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  line-height: 6;
+  color: #d6d6d6;
 }
 /*回顾自测题*/
 .review-swipe {

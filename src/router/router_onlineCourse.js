@@ -1,10 +1,13 @@
-import videoColumnDetail from  '../views/onlineCourse/videoColumnDetail'
-import videoCourseDetail from  '../views/onlineCourse/videoCourseDetail'
-import Praise from '../views/praise/Praise'
+const videoColumnDetail = () => import(/* webpackChunkName: "index" */ '../views/onlineCourse/videoColumnDetail')
+const videoCourseDetail = () => import(/* webpackChunkName: "index" */ '../views/onlineCourse/videoCourseDetail')
+const videoCourseComment = () => import(/* webpackChunkName: "index" */ '../views/onlineCourse/VideoCourseCmts')
+const videoInnerList = () => import(/* webpackChunkName: "index" */ '../views/onlineCourse/videoInnerList')
+
+
 
 const PageInfo_From_onlineCourse = [
   {
-    path: '/videoColumnDetail/:courseId',
+    path: '/home/videoColumnDetail/:courseId',
     name: 'videoColumnDetail',
     component: videoColumnDetail
   },
@@ -14,9 +17,14 @@ const PageInfo_From_onlineCourse = [
     component: videoCourseDetail
   },
   {
-    path: '/Praise/:courseId',
-    name: 'Praise',
-    component:Praise
+    path: '/videoCourseCmts/:courseId',
+    name: 'videoCourseCmts',
+    component: videoCourseComment
+  },
+  {
+    path: '/videoInnerList/:courseId',
+    name: 'videoInnerList',
+    component: videoInnerList
   }
 ]
 

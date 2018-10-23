@@ -1,8 +1,8 @@
 <template> 
-    <div class="singleset-item-container" tag="div" @click="onItemClick(item.id)">
+    <div class="singleset-item-container" tag="div" @click="onItemClick(item)">
       <div class="item-content">
-        <div :class="{'icon-playing':playing}" class="item-icon">
-          <img :src="playing?require('../assets/readings_detail_play.png'):require('../assets/readings_detail_pause.png')">
+        <div :class="{'icon-playing':playing}" class="item-icon" v-lazy:background-image="`${item.coverPic}?imageView2/1/w/100/h/100/format/jpg/q/50`">
+          <img :src="playing?require('../assets/images/icon_playing_shadow.png'):require('../assets/images/icon_pause_shadow.png')">
         </div>
         <div class="item-describe">
           <h3 :class="{'item-playing':playing}">
@@ -12,43 +12,72 @@
             {{item.subTitle}}
           </h4>
           <div class="bottom-container">
-            <span v-if="item.isAudition">试听</span> 
-            <p>{{item.totalTime | formatDuring}} | {{item.learnTime |learntimeFormat(item.totalTime)}}</p> 
+            <span v-if="item.isFree">试听</span> 
+            <p>{{item.totalTime | formatDuring}} | {{item.learnTime | learntimeFormat(item.totalTime,item.id)}}</p> 
           </div>
         </div>
       </div>
-      <hr>
     </div> 
 </template>
 
 <script>
 export default {
-  filters: {
-    learntimeFormat: function(value, totaltime) {
-      if (value <= 1) return '未收听'
-      return '已收听' + parseInt((value * 100) / totaltime) + '%'
-    }
-  },
   //singleset 单集  playing是否正在播放
-  props: ['item', 'playing'],
+  props: ['item', 'playing','singletype','courseid','coursename','useraccessstatus'],
   methods: {
-    onItemClick(id) {
-      this.$router.push({ path: '/audio/audioplay', query: { id, hiddenDraft:true } })
+    onItemClick(item) {
+      let unLock = false
+      switch(this.useraccessstatus){
+        case -3://拼团失败
+        break
+        case 0:
+        break
+        case 1001://单购成功
+          unLock = true
+        break
+        case 1003://拼团成功
+         unLock = true
+        break
+        case 1005://拼团中
+        break
+        case 1007://集赞成功未领取
+        break
+        case 1008://集赞成功已领取
+         unLock = true
+        break
+        case 1009://集赞中
+        break
+      }
+      if (item.isFree || unLock) {
+     
+        if(this.singletype == '1005'){
+           console.log(this.singletype)
+          this.$router.push({
+           path: `/videoCourseDetail/${item.id}`
+          })
+        }else{
+        this.$router.push({
+          name: 'AudioPlay',
+          params: {id: item.id },
+          query:{courseId: this.courseid, columnType:this.singletype,courseName:this.coursename}
+        })
+        }
+      } else {
+          console.log(this.singletype);
+          this.$toast.fail('您还未购买该专栏')
+      }
     }
   }
 }
 </script>
 <style lang="scss" scoped>
 .singleset-item-container {
-  display: flex;
+  display: block;
   flex-direction: column;
   justify-content: center;
-  hr {
-    height: 2px;
-    border: none;
-    margin: 0 20px;
-    background-color: rgb(237, 237, 237);
-  }
+  border-bottom: 2px solid #F1F1F1;
+  margin: 0 36px -2px;
+
   .item-icon {
     align-self: center;
     width: 96px;
@@ -56,6 +85,7 @@ export default {
     // padding: 28px 31px 28px 35px;
     box-sizing: border-box;
     background-color: #fde3e3;
+    background-size: 96px;
     display: flex;
     border-radius: 96px;
   }
@@ -73,12 +103,11 @@ export default {
     margin: auto 0;
   }
   .item-content {
-    margin-left: 36px;
     display: flex;
     flex-direction: row;
   }
   .item-describe {
-    display: flex;
+    display: block;
     flex-direction: column;
     margin-left: 20px;
     h3 {
@@ -90,7 +119,7 @@ export default {
     }
     h4 {
       margin: 20px 0 0 0;
-      font-size: 24px;
+
       line-height: 24px;
       font-weight: 300;
       color: rgb(102, 102, 102);
@@ -108,14 +137,13 @@ export default {
   .bottom-container span {
     background-color: #ea605c;
     color: white;
-    padding: 3px 10px;
+    padding: 4px 12px;
     border-radius: 10px;
     font-size: 26px;
     margin-right: 20px;
-    line-height: 36px;
   }
   .bottom-container p {
-    font-size: 24px;
+
     color: rgb(148, 154, 170);
     margin: 0;
     line-height: 24px;

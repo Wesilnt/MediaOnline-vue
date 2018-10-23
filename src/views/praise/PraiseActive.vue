@@ -1,40 +1,62 @@
 <template>
     <div class="praise-active">
-        <div v-for="(item,i) of actives" :key="i" class="active-item">
-            <img :src="item.url">
-        </div>
-        <div class="help-btn" @click="toHelp">
-            为TA助力，免费领取某某课程
+        <!-- <div v-for="(item,i) of picList" :key="i" class="active-item">
+            <img :src="item">
+        </div> -->
+        <div class="active-item" v-lazy:background-image="`${pageBgUrl}?imageView2/1/format/jpg`" :style="{marginBottom:!isNewUser?'48px':'0px'}"></div>
+        <div class="help-btn" @click="toHelp">为TA助力，免费领取《{{courseName}}》
         </div>
     </div>
 </template>
 <script>
+import { createNamespacedHelpers } from 'vuex'
+const { mapState,mapMutations, mapActions, mapGetters } = createNamespacedHelpers('praiseData')
 export default {
   data() {
     return {
-      actives: [
-        { url: require('../../assets/praise_head_bg.png') },
-        { url: require('../../assets/praise_head_bg.png') },
-        { url: require('../../assets/praise_head_bg.png') },
-        { url: require('../../assets/praise_head_bg.png') }
-      ]
+      courseId: this.$route.params.courseId,
+      collectLikeId: this.$route.params.collectLikeId,
+      isNewUser:false
     }
   },
+  computed: { ...mapState(['userId','pageBgUrl', 'courseName','praiseDetail','isPraised']) },
+  created() {
+    let response = this.checkStatus({ collectLikeId: this.collectLikeId })
+    if(response)response.then(()=>{
+       this.isNewUser = this.userId == this.praiseDetail.starterUid||this.isPraised
+       if(this.isNewUser) this.toHelp()
+    })
+    // this.checkStatus({ collectLikeId: this.collectLikeId }) 
+    // this.getCollectDetail({ collectLikeId: this.collectLikeId })
+    // .then(()=>{
+    //    if(this.userId == praiseDetail.starterUid||this.isPraised){
+    //      this.toHelp()
+    //    }
+    // })
+  },
   methods: {
+    ...mapMutations(['destroyInterval']),
+    ...mapActions(['checkoutAuthorrization','checkStatus','getUserByToken','getCollectDetail']),
     toHelp() {
-      this.$router.push({ path: '/praise' })
+      this.$router.replace({
+        name: 'Praise',
+        params: { courseId: this.courseId, collectLikeId: this.collectLikeId },
+        query:{columnType:this.$route.query.columnType}
+      })
     }
+  },
+  beforeDestroy(){
+    this.destroyInterval()
   }
 }
 </script>
 <style lang="scss" scoped>
-.active-item {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  img {
-    width: 100%;
-  }
+.active-item { 
+  width: 100%; 
+  height: 100vh;
+  background-size: 100%;
+  background-position: center; 
+  background-repeat: no-repeat;
 }
 .help-btn {
   background-color: rgb(255, 163, 47);

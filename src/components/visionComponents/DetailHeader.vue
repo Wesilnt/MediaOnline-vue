@@ -2,17 +2,17 @@
   <div class="header">
     <span class="title">{{title}}</span>
     <span class="right" @click="enterList">{{subtitle}} 
-      <img class="arrow" src="../../assets/vision_arrow.png" alt="">
+      <img class="arrow" src="../../assets/images/arrow_right.png" alt="">
     </span>
   </div>
 </template>
 
 <script>
 export default {
-  props: ['title', 'link', 'subtitle','params'],
+  props: ['title', 'link', 'subtitle', 'courseId'],
   methods: {
     enterList() {
-      this.$router.push({ name:this.link, params:this.params })
+      this.$router.push({path:`${this.link}/${this.courseId}`})
     }
   }
 }
@@ -33,7 +33,6 @@ export default {
 }
 .right {
   margin-top: 4px;
-  font-size: 24px;
   color: rgb(41, 53, 76);
   display: flex;
   vertical-align: middle;

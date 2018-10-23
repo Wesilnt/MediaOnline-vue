@@ -1,81 +1,57 @@
 <template>
-  <div class="videocol-dec-container" id="detailmain" ref="detailmain">
-    <GroupHeader></GroupHeader>
-    <GroupContent></GroupContent>
-    <!-- 底部工具条 -->
-    <tools-navbar
-        v-on:router-to-audition="routerToAudition"
-        v-on:router-to-collage="routerToCollage"
-        v-on:router-to-collect="routerToCollect"
-        :price="['100','10']"
-        collageText="拼团拼团"
-        :collect='true'
-        :collage='true'
-    />
+  <div>
+    <SkeletonFullScreen  v-if="loading"/>
+    <div class="anti-bottomBar" v-else>
+      <GroupHeader></GroupHeader>
+      <GroupContent></GroupContent>
+      <!-- 底部工具条 -->
+      <tools-navbar/>
+    </div>
   </div>
 </template>
 
 <script>
+import SkeletonFullScreen from '../../components/SkeletonFullScreen'
 import GroupHeader from './components/GroupHeader'
 import GroupContent from './components/GroupContent'
 import toolsNavbar from '../../components/toolsNavbar.vue'
 import { createNamespacedHelpers } from 'vuex'
-const { mapState,mapMutations,mapActions } = createNamespacedHelpers('videoColumnDetail')
+const { mapState, mapMutations, mapActions } = createNamespacedHelpers(
+  'videoColumnDetailData'
+)
 
 export default {
-    name: 'VideoColumnDetail',
-    components: {
-      'tools-navbar': toolsNavbar,
-      GroupHeader,
-      GroupContent
-    },
-    data() {
-      return {
-        dataList: []
-      }
-    },
-    watch: {},
-    computed: {
-      ...mapState([
-        'freeLessonList', //试看课程数组
-        'profilePic', //头图
-        'description', //专栏介绍
-        'outlinePic', //课程列表下面的大图展示
-        'buyIntro', //购买须知
-        'lessonCount', //专栏课集总数
-        'commentCount', //留言总条数
-        'buyCount'
-      ])
-    },
-    methods: {
-      ...mapMutations(['initDatas']),
-      ...mapActions(['getVideoColumnDetail']),
-      routerToAudition() {
-        console.log('跳转到试听')
-      },
-      routerToCollage() {
-        console.log('跳转到拼团')
-      },
-      routerToCollect() {
-        console.log('跳转到集赞')
-        this.$router.push({ name: 'Praise', params: { "courseId" : this.$route.params.courseId } })
-      }
-    },
-    created() {
-      //获取专栏Id
-      const courseId = this.$route.params.courseId
-      this.initDatas(courseId)
-      this.getVideoColumnDetail({ "courseId": courseId })
+  name: 'VideoColumnDetail',
+  components: {
+    SkeletonFullScreen,
+    'tools-navbar': toolsNavbar,
+    GroupHeader,
+    GroupContent
+  },
+  data() {
+    return {
+      courseId:this.$route.params.courseId,
+      groupBuyId:this.$route.query.groupBuyId
     }
-
+  },
+  computed: {
+    ...mapState([
+      'loading'
+    ])
+  },
+  methods: {
+    ...mapMutations(['initDatas', 'resetState']),
+    ...mapActions(['getVideoColumnDetail'])
+  },
+  created() {
+    //初始化页面数据(将路由中带过来的专栏ID存储到仓库)
+    this.initDatas({ courseId: this.courseId, groupBuyId: this.groupBuyId })
+    //获取专栏详情
+    this.getVideoColumnDetail({ courseId: this.courseId, groupBuyId: this.groupBuyId })
+  },
+  beforeDestroy() {
+    //页面销毁前将loading状态还原
+    this.resetState()
+  }
 }
 </script>
-
-<style lang="scss" scoped>
-.videocol-dec-container {
-  margin: 0;
-  padding: 0;
-  background-color: #fff;
-  height: 100%;
-}
-</style>

@@ -13,57 +13,58 @@
         {{btnState.rightText}}
       </span>
     </div>
-    <mobile-validate v-if="show" @callback="validateCallback"/>
-   
+    <!-- <mobile-validate v-if="show" @callback="validateCallback"/> -->
   </div>
 </template>
 <script>
+import { createNamespacedHelpers,mapState as mapRootState } from 'vuex'
 import MobileVali from '../../components/PhoneVerif.vue'
+const { mapState, mapActions, mapGetters } = createNamespacedHelpers('praiseData')
 let buttonDatas = [
   {
-    isSingle: false, //单按钮还是双按钮
+    isSingle: false, //单按钮还是双按钮  0
     leftText: '分享给好友',
     rightText: '分享海报'
   },
   {
-    isSingle: true, //单按钮还是双按钮
+    isSingle: true, //单按钮还是双按钮   1
     singleStyle: 'solid-large', //按钮样式
     singleText: '为TA点赞，免费领取伍老师历史课程'
   },
   {
-    isSingle: false, //单按钮还是双按钮
+    isSingle: false, //单按钮还是双按钮  2
     leftText: '帮TA分享',
     rightText: '我也要集赞'
   },
   {
-    isSingle: true, //单按钮还是双按钮
+    isSingle: true, //单按钮还是双按钮   3
     singleStyle: 'hollow-small', //按钮样式
     singleText: '现在去领取'
   },
   {
-    isSingle: true, //单按钮还是双按钮
+    isSingle: true, //单按钮还是双按钮   4
     singleStyle: 'hollow-small', //按钮样式
     singleText: '马上去学习'
   },
   {
-    isSingle: true, //单按钮还是双按钮
+    isSingle: true, //单按钮还是双按钮   5
     singleStyle: 'solid-small', //按钮样式
     singleText: '我也要集赞'
   },
   {
-    isSingle: true, //单按钮还是双按钮
+    isSingle: true, //单按钮还是双按钮    6
     singleStyle: 'hollow-small', //按钮样式
     singleText: '活动已结束'
   },
   {
-    isSingle: true, //单按钮还是双按钮
+    isSingle: true, //单按钮还是双按钮   7
     singleStyle: 'solid-small', //按钮样式
     singleText: '重新发起集赞'
   }
 ]
 export default {
   components: { 'mobile-validate': MobileVali },
-  props: ['state'],
+  props: ['state', 'courseid', 'collectlikeid','columntype'],
   data() {
     return {
       show: false,
@@ -76,13 +77,13 @@ export default {
       this.btnState = buttonDatas[newValue]
     }
   },
+  computed:{...mapRootState(['url'])},
   methods: {
+    ...mapActions(['joinCollectLike']),
     onSingle() {
       if (1 == this.state) {
-        //TODO 发起集赞
-      }
-      if (this.state == 5) {
-        this.show = true
+        //TODO  参与集赞
+        this.joinCollectLike({ collectLikeId: this.collectlikeid })
       }
       if (
         3 == this.state || //集赞完成未领取（发起人）
@@ -91,6 +92,7 @@ export default {
         7 == this.state
       ) {
         //TODO专栏详情
+       this.goColumnDetail()
         return
       }
     },
@@ -99,16 +101,31 @@ export default {
       this.$emit('share')
     },
     onRight() {
-      if (0 == this.state) {
+      if (0 == this.state) { 
+        // let params = { courseId:  this.courseid,collectLikeId :this.collectlikeid, }
         //分享海报
-        this.$router.push({ path: '/save-poster' })
+        //专栏类型columnType：  FreeZone(1001) 免费专区  OnlineCourse(1005) 在线课堂 OnlineVision(1003) 在线视野  Readings(1007) 读书会 
+        this.$router.push({
+          name: 'SharePoster',
+          params:{},
+          query: { 
+                  courseId:this.courseid,
+                  columnType:this.columntype
+                 }
+        })
       }
       if (2 == this.state) {
         //我也要集赞
+        this.goColumnDetail()
       }
     },
-    validateCallback() {
-      this.show = false
+    goColumnDetail(){  
+      //专栏类型  FreeZone(1001) 免费专区  OnlineCourse(1005) 在线课堂 OnlineVision(1003) 在线视野  Readings(1007) 读书会 
+      let columnName = this.columntype == "1005" ? 
+                'videoColumnDetail':this.columntype == '1003'?
+                'VisionDetail':this.columntype == '1007'? 
+                '1001':'BookDetail'
+      this.$router.push({name: columnName, params: { courseId: this.courseid }})
     }
   }
 }

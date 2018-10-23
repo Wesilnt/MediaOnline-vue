@@ -1,26 +1,35 @@
 <template>
   <div>
-    <Swiper :images="bannerList"/>
-    <Notice :message-count="newMessageCount"/>
-    <Header :link="'/home/freezone'" title="免费专区" subtitle="探索更多"/>
-    <FreeList :free-list="freeList"/>
-    <div class="sepline"/>
+    <SkeletonFullScreen  v-if="loading"/>
+    <div class="index" v-else>
+      <div>
+        <van-swipe :autoplay="4000" class="index-swiper">
+          <van-swipe-item v-for="list in bannerList" :key="list.url">
+            <i class="qhht-icon lazy-img-larger index-swiper-img" v-lazy:background-image="`${list.url}?imageView2/1/format/jpg`" @click="routerToSwiperDetail(list.link)"></i>
+          </van-swipe-item>
 
-    <Header :link="'/home/visionList'" title="少年视野" subtitle="探索更多" />
-    <DisCoverVisionList :vision-list="visionList"/>
-    <div class="sepline"/>
-    <Header :link="'/home/videoList'" title="少年必修" subtitle="探索更多"/>
-    <DisCoverVideoList :video-list="videoList"/>
-    <div class="sepline" />
-    <Header :link="'/home/readings'" title="中国少年读书会" subtitle="探索更多"/>
-    <BookList :book-list="bookList"/>
-    <div class="homePosition"/>
+        </van-swipe>
+        <!-- <div class="swiper_bottom"></div> -->
+      </div>
 
+      <Notice :message-count="newMessageCount" :fromAvatarUrl= "fromAvatarUrl"/>
+      <div class="index-container">
+        <Header v-if="false" :link="'/home/freezone'" title="免费专区" subtitle="探索更多" />
+        <FreeList v-if="false" :free-list="freeList" />
+        <Header :link="'/home/visionList'" title="音频课程" subtitle="探索更多" />
+        <DisCoverVisionList :vision-list="visionList" />
+        <Header :link="'/home/videoList'" title="视频课程" subtitle="探索更多" />
+        <DisCoverVideoList :video-list="videoList" />
+        <Header :link="'/home/readings'" title="少年读书会" subtitle="探索更多" />
+        <BookList :book-list="bookList" />
+      </div>
+    </div>
   </div>
+
 </template>
 
 <script>
-import Swiper from '../components/homeComponents/Swiper.vue'
+import SkeletonFullScreen from '../components/SkeletonFullScreen'
 import Notice from '../components/homeComponents/Notice.vue'
 import Header from '../components/homeComponents/Header.vue'
 import FreeList from './FreeList.vue'
@@ -30,12 +39,13 @@ import BookList from './BookList.vue'
 import homeData from '../store/module/homeData.js'
 
 import { createNamespacedHelpers } from 'vuex'
+import { courseType } from '../utils/config'
 const { mapState, mapActions } = createNamespacedHelpers('homeData')
 
 export default {
   name: 'Homepage',
   components: {
-    Swiper,
+    SkeletonFullScreen,
     Notice,
     Header,
     FreeList,
@@ -44,43 +54,68 @@ export default {
     BookList
   },
   computed: mapState([
+    'loading',
     'bannerList',
     'newMessageCount',
+    'fromAvatarUrl',
     'freeList',
     'visionList',
     'videoList',
     'bookList'
   ]),
   methods: {
-    ...mapActions([
-      'getBannerList',
-      'getNewMessageCount',
-      'getFreeList',
-      'getVisionList',
-      'getVideoList',
-      'getBookList'
-    ])
+    ...mapActions(['getIndexPageData']),
+    routerToSwiperDetail(url) {
+      if (!url) {
+        return
+      }
+      if (url.includes('&/&')) {
+        const [type, id] = url.split('&/&')
+        this.$router.push({ path: `/${courseType[type]}${id}` })
+      } else {
+        console.log(url)
+        window.location.href = url
+      }
+    }
   },
-  created() {
-    this.getBannerList()
-    this.getNewMessageCount()
-    this.getFreeList()
-    this.getVisionList()
-    this.getVideoList()
-    this.getBookList()
+  mounted() {
+    this.getIndexPageData()
   }
 }
 </script>
 
 <style lang='less' scoped>
-.sepline {
-  width: 694px;
-  height: 2px;
-  background-color: rgb(238, 238, 238);
-  margin-top: 28px;
-  margin-left: 28px;
+.index {
+  color: #3e3e53;
+  margin-bottom: 100px;
+  // /deep/.van-swipe__indicators{
+  //   bottom:30px;
+  // }
+  /deep/.van-swipe__indicator {
+    background-color: white;
+  }
+  /deep/.van-swipe__indicator--active {
+    background-color: #d9d9d9;
+  }
 }
-.homePosition {
-  height: 100px;
+.index-swiper {
+  // margin-bottom: 28px;
+}
+// .swiper_bottom {
+//   background-color: white;
+//   width: 100%;
+//   height: 60px;
+//   position: absolute;
+//   top: 320px;
+//   border-top-left-radius: 50%;
+//   border-top-right-radius: 50%;
+//   z-index: 999;
+// }
+.index-swiper-img {
+  width: 100%;
+  height: 46.7vw;
+}
+.index-container {
+  padding: 0 28px;
 }
 </style>

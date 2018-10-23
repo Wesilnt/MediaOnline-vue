@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="listHeader">
-      <span class="headerCount">共143讲</span>
+      <span class="headerCount">共{{courseCount}}讲</span>
       <div class="ascButton" @click="reverseList">
         <img class="sortIcon" :src="Ascending?ascDown:ascUp" alt=""> {{Ascending?'正序':'倒叙'}}
       </div>
@@ -11,30 +11,44 @@
       <div v-if="item.id != -1" @click="spreat(item.id)" :class="(item.id ===selectCate)&&spread?'categoryHeader selectShadow':'categoryHeader'" :style="{background:'url('+item.picUrl+')'}">
         <div class="categoryHeaderCount"> {{item.lessonCount}}期 </div>
       </div>
-      <SingleSetList v-show="item.id == selectCate && spread" class="categoryList" :list='item.lessonList'></SingleSetList>
+      <SingleSetList
+        v-show="item.id == selectCate && spread" 
+        :courseid="courseId"
+        :singletype="'1003'" 
+        class="categoryList" 
+        :list='item.lessonList' 
+        :coursename="courseName" 
+        :useraccessstatus="userAccessStatus"></SingleSetList>
     </div>
   </div>
 </template>
 <script>
 import SingleSetList from '../../components/SingleSetList.vue'
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions } = createNamespacedHelpers('visionData')
+const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
+  'visionData'
+)
 export default {
   data() {
     return {
+      courseId:this.$route.params.courseId,
       selectCate: 0,
       spread: true,
-      ascDown: require('../../assets/vision_list_down.png'),
-      ascUp: require('../../assets/vision_list_up.png'),
-      Ascending: true
+      ascDown: require('../../assets/images/vision_list_down.png'),
+      ascUp: require('../../assets/images/vision_list_up.png'),
+      Ascending: true,
+      courseCount: 0
     }
   },
-  computed: mapState(['categoryList']),
+  // props: ['courseId'],
+  computed: { 
+    ...mapState(['categoryList','courseName','userAccessStatus'])
+  },
   components: {
     SingleSetList
   },
   methods: {
-    ...mapActions(['reverse']),
+    ...mapActions(['reverse', 'getCategoryList']),
     spreat(id) {
       if (id === this.selectCate) {
         this.spread = !this.spread
@@ -49,7 +63,12 @@ export default {
     }
   },
   mounted() {
-    this.selectCate = this.categoryList[0].id
+    this.getCategoryList(this.$route.params.courseId).then(() => {
+      this.selectCate = this.categoryList[0].id
+      this.categoryList.map(item => {
+        this.courseCount += item.lessonList.length
+      })
+    })
   }
 }
 </script>
@@ -73,7 +92,7 @@ export default {
   display: flex;
   border: 2px rgb(255, 163, 47) solid;
   border-radius: 8px;
-  font-size: 24px;
+
   color: rgb(255, 163, 47);
   margin-right: 28px;
   line-height: 60px;

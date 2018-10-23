@@ -1,140 +1,142 @@
 <template>
-    <div class="books-container">
-        <hr>
-        <div class="book-list">
-            <router-link v-for="item of bookList" :key="item.id" to="/audio/audioplay">
-                <div class="book-item">
-                    <img :src="item.isPlaying?playingIcon:pauseIcon" >
-                    <div class="book-content">
-                        <p :class="{'book-title-playing':item.isPlaying}">
-                            文学| 为什么抱怨科技没有食堂?
+    <div>
+       <van-list
+               class="freeZone-list"
+          v-model="refreshing"
+          :finished="finished"
+          :immediate-check="false"
+          @load="scrollBottom"
+          @offset="10">
+            <router-link class="qhht-flex freeZone-item" v-for="item of freeZoneList" :key="item.id" :to="{name:'AudioPlay', params:{id:item.id},query:{columnType:'FreeZone'}}">
+                    <img  class="freeZone-infoBtn" :src="playingId===item.id?playingIcon:pauseIcon" >
+                    <div class="freeZone-content">
+                        <p class="freeZone-item-title" :class="{'book-title-playing':playingId === item.id}">
+                           {{ item.title}}
                         </p>
-                        <div class="book-bottom">
-                            <span :class="{'book-datetime':item.isPlaying}">{{item.isPlaying?'最新':'2018/08/11'}}</span>
-                            <span class="book-state">时长02:11 | 未学习</span>
-                        </div>
-                    </div>
+                        <span class="book-datetime" v-if="isNewest(item.createTime,timeLen)">{{item.createTime| createtimeFormat(timeLen)}}</span>
+                        <span>时长{{item.totalTime | formatDuring}} | {{item.learnTime |learntimeFormat(item.totalTime,item.id)}}</span>
                 </div>
-                <hr>
-            </router-link> 
-                <button :class="{subscribe:isSubscribe}" @click="isSubscribe = !isSubscribe">订阅</button> 
-        </div>
+            </router-link>
+            </van-list>
+        <p class="footer-warn">没有更多啦</p>
+           <a class="qhht-blockButton subscribe-btn" :class="{'subscribe-disabled':isSubscribe}" @click="subscribe">{{isSubscribe?'已订阅':'订阅'}}</a>
     </div>
 </template> 
 <script>
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions, mapGetters } = createNamespacedHelpers('freezone')
+const { mapState, mapActions, mapGetters } = createNamespacedHelpers('FreeZoneData')
 export default {
+  filters: {
+    createtimeFormat: function(value, timeLen) {
+      let createDate = new Date(value)
+      let isNewest = Date.now() - createDate.getTime() < timeLen
+      if (isNewest) {
+        return '最新'
+      } else {
+        let year = createDate.getFullYear()
+        let month = createDate.getMonth() + 1
+        let m = month < 10 ? '0' + month : month
+        let date = createDate.getDate()
+        let d = date < 10 ? '0' + date : date
+        return year + '/' + m + '/' + d
+      }
+    }
+  },
   data() {
     return {
-      playingIcon: require('../../assets/freezone_playing.png'),
-      pauseIcon: require('../../assets/freezone_pause.png'),
-      bookList: [
-        { id: 1, isPlaying: true },
-        { id: 2, isPlaying: false },
-        { id: 3, isPlaying: false },
-        { id: 4, isPlaying: false },
-        { id: 5, isPlaying: false },
-        { id: 6, isPlaying: false },
-        { id: 7, isPlaying: false },
-        { id: 8, isPlaying: false },
-        { id: 9, isPlaying: false },
-        { id: 10, isPlaying: false },
-        { id: 11, isPlaying: false }
-      ],
-      isSubscribe: false
+      timeLen: 30 * 24 * 60 * 60 * 1000,
+      playingIcon: require('../../assets/images/freezone_playing.png'),
+      pauseIcon: require('../../assets/images/freezone_pause.png'),
+      refreshing: false
+    }
+  },
+  computed: {
+    ...mapState(['freeZoneList', 'loading', 'finished', 'isSubscribe']),
+    ...mapGetters(['playingId'])
+  },
+  created() {
+    this.getFreezoneList(1)
+    this.getUserByToken()
+  },
+  watch: {
+    loading: function(loading) {
+      this.refreshing = loading
     }
   },
   methods: {
+    ...mapActions(['getFreezoneList', 'doFreeLesson', 'getUserByToken']),
+    //分页加载
+    scrollBottom() {
+      this.getFreezoneList()
+    },
+    isNewest(createTime, timeLen) {
+      let createDate = new Date(createTime)
+      return Date.now() - createDate.getTime() < timeLen
+    },
     subscribe() {
-      //TODO 订阅代码
-      Toast('订阅')
+      if (this.isSubscribe) {
+        this.$toast('已订阅')
+      } else {
+        this.doFreeLesson()
+      }
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.books-container {
-  hr {
-    height: 1px; /*no*/
-    background: rgb(227, 227, 227);
-    border: 0;
-  }
-  .book-list {
-    display: flex;
-    flex-direction: column;
-    padding-bottom: 116px;
-    hr {
-      height: 1px; /*no*/
-      background: rgb(227, 227, 227);
-      border: 0;
-      margin: 0 40px;
-      box-sizing: border-box;
-    }
-  }
-  .book-item {
-    display: flex;
-    flex-direction: row;
-    padding: 40px;
-    align-items: center;
-    img {
-      width: 60px;
-      height: 60px;
-      margin: auto 20px auto 0;
-    }
-  }
-  .book-content {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    p {
-      line-height: 28px;
-      margin: 0 0 12px 0;
-      font-size: 28px;
-      color: rgb(51, 51, 51);
-    }
-    .book-title-playing {
-      color: rgb(255, 163, 47);
-    }
-  }
-  .book-bottom {
-    margin: 12px 0 0px 0;
-    line-height: 24px;
-    span {
-      font-size: 24px;
-      color: rgb(102, 102, 102);
-      margin-right: 20px;
-    }
-    .book-datetime {
-      font-size: 24px;
-      border: 1px solid; /*no*/
-      border-radius: 10px;
-      padding: 2px 20px;
-      color: red;
-      margin-right: 20px;
-    }
-  }
-  button {
-    z-index: 99999;
-    position: fixed;
-    height: 96px;
-    color: white;
-    font-size: 32px;
-    width: 100%;
-    bottom: 0px;
-    border: 0;
-    background-color: rgb(255, 163, 47);
-    outline: none;
-  }
-  .subscribe {
-    background-color: rgb(230, 230, 230);
-  }
-  button:focus {
-    outline: 0;
+.freeZone-list {
+  padding: 0 20px;
+  letter-spacing: 1px;
+}
+.freeZone-item {
+  padding: 32px;
+  border: 0;
+  border-bottom: 2px #f1f1f1 solid;
+}
+.freeZone-item-title {
+  margin-bottom: 20px;
+  font-size: 28px;
+  color: #333;
+  &.book-title-playing {
+    font-weight: bolder;
+    color: #ffa32f;
   }
 }
-.book-subscribe:focus {
-  outline: 0;
+
+.freeZone-infoBtn {
+  width: 60px;
+  margin-right: 20px;
+}
+.freeZone-content {
+  flex-grow: 1;
+  color: #666;
+}
+.book-datetime {
+  border: 2px solid #ed6c67;
+  border-radius: 6px;
+  padding: 4px 20px;
+  color: #ed6c67;
+  margin-right: 20px;
+}
+.footer-warn {
+  margin: 96px 0 192px;
+  text-align: center;
+  font-weight: bolder;
+  color: #c8c8c8;
+}
+.subscribe-btn {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 96px;
+  line-height: 96px;
+  font-size: 32px;
+  border-radius: 0;
+  outline: none;
+}
+.subscribe-disabled {
+  background-color: #e6e6e6;
 }
 </style>

@@ -1,171 +1,188 @@
 <template>
-  <div class="audioplay-container">
+<div>
+   <div class="lazy-img-most audioplay-container" v-lazy:background-image="`${audio.coverPic}?imageView2/1/w/750/h/750`" ref='container'>
+  
     <!-- 封面 -->
-    <img :src="audio.coverPic" class="cover">
-    <!-- 主，副标题 -->
-    <h3> {{audio.title}}</h3>
-    <h4> {{audio.subTitle}}</h4>
-    <!-- 中间tabbar -->
-    <div class="tab-container">
-      <div class="tab-item" @click="onCollect">
-        <img :src="isLike?require('../../assets/audio_love_collect.png'):require('../../assets/audio_love_normal.png')">
+    <div class="controller-container" ref='controller'>
+      <!-- 主，副标题 -->
+      <h3> {{audio.title}}</h3>
+      <h4> {{audio.subTitle}}</h4>
+      <!-- 中间tabbar -->
+      <div class="tab-container">
+        <div class="tab-container-collect" @click="onCollect"
+         :style="{backgroundImage:isLike
+         ? 'url('+require('../../assets/images/love_collect.png')+')'
+         : 'url('+require('../../assets/images/audio_love_normal.png')+')'}">
+        </div>
+        <div v-if="'1007'!=columnType" class="tab-container-draft" @click="onDraft"/>
+        <div  class="tab-container-comment" @click="toComment">
+          <span>{{audio.commentCount}}</span>
+        </div>
+        <div class="tab-container-share" @click="onShare"/>
       </div>
-      <router-link :to="'/audio/audiodraft/'+lessonId" v-if="!hiddenDraft" class="tab-item" tag="div">
-        <img src="../../assets/audio_play_manuscripts.png">
-      </router-link>
-      <router-link :to="'/audio/audiocmts/'+lessonId" class="tab-item" tag="div">
-        <span>{{audio.commentCount}}</span>
-        <img src="../../assets/audio_play_comments.png">
-      </router-link>
-      <div class="tab-item" @click="onShare">
-        <img src="../../assets/audio_play_share.jpg">
+      <!-- 进度条 -->
+      <div class="slider-container"> 
+        <div slot="start">{{currentTime | formatDuring}}</div>
+        <van-slider style="width:80%;" 
+          v-model="progress"
+          :max="maxTime" 
+          :min="0"
+          bar-height="2px" 
+          @change="onSliderChnage"/>
+        <div slot="end">{{ maxTime | formatDuring}}</div>
       </div>
-    </div>
-    <!-- 进度条 -->
-    <div class="slider-container">
-      <div slot="start">{{parseInt(touching?progress:currentTime(touching,progress)) | formatDuring}}</div>
-      <!-- <mt-range ref="mtrange" v-model="currentTime" :min="0" :max="duration" :step="100/duration" :bar-height="2"/> 
-       let percent = parseInt(e.target.value * 100 / e.target.max)
-      e.target.style =  'background: linear-gradient(to right,#FFCD7D ' + percent + '%,  #E5E5E5 1%, #E5E5E5'
-      -->
-    <input type="range" 
-       @input="onInputChange" 
-       :value="touching?progress:currentTime(touching,progress)" 
-       :min="0" 
-       :max="maxTime" 
-       :style="{background:touching
-       ?'linear-gradient(to right,#FFCD7D ' + parseInt(progress * 100 / maxTime) + '%,  #E5E5E5 1%, #E5E5E5'
-       : 'linear-gradient(to right,#FFCD7D ' + parseInt(currentTime(touching,progress) * 100 / maxTime) + '%,  #E5E5E5 1%, #E5E5E5'}"
-       @touchstart="handleTouchStart" 
-       @touchcancel="handleTouchCancel" 
-       @touchmove="handleTouchMove"
-       @touchend="handleTouchEnd"/>
-      <div slot="end">{{ maxTime | formatDuring}}</div>
-    </div>
-    <!-- <vue-slider></vue-slider> -->
-    <!-- <div class="play-slider">
-      <span>05:32</span>
-      <mu-slider :display-value="display" @change="sliderChange" class="demo-slider" v-model="background"></mu-slider>
-      <span>06:23</span>
-    </div> -->
-    <!-- 播放按钮 -->
-    <div class="play-btns">
-      <div class="btn-item" @click="onPlayMode">
-        <img :src="'single'==playMode?require('../../assets/audio_play_single.png'):require('../../assets/audio_play_sort.png')">
-      </div>
-      <div class="btn-item" @click="onPlayPrv">
-        <img src="../../assets/audio_play_prv.png">
-      </div>
-      <div :class="{'play-btn-active':playing}" class="btn-item" @click="onPlayPause">
-        <img :src="playing?require('../../assets/audio_play_play.png'):require('../../assets/audio_play_pause.png')">
-      </div>
-      <div class="btn-item" @click="onPlayNext">
-        <img src="../../assets/audio_play_next.png">
-      </div>
-      <div class="btn-item" @click="onPlayList">
-        <img src="../../assets/audio_play_list.png">
+      <!-- 播放按钮 -->
+      <div class="play-btns">
+        <div class="btn-item" :style="{backgroundImage:`url(${'single'==playMode?singleIcon:orderIcon})`}" @click="onPlayMode" />
+        <div class="btn-item" :style="{backgroundImage:`url(${preIcon})`}" @click="onPlayPrv"/> 
+        <div :class="{'btn-item':true,'play-btn-active':playing}"  @click="onPlayPause">
+          <span :style="{backgroundImage:`url(${playing?playIcon:pauseIcon})`}"/>
+        </div>
+        <div class="btn-item" :style="{backgroundImage:`url(${nextIcon})`}" @click="onPlayNext"/>  
+        <div class="btn-item" :style="{backgroundImage:`url(${listIcon})`}" @click="onPlayList"/>
       </div>
     </div>
     <!-- 音频列表弹框 -->
 
-    <van-popup v-model="popupVisible" position="bottom"  close-on-click-overlay>
+    <van-popup v-model="popupVisible" position="bottom"  close-on-click-overlay >
       <div class="play-list-container">
         <div class="list-header">
           <h3>播放列表</h3>
         </div>
         <hr>
         <div class="list-container">
-          <div v-for="item of singleSetList" :key="item.id" class="list-item">
+          <div v-for="(item,index) of singleSetList" :key="item.id" class="list-item">
             <div class="list-content" @click="onItemClick(item)">
-              <img v-if="lessonId==item.id" src="../../assets/audio_list_playing.png">
+              <img v-if="lessonId==item.id" src="../../assets/images/audio_list_playing.png">
               <p :class="{'p-playing':lessonId==item.id}">{{item.title}}</p>
             </div>
-            <hr>
+            <hr v-show="singleSetList.length-1 != index">
           </div>
         </div>
         <div class="list-close" @click="onCloseList">关闭</div>
       </div>
     </van-popup>
     <!-- 分享框 -->
-    <share-pop :show="showShare" @close="closeShare" :shareid="audio.courseId"/>
+    <share-pop :show="showShare" @close="closeShare" :courseId="courseId" :columnType ="columnType"/>
+     <!--loading-->
+     <div class="loading-container" v-show="isBuffering">
+        <van-loading color="white" />
+     </div>
   </div>
+</div>
+
 </template>
 <script>
-import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions, mapGetters } = createNamespacedHelpers('audio')
-
+import { courseType } from '../../utils/config'
 import SharePop from '../share/Share.vue'
-import AudioTask from '../../utils/AudioTask.js'
-
+import {createNamespacedHelpers,mapState as rootState, mapActions as rootActions} from 'vuex'
+const {mapState,mapMutations, mapActions,mapGetters} = createNamespacedHelpers('audiotaskData/audioData')
 export default {
-  components: {
-    'share-pop': SharePop
-  },
+  components: { 'share-pop': SharePop },
   data() {
     return {
-      lessonId: this.$route.query.id,
-      hiddenDraft:this.$route.query.hiddenDraft,
-      isInit:true,
+      singleIcon:require('../../assets/images/audio_play_single.png'),
+      orderIcon:require('../../assets/images/audio_play_sort.png'),
+      listIcon:require('../../assets/images/audio_play_list.png'),
+      preIcon:require('../../assets/images/audio_play_prv.png'),
+      nextIcon:require('../../assets/images/audio_play_next.png'),
+      playIcon:require('../../assets/images/audio_play_play.png'),
+      pauseIcon:require('../../assets/images/icon_pause.png'),
+      lessonId: this.$route.params.id, 
+      courseId:this.$route.query.courseId,
+      columnType: this.$route.query.columnType, //播放类型 FreeZone(1001) 免费专区  OnlineCourse(1005) 在线课堂 OnlineVision(1003) 在线视野  Readings(1007) 读书会 
+      courseName: this.$route.query.courseName, //专栏名
+      isInit: true, 
       play: true,
-      isSingle: false, //是否单个循环
-      // isPlaying: false, //是否正在播放
       popupVisible: false, //是否显示音频列表弹框
-      playIndex: 0, //播放第几首
       showShare: false, //是否显示分享框
-      // currentTime: '0', //播放音频进度
-      // duration: 100, //播放音频最大时长
       touching: false, //slider触摸
-      progress:0,
-      rangeValue: 0,
-      cover: '',
-      progressColor: '#ff0000',
-      background: 12,
-      display: false,
-      touchStart: 0,
-      audioTask:AudioTask.getInstance()  //音频播放任务管理
+      progress: 0 ,     
     }
   },
-  computed:{...mapState({isLike(state){ 
-    let like = state.isLike
-    if(!this.isInit){
-      if(like)
-      this.$toast.success({duration:2000,message: '已添加到我喜欢的'})
-      else
-      this.$toast.fail({duration:2000,message:'已取消喜欢'})
-    }
-    return state.isLike
-  },'singleSetList':'singleSetList'}),
-  ...mapGetters(["audio",'currentTime','maxTime', 'playMode','status','playing']), 
+  computed: {
+    ...rootState(['url','columnDetail']),
+    ...mapState({
+      isLike(state) {
+        let like = state.isLike
+        if (!this.isInit) {
+          if (like)this.$toast.success({ duration: 2000, message: '已添加到我喜欢的' })
+          else this.$toast.fail({ duration: 2000, message: '已取消喜欢' })
+        }
+        return state.isLike
+      }
+    }),
+    ...mapGetters([
+      'isLoading',
+      'isBuffering',
+      'audio',
+      'audioId', 
+      'currentTime',
+      'maxTime',
+      'playMode',
+      'status',
+      'playing',
+      'singleSetList'
+    ])
   },
   created() {
     this.isInit = true
-    this.playAudio({lessonId:this.lessonId}) 
+    this.bindCourseName(this.courseName) 
+    this.playAudio({ lessonId: this.lessonId, columnType: this.columnType })
+    this.setShareInfo({courseId:this.courseId,columnType: this.columnType})
+  }, 
+  watch: {
+    audioId: function(id) {
+      this.lessonId = id
+    },
+    currentTime: function(value) {
+      this.progress = (value * 100) / this.maxTime
+      return value
+    }
   },
-  methods: {
-    ...mapActions(['getAudioDetail','postFavorite','playAudio','pauseAudio','setPlayMode','seekTo','pre','next']),
-    //进度条拖动 OTAwOWY1ZjgtZTJiYy00Y2IwLTk4ZDktNzIxYjMyMTUzYzU2
-    sliderChange(value) {
-      console.log(value)
-      console.log(this.$refs.content)
-    }, 
+  methods: { 
+    ...mapActions([ 
+      'setShareInfo',
+      'postFavorite',
+      'postUnFavorite',
+      'playAudio',
+      'pauseAudio',
+      'setPlayMode',
+      'seekTo',
+      'pre',
+      'next',
+      'bindCourseName' 
+    ]),
+    ...mapMutations(['clearData']),
     //拖动进度改变进度
     onInputChange(e) {
-      this.progress = e.target.value  
-    },
-    handleTouchStart(e){
-      this.touching = true  
-    },
-    handleTouchMove(){},
-    handleTouchEnd(e){ 
-      this.touching = false  
-      this.seekTo(this.progress) 
-    },
-    handleTouchCancel(){
-      this.touching = false
-    },
+      this.progress = e.target.value
+    },  
+    onSliderChnage() { 
+      this.seekTo(this.progress*this.maxTime/100)
+    }, 
     //收藏
     onCollect() {
-      this.postFavorite({ lessonId: this.lessonId })
+      this.isInit = false
+      if (this.isLike) {
+        this.postUnFavorite({ lessonId: this.lessonId })
+      } else {
+        this.postFavorite({ lessonId: this.lessonId })
+      }
+    },
+    //查看文稿
+    onDraft() {
+      this.$router.push({
+        name: 'AudioDraft',
+        params: { lessonid: this.lessonId }
+      })
+    },
+    //评论
+    toComment() {
+      this.$router.push({
+        name: 'AudioCmts',
+        params: { lessonid: this.lessonId }
+      })
     },
     //分享
     onShare() {
@@ -177,59 +194,66 @@ export default {
     },
     //切换播放模式
     onPlayMode() {
-      let mode = this.playMode == "single"?'order':'single'
-      this.$toast(mode=='single' ? '单曲循环' : '列表循环') 
+      let mode = this.playMode == 'single' ? 'order' : 'single'
+      this.$toast(mode == 'single' ? '单曲循环' : '列表循环')
       this.setPlayMode(mode)
     },
-      //播放/暂停
-      onPlayPause() {
-        this.playAudio() 
-      },
+    //播放/暂停
+    onPlayPause() {
+      this.playAudio()
+    },
     //上一首
-    onPlayPrv() {
-      if(!this.audio)return
+    onPlayPrv() {  
+      if (!this.audio) return 
       let preId = this.audio.preLessonId
-      if(preId&&-1!=preId){
-        this.pre({lessonId:preId})
-      }else{
-          this.$toast.fail('这是第一条')
+      // let useraccessstatus =this.columnDetail ? this.columnDetail.userAccessStatus : 1001
+      // if(this.singleSetList
+      //   && 1001 != useraccessstatus 
+      //   && 1003 != useraccessstatus 
+      //   && 1008 != useraccessstatus) {
+      //   let listenable  = true
+      //   this.singleSetList.some(item=>{ 
+      //       if(item.id == preId && !item.isFree){
+      //         listenable = false   
+      //         this.$toast.fail('这是第一条')
+      //         return
+      //       }
+      //     }) 
+      //     if(!listenable)return
+      // } 
+ 
+      if (preId && -1 != preId) {
+        this.pre({ lessonId: preId })
+      } else {
+        this.$toast.fail('这是第一条')
       }
     },
     //下一首
-    onPlayNext() {
-         if(!this.audio)return
-         let nextId = this.audio.nextLessonId
-         if(nextId&&-1!=nextId){
-           this.pre({lessonId:nextId})
-         }else{
-             this.$toast.fail('已经是最后一条')
-         } 
+    onPlayNext() { 
+      if (!this.audio) return 
+      let nextId = this.audio.nextLessonId
+      // let useraccessstatus =this.columnDetail ? this.columnDetail.userAccessStatus : 1001
+      // if( this.singleSetList
+      //   && 1001 != useraccessstatus 
+      //   && 1003 != useraccessstatus 
+      //   && 1008 != useraccessstatus) {
+      //     let listenable  = true 
+      //     this.singleSetList.some(item=>{ 
+      //       if(item.id == nextId && !item.isFree){
+      //         listenable = false
+      //         this.$toast.fail('已经是最后一条')
+      //         return
+      //       }
+      //     }) 
+      //   if(!listenable)return
+      // } 
+        
+      if (nextId && -1 != nextId) {  
+        this.next({ lessonId: nextId })
+      } else {
+        this.$toast.fail('已经是最后一条')
+      }
     },
-    //音频进度监听
-    // onTimeUpdate(currentTime, duration) {
-    //   if (this.touching) return
-    //   this.currentTime = currentTime
-    //   this.duration = duration
-    //   this.$nextTick(() => {
-    //     let percent = parseInt(Math.ceil(currentTime * 100 / duration))
-    //     this.$refs.range.style =
-    //       'background: linear-gradient(to right,#FFCD7D ' +
-    //       percent +
-    //       '%, #E5E5E5 1%, #E5E5E5'
-    //   })
-    // },
-    //播放状态监听
-    // onStateUpdate(status) { 
-    //   if (status == 'canplaythrough') {
-    //     this.duration = AudioTask.getInstance().getDuration()
-    //   }
-    //   if (status == 'ended') {
-    //     this.isPlaying = false
-    //   }
-    //   if (status == 'play') {
-    //     this.isPlaying = true
-    //   }
-    // },
     //音频列表
     onPlayList() {
       this.popupVisible = true
@@ -239,67 +263,118 @@ export default {
       this.popupVisible = false
     },
     //列表Item点击事件
-
-    onItemClick(audio) { 
-      if(audio.isFree){
-         this.playAudio({lessonId:this.lessonId})  
-      }else{
-          this.$toast({duration:2000,message:'你还未购买该专栏,请购买之后收听!!!'})
-      } 
+    onItemClick(audio) {
+      this.isInit = true
       this.popupVisible = false
+      this.$router.replace({
+        name: 'AudioPlay',
+        params: { id: audio.id },
+        query: { courseId: this.courseId,columnType: this.columnType }
+      })
+      this.playAudio({ lessonId: audio.id, columnType: this.columnType })
     }
+  },
+  /**
+   * 监听页面离开，设置本页面是否缓存起来， 如果跳转到评论页面, 设置本页面router:meta.keepAlive = true, 否则 = false
+   */
+  // beforeRouteLeave(to, from, next) {  
+  //     console.log("updated")
+  //   // 设置下一个路由的 meta
+  //   from.meta.keepAlive = false // 让 頁面缓存，即不刷新
+  //   next()
+  // }, 
+  /**
+   * 监听页面进入，设置本页面是否缓存起来， 如果跳转到评论页面, 设置本页面router:meta.keepAlive = true, 否则 = false
+   */
+  // beforeRouteEnter(to, from, next) {   
+  //   next(vm => {
+  //   console.log(to,from)
+  //     // 通过 `vm` 访问组件实例
+  //     to.meta.keepAlive = false // 让 頁面缓存，即不刷新
+  //   }) 
+  // }
+  mounted(){
+    
+     this.$nextTick(()=>{
+        const {height,top,bottom}=this.$refs.controller.getBoundingClientRect()
+        const {innerHeight,innerWidth}=window;
+          if(top<innerWidth)  this.$refs.container.style.height=top+'px'
+     })
+    
+  },
+  beforeDestroy(){
+    this.clearData()
   }
 }
 </script>
-<style lang="scss" scoped>
+<style lang="scss" >
 .audioplay-container {
-  display: flex;
-  flex-direction: column;
+  background: #fff center/100% no-repeat;
+  height: 750px;
   .cover {
     height: 750px;
-    width: 100%;
     background-color: #d5d8de;
   }
+  .controller-container {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background-color: white;
+  }
   h3 {
+    line-height: 32px;
     font-size: 32px;
     color: rgb(38, 38, 38);
     text-align: center;
-    margin: 40px 0 0 0;
+    padding-top: 40px;
   }
   h4 {
-    font-size: 24px;
+    line-height: 24px;
     color: rgb(118, 118, 118);
     text-align: center;
-    margin: 18px 0 0 0;
+    padding-top: 18px;
   }
   .tab-container {
-    position: relative;
     display: flex;
     justify-content: space-between;
     flex-direction: row;
-    margin: 64px 120px 0;
-    span {
-      position: relative;
-      left: 48px;
-      top: -20px;
-      font-size: 20px;
-      color: rgb(146, 145, 150);
-    }
-    > :nth-child(1) img {
+    padding: 60px 120px 0;
+    &-collect {
       width: 48px;
       height: 41px;
+      background-repeat: no-repeat;
+      background-size: 48px 41px;
     }
-    > :nth-child(2) img {
+    &-draft {
       width: 37px;
       height: 45px;
+      background-repeat: no-repeat;
+      background-size: 37px 45px;
+      background-image: url('../../assets/images/audio_play_manuscripts.png');
     }
-    > :nth-child(3) img {
+    &-comment {
+      position: relative;
       width: 41px;
       height: 41px;
+      background-repeat: no-repeat;
+      background-size: 41px 41px;
+      background-image: url('../../assets/images/audio_play_comments.png');
+      span {
+        left: 30px;
+        top: -10px;
+        position: absolute;
+        font-size: 20px;
+        color: rgb(146, 145, 150);
+      }
     }
-    > :nth-child(4) img {
+    &-share {
       width: 42px;
       height: 40px;
+      background-repeat: no-repeat;
+      background-size: 41px 41px;
+      background-image: url('../../assets/images/audio_play_share.jpg');
     }
   }
 
@@ -308,17 +383,17 @@ export default {
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-top: 32px;
+    padding-top: 32px;
 
     > :nth-child(1) {
-      margin-right: 20px;
+      margin-right: 30px;
       font-size: 20px;
       color: rgb(146, 145, 150);
     }
     > :nth-child(3) {
       font-size: 20px;
       color: rgb(146, 145, 150);
-      margin-left: 20px;
+      margin-left: 30px;
     }
     input[type='range'] {
       // background-image: -webkit-linear-gradient(left,red, yellow);   //我咋记得是 to left
@@ -342,66 +417,43 @@ export default {
       width: 32px;
       transform: translateY(0px);
       /*background: none repeat scroll 0 0 #5891f5;*/
-      background: url(../../assets/audio_play_slider.png) no-repeat;
-      background-position: center;
-      background-size: 32px;
+      background: url(../../assets/images/audio_play_slider.png) center/32px
+        no-repeat;
       border-radius: 15px;
       // border: 5px solid #006eb3;
       /*-webkit-box-shadow: 0 -1px 1px #fc7701 inset;*/
     }
+    .van-slider {
+      background-color: #e5e5e5;
+      /deep/.van-slider__bar {
+        max-width: 100%;
+      }
+      .van-slider__button {
+        background: url(../../assets/images/audio_play_slider.png) center/18px
+          no-repeat;
+        border-radius: 15px;
+        width: 18px;
+        height: 18px;
+      }
+      .van-slider__bar {
+        background-color: #ffcd7d;
+      }
+    }
   }
-
-  // .play-slider {
-  //   padding: 0 24px;
-  //   margin-top: 32px;
-  //   display: flex;
-  //   flex-direction: row;
-  //   justify-content: space-between;
-  //   align-items: center;
-  //   span {
-  //     color: rgb(189, 192, 199);
-  //     font-size: 20px;
-  //   }
-  //   .mu-slider {
-  //     margin: 0 20px;
-  //     .mu-slider-track {
-  //       background-color: rgb(229, 229, 229);
-  //     }
-  //     .mu-slider-fill {
-  //       background-color: rgb(255, 205, 126);
-  //     }
-  //     .mu-slider-thumb {
-  //       background-image: url(../../assets/audio_play_slider.png);
-  //       background-size: 32px;
-  //       height: 32px;
-  //       background-color: transparent;
-  //       width: 32px;
-  //       max-width: 32px;
-  //       max-height: 32px;
-  //       border: none;
-  //     }
-  //     .zero .mu-slider-thumb {
-  //       border: none;
-  //     }
-  //   }
-  // }
-
   .play-btns {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin-top: 58px;
-    padding: 0 36px 22px;
+    padding: 58px 36px 70px;
     box-sizing: content-box;
+    align-items: center;
     .btn-item {
       display: flex;
       align-items: center;
-      img {
-        vertical-align: middle;
-        margin: 0;
-        width: 50px;
-        height: 46px;
-      }
+      background-size: 50px;
+      width: 50px;
+      height: 50px;
+      background-repeat: no-repeat;   
     }
     .btn-item:nth-child(2) {
       margin-left: 40px;
@@ -415,19 +467,24 @@ export default {
       background-color: #ff8a1f;
       border-radius: 50%;
       justify-content: center;
-      padding: 26px 29px 26px 30px;
-      img {
+      display: flex; 
+      align-items: center;
+
+      // padding: 26px 29px 26px 30px;
+      // padding: 26px 35px; 
+      span {
         margin-left: 4px;
-        width: 20px;
+        width: 31px; 
         height: 38px;
+        background-size: 31px 38px;
+        background-repeat: no-repeat;
       }
     }
     .play-btn-active {
-      padding: 26px 35px;
-      img {
-        margin-left: 4px;
-        width: 31px;
-        height: 38px;
+      // padding: 26px 35px; 
+      span {
+        margin-left: 2px; 
+        background-repeat: no-repeat; 
       }
     }
   }
@@ -497,42 +554,65 @@ export default {
     background-color: rgb(245, 245, 245);
   }
 }
-/**收藏提示ICON*/
-.van-icon-success {
-  background-image: url(../../assets/audio_love_collect.png);
+
+.van-toast {
+  /deep/.van-icon-success {
+    background-image: url('../../assets/images/love_collect.png');
+    background-size: 28px;
+    background-repeat: no-repeat;
+    margin: 1px auto 12px;
+    height: 28px;
+    width: 28px;
+  }
+  .van-icon-success::before {
+    content: none;
+  }
+  .van-toast--text {
+    max-width: 80%;
+    white-space: nowrap;
+    min-width: inherit;
+    width: auto;
+  }
+
+  .van-icon-fail::before {
+    content: none;
+  }
+  .van-toast__text {
+    padding-top: 0;
+    width: auto;
+  }
+
+  .van-list__loading {
+    width: 100vw;
+  }
+}
+.van-toast.van-toast--default {
+  min-height: 0;
+  width: auto;
+  min-width: inherit;
+  white-space: nowrap;
+}
+.van-toast.van-icon-fail {
+  background-image: url('../../assets/images/audio_play_tip.png');
   background-size: 28px;
   background-repeat: no-repeat;
   margin: 1px auto 12px;
   height: 28px;
   width: 28px;
 }
-.van-icon-success::before {
-  content: none;
-}
-.van-toast--text {
-  max-width: 80%;
-  white-space: nowrap;
-}
-
-.van-icon-fail::before {
-  content: none;
-}
-.van-toast--default .van-toast__text {
-  padding-top: 0;
-}
-.van-toast--default {
-  min-height: 0;
-  width: auto;
-  white-space: nowrap;
-}
-
-.first-icon,
-.last-icon {
-  background-image: url(../../assets/audio_play_tip.png);
-  background-size: 56px;
-  background-repeat: no-repeat;
-  margin: 0 auto;
-  height: 56px;
-  width: 56px;
+//loading框
+.loading-container {
+  position: fixed;
+  z-index: 9999;
+  width: 180px;
+  height: 180px;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: translate(-50%, -50%);
+  background-color: rgba($color: #000000, $alpha: 0.5);
+  border-radius: 5px;
 }
 </style>

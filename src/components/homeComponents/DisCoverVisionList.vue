@@ -1,8 +1,6 @@
 <template>
-    <div class="list">
-        <div v-for="(item, index) in visionList" :key="index" class="cell">
-            <VisionCell :vision="item"/>
-        </div>
+    <div class="home_visionlist_bottom">
+        <VisionCell  v-for="(item, index) in visionList" :key="index" :vision="item"/>
     </div>
 </template>
 
@@ -17,11 +15,8 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.list {
-  width: 100%;
-}
-.cell {
-  height: 240px;
-  margin-bottom: 36px;
+.home_visionlist_bottom{
+   border-bottom: 2px solid #F1F1F1;
 }
 </style>
+

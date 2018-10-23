@@ -1,29 +1,11 @@
 <template>
   <div class="comments-container">
     <!-- 全部留言 -->
-    <!-- <div class="commment-list"> -->
-      <div v-if="commentList.length<=0" class="nodata-container">
-          还没有评论，快来评论吧!
-      </div>
-      <van-list
-          class="commment-list"
-          v-model="refreshing"
-          :finished="finished"
-          :immediate-check="false"
-          @load="scrollBottom"
-          @offset="10">
-      <!-- <div v-for="item of commentList" :key="item.id" class="comment-item"> -->
-           <van-cell  v-for="item of commentList" :key="item.id" class="comment-item" >
-                  <comment-item :comment="item"/>
-           </van-cell>
-      <!-- </div> -->
-      <!-- <div class="loadmore" v-scrollbottom="scrollBottom">加载更多</div> -->
-      </van-list>
-    <!-- </div> -->
+      <comment-list  :regionid="lessonId" :regiontype="2202"></comment-list>
     <!-- 评论按钮 -->
     <div class="comment-publish">
       <div class="comment-method" @click="onCommentMethod" v-if="false">
-        <img :src="isSpeak?require('../../assets/audio_cmt_text.png'):require('../../assets/audio_cmt_speak.png')">
+        <img :src="isSpeak?require('../../assets/images/audio_cmt_text.png'):require('../../assets/images/audio_cmt_speak.png')">
       </div>
       <div :class="{touched:isSpeaking}" class="comment-button">
         <p v-if="isSpeak" class="speak-btn" @touchstart.prevent="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
@@ -32,72 +14,49 @@
         <textarea v-else v-model="commentContent" rows="1" placeholder="写评论" @keyup.enter="onKeyUp"/>
       </div>
       <div v-if="!isSpeak" class="comment-send" @click="onSendComment">
-        <img :src="commentContent.length<=0?require('../../assets/cmt_send_unable.png'):require('../../assets/cmt_send_abled.png')">
+        <img :src="require('../../assets/images/cmt_send_abled.png')" :style="{opacity:commentContent.length<=0?'0.5':'1'}">
       </div>
     </div>
   </div>
 </template>
 <script>
+import CommentList from '../comment/CommentList.vue'
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions, mapMutations } = createNamespacedHelpers('comment')
-import CommentItem from '../CommentItem.vue'
+const { mapState, mapActions, mapMutations } = createNamespacedHelpers(
+  'commentData'
+)
 export default {
-  components: {'comment-item': CommentItem},
+  components: { 'comment-list': CommentList },
   data() {
     return {
       lessonId: this.$route.params.lessonid,
       isSpeak: false,
       isSpeaking: false,
-      commentContent: '',  
-      refreshing:false
+      commentContent: ''
     }
   },
-  directives:{
-    'scrollbottom':(el,binding)=>{
-      // window.onscroll = ()=>{
-      //   // console.log(el.scrollTop)
-      //   // console.log(el.scrollHeight)
-      //   // console.log(el.offsetHeight)
-      //   // binding.value()
-      // }
-    }
-  },
-  computed: { ...mapState(['commentList','finished','loading']) },
-  created() {
-    this.getCommentList({lessonId:this.lessonId,isLoadMore:false}) 
-  },
-  watch:{
-    loading:function(loading){
-      this.refreshing = loading
-    }
-  },
-  methods: { 
-    ...mapActions(['getCommentList', 'postComment']),
-    //分页加载
-    scrollBottom(){ 
-      console.log("分页加载")
-      this.getCommentList({lessonId:this.lessonId,isLoadMore:true}) 
-    },
+  methods: {
+    ...mapActions(['postComment']),
     //切换评论方式
     onCommentMethod() {
       this.isSpeak = !this.isSpeak
-    }, 
+    },
     //输入或者录入评论
     onInputeComment() {},
     //发送评论
-    onSendComment() {  
-       if(this.commentContent.trim().length<=0){
-           this.$toast('期待你宝贵的建议')
-           this.commentContent = ''
-         return
-       }
+    onSendComment() {
+      if (this.commentContent.trim().length <= 0) {
+        this.$toast('期待你宝贵的建议')
+        this.commentContent = ''
+        return
+      }
       this.postComment({
         regionId: this.lessonId, //单集id
         regionType: 2202, //目标类型（2201：专栏，2202：单集）
         commentType: 3301, //评论类型（3301:text,3302:voice,3303:text&voice)
         content: this.commentContent, //留言内容
         duration: '' //音频长度
-      }) 
+      })
       this.commentContent = ''
     },
     //点赞
@@ -106,27 +65,21 @@ export default {
       this.comments[index].isPraised = !isPraised
       this.$toast(isPraised ? '取消点赞' : '点赞成功')
     },
-    onKeyUp(key){ 
-      this.onSendComment(); 
-    },
- 
-  }
+    onKeyUp(key) {
+      this.onSendComment()
+    }
+  },
+    /**
+   * 监听页面离开，设置本页面是否缓存起来， 如果跳转到评论页面, 设置本页面router:meta.keepAlive = true, 否则 = false
+   */
+  // beforeRouteLeave(to, from, next) {  
+  //   // 设置下一个路由的 meta
+  //   to.meta.keepAlive = true // 让 頁面缓存，即不刷新
+  //   next()
+  // }, 
 }
 </script>
 <style lang='scss' scoped>
-.commment-list {
-  display: flex;
-  flex-direction: column;
-  padding-bottom: 160px;
-  padding-top: 10px;
-}
-.nodata-container{
-  height: 100vh;
-  width: 100%;
-  text-align: center;
-  line-height: 80vh;
-  font-size: 20px;
-}
 .comment-publish {
   position: fixed;
   bottom: 0;

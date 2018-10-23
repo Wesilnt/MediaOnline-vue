@@ -1,8 +1,11 @@
 <template>
   <div class="book-detail-container">
+     <SkeletonFullScreen  v-if="dataLoading"/>
+    <div class="data-content" v-else>
+     <GroupHeader></GroupHeader>
     <!-- 1. 头部 -->
-    <div class="book-header-container">
-      <div class="book-cover" :style="{background:'url('+bookDetail.coverPic+')'}">
+    <div class="book-header-container" v-show="false">
+      <div class="book-cover" :style="{background:`url(${bookDetail?bookDetail.coverPic:''})`,'background-size':'100%'}">
         <span v-if="new Date().getTime() - new Date(bookDetail.createTime).getTime()<30*24*3600*1000">上新</span>
       </div>
     </div>
@@ -10,45 +13,33 @@
     <div class="book-persons-container">
       <div class="person-item">
         <div class="person-label">
-          <font>作</font>
-          <font>者:</font>
+          <span>作</span>
+          <span>者:</span>
         </div>
-        <font>{{bookDetail.authorName}}</font>
+        <span>{{bookDetail.authorName}}</span>
       </div>
       <hr>
       <div class="person-item">
         <div class="person-label">
-          <font>演</font>
-          <font>讲</font>
-          <font>者:</font>
+          <span>演</span>
+          <span>讲</span>
+          <span>者:</span>
         </div>
-        <font>{{bookDetail.commentator}}</font>
+        <span>{{bookDetail.commentator}}</span>
       </div>
       <hr>
       <div class="person-item">
         <div class="person-label">
-          <font>系</font>
-          <font>列:</font>
+          <span>系</span>
+          <span>列:</span>
         </div>
-        <font>{{bookDetail.series}}</font>
+        <span>{{bookDetail.series}}</span>
       </div>
       <hr>
     </div>
     <!-- 3. 作品属性 -->
     <div class="book-properties-container">
-      <p>{{bookDetail.radioIntro}}</p>
-      <!-- <div class="property-item">
-        <img src="../../assets/readings_detail_star.png">
-        <p> 教育部新课必读书目 </p>
-      </div>
-      <div class="property-item">
-        <img src="../../assets/readings_detail_star.png">
-        <p> 民国四大才子宅王鹏代表作</p>
-      </div>
-      <div class="property-item">
-        <img src="../../assets/readings_detail_star.png">
-        <p>现代诗性小说大师之作</p>
-      </div> -->
+      <p v-html="bookDetail.radioIntro"></p> 
     </div>
     <hr>
 
@@ -59,9 +50,7 @@
         <span>共{{bookDetail.availLessonCount}}集</span>
       </div>
       <div class="introduce-content">
-        <p>
-           {{bookDetail.description}}
-        </p>
+        <p v-html="bookDetail.description"/>
         <div class="intoduce-whole">
           <span @click="toLookWhole">查看全部</span>
         </div>
@@ -69,51 +58,121 @@
     </div>
     <hr>
     <!-- 5. 作品单集/章集 播放列表 -->
-    <singleset-list :list="singleSetList" :play-id="playLessonId"/>
+    <van-list 
+      v-model="refreshing"
+      :finished="singleFinished"
+      :immediate-check="false"
+      @load="scrollBottom"
+      @offset="10">
+         <SingleSetList 
+            :courseid="courseId"
+            :list="singleSetList" 
+            :play-id="playingId" 
+            :singletype="'1007'" 
+            :coursename="courseName" 
+            :useraccessstatus="userAccessStatus"/>
+    </van-list>
     <!-- 6. 分页布局 -->
-    <div class="load-more-container">
+    <div class="load-more-container" v-if="singleFinished">
       <span>没有更多了，不要再拉啦～</span>
     </div>
-
+    <!-- 7. 底部工具条 -->
+    <toolsNavbar 
+      :originPrice="'100'"
+      :groupPrice="'10'"
+      collageText="拼团"
+      collectText="集赞"
+      :collect='true'
+      :collage='true'/>
+     </div>
   </div>
 </template>
 <script>
+import SkeletonFullScreen from '../../components/SkeletonFullScreen'
+import toolsNavbar from '../../components/toolsNavbar.vue'
+import GroupHeader from '../onlineCourse/components/GroupHeader'
 import SingleSetList from '../../components/SingleSetList.vue'
-import AudioTask from '../../utils/AudioTask.js'
-import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions, mapGetters } = createNamespacedHelpers('readings') 
+import { createNamespacedHelpers,mapState as rootState,mapActions as rootActions } from 'vuex'
+const {
+  mapState,
+  mapMutations,
+  mapActions,
+  mapGetters
+} = createNamespacedHelpers('readingsData')
 export default {
-  components: { 'singleset-list': SingleSetList },
   data() {
     return {
-      courseId:this.$route.query.id,
-      playLessonId:0,
-      currentPage:1,
-      pageSize:20, 
+      courseId: this.$route.params.courseId,
+      currentPage: 1,
+      pageSize: 20,
+      refreshing: false
     }
   },
-
-  computed: {
-    ...mapState(['bookDetail', 'singleSetList'])
+  components: {
+     SingleSetList,
+    toolsNavbar,
+    GroupHeader,
+    SkeletonFullScreen
+  },
+  computed: {     
+      ...rootState(['url']),     
+    ...mapState([
+      'dataLoading',
+      'bookDetail',
+      'singleLoaing',
+      'singleFinished',
+      'singleSetList',
+      'courseName',
+      'userAccessStatus'
+    ]),
+    ...mapGetters(['playingId'])
   },
   created() {
-    this.playLessonId = AudioTask.getInstance().getId()
-    this.getBookDetail({courseId:this.courseId})
-    this.getSingleSetList({courseId:this.courseId,currentPage:this.currentPage,pageSize:this.pageSize})
+    this.initData({courseId: this.courseId, groupBuyId: this.$route.query.groupBuyId})
+    this.getBookDetail({courseId: this.courseId, groupBuyId: this.$route.query.groupBuyId})
+  },
+  mounted(){  
+    this.getUserInfo()
+    .then(user=>{ 
+      //拼装分享内容
+      this.shareData = {
+        link: this.url + `/#/home/readings/book/${this.courseId}`, 
+        title: this.courseName,
+        desc: '你一定会爱上国学课...',
+        imgUrl:`${this.bookDetail.sharePostUrl}?imageView2/1/w/100/h/100/format/jpg`,
+        successCB: () => console.log('分享回调成功') ,
+        cancelCB: () =>  console.log('分享回调失败')
+      } 
+      this.setWxShareFriend(this.shareData)
+      this.setWxShareZone(this.shareData)
+    }) 
+  },
+  watch: {
+    singleLoaing: function(loading) {
+      this.refreshing = loading
+    }
   },
   methods: {
+    ...rootActions(['getUserInfo', 'setWxShareFriend', 'setWxShareZone']),
+    ...mapMutations(['initData']),
     ...mapActions(['getBookDetail', 'getSingleSetList']),
     toLookWhole() {
-      this.$router.push({ path: '/home/readings/summary' }) 
+      this.$router.push({ path: '/home/readings/summary' })
+    },
+    //分页加载
+    scrollBottom() {
+      this.getSingleSetList()
     }
   }
 }
 </script>
 <style lang="scss" scoped>
 .book-detail-container {
+  display: flex;
+  flex-direction: column;
   background-color: white;
   hr {
-    height: 2px;
+    height:1px;/*no*/
     border: none;
     margin: 0 20px;
     background-color: rgb(237, 237, 237);
@@ -127,7 +186,6 @@ export default {
     justify-content: center;
     background-color: #f6f5f6;
     padding-top: 36px;
-
     .book-cover {
       position: relative;
       height: 350px;
@@ -163,7 +221,7 @@ export default {
       width: 124px;
       margin-right: 20px;
     }
-    .person-label > font {
+    .person-label > span {
       color: rgb(170, 175, 188);
       font-size: 28px;
     }
@@ -176,23 +234,7 @@ export default {
   .book-properties-container {
     padding: 40px 40px;
     display: flex;
-    flex-direction: column;
-    // .property-item {
-    //   display: flex;
-    //   flex-direction: row;
-    //   margin: 8px 0px;
-    //   align-items: center;
-    // }
-    // .property-item img {
-    //   width: 28px;
-    //   height: 28px;
-    // }
-    // .property-item p {
-    //   color: rgb(22, 35, 60);
-    //   font-size: 28px;
-    //   line-height: 28px;
-    //   margin: 0;
-    // }
+    flex-direction: column; 
     p {
       color: rgb(22, 35, 60);
       font-size: 28px;
@@ -219,7 +261,7 @@ export default {
       color: rgb(62, 62, 83);
     }
     .book-introduce-header :nth-child(2) {
-      font-size: 24px;
+
       align-self: flex-end;
       line-height: 24px;
       color: rgb(170, 175, 188);
@@ -256,8 +298,8 @@ export default {
     width: 100%;
     text-align: center;
     height: 64px;
-    font-size: 24px;
-    padding: 96px 0;
+
+    padding: 96px 0 216px;
     color: rgb(200, 200, 200);
   }
 }

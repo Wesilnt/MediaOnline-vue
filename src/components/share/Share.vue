@@ -1,26 +1,28 @@
 <template>
-  <div v-show="show" class="share-container">
+  <div v-show="show" class="share-container" @click.self="onCancel">
+    <div v-show="showTip" class="share-tip">
+    </div>
     <transition @after-leave="afterLeave">
       <div v-show="isOpen" class="share-content">
         <div class="share-src">
           此网页由www.shbaoyuantech.com提供
         </div>
         <div class="share-list">
-          <router-link class="share-item" :to="'/share/poster/'+shareid" tag="div">
+          <div class="share-item" @click="toPoster">
             <div class="share-icon">
-              <img src="../../assets/share_poster.png">
+              <img src="../../assets/images/share_poster.png">
             </div>
             <span class="share-label">生成海报</span>
-          </router-link>
+          </div>
           <div class="share-item" @click="onShareItem('friends')">
             <div class="share-icon">
-              <img src="../../assets/share_friends.png">
+              <img src="../../assets/images/share_friends.png">
             </div>
             <span class="share-label">发送给朋友</span>
           </div>
           <div class="share-item" @click="onShareItem('circle')">
             <div class="share-icon">
-              <img src="../../assets/share_circle.png">
+              <img src="../../assets/images/share_circle.png">
             </div>
             <span class="share-label">分享到朋友圈</span>
           </div>
@@ -33,31 +35,68 @@
   </div>
 </template>
  <script>
+import { mapActions, mapState } from 'vuex'
 export default {
-  props: ['show','shareid'],
+  props: ['show', 'courseId', 'columnType'],
   data() {
-    return { isOpen: false }
+    return {
+      isOpen: false,
+      showTip:false
+    }
   },
   watch: {
     show(value) {
+      console.log(value)
       this.isOpen = value
     }
   },
+  computed: {
+    ...mapState(['url'])
+  },
   methods: {
+    ...mapActions([ 'setWxShareFriend', 'setWxShareZone']),
     onShareItem(shareScore) {
-      this.isOpen = false
-      if (shareScore == 'poster') {
+      // this.isOpen = false
+      // const nickname = 'nihao' 
+      // const shareOption = {
+      //   link: this.url + this.shareInfo.link,
+      //   title: this.shareInfo.title,
+      //   desc: this.shareInfo.desc,
+      //   imgUrl:  this.shareInfo.imgUrl,
+      //   successCB: () => {
+      //     this.$toast('分享回调成功')
+      //   },
+      //   cancelCB: () => {
+      //     this.$toast('分享回调失败')
+      //   }
+      // } 
+      // console.log(shareOption)
+      if (shareScore === 'poster') {
         this.$toast('分享海报')
       }
-      if (shareScore == 'friends') {
-        this.$toast('分享给朋友')
+      if (shareScore === 'friends') {
+        // this.$toast('分享给朋友')
+        this.showTip = true
+        // this.setWxShareFriend(shareOption)
       }
       if (shareScore == 'circle') {
-        this.$toast('分享到朋友圈')
+        this.showTip = true
+        // this.$toast('分享到朋友圈')
+        // this.setWxShareZone(shareOption)
       }
     },
+    toPoster(){
+     this.$router.push({
+     name: 'SharePoster',
+     query: {  
+              courseId: this.courseId,
+              columnType:this.columnType
+            }
+      })
+    },
     onCancel() {
-      this.isOpen = false
+      this.isOpen = false,
+      this.showTip = false
     },
     afterLeave(el) {
       this.$emit('close')
@@ -67,12 +106,24 @@ export default {
 </script>
  <style lang="scss" scoped>
 .share-container {
-  top:0;
   position: fixed;
+  top: 0;
+  left:0;
+  right:0;
+  bottom:0;
+  
   z-index: 2004;
   width: 100%;
   background-color: rgba(00, 00, 00, 0.5);
   height: 100%;
+  .share-tip{
+    margin: 40px 30px 0px 400px;
+    width: 320px;
+    height: 164px;
+    background-repeat: no-repeat;
+    background-size: 320px 164px;
+    background-image: url('../../assets/images/share_tip.jpg');
+  }
   .share-content {
     position: fixed;
     background-color: #e1d9d5;
@@ -80,9 +131,9 @@ export default {
     bottom: 0;
     display: flex;
     flex-direction: column;
-    transition: all 0.5s ease;
+    transition: all 0.2s ease;
     .share-src {
-      font-size: 24px;
+
       color: rgb(82, 82, 77);
       text-align: center;
       margin-top: 16px;
@@ -115,7 +166,7 @@ export default {
       .share-label {
         margin-top: 20px;
         color: rgb(82, 81, 77);
-        font-size: 24px;
+
       }
     }
   }
@@ -141,6 +192,6 @@ export default {
 }
 .v-enter-active,
 .v-leave-active {
-  transition: all 0.3s ease;
+  transition: all 0.1s ease;
 }
 </style>

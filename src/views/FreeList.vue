@@ -1,69 +1,83 @@
 <template>
-  <div class="free">
-    <div v-for="(item, index) in freeList" :key="index" class="freeCell">
-      <div class="free-play-button-container">
-        <div class="free-play-button">
-          <img class="freePlayIcon" src="../assets/home_video_play.jpg" alt="">
-        </div>
+  <div class="freeList">
+    <div v-for="item in freeList" :key="item.id" class="qhht-flex freeList-cell" @click="routerToPlayDetail(item.id)">
+      <i class="qhht-icon freeList-play-button" ></i>
+      <div  class="content">
+        <span class="content-type">{{item.type?item.type:'假装文学'}}</span>
+        <span> {{item.title}}</span>
       </div>
-      <span class="content">{{item.type}}|{{item.title}}</span>
     </div>
-    <div class="line" />
     <router-view name="FreeList" />
   </div>
 </template>
 
 <script>
 export default {
-  props: ['freeList']
+  props: ['freeList'],
+  methods: {
+    routerToPlayDetail(id) {
+      this.$router.push({
+        name: 'AudioPlay',
+        params: { id },
+        query: { courseId: -1 , columnType: 'FreeZone' }
+      })
+    }
+  }
 }
 </script>
 
 <style lang="less" scoped>
-.free {
-  width: 694px;
+.freeList {
   background-color: rgba(245, 245, 245, 0.5);
   border-radius: 14px;
-  height: 177px;
+  margin-bottom: 28px;
+  overflow: hidden;
 }
-.free-cell {
-  height: 88px;
-  width: 100%;
+.freeList-cell {
+  position: relative;
+  padding: 24px 20px;
+  &:not(:last-child) {
+    &:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width: 654px;
+      height: 2px;
+      margin: 0 auto;
+      background-color: #e7e7e7;
+    }
+  }
 }
-.free-play-button-container {
+.freeList-play-button {
   display: inline-block;
-  width: 88px;
-  height: 88px;
-  vertical-align: middle;
-  margin-left: 28px;
-}
-.free-play-button {
-  margin-top: 20px;
   width: 48px;
   height: 48px;
-  background-color: #ffffff;
   border-radius: 50%;
-  -webkit-box-shadow: 0 0 15px 2px #e5dacf;
-  -moz-box-shadow: 0 0 15px 2px #e5dacf;
+  margin-right: 20px;
+  background-color: #ffffff;
+  background-image: url('../assets/images/home_video_play.jpg');
+  background-size: 18px;
   box-shadow: 0 0 15px 2px #e5dacf;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.freePlayIcon {
-  width: 16px;
-  height: 18px;
 }
 .content {
+  flex-grow: 1;
   font-size: 28px;
-  color: rgb(22, 35, 60);
+  color: #16233c;
 }
-.line {
-  position: absolute;
-  width: 654px;
-  height: 2px;
-  background-color: rgb(238, 238, 238);
-  margin-top: -88px;
-  margin-left: 28px;
+.content-type {
+  position: relative;
+  padding-right: 20px;
+  &:after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    margin-top: -14px;
+    height: 28px;
+    width: 2px;
+    margin-left: 10px;
+    background-color: #16233c;
+  }
 }
 </style>

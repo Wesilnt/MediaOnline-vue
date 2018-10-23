@@ -1,75 +1,69 @@
 <template>
-  <div :style="{backgroundImage: 'url(' + video.coverPic + ')' }" class="cell">
-    <div class="videoPlay">
-      <img class="videoPlayTringle" src="../../assets/home_video_play.jpg" alt="">
-    </div>
-    <div class="text">
-      <p class="videoTitle">{{video.name}}</p>
-      <p class="videoDetail">{{video.briefIntro}}</p>
-      <p class="videoDetail">{{video.authorName}}</p>
-      <p class="videoDetail">
-        <span class="price">¥{{video.price}}</span>/共{{video.lessonCount}}讲
-      </p>
-    </div>
-
+  <div v-lazy:background-image="`${video.coverPicH}?imageView2/1/format/jpg`" @click="onItemClick" class="qhht-flex lazy-img-larger cell">
+      <i class="qhht-icon videoPlayTringle" ></i>
+    <p class="videoTitle">{{video.name}}</p>
+    <p>{{video.briefIntro}}</p>
+    <p>{{video.authorName}}</p>
+    <p>
+      <span class="price">¥{{video.price}}</span>/共{{video.lessonCount}}讲
+    </p>
   </div>
 </template>
 
 <script>
 export default {
-  props: ['video']
+  props: ['video'],
+  methods: {
+    onItemClick() {
+      this.$router.push({
+        name: 'videoColumnDetail',
+        params: { courseId: this.video.id }
+      })
+    }
+  }
 }
 </script>
 
 <style lang="less" scoped>
-p {
-  margin: 0;
-  padding: 0;
-}
 .cell {
   position: relative;
-  width: 694px;
   height: 220px;
   border-radius: 16px;
-  margin-left: 28px;
   overflow: hidden;
-}
-.videoPlay {
-  background-color: #ffffff;
-  border-radius: 50%;
-  position: absolute;
-  width: 60px;
-  height: 60px;
-  top: 50%;
-  left: 50%;
-  margin-top: -30px; /* 高度的一半 */
-  margin-left: -30px; /* 宽度的一半 */
-  -webkit-box-shadow: 0 0 15px 2px #e5dacf;
-  -moz-box-shadow: 0 0 15px 2px #e5dacf;
-  box-shadow: 0 0 15px 2px #e5dacf;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background: #f6f6f6 center/cover no-repeat;
+  padding: 30px 36px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  /deep/ p {
+    width: 100%;
+    flex-grow: 1;
+    max-width: 620px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
 }
 .videoPlayTringle {
-  width: 18px;
-  height: 20px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-top: -30px;
+  margin-left: -30px;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  background-color: #fff;
+  background-image: url('../../assets/images/home_video_play.jpg');
+  background-size: 20px;
+  box-shadow: 0 0 15px 2px #e5dacf;
 }
-.text {
-  margin-left: 36px;
-  margin-top: 30px;
-}
+
 .videoTitle {
   font-size: 32px;
-  color: rgb(51, 51, 51);
+  color: #333333;
   font-weight: bolder;
 }
-.videoDetail {
-  font-size: 24px;
-  margin-top: 4px;
-  color: rgb(102, 102, 102);
-}
 .price {
-  color: rgb(255, 163, 47);
+  color: #ffa32f;
 }
 </style>

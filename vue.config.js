@@ -1,21 +1,25 @@
+const uglifyJsPlugin = require('uglifyjs-webpack-plugin')
+const { NODE_ENV } = process.env
+const isProd = NODE_ENV === 'production'
 module.exports = {
- /* css: {
-    loaderOptions: {
-      css: {
-        // options here will be passed to css-loader
-      },
-      postcss: {
-        // options here will be passed to postcss-loader
-        plugins: [
-          require('postcss-pxtorem')({
-            remUnit:  37.5,
-            // rootValue: 37.5,
-            selectorBlackList: ['van-'],
-            // propList: ['src']
+  lintOnSave: undefined,
+    css:{extract:true},
+  configureWebpack: {
+    plugins: isProd
+      ? [
+          new uglifyJsPlugin({
+            uglifyOptions: {
+              compress: {
+                  join_vars: true,
+                warnings: false,
+                drop_console: isProd,
+                drop_debugger: isProd
+              },
+                toplevel: false,
+                ie8: false,
+            }
           })
         ]
-      }
-    }
-  },*/
-  lintOnSave: undefined
+      : []
+  }
 }

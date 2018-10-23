@@ -1,126 +1,101 @@
 <template>
     <section>
-        <div v-if="onLineVisionList.length === 0 &&onLineVideoList.length === 0 && onLineReadList.length === 0 " >
-            <div class="purchase-nodata">
-                <i class="qhht-icon purchase-nodata-icon"/>
-                <p class="purchase-nodata-warn">暂无购买记录</p>
-                <a class="purchase-nodata-btn"></a>
-            </div>
+        <div class="purchase-nodata" v-if="noPurChaseData">
+            <i class="qhht-icon purchase-nodata-icon"></i>
+            <p class="purchase-nodata-warn">亲，您还没有购买</p>
         </div>
         <div v-else class="purchase">
-            <div class="purchase-head">
-                <div class="purchase-head-text">最近学习</div>
-                <img class="purchase-head-left-icon" src="../../assets/images/onlinecourse_arrow_down.png"/>
-                <img class="purchase-head-right-icon" src="../../assets/images/my_sys_menu.png"/>
+            <div class="qhht-flex purchase-item purchase-head" @click="handleSortToggle">
+                <div class="purchase-head-btn-sort">{{purchaseSortType[orderBy]}}</div>
+                <i class="purchase-head-btn-listDisplay" :class="{gridDisplay:isGridDisplay}" @click="handleMenuToggle"></i>
             </div>
-
-            <div v-if="onLineVisionList.length !== 0" class="purchase-container">
-                <p class="purchase-container-head">{{tab[0]}}</p>
-                <div v-for="item in onLineVisionList" :key="item.id">
-                    <div class="purchase-container-item" @click='toPlayAudio(item.newestLessonId)'>
-                        <img :src='item.coverPic' class="purchase-container-item-avatar"/>
-                        <div class="purchase-container-item-content">
-                            <div class="purchase-container-item-content-name">{{item.name}}</div>
-                            <div class="purchase-container-item-content-playto">播放至：{{item.readto}}</div>
-                            <div class="purchase-container-item-content-updateto">更新至：{{item.lessonCount }}</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div v-if="onLineVideoList.length !== 0" class="purchase-container">
-                <p class="purchase-container-head">{{tab[1]}}</p>
-                <div v-for="item in onLineVideoList" :key="item.id">
-                    <div class="purchase-container-item" @click='toPlayVideo(item.newestLessonId)'>
-                        <img :src='item.coverPic' class="purchase-container-item-avatar"/>
-                        <div class="purchase-container-item-content">
-                            <div class="purchase-container-item-content-name">{{item.name}}</div>
-                            <div class="purchase-container-item-content-playto">播放至：{{item.readto}}</div>
-                            <div class="purchase-container-item-content-updateto">更新至：{{item.lessonCount }}</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div v-if="onLineReadList.length !== 0" class="purchase-container">
-                <p class="purchase-container-head">{{tab[2]}}</p>
-                <div v-for="item in onLineReadList" :key="item.id">
-                    <div class="purchase-container-item" @click='toPlayAudio(item.newestLessonId)'>
-                        <img :src='item.coverPic' class="purchase-container-item-avatar"/>
-                        <div class="purchase-container-item-content">
-                            <div class="purchase-container-item-content-name">{{item.name}}</div>
-                            <div class="purchase-container-item-content-playto">播放至：{{ item.availLessonCount }} |  {{ item.lastViewLessonTitle }}</div>
-                            <div class="purchase-container-item-content-updateto">更新至：{{ item.lessonCount }}  |  {{ item.newestLessonTitle }}</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <PurchaseItem  v-for="list in Object.entries(lists)" :key="list[0]" :title="purchaseQueryType[list[0]]" :total="totalCounts[list[0]]" :list="list[1]" :grid="isGridDisplay" :type="list[0]" v-on:toggle="toggle"/>
         </div>
     </section>
 </template>
 
 <script>
 import { createNamespacedHelpers } from 'vuex'
-
-const { mapState, mapActions } = createNamespacedHelpers('myPurchase')
+import PurchaseItem from './component/PurchaseItem'
+import { purchaseQueryType, purchaseSortType } from '../../utils/config'
+import {log} from "../../store/module/typeData";
+const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
+  'myPurchaseData'
+)
 export default {
   name: 'Purchase',
+  components: {
+    PurchaseItem
+  },
   data: function() {
     return {
-      tab: ['少年视野', '视频课程', '读书会']
+      purchaseQueryType,
+      purchaseSortType,
+      orderBy: Object.keys(purchaseSortType)[0],
+      isGridDisplay: false
+    }
+  },
+  watch: {
+    orderBy: {
+      handler: 'getAllPurchase',
+      immediate: true
     }
   },
   computed: {
-    ...mapState([
-      'onLineVisionList',
-      'onLineVideoList',
-      'onLineReadList',
-      'loading'
-    ])
+    ...mapState(['lists', 'totalCounts', 'loading']),
+    ...mapGetters(['noPurChaseData'])
   },
   methods: {
-    ...mapActions(['queryList']),
-    getAllPurchase: function(orderBy) {
-      this.queryList({ type: 1003, orderBy: orderBy }) //  获取视野
-      this.queryList({ type: 1005, orderBy: orderBy }) //  获取在线课堂
-      this.queryList({ type: 1007, orderBy: orderBy }) //  获取读书会
+    ...mapActions(['queryListItem']),
+    getAllPurchase: function() {
+      const { orderBy } = this
+      Object.keys(purchaseQueryType).forEach(type => {
+        this.queryListItem({ orderBy, type, currentPage:1, pageSize:3 })
+      })
     },
-    toPlayAudio: function(id) {
-      this.$router.push({ path: '/audio/audioplay', query: { id } })
+    toggle: function({currentType, currentPage, pageSize}) {
+      const { orderBy } = this
+      Object.keys(purchaseQueryType).forEach(type => {
+        if(type === currentType) {
+          this.queryListItem({orderBy, type, currentPage, pageSize})
+        }
+      })
     },
-    toPlayVideo: function(id) {
-      console.log(id)
-    }
-  },
-  created() {
-    this.getAllPurchase('lastBought')
+    handleSortToggle: function() {
+      this.orderBy = this.orderBy === 'lastLearn' ? 'lastBought' : 'lastLearn'
+    },
+    handleMenuToggle: function() {
+      // 横竖显示切换
+      this.isGridDisplay = !this.isGridDisplay
+    },
   }
 }
 </script>
 
 <style scoped lang="less">
 .purchase {
-  background: #e3e3e3;
+  background: #f4f4f4;
+  color: #666;
   &-head {
-    padding: 20px;
-    display: flex;
-    flex-direction: row;
+    padding: 20px 30px;
+    font-size: 28px;
+    font-weight: bolder;
     background: white;
-    &-left-icon {
-      width: 30px;
+    border-bottom: 1px solid #e3e3e3;
+    &-btn-sort {
+      width: 150px;
+      background: url('../../assets/images/arrow_down.png') right
+        center/30px no-repeat;
+    }
+    &-btn-listDisplay {
+      display: inline-block;
+      width: 60px;
       height: 30px;
-      margin: 25px 20px 20px 20px;
-    }
-    &-right-icon {
-      width: 28px;
-      height: 26px;
-      margin: 30px 0px 0px 0px;
-      position: absolute;
-      right: 30px;
-    }
-    &-text {
-      padding: 20px 8px 0px 0px;
-      font-size: 28px;
-      font-weight: bold;
-      color: #666666;
+      background: url('../../assets/images/my_menu_list.png') right center/30px
+        no-repeat;
+      &.gridDisplay {
+        background-image: url('./../../assets/images/my_menu_grid.png');
+      }
     }
   }
   &-container {
@@ -132,39 +107,6 @@ export default {
       font-weight: bold;
       padding: 40px 0px 40px 30px;
     }
-    &-item {
-      width: 100%;
-      height: 280px;
-      padding: 0px 20px 0px 30px;
-      display: flex;
-      flex-direction: row;
-      &-avatar {
-        width: 150px;
-        height: 200px;
-        background-color: #fde7e7;
-        border-radius: 12px;
-        margin: 30px 0px 0px 0px;
-      }
-      &-content {
-        padding-left: 30px;
-        &-name {
-          padding-top: 40px;
-          color: #333333;
-          font-size: 30px;
-          font-weight: bold;
-        }
-        &-playto {
-          font-size: 26px;
-          color: #999999;
-          padding: 32px 30px 0px 0px;
-        }
-        &-updateto {
-          font-size: 26px;
-          color: #999999;
-          padding: 38px 30px 0px 0px;
-        }
-      }
-    }
   }
   &-nodata {
     height: 100vh;
@@ -174,12 +116,15 @@ export default {
       width: 180px;
       height: 200px;
       margin-top: 180px;
-      background-image: url('../../assets/my-nodata.png');
+      background-image: url('../../assets/images/my_data_empty.png');
     }
     &-warn {
-      font-size: 24px;
       margin: 40px 0;
     }
   }
+}
+.list {
+  flex-wrap: wrap;
+  padding: 30px;
 }
 </style>

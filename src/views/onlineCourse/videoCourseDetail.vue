@@ -1,74 +1,97 @@
 <template>
-  <div class="videocourse-detail-container" id="detailmain" ref="detailmain">
-      <!-- 播放器封面 -->
-    <div class="video-detail-header" :style="{ background : 'url('+radioShowPic+')' }">
-      <div class="video-detail-header-right-top">
-          <img :src="isLike?collectIcon:unCollectIcon" class="video-detail-collect" alt="" @click="onCollectFavorite">
-          <img :src="require('../../assets/images/onlinecourse-play_ic_share@2x.png')" class="video-detail-share" alt="" @click="onShareAction">
-      </div>
-      <div class="video-detail-header-left-bottom" @click="clickPlayVideoBtn">
-          <img :src="require('../../assets/images/onlinecourse-video-detail-header.jpg')" alt="" >
-          <label>开始播放</label>   
-      </div>
-          <!-- <img :src="require('../../assets/images/onlinecourse_video_ic_gift.png')" class="video-detail-header-gift" alt="">     -->
+    <div>
+        <SkeletonFullScreen  v-show="loading"/>
+        <div v-show="!loading" class="videocourse-detail-container" id="detailmain" ref="detailmain">
+            <!-- 播放器封面 -->
+            <div class="lazy-img-most  video-detail-header"  v-lazy:background-image="`${coverPic}?imageView2/1/format/jpg`">
+                <div class="video-detail-header-bg">
+                    <div class="video-detail-header-right-top">
+                        <img :src="isLike?collectIcon:unCollectIcon" class="video-detail-collect" alt="" @click="onCollectFavorite">
+                        <img :src="require('../../assets/images/onlinecourse-play_ic_share.png')" class="video-detail-share" alt="" @click="onShareAction">
+                    </div>
+                    <a class="video-playbtn-icon" @click="handleVideoPlay">
+                        开始播放
+                    </a>
+                    <!-- <img :src="require('../../assets/images/onlinecourse_video_ic_gift.png')" class="video-detail-header-gift" alt="">     -->
+                </div>
+
+            </div>
+            <!-- navbar -->
+            <ScrollNavBar :bars="navBars" />
+            <!-- 资料 -->
+            <div id="desc">
+                <div class="video-detail-base" v-if="manuscript">
+                    <div class="video-detail-sction-title">
+                        <h4>笔记</h4>
+                    </div>
+                    <CourseIntroduce :courseinfo="manuscript"/>
+                </div>
+                <div class="video-detail-base" v-if="haveQuestionBOList">
+                    <div class="video-detail-sction-title">
+                        <h4>自测题</h4>
+                    </div>
+                    <QuestionList @update="getVideoCourseDetail" :key="id"/>
+                </div>
+            </div>
+            <!-- 目录 -->
+            <div class="video-detail-base" id="tryCourse">
+                <div  ref="tryCourse" class="video-detail-sction-title">
+                    <h4>目录</h4>
+                </div>
+                <playlist v-for="(item,index) of lessonList" :key="item.id" :iteminfo="item" :activeID="activeID" :lastindex="index == (lessonList.length - 1)" @jumpEvent="beActive"/>
+            </div>
+            <!-- 留言 -->
+            <div class="video-detail-base" id="leaveMessage">
+                <div  ref="leaveMessage" class="video-detail-sction-title">
+                    <h4>留言</h4>
+                    <div class="video-detail-leavemessage" @click="toggleKeyboard(true)">
+                        我要留言
+                    </div>
+                </div>
+                <CommentList  :regionid="lessonId" :regiontype="2202" :unindent="true" ></CommentList>
+                <!-- <CommentItem class="video-course-comment" v-for="item in singleComments" :key="item.id" :comment="item" :unindent="true" :regiontype="2202"/> -->
+            </div>
+            <CommentBar :show="commentBarShow" v-on:toggle="toggleKeyboard"/>
+            <Share :show="sharePageShow" :courseId="courseId" :columnType ="'1005'" @close="cancelSharePage"></Share>
+            <div v-show="videoShow" class='video-wrapper popup-modal-white' @click="handleVideoPause">
+               <video class="videoitem"
+                       ref="videoitem"
+                       :src="videoUrl"
+                       controls
+                       width="100%"
+                       preload="auto"
+                      webkit-playsinline
+                      playsinline
+
+                      x-webkit-airplay="allow"
+                      x5-video-player-type="h5"
+                      x5-video-player-fullscreen="true"
+                      x5-video-orientation="portraint"
+                       style="object-fit:fill"></video>
+            </div>
+        </div>
     </div>
-    <!-- 播放器 -->
-    <video class="videoitem" ref="videoitem" :src="videoUrl" controls="controls" width="100%" height='100%' preload="auto"></video>
-    <!-- Navbar -->
-    <div ref="navbar" :class="navbarFixed == true ? 'isFixed' : ''" class="video-detail-navbar">
-        <div v-for="(item,index) of navbar" :class="{'selected':selected == index }" :key="index" class="video-detail-navbar-item" @click="clickFnc(index)">{{item}}</div>
-    </div>
-    <!-- 资料 -->
-    <div class="video-detail-base">
-      <div id="note" ref="note" class="video-detail-sction-title">
-          <h4>笔记</h4>
-      </div>
-      <CourseIntroduce :courseinfo="description" />
-    </div>
-    <div class="video-detail-base" v-if="haveQuestionBOList">
-      <div class="video-detail-sction-title">
-          <h4>自测题</h4>
-      </div>
-      <QuestionList :progress="progress" :deblock="deblockQuestion"/>
-    </div>
-    <!-- 目录 -->
-    <div class="video-detail-base">
-      <div id="catalog" ref="catalog" class="video-detail-sction-title">
-          <h4>目录</h4>
-      </div>
-      <playlist v-for="(item,index) of lessonList" :key="item.id" :iteminfo="item" :activeID="activeID" :lastindex="index == (lessonList.length - 1)" @jumpEvent="beActive"/>      
-    </div>
-    <!-- 留言 -->
-    <div class="video-detail-base">
-      <div id="leavemessage" ref="leavemessage" class="video-detail-sction-title">
-          <h4>留言</h4>
-          <div class="video-detail-leavemessage" @click="toggleKeyboard(true)">
-              <img src="../../assets/images/onlinecourse_video_detail_ic_editor.png" alt="">
-              <span>我要留言</span>
-          </div>
-      </div>
-      <CommentItem class="video-course-comment" v-for="item in singleComments" :key="item.id" :comment="item" :unindent="true" :regiontype="2202"/>      
-    </div>
-      <CommentBar :show="commentBarShow" v-on:toggle="toggleKeyboard"/>
-      <Share :show="sharePageShow" :shareid="courseId" @close="cancelSharePage"></Share>
-  </div>
 </template>
 
 <script>
+import CommentList from '../../components/comment/CommentList.vue'
+import ScrollNavBar from '../../components/ScrollNavBar'
 import CourseIntroduce from '../../components/CourseIntroduce.vue'
 import playlist from './components/playlist.vue'
-import CommentItem from '../../components/CommentItem.vue'
+import CommentItem from '../../components/comment/CommentItem.vue'
 import videoComment from '../../components/video-comment.vue'
 import QuestionList from './QuestionList'
 import CommentBar from '../../components/CommentBar'
+import SkeletonFullScreen from '../../components/SkeletonFullScreen'
 import Share from '../../components/share/Share.vue'
 import { createNamespacedHelpers } from 'vuex'
+import { mapActions as mapRootActions, mapState as rootState } from 'vuex'
 const {
   mapState,
   mapGetters,
   mapActions,
   mapMutations
-} = createNamespacedHelpers('videoCourseDetail')
+} = createNamespacedHelpers('videoCourseDetailData')
 export default {
   name: 'VideoCourseDetail',
   components: {
@@ -78,46 +101,63 @@ export default {
     CommentItem,
     QuestionList,
     CommentBar,
-    Share
+    Share,
+    ScrollNavBar,
+    CommentList,
+    SkeletonFullScreen
   },
   data() {
     return {
-      navbar: ['资料', '目录', '留言'],
-      navbarFixed: false, //控制navbar是否吸顶
-      selected: 0,
+      lessonId: this.$route.params.lessonId,
+      navBars: [
+        {
+          title: '资料',
+          ref: 'desc'
+        },
+        {
+          title: '目录',
+          ref: 'tryCourse'
+        },
+        {
+          title: '留言',
+          ref: 'leaveMessage'
+        }
+      ],
       currentVideoTime: 0,
       inputValue: '',
       lockIcon: require('../../assets/images/onlinecourse_lock.jpg'), //未解锁
       unlockIcon: require('../../assets/images/onlinecourse_unlock.jpg'), //已解锁
-      collectIcon: require('../../assets/images/onlinecourse_love_highlight.png'), //已收藏
+      collectIcon: require('../../assets/images/love_collect.png'), //已收藏
       unCollectIcon: require('../../assets/images/onlinecourse_love_normal.png'), //未搜藏
       //视频播放相关属性
       timer: 0, //定时器
-      progress: 0,
-      loaclPlayTotalTime: 0, //本地累计播放时长
+
+      localPlayTotalTime: 0, //本地累计播放时长
       localPlayTime: 0, //本地播放位置
       playStartTime: null,
-      deblockQuestion: false, //是否解锁自测题
+
       isAchieveQuestion: false, //是否完成自测题
       // 我要留言显示
       commentBarShow: false,
       //分享页面显示
       sharePageShow: false,
-      //控制目录当前播放的状态
-      isPlaying: false,
-      activeID: this.$route.params.lessonID //当前选中单集ID
+      //控制播放的状态
+      videoShow: false,
+      videoElem: null
     }
   },
   computed: {
+    ...rootState(['url', 'columnDetail']),
     ...mapState([
+      'loading',
       'lessonList', //目录课程
-      'radioShowPic', //视频背景图
+      'coverPic', //视频背景图
       'audioUrl', //音频地址
       'videoUrl', //视频地址
       'courseId', //专栏ID
       'id', //单集ID
       'singleComments',
-      'description', //笔记
+      'manuscript', //笔记
       'totalTime', //服务器返回的视频总长度
       'isFree',
       'isLike',
@@ -126,48 +166,50 @@ export default {
       'isAchieveCollect', //是否完成收藏
       'collectionId', //收藏Id
       'learnTime', //服务器上次播放位置
-      'learnTotalTime' //服务器累计播放时长
+      'learnTotalTime', //服务器累计播放时长
+      'deblockQuestion',
+      'progress',
+      'activeID' //当前播放的单集ID
     ]),
-    ...mapGetters(['haveQuestionBOList', 'haveLessonlist'])
+    ...mapGetters(['haveQuestionBOList'])
   },
-  async mounted() {
-    //监听滚动
-    await addEventListener('scroll', this.handleScroll)
+  watch: {
+    videoUrl: {
+      handler() {
+        this.$nextTick(() => {
+          this.videoElem.addEventListener('canplay', this.canplay)
+        })
+      },
+      immediate: true
+    }
+  },
+  mounted() {
     //视频播放器相关监听
-    const vid = await this.$refs.videoitem
+    this.videoElem = this.$refs.videoitem
     //视频进度
-    vid.addEventListener('timeupdate', this.getVideoProgress)
-    vid.addEventListener('play', this.clickPlayVideoBtn)
+    this.videoElem.addEventListener('timeupdate', this.getVideoProgress)
+    this.videoElem.addEventListener('play', this.handleVideoPlay)
+    this.videoElem.addEventListener('contextmenu', () => {
+      return false
+    })
   },
   beforeDestroy() {
-    const vid = this.$refs.videoitem
-    vid.removeEventListener('timeupdate', this.getVideoProgress)
-    vid.removeEventListener('play', this.clickPlayVideoBtn)
-  },
-  destroyed() {
-    removeEventListener('scroll', this.handleScroll)
+    this.videoElem.removeEventListener('timeupdate', this.getVideoProgress)
+    this.videoElem.removeEventListener('play', this.handleVideoPlay)
+
+    this.resetLoading(true)
   },
   created() {
-    //获取课程ID
     const { lessonId } = this.$route.params
-    this.getVideoCourseDetail({ lessonId })
-    //获取目录课程数据
-    console.log("courseId = " + this.courseId)
-    this.getLessonListByCourse({
-      courseId: this.courseId,
-      currentPage: 1,
-      pageSize: 10
-    })
-    //获取单集评论
-    this.getCommentList({
-      regionType: 2202,
-      regionId: lessonId,
-      currentPage: 1,
-      pageSize: 11
-    })
+    this.getVideoCourseDetail({ lessonId, loading: true })
   },
   methods: {
-    ...mapMutations(['updateLocalVideoData']),
+    ...mapMutations([
+      'updateLocalVideoData',
+      'bindQuestionBymyself',
+      'bindActiveId',
+      'resetLoading'
+    ]),
     ...mapActions([
       'getVideoCourseDetail',
       'getLessonListByCourse',
@@ -176,66 +218,91 @@ export default {
       'unCollectFavorite',
       'postComment'
     ]),
-    //播放视频
-    clickPlayVideoBtn() {
-      const video = this.$refs.videoitem
-      //从本地获取历史播放位置
+    ...mapRootActions(['getUserInfo', 'setWxShareFriend', 'setWxShareZone']),
+    canplay() {
       const videoData = JSON.parse(localStorage.getItem(this.id))
       const { historyPlayPosition } = videoData
-      video.play()
-      video.currentTime =
-        historyPlayPosition >= video.duration ? 0 : historyPlayPosition
+      this.videoElem.currentTime =
+        historyPlayPosition >= this.totalTime ? 0 : historyPlayPosition
+      console.log(this.videoElem.readyState)
+      console.log('historyPlayPosition =', historyPlayPosition)
+      console.log('totalTime =', this.totalTime)
+      console.log('videoElem.currentTime ==', this.videoElem.currentTime)
+      this.localPlayTotalTime = Math.round(parseFloat(videoData.playTotalTime))
       // 记录当前播放时间戳
       this.playStartTime = new Date()
+      this.videoElem.removeEventListener('canplay', this.canplay)
+    },
+    //播放视频
+    handleVideoPlay() {
+      this.videoShow = true
+      setTimeout(() => {
+        this.videoElem.play()
+      }, 100)
+    },
+    handleVideoPause() {
+      this.videoShow = false
+      const { paused } = this.videoElem
+      if (!paused) this.videoElem.pause()
+      const { lessonId } = this.$route.params
+      this.getVideoCourseDetail({ lessonId })
     },
     getVideoProgress({ target }) {
-      const { currentTime, paused, duration } = target
-
-      //  播放累计时长大于视频的总时长，解锁
-      const videoData = JSON.parse(localStorage.getItem(this.id))
-      if (
-        !this.deblockQuestion &&
-        Math.round(videoData.playTotalTime) >= Math.round(duration * 0.7)
-      ) {
-        console.log(1)
-        this.deblockQuestion = true
-      }
-      if (paused) {
-        // 获取播放累计时长
+      const { currentTime, paused, duration, readyState } = target
+      /*
+      视频存储数据逻辑
+      */
+      // 获取播放累计时长
+      if (readyState == 4 || readyState == 3) {
+        //累计播放时长大于视频总长度.将历史播放进度置为0
         const durationPlayingTime = this.playStartTime
           ? (new Date() - this.playStartTime) / 1000
           : 0
-        this.loaclPlayTotalTime += durationPlayingTime
-        this.playStartTime = null
-        const videoData = JSON.parse(localStorage.getItem(this.id))
-        const newTotalTime =
-          durationPlayingTime + Math.round(parseFloat(videoData.playTotalTime))
-        // console.log(this.loaclPlayTotalTime )
+
+        const newTotalTime = this.localPlayTotalTime + durationPlayingTime
+        let newPosition = currentTime
         const obj = {
           playTotalTime: newTotalTime,
-          historyPlayPosition: currentTime
+          historyPlayPosition: newPosition
         }
-        // console.log('更新本地数据 obj = ')
+        // console.log('实时存储的播放数据 = ')
         // console.log(obj)
         localStorage.setItem(this.id, JSON.stringify(obj))
-        // console.log(this.loaclPlayTotalTime)
-      }
-      // 进度条 未解锁就动态显示
-      if (!this.deblockQuestion && duration) {
-        const percent = (this.loaclPlayTotalTime / duration) * 100
-        this.progress = percent <= 100 ? percent : 100
+        /*
+        自测题逻辑
+        */
+        //  播放累计时长大于视频的总时长，解锁
+        // console.log(newTotalTime,currentTime, this.totalTime * 0.7)
+        if (!this.deblockQuestion && newTotalTime >= this.totalTime * 0.7) {
+          console.log('deblockQuestion ===', this.deblockQuestion)
+          console.log('newTotalTime ===', newTotalTime)
+          this.bindQuestionBymyself({ deblockQuestion: true })
+        }
       } else {
-        //第一次进入单集详情页面时,答题进度用服务器保存的视频长度
-        const percent = (this.loaclPlayTotalTime / this.totalTime) * 100
-        this.progress = percent <= 100 ? percent : 100
+        const videoData = JSON.parse(localStorage.getItem(this.id))
+        this.playStartTime = new Date()
+        if (videoData) {
+          this.localPlayTotalTime = Math.round(
+            parseFloat(videoData.playTotalTime)
+          )
+        }
+      }
+      if (paused) {
+        // 进度条 未解锁就动态显示
+        if (!this.deblockQuestion && duration) {
+          const percent = (this.localPlayTotalTime / duration) * 100
+          let progress = percent <= 100 ? percent : 100
+          this.bindQuestionBymyself({ progress })
+          console.log('localPlayTotalTime ===', this.localPlayTotalTime)
+          console.log('progress ===', progress)
+        }
       }
     },
     //显示键盘
     toggleKeyboard(commentBarShow, inputer) {
       this.commentBarShow = commentBarShow
       if (inputer) {
-        console.log('留言内容为 ' + inputer)
-        const lessonId = this.$route.params.lessonID
+        const { lessonId } = this.$route.params
         const params = {
           regionId: lessonId,
           regionType: 2202,
@@ -255,74 +322,38 @@ export default {
       }
     },
     onShareAction() {
-      console.log('点击分享')
       this.sharePageShow = true
     },
     cancelSharePage(data) {
-      console.log('关闭分享页面')
       this.sharePageShow = false
     },
     //点击目录
     beActive(lessonId) {
-      this.activeID = lessonId
-      //刷新接口
-      this.getVideoCourseDetail({ lessonId: lessonId })
-    },
-    clickFnc(index) {
-      this.selected = index
-      let positionId
-      switch (index) {
-        case 0:
-          positionId = '#note'
-          break
-        case 1:
-          positionId = '#catalog'
-          break
-        case 2:
-          positionId = '#leavemessage'
-          break
-        default:
-          break
-      }
-
-      let anchor = this.$el.querySelector(positionId)
-      document.body.scrollTop = anchor.offsetHeight - 50
-      // // Firefox
-      document.documentElement.scrollTop = anchor.offsetTop - 50
-      // Safari
-      pageYOffset = anchor.offsetTop - 50
-    },
-    async handleScroll() {
-      //1.监听滚动
-      let scrollTop = Math.abs(
-        this.$refs.detailmain.getBoundingClientRect().top
-      )
-      let noteH = this.$el.querySelector('#note').offsetTop - 50
-      let catalogH = this.$el.querySelector('#catalog').offsetTop - 50
-      // let leavemessageH = this.$el.querySelector('#leavemessage').offsetTop -50
-      if (scrollTop < noteH) {
-        this.selected = 0
-      } else if (scrollTop < catalogH && scrollTop > noteH) {
-        this.selected = 1
-      } else if (scrollTop > catalogH) {
-        this.selected = 2
+      if (this.activeID !== lessonId) {
+        this.getVideoCourseDetail({ lessonId, loading: true })
       }
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 .videocourse-detail-container {
   background-color: #fff;
-  font-size: 24px;
 }
 //header
 .video-detail-header {
-  width: 100%;
   height: 422px;
-  background-color: rgb(198, 72, 172);
   position: relative;
+  background: #f6f6f6 center/cover no-repeat;
+  &-bg {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+  }
 }
 .video-detail-header-right-top {
   position: absolute;
@@ -340,33 +371,19 @@ export default {
   height: 30px;
   margin-left: 24px;
 }
-.video-detail-header-left-bottom {
+.video-playbtn-icon {
   position: absolute;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
   left: 30px;
   bottom: 30px;
-  height: 60px;
-  border: 1px solid lightgray;
-  border-radius: 30px;
   width: 196px;
-
-  label {
-    color: white;
-    font-size: 24px;
-    height: 28px;
-    line-height: 28px;
-    padding: 0;
-    margin: 0;
-    align-self: center;
-  }
-
-  img {
-    width: 20px;
-    height: 26px;
-    margin: 20px;
-  }
+  padding: 16px 0;
+  border: 2px solid #fff;
+  padding-left: 30px;
+  text-align: center;
+  border-radius: 60px;
+  color: #fff;
+  background: url('../../assets/images/icon_pause.png') 32px center/20px
+    no-repeat;
 }
 .video-detail-header-gift {
   position: absolute;
@@ -428,7 +445,7 @@ export default {
   font-size: 32px;
   text-align: left;
   color: rgb(62, 62, 83);
-  margin-top: 48px;
+  padding-top: 48px;
 
   h4 {
     font-size: 32px;
@@ -441,21 +458,19 @@ export default {
 }
 .video-detail-leavemessage {
   width: 220px;
-  height: 60px;
-  border-radius: 30px;
-  background-color: rgb(247, 247, 247);
-  display: flex;
-  align-items: center;
-
-  img {
-    width: 30px;
-    height: 30px;
-    margin: 16px 12px 16px 30px;
-  }
-
-  input {
-    font-size: 32px;
-    color: rgb(255, 163, 47);
-  }
+  border-radius: 80px;
+  padding: 8px 0 8px 70px;
+  background: #f7f7f7
+    url('../../assets/images/onlinecourse_video_detail_ic_editor.png') 30px
+    center/30px no-repeat;
+  color: #ffa32f;
+}
+.video-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 400;
 }
 </style>

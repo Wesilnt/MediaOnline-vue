@@ -1,6 +1,10 @@
 <template>
     <div class="descrip-container">
-        <div class="descrip-header" :style="{background:'url('+getBookIntroduce.coverPic+')'}"/>
+      <div class="book-header-container"  >
+       <div class="book-cover" :style="{background:'url('+getBookIntroduce.coverPic+')','background-size':'100%'}">
+        <span v-if="new Date().getTime() - new Date(getBookIntroduce.createTime).getTime()<30*24*3600*1000">上新</span>
+      </div>
+    </div>
         <div class="course-name">
            {{getBookIntroduce.name}}
         </div>
@@ -8,15 +12,15 @@
         <div class="course-detail">
             <div class="course-content">
                 <h2>内容介绍:</h2>
-                <p>{{getBookIntroduce.description||'暂无相关介绍'}}</p>
+                <p v-html= "getBookIntroduce.description"/>
             </div>
             <div class="course-author">
                 <h2>作者介绍:</h2>
-                <p>{{getBookIntroduce.authorIntro||'暂无相关介绍'}}</p>
+                <p v-html= "getBookIntroduce.authorBriefIntro"/>
             </div>
             <div class="course-speaker">
                 <h2>播讲者介绍:</h2>
-                <p>{{getBookIntroduce.commentatorIntro||'暂无相关介绍'}}</p>
+                <p v-html="getBookIntroduce.radioIntro" />
             </div>
         </div>
 
@@ -24,7 +28,7 @@
 </template>
 <script>
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapGetters } = createNamespacedHelpers('readings')
+const { mapState, mapGetters } = createNamespacedHelpers('readingsData')
 export default {
   computed: {
     ...mapGetters(['getBookIntroduce'])
@@ -36,6 +40,34 @@ export default {
 .descrip-container {
   display: flex;
   flex-direction: column;
+
+  //1. 作品封面介绍
+  .book-header-container {
+    height: 440px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    background-color: #f6f5f6;
+    padding-top: 36px;
+    .book-cover {
+      position: relative;
+      height: 350px;
+      width: 268px;
+      background-color: #fde3e3;
+      span {
+        border-top-right-radius: 20px;
+        background-color: red;
+        font-weight: 500;
+        padding: 10px 20px;
+        position: absolute;
+        bottom: 0;
+        color: white;
+        font-size: 36px;
+        letter-spacing: 4px;
+      }
+    }
+  }
   .descrip-header {
     height: 372px;
     width: 100%;

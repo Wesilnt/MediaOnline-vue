@@ -3,9 +3,9 @@
         <div v-show="allNoData" class="my-puzzle-nodata">
             <i class="qhht-icon my-puzzle-nodata-icon"></i>
             <p class="my-puzzle-nodata-warn">暂无{{pageName}}信息</p>
-            <a class="my-puzzle-nodata-btn">我要{{pageName}}</a>
+            <a class="my-puzzle-nodata-btn" @click="routerToHome">我要{{pageName}}</a>
         </div>
-        <div  v-show="!allNoData" class="my-puzzle-container">
+        <div   class="my-puzzle-container">
             <van-tabs v-model="selected" color="#ffa32f" :line-width='60'>
                 <van-tab  v-for="item in Object.keys(puzzleTabs)"
                           :key="item"
@@ -20,14 +20,18 @@
                                 :offset="60"
                                 :immediate-check="false"
                             >
-                                <div v-for="puzzle in puzzleList" :key="puzzle.id" class="my-puzzle-content-cell">
+                                <div v-for="puzzle in puzzleList"
+                                     :key="puzzle.id"
+                                     class="my-puzzle-content-cell"
+                                     @click="routerToDetail(puzzle.course)"
+                                >
                                     <p class="qhht-flex">
                                         <i class="qhht-icon my-puzzle-content-cell-icon"></i>
                                         <span class="my-puzzle-content-cell-date">{{pageName}}时间：{{puzzle.createTime}}</span>
                                         <Badge :status="isPraise?puzzle.collectLikeStatus:puzzle.groupBuyStatus">{{pageName}}</Badge>
                                     </p>
                                     <div class="qhht-flex">
-                                        <img :alt="puzzle.course.name" :title="puzzle.course.name" class="my-puzzle-content-img" v-lazy="puzzle.course.coverPic" >
+                                        <div v-lazy:background-image="`${puzzle.course.coverPic}?imageView2/1/format/jpg`" class="my-puzzle-content-img"></div>
                                         <ul class="my-puzzle-display">
                                             <li><h3> {{puzzle.course.name}}</h3></li>
                                             <li>{{puzzle.course.priefIntro?puzzle.course.priefIntro:'暂无简介'}}</li>
@@ -50,19 +54,32 @@
 import { createNamespacedHelpers } from 'vuex'
 import Badge from '../../components/Badge'
 import Skeleton from '../../components/Skeleton'
+import {
+  puzzleTabs,
+  praiseTypes,
+  puzzleTypes,
+  courseType
+} from '../../utils/config'
 
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
-  'myPuzzle_Praise'
+  'myPuzzle_PraiseData'
 )
 
 export default {
   name: 'MyPuzzlePraise',
   data: function() {
     const { path } = this.$route
-    let pageName = ''
+    let pageName = '',
+      productTypes = puzzleTypes
     if (path.endsWith('my-puzzle')) pageName = '拼团'
-    else if (path.endsWith('my-praise')) pageName = '集赞'
+    else if (path.endsWith('my-praise')) {
+      pageName = '集赞'
+      productTypes = praiseTypes
+    }
+
     return {
+      puzzleTabs,
+      productTypes,
       selected: '1200',
       pageName,
       isPraise: pageName === '集赞',
@@ -73,8 +90,6 @@ export default {
   },
   computed: {
     ...mapState([
-      'puzzleTabs',
-      'puzzleTypes',
       'currentType',
       'puzzleList',
       'querying',
@@ -87,8 +102,9 @@ export default {
   },
   watch: {
     selected: function(currentType) {
-      const { isPraise, puzzleTypes, pageSize, currentPage } = this
-      const Types = Object.values(puzzleTypes)
+      const { isPraise, productTypes, pageSize, currentPage } = this
+      console.log(productTypes)
+      const Types = Object.values(productTypes)
       this.toggleCurrentType({
         pageSize,
         currentPage,
@@ -106,7 +122,7 @@ export default {
     puzzleList: function(puzzleList) {
       this.allNoData =
         puzzleList.length === 0 &&
-        this.currentType === this.puzzleTypes.all &&
+        this.currentType === this.productTypes.all &&
         this.totalCount === 0
     }
   },
@@ -127,6 +143,12 @@ export default {
         isPraise,
         loadType
       })
+    },
+    routerToDetail({ type, id }) {
+      this.$router.push({ path: `/${courseType[type]}${id}` })
+    },
+    routerToHome() {
+      this.$router.push({ path: '/home' })
     }
   },
   components: {
@@ -141,7 +163,6 @@ export default {
 @fail: #ccc;
 .my-puzzle {
   &-container {
-    font-size: 24px;
     min-height: 100vh;
     background-color: #fffcf7;
     .van-tabs {
@@ -174,7 +195,7 @@ export default {
     /*}*/
   }
   &-content {
-    padding: 32px 40px;
+    padding: 132px 40px 32px;
     .van-list {
       min-height: 50vh;
     }
@@ -189,7 +210,7 @@ export default {
         width: 24px;
         height: 24px;
         margin-right: 12px;
-        background-image: url('../../assets/my_puzzle_clock.png');
+        background-image: url('../../assets/images/my_puzzle_clock.png');
       }
       &-date {
         flex-grow: 1;
@@ -203,6 +224,7 @@ export default {
       width: 136px;
       height: 180px;
       border-radius: 12px;
+      background: #f6f6f6 center/cover no-repeat;
     }
   }
   &-display {
@@ -238,10 +260,9 @@ export default {
       width: 180px;
       height: 200px;
       margin-top: 180px;
-      background-image: url('../../assets/my-nodata.png');
+      background-image: url('../../assets/images/my_praise_empty.png');
     }
     &-warn {
-      font-size: 24px;
       margin: 40px 0;
     }
     &-btn {

@@ -1,73 +1,82 @@
 <template>
-  <div class="cell" @click="onItemClick">
-    <img :src="book.coverPic" class="cover" alt="">
-
-    <div class="play-button">
-      <img class="bookPlayTringle" src="../../assets/home_video_play.jpg" alt="">
+  <div class="cell">
+    <div class="cell-header" @click="onItemClick" v-lazy:background-image="`${book.coverPic}?imageView2/1/format/jpg`">
+      <span v-if="book.isNew" class="cell-isNew">上新</span>
+      <i class="qhht-icon bookPlayTringle" @click.stop="onPlayClick" />
     </div>
-    <img v-if="book.isNew" :src='null' alt="">
-    <p class="title">{{book.name}}</p>
-    <p class="price">¥{{book.price}}</p>
+    <div class="cell-footer">
+      <p class="van-ellipsis title">{{book.name}}</p>
+      <p class="price">¥{{book.price}}</p>
+    </div>
   </div>
+
 </template>
 <script>
 export default {
   props: ['book'],
-  methods:{
-    onItemClick(){
-       this.$router.push({path:'/audio/audioplay',query:{id:this.book.freeLessonList[0].id,hiddenDraft:true}})
+  methods: {
+    onItemClick() {
+      this.$router.push({
+        name: 'BookDetail',
+        params: { courseId: this.book.id},
+        query:{columnType:"1007"}
+      })
+    },
+    onPlayClick() { 
+      if(this.book.freeLessonList&&this.book.freeLessonList.length>0){
+        this.$router.push({
+          name: 'AudioPlay',
+          params: {id: this.book.freeLessonList[0].id },
+          query:{courseId: this.book.id,columnType:"1007",courseName:this.book.name}
+        })
+      }else{
+        this.$toast('本书籍暂时不支持试听')
+      }
     }
   }
 }
 </script>
 <style lang="less" scoped>
-p {
-  margin: 0;
-  padding: 0;
-}
 .cell {
-  position: relative;
-  width: 196px;
-  display: inline-block;
-  margin-left: 40px;
-  padding-bottom: 64px;
-
-  .cover {
-    display: block;
+  margin-bottom: 64px;
+  .cell-isNew {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    border-radius: 0 20px 0 12px;
+    padding: 0 10px;
+    color: #fff;
+    background: #e93323;
+  }
+  .cell-header {
+    position: relative;
     width: 196px;
     height: 257px;
     border-radius: 12px;
-  }
-  .play-button {
-    position: absolute;
-    right: 10px;
-    top: 197px;
-    width: 50px;
-    height: 50px;
-    background: #fff;
-    border-radius: 50%;
-    -webkit-box-shadow: 0 0 8px 1px #e5dacf;
-    -moz-box-shadow: 0 0 8px 1px #e5dacf;
-    box-shadow: 0 0 8px 1px #e5dacf;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    background: #fff center/100% no-repeat;
   }
   .bookPlayTringle {
-    width: 16px;
-    height: 18px;
-    margin-left: 2px;
+    position: absolute;
+    right: 16px;
+    bottom: 16px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    box-shadow: 0 0 8px 1px #e5dacf;
+    background-color: #fff;
+    background-image: url('../../assets/images/home_video_play.jpg');
+    background-size: 18px;
+  }
+  .cell-footer {
+    margin-top: 14px;
+    padding-left: 10px;
   }
   .title {
-    margin-top: 14px;
-    margin-left: 10px;
-    font-size: 24px;
+    max-width: 196px;
     color: rgb(51, 51, 51);
   }
   .price {
     margin-top: 4px;
-    font-size: 24px;
-    margin-left: 10px;
     color: rgb(255, 163, 47);
   }
 }

@@ -1,25 +1,20 @@
 <template>
-  <div class="cell" @click="enterVisionDetail(vision.id)">
-    <div>
-      <img :src="vision.coverPic" class="visionicon" alt="">
-    </div>
-    <div class="detailContent">
-      <p class="visionTitle">{{vision.name}}</p>
-      <p class="visionDetail">{{vision.briefIntro}}</p>
-      <p class="visionDetail">{{vision.authorName}}</p>
-      <p class="visionDetail footText">
+  <div class="qhht-flex cell" @click="enterVisionDetail(vision.id)">
+    <i v-lazy:background-image="`${vision.coverPic}?imageView2/1/format/jpg`" class="qhht-icon vision-avater"></i>
+    <ul class="cell-content">
+      <li class="cell-content-title">{{vision.name}}</li>
+      <li>{{vision.briefIntro}}</li>
+      <li>{{vision.authorName}}</li>
+      <li class="footText">
         <span class="price">¥{{vision.price}}</span>/共{{vision.lessonCount}}讲
-      </p>
+      </li>
+    </ul>
+    <div class="qhht-flex cell-footer">
+      <span class="fit">{{vision.fitFor}}岁</span>
+      <a v-if="vision.freeLessonList" class="cell-footer-btn" @click.stop="enterVisionPlay">
+        <i class="qhht-icon play-tringle" />试听
+      </a>
     </div>
-    <div>
-      <div class="fit">{{vision.fitFor}}岁</div>
-      <div class="visionPlay" @click.stop="enterVisionPlay">
-        <div class="visionPlayContent">
-          <img class="palyTringle" src="../../assets/home_vision_play.jpg" alt="">试听
-        </div>
-      </div>
-    </div>
-
   </div>
 </template>
 
@@ -28,15 +23,18 @@ export default {
   props: ['vision'],
   methods: {
     enterVisionDetail(id) {
+      console.log(id)
       this.$router.push({ path: '/home/visionDetail/' + id })
     },
     enterVisionPlay() {
-      if(this.vision.freeLessonList.length == 0){
-        return;
+      const { freeLessonList } = this.vision
+      if (!freeLessonList || freeLessonList.length === 0) {
+        return
       }
       this.$router.push({
-        path: '/audio/audioplay',
-        query: { id: this.vision.freeLessonList[0].id }
+        name: 'AudioPlay',
+        params: {id: freeLessonList[0].id },
+        query:{courseId: this.vision.id, columnType:'1003',courseName:this.vision.name}
       })
     }
   }
@@ -45,33 +43,28 @@ export default {
 
 <style lang="less" scoped>
 .cell {
-  width: 694px;
-  margin-left: 28px;
-  display: flex;
   flex-wrap: nowrap;
-  justify-content: space-between;
+  /*height: 240px;*/
+  align-items: center;
+  margin-bottom: 36px;
 }
-.detailContent {
-  flex: 2;
-  margin-left: 20px;
-}
-
-.visionicon {
+.vision-avater {
   width: 180px;
   height: 240px;
-  background-color: rgb(253, 231, 231);
   border-radius: 12px;
 }
-.visionTitle {
-  margin-top: 18px;
-  font-size: 32px;
-  color: rgb(68, 78, 98);
-  font-weight: bolder;
-}
-.visionDetail {
-  margin-top: 12px;
-  font-size: 24px;
-  color: rgb(148, 154, 170);
+.cell-content {
+  flex: 1;
+  margin-left: 20px;
+  padding: 20px 0;
+  /deep/ li {
+    color: #949aaa;
+  }
+  .cell-content-title {
+    font-size: 32px;
+    color: rgb(68, 78, 98);
+    font-weight: bolder;
+  }
 }
 .price {
   color: rgb(255, 163, 47);
@@ -79,40 +72,35 @@ export default {
 .footText {
   margin-top: 30px;
 }
-
+.cell-footer {
+  text-align: center;
+  padding: 28px 0;
+  flex-wrap: wrap;
+  flex-direction: column;
+  height: 240px;
+}
 .fit {
-  padding-left: 5px;
-  padding-right: 5px;
-  margin-top: 28px;
-  border: rgb(218, 221, 226) 2px solid;
+  border: 2px #dadde2 solid;
   border-radius: 20px;
   font-size: 20px;
-  color: rgb(170, 175, 188);
   height: 40px;
-  text-align: center;
+  padding: 0 10px;
   line-height: 40px;
+  min-width: 132px;
 }
-.palyTringle {
+.play-tringle {
   width: 16px;
   height: 20px;
   margin-right: 8px;
+  background-image: url('../../assets/images/home_vision_play.jpg');
 }
-.visionPlay {
+.cell-footer-btn {
   width: 132px;
   height: 60px;
+  padding: 14px 0px;
   border-radius: 30px;
   background-color: #ffa32f;
-  margin-top: 96px;
   color: #fff;
-  font-size: 24px;
-  text-align: center;
-  -webkit-box-shadow: 0 0 15px 2px #e5dacf;
-  -moz-box-shadow: 0 0 15px 2px #e5dacf;
   box-shadow: 0 0 15px 2px #e5dacf;
-}
-.visionPlayContent {
-  display: inline-block;
-  vertical-align: middle;
-  line-height: 60px;
 }
 </style>
