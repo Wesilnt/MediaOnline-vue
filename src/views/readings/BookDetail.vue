@@ -273,8 +273,7 @@ export default {
       p {
         margin: 0;
         font-size: 32px;
-        color: rgb(22, 35, 60);
-        line-height: 48px;
+        color: rgb(22, 35, 60); 
         overflow: hidden;
         text-overflow: ellipsis;
         display: -webkit-box;
