@@ -124,7 +124,7 @@ export default {
       let columnName = this.columntype == "1005" ? 
                 'videoColumnDetail':this.columntype == '1003'?
                 'VisionDetail':this.columntype == '1007'? 
-                '1001':'BookDetail'
+                'BookDetail':'FreeZone'
       this.$router.push({name: columnName, params: { courseId: this.courseid }})
     }
   }
