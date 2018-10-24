@@ -1,4 +1,4 @@
-import { wxConfig,getGroupBuyDetail,startGroupBuy,joinGroupBuy,startCollectLike,getCollectLike,unlockCourse,wechatSubscribed } from '../../api/groupBuyApi.js'
+import { getGroupBuyDetail,startGroupBuy,joinGroupBuy,startCollectLike,getCollectLike,unlockCourse,wechatSubscribed } from '../../api/groupBuyApi.js'
 import {getLessonListByCourse} from '../../api/columnsApi.js'
 import {getMyUserInfo} from '../../api/myApi'
 import {Toast} from 'vant'
@@ -40,7 +40,7 @@ const groupManagerData = {
         startPraiseFlag:false,
 
         //业务类型
-        serviceType:"",    ////播放类型 FreeZone(1001) 免费专区  OnlineCourse(1005) 在线课堂 OnlineVision(1003) 在线视野  Readings(1007) 读书会 
+        // serviceType:"",    ////播放类型 FreeZone(1001) 免费专区  OnlineCourse(1005) 在线课堂 OnlineVision(1003) 在线视野  Readings(1007) 读书会 
 
         isLoading:false,   //发起拼团  原价购买  发起集赞 防止重复操作
 
@@ -48,43 +48,13 @@ const groupManagerData = {
     },
     getters:{
         //专栏头图
-        buyCount(state,getters,{ videoColumnDetailData }) {
-            return videoColumnDetailData.buyCount
-        },
-        //专栏名称
-        // courseName(state,getters,{videoColumnDetailData},rootGetters) {
-        //     return rootGetters['videoColumnDetailData/courseName']
-        // },
-        courseName(state,getters,rootState) {
-            let nameStr = ""
-            switch(state.serviceType){
-                case "1003":
-                    nameStr = rootState.visionData.courseName
-                break
-                case "1005":
-                    nameStr = rootState.videoColumnDetailData.courseName
-                break
-                case "1007":
-                    nameStr = rootState.readingsData.courseName
-                break
-            }
-            return nameStr
-        },
+        buyCount:(state,getters,{ videoColumnDetailData })=> videoColumnDetailData.buyCount,
+        courseName:(state,getters,rootState) => rootState.columnDetail.name,
         //是否来自分享
         isFromShare(state,getters,rootState) {
-            let isFromShareStatus = null
-            switch(state.serviceType){
-                case "1003":
-                    isFromShareStatus = rootState.visionData.isFromShare
-                break
-                case "1005":
-                    isFromShareStatus = rootState.videoColumnDetailData.isFromShare
-                break
-                case "1007":
-                    isFromShareStatus = rootState.readingsData.isFromShare   
-                break
-            }
-            return isFromShareStatus
+            if(rootState.columnType=='1003') return rootState.visionData.isFromShare
+            if(rootState.columnType=='1005') return rootState.videoColumnDetailData.isFromShare
+            if(rootState.columnType=='1007') return rootState.readingsData.isFromShare
         }
     },
     mutations:{
@@ -139,11 +109,10 @@ const groupManagerData = {
             state.startPraiseFlag = flag
         },
 
-        bindColunmnInfo(state,{serviceType,profilePic,courseId,freeLesson}){
+        bindColunmnInfo(state,{profilePic,courseId,freeLesson}){
             state.profilePic = profilePic
             state.courseId = courseId
             state.freeLesson = freeLesson
-            state.serviceType = serviceType
         },
         
         setLoading(state ,isLoading){
@@ -166,9 +135,9 @@ const groupManagerData = {
                               break
                           }                          
                           if(1202==orderStatus){
-                            link = `${rootState.url}/#/${courseType[state.serviceType]}${courseId}?groupBuyId=${groupBuyId}`
+                            link = `${rootState.url}/#/${courseType[rootState.columnType]}${courseId}?groupBuyId=${groupBuyId}`
                           }else {
-                            link = `${rootState.url}/#/${courseType[state.serviceType]}${courseId}`
+                            link = `${rootState.url}/#/${courseType[rootState.columnType]}${courseId}`
                           }
                     }else{
                         switch (state.userAccessStatus) {
@@ -183,11 +152,11 @@ const groupManagerData = {
                               break
                           }
                           if(1005==state.userAccessStatus){
-                            link = `${rootState.url}/#/${courseType[state.serviceType]}${courseId}?groupBuyId=${groupBuyId}`
+                            link = `${rootState.url}/#/${courseType[rootState.columnType]}${courseId}?groupBuyId=${groupBuyId}`
                           }else if(1009==state.userAccessStatus) {
-                            link =  `${rootState.url}/#/praise/active/${courseId}/${collectLikeId}?columnType=${state.serviceType}` 
+                            link =  `${rootState.url}/#/praise/active/${courseId}/${collectLikeId}?columnType=${rootState.columnType}` 
                           }else {
-                            link = `${rootState.url}/#/${courseType[state.serviceType]}${courseId}`
+                            link = `${rootState.url}/#/${courseType[rootState.columnType]}${courseId}`
                           } 
                     }
                     console.log('groupmanager来自分享设置分享地址：', link, '   设置分享标题：', title)
@@ -204,8 +173,8 @@ const groupManagerData = {
                 })         
         },
 
-        initColumnInfo({commit,dispatch},{serviceType,courseId,profilePic,freeLesson}){
-            commit('bindColunmnInfo',{serviceType,courseId,profilePic,freeLesson})
+        initColumnInfo({commit,dispatch},{courseId,profilePic,freeLesson}){
+            commit('bindColunmnInfo',{courseId,profilePic,freeLesson})
             //获取专栏下所有课程
             let params = {
                 'courseId' :courseId,
@@ -664,8 +633,8 @@ const groupManagerData = {
         },
         
         //从新获取专栏详情接口,刷新父组件显示
-        async updateFatherData({dispatch,state}){
-            switch(state.serviceType){
+        async updateFatherData({dispatch,state,getters,rootState}){
+            switch(rootState.columnType){
                 case "1003":
                     dispatch('visionData/getVisionDetail',{"courseId" : state.courseId},{root:true})
                 break
@@ -676,7 +645,6 @@ const groupManagerData = {
                     dispatch('readingsData/getBookDetail',{"courseId" : state.courseId},{root:true})
                 break
             }
-
         },
 
         //获取专栏下所有课程

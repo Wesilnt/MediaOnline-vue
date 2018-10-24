@@ -66,9 +66,9 @@ const videoColumnDetailData = {
       //绑定业务类型,专栏头图,试听列表,专栏ID到拼团仓库中
       const profilePic = result.profilePic
       const freeLessonList = result.freeLessonList
-      const serviceType = '1005'
+      // const serviceType = '1005'
       dispatch('groupManagerData/initColumnInfo', {
-        serviceType,
+        // serviceType,
         courseId,
         profilePic,
         freeLesson: freeLessonList
