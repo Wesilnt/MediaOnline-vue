@@ -12,12 +12,16 @@
           <div  class="read-list-container">
             <div v-for="item of bookList" :key="item.id"  @click="toDetail(item.id)" class="list-item">
                 <div class="top-container" v-lazy:background-image="item.coverPic">
-                    <span v-if="new Date().getTime() - new Date(item.lastModifyTime).getTime()<30*24*3600*1000">上新</span>
+                    <span v-if="Date.now() - new Date(item.createTime).getTime()<30*24*3600*1000">上新</span>
                     <img src="../../assets/images/btn-play.png">
                 </div>
                 <div class="bottom-container">
                     <p>{{item.name}}</p>
-                    <span>¥ {{item.price}}</span>
+                    <p v-if="1001 === item.userAccessStatus  ||
+                             1003 === item.userAccessStatus || 
+                             1008 === item.userAccessStatus" 
+                             class="purchase">已购买</p>
+                    <span v-else>¥ {{item.price}}</span>
                 </div>
             </div> 
           </div> 
