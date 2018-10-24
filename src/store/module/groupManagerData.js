@@ -274,12 +274,7 @@ const groupManagerData = {
                 break
                 case 1009:                 
                     isShowGroupBuy = false
-<<<<<<< Updated upstream
                     Object.assign(toolsObject,{ 'collectText':'集赞中', "collage":false })                
-=======
-                    Object.assign(toolsObject,{ "collage":false })  
-                    console.log('AAAAAAAA',toolsObject)              
->>>>>>> Stashed changes
                 break
             }
             const groupBuyId = groupData.groupBuyId
