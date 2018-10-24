@@ -145,10 +145,12 @@ const groupManagerData = {
                               title = `我正在参加《${courseName}》拼团活动,仅差${leavePerson || 0}人,快来和我一起拼团吧!`
                               break
                             case 1009: //集赞中
-                              title = `我是${user.nickName}, ${true ? '我想免费' : '正在帮朋友'}领取《${courseName}》,求助攻~`
+                              title = `我是$
+                              ser.nickName}, ${true ? '我想免费' : '正在帮朋友'}领取《${courseName}》,求助攻~`
                               break
                             default:
-                              title = courseName
+                              title = course
+                              me
                               break
                           }
                           if(1005==state.userAccessStatus){
@@ -263,7 +265,7 @@ const groupManagerData = {
                 case 1007:
                     console.log('集赞成功未领取')
                     isShowGroupBuy = false
-                    Object.assign(toolsObject,{ "collage":false })
+                    Object.assign(toolsObject,{ 'collectText':'集赞成功未领取',"collage":false })
                 break
                 case 1008:
                     console.log('集赞成功已领取')
@@ -272,7 +274,7 @@ const groupManagerData = {
                 break
                 case 1009: 
                     isShowGroupBuy = false
-                    Object.assign(toolsObject,{ "collage":false })                
+                    Object.assign(toolsObject,{ 'collectText':'集赞中', "collage":false })                
                 break
             }
             const groupBuyId = groupData.groupBuyId
