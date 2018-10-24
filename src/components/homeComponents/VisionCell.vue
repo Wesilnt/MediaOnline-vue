@@ -11,9 +11,17 @@
     </ul>
     <div class="qhht-flex cell-footer">
       <span class="fit">{{vision.fitFor}}岁</span>
-      <a v-if="vision.freeLessonList" class="cell-footer-btn" @click.stop="enterVisionPlay">
-        <i class="qhht-icon play-tringle" />试听
+      <p v-if="1001 === vision.useraccessstatus  ||
+                1003 === vision.useraccessstatus || 
+                1008 === vision.useraccessstatus" 
+                class="purchase">已购买</p>
+      <a v-else-if="vision.freeLessonList" 
+                class="cell-footer-btn" 
+                @click.stop="enterVisionPlay">
+        <i class="qhht-icon play-tringle" />
+        <span class="try-listen">试听</span>
       </a>
+      
     </div>
   </div>
 </template>
@@ -33,8 +41,12 @@ export default {
       }
       this.$router.push({
         name: 'AudioPlay',
-        params: {id: freeLessonList[0].id },
-        query:{courseId: this.vision.id, columnType:'1003',courseName:this.vision.name}
+        params: { id: freeLessonList[0].id },
+        query: {
+          courseId: this.vision.id,
+          columnType: '1003',
+          courseName: this.vision.name
+        }
       })
     }
   }
@@ -102,5 +114,11 @@ export default {
   background-color: #ffa32f;
   color: #fff;
   box-shadow: 0 0 15px 2px #e5dacf;
+}
+.purchase {
+  width: 100%;
+  text-align: right;
+  font-size: 28px;
+  color: rgb(255, 163, 47);
 }
 </style>

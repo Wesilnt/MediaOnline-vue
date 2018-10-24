@@ -149,8 +149,7 @@ const groupManagerData = {
                               ser.nickName}, ${true ? '我想免费' : '正在帮朋友'}领取《${courseName}》,求助攻~`
                               break
                             default:
-                              title = course
-                              me
+                              title = courseName 
                               break
                           }
                           if(1005==state.userAccessStatus){
