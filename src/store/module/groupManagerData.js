@@ -265,7 +265,7 @@ const groupManagerData = {
                 case 1007:
                     console.log('集赞成功未领取')
                     isShowGroupBuy = false
-                    Object.assign(toolsObject,{ 'collectText':'集赞成功未领取',"collage":false })
+                    Object.assign(toolsObject,{ 'originPrice':'','collectText':'集赞成功未领取',"collage":false })
                 break
                 case 1008:
                     console.log('集赞成功已领取')
@@ -274,7 +274,7 @@ const groupManagerData = {
                 break
                 case 1009:                 
                     isShowGroupBuy = false
-                    Object.assign(toolsObject,{ 'collectText':'集赞中', "collage":false })                
+                    Object.assign(toolsObject,{ 'originPrice':'', 'collectText':'集赞中', "collage":false })         
                 break
             }
             const groupBuyId = groupData.groupBuyId
