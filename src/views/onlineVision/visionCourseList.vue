@@ -2,9 +2,9 @@
   <div>
     <div class="listHeader">
       <span class="headerCount">共{{courseCount}}讲</span>
-      <!-- <div class="ascButton" @click="reverseList">
+      <div class="ascButton" @click="reverseList">
         <img class="sortIcon" :src="Ascending?ascDown:ascUp" alt=""> {{Ascending?'正序':'倒叙'}}
-      </div> -->
+      </div>
 
     </div>
     <div class="category" v-for="item in categoryList" :key="item.id">

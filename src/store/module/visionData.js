@@ -21,7 +21,11 @@ const visionData = {
     },
     actions:{
         reverse({commit,state}){
-            commit('setCategoryList',state.categoryList.slice().reverse());
+            const result =  JSON.parse(JSON.stringify(state.categoryList))
+            result.map(item =>{
+              item.lessonList.reverse()
+            })
+            commit('setCategoryList',result.slice().reverse());
         },
         async getCategoryList({commit},courseId){
             let result = await getVisionCourseList({courseId:courseId})
