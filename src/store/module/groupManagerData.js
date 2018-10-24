@@ -161,7 +161,7 @@ const groupManagerData = {
                             link = `${rootState.url}/#/${courseType[rootState.columnType]}${courseId}`
                           } 
                     }
-                    console.log('groupmanager来自分享设置分享地址：', link, '   设置分享标题：', title)
+                    // console.log('groupmanager来自分享设置分享地址：', link, '   设置分享标题：', title)
                     let shareData = {
                       link,
                       title,
@@ -272,9 +272,14 @@ const groupManagerData = {
                     isShowGroupBuy = false
                     Object.assign(toolsObject,{ "isShow":false })               
                 break
-                case 1009: 
+                case 1009:                 
                     isShowGroupBuy = false
+<<<<<<< Updated upstream
                     Object.assign(toolsObject,{ 'collectText':'集赞中', "collage":false })                
+=======
+                    Object.assign(toolsObject,{ "collage":false })  
+                    console.log('AAAAAAAA',toolsObject)              
+>>>>>>> Stashed changes
                 break
             }
             const groupBuyId = groupData.groupBuyId
