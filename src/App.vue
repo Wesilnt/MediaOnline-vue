@@ -21,32 +21,44 @@ export default {
         title: '秦汉胡同在线',
         desc: '你一定会爱上的国学课',
         link,
-        imgUrl: 'http://qiniu.shbaoyuantech.com/FsvTsNINf5rPwNOmQTfe-WSxTSF1?imageView2/1/w/100/h/100/format/jpg'
+        imgUrl:
+          'http://qiniu.shbaoyuantech.com/FsvTsNINf5rPwNOmQTfe-WSxTSF1?imageView2/1/w/100/h/100/format/jpg'
       }
-      console.log('App分享数据:', options)
+      // console.log('App分享数据:', options)
       this.setWxShareFriend(options)
       this.setWxShareZone(options)
     }
   },
   watch: {
     $route({ fullPath }) {
-      this.registerWxConfig({
-        fullPath,
-        jsApiList: [
-          'onMenuShareAppMessage',
-          'onMenuShareTimeline',
-          'startRecord',
-          'stopRecord',
-          'onVoiceRecordEnd',
-          'playVoice',
-          'pauseVoice',
-          'stopVoice',
-          'onVoicePlayEnd',
-          'translateVoice',
-          'hideMenuItems'
-        ]
-      }) 
+      if (fullPath.includes('/my')) {
+        /*
+        * 隐藏我的相关页的分享及其他按钮
+        * */
+        this.registerWxConfig({
+          fullPath,
+          jsApiList: ['hideAllNonBaseMenuItem']
+        })
+        wx.hideAllNonBaseMenuItem()
+      } else {
+        this.registerWxConfig({
+          fullPath,
+          jsApiList: [
+            'onMenuShareAppMessage',
+            'onMenuShareTimeline',
+            'startRecord',
+            'stopRecord',
+            'onVoiceRecordEnd',
+            'playVoice',
+            'pauseVoice',
+            'stopVoice',
+            'onVoicePlayEnd',
+            'translateVoice',
+            'hideMenuItems'
+          ]
+        })
         this.handleWxShare(window.location.href)
+      }
     }
   }
 }
@@ -64,14 +76,14 @@ export default {
 }
 .popup-modal-white {
   background-color: #fff;
-    &:after{
-        content: '点击此处返回';
-        position: absolute;
-        bottom: 72px;
-        left: 0;
-        right: 0;
-        text-align: center;
-        color: #9a9a9a;
-    }
+  &:after {
+    content: '点击此处返回';
+    position: absolute;
+    bottom: 72px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    color: #9a9a9a;
+  }
 }
 </style>
