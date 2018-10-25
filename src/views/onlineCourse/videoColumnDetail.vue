@@ -5,7 +5,8 @@
       <GroupHeader></GroupHeader>
       <GroupContent></GroupContent>
       <!-- 底部工具条 -->
-      <tools-navbar/>
+      <Payment />
+      <toolsNavbar/>
     </div>
   </div>
 </template>
@@ -15,6 +16,7 @@ import SkeletonFullScreen from '../../components/SkeletonFullScreen'
 import GroupHeader from './components/GroupHeader'
 import GroupContent from './components/GroupContent'
 import toolsNavbar from '../../components/toolsNavbar.vue'
+import Payment from '../../components/Payment'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState, mapMutations, mapActions } = createNamespacedHelpers(
   'videoColumnDetailData'
@@ -24,20 +26,19 @@ export default {
   name: 'VideoColumnDetail',
   components: {
     SkeletonFullScreen,
-    'tools-navbar': toolsNavbar,
+    toolsNavbar,
     GroupHeader,
-    GroupContent
+    GroupContent,
+    Payment
   },
   data() {
     return {
-      courseId:this.$route.params.courseId,
-      groupBuyId:this.$route.query.groupBuyId
+      courseId: this.$route.params.courseId,
+      groupBuyId: this.$route.query.groupBuyId
     }
   },
   computed: {
-    ...mapState([
-      'loading'
-    ])
+    ...mapState(['loading'])
   },
   methods: {
     ...mapMutations(['initDatas', 'resetState']),
@@ -47,7 +48,10 @@ export default {
     //初始化页面数据(将路由中带过来的专栏ID存储到仓库)
     this.initDatas({ courseId: this.courseId, groupBuyId: this.groupBuyId })
     //获取专栏详情
-    this.getVideoColumnDetail({ courseId: this.courseId, groupBuyId: this.groupBuyId })
+    this.getVideoColumnDetail({
+      courseId: this.courseId,
+      groupBuyId: this.groupBuyId
+    })
   },
   beforeDestroy() {
     //页面销毁前将loading状态还原

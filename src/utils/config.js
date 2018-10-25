@@ -2,7 +2,7 @@
 const { NODE_ENV } = process.env
 
 // 调试选项，本地调试请改为 False
-export const IS_ONLINE = true
+export const IS_ONLINE = false
 // 测试 Token
 export const TEST_TOKEN = "53134d86-3393-4a13-a597-e6a70a43f3c5"
 
