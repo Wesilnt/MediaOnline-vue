@@ -143,7 +143,7 @@ export default {
 //大图浏览
 .videocol-bigimage {
   position: relative;
-  padding: 0 40px 40px;
+  padding: 0 40px;
   width: 100%;
   height: auto;
   //   margin: 40px 0;

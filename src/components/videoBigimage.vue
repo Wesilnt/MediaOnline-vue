@@ -2,7 +2,7 @@
   <div class="video-bigimage-container">
     <div class="originImage">
       <img :src="`${src}?imageView2/1/format/jpg`" class="lazy-img-larger img" @click="isExtend=true">
-      <!--<img :src="require('../assets/images/icon_zoom.png')" class="videocol-bigimage-search" @click="isExtend=true">-->
+      <img :src="require('../assets/images/icon_zoom.png')" class="videocol-bigimage-search" @click="isExtend=true">
     </div>
     <transition enter-active-class="fadeIn" leave-active-class="fadeOut">
       <div v-if="isExtend&&src" class="imageExtend" @click="isExtend=false">
@@ -39,7 +39,7 @@ export default {
 }
 .video-bigimage-container {
   display: inline-block;
-  width: 100%;
+  margin-bottom: 40px;
   .imageExtend {
     position: fixed;
     top: 0;
