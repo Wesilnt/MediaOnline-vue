@@ -38,7 +38,7 @@
             <div class="groupBuy-circleline" v-show="false"></div>
         </div>
         <!--1. 读书会头图-->
-        <div v-if="serviceType ==='1007'">
+        <div v-if="columnType ==='1007'">
           <div class="book-header-container lazy-img-larger">
             <div class="book-cover" v-lazy:background-image="`${profilePic}?imageView2/1/format/jpg`">
             </div>
@@ -52,7 +52,10 @@
 </template>
 
 <script>
-import { createNamespacedHelpers } from 'vuex'
+import {
+  createNamespacedHelpers,
+  mapState as rootState,
+} from 'vuex'
 const { mapState, mapGetters, mapActions } = createNamespacedHelpers(
   'videoColumnDetailData/groupManagerData'
 )
@@ -66,6 +69,7 @@ export default {
     CountDown
   },
   computed: {
+    ...rootState(['columnType']),
     ...mapState([
       'leavePerson',
       'countDownTime',

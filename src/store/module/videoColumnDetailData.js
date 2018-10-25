@@ -7,8 +7,7 @@ import groupManagerData from './groupManagerData'
 
 const videoColumnDetailData = {
   namespaced: true,
-  state: () => {
-    return {
+  state: {
       loading: true,//控制骨架屏的显示
       freeLessonList: [], //试看课程数组
       profilePic: '', //头图
@@ -23,7 +22,6 @@ const videoColumnDetailData = {
       isFromShare: false,//判断打开专栏页是否来自分享链接
       userAccessStatus:0,//用户和专栏的关系
       videoCourseList:[]//专栏的全部课集列表
-    }
   },
   mutations: {
     initDatas(state, { courseId, groupBuyId }) {

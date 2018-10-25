@@ -2,7 +2,7 @@
     <div class="purchase-toolbar" v-show="toolsObject&&toolsObject.isShow">
         <div class="toolbar-audition" @click="clickAuditionBtn">
             <i class="qhht-icon audition-icon"></i>
-            <p class="under-text">{{serviceType == "1005"?'试看':'试听'}}</p>
+            <p class="under-text">{{columnType == "1005"?'试看':'试听'}}</p>
         </div>
         <hr class="vertical-line"/>
         <div v-show="toolsObject&&toolsObject.originPrice" :disabled="isLoading" class="toolbar-price" :class="{'toolbar-price-active':toolsObject&&!toolsObject.collage&&!toolsObject.collect }"  @click="clickOriginPriceBtn">
@@ -21,7 +21,7 @@
                 <div>{{toolsObject&&toolsObject.collectText}}</div>
             </div>
         </div>
-        <Share :show="sharePageShow" :courseId="courseId" :columnType ="serviceType"  @close="cancelSharePage"></Share>
+        <Share :show="sharePageShow" :courseId="courseId" :columnType ="columnType"  @close="cancelSharePage"></Share>
         <PhoneVerif :style="{'z-index':100}" v-if="isShowMobileDialog" @callback="bindIsShowMobileDialog(false)"></PhoneVerif>
     </div>
 
@@ -88,6 +88,11 @@ export default {
     this.updateUserAccessStatus()
   },
   watch: {
+    /* 
+     仓库中的集赞ID绑定完成后发生改变且已经发起集赞,就自动跳到集赞详情页
+     这里添加判断是否发起集赞的标志位是为了解决.当从一个集赞中的专栏点开另一个专栏时
+     集赞ID也会发生改变,造成多余跳转
+    */
     collectLikeId: function(newVal) {
       if (newVal != 0 && this.startPraiseFlag) {
         this.toggolePraiseFlag(false)
@@ -97,7 +102,7 @@ export default {
             courseId: this.$route.params.courseId,
             collectLikeId: newVal
           },
-          query: { columnType: this.serviceType }
+          query: { columnType: this.columnType }
         })
       }
     },
@@ -111,7 +116,7 @@ export default {
     userAccessStatus: function(value) {}
   },
   computed: {
-    ...rootState(['url', 'columnDetail']),
+    ...rootState(['url','columnDetail','columnType']),
     ...mapState([
       'isLoading',
       'userList',
@@ -123,7 +128,6 @@ export default {
       'freeLesson', //试听对象
       'courseId', //专栏ID
       'startPraiseFlag',
-      'serviceType',
       'leavePerson',
       'isGroupCurrent',
       'orderStatus', //当前订单状态
@@ -355,7 +359,7 @@ export default {
               collectLikeId: this.collectLikeId
             },
             query: {
-              columnType: this.serviceType
+              columnType: this.columnType
             }
           })
           break
@@ -389,9 +393,9 @@ export default {
     //邀请好友拼团
     cancelSharePage() {
       this.sharePageShow = false
-    },
-    gotoInfoPage(id) {
-      switch (this.serviceType) {
+    }, 
+    gotoInfoPage(id){   
+      switch (this.columnType) {
         case '1005':
           this.$router.push({
             name: 'videoCourseDetail',
@@ -404,22 +408,14 @@ export default {
           this.$router.push({
             name: 'AudioPlay',
             params: { id },
-            query: {
-              courseId: this.courseId,
-              columnType: this.serviceType,
-              courseName: this.courseName
-            }
+            query: {courseId: this.courseId,  columnType: this.columnType, courseName: this.courseName }
           })
           break
         case '1007':
           this.$router.push({
             name: 'AudioPlay',
             params: { id },
-            query: {
-              courseId: this.courseId,
-              columnType: this.serviceType,
-              courseName: this.courseName
-            }
+            query: {courseId: this.courseId,  columnType: this.columnType, courseName: this.courseName }
           })
           break
       }
