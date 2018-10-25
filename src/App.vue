@@ -30,35 +30,40 @@ export default {
     }
   },
   watch: {
-    $route({ fullPath }) {
-      if (fullPath.includes('/my')) {
-        /*
+    $route: {
+      handler({ fullPath }) {
+        if (fullPath === '/') return
+        console.log(fullPath)
+        if (fullPath.includes('/my')) {
+          /*
         * 隐藏我的相关页的分享及其他按钮
         * */
-        this.registerWxConfig({
-          fullPath,
-          jsApiList: ['hideAllNonBaseMenuItem']
-        })
-        wx.hideAllNonBaseMenuItem()
-      } else {
-        this.registerWxConfig({
-          fullPath,
-          jsApiList: [
-            'onMenuShareAppMessage',
-            'onMenuShareTimeline',
-            'startRecord',
-            'stopRecord',
-            'onVoiceRecordEnd',
-            'playVoice',
-            'pauseVoice',
-            'stopVoice',
-            'onVoicePlayEnd',
-            'translateVoice',
-            'hideMenuItems'
-          ]
-        })
-        this.handleWxShare(window.location.href)
-      }
+          this.registerWxConfig({
+            fullPath,
+            jsApiList: ['hideAllNonBaseMenuItem']
+          })
+          wx.hideAllNonBaseMenuItem()
+        } else {
+          this.registerWxConfig({
+            fullPath,
+            jsApiList: [
+              'onMenuShareAppMessage',
+              'onMenuShareTimeline',
+              'startRecord',
+              'stopRecord',
+              'onVoiceRecordEnd',
+              'playVoice',
+              'pauseVoice',
+              'stopVoice',
+              'onVoicePlayEnd',
+              'translateVoice',
+              'hideMenuItems'
+            ]
+          })
+          this.handleWxShare(window.location.href)
+        }
+      },
+      immediate: true
     }
   }
 }
