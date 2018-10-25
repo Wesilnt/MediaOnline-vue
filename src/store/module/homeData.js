@@ -41,7 +41,6 @@ const homeData = {
     async getNewMessageCount({ commit }) {
       const result = await getNewMessageCount()
       const { count , fromAvatarUrl  } = result
-      console.log(result)
       commit('setNewMessageCount', count)
       commit('setFromAvatarUrl', fromAvatarUrl)
     },
