@@ -3,55 +3,39 @@
     <SkeletonFullScreen  v-if="renderLoading"/>
     <div v-else id="detailmain" ref="detailmain">
     <GroupHeader />
-    <!-- <img :src="visionDetail.coverPic" class="head" alt=""> -->
-
     <ScrollNavBar :bars="navBars" />
     <!-- introduce -->
-    <div  class="intro"> 
-      <div id="intro" class="info bottomline">
-        <div class="text-margin">
-          <CourseIntroduce :courseinfo="visionDetail.description" />
-          </div>
-         
-        <!-- <div :class=" showall?'textFold infoText fulltext':'textFold infoText detault'">{{visionDetail.description}}
+    <div id="intro">
+      <div  class="vision-wrapper">
+        <div class="vision-body">
+          <CourseIntroduce :courseinfo="visionDetail.description"  />
         </div>
-        <div :class="showall?'show hide':'show'">
-          <img :src="showall?arrowUp:arrowDown" class="visionarrow" alt="" @click="ellipsis">
-        </div> -->
       </div>
-
-      <!-- outline -->
-      <div class="outline bottomline">
-        <div class="noticeBuyText">课程列表
-          <span class="count">(共{{visionDetail.lessonCount}}讲)</span>
+      <div class="vision-wrapper">
+        <h3 class="vision-title">课程列表  <span class="vision-title-badge">(共{{visionDetail.lessonCount}}讲)</span></h3>
+        <div class="vision-body">
+          <videoBigimage :src="visionDetail.outlinePic"></videoBigimage>
         </div>
-         <videoBigimage :src="visionDetail.outlinePic" class="outlineImage"></videoBigimage>
-        <img class="zoom" src="../../assets/images/icon_zoom.png" alt="">
       </div>
     </div>
+
     <!-- try -->
-    <div id="try" class="try bottomline">
-      <DetailHeader title="试听课程" subtitle="全部" link='/home/visionDetail/visionCourseList' :courseId="courseId" :coursename="courseName"/>
-      <SingleSetList 
-        :courseid="courseId"
-        :list='visionDetail.freeLessonList' 
-        :singletype="'1003'"/>
-    </div>
-    <!-- message -->
-    <div id="message" class="message bottomline" >
-      <DetailHeader title="精选留言" link='/videoCourseCmts' :courseId="courseId" :subtitle="visionDetail.commentCount + '条'" />
-      <!-- <div v-for="item of commentList" :key="item.id" >
-        <comment-item :comment="item"  class="vision_comment_item"/>
-      </div> -->
-       <CommentList  :regionid="courseId" :regiontype="2201" :haspadding="true" ></CommentList>
-    </div>
-
-    <div class="noticeBuyArea">
-      <div class="noticeBuyText">
-        购买须知
-        <p v-html="visionDetail.buyIntro"/>
+      <div id="try" class="vision-wrapper">
+        <DetailHeader title="试听课程" subtitle="全部" link='/home/visionDetail/visionCourseList' :courseId="courseId" :coursename="courseName"/>
+        <SingleSetList
+                :courseid="courseId"
+                :list='visionDetail.freeLessonList'
+                :singletype="'1003'"/>
       </div>
-    </div>
+    <!-- message -->
+      <div id="message" class="vision-wrapper">
+        <DetailHeader title="精选留言" link='/videoCourseCmts' :courseId="courseId" :subtitle="visionDetail.commentCount + '条'" />
+        <CommentList  :regionid="courseId" :regiontype="2201" :haspadding="true" ></CommentList>
+      </div>
+      <div class="vision-wrapper wrapper-last">
+        <h3 class="vision-title">购买须知</h3>
+        <div class="vision-body" v-html="visionDetail.buyIntro"></div>
+      </div>
    <tools-navbar
         v-on:router-to-audition="routerToAudition"
         v-on:router-to-collage="routerToCollage"
@@ -81,7 +65,7 @@ import {
   mapState as rootState,
   mapActions as rootActions
 } from 'vuex'
-const { mapState, mapActions,mapMutations } = createNamespacedHelpers(
+const { mapState, mapActions, mapMutations } = createNamespacedHelpers(
   'visionData'
 )
 export default {
@@ -94,7 +78,7 @@ export default {
     toolsNavbar,
     GroupHeader,
     CourseIntroduce,
-      SkeletonFullScreen
+    SkeletonFullScreen
   },
   props: ['courseId'],
   data() {
@@ -131,30 +115,28 @@ export default {
     this.getCommentList(this.courseId)
   },
   mounted() {
-    // this.getUserInfo().then(user => { 
-      //拼装分享内容
-      this.shareData = {
-        link: this.url + `/#/home/visionDetail/${this.courseId}`,
-        title: this.courseName,
-        desc: '你一定会爱上国学课...',
-        imgUrl:`${this.visionDetail.sharePostUrl}?imageView2/1/w/100/h/100/format/jpg`,
-        successCB: () => console.log('分享回调成功'),
-        cancelCB: () => console.log('分享回调失败')
-      }
-      this.setWxShareFriend(this.shareData)
-      this.setWxShareZone(this.shareData)
+    // this.getUserInfo().then(user => {
+    //拼装分享内容
+    this.shareData = {
+      link: this.url + `/#/home/visionDetail/${this.courseId}`,
+      title: this.courseName,
+      desc: '你一定会爱上国学课...',
+      imgUrl: `${
+        this.visionDetail.sharePostUrl
+      }?imageView2/1/w/100/h/100/format/jpg`,
+      successCB: () => console.log('分享回调成功'),
+      cancelCB: () => console.log('分享回调失败')
+    }
+    this.setWxShareFriend(this.shareData)
+    this.setWxShareZone(this.shareData)
     // })
   },
   computed: {
     ...rootState(['url']),
-    ...mapState(['visionDetail', 'courseName', 'commentList','renderLoading'])
+    ...mapState(['visionDetail', 'courseName', 'commentList', 'renderLoading'])
   },
   methods: {
-    ...rootActions([
-      'getUserInfo',
-      'setWxShareFriend',
-      'setWxShareZone'
-    ]),
+    ...rootActions(['getUserInfo', 'setWxShareFriend', 'setWxShareZone']),
     ...mapActions(['getVisionDetail', 'getCommentList']),
     ...mapMutations(['initDatas']),
     ellipsis() {
@@ -174,93 +156,23 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.head {
-  display: block;
-  width: 100%;
-  height: 300px;
-  background-color: red;
+.vision-wrapper {
+  border-bottom: 8px solid #f7f7f7;
+  &.wrapper-last{
+    padding-bottom: 200px;
+  }
 }
-
-.infoText {
-  margin: 40px;
-  font-size: 30px;
-  color: rgb(112, 127, 155);
-}
-
-.textFold {
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  text-overflow: ellipsis;
-  overflow: hidden;
-}
-.text-margin {
-  margin: 0 40px;
-}
-.detault {
-  -webkit-line-clamp: 6;
-}
-.fulltext {
-  -webkit-line-clamp: 0;
-}
-.show {
-  margin-top: -80px;
-  height: 100px;
-  position: relative;
-  background: linear-gradient(rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 1));
-}
-.hide {
-  margin-top: -40px;
-  background: white;
-}
-.visionarrow {
-  width: 48px;
-  height: 48px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin-top: -24px;
-  margin-left: -24px;
-}
-
-.bottomline {
-  border-bottom: 8px solid rgb(238, 238, 238);
-}
-
-.noticeBuyText {
+.vision-title {
   font-size: 32px;
-  font-weight: bolder;
-  color: rgb(39, 51, 75);
-  margin: 40px;
+  color: #3e3e53;
+  padding: 48px 40px;
 }
-.outline {
-  position: relative;
-}
-.outlineImage {
-  width: 670px;
-  // height: 800px;
-  margin: 0 40px 40px;
-  background-size: 100%;
-}
-.count {
+.vision-title-badge {
   font-size: 28px;
-  color: rgb(155, 161, 176);
+  color: #9ba1b0;
+  font-weight: normal;
 }
-.zoom {
-  width: 72px;
-  height: 72px;
-  position: absolute;
-  right: 56px;
-  bottom: 60px;
-}
-.noticeBuyArea {
-  margin-bottom: 200px;
-}
-.noticeBuyTextDetail {
-  margin-top: 10px;
-  color: rgb(128, 128, 128);
-  font-weight: 400;
-}
-.vision_comment_item {
-  padding: 40px 48px;
+.vision-body {
+  padding: 0 40px;
 }
 </style>

@@ -49,11 +49,11 @@ export default {
       sharePageShow: false,
       //分享内容
       shareData: null,
-      lastClickTime:0,
+      lastClickTime: 0,
       //点击原价购买按钮
-      isClickOriginPriceBtn:false,
+      isClickOriginPriceBtn: false,
       //点击拼团按钮
-      isClickCollageBtn:false,
+      isClickCollageBtn: false
     }
   },
   props: {
@@ -84,7 +84,7 @@ export default {
     Share,
     PhoneVerif
   },
-  beforeDestroy(){
+  beforeDestroy() {
     this.updateUserAccessStatus()
   },
   watch: {
@@ -108,12 +108,10 @@ export default {
         this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
       }
     },
-    userAccessStatus: function(value) {
-     
-    }
+    userAccessStatus: function(value) {}
   },
   computed: {
-    ...rootState(['url','columnDetail']),
+    ...rootState(['url', 'columnDetail']),
     ...mapState([
       'isLoading',
       'userList',
@@ -128,14 +126,14 @@ export default {
       'serviceType',
       'leavePerson',
       'isGroupCurrent',
-      'orderStatus',//当前订单状态
-      'isOwner',    //是不是开团人 
+      'orderStatus', //当前订单状态
+      'isOwner', //是不是开团人
       'isGroupCurrent', //当前用户是否在拼团列表
-      'isFullStaff',//拼团是否已满
-      'achievePayment',//当前用户是否完成支付
-      'isAllPay',//拼团用户列表中的用户是否都完成支付
-      'currUserStatus',//当前用户的支付状态
-      'lessonsArray'//专栏下所有课程
+      'isFullStaff', //拼团是否已满
+      'achievePayment', //当前用户是否完成支付
+      'isAllPay', //拼团用户列表中的用户是否都完成支付
+      'currUserStatus', //当前用户的支付状态
+      'lessonsArray' //专栏下所有课程
     ]),
     ...mapGetters(['isFromShare', 'courseName'])
   },
@@ -147,12 +145,12 @@ export default {
     }
   },
   methods: {
-    ...rootActions([
-      'getUserInfo',
-      'setWxShareFriend',
-      'setWxShareZone'
+    ...rootActions(['getUserInfo', 'setWxShareFriend', 'setWxShareZone']),
+    ...mapMutations([
+      'bindIsShowMobileDialog',
+      'toggolePraiseFlag',
+      'updateUserAccessStatus'
     ]),
-    ...mapMutations(['bindIsShowMobileDialog', 'toggolePraiseFlag','updateUserAccessStatus']),
     ...mapActions([
       'startGroupBuy',
       'getCollectLike',
@@ -173,18 +171,18 @@ export default {
     },
     //点击原价购买按钮
     clickOriginPriceBtn() {
-      if(this.isQuiklyClick())return 
+      if (this.isQuiklyClick()) return
       this.isClickCollageBtn = false
       this.isClickOriginPriceBtn = true
-      if(this.isLoading) {
-        this.$toast("正在调起支付...")
+      if (this.isLoading) {
+        this.$toast('正在调起支付...')
         return
-      }  
-      let params = { courseId: this.courseId, payType: 0 } 
+      }
+      let params = { courseId: this.courseId, payType: 0 }
       switch (this.userAccessStatus) {
         //没有购买和集赞行为
         case 0:
-        case -3://拼团失败
+        case -3: //拼团失败
           this.checkoutAuthorrization(params)
           break
         case 1001:
@@ -197,109 +195,134 @@ export default {
     },
     //点击拼团按钮
     clickCollageBtn() {
-      if(this.isQuiklyClick())return
+      if (this.isQuiklyClick()) return
       this.isClickCollageBtn = true
       this.isClickOriginPriceBtn = false
-      if(this.isLoading) { 
-        this.$toast("正在调起支付...")
+      if (this.isLoading) {
+        this.$toast('正在调起支付...')
         return
-      } 
-      console.log("支付事件")
+      }
+      console.log('支付事件')
       let params = null
-      console.log('是否来自分享'+ this.isFromShare)
-      if(this.isFromShare){
-        console.log('正常进入'+ this.orderStatus)
+      console.log('是否来自分享' + this.isFromShare)
+      if (this.isFromShare) {
+        console.log('正常进入' + this.orderStatus)
         //从分享进入
-        switch(this.orderStatus){
+        switch (this.orderStatus) {
           case 1201:
-          break
+            break
           case 1204:
             //拼团失败,重新发起拼团
-            params = {courseId: this.courseId, payType: 1}
+            params = { courseId: this.courseId, payType: 1 }
             this.checkoutAuthorrization(params)
-          break
+            break
           case 1203:
             //拼团成功
-            if(this.isGroupCurrent){
+            if (this.isGroupCurrent) {
               //当前用户在拼团用户列表中,显示我要学习,就解锁专栏,跳转到单集详情页
               if (this.lessonsArray && this.lessonsArray.length > 0) {
-                   const { id } = this.lessonsArray[0]
-                   this.gotoInfoPage(id)
+                const { id } = this.lessonsArray[0]
+                this.gotoInfoPage(id)
               }
-            }else {
+            } else {
               //当前用户不在用户列表中,就重新发起拼团
-              params = {courseId: this.courseId, payType: 1}
+              params = { courseId: this.courseId, payType: 1 }
               this.checkoutAuthorrization(params)
             }
-          break
+            break
           case 1202:
             //拼团中
             //拼团中&&开团人  显示  邀请好友拼团
-            if(this.isOwner){
+            if (this.isOwner) {
               this.sharePageShow = true
               //拼装分享内容
               // this.setShareInfo()
             }
             //拼团中&& 参团人 && 如果拼团已满 && 当前用户已完成购买 && 存在其他人未完成支付  "立即邀请好友拼团"
-            if(!this.isOwner&&this.isFullStaff&&this.achievePayment&&!this.isAllPay){
+            if (
+              !this.isOwner &&
+              this.isFullStaff &&
+              this.achievePayment &&
+              !this.isAllPay
+            ) {
               this.sharePageShow = true
               //拼装分享内容
               // this.setShareInfo()
             }
             //拼团中&&参团人&&当前拼团未满&&当前用户完成支付   按钮显示:"邀请好友拼团"
-            if (!this.isOwner && !this.isFullStaff && this.achievePayment){
+            if (!this.isOwner && !this.isFullStaff && this.achievePayment) {
               this.sharePageShow = true
               //拼装分享内容
               // this.setShareInfo()
             }
             //拼团中&&参团人&&当前拼团未满&&当前用户未调起支付   按钮显示:"参与拼团"
-            if(!this.isOwner && !this.isFullStaff && !this.achievePayment && this.currUserStatus == 0){
-              params = {groupBuyId: this.groupBuyId, payType: 2}
+            if (
+              !this.isOwner &&
+              !this.isFullStaff &&
+              !this.achievePayment &&
+              this.currUserStatus == 0
+            ) {
+              params = { groupBuyId: this.groupBuyId, payType: 2 }
               this.checkoutAuthorrization(params)
             }
             //拼团中&&参团人&&当前拼团未满&&当前用户调起支付未支付完成   按钮显示:"继续支付"
-            if(!this.isOwner && !this.isFullStaff && !this.achievePayment && this.currUserStatus == 2601){
-              params = {groupBuyId: this.groupBuyId, payType: 2}
+            if (
+              !this.isOwner &&
+              !this.isFullStaff &&
+              !this.achievePayment &&
+              this.currUserStatus == 2601
+            ) {
+              params = { groupBuyId: this.groupBuyId, payType: 2 }
               this.checkoutAuthorrization(params)
             }
             //拼团中&&参团人&&当前拼团已满&&当前用户未完成支付&&当前用户不在拼团用户列表中  按钮显示"我要开团"
-            if(!this.isOwner && this.isFullStaff && !this.achievePayment && !this.isGroupCurrent){
-              params = {courseId: this.courseId, payType: 1}
+            if (
+              !this.isOwner &&
+              this.isFullStaff &&
+              !this.achievePayment &&
+              !this.isGroupCurrent
+            ) {
+              params = { courseId: this.courseId, payType: 1 }
               this.checkoutAuthorrization(params)
             }
             //拼团中&&参团人&&当前拼团已满&&当前用户未完成支付&&当前用户在拼团用户列表中  按钮显示"继续支付"
-            if(!this.isOwner && this.isFullStaff && !this.achievePayment && this.isGroupCurrent){
-              params = {groupBuyId: this.groupBuyId, payType: 2}
-              this.checkoutAuthorrization(params)                 
+            if (
+              !this.isOwner &&
+              this.isFullStaff &&
+              !this.achievePayment &&
+              this.isGroupCurrent
+            ) {
+              params = { groupBuyId: this.groupBuyId, payType: 2 }
+              this.checkoutAuthorrization(params)
             }
-          break
+            break
         }
-      }else{
+      } else {
         //正常进入
-        console.log('正常进入'+ this.userAccessStatus)
-        switch (this.userAccessStatus){
+        console.log('正常进入' + this.userAccessStatus)
+        switch (this.userAccessStatus) {
           case -3:
             //拼团失败,重新发起拼团 比如从我的拼团记录中点击一张失败的单子进入
-            params = {courseId: this.courseId, payType: 1}
+            params = { courseId: this.courseId, payType: 1 }
             this.checkoutAuthorrization(params)
-          break
+            break
           case 0:
             //没有购买和集赞行为
-            params = {courseId: this.courseId, payType: 1}
+            params = { courseId: this.courseId, payType: 1 }
             this.checkoutAuthorrization(params)
-          break
+            break
           case 1003:
             //拼团成功
             if (this.lessonsArray && this.lessonsArray.length > 0) {
-                  const { id } = this.lessonsArray[0]
-                  this.gotoInfoPage(id)
+              const { id } = this.lessonsArray[0]
+              this.gotoInfoPage(id)
             }
-          break
+            break
           case 1005:
             //拼团中
             this.sharePageShow = true
-            console.log('sharePageShow =',this.sharePageShow)
-          break
+            console.log('sharePageShow =', this.sharePageShow)
+            break
         }
       }
     },
@@ -319,8 +342,8 @@ export default {
         case 1008:
           //集赞成功已领取  解锁专栏 跳转到单集详情页
           if (this.lessonsArray && this.lessonsArray.length > 0) {
-                   const { id } = this.lessonsArray[0]
-                  this.gotoInfoPage(id)
+            const { id } = this.lessonsArray[0]
+            this.gotoInfoPage(id)
           }
           break
         case 1009:
@@ -354,8 +377,8 @@ export default {
           break
       }
     },
-    isQuiklyClick(){
-      if(Date.now()-this.lastClickTime < 1000){
+    isQuiklyClick() {
+      if (Date.now() - this.lastClickTime < 1000) {
         // this.$toast('按钮点击频率太高了...')
         this.lastClickTime = Date.now()
         return true
@@ -366,8 +389,8 @@ export default {
     //邀请好友拼团
     cancelSharePage() {
       this.sharePageShow = false
-    }, 
-    gotoInfoPage(id){   
+    },
+    gotoInfoPage(id) {
       switch (this.serviceType) {
         case '1005':
           this.$router.push({
@@ -381,14 +404,22 @@ export default {
           this.$router.push({
             name: 'AudioPlay',
             params: { id },
-            query: {courseId: this.courseId,  columnType: this.serviceType, courseName: this.courseName }
+            query: {
+              courseId: this.courseId,
+              columnType: this.serviceType,
+              courseName: this.courseName
+            }
           })
           break
         case '1007':
           this.$router.push({
             name: 'AudioPlay',
             params: { id },
-            query: {courseId: this.courseId,  columnType: this.serviceType, courseName: this.courseName }
+            query: {
+              courseId: this.courseId,
+              columnType: this.serviceType,
+              courseName: this.courseName
+            }
           })
           break
       }
@@ -506,7 +537,7 @@ export default {
     font-size: 20px;
   }
 }
-.van-loading{
+.van-loading {
   position: absolute;
   left: 10px;
   width: 18px;
