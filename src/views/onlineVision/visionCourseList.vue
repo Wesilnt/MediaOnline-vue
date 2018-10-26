@@ -124,7 +124,7 @@ export default {
 .categoryHeaderCount {
   display: inline-block;
   position: absolute;
-  right: 30px;
+  right: 40px;
   margin-top: 28px;
 }
 .categoryList {
