@@ -39,3 +39,8 @@ export async function lessonListenForVedio(params) {
 export async function uploadAnswer(params) {
   return request.post('/lesson/doAnswer', params)
 }
+
+//少年视野获取专栏分类列表
+export function getVisionCourseList(params){
+  return request(`/lesson/getCategoryListByCourse?${stringify(params)}`)
+}

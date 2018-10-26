@@ -1,6 +1,6 @@
 <template>
     <div>
-        <VisionDetail v-if="columnType === '1003'"/>
+        <VisionDetail v-if="columnType === '1003'" />
         <videoColumnDetail v-if="columnType === '1005'" />      
         <BookDetail v-if="columnType === '1007'"/>
     </div>
@@ -21,7 +21,7 @@ export default {
         videoColumnDetail,
         VisionDetail,
         BookDetail
-    }  
+    },
 }
 </script>
 
