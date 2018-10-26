@@ -51,6 +51,7 @@ const homeData = {
       commit('setVideoList', result.videoList)
       commit('setBookList', result.bookList)
       commit('setList', result)
+      console.log("---------",result)
     },
     async getVisionList({ commit }) {
       let result = await getVisionList()
