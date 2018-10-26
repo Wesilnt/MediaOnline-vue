@@ -103,122 +103,20 @@ export default {
         })
       }
       e.preventDefault()
-    },
-    _togglePlay() {
-      this._drawPlayIconBg()
-      let playIcon = new Image()
-      if (this.isPlaying) {
-        playIcon.src = require('../../assets/images/audio_play_play.png')
-      } else {
-        playIcon.src = require('../../assets/images/icon_pause.png')
-      }
-      playIcon.onload = () => {
-        this._ctx.drawImage(playIcon,this.width / 2 - 5,this.height / 2 - 8,10,16)
-      }
-    },
-    //设置进度
-    _setProgress: function(progress, max) {
-      this._drawProgress(progress, max)
-    },
-    //绘制进度底色
-    _drawProgressColor: function() {
-      this._ctx.beginPath()
-      this._ctx.arc(this.width / 2,this.height / 2,this.height / 2,0,2 * Math.PI,1)
-      this._ctx.fillStyle = 'white'
-      this._ctx.fill()
-
-      // this._ctx.fillStyle = '#EB852A';
-      // this._ctx.shadowOffsetX = 15; // 阴影Y轴偏移
-      // this._ctx.shadowOffsetY = 15; // 阴影X轴偏移
-      // this._ctx.shadowBlur = 14; // 模糊尺寸
-      // this._ctx.shadowColor = 'rgba(0, 0, 0, 0.5)'; // 颜色
-      // this._ctx.beginPath();
-      // this._ctx.arc(this.width/2, this.height/2 , this.height/2, 0, 2 * Math.PI, false);
-      // this._ctx.fill();
-    },
-    //绘制按鈕底色
-    _drawPlayIconBg: function() {
-      this._ctx.beginPath()
-      this._ctx.arc(
-        this.width / 2,
-        this.height / 2,
-        this.width / 2 - this.outRingWidth - this.progressgWidth + 2,
-        0,
-        2 * Math.PI,
-        1
-      )
-      this._ctx.fillStyle = '#FDE7E7'
-      this._ctx.fill()
-    },
-    //绘制进度
-    _drawProgress: function(progress, duration) {
-      let angle = (-1 / 2) * Math.PI + (progress / duration) * 2 * Math.PI
-      let max = parseInt(duration)
-      let value = parseInt(progress)
-      //1. 进度条
-      this._ctx.beginPath()
-      this._ctx.lineWidth = this.progressgWidth
-      this._ctx.strokeStyle = '#FFCD7D'
-      this._ctx.arc(
-        this.width / 2,
-        this.height / 2,
-        this.height / 2 - this.outRingWidth,
-        (-1 / 2) * Math.PI,
-        angle,
-        0
-      )
-      this._ctx.stroke()
-      this._ctx.closePath()
-      //2. 底色部分
-      this._ctx.beginPath()
-      this._ctx.lineWidth = this.progressgWidth
-      this._ctx.strokeStyle = 'white'
-      this._ctx.arc(
-        this.width / 2,
-        this.height / 2,
-        this.height / 2 - this.outRingWidth,
-        angle,
-        (3 / 2) * Math.PI,
-        0
-      )
-      this._ctx.stroke()
-      this._ctx.closePath()
     }
   },
   mounted() {
-    if (this.$route.path)
-      this.$refs.mediaIcon.addEventListener(
-        'touchstart',
-        this._touchStart,
-        true
-      )
+    let navBar = document.getElementById('navbar')
+    console.log("navBar:",navBar)
+    this.$refs.mediaIcon.addEventListener( 'touchstart',this._touchStart,true)
     this.$refs.mediaIcon.addEventListener('touchmove', this._touchMove, true)
     this.$refs.mediaIcon.addEventListener('touchend', this._touchEnd, true)
-    // this._canvas = this.$refs.canvasArc
-    // this._ctx =  this._canvas.getContext('2d')
-    // if(window.devicePixelRatio){
-    //   this._canvas.style.width = this.width + "px";
-    //   this._canvas.style.height = height + "px";
-    //   this._canvas.height = height * window.devicePixelRatio;
-    //   this._canvas.width = width * window.devicePixelRatio;
-    // }
-    // this._drawProgressColor()
-    // this._drawPlayIconBg()
-    // this._setProgress(10, 100)
-    // this._togglePlay()
-
-    // if(window.devicePixelRatio){
-    //   this._ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-    // }
   },
   watch: {
     isPlaying: function(value) {
-      // this._togglePlay(value)
       return value
     },
     currentTime: function(value) {
-      // console.log(this.$route.path)
-      // this._setProgress(this.currentTime,this.maxTime)
       this.progress = (value * 100) / this.maxTime
       return value
     },
