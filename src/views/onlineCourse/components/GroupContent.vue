@@ -71,7 +71,7 @@ export default {
           ref: 'desc'
         },
         {
-          title: '试听',
+          title: '试看',
           ref: 'tryCourse'
         },
         {
