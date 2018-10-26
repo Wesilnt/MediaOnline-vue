@@ -8,7 +8,9 @@
 
     </div>
     <div class="category" v-for="item in categoryList" :key="item.id">
-      <div v-if="item.id != -1" @click="spreat(item.id)" :class="(item.id ===selectCate)&&spread?'categoryHeader selectShadow':'categoryHeader'" :style="{background:'url('+item.picUrl+')'}">
+      <div v-if="item.id != -1" @click="spreat(item.id)" 
+      :class="(item.id ===selectCate)&&spread?'categoryHeader selectShadow':'categoryHeader'" 
+      :style="{background:'url('+item.picUrl+')',backgroundSize:'100%'}">
         <div class="categoryHeaderCount"> {{item.lessonCount}}期 </div>
       </div>
       <SingleSetList
@@ -117,6 +119,7 @@ export default {
   color: #3e3e3e;
   margin-left: 20px;
   border-radius: 8px;
+  
 }
 .categoryHeaderCount {
   display: inline-block;
