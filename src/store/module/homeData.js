@@ -6,7 +6,7 @@ import {
   getVideoList,
   getBookList,
   getAllList,
-} from '../../api/homeApi'
+} from '../../api/homeApi' 
 const homeData = {
   namespaced: true,
   state: {
@@ -17,13 +17,14 @@ const homeData = {
     freeList: [],
     visionList: [],
     videoList: [],
-    bookList: []
+    bookList: [], 
+    columns:[]
   },
   actions: {
     async getIndexPageData({ dispatch, commit }) {
       await dispatch('getBannerList')
       dispatch('getNewMessageCount')
-      // await dispatch('getFreeList')
+      await dispatch('getFreeList')
       // dispatch('getVisionList')
       commit('setLoading', false)
       // dispatch('getVideoList')
@@ -49,6 +50,7 @@ const homeData = {
       commit('setVisionList', result.visionList)
       commit('setVideoList', result.videoList)
       commit('setBookList', result.bookList)
+      commit('setList', result)
     },
     async getVisionList({ commit }) {
       let result = await getVisionList()
@@ -70,8 +72,9 @@ const homeData = {
     setBannerList(state, bannerList) {
       state.bannerList = bannerList
     },
-    setFreeList(state, freeList) {
-      state.freeList = freeList
+    setFreeList(state, freeList) { 
+      state.freeList = freeList 
+      state.columns = {...state.columns,'freeList':freeList}
     },
     setFromAvatarUrl(state, fromAvatarUrl) {
       state.fromAvatarUrl = fromAvatarUrl
@@ -81,6 +84,10 @@ const homeData = {
     },
     setVisionList(state, visionList) {
       state.visionList = visionList
+    },
+    setList(state, result) { 
+      // state.columns = result
+      state.columns = {...state.columns,...result}
     },
     setVideoList(state, videoList) {
       state.videoList = videoList

@@ -1,18 +1,18 @@
 <template>
-  <div v-lazy:background-image="`${video.coverPicH}?imageView2/1/format/jpg`" @click="onItemClick" class="qhht-flex lazy-img-larger cell">
+  <div v-lazy:background-image="`${data.coverPicH}?imageView2/1/format/jpg`" @click="onItemClick" class="qhht-flex lazy-img-larger cell">
       <i class="qhht-icon videoPlayTringle" ></i>
-    <p class="videoTitle">{{video.name}}</p>
-    <p>{{video.briefIntro}}</p>
-    <p>{{video.authorName}}</p>
+    <p class="videoTitle">{{data.name}}</p>
+    <p>{{data.briefIntro}}</p>
+    <p>{{data.authorName}}</p>
     <p>
-      <span class="price">¥{{video.price}}</span>/共{{video.lessonCount}}讲
+      <span class="price">¥{{data.price}}</span>/共{{data.lessonCount}}讲
     </p>
   </div>
 </template>
 
 <script>
 export default {
-  props: ['video'],
+  props: ['data'],
   methods: {
     onItemClick() {
       const {columnType}=this.$route.params
@@ -20,9 +20,9 @@ export default {
       //   name: 'videoColumnDetail',
       //   params: { courseId: this.video.id }
       // })
-      this.$router.push({
+      this.$router.push({ 
         name: 'ColumnDetail',
-        params: { columnType:"1005", columnId: this.video.id }
+        params: { columnType:"1005", columnId: this.data.id } 
       })
     }
   }

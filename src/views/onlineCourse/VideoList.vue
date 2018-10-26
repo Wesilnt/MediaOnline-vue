@@ -8,7 +8,7 @@
           :immediate-check="false"
           @load="scrollBottom"
           @offset="10">
-            <VideoCell   v-for="item in columns" :key="item.id" :video="item"/>
+            <VideoCell   v-for="item in columns" :key="item.id" :data="item"/>
         </van-list>
         <!-- <div class="home-video">
             <videolistitem v-for="item of columns" :key="item.id" :iteminfo="item" @jumpEvent="jumpToVideoDetail(item.id)"/>

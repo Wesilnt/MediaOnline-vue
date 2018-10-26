@@ -162,6 +162,7 @@ export default {
   &.wrapper-last{
     padding-bottom: 200px;
   }
+
 }
 .vision-title {
   font-size: 32px;

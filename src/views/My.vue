@@ -73,6 +73,11 @@
             image: feedback,
             title: '意见反馈'
           },
+          {
+            name: '/my/Public',
+            image: feedback,
+            title: '公共内容'
+          },
           /* {
           name: '/my/SysMessage',
           image: sys,

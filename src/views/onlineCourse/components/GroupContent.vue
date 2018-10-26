@@ -221,3 +221,6 @@ export default {
   margin-bottom: 60px;
 }
 </style>
+audio==
+video==vuex==columnId/name
+book==

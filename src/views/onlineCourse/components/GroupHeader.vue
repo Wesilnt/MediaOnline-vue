@@ -56,7 +56,7 @@ import {
   createNamespacedHelpers,
   mapState as rootState,
 } from 'vuex'
-const { mapState, mapGetters, mapActions } = createNamespacedHelpers(
+const { mapState, mapGetters } = createNamespacedHelpers(
   'videoColumnDetailData/groupManagerData'
 )
 import CountDown from '../../../components/CountDown'
@@ -170,7 +170,7 @@ export default {
   padding: 0 40px;
   text-align: left;
   position: relative;
-    background: #f6f6f6 center/cover no-repeat;
+  background: #f6f6f6 center/cover no-repeat;
   span {
     position: absolute;
     bottom: 20px;

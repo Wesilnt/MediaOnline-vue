@@ -54,12 +54,12 @@ export default {
             },
   created(){ 
     this.shareType = this.shareType || this.columnType  
-     //1. 传入分享地址 
+     // 1. 传入分享地址 
      if(this.shareUrl&&this.shareUrl != `${location.href.split('#')[0]}#/home`) {
         this.drawBottomMap()       //重新生成图片
        return  
      }
-     //2.  有专栏ID 
+     // 2.  有专栏ID 
      if(this.courseId){
         this.getColumnDetail({courseId:this.courseId,columnType:this.columnType,useCache:true}) 
         .then(()=>{

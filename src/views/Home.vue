@@ -14,14 +14,19 @@
 
       <Notice :message-count="newMessageCount" :fromAvatarUrl= "fromAvatarUrl"/>
       <div class="index-container">
-        <Header v-if="false" :link="'/home/freezone'" title="免费专区" subtitle="探索更多" />
+        <!-- <Header v-if="false" :link="'/home/freezone'" title="免费专区" subtitle="探索更多" />
         <FreeList v-if="false" :free-list="freeList" />
         <Header :link="'/home/visionList'" title="音频课程" subtitle="探索更多" />
         <DisCoverVisionList :vision-list="visionList" />
         <Header :link="'/home/videoList'" title="视频课程" subtitle="探索更多" />
         <DisCoverVideoList :video-list="videoList" />
         <Header :link="'/home/readings'" title="少年读书会" subtitle="探索更多" />
-        <BookList :book-list="bookList" />
+        <BookList :book-list="bookList" /> -->
+        <HomeItem v-for="item of Object.keys(homeColumnList)" 
+                  :key="item" 
+                  :item="homeColumnList[item]" 
+                  :columnType="item"
+                  :list='columns[homeColumnList[item].listKey]'/>
       </div>
     </div>
   </div>
@@ -32,26 +37,33 @@
 import SkeletonFullScreen from '../components/SkeletonFullScreen'
 import Notice from '../components/homeComponents/Notice.vue'
 import Header from '../components/homeComponents/Header.vue'
-import FreeList from './FreeList.vue'
-import DisCoverVisionList from '../components/homeComponents/DisCoverVisionList.vue'
-import DisCoverVideoList from '../components/homeComponents/HomeVideoList.vue'
-import BookList from './BookList.vue'
+// import FreeList from './FreeList.vue'
+// import DisCoverVisionList from '../components/homeComponents/DisCoverVisionList.vue'
+// import DisCoverVideoList from '../components/homeComponents/HomeVideoList.vue'
+// import BookList from './BookList.vue' 
+import HomeItem from '../components/HomeItem.vue'
 import homeData from '../store/module/homeData.js'
-
+import { homeColumnList } from '../utils/config'
 import { createNamespacedHelpers } from 'vuex'
 import { courseType } from '../utils/config'
-const { mapState, mapActions } = createNamespacedHelpers('homeData')
+const { mapState, mapActions } = createNamespacedHelpers('homeData') 
 
 export default {
   name: 'Homepage',
+  data(){
+     return{
+       homeColumnList:homeColumnList
+     }
+  },
   components: {
     SkeletonFullScreen,
     Notice,
-    Header,
-    FreeList,
-    DisCoverVisionList,
-    DisCoverVideoList,
-    BookList
+    // Header,
+    // FreeList,
+    // DisCoverVisionList,
+    // DisCoverVideoList,
+    // BookList,
+    HomeItem
   },
   computed: mapState([
     'loading',
@@ -61,14 +73,14 @@ export default {
     'freeList',
     'visionList',
     'videoList',
-    'bookList'
+    'bookList',
+    // 'homeColumnList',
+    'columns'
   ]),
   methods: {
     ...mapActions(['getIndexPageData']),
     routerToSwiperDetail(url) {
-      if (!url) {
-        return
-      }
+      if (!url) return
       if (url.includes('&/&')) {
         const [type, id] = url.split('&/&')
         this.$router.push({ path: `/${courseType[type]}${id}` })

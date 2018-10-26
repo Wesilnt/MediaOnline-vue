@@ -4,7 +4,7 @@
     <div class="lazy-img-larger head" v-lazy:background-image="`${bannerPic}?imageView2/1/format/jpg`"></div>
     <van-list class="view-list" v-model="refreshing" :finished="finished" @load="loadMore" @offset="10">
       <div v-for="(item, index) in visionList" :key="index" class="view-list-cell">
-        <VisionCell :vision="item"  />
+        <VisionCell :data="item"  />
       </div>
     </van-list>
     <div class="view-footer" v-if="finished">没有更多了，不要再拉了</div>
