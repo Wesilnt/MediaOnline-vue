@@ -29,9 +29,14 @@
         "singleQuote": true,
         "semi": false
     },
+    "husky": {
+        "hooks": {
+            "pre-commit": "yarn run precommit-msg && lint-staged"
+        }
+    },
     "lint-staged": {
-        "**/*.{js,vue,scss,less}": [
-            "prettier --wirter",
+        "**/**.{js,json,pcss,md,vue}": [
+            "prettier --write",
             "git add"
         ]
     },

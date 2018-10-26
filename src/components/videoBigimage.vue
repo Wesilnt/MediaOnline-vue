@@ -38,7 +38,7 @@ export default {
   bottom: 0;
 }
 .video-bigimage-container {
-  display: inline-block;
+  display: block;
   margin-bottom: 40px;
   .imageExtend {
     position: fixed;
