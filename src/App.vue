@@ -42,7 +42,9 @@ export default {
             fullPath,
             jsApiList: ['hideAllNonBaseMenuItem']
           })
-          wx.hideAllNonBaseMenuItem()
+          wx.ready(function() {
+            wx.hideAllNonBaseMenuItem()
+          })
         } else {
           this.registerWxConfig({
             fullPath,
