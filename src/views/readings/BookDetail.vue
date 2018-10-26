@@ -102,7 +102,7 @@ const {
 export default {
   data() {
     return {
-      courseId: this.$route.params.courseId,
+      courseId: this.$route.params.columnId,
       currentPage: 1,
       pageSize: 20,
       refreshing: false

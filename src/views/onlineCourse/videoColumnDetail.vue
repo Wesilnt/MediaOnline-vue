@@ -31,10 +31,12 @@ export default {
     GroupContent,
     Payment
   },
+  // props:['columnId','groupBuyId'],
   data() {
     return {
-      courseId: this.$route.params.courseId,
-      groupBuyId: this.$route.query.groupBuyId
+      // courseId: this.$route.params.courseId,
+      // groupBuyId: this.$route.query.groupBuyId
+      columnId:this.$route.params.columnId
     }
   },
   computed: {
@@ -46,10 +48,10 @@ export default {
   },
   created() {
     //初始化页面数据(将路由中带过来的专栏ID存储到仓库)
-    this.initDatas({ courseId: this.courseId, groupBuyId: this.groupBuyId })
-    //获取专栏详情
+    this.initDatas({ courseId: this.columnId, groupBuyId: this.groupBuyId })
+   // 获取专栏详情
     this.getVideoColumnDetail({
-      courseId: this.courseId,
+      courseId: this.columnId,
       groupBuyId: this.groupBuyId
     })
   },

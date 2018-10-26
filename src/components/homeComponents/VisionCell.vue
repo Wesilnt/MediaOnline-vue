@@ -31,8 +31,11 @@ export default {
   props: ['vision'],
   methods: {
     enterVisionDetail(id) {
-      console.log(id)
-      this.$router.push({ path: '/home/visionDetail/' + id })
+      this.$router.push({
+        name: 'ColumnDetail',
+        params: { columnType:"1003", columnId: id }
+      })
+      // this.$router.push({ path: '/home/visionDetail/' + id })
     },
     enterVisionPlay() {
       const { freeLessonList } = this.vision

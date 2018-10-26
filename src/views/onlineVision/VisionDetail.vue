@@ -21,16 +21,16 @@
 
     <!-- try -->
       <div id="try" class="vision-wrapper">
-        <DetailHeader title="试听课程" subtitle="全部" link='/home/visionDetail/visionCourseList' :courseId="courseId" :coursename="courseName"/>
+        <DetailHeader title="试听课程" subtitle="全部" link='/home/visionDetail/visionCourseList' :courseId="columnId" :coursename="courseName"/>
         <SingleSetList
-                :courseid="courseId"
+                :courseid="columnId"
                 :list='visionDetail.freeLessonList'
                 :singletype="'1003'"/>
       </div>
     <!-- message -->
       <div id="message" class="vision-wrapper">
-        <DetailHeader title="精选留言" link='/videoCourseCmts' :courseId="courseId" :subtitle="visionDetail.commentCount + '条'" />
-        <CommentList  :regionid="courseId" :regiontype="2201" :haspadding="true" ></CommentList>
+        <DetailHeader title="精选留言" link='/videoCourseCmts' :courseId="columnId" :subtitle="visionDetail.commentCount + '条'" />
+        <CommentList  :regionid="columnId" :regiontype="2201" :haspadding="true" ></CommentList>
       </div>
       <div class="vision-wrapper wrapper-last">
         <h3 class="vision-title">购买须知</h3>
@@ -86,6 +86,7 @@ export default {
       arrowUp,
       arrowDown,
       banner: '',
+      columnId:this.$route.params.columnId,
       navBars: [
         {
           title: '介绍',
@@ -105,20 +106,20 @@ export default {
   },
   created() {
     this.initDatas({
-      courseId: this.courseId,
+      courseId: this.columnId,
       groupBuyId: this.$route.query.groupById
     })
     this.getVisionDetail({
-      courseId: this.courseId,
+      courseId: this.columnId,
       groupBuyId: this.$route.query.groupById
     })
-    this.getCommentList(this.courseId)
+    this.getCommentList(this.$route.params.columnId)
   },
   mounted() {
     // this.getUserInfo().then(user => {
     //拼装分享内容
     this.shareData = {
-      link: this.url + `/#/home/visionDetail/${this.courseId}`,
+      link: this.url + `/#/home/visionDetail/${this.columnId}`,
       title: this.courseName,
       desc: '你一定会爱上国学课...',
       imgUrl: `${

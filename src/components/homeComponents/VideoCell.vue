@@ -15,9 +15,14 @@ export default {
   props: ['video'],
   methods: {
     onItemClick() {
+      const {columnType}=this.$route.params
+      // this.$router.push({
+      //   name: 'videoColumnDetail',
+      //   params: { courseId: this.video.id }
+      // })
       this.$router.push({
-        name: 'videoColumnDetail',
-        params: { courseId: this.video.id }
+        name: 'ColumnDetail',
+        params: { columnType:"1005", columnId: this.video.id }
       })
     }
   }

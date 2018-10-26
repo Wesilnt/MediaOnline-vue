@@ -21,9 +21,9 @@ export default {
   methods: {
     onItemClick() {
       this.$router.push({
-        name: 'BookDetail',
-        params: { courseId: this.book.id},
-        query:{columnType:"1007"}
+        name: 'ColumnDetail',
+        params: { columnType:"1007", columnId: this.book.id},
+        // query:{columnType:"1007"}
       })
     },
     onPlayClick() { 
