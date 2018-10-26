@@ -12,8 +12,8 @@
     <div class="qhht-flex cell-footer"> 
       <span class="fit">{{vision.fitFor}}岁</span>
       <p v-if="1001 === vision.userAccessStatus  ||
-                1003 === vision.userAccessStatus || 
-                1008 === vision.userAccessStatus"  
+                1003 === vision.userAccessStatus ||  
+                1008 === vision.userAccessStatus"    
                 class="purchase">已购买</p>
       <a v-else-if="data.freeLessonList" 
                 class="cell-footer-btn" 
