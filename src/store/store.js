@@ -22,12 +22,17 @@ import audiotaskData from './module/audioTaskData'
 import shareData from './module/shareData'
 import praiseData from './module/praiseData'
 import mobileData from './module/mobileData'
+import payment from './module/payment'
 import columnActions from './column'
 
-import { getToken, getUserByToken ,getColumnDetail} from '../api/accessTokenApi'
+import {
+  getToken,
+  getUserByToken,
+  getColumnDetail
+} from '../api/accessTokenApi'
 import { noAccessToken } from '../utils/userAuth'
 import { wxConfig as wxConfigApi } from '../api/groupBuyApi.js'
-import { stat } from 'fs';
+import { stat } from 'fs'
 
 Vue.use(Vuex)
 export default new Vuex.Store({
@@ -36,7 +41,7 @@ export default new Vuex.Store({
     // url: encodeURIComponent(location.href.split('#')[0])
     url: window.location.href.split('#')[0],
     wxRegisterPath: '',
-    userInfo: null ,
+    userInfo: null,
     columnDetail: {},
     columnType: null
   },
@@ -49,12 +54,12 @@ export default new Vuex.Store({
     },
     //设置当前用户选中专栏columnDetail  ,
     //专栏类型 columnType : FreeZone(1007) 免费专区 OnlineCourse(1005) 在线课堂  OnlineVision(1003) 在线视野  Readings(1001) 读书会
-    bindColumnType(state, {columnType}){
+    bindColumnType(state, { columnType }) {
       state.columnType = columnType
     },
     //设置当前用户选中专栏columnDetail  ,
-    bindCurrentColumn(state, {columnDetail}){
-      state.columnDetail =  columnDetail
+    bindCurrentColumn(state, { columnDetail }) {
+      state.columnDetail = columnDetail
     }
   },
   actions: {
@@ -64,11 +69,11 @@ export default new Vuex.Store({
     async checkToken({ dispatch }) {
       noAccessToken() && dispatch('getAccessToken')
     },
-    async getUserInfo({ state, commit },forceUpdate=false ) {
+    async getUserInfo({ state, commit }, forceUpdate = false) {
       const { userInfo } = state
       if (userInfo && !forceUpdate) return userInfo
       const response = await getUserByToken()
-      commit('saveUserInfo', {userInfo: response})
+      commit('saveUserInfo', { userInfo: response })
       return response
     },
     /** 注入配置信息 */
@@ -247,6 +252,7 @@ export default new Vuex.Store({
     audioData,
     shareData,
     praiseData,
-    mobileData
+    mobileData,
+    payment
   }
 })
