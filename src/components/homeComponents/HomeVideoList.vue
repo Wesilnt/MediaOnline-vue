@@ -17,6 +17,6 @@ export default {
 <style lang="less" scoped>
 .home_video_bottom{
   padding-bottom: 28px;
-  border-bottom: 2px solid #F1F1F1;
+  //border-bottom: 2px solid #F1F1F1;
 }
 </style>
