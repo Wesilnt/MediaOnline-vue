@@ -6,7 +6,6 @@
     </div>
     <transition enter-active-class="fadeIn" leave-active-class="fadeOut">
       <div v-if="isExtend&&src" class="imageExtend" @click="isExtend=false">
-        <div class="extend-back"/>
         <img :src="`${src}?imageView2/1/format/jpg`"  class="extend-img">
       </div>
     </transition>
@@ -47,28 +46,15 @@ export default {
     bottom: 0;
     left: 0;
     z-index: 3500;
-    overflow: scroll;
+    overflow-y: scroll;
+    background-color: #000;
   }
   .img {
     width: 100%;
     display: block;
   }
-  .extend-back {
-    position: absolute;
-    background-color: #000;
-    width: 100%;
-    height: 100%;
-    opacity: 0.8;
-  }
   .extend-img {
     margin: auto;
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    // max-height: 100%;
-    // max-width: 100%;
     width: 100%;
   }
 }
