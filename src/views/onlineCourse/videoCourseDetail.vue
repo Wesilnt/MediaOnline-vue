@@ -200,6 +200,7 @@ export default {
     this.resetLoading(true)
   },
   created() {
+    this.pauseAudio()
     const { lessonId } = this.$route.params
     this.getVideoCourseDetail({ lessonId, loading: true })
   },
@@ -216,7 +217,8 @@ export default {
       'getCommentList',
       'doCollectFavorite',
       'unCollectFavorite',
-      'postComment'
+      'postComment',
+      'pauseAudio'
     ]),
     ...mapRootActions(['getUserInfo', 'setWxShareFriend', 'setWxShareZone']),
     canplay() {

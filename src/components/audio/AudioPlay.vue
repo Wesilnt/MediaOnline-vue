@@ -308,13 +308,9 @@ export default {
 }
 </script>
 <style lang="scss" >
-.audioplay-container {
+.audioplay-containeraudioplay-container {
   background: #fff center/100% no-repeat;
-  height: 750px;
-  .cover {
-    height: 750px;
-    background-color: #d5d8de;
-  }
+  height: 750px; 
   .controller-container {
     position: fixed;
     bottom: 0;

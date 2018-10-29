@@ -1,7 +1,7 @@
 import { getAudioDetail, postLearnRate,getSingleSetList } from '../../api/audioApi'
 import { throttle } from '../../utils/utils'  
-import audioData from './audioData' 
-import {Toast} from 'vant'
+import audioData from './audioData'  
+import videoCourseDetailData from './videoCourseDetailData'  
 
 export default {
   namespaced:true,
@@ -316,6 +316,7 @@ export default {
     columnType: (state,getters,rootState)=>rootState.columnType, 
   },
   modules:{
-    audioData
+    audioData,
+    videoCourseDetailData
   }
 }

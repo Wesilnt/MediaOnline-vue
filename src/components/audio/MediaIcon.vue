@@ -1,5 +1,10 @@
 <template>
-  <div v-show="forceHidenFloat&&showFloat" ref="mediaIcon" class="media-icon-container" :style="{left:x,top:y}">
+  <div v-show="forceHidenFloat&&showFloat" 
+       ref="mediaIcon" 
+       class="media-icon-container" 
+       :class="{animation: dragableAnim}"
+       :style="{left:x,top:y}"
+       @click="goPlaying">
   
      <!-- <canvas width="68" height="68" ref="canvasArc"/> -->
      <div class="image-icon-container" v-lazy:background-image ="`${coverPic}?imageView2/1/w/100/h/100/format/jpg/q/50`">
@@ -45,7 +50,11 @@ export default {
       startTime: 0,
       outRingWidth: 6,
       progressgWidth: 4,
-      progress: 0
+      progress: 0,
+      tempX : window.screen.width - 74 - 12 + 'px',
+      tempY : ((window.screen.height - 68) * 3) / 4 + 'px',
+      dragable: true,             //是否可以拖拽
+      dragableAnim: true
     }
   },
   computed: {
@@ -70,6 +79,8 @@ export default {
     ...mapActions(['initAudio']),
     //触摸开始
     _touchStart: function(e) {
+      if(!this.dragable) return
+      this.dragableAnim = false
       this.startTime = new Date().getTime()
       this.startX = e.touches[0].clientX
       this.startY = e.touches[0].clientY
@@ -77,6 +88,7 @@ export default {
     },
     //触摸移动
     _touchMove: function(e) {
+      if(!this.dragable) return
       let left = e.touches[0].clientX - this.width / 2
       let top = e.touches[0].clientY - this.width / 2
       left = left < 0 ? 0 : left
@@ -91,23 +103,24 @@ export default {
     },
     //触摸结束
     _touchEnd: function(e) {
+      if(!this.dragable) return
       let offsetTime = new Date().getTime() - this.startTime
       let offsetX = e.changedTouches[0].clientX - this.startX
-      let offsetY = e.changedTouches[0].clientY - this.startY
-      if (offsetTime < 800 && Math.abs(offsetX) < 50 &&Math.abs(offsetY) < 50) {
-        console.log("columnType:=",this.columnType)
-        this.$router.push({
-          name: 'AudioPlay',
-          params: { id: this.audioId },
-          query: {courseId: this.courseId, columnType: this.columnType, courseName: this.courseName }
-        })
+      let offsetY = e.changedTouches[0].clientY - this.startY 
+      if(offsetTime < 800 && Math.abs(offsetX)<50 && Math.abs(offsetY)<50){
+        this.goPlaying()
       }
       e.preventDefault()
+    },
+    goPlaying(){
+      this.$router.push({
+        name: 'AudioPlay',
+        params: { id: this.audioId },
+        query: {courseId: this.courseId, columnType: this.columnType, courseName: this.courseName }
+      })
     }
   },
   mounted() {
-    let navBar = document.getElementById('navbar')
-    console.log("navBar:",navBar)
     this.$refs.mediaIcon.addEventListener( 'touchstart',this._touchStart,true)
     this.$refs.mediaIcon.addEventListener('touchmove', this._touchMove, true)
     this.$refs.mediaIcon.addEventListener('touchend', this._touchEnd, true)
@@ -120,12 +133,36 @@ export default {
       this.progress = (value * 100) / this.maxTime
       return value
     },
-    $route(to) { 
-      this.setFloatButton(!to.name || (to.name&&!to.name.includes('AudioPlay')))
+    $route(to,from) { 
+      this.setFloatButton(!to.name || (to.name&&!to.name.includes('AudioPlay'))) 
+      if(!this.showFloat) return
+      this.$nextTick(()=>{
+        this.dragableAnim = true
+        if(from.path !== '/' && from.path !== '/home'  && from.path !== '/my' &&
+          (to.path === '/'||to.path === '/home' || to.path === '/my'))  
+        {
+          console.log("路由切换",from.path, to.path)
+          let navBar = document.getElementById('navbar') 
+          let iconWidth = this.$refs.mediaIcon.clientWidth
+          let iconHeight = this.$refs.mediaIcon.clientHeight 
+          let boundingClientRect  = navBar.getBoundingClientRect()
+          this.tempX = this.x
+          this.tempY = this.y
+          this.x = navBar.getBoundingClientRect().right / 2 - iconWidth / 2  + 'px'
+          this.y = navBar.getBoundingClientRect().y - iconHeight / 2 +'px'
+        }
+        if((from.path === '/my' && to.path !== '/home') || (from.path === '/home' && to.path !== '/my')){
+          this.x = this.tempX
+          this.y = this.tempY
+        }
+        this.dragable = to.path !== '/home' && to.path !== '/my'
+      })
+      
     }
   }
 }
 </script>
+
 <style lang="scss" scoped>
 .media-icon-container {
   position: fixed;
@@ -164,5 +201,8 @@ export default {
     height: 32px;
     width: 28px;
   }
+}
+.animation{
+   transition: all 0.5s linear;
 }
 </style>
