@@ -20,10 +20,9 @@
             <img src="../../assets/images/cmt_voice_icon.png">
             <span>{{comment.audioTime}}"</span>
           </div>
-          <div v-if="!isExpand && needExpand" class="comment-expand-btn">
-            <a @click="handleExpand(comment.id)">全文</a>
+          <div v-if="needExpand" class="comment-expand-btn">
+            <a @click="handleExpand(comment.id)">{{isExpand?"双起":"全文"}}</a>
           </div>
-
         </div>
         <div v-if="regiontype==2201" class="comment-detail-footer">
           <!-- <font>{{comment.content | getSingleCourseName()}}</font> -->
@@ -53,19 +52,24 @@ export default {
     },
     getSingleCourseName: function(value, isCourseName) {
       const arr = value.split('=>')
-      const lastIndex=arr.length-1
-      if(isCourseName){
+      const lastIndex = arr.length - 1
+      if (isCourseName) {
         return arr[lastIndex]
-      }else{
-        if(arr.length===1)return arr[0]
-        return arr.reduce((prev,item,index)=>{
-          return prev+=lastIndex===index?'':(0===index?'':'=>')+item
-        },'')
-
+      } else {
+        if (arr.length === 1) return arr[0]
+        return arr.reduce((prev, item, index) => {
+          return (prev +=
+            lastIndex === index ? '' : (0 === index ? '' : '=>') + item)
+        }, '')
       }
     }
   },
-  props: {'comment':{default:{}}, 'unindent':{default:false}, 'regiontype':{default:2202}, 'lastindex':{default:false}},
+  props: {
+    comment: { default: {} },
+    unindent: { default: false },
+    regiontype: { default: 2202 },
+    lastindex: { default: false }
+  },
   data() {
     return {
       needExpand: false,
@@ -79,18 +83,27 @@ export default {
     //点赞
     onPraise(praised) {
       if (praised) {
-        return this.$toast({  message: '您已点赞' })
+        return this.$toast({ message: '您已点赞' })
       }
       this.likeComment(this.comment.id)
     },
     handleExpand() {
-      this.isExpand = true
+      this.isExpand = !this.isExpand
     }
   },
-  mounted() { 
-    let frameHeight = this.$refs.content.clientHeight<=0?  this.$refs.content.scrollHeight :this.$refs.content.clientHeight
-    let contentHeight   =  this.$refs.contentChild.offsetHeight<=0? this.$refs.contentChild.scrollHeight :this.$refs.contentChild.offsetHeight
-    this.needExpand = frameHeight < contentHeight
+  mounted() {
+    setTimeout(() => {
+      const { content, contentChild } = this.$refs
+      let frameHeight =
+        content.clientHeight <= 0 ? content.scrollHeight : content.clientHeight
+      let contentHeight =
+        contentChild.offsetHeight <= 0
+          ? contentChild.scrollHeight
+          : contentChild.offsetHeight
+      if (frameHeight < contentHeight) {
+        this.needExpand = true
+      }
+    }, 100)
   }
 }
 </script>
@@ -99,7 +112,7 @@ export default {
   font-size: 28px;
   color: #333;
 }
-.comment-item {   
+.comment-item {
   padding: 48px 40px 48px;
 }
 .comment-avatar {
