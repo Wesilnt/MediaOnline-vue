@@ -11,7 +11,6 @@
         </van-swipe>
         <!-- <div class="swiper_bottom"></div> -->
       </div>
-
       <Notice :message-count="newMessageCount" :fromAvatarUrl= "fromAvatarUrl"/>
       <div class="index-container">
         <!-- <Header v-if="false" :link="'/home/freezone'" title="免费专区" subtitle="探索更多" />
