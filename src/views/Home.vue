@@ -92,10 +92,10 @@ export default {
   //   bottom:30px;
   // }
   /deep/.van-swipe__indicator {
-    background-color: white;
+    background-color: #d9d9d9;
   }
   /deep/.van-swipe__indicator--active {
-    background-color: #d9d9d9;
+    background-color:white ;
   }
 }
 .index-swiper {
