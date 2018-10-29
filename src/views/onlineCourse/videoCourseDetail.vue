@@ -53,7 +53,7 @@
             </div>
             <CommentBar :show="commentBarShow" v-on:toggle="toggleKeyboard"/>
             <Share :show="sharePageShow" :courseId="courseId" :columnType ="'1005'" @close="cancelSharePage"></Share>
-            <div v-show="videoShow" class='video-wrapper popup-modal-white' @click="handleVideoPause">
+            <div v-show="videoShow" class='video-wrapper popup-modal-white' @click.self="handleVideoPause">
                <video class="videoitem"
                        ref="videoitem"
                        :src="videoUrl"
@@ -189,7 +189,9 @@ export default {
     //视频进度
     this.videoElem.addEventListener('timeupdate', this.getVideoProgress)
     this.videoElem.addEventListener('play', this.handleVideoPlay)
-    this.videoElem.addEventListener('contextmenu', () => {
+    this.videoElem.addEventListener('contextmenu', e => {
+      e.preventDefault()
+      e.stopPropagation()
       return false
     })
   },
@@ -234,13 +236,15 @@ export default {
       this.videoElem.removeEventListener('canplay', this.canplay)
     },
     //播放视频
-    handleVideoPlay() {
+    handleVideoPlay(e) {
+      e.preventDefault()
+      e.stopPropagation()
       this.videoShow = true
       setTimeout(() => {
         this.videoElem.play()
       }, 100)
     },
-    handleVideoPause() {
+    handleVideoPause(e) {
       this.videoShow = false
       const { paused } = this.videoElem
       if (!paused) this.videoElem.pause()

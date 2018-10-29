@@ -6,6 +6,7 @@
             overlay-class="popup-comment-modal"
             @click-overlay="closePopup"
             :lazy-render="false"
+            ref="commentBar"
     >
         <div class="qhht-flex commentBar-wrapper" >
             <a class="qhht-icon commentBar-btn" :style="{backgroundImage:`url('${record?iconInputer:iconSpeaker}')`}" @click="toggleRecord"></a>
@@ -28,9 +29,10 @@
 import default_speaker_icon from '../assets/images/audio_cmt_speak.png'
 import default_inputer_icon from '../assets/images/audio_cmt_text.png'
 import default_submit_icon from '../assets/images/comment-submit.png'
-
 let inter = null,
-  voiceRecord = null
+  voiceRecord = null,
+  commentBar = null,
+  commentInter = null
 export default {
   name: 'CommentBar',
   props: {
@@ -73,17 +75,33 @@ export default {
   watch: {
     show: function(show) {
       this.showPop = show
-      show
-        ? window.addEventListener('contextmenu', this.preventDefault)
-        : window.removeEventListener('contextmenu', this.preventDefault)
+      if (show) {
+        window.addEventListener('contextmenu', this.preventDefault)
+        let height = null
+        commentInter = setInterval(() => {
+          const winHeight = window.innerHeight
+          if (winHeight !== height) {
+            height = winHeight
+            this.handleResize()
+          }
+        }, 100)
+      } else {
+        clearInterval(commentInter)
+        window.removeEventListener('contextmenu', this.preventDefault)
+      }
     }
   },
   methods: {
     preventDefault: function(e) {
-      console.log(e)
       e.preventDefault()
     },
+    handleResize: function(e) {
+      commentBar.scrollIntoView(false)
+      window.scrollTo(0, document.body.scrollHeight)
+    },
     checkRows: function(el) {
+      el.preventDefault()
+      el.stopPropagation()
       const { target } = el
       let inputerWidth = 0
       for (let codePoint of target.value) {
@@ -157,6 +175,9 @@ export default {
   },
   mounted() {
     voiceRecord = this.$refs.voiceRecord
+    commentBar = this.$refs.commentBar.$el
+    console.dir(commentBar)
+    // window.addEventListener('resize', this.handleResize)
     voiceRecord.addEventListener('touchstart', this.touchstart)
     voiceRecord.addEventListener('touchend', this.touchend)
     wx.onVoiceRecordEnd({
@@ -184,6 +205,7 @@ export default {
 .popup-comment {
   position: fixed;
   left: 50%;
+  top: auto;
   bottom: 0;
   width: 100%;
 }
@@ -211,6 +233,7 @@ export default {
 .commentBar-textarea {
   width: 100%;
   border: none;
+  border-radius: 0;
   min-height: 32px;
   border-bottom: 1px solid #ddd;
   margin-bottom: -12px;
