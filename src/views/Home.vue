@@ -20,8 +20,8 @@
         <DisCoverVisionList :vision-list="visionList" />
         <Header :link="'/home/videoList'" title="视频课程" subtitle="探索更多" />
         <DisCoverVideoList :video-list="videoList" />
-        <Header :link="'/home/readings'" title="少年读书会" subtitle="探索更多" />
-        <BookList :book-list="bookList" />
+<!--        <Header :link="'/home/readings'" title="少年读书会" subtitle="探索更多" />
+        <BookList :book-list="bookList" />-->
       </div>
     </div>
   </div>
