@@ -240,8 +240,8 @@ export default {
   align-items: center;
   padding: 12px;
   background-color: white;
-  border-radius: 20px;
-  box-shadow: 0 0 12px #f7f7f7;
+  border-radius: 50%;
+  box-shadow: 0 0 12px #e0e0e0;
   .circle_container {
     position: absolute;
   }

@@ -21,7 +21,7 @@ export default {
   mutations: {
     bindAudioDetail(state, res) {
       state.audioDetail = res
-      if(res && res.audioDetail)
+      if(state.audioDetail)
       state.isLike = state.audioDetail.isLike
     },
     bindFavorite(state, res) {
@@ -50,10 +50,8 @@ export default {
         .then(res => { 
           if(!res)  return
           commit('bindAudioDetail', res)                                          //绑定音频数据
-            console.log(res);
-            let courseId = res.courseId
-          if(state.courseId === courseId) return
-          // dispatch('getSingleSetList', { courseId, pageSize: getters.pageSize })  //获取单集列表
+          let courseId = res.courseId
+          if(state.courseId === courseId) return 
           let columnType = params.columnType  
           dispatch('setShareInfo', { courseId, columnType })                      //设置分享信息
         })

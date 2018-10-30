@@ -48,8 +48,15 @@ const groupManagerData = {
     },
     getters:{
         //专栏头图
-        buyCount(state,getters,{ videoColumnDetailData }) {
-            return videoColumnDetailData.buyCount
+        buyCount(state,getters, rootState) { 
+          switch(state.serviceType){
+            case "1003":
+                return rootState.visionData.buyCount 
+            case "1005":
+                return  rootState.videoColumnDetailData.buyCount 
+            case "1007":
+                return rootState.readingsData.buyCount  
+          } 
         },
         //专栏名称
         // courseName(state,getters,{videoColumnDetailData},rootGetters) {

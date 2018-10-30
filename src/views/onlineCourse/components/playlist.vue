@@ -7,7 +7,7 @@
             <p class="playItem-title" :class="{'playItem-title' : true, 'playItem-title-active' : activeID === iteminfo.id}">{{iteminfo.title}}</p>
             <p class="playItem-info">{{iteminfo.subTitle}}</p>
             <p>
-                <a v-if="iteminfo.isFree" class="audition-btn">试听</a>
+                <a v-if="iteminfo.isFree" class="audition-btn">试看</a>
                 <span>{{iteminfo.totalTime | formatDuring}}</span> |
                 <span>{{ iteminfo.learnTime |getProgress(iteminfo.totalTime,iteminfo.id) }}</span>
             </p>

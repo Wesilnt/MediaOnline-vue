@@ -20,9 +20,16 @@
             <img src="../../assets/images/cmt_voice_icon.png">
             <span>{{comment.audioTime}}"</span>
           </div>
+<<<<<<< Updated upstream
           <div v-if="needExpand" class="comment-expand-btn">
             <a @click="handleExpand(comment.id)">{{isExpand?"双起":"全文"}}</a>
           </div>
+=======
+          <div  class="comment-expand-btn">
+            <a @click="handleExpand(comment.id)">{{isExpand?'收起':'全文'}}</a>
+          </div> 
+
+>>>>>>> Stashed changes
         </div>
         <div v-if="regiontype==2201" class="comment-detail-footer">
           <!-- <font>{{comment.content | getSingleCourseName()}}</font> -->
@@ -90,7 +97,7 @@ export default {
     handleExpand() {
       this.isExpand = !this.isExpand
     }
-  },
+  }, 
   mounted() {
     setTimeout(() => {
       const { content, contentChild } = this.$refs
@@ -103,7 +110,7 @@ export default {
       if (frameHeight < contentHeight) {
         this.needExpand = true
       }
-    }, 100)
+    }, 100) 
   }
 }
 </script>

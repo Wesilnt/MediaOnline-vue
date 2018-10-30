@@ -202,6 +202,7 @@ export default {
     this.resetLoading(true)
   },
   created() {
+    this.pauseAudio()
     const { lessonId } = this.$route.params
     this.getVideoCourseDetail({ lessonId, loading: true })
   },
@@ -218,14 +219,14 @@ export default {
       'getCommentList',
       'doCollectFavorite',
       'unCollectFavorite',
-      'postComment'
+      'postComment',
+      'pauseAudio'
     ]),
     ...mapRootActions(['getUserInfo', 'setWxShareFriend', 'setWxShareZone']),
     canplay() {
       const videoData = JSON.parse(localStorage.getItem(this.id))
       const { historyPlayPosition } = videoData
-      this.videoElem.currentTime =
-        historyPlayPosition >= this.totalTime ? 0 : historyPlayPosition
+      this.videoElem.currentTime = historyPlayPosition >= this.totalTime ? 0 : historyPlayPosition
       console.log(this.videoElem.readyState)
       console.log('historyPlayPosition =', historyPlayPosition)
       console.log('totalTime =', this.totalTime)
