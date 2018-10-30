@@ -21,7 +21,7 @@
                 <div>{{toolsObject&&toolsObject.collectText}}</div>
             </div>
         </div>
-        <Share :show="sharePageShow" :courseId="courseId" :columnType ="serviceType"  @close="cancelSharePage"></Share>
+        <Share :show="sharePageShow" :courseId="courseId" :columnType ="serviceType"  :posturl="'groupBuy'" @close="cancelSharePage"></Share>
         <PhoneVerif :style="{'z-index':100}" v-if="isShowMobileDialog" @callback="bindIsShowMobileDialog(false)"></PhoneVerif>
     </div>
 
@@ -88,18 +88,21 @@ export default {
     this.updateUserAccessStatus()
   },
   watch: {
-    collectLikeId: function(newVal) {
-      if (newVal != 0 && this.startPraiseFlag) {
-        this.toggolePraiseFlag(false)
-        this.$router.push({
-          name: 'Praise',
-          params: {
-            courseId: this.$route.params.courseId,
-            collectLikeId: newVal
-          },
-          query: { columnType: this.serviceType }
-        })
-      }
+    'collectLikeId':{
+      handler(newVal){ 
+        if (newVal != 0 && this.startPraiseFlag) { 
+          this.toggolePraiseFlag(false)
+          this.$router.push({
+            name: 'Praise',
+            params: {
+              courseId: this.$route.params.courseId,
+              collectLikeId: newVal
+            },
+            query: { columnType: this.serviceType }
+          })
+        }
+      },
+       immediate: true
     },
     achieveOriginBuy: function(newVal) {
       if (newVal == true) {

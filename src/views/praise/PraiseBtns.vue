@@ -64,7 +64,7 @@ let buttonDatas = [
 ]
 export default {
   components: { 'mobile-validate': MobileVali },
-  props: ['state', 'courseid', 'collectlikeid','columntype'],
+  props: ['state', 'courseid','posturl', 'collectlikeid','columntype'],
   data() {
     return {
       show: false,
@@ -109,8 +109,9 @@ export default {
           name: 'SharePoster',
           params:{},
           query: { 
+                  sharePostUrl:this.posturl,
                   courseId:this.courseid,
-                  columnType:this.columntype
+                  columnType:this.columntype,
                  }
         })
       }
