@@ -19,17 +19,10 @@
           <div v-else class="voice-container">
             <img src="../../assets/images/cmt_voice_icon.png">
             <span>{{comment.audioTime}}"</span>
-          </div>
-<<<<<<< Updated upstream
-          <div v-if="needExpand" class="comment-expand-btn">
-            <a @click="handleExpand(comment.id)">{{isExpand?"双起":"全文"}}</a>
-          </div>
-=======
-          <div  class="comment-expand-btn">
-            <a @click="handleExpand(comment.id)">{{isExpand?'收起':'全文'}}</a>
           </div> 
-
->>>>>>> Stashed changes
+          <div v-if="needExpand" class="comment-expand-btn">
+            <a @click="handleExpand(comment.id)">{{isExpand?"收起":"全文"}}</a>
+          </div> 
         </div>
         <div v-if="regiontype==2201" class="comment-detail-footer">
           <!-- <font>{{comment.content | getSingleCourseName()}}</font> -->

@@ -339,7 +339,7 @@ export default {
     display: flex;
     justify-content: space-between;
     flex-direction: row;
-    padding: 60px 120px 0;
+    padding: 40px 120px 0;
     &-collect {
       width: 48px;
       height: 41px;

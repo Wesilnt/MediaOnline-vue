@@ -76,15 +76,7 @@ export default {
     show: function(show) {
       this.showPop = show
       if (show) {
-        window.addEventListener('contextmenu', this.preventDefault)
-        let height = null
-        commentInter = setInterval(() => {
-          const winHeight = window.innerHeight
-          if (winHeight !== height) {
-            height = winHeight
-            this.handleResize()
-          }
-        }, 100)
+       this.handleResize()
       } else {
         clearInterval(commentInter)
         window.removeEventListener('contextmenu', this.preventDefault)
@@ -96,8 +88,16 @@ export default {
       e.preventDefault()
     },
     handleResize: function(e) {
-      commentBar.scrollIntoView(false)
-      window.scrollTo(0, document.body.scrollHeight)
+        window.addEventListener('contextmenu', this.preventDefault)
+        let height = null
+        commentInter = setInterval(() => {
+          const winHeight = window.innerHeight
+          if (winHeight !== height) {
+            height = winHeight 
+            commentBar.scrollIntoView(false)
+            window.scrollTo(0, document.body.scrollHeight)
+          }
+        }, 100)
     },
     checkRows: function(el) {
       el.preventDefault()

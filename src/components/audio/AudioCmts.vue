@@ -11,7 +11,7 @@
         <p v-if="isSpeak" class="speak-btn" @touchstart.prevent="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
           {{isSpeaking?'松开&nbsp;结束':'按住&nbsp;说话'}}
         </p>
-        <textarea v-else v-model="commentContent" rows="1" placeholder="写评论" @keyup.enter="onKeyUp"/>
+        <textarea v-else v-model="commentContent" @focus="onFocus" @blur="onBlur" rows="1" placeholder="写评论" @keyup.enter="onKeyUp"/>
       </div>
       <div v-if="!isSpeak" class="comment-send" @click="onSendComment">
         <img :src="require('../../assets/images/cmt_send_abled.png')" :style="{opacity:commentContent.length<=0?'0.5':'1'}">
@@ -25,6 +25,7 @@ import { createNamespacedHelpers } from 'vuex'
 const { mapState, mapActions, mapMutations } = createNamespacedHelpers(
   'commentData'
 )
+const commentInter = null 
 export default {
   components: { 'comment-list': CommentList },
   data() {
@@ -43,6 +44,12 @@ export default {
     },
     //输入或者录入评论
     onInputeComment() {},
+    onFocus(){
+      this.handleResize()
+    },
+    onBlur(){
+      clearInterval(commentInter)
+    },
     //发送评论
     onSendComment() {
       if (this.commentContent.trim().length <= 0) {
@@ -58,6 +65,21 @@ export default {
         duration: '' //音频长度
       })
       this.commentContent = ''
+    },
+    handleResize: function(e) {
+      window.addEventListener('contextmenu', this.preventDefault)
+      let height = null
+      commentInter = setInterval(() => {
+        const winHeight = window.innerHeight
+        if (winHeight !== height) {
+          height = winHeight 
+          commentBar.scrollIntoView(false)
+          window.scrollTo(0, document.body.scrollHeight)
+        }
+      }, 100)
+    },
+    preventDefault: function(e) {
+      e.preventDefault()
     },
     //点赞
     onPraise(index) {
