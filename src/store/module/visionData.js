@@ -14,6 +14,7 @@ const visionData = {
         commentList:[],
         finished:false,
         isLoading:false,
+        buyCount: 0, //购买数量
         courseName:'',//专栏名称
         userAccessStatus:0,
         isFromShare:false,
@@ -51,8 +52,7 @@ const visionData = {
         },
         async getVisionDetail({state,dispatch,commit},{courseId,groupBuyId}){
             !state.renderLoading && commit('setIsLoading',{renderLoading:true});
-            let result = await dispatch('getColumnDetail',{courseId,columnType:'1003'},{root:true})
-            console.log('groupBuyId ==',groupBuyId)
+            let result = await dispatch('getColumnDetail',{courseId,columnType:'1003'},{root:true}) 
             console.log('少年视野专栏数据:')
             console.log(result)
             commit('setVisionDetail', result)
@@ -120,6 +120,7 @@ const visionData = {
         setVisionDetail(state, result){
             state.visionDetail = result;
             state.courseName = result.name
+            state.buyCount = result.buyCount
             state.userAccessStatus = result.userAccessStatus
         },
         setCommentList(state, commentList){

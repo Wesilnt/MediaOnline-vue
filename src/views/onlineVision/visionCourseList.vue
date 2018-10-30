@@ -3,7 +3,7 @@
     <div class="listHeader">
       <span class="headerCount">共{{courseCount}}讲</span>
       <div class="ascButton" @click="reverseList">
-        <img class="sortIcon" :src="Ascending?ascDown:ascUp" alt=""> {{Ascending?'正序':'倒叙'}}
+        <img class="sortIcon" :src="Ascending?ascDown:ascUp" alt=""> {{Ascending?'正序':'倒序'}}
       </div>
 
     </div>

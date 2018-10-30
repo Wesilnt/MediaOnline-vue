@@ -48,6 +48,7 @@
         <!-- <div v-else class="lazy-img-larger groupBuy-banner" v-lazy:background-image="`${profilePic}?imageView2/1/format/jpg`">
             <span class="groupBuy-banner-bottom" v-show="buyCount == 0 ? false : true">{{buyCount}}人已购买</span>
         </div> -->
+
     </div>
 </template>
 
@@ -167,7 +168,7 @@ export default {
 }
 .groupBuy-banner {
   height: 300px;
-  padding: 0 40px;
+  // padding: 0 40px;
   text-align: left;
   position: relative;
   background: #f6f6f6 center/cover no-repeat;

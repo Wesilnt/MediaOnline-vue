@@ -300,9 +300,9 @@ const videoCourseDetailData = {
       //   dispatch('setWxShareZone',shareData,{root:true})
       // })
     },
-    //播放音频
+    //暂停音频
     async pauseAudio({ dispatch }) {
-      dispatch('audiotaskData/asyncPause', null, { root: true })
+     dispatch('audiotaskData/asyncPause', null, { root: true })
     },
   },
 

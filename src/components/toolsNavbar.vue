@@ -21,7 +21,7 @@
                 <div>{{toolsObject&&toolsObject.collectText}}</div>
             </div>
         </div>
-        <Share :show="sharePageShow" :courseId="courseId" :columnType ="columnType"  @close="cancelSharePage"></Share>
+        <Share :show="sharePageShow" :courseId="courseId" :columnType ="columnType" :posturl="'groupBuy'" @close="cancelSharePage"></Share>
         <PhoneVerif :style="{'z-index':100}" v-if="isShowMobileDialog" @callback="bindIsShowMobileDialog(false)"></PhoneVerif>
     </div>
 
@@ -93,18 +93,21 @@ export default {
      这里添加判断是否发起集赞的标志位是为了解决.当从一个集赞中的专栏点开另一个专栏时
      集赞ID也会发生改变,造成多余跳转
     */
-    collectLikeId: function(newVal) {
-      if (newVal != 0 && this.startPraiseFlag) {
-        this.toggolePraiseFlag(false)
-        this.$router.push({
-          name: 'Praise',
-          params: {
-            courseId: this.$route.params.courseId,
-            collectLikeId: newVal
-          },
-          query: { columnType: this.columnType }
-        })
-      }
+    'collectLikeId':{
+      handler(newVal){ 
+        if (newVal != 0 && this.startPraiseFlag) { 
+          this.toggolePraiseFlag(false)
+          this.$router.push({
+            name: 'Praise',
+            params: {
+              courseId: this.$route.params.courseId,
+              collectLikeId: newVal
+            },
+            query: { columnType: this.serviceType }
+          })
+        }
+      },
+      immediate: true
     },
     achieveOriginBuy: function(newVal) {
       if (newVal == true) {

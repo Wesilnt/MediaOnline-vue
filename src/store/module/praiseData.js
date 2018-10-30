@@ -13,14 +13,16 @@ export default {
   namespaced: true,
   state: {
     userId: 0,
-    isPraised:false,   //当前用户关于这个集赞是否已点赞
+    isPraised:false,       //当前用户关于这个集赞是否已点赞
     rollerFlag: true,
     praiseDetail: {},
-    seconds: 0, //倒计时总时长(秒)
-    remainTime: null, //倒计时提示文案
+    seconds: 0,           //倒计时总时长(秒)
+    remainTime: null,     //倒计时提示文案
     rollerInterval: null, //倒计时滚动定时器
-    timerInterval: null, //倒计时定时器
-    pageBgUrl: '',
+    timerInterval: null,  //倒计时定时器
+    introBgUrl: '',       //集赞说明背景图
+    pageBgUrl: '',        //集赞页面背景图
+    sharePostUrl: '',     //集赞分享海报图
     courseName: '',
     columnType: '1007',
     userInfo:{},
@@ -60,7 +62,9 @@ export default {
     },
     //绑定集赞状态
     bindPraiseStatus(state, res) {
+      state.introBgUrl = res.introBgUrl
       state.pageBgUrl = res.pageBgUrl
+      state.sharePostUrl = res.sharePostUrl
       state.courseName = res.courseName
     },
     //销毁定时器
@@ -86,7 +90,7 @@ export default {
       if (res) commit('bindPraiseStatus', res)
       return dispatch('getCollectDetail',params)
     },
-    //集赞详情
+    //集赞详情  
     async getCollectDetail({ state, commit,dispatch }, params) {
       const res = await getCollectDetail(params)
       const user = await dispatch('getUserInfo',null,{root:true}) 

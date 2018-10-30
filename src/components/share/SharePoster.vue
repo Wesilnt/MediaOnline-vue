@@ -27,6 +27,7 @@ export default {
     return {
       user:{}, 
       shareUrl: this.$route.query.shareUrl||`${location.href.split('#')[0]}#/home`,
+      sharePostUrl:this.$route.query.sharePostUrl,
       shareType: this.$route.query.columnType,
       courseId: this.$route.query.courseId, 
       pixelRatio: 1,
@@ -147,7 +148,11 @@ export default {
       this.ctx.fillRect(0, this.bottomY, this.canvasW, this.bottomH)
       var cover = new Image() 
       cover.setAttribute('crossOrigin', 'anonymous') 
-      cover.src = this.columnDetail.sharePostUrl
+      let sharePoster =  this.columnDetail.sharePostUrl  //默认专栏海报分享
+      if(this.sharePostUrl) {  //groupBuy拼团分享海报,  集赞分享海报
+        sharePoster = this.sharePostUrl === 'groupBuy' ? this.columnDetail.groupBuySharePostUrl : this.sharePostUrl
+      }
+      cover.src = sharePoster
       cover.onload = () => {
         this.ctx.save()
         this.ctx.drawImage(cover, 0, 0, this.canvasW, this.canvasH)

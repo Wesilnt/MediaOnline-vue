@@ -1,6 +1,7 @@
 <template>
     <div class="group-content-container" id="detailmain" ref="detailmain">
         <div class="lazy-img-larger videocol-banner" v-lazy:background-image="`${columnDetail.profilePic}?imageView2/1/format/jpg`">
+            <div class="qhht-mask"></div>
             <span class="videocol-banner-bottom" v-show="columnDetail.buyCount == 0 ? false : true">{{columnDetail.buyCount}}人已购买</span>
         </div>
         <ScrollNavBar :bars="navBars" />
@@ -147,7 +148,7 @@ export default {
 //banner头图
 .videocol-banner {
   height: 300px;
-  padding: 0 40px;
+  // padding: 0 40px;
   text-align: left;
   position: relative;
   background: #f6f6f6 center/cover no-repeat;

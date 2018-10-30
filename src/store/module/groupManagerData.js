@@ -40,8 +40,35 @@ const groupManagerData = {
     },
     getters:{
         //专栏头图
-        buyCount:(state,getters,{ videoColumnDetailData })=> videoColumnDetailData.buyCount,
-        // courseName:(state,getters,rootState) => rootState.columnDetail.name,
+        buyCount(state,getters, rootState) { 
+          switch(state.serviceType){
+            case "1003":
+                return rootState.visionData.buyCount 
+            case "1005":
+                return  rootState.videoColumnDetailData.buyCount 
+            case "1007":
+                return rootState.readingsData.buyCount  
+          } 
+        },
+        //专栏名称
+        // courseName(state,getters,{videoColumnDetailData},rootGetters) {
+        //     return rootGetters['videoColumnDetailData/courseName']
+        // },
+        courseName(state,getters,rootState) {
+            let nameStr = ""
+            switch(state.serviceType){
+                case "1003":
+                    nameStr = rootState.visionData.courseName
+                break
+                case "1005":
+                    nameStr = rootState.videoColumnDetailData.courseName
+                break
+                case "1007":
+                    nameStr = rootState.readingsData.courseName
+                break
+            }
+            return nameStr
+        },
         //是否来自分享
         isFromShare:(state,getters,rootState) => {
             if(rootState.columnType=='1003') return rootState.visionData.isFromShare

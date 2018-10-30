@@ -8,7 +8,7 @@
       <h3> {{audio.title}}</h3>
       <h4> {{audio.subTitle}}</h4>
       <!-- 中间tabbar -->
-      <div class="tab-container">
+      <div class="tab-container" ref="tab">
         <div class="tab-container-collect" @click="onCollect"
          :style="{backgroundImage:isLike
          ? 'url('+require('../../assets/images/love_collect.png')+')'
@@ -32,7 +32,7 @@
         <div slot="end">{{ maxTime | formatDuring}}</div>
       </div>
       <!-- 播放按钮 -->
-      <div class="play-btns">
+      <div class="play-btns" ref="playButton">
         <div class="btn-item" :style="{backgroundImage:`url(${'single'==playMode?singleIcon:orderIcon})`}" @click="onPlayMode" />
         <div class="btn-item" :style="{backgroundImage:`url(${preIcon})`}" @click="onPlayPrv"/> 
         <div :class="{'btn-item':true,'play-btn-active':playing}"  @click="onPlayPause">
@@ -97,7 +97,10 @@ export default {
       popupVisible: false, //是否显示音频列表弹框
       showShare: false, //是否显示分享框
       touching: false, //slider触摸
-      progress: 0 ,     
+      progress: 0 ,  
+      subBottom:35,
+      subTop:29,
+      subTab:30,   
     }
   },
   computed: {
@@ -221,7 +224,6 @@ export default {
       //     }) 
       //     if(!listenable)return
       // } 
- 
       if (preId && -1 != preId) {
         this.pre({ lessonId: preId })
       } else {
@@ -247,7 +249,6 @@ export default {
       //     }) 
       //   if(!listenable)return
       // } 
-        
       if (nextId && -1 != nextId) {  
         this.next({ lessonId: nextId })
       } else {
@@ -294,14 +295,13 @@ export default {
   //   }) 
   // }
   mounted(){
-    
      this.$nextTick(()=>{
         const {height,top,bottom}=this.$refs.controller.getBoundingClientRect()
-        const {innerHeight,innerWidth}=window;
-          if(top<innerWidth)  this.$refs.container.style.height=top+'px'
-     })
-    
-  },
+        const {innerHeight,innerWidth}=window 
+        this.$refs.controller.style.height =  innerHeight - innerWidth +'px'
+        if(top<innerWidth)  this.$refs.container.style.height=top+'px'
+     }) 
+  }, 
   beforeDestroy(){
     this.clearData()
   }
@@ -310,8 +310,11 @@ export default {
 <style lang="scss" >
 .audioplay-containeraudioplay-container {
   background: #fff center/100% no-repeat;
-  height: 750px; 
+  height: 0px;
+  padding-bottom: 100%; 
   .controller-container {
+    display: flex;
+    flex-direction: column;
     position: fixed;
     bottom: 0;
     left: 0;
@@ -336,7 +339,7 @@ export default {
     display: flex;
     justify-content: space-between;
     flex-direction: row;
-    padding: 60px 120px 0;
+    padding: 40px 120px 0;
     &-collect {
       width: 48px;
       height: 41px;
@@ -440,9 +443,12 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding: 58px 36px 70px;
+    padding: 0px 36px;
     box-sizing: content-box;
     align-items: center;
+    min-height: 120px;
+    height: 0;
+    flex: 1;
     .btn-item {
       display: flex;
       align-items: center;
