@@ -1,16 +1,19 @@
 <template>
     <div class="group-content-container" id="detailmain" ref="detailmain">
+        <div class="lazy-img-larger videocol-banner" v-lazy:background-image="`${columnDetail.profilePic}?imageView2/1/format/jpg`">
+            <span class="videocol-banner-bottom" v-show="columnDetail.buyCount == 0 ? false : true">{{columnDetail.buyCount}}人已购买</span>
+        </div>
         <ScrollNavBar :bars="navBars" />
         <!-- description(介绍) -->
         <div class="videocol-base">
-            <course-introduce  id="desc" :courseinfo="description"/>
+            <course-introduce  id="desc" :courseinfo="columnDetail.description"/>
         </div>
         <!-- 课程列表 -->
         <div class="videocol-bigimage">
             <div class="videocol-sction-title">
-                <h4>课程列表 <label>(共{{lessonCount}}讲)</label></h4>
+                <h4>课程列表 <label>(共{{columnDetail.lessonCount}}讲)</label></h4>
             </div>
-            <videoBigimage :src="outlinePic"/>   
+            <videoBigimage :src="columnDetail.outlinePic"/>   
             <!-- <img :src="require('../../../assets/images/icon_zoom.png')" class="videocol-bigimage-search"> -->
         </div>
         <!-- 试看课程 -->
@@ -22,7 +25,7 @@
                     <img :src="require('../../../assets/images/arrow_right.png')" class="videocol-allbtn-icon">
                 </div>
             </div>
-            <playlist v-for="(item,index) of freeLessonList" :key="item.id" :iteminfo="item" :lastindex="index === (freeLessonList.length - 1)" @jumpEvent="gotoVideoCourseDetailPage(item.id)"/>
+            <playlist v-for="(item,index) of columnDetail.freeLessonList" :key="item.id" :iteminfo="item" :lastindex="index === (columnDetail.freeLessonList.length - 1)" @jumpEvent="gotoVideoCourseDetailPage(item.id)"/>
         </div>
         <!-- 精选留言 -->
         <div class="videocol-base">
@@ -42,7 +45,7 @@
             <h4>购买须知</h4>
         </div>
         <div class="videocol-purchase-tip-fatherView">
-            <p v-html="buyIntro"></p>
+            <p v-html="columnDetail.buyIntro"></p>
         </div>  
         </div>
     </div>
@@ -59,7 +62,7 @@ import videoBigimage from '../../../components/videoBigimage.vue'
 
 import { createNamespacedHelpers } from 'vuex'
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
-  'videoColumnDetailData/groupContentData'
+  'columnData/groupContentData'
 )
 export default {
   name: 'GroupContent',
@@ -78,7 +81,8 @@ export default {
           title: '留言',
           ref: 'leaveMessage'
         }
-      ]
+      ],
+      columnType:this.$route.params.columnType,
     }
   },
   components: {
@@ -93,19 +97,26 @@ export default {
   computed: {
     ...mapState(['videoColumnComments','commentsTotalCount']),
     ...mapGetters([
-      'description',
-      'lessonCount',
-      'outlinePic',
-      'buyIntro',
-      'buyCount',
-      'freeLessonList', 
-      'courseId'
+      'columnDetail',
+      'courseId',
+      // 'description',
+      // 'lessonCount',
+      // 'outlinePic',
+      // 'buyIntro',
+      // 'buyCount',
+      // 'freeLessonList', 
+      // 'courseId'
     ])
   },
   methods: {
     ...mapActions(['getCommentList', 'likeComment']),
     enterAllVideoList(){
-       this.$router.push(`/videoInnerList/${this.courseId}`)
+      if(this.columnType === 'onlineCourse'){
+        this.$router.push(`/videoInnerList/${this.courseId}`)
+      }else if(this.columnType === 'onlineVision'){
+        this.$router.push({path:`/home/visionDetail/visionCourseList/${this.courseId}`})
+      }
+       
     },
     enterVideoCommentsList(){
       this.$router.push(`/videoCourseCmts/${this.courseId}`)
@@ -133,7 +144,21 @@ export default {
   background-color: #fff;
   height: 100%;
 }
-
+//banner头图
+.videocol-banner {
+  height: 300px;
+  padding: 0 40px;
+  text-align: left;
+  position: relative;
+  background: #f6f6f6 center/cover no-repeat;
+  span {
+    position: absolute;
+    bottom: 20px;
+    right: 40px;
+    font-size: 28px;
+    color: white;
+  }
+}
 //介绍
 .videocol-base {
   padding: 0 40px;
@@ -221,6 +246,4 @@ export default {
   margin-bottom: 60px;
 }
 </style>
-audio==
-video==vuex==columnId/name
-book==
+

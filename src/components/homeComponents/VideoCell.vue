@@ -22,7 +22,7 @@ export default {
       // })
       this.$router.push({ 
         name: 'ColumnDetail',
-        params: { columnType:"1005", columnId: this.data.id } 
+        params: { columnType:"onlineCourse", courseId: this.data.id } 
       })
     }
   }

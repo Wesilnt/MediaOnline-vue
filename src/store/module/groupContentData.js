@@ -6,30 +6,36 @@ const groupContentData = {
     commentsTotalCount:0//精选留言总数
   },
   getters: {
-    description(state, getters, { videoColumnDetailData }) {
-      return videoColumnDetailData.description
+    columnDetail(state,getters,{ columnData }) {
+      return columnData.columnDetail
     },
-    lessonCount(state, getters, { videoColumnDetailData }) {
-      return videoColumnDetailData.lessonCount
-    },
-    outlinePic(state, getters, { videoColumnDetailData }) {
-      return videoColumnDetailData.outlinePic
-    },
-    buyIntro(state, getters, { videoColumnDetailData }) {
-      return videoColumnDetailData.buyIntro
-    },
-    commentCount(state, getters, { videoColumnDetailData }) {
-      return videoColumnDetailData.commentCount
-    },
-    buyCount(state, getters, { videoColumnDetailData }) {
-      return videoColumnDetailData.buyCount
-    },
-    freeLessonList(state, getters, { videoColumnDetailData }) {
-      return videoColumnDetailData.freeLessonList
-    },
-    courseId(state, getters, { videoColumnDetailData }) {
-      return videoColumnDetailData.courseId
+    courseId(state,getters,{ columnData }) {
+      return columnData.courseId
     }
+    // description(state, getters, { videoColumnDetailData }) {
+    //   return videoColumnDetailData.description
+    // },
+    // lessonCount(state, getters, { videoColumnDetailData }) {
+    //   return videoColumnDetailData.lessonCount
+    // },
+    // outlinePic(state, getters, { videoColumnDetailData }) {
+    //   return videoColumnDetailData.outlinePic
+    // },
+    // buyIntro(state, getters, { videoColumnDetailData }) {
+    //   return videoColumnDetailData.buyIntro
+    // },
+    // commentCount(state, getters, { videoColumnDetailData }) {
+    //   return videoColumnDetailData.commentCount
+    // },
+    // buyCount(state, getters, { videoColumnDetailData }) {
+    //   return videoColumnDetailData.buyCount
+    // },
+    // freeLessonList(state, getters, { videoColumnDetailData }) {
+    //   return videoColumnDetailData.freeLessonList
+    // },
+    // courseId(state, getters, { videoColumnDetailData }) {
+    //   return videoColumnDetailData.courseId
+    // }
   },
   mutations: {
     bindCommentList(state, payload) {

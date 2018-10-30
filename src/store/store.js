@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import myPuzzle_PraiseData from './module/myPuzzle_PraiseData'
 import columnInfoData from './module/columnInfoData'
 import homeData from './module/homeData'
+import columnData from './module/columnData'
 import videoColumnDetailData from './module/videoColumnDetailData'
 import videoCourseDetailData from './module/videoCourseDetailData'
 import visionData from './module/visionData'
@@ -233,6 +234,7 @@ export default new Vuex.Store({
     myPuzzle_PraiseData,
     homeData,
     columnInfoData,
+    columnData,
     videoColumnDetailData,
     videoCourseDetailData, // 内建 问题列表modul
     myData,

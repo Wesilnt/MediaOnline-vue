@@ -33,7 +33,7 @@ export default {
     enterVisionDetail(id) {
       this.$router.push({
         name: 'ColumnDetail',
-        params: { columnType:"1003", columnId: id }
+        params: { columnType:"onlineVision", courseId: id }
       })
       // this.$router.push({ path: '/home/visionDetail/' + id })
     },

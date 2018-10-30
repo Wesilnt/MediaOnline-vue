@@ -41,7 +41,7 @@ const groupManagerData = {
     getters:{
         //专栏头图
         buyCount:(state,getters,{ videoColumnDetailData })=> videoColumnDetailData.buyCount,
-        courseName:(state,getters,rootState) => rootState.columnDetail.name,
+        // courseName:(state,getters,rootState) => rootState.columnDetail.name,
         //是否来自分享
         isFromShare:(state,getters,rootState) => {
             if(rootState.columnType=='1003') return rootState.visionData.isFromShare

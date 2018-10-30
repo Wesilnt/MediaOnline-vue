@@ -23,7 +23,7 @@ export default {
     onItemClick() {
       this.$router.push({ 
         name: 'ColumnDetail',
-        params: { columnType:"1007", columnId: this.data.id},
+        params: { columnType:"reading", courseId: this.data.id},
         // query:{columnType:"1007"} 
       })
     },

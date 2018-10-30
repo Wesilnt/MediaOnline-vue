@@ -28,7 +28,7 @@
 </template>
 <script>
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapGetters } = createNamespacedHelpers('readingsData')
+const { mapState, mapGetters } = createNamespacedHelpers('columnData')
 export default {
   computed: {
     ...mapGetters(['getBookIntroduce'])

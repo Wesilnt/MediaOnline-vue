@@ -38,16 +38,16 @@
             <div class="groupBuy-circleline" v-show="false"></div>
         </div>
         <!--1. 读书会头图-->
-        <div v-if="columnType ==='1007'">
+        <!-- <div v-if="columnType ==='1007'">
           <div class="book-header-container lazy-img-larger">
             <div class="book-cover" v-lazy:background-image="`${profilePic}?imageView2/1/format/jpg`">
             </div>
           </div>
-        </div>
+        </div> -->
            <!--2. 少年视野，少年必修-->
-        <div v-else class="lazy-img-larger groupBuy-banner" v-lazy:background-image="`${profilePic}?imageView2/1/format/jpg`">
+        <!-- <div v-else class="lazy-img-larger groupBuy-banner" v-lazy:background-image="`${profilePic}?imageView2/1/format/jpg`">
             <span class="groupBuy-banner-bottom" v-show="buyCount == 0 ? false : true">{{buyCount}}人已购买</span>
-        </div>
+        </div> -->
     </div>
 </template>
 

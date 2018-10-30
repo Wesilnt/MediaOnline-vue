@@ -1,12 +1,12 @@
 <template>
   <div class="book-detail-container">
-     <SkeletonFullScreen  v-if="dataLoading"/>
+    <SkeletonFullScreen  v-if="renderLoading"/>
     <div class="data-content" v-else>
      <GroupHeader></GroupHeader>
     <!-- 1. 头部 -->
-    <div class="book-header-container" v-show="false">
-      <div class="book-cover" :style="{background:`url(${bookDetail?bookDetail.coverPic:''})`,'background-size':'100%'}">
-        <span v-if="new Date().getTime() - new Date(bookDetail.createTime).getTime()<30*24*3600*1000">上新</span>
+    <div class="book-header-container">
+      <div class="book-cover" :style="{background:`url(${columnDetail?columnDetail.coverPic:''})`,'background-size':'100%'}">
+        <span v-if="new Date().getTime() - new Date(columnDetail.createTime).getTime()<30*24*3600*1000">上新</span>
       </div>
     </div>
     <!-- 2. 书的相关人物信息 -->
@@ -16,7 +16,7 @@
           <span>作</span>
           <span>者:</span>
         </div>
-        <span>{{bookDetail.authorName}}</span>
+        <span>{{columnDetail.authorName}}</span>
       </div>
       <hr>
       <div class="person-item">
@@ -25,7 +25,7 @@
           <span>讲</span>
           <span>者:</span>
         </div>
-        <span>{{bookDetail.commentator}}</span>
+        <span>{{columnDetail.commentator}}</span>
       </div>
       <hr>
       <div class="person-item">
@@ -33,13 +33,13 @@
           <span>系</span>
           <span>列:</span>
         </div>
-        <span>{{bookDetail.series}}</span>
+        <span>{{columnDetail.series}}</span>
       </div>
       <hr>
     </div>
     <!-- 3. 作品属性 -->
     <div class="book-properties-container">
-      <p v-html="bookDetail.radioIntro"></p> 
+      <p v-html="columnDetail.radioIntro"></p> 
     </div>
     <hr>
 
@@ -47,10 +47,10 @@
     <div class="book-introduce-container">
       <div class="book-introduce-header">
         <span>音频简介</span>
-        <span>共{{bookDetail.availLessonCount}}集</span>
+        <span>共{{columnDetail.availLessonCount}}集</span>
       </div>
       <div class="introduce-content">
-        <p v-html="bookDetail.description"/>
+        <p v-html="columnDetail.description"/>
         <div class="intoduce-whole">
           <span @click="toLookWhole">查看全部</span>
         </div>
@@ -60,30 +60,24 @@
     <!-- 5. 作品单集/章集 播放列表 -->
     <van-list 
       v-model="refreshing"
-      :finished="singleFinished"
-      :immediate-check="false"
+      :finished="lessonFinished"
+      :immediate-check="true"
       @load="scrollBottom"
       @offset="10">
          <SingleSetList 
             :courseid="courseId"
-            :list="singleSetList" 
+            :list="lessonList" 
             :play-id="playingId" 
             :singletype="'1007'" 
-            :coursename="courseName" 
+            :coursename="columnDetail.name" 
             :useraccessstatus="userAccessStatus"/>
     </van-list>
     <!-- 6. 分页布局 -->
-    <div class="load-more-container" v-if="singleFinished">
+    <div class="load-more-container" v-if="lessonFinished">
       <span>没有更多了，不要再拉啦～</span>
     </div>
     <!-- 7. 底部工具条 -->
-    <toolsNavbar 
-      :originPrice="'100'"
-      :groupPrice="'10'"
-      collageText="拼团"
-      collectText="集赞"
-      :collect='true'
-      :collage='true'/>
+    <toolsNavbar />
      </div>
   </div>
 </template>
@@ -98,18 +92,19 @@ const {
   mapMutations,
   mapActions,
   mapGetters
-} = createNamespacedHelpers('readingsData')
+} = createNamespacedHelpers('columnData')
 export default {
   data() {
     return {
-      courseId: this.$route.params.columnId,
+      courseId: this.$route.params.courseId,
+      columnType: this.$route.params.columnType,
       currentPage: 1,
       pageSize: 20,
       refreshing: false
     }
   },
   components: {
-     SingleSetList,
+    SingleSetList,
     toolsNavbar,
     GroupHeader,
     SkeletonFullScreen
@@ -117,19 +112,19 @@ export default {
   computed: {     
       ...rootState(['url']),     
     ...mapState([
-      'dataLoading',
-      'bookDetail',
-      'singleLoaing',
-      'singleFinished',
-      'singleSetList',
+      'renderLoading',
+      'columnDetail',
+      'lessonLoading',
+      'lessonFinished',
+      'lessonList',
       'courseName',
       'userAccessStatus'
     ]),
     ...mapGetters(['playingId'])
   },
   created() {
-    this.initData({courseId: this.courseId, groupBuyId: this.$route.query.groupBuyId})
-    this.getBookDetail({courseId: this.courseId, groupBuyId: this.$route.query.groupBuyId})
+    this.initDatas({courseId: this.courseId, groupBuyId: this.$route.query.groupBuyId})
+    this.getColumnDetail({ columnType:this.columnType, courseId: this.courseId, groupBuyId: this.$route.query.groupBuyId})
   },
   mounted(){  
     this.getUserInfo()
@@ -139,7 +134,7 @@ export default {
         link: this.url + `/#/home/readings/book/${this.courseId}`, 
         title: this.courseName,
         desc: '你一定会爱上国学课...',
-        imgUrl:`${this.bookDetail.sharePostUrl}?imageView2/1/w/100/h/100/format/jpg`,
+        imgUrl:`${this.columnDetail.sharePostUrl}?imageView2/1/w/100/h/100/format/jpg`,
         successCB: () => console.log('分享回调成功') ,
         cancelCB: () =>  console.log('分享回调失败')
       } 
@@ -148,20 +143,20 @@ export default {
     }) 
   },
   watch: {
-    singleLoaing: function(loading) {
+    lessonLoading: function(loading) {
       this.refreshing = loading
     }
   },
   methods: {
     ...rootActions(['getUserInfo', 'setWxShareFriend', 'setWxShareZone']),
-    ...mapMutations(['initData']),
-    ...mapActions(['getBookDetail', 'getSingleSetList']),
+    ...mapMutations(['initDatas']),
+    ...mapActions(['getLessonList','getColumnDetail']),
     toLookWhole() {
       this.$router.push({ path: '/home/readings/summary' })
     },
     //分页加载
     scrollBottom() {
-      this.getSingleSetList()
+      this.getLessonList({courseId:this.courseId,refresh:false})
     }
   }
 }

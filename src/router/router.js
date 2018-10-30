@@ -12,9 +12,7 @@ import { getColumnDetail } from '../api/praiseApi';
 const Home = () => import(/* webpackChunkName: "home" */ '../views/Home')
 const My = () => import(/* webpackChunkName: "index" */ '../views/My')
 const ColumnDetail = () => import(/* webpackChunkName: "index" */ '../views/ColumnDetail')
-const videoColumnDetail = () => import(/* webpackChunkName: "index" */ '../views/onlineCourse/videoColumnDetail')
-const VisionDetail = () => import(/* webpackChunkName: "index" */ '../views/onlineVision/VisionDetail')
-const BookDetail = () => import(/* webpackChunkName: "index" */ '../views/readings/BookDetail')
+const ColumnList = () => import(/* webpackChunkName: "index" */ '../views/ColumnList')
 
 Vue.use(Router)
 
@@ -35,20 +33,20 @@ export default new Router({
         { path: '', component: Home },
         { path: 'home', component: Home },
         {
-          path: 'my',
-          component: My
+          path: '/my',
+          component: My,
         }
       ]
     },
     {
-      path:'/detail/:columnType/:columnId',
+      path:'/detail/:columnType/:courseId',
       name:'ColumnDetail',
       component:ColumnDetail,
-      children:[
-        { path: 'videoColumnDetail', component: videoColumnDetail },
-        { path: 'VisionDetail', component: VisionDetail },
-        { path: 'BookDetail', component: BookDetail },
-      ]
+    },
+    {
+      path:'/home/:columnType/columnlist',
+      name:'ColumnList',
+      component:ColumnList,
     },
     ...PageInfo_From_Home,
     ...PageInfo_From_My,

@@ -1,28 +1,51 @@
 <template>
   <div>
-    <playlist v-for="(item,index) of videoCourseList" :key="item.id" :iteminfo="item" :lastindex="index == (videoCourseList.length - 1)" @jumpEvent="gotoVideoCourseDetailPage(item)"/>
-
+    <van-list
+      class="home-video"
+      v-model="refreshing"
+      :finished="lessonFinished"
+      :immediate-check="false"
+      @load="scrollBottom"
+      @offset="10">
+          <playlist v-for="(item,index) of lessonList" :key="item.id" :iteminfo="item" :lastindex="index == (lessonList.length - 1)" @jumpEvent="gotoVideoCourseDetailPage(item)"/>
+    </van-list>
+    <div class="home-warnTip" v-show="lessonFinished">没有更多了,不要在拉了~</div>
   </div>
 </template>
 
 <script>
 import playlist from './components/playlist.vue'
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions, mapGetters } = createNamespacedHelpers('videoColumnDetailData')
+const { mapState,mapMutations, mapActions, mapGetters } = createNamespacedHelpers('columnData')
 
 export default{
   data(){
     return{
-
+      refreshing:false,
+      courseId:this.$route.params.courseId
     }
   },
-   computed: { 
-    ...mapState(['videoCourseList','courseName', 'userAccessStatus'])
+  created(){
+
+  },
+  watch: {
+    lessonLoading: function(loading) {
+      this.refreshing = loading
+    }
+  },
+  computed: { 
+    ...mapState(['lessonList','lessonLoading','lessonFinished', 'userAccessStatus'])
   },
   components: {
     playlist
   },
   methods: {
+    ...mapMutations(['resetState']),
+    ...mapActions(['getLessonList']),
+    scrollBottom() {
+      console.log('scrollBottom ==',this.courseId)
+      this.getLessonList({ refresh: false, courseId: this.courseId })
+    },
     gotoVideoCourseDetailPage(item) {
       let unLock = false
       switch(this.useraccessstatus){
@@ -56,8 +79,20 @@ export default{
   },
   mounted(){
 
+  },
+  beforeDestroy() {
+    this.resetState()
   }
 }
- 
 
 </script>
+
+<style lang="scss" scoped>
+.home-warnTip {
+  text-align: center;
+  margin: 120px auto 180px;
+
+  color: rgb(200, 200, 200);
+}
+</style>
+

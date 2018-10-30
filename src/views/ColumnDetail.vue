@@ -1,8 +1,9 @@
 <template>
     <div>
-        <VisionDetail v-if="columnType === '1003'" />
-        <videoColumnDetail v-if="columnType === '1005'" />      
-        <BookDetail v-if="columnType === '1007'"/>
+        <!-- <SkeletonFullScreen  v-if="renderLoading"/> -->
+        <!-- <VisionDetail v-if="columnType === 'onlineVision'" /> -->
+        <videoColumnDetail v-if="columnType === 'onlineCourse' || columnType === 'onlineVision'" />      
+        <BookDetail v-if="columnType === 'reading'"/>
     </div>
 </template>
 
@@ -10,11 +11,12 @@
 import videoColumnDetail from './onlineCourse/videoColumnDetail'
 import VisionDetail from './onlineVision/VisionDetail'
 import BookDetail from './readings/BookDetail'
+
 export default {
     name:'ColumnDetail',
     data(){
         return{
-            columnType:this.$route.params.columnType
+            columnType:this.$route.params.columnType,
         }
     },
     components:{

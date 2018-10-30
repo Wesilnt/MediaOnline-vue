@@ -28,7 +28,7 @@
 import SingleSetList from '../../components/SingleSetList.vue'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
-  'visionData'
+  'columnData'
 )
 export default {
   data() {
