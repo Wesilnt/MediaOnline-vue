@@ -21,9 +21,7 @@
         :speed="1"
         :clockwise="true"
         :stroke-width="60"
-        :rate="1"
-      >
-     </van-circle>
+        :rate="1"/>
   </div>
 </template>
 <script>
@@ -67,9 +65,10 @@ export default {
       'forceHidenFloat',
       'showFloat',
       'courseId', 
-      'courseName'
+      'courseName',
+      'columnType'
     ]),
-    ...rootState(['columnType'])
+    // ...rootState(['columnType'])
   },
   created() {
     this.initAudio()
@@ -112,11 +111,15 @@ export default {
       }
       e.preventDefault()
     },
-    goPlaying(){
+    goPlaying(){ 
       this.$router.push({
         name: 'AudioPlay',
-        params: { id: this.audioId },
-        query: {courseId: this.courseId, columnType: this.columnType, courseName: this.courseName }
+        params: { 
+          columnType:this.columnType,
+          courseId: this.courseId,
+          lessonId: this.audioId 
+        },
+        query: {courseName: this.courseName }
       })
     }
   },
@@ -141,8 +144,9 @@ export default {
         if(from.path !== '/' && from.path !== '/home'  && from.path !== '/my' &&
           (to.path === '/'||to.path === '/home' || to.path === '/my'))  
         {
-          console.log("路由切换",from.path, to.path)
+          
           let navBar = document.getElementById('navbar') 
+          if(!navBar) return
           let iconWidth = this.$refs.mediaIcon.clientWidth
           let iconHeight = this.$refs.mediaIcon.clientHeight 
           let boundingClientRect  = navBar.getBoundingClientRect()

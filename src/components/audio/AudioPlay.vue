@@ -89,15 +89,15 @@ export default {
       nextIcon:require('../../assets/images/audio_play_next.png'),
       playIcon:require('../../assets/images/audio_play_play.png'),
       pauseIcon:require('../../assets/images/icon_pause.png'),
-      lessonId: this.$route.params.id, 
-      courseId:this.$route.query.courseId,
-      columnType: this.$route.query.columnType, //播放类型 FreeZone(1001) 免费专区  OnlineCourse(1005) 在线课堂 OnlineVision(1003) 在线视野  Readings(1007) 读书会 
-      courseName: this.$route.query.courseName, //专栏名
+      lessonId: this.$route.params.lessonId,       //单集ID
+      courseId:this.$route.params.courseId,        //专栏ID
+      columnType: this.$route.params.columnType,   //专栏类型 freezone(1001) 免费专区  onlineCourse(1005) 在线课堂 onlineVision(1003) 在线视野  reading(1007) 读书会 
+      courseName: this.$route.query.courseName,    //专栏名
       isInit: true, 
       play: true,
-      popupVisible: false, //是否显示音频列表弹框
-      showShare: false, //是否显示分享框
-      touching: false, //slider触摸
+      popupVisible: false,   //是否显示音频列表弹框
+      showShare: false,      //是否显示分享框
+      touching: false,       //slider触摸
       progress: 0 ,  
       subBottom:35,
       subTop:29,
@@ -132,10 +132,16 @@ export default {
   created() {
     this.isInit = true
     this.bindCourseName(this.courseName) 
-    this.playAudio({ lessonId: this.lessonId, columnType: this.columnType })
+    this.playAudio({ lessonId: this.lessonId, columnType: this.columnType }) 
     this.setShareInfo({courseId:this.courseId,columnType: this.columnType})
   }, 
   watch: {
+    columnId:{
+     handler:function(courseId){
+        if(courseId>0) this.courseId = courseId
+     },
+     immediate: true
+    },
     audioId: function(id) {
       this.lessonId = id
     },
@@ -178,14 +184,22 @@ export default {
     onDraft() {
       this.$router.push({
         name: 'AudioDraft',
-        params: { lessonid: this.lessonId }
+        params: {  
+          columnType: this.columnType, 
+          courseId: this.courseId,
+          lessonid: this.lessonId 
+        }
       })
     },
     //评论
     toComment() {
       this.$router.push({
         name: 'AudioCmts',
-        params: { lessonid: this.lessonId }
+        params: {
+          columnType: this.columnType, 
+          courseId: this.courseId,
+          lessonid: this.lessonId 
+        }
       })
     },
     //分享
@@ -309,7 +323,7 @@ export default {
 }
 </script>
 <style lang="scss" >
-.audioplay-containeraudioplay-container {
+.audioplay-container {
   background: #fff center/100% no-repeat;
   height: 0px;
   padding-bottom: 100%; 
@@ -406,7 +420,7 @@ export default {
         max-width: 100%;
       }
       .van-slider__button {
-        background: url(../../assets/images/audio_play_slider.png) center/18px
+        background: url('../../assets/images/audio_play_slider.png') center/18px
           no-repeat;
         border-radius: 15px;
         width: 18px;

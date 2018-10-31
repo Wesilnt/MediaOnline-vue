@@ -2,7 +2,7 @@ import { getGroupBuyDetail,startGroupBuy,joinGroupBuy,startCollectLike,getCollec
 import {getLessonListByCourse} from '../../api/columnsApi.js'
 import {getMyUserInfo} from '../../api/myApi'
 import {Toast} from 'vant'
-import { WECHAT_SUBSCRIPTION_URL, courseType } from '../../utils/config'
+import { WECHAT_SUBSCRIPTION_URL, courseType,columnType } from '../../utils/config'
 
 const groupManagerData = {
     namespaced: true,
@@ -146,9 +146,11 @@ const groupManagerData = {
                             break
                         }                          
                         if(1202==orderStatus){
-                        link = `${rootState.url}/#/${courseType[rootState.columnType]}${courseId}?groupBuyId=${groupBuyId}`
+                        // link = `${rootState.url}/#/${courseType[rootState.columnType]}${courseId}?groupBuyId=${groupBuyId}`
+                        link =  `${rootState.url}/#/detail/${rootState.columnType}/${courseId}?groupBuyId=${groupBuyId}`
                         }else {
-                        link = `${rootState.url}/#/${courseType[rootState.columnType]}${courseId}`
+                        // link = `${rootState.url}/#/${courseType[rootState.columnType]}${courseId}`
+                        link =  `${rootState.url}/#/detail/${rootState.columnType}/${courseId}`
                         }
                 }else{
                     switch (state.userAccessStatus) {
@@ -156,30 +158,31 @@ const groupManagerData = {
                             title = `我正在参加《${courseName}》拼团活动,仅差${leavePerson || 0}人,快来和我一起拼团吧!`
                             break
                         case 1009: //集赞中
-                            title = `我是$
-                            ser.nickName}, ${true ? '我想免费' : '正在帮朋友'}领取《${courseName}》,求助攻~`
+                            title = `我是${user.nickName}, ${true ? '我想免费' : '正在帮朋友'}领取《${courseName}》,求助攻~`
                             break
                         default:
                             title = courseName 
                             break
-                        }
-                        if(1005==state.userAccessStatus){
-                        link = `${rootState.url}/#/${courseType[rootState.columnType]}${courseId}?groupBuyId=${groupBuyId}`
-                        }else if(1009==state.userAccessStatus) {
-                        link =  `${rootState.url}/#/praise/active/${courseId}/${collectLikeId}?columnType=${rootState.columnType}` 
-                        }else {
-                        link = `${rootState.url}/#/${courseType[rootState.columnType]}${courseId}`
                         } 
+                        if(1005==state.userAccessStatus){
+                          // link = `${rootState.url}/#/${courseType[rootState.columnType]}${courseId}?groupBuyId=${groupBuyId}`
+                          link = `${rootState.url}/#/detail/${rootState.columnType}/${courseId}?groupBuyId=${groupBuyId}`
+                        }else if(1009==state.userAccessStatus) {
+                          link =  `${rootState.url}/#/praise/active/${courseId}/${collectLikeId}?columnType=${rootState.columnType}` 
+                        }else {
+                          // link = `${rootState.url}/#/${courseType[rootState.columnType]}${courseId}`
+                          link = `${rootState.url}/#/detail/${rootState.columnType}/${courseId}`
+                        }  
                 }
-                // console.log('groupmanager来自分享设置分享地址：', link, '   设置分享标题：', title)
                 let shareData = {
-                    link,
-                    title,
-                    desc: '你一定会爱上国学课...',
-                    imgUrl:`${rootState.columnDetail.sharePostUrl}?imageView2/1/w/100/h/100/format/jpg`,
-                    successCB: () => console.log('分享回调成功'),
-                    cancelCB: () => console.log('分享回调失败')
+                  link,
+                  title,
+                  desc: '你一定会爱上国学课...',
+                  imgUrl:`${rootState.columnDetail.sharePostUrl}?imageView2/1/w/100/h/100/format/jpg`,
+                  successCB: () => console.log('分享回调成功'),
+                  cancelCB: () => console.log('分享回调失败')
                 }
+                console.log('专栏详情分享参数:', shareData)
                 dispatch('setWxShareFriend',shareData,{root:true})
                 dispatch('setWxShareZone',shareData,{root:true})
             })         

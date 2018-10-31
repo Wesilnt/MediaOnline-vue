@@ -22,7 +22,7 @@ const PageInfo_From_onlineCourse = [
     component: videoCourseComment
   },
   {
-    path: '/videoInnerList/:courseId',
+    path: '/videoInnerList/:columnType/:courseId',
     name: 'videoInnerList',
     component: videoInnerList
   }

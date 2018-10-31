@@ -20,13 +20,13 @@
         <!-- 试看课程 -->
         <div class="videocol-base">
             <div class="videocol-sction-title" id="tryCourse">
-                <h4>试看课程</h4>
+                <h4>{{this.columnType === 'onlineCourse'? '试看课程':'试听课程'}}</h4>
                 <div class="videocol-all" @click="enterAllVideoList()">
                     <span class="videocol-allbtn">全部</span>
                     <img :src="require('../../../assets/images/arrow_right.png')" class="videocol-allbtn-icon">
                 </div>
             </div>
-            <playlist v-for="(item,index) of columnDetail.freeLessonList" :key="item.id" :iteminfo="item" :lastindex="index === (columnDetail.freeLessonList.length - 1)" @jumpEvent="gotoVideoCourseDetailPage(item.id)"/>
+            <playlist v-for="(item,index) of columnDetail.freeLessonList" :key="item.id" :iteminfo="item" :lastindex="index === (columnDetail.freeLessonList.length - 1)" @jumpEvent="toDetail(item.id)"/>
         </div>
         <!-- 精选留言 -->
         <div class="videocol-base">
@@ -62,20 +62,19 @@ import CommentItem from '../../../components/comment/CommentItem.vue'
 import videoBigimage from '../../../components/videoBigimage.vue'
 
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
-  'columnData/groupContentData'
-)
+const { mapState, mapActions, mapGetters } = createNamespacedHelpers('columnData/groupContentData')
 export default {
   name: 'GroupContent',
   data() {
     return {
+      columnType:this.$route.params.columnType,
       navBars: [
         {
           title: '介绍',
           ref: 'desc'
         },
         {
-          title: '试看',
+          title: this.columnType === 'onlineCourse'? '试看':'试听',
           ref: 'tryCourse'
         },
         {
@@ -83,7 +82,6 @@ export default {
           ref: 'leaveMessage'
         }
       ],
-      columnType:this.$route.params.columnType,
     }
   },
   components: {
@@ -113,7 +111,7 @@ export default {
     ...mapActions(['getCommentList', 'likeComment']),
     enterAllVideoList(){
       if(this.columnType === 'onlineCourse'){
-        this.$router.push(`/videoInnerList/${this.courseId}`)
+        this.$router.push(`/videoInnerList/${this.columnType}/${this.courseId}`)
       }else if(this.columnType === 'onlineVision'){
         this.$router.push({path:`/home/visionDetail/visionCourseList/${this.courseId}`})
       }
@@ -122,8 +120,19 @@ export default {
     enterVideoCommentsList(){
       this.$router.push(`/videoCourseCmts/${this.courseId}`)
     },
-    gotoVideoCourseDetailPage(lessonId) {
-      this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
+    toDetail(lessonId) {
+      if(this.columnType === 'onlineVision')
+         this.$router.push({
+            name: 'AudioPlay',
+            params: { 
+                courseId: this.courseId,
+                columnType: this.columnType,
+                lessonId,
+              }, 
+            query: {courseName: this.columnDetail.name}
+         })
+      if(this.columnType === 'onlineCourse')
+         this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
     },
   },
   created() {

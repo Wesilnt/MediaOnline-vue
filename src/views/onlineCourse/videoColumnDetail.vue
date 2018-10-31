@@ -5,7 +5,7 @@
       <GroupHeader></GroupHeader>
       <GroupContent></GroupContent>
       <!-- 底部工具条 -->
-      <Payment />
+      <!-- <Payment /> -->
       <toolsNavbar/>
     </div>
   </div>
@@ -18,7 +18,7 @@ import GroupContent from './components/GroupContent'
 import toolsNavbar from '../../components/toolsNavbar.vue'
 import Payment from '../../components/Payment'
 import { createNamespacedHelpers } from 'vuex'
-import {columnStatus} from '../../utils/config'
+import {columnType,columnStatus} from '../../utils/config'
 const { mapState, mapMutations, mapActions } = createNamespacedHelpers(
   'columnData'
 )
@@ -53,7 +53,7 @@ export default {
     this.getColumnDetail({
       courseId: this.courseId,
       groupBuyId: this.groupBuyId,
-      columnType:columnStatus[this.columnType]
+      columnType: this.columnType
     })
     //获取专栏下的所有单集
     console.log('columnType ==',this.columnType,this.courseId)

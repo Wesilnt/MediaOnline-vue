@@ -14,7 +14,7 @@
 <script>
 import VisionCell from '../../components/homeComponents/VisionCell.vue'
 import { createNamespacedHelpers } from 'vuex'
-import {columnStatus} from '../../utils/config'
+import {columnType,columnStatus} from '../../utils/config'
 const { mapState,mapMutations, mapActions } = createNamespacedHelpers('columnData')
 export default {
   data() {
@@ -35,15 +35,13 @@ export default {
   methods: {
     ...mapMutations(['resetState']),
     ...mapActions(['getColumnList']),
-    loadMore() {
-      console.log('执行了loadmore')
-      this.getColumnList({ refresh: false, columnType: columnStatus[this.columnType] })
+    loadMore() { 
+      this.getColumnList({ refresh: false, columnType:this.columnType })
       // console.log(this.visionList)
     }
   },
   created() {
-    console.log('============')
-    this.getColumnList({ refresh: false, columnType:columnStatus[this.columnType] })
+    this.getColumnList({ refresh: false, columnType:this.columnType })
     // this.getVisionListData()
   },
   beforeDestroy() {

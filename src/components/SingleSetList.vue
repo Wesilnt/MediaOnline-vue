@@ -5,7 +5,7 @@
       :courseid="courseid"
       :item="item" 
       :playing="item.id==playId" 
-      :singletype='singletype' 
+      :columnType='columnType' 
       :coursename='coursename' 
       :useraccessstatus = 'useraccessstatus' />
     </div>
@@ -18,7 +18,7 @@ import SingleSet from './SingleSetItem.vue'
 export default {
   components: { singleset: SingleSet },
   //list 单集列表数据
-  props: ['list', 'playId','singletype','courseid','coursename','useraccessstatus'],
+  props: ['list', 'playId','columnType','courseid','coursename','useraccessstatus'],
   data() {
     return { playingIndex: 0 }
   }

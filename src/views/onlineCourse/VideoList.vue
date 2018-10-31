@@ -19,7 +19,7 @@
 <script>
 import VideoCell from '../../components/homeComponents/VideoCell'
 import { createNamespacedHelpers } from 'vuex'
-import {columnStatus} from '../../utils/config'
+import {columnType,columnStatus} from '../../utils/config'
 const { mapState,mapMutations, mapActions } = createNamespacedHelpers('columnData')
 export default {
   name: 'VideoList',
@@ -46,13 +46,13 @@ export default {
     VideoCell
   },
   created() {
-    this.getColumnList({ refresh: false, columnType:columnStatus[this.columnType] })
+    this.getColumnList({ refresh: false, columnType: this.columnType })
   },
   methods: {
     ...mapMutations(['resetState']),
     ...mapActions(['getColumnList']),
     scrollBottom() {
-      this.getColumnList({ refresh: false, columnType: columnStatus[this.columnType] })
+      this.getColumnList({ refresh: false, columnType: this.columnType})
     }
   },
   beforeDestroy() {

@@ -1,14 +1,15 @@
 <template>
   <div class="homeitem-container">
     <Header :title="item.title" subtitle="探索更多" :link="item.link" />
-    <div :class="{'vision-list': columnType === '1003',
-                   'video-list': columnType === '1005',
-                   'qhht-flex': columnType === '1007',
-                   'book-list': columnType === '1007',}">
+    <div :class="{'vision-list': columnType === 'onlineVision',
+                   'video-list': columnType === 'onlineCourse',
+                   'qhht-flex': columnType === 'reading',
+                   'book-list': columnType === 'reading',}">
           <component v-for="data in list"
                     :is="item.componentName" 
                     :data="data"  
                     :key="data.id" 
+                    :columnType="columnType"
                     :class="{emptyItem:!data.id}"/> 
     </div>
   </div>
@@ -16,23 +17,12 @@
 <script>
 import Header from './homeComponents/Header.vue'
 import FreeList from '../views/FreeList.vue'
-// import DisCoverVisionList from './homeComponents/DisCoverVisionList.vue'
-// import DisCoverVideoList from './homeComponents/HomeVideoList.vue'
-// import BookList from '../views/BookList.vue'
 import VisionCell from './homeComponents/VisionCell.vue'
 import VideoCell from './homeComponents/VideoCell.vue'
 import BookCell from './homeComponents/BookCell.vue'
 export default {
     props:['columnType','item','list'],
-    components:{ Header,
-                 FreeList,
-                //  BookList,
-                //  DisCoverVisionList,
-                //  DisCoverVideoList,
-                 VisionCell,
-                 VideoCell,
-                 BookCell,
-                }
+    components:{ Header,FreeList,VisionCell,VideoCell,BookCell,}
 }
 </script> 
 

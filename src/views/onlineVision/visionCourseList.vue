@@ -15,9 +15,9 @@
       </div>
       <SingleSetList
         v-show="item.id == selectCate && spread" 
-        :courseid="courseId"
-        :singletype="'1003'" 
         class="categoryList" 
+        :courseid="courseId"
+        :columnType="columnType" 
         :list='item.lessonList' 
         :coursename="courseName" 
         :useraccessstatus="userAccessStatus"></SingleSetList>
@@ -27,13 +27,12 @@
 <script>
 import SingleSetList from '../../components/SingleSetList.vue'
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
-  'columnData'
-)
+const { mapState, mapActions, mapGetters } = createNamespacedHelpers('columnData')
 export default {
   data() {
     return {
       courseId:this.$route.params.courseId,
+      columnType:this.$route.params.columnType,
       selectCate: 0,
       spread: true,
       ascDown: require('../../assets/images/vision_list_down.png'),

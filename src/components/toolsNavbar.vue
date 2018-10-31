@@ -2,7 +2,7 @@
     <div class="purchase-toolbar" v-show="toolsObject&&toolsObject.isShow">
         <div class="toolbar-audition" @click="clickAuditionBtn">
             <i class="qhht-icon audition-icon"></i>
-            <p class="under-text">{{columnType == "1005"?'试看':'试听'}}</p>
+            <p class="under-text">{{columnType == "onlineCourse"?'试看':'试听'}}</p>
         </div>
         <hr class="vertical-line"/>
         <div v-show="toolsObject&&toolsObject.originPrice" :disabled="isLoading" class="toolbar-price" :class="{'toolbar-price-active':toolsObject&&!toolsObject.collage&&!toolsObject.collect }"  @click="clickOriginPriceBtn">
@@ -21,7 +21,7 @@
                 <div>{{toolsObject&&toolsObject.collectText}}</div>
             </div>
         </div>
-        <Share :show="sharePageShow" :courseId="courseId" :columnType ="columnType" :posturl="'groupBuy'" @close="cancelSharePage"></Share>
+        <Share :show="sharePageShow" :courseId="courseId" :columnType ="columnType" :postType="'collage'" @close="cancelSharePage"></Share>
         <PhoneVerif :style="{'z-index':100}" v-if="isShowMobileDialog" @callback="bindIsShowMobileDialog(false)"></PhoneVerif>
     </div>
 
@@ -53,7 +53,8 @@ export default {
       //点击原价购买按钮
       isClickOriginPriceBtn: false,
       //点击拼团按钮
-      isClickCollageBtn: false
+      isClickCollageBtn: false,
+      columnType: this.$route.params.columnType
     }
   },
   props: {
@@ -100,10 +101,10 @@ export default {
           this.$router.push({
             name: 'Praise',
             params: {
+              columnType: this.columnType,
               courseId: this.$route.params.courseId,
               collectLikeId: newVal
-            },
-            query: { columnType: this.serviceType }
+            }
           })
         }
       },
@@ -119,7 +120,7 @@ export default {
     userAccessStatus: function(value) {}
   },
   computed: {
-    ...rootState(['url','columnDetail','columnType']),
+    ...rootState(['url','columnDetail']),
     ...mapState([
       'isLoading',
       'userList',
@@ -358,11 +359,9 @@ export default {
           this.$router.push({
             name: 'Praise',
             params: {
-              courseId: this.$route.params.courseId,
+              columnType: this.columnType,
+              courseId: this.courseId,
               collectLikeId: this.collectLikeId
-            },
-            query: {
-              columnType: this.columnType
             }
           })
           break
@@ -407,19 +406,17 @@ export default {
           break
         case 'FreeZone':
           break
-        case '1003':
-          this.$router.push({
-            name: 'AudioPlay',
-            params: { id },
-            query: {courseId: this.courseId,  columnType: this.columnType, courseName: this.courseName }
-          })
-          break
+        case '1003': 
         case '1007':
           this.$router.push({
-            name: 'AudioPlay',
-            params: { id },
-            query: {courseId: this.courseId,  columnType: this.columnType, courseName: this.courseName }
-          })
+              name: 'AudioPlay',
+              params: { 
+                courseId: this.courseId,
+                columnType : this.columnType,
+                lessonId: id,
+              },  
+              query: {courseName: this.courseName }
+            })
           break
       }
     }

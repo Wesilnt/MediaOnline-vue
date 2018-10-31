@@ -7,7 +7,7 @@
             <p class="playItem-title" :class="{'playItem-title' : true, 'playItem-title-active' : activeID === iteminfo.id}">{{iteminfo.title}}</p>
             <p class="playItem-info">{{iteminfo.subTitle}}</p>
             <p>
-                <a v-if="iteminfo.isFree" class="audition-btn">试看</a>
+                <a v-if="iteminfo.isFree" class="audition-btn">{{this.columnType === 'onlineCourse'? '试看':'试听'}}</a>
                 <span>{{iteminfo.totalTime | formatDuring}}</span> |
                 <span>{{ iteminfo.learnTime |getProgress(iteminfo.totalTime,iteminfo.id) }}</span>
             </p>
@@ -20,8 +20,9 @@ export default {
   props: ['iteminfo', 'lastindex', 'activeID'],
   data() {
     return {
+      columnType:this.$route.params.columnType,
       studyProgress: '', //收听进度
-      isPlaying: false
+      isPlaying: false ,
     }
   },
   filters: {

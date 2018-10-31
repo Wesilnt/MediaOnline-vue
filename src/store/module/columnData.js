@@ -1,4 +1,5 @@
 import { getVisionCourseList,getLessonListByCourse,getColumns } from '../../api/columnsApi.js'
+import {columnType as ColumnType} from "../../utils/config"
 
 import groupContentData from './groupContentData'
 import groupManagerData from './groupManagerData'
@@ -111,14 +112,15 @@ const columnData = {
             }
         },
         //获取专栏列表
-        async getColumnList({commit,state},{refresh,columnType}){
-            console.log('getColumnList')
+        async getColumnList({commit,state},{refresh,columnType}){ 
             if (state.columnFinished || state.columnLoading) return
             commit('saveStatus',{columnLoading : true})
-            const page  = refresh ? 1 : state.columnCurrentPage + 1
-            console.log("page ==",page)
-            const result = await getColumns({ type: columnType, currentPage: page, pageSize: state.pageSize }) 
-            console.log("result ==",result)
+            const page  = refresh ? 1 : state.columnCurrentPage + 1   
+            const result = await getColumns({ 
+                                              type: ColumnType[columnType].code, 
+                                              currentPage: page, 
+                                              pageSize: state.pageSize }) 
+            console.log(result)
             if(!result) return
             if(refresh){
                 commit('saveStatus',
@@ -131,8 +133,7 @@ const columnData = {
                 })
             }else{
                 const tempColumns = state.columnList.concat(result.courseInfo.result)
-                let isFinished = tempColumns.length >= result.courseInfo.totalCount
-                console.log("tempColumns ==",tempColumns)
+                let isFinished = tempColumns.length >= result.courseInfo.totalCount 
                 commit('saveStatus',
                 {
                     bannerPic : result.bannerPic,
@@ -146,8 +147,7 @@ const columnData = {
         //获取专栏详情
         async getColumnDetail({ state, commit, dispatch }, { courseId, groupBuyId, columnType }) {
             //获取视频专栏数据
-            const columnDetail = await dispatch('getColumnDetail',{courseId,columnType:columnType},{root:true}) 
-            console.log('专栏数据')   
+            const columnDetail = await dispatch('getColumnDetail',{courseId,columnType},{ root:true })  
             console.log(columnDetail) 
             if(!columnDetail) return
             //绑定业务类型,专栏头图,试听列表,专栏ID到拼团仓库中

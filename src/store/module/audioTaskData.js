@@ -19,6 +19,7 @@ export default {
     isPlaying: false, //是否正在播放
     isBuffering: false, //是否处于缓冲中
     courseName:"", //专栏名
+    columnType:'reading',
     courseId:-1,
     throttle: null,
     pageSize: 20,
@@ -44,6 +45,10 @@ export default {
       state.audioId = res.id
       state.courseId = res.courseId
       state.coverPic = res.coverPic
+    },
+    //绑定专栏类型
+    bindColumnType(state,columnType){
+      state.columnType = columnType
     },
     //音频播放同步方法
     syncPlay(state, params) {
@@ -164,6 +169,9 @@ export default {
     },
     //音频播放异步方式
     async asyncPlay({ state, commit, dispatch }, params) {
+      if(params && params.columnType){
+        commit('bind',params.columnType)
+      }
       //1. 如果播放的是当前音频，则直接播放
       if (params && params.lessonId == state.audioDetail.id) {
         if (!state.isPlaying) commit('syncPlay')
@@ -188,9 +196,9 @@ export default {
     async playNext({ state,commit,rootState, dispatch },params) { 
      let nextId = params && params.learnId? params.lessonId : state.audioDetail.nextLessonId 
      if(rootState.columnType
-        &&(rootState.columnType == "1003" 
-        || rootState.columnType == "1007")
-        &&rootState.columnDetail){
+        &&(rootState.columnType == "reading" 
+        || rootState.columnType == "onlineVision")
+        && rootState.columnDetail){
         let useraccessstatus = rootState.columnDetail.userAccessStatus 
        if(1001 != useraccessstatus 
          && 1003 != useraccessstatus 
@@ -217,8 +225,8 @@ export default {
     async playPre({ state,commit,rootState, dispatch },params) { 
       let preId = params && params.learnId? params.lessonId :state.audioDetail.preLessonId
       if(rootState.columnType
-           &&(rootState.columnType == "1007" 
-           || rootState.columnType == "1003")
+           &&(rootState.columnType == "reading" 
+           || rootState.columnType == "onlineVision")
            && rootState.columnDetail){
           let useraccessstatus = rootState.columnDetail.userAccessStatus
           if(useraccessstatus

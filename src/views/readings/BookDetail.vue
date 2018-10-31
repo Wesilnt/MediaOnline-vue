@@ -68,7 +68,7 @@
             :courseid="courseId"
             :list="lessonList" 
             :play-id="playingId" 
-            :singletype="'1007'" 
+            :columnType="columnType" 
             :coursename="columnDetail.name" 
             :useraccessstatus="userAccessStatus"/>
     </van-list>
