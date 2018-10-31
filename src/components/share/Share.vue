@@ -84,12 +84,11 @@ export default {
         // this.setWxShareZone(shareOption)
       }
     },
-    toPoster(){
+    toPoster(){ 
+      let postType = postType? postType: 'default'
      this.$router.push({
      name: 'SharePoster',
-     params:{
-       postType: this.postType
-     },
+     params:{postType},
      query: {   
               courseId: this.courseId,
               columnType:this.columnType

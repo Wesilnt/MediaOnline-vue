@@ -170,7 +170,7 @@ export default {
     //音频播放异步方式
     async asyncPlay({ state, commit, dispatch }, params) {
       if(params && params.columnType){
-        commit('bind',params.columnType)
+        commit('bindColumnType',params.columnType)
       }
       //1. 如果播放的是当前音频，则直接播放
       if (params && params.lessonId == state.audioDetail.id) {
