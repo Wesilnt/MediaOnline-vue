@@ -1,9 +1,9 @@
 <template>
     <div class="my">
-        <div class="my-user-info" @click="editUserInfo">
-            <i class="qhht-icon my-user-info-avatar" :style="{backgroundImage:`url(${userInfo.avatarUrl})`}"></i>
+        <div class="my-user-info">
+            <i class="qhht-icon my-user-info-avatar" :style="{backgroundImage:`url(${userInfo.avatarUrl})`}" @click="editUserInfo"></i>
             <span class="my-user-info-nickname">{{ userInfo.nickName }}</span>
-            <div v-if="showEdit" class="my-user-info-edit">编辑个人资料</div>
+            <div v-if="showEdit" class="my-user-info-edit" @click="editUserInfo">编辑个人资料</div>
         </div>
 
         <div class="my-grid-list">

@@ -124,7 +124,7 @@
             this.showIdentity = false
           }
         } else {
-          if (this.sex === '') {
+          if (this.gender === '') {
             Toast.fail('请选择性别')
           } else if (this.grade === '') {
             Toast.fail('请选择年级')
