@@ -2,7 +2,7 @@
 const { NODE_ENV } = process.env
 
 // 调试选项，本地调试请改为 False
-export const IS_ONLINE = false
+export const IS_ONLINE = true
 // 测试 Token
 export const TEST_TOKEN ="b969ca01-e1bc-44f1-bec4-5fa03bcaf246"
 
@@ -32,9 +32,9 @@ export const homeColumnList = {
   // '1001': {componentName:'FreeList', title:'免费专区',listKey:'freeList',link:"/home/freezone"},// 免费专区
   // 少年视野
   '1003': {componentName:'VisionCell', title:'音频课程',listKey:'visionList',link:`/home/${columnType['1003']}/columnlist`},// 线上课程
-  '1005': {componentName:'VideoCell', title:'视频课程',listKey:'videoList',link:`/home/${columnType['1005']}/columnlist`}, 
+  '1005': {componentName:'VideoCell', title:'视频课程',listKey:'videoList',link:`/home/${columnType['1005']}/columnlist`},
   // 读书会
-  '1007': {componentName:'BookCell', title:'少年读书会',listKey:'bookList',link:`/home/${columnType['1007']}/columnlist`}, 
+  '1007': {componentName:'BookCell', title:'少年读书会',listKey:'bookList',link:`/home/${columnType['1007']}/columnlist`},
 }
 // 首页导航配置
 export const navbar = [
