@@ -2,9 +2,9 @@
 const { NODE_ENV } = process.env
 
 // 调试选项，本地调试请改为 False
-export const IS_ONLINE = true
+export const IS_ONLINE = false
 // 测试 Token
-export const TEST_TOKEN = "d8bae6f4-c05b-42a6-93c5-08e8184c0a97"
+export const TEST_TOKEN ="b969ca01-e1bc-44f1-bec4-5fa03bcaf246"
 
 // TODO router 设置未统一，后期需要统一格式
 export const courseType = {
@@ -12,6 +12,29 @@ export const courseType = {
     '1005': 'home/videoColumnDetail/', // 线上课程
     '1003': 'home/visionDetail/', // 少年视野
     '1001': 'home/freezone' // 免费专区
+}
+
+export const columnType = {
+    '1007': 'reading', // 读书会
+    '1005': 'onlineCourse', // 线上课程
+    '1003': 'onlineVision', // 少年视野
+    '1001': 'freezone' // 免费专区
+}
+export const columnStatus = {
+    'reading':'1007', // 读书会
+    'onlineCourse':'1005', // 线上课程
+    'onlineVision':'1003', // 少年视野
+    'freezone':'1001' // 免费专区
+}
+
+// TODO router 设置未统一，后期需要统一格式
+export const homeColumnList = {
+  // '1001': {componentName:'FreeList', title:'免费专区',listKey:'freeList',link:"/home/freezone"},// 免费专区
+  // 少年视野
+  '1003': {componentName:'VisionCell', title:'音频课程',listKey:'visionList',link:`/home/${columnType['1003']}/columnlist`},// 线上课程
+  '1005': {componentName:'VideoCell', title:'视频课程',listKey:'videoList',link:`/home/${columnType['1005']}/columnlist`}, 
+  // 读书会
+  '1007': {componentName:'BookCell', title:'少年读书会',listKey:'bookList',link:`/home/${columnType['1007']}/columnlist`}, 
 }
 // 首页导航配置
 export const navbar = [

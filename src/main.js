@@ -17,10 +17,10 @@ Vue.filter('learntimeFormat', learntimeFormat)
 Vue.config.productionTip = false
 Vue.component('qr-code', VueQRCodeComponent)
 
-router.beforeEach((to, from, next) => { 
-  if (to.name === "AudioPlay" ){
+router.beforeEach((to, from, next) => {
+  if (to.name === 'AudioPlay') {
     to.meta.keepAlive = from.name === 'AudioCmts'
-  } 
+  }
   next()
 })
 

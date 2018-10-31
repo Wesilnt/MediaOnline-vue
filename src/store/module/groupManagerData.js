@@ -1,4 +1,4 @@
-import { wxConfig,getGroupBuyDetail,startGroupBuy,joinGroupBuy,startCollectLike,getCollectLike,unlockCourse,wechatSubscribed } from '../../api/groupBuyApi.js'
+import { getGroupBuyDetail,startGroupBuy,joinGroupBuy,startCollectLike,getCollectLike,unlockCourse,wechatSubscribed } from '../../api/groupBuyApi.js'
 import {getLessonListByCourse} from '../../api/columnsApi.js'
 import {getMyUserInfo} from '../../api/myApi'
 import {Toast} from 'vant'
@@ -7,16 +7,24 @@ import { WECHAT_SUBSCRIPTION_URL, courseType } from '../../utils/config'
 const groupManagerData = {
     namespaced: true,
     state:{
+        //页面展示相关状态
         userListTop:[],     //拼团成员列表第一排
         userListBot:[],     //拼团成员列表第二排
         leavePerson:0,   //拼团剩余名额
-        countDownTime:0, //倒计时剩余时长
-        collectLikeId:0,  //集赞ID
+        countDownTime:0, //倒计时剩余时长      
         isSixGroup:false,  //是否是六人团
         headerType:0,       // 100倒计时  101拼团成功  102拼团失败  103拼团已满 
         isShowMobileDialog:false, //是否弹出手机号收集框
+        isLoading:false,   //发起拼团  原价购买  发起集赞 防止重复操作
+        isShowGroupBuy:false ,  //是否显示拼团UI
+        //专栏相关状态
+        profilePic:'',//专栏头图
+        courseId:0,//专栏ID
+        freeLesson:{},//试听对象  type字段用来区分点击试听按钮跳往哪里  freeLessonList是当前专栏的免费试听课程数组
+        lessonsArray:[], //专栏下的所有课程
+        userAccessStatus:0,
+        //拼团相关状态
         achieveOriginBuy:false, //是否完成原价购买
-
         orderStatus:0,//当前订单状态
         isOwner:false,    //是不是开团人 
         isGroupCurrent:false, //当前用户是否在拼团列表
@@ -24,32 +32,23 @@ const groupManagerData = {
         achievePayment:false,//当前用户是否完成支付
         isAllPay:false,//拼团用户列表中的用户是否都完成支付
         currUserStatus:0,//当前用户的支付状态
-
-        profilePic:'',//专栏头图
-        courseId:0,//专栏ID
-        freeLesson:{},//试听对象  type字段用来区分点击试听按钮跳往哪里  freeLessonList是当前专栏的免费试听课程数组
-
-        userAccessStatus:0,
-        groupBuyId:0,//拼团ID
-        //工具条对象
-        toolsObject:null,
-        //是否显示拼团UI
-        isShowGroupBuy:false ,
-        
-        //发起集赞标记位
-        startPraiseFlag:false,
-
-        //业务类型
-        serviceType:"",    ////播放类型 FreeZone(1001) 免费专区  OnlineCourse(1005) 在线课堂 OnlineVision(1003) 在线视野  Readings(1007) 读书会 
-
-        isLoading:false,   //发起拼团  原价购买  发起集赞 防止重复操作
-
-        lessonsArray:[] //专栏下的所有课程
+        groupBuyId:0,//拼团ID       
+        toolsObject:null,//工具条对象  
+        //集赞相关状态
+        startPraiseFlag:false,//发起集赞标记位
+        collectLikeId:0  //集赞ID    
     },
     getters:{
         //专栏头图
-        buyCount(state,getters,{ videoColumnDetailData }) {
-            return videoColumnDetailData.buyCount
+        buyCount(state,getters, rootState) { 
+          switch(state.serviceType){
+            case "1003":
+                return rootState.visionData.buyCount 
+            case "1005":
+                return  rootState.videoColumnDetailData.buyCount 
+            case "1007":
+                return rootState.readingsData.buyCount  
+          } 
         },
         //专栏名称
         // courseName(state,getters,{videoColumnDetailData},rootGetters) {
@@ -71,27 +70,28 @@ const groupManagerData = {
             return nameStr
         },
         //是否来自分享
-        isFromShare(state,getters,rootState) {
-            let isFromShareStatus = null
-            switch(state.serviceType){
-                case "1003":
-                    isFromShareStatus = rootState.visionData.isFromShare
-                break
-                case "1005":
-                    isFromShareStatus = rootState.videoColumnDetailData.isFromShare
-                break
-                case "1007":
-                    isFromShareStatus = rootState.readingsData.isFromShare   
-                break
-            }
-            return isFromShareStatus
+        isFromShare:(state,getters,rootState) => {
+            if(rootState.columnType=='1003') return rootState.visionData.isFromShare
+            if(rootState.columnType=='1005') return rootState.videoColumnDetailData.isFromShare
+            if(rootState.columnType=='1007') return rootState.readingsData.isFromShare
         }
     },
     mutations:{
-        bindCollectLikeId(state,collectLikeId) {
-            state.collectLikeId = collectLikeId
+        bindColumnObject(state,{toolsObject,groupBuyId,collectLikeId,isShowGroupBuy,userAccessStatus,profilePic,courseId,freeLesson}) {
+            state.toolsObject = toolsObject ||  state.toolsObject;
+            state.groupBuyId = groupBuyId || state.groupBuyId;
+            state.isShowGroupBuy = isShowGroupBuy || state.isShowGroupBuy;
+            state.userAccessStatus = userAccessStatus || state.userAccessStatus;
+            state.collectLikeId = collectLikeId || state.collectLikeId;
+            state.profilePic = profilePic || state.profilePic;
+            state.courseId = courseId || state.courseId;
+            state.freeLesson = freeLesson || state.freeLesson;
         },
-        bindGroupHeaderData(state,payload){        
+        //集赞
+        bindCollectLikeId(state,collectLikeId) {state.collectLikeId = collectLikeId} ,
+        toggolePraiseFlag(state,flag) {state.startPraiseFlag = flag} ,
+        //拼团
+        bindGroupHeaderData(state,payload) {        
             state.userListTop = payload.userListTop
             state.userListBot = payload.userListBot
             state.leavePerson = payload.leavePerson
@@ -99,25 +99,14 @@ const groupManagerData = {
             state.headerType = payload.headerType
             state.isSixGroup = payload.isSixGroup
         },
-        bindAchieveOriginBuy(state,achieveOriginBuy){
-            state.achieveOriginBuy = achieveOriginBuy
-        },
-        bindIsShowMobileDialog(state,isShowMobileDialog){
-            state.isShowMobileDialog = isShowMobileDialog
-        },
-        bindLessonsArray(state,lessons){
-            state.lessonsArray = lessons
-        },
-
-        bindOrderObject(state,{toolsObject,groupBuyId,isShowGroupBuy,userAccessStatus}){
+        bindOrderObject(state,{toolsObject,groupBuyId,isShowGroupBuy,userAccessStatus}) {
             state.toolsObject = toolsObject
             state.groupBuyId = groupBuyId
             state.isShowGroupBuy = isShowGroupBuy
             state.userAccessStatus = userAccessStatus
         },
-
         //控制团购订单状态
-        checkOrderStatus(state,{orderStatus,isOwner,isGroupCurrent,isFullStaff,achievePayment,isAllPay,currUserStatus}){
+        checkOrderStatus(state,{orderStatus,isOwner,isGroupCurrent,isFullStaff,achievePayment,isAllPay,currUserStatus}) {
             state.orderStatus = orderStatus
             state.isOwner = isOwner
             state.isGroupCurrent = isGroupCurrent
@@ -126,86 +115,78 @@ const groupManagerData = {
             state.isAllPay = isAllPay
             state.currUserStatus = currUserStatus
         },
-
-        deleteCountTime(state) {
-            state.countDownTime = 0
-        },
-
-        updateUserAccessStatus(state) {
-            state.userAccessStatus = 0
-        },
-
-        toggolePraiseFlag(state,flag) {
-            state.startPraiseFlag = flag
-        },
-
-        bindColunmnInfo(state,{serviceType,profilePic,courseId,freeLesson}){
+        //单购
+        bindAchieveOriginBuy(state,achieveOriginBuy) {state.achieveOriginBuy = achieveOriginBuy},
+        //是否弹出手机号收集框
+        bindIsShowMobileDialog(state,isShowMobileDialog) {state.isShowMobileDialog = isShowMobileDialog},
+        //专栏所有单集
+        bindLessonsArray(state,lessons) {state.lessonsArray = lessons},
+        deleteCountTime(state) {state.countDownTime = 0},
+        updateUserAccessStatus(state) {state.userAccessStatus = 0},
+        bindColunmnInfo(state,{profilePic,courseId,freeLesson}) {
             state.profilePic = profilePic
             state.courseId = courseId
             state.freeLesson = freeLesson
-            state.serviceType = serviceType
-        },
-        
-        setLoading(state ,isLoading){
-          state.isLoading = isLoading
-        }
+        },       
+        setLoading(state ,isLoading) {state.isLoading = isLoading} 
     },
     actions:{
-
+        //自定义分享
         setupShareOption({state,getters,dispatch,rootState},{courseName,courseId,groupBuyId,collectLikeId,leavePerson,orderStatus}){
-                dispatch('getUserInfo',null,{root:true}).then(user =>{
-                    let title = null
-                    let link = ''
-                    if(getters.isFromShare){
-                        switch (orderStatus) {
-                            case 1202: //拼团中
-                              title = `我正在参加《${courseName}》拼团活动,仅差${leavePerson || 0}人,快来和我一起拼团吧!`
-                              break
-                            default:
-                              title = courseName
-                              break
-                          }                          
-                          if(1202==orderStatus){
-                            link = `${rootState.url}/#/${courseType[state.serviceType]}${courseId}?groupBuyId=${groupBuyId}`
-                          }else {
-                            link = `${rootState.url}/#/${courseType[state.serviceType]}${courseId}`
-                          }
-                    }else{
-                        switch (state.userAccessStatus) {
-                            case 1005: //拼团中
-                              title = `我正在参加《${courseName}》拼团活动,仅差${leavePerson || 0}人,快来和我一起拼团吧!`
-                              break
-                            case 1009: //集赞中
-                              title = `我是${user.nickName}, ${true ? '我想免费' : '正在帮朋友'}领取《${courseName}》,求助攻~`
-                              break
-                            default:
-                              title = courseName
-                              break
-                          }
-                          if(1005==state.userAccessStatus){
-                            link = `${rootState.url}/#/${courseType[state.serviceType]}${courseId}?groupBuyId=${groupBuyId}`
-                          }else if(1009==state.userAccessStatus) {
-                            link =  `${rootState.url}/#/praise/active/${courseId}/${collectLikeId}?columnType=${state.serviceType}` 
-                          }else {
-                            link = `${rootState.url}/#/${courseType[state.serviceType]}${courseId}`
-                          } 
-                    }
-                    console.log('groupmanager来自分享设置分享地址：', link, '   设置分享标题：', title)
-                    let shareData = {
-                      link,
-                      title,
-                      desc: '你一定会爱上国学课...',
-                      imgUrl:`${rootState.columnDetail.sharePostUrl}?imageView2/1/w/100/h/100/format/jpg`,
-                      successCB: () => console.log('分享回调成功'),
-                      cancelCB: () => console.log('分享回调失败')
-                    }
-                    dispatch('setWxShareFriend',shareData,{root:true})
-                    dispatch('setWxShareZone',shareData,{root:true})
-                })         
+            dispatch('getUserInfo',null,{root:true}).then(user =>{
+                let title = null
+                let link = ''
+                if(getters.isFromShare){
+                    switch (orderStatus) {
+                        case 1202: //拼团中
+                            title = `我正在参加《${courseName}》拼团活动,仅差${leavePerson || 0}人,快来和我一起拼团吧!`
+                            break
+                        default:
+                            title = courseName
+                            break
+                        }                          
+                        if(1202==orderStatus){
+                        link = `${rootState.url}/#/${courseType[rootState.columnType]}${courseId}?groupBuyId=${groupBuyId}`
+                        }else {
+                        link = `${rootState.url}/#/${courseType[rootState.columnType]}${courseId}`
+                        }
+                }else{
+                    switch (state.userAccessStatus) {
+                        case 1005: //拼团中
+                            title = `我正在参加《${courseName}》拼团活动,仅差${leavePerson || 0}人,快来和我一起拼团吧!`
+                            break
+                        case 1009: //集赞中
+                            title = `我是$
+                            ser.nickName}, ${true ? '我想免费' : '正在帮朋友'}领取《${courseName}》,求助攻~`
+                            break
+                        default:
+                            title = courseName 
+                            break
+                        }
+                        if(1005==state.userAccessStatus){
+                        link = `${rootState.url}/#/${courseType[rootState.columnType]}${courseId}?groupBuyId=${groupBuyId}`
+                        }else if(1009==state.userAccessStatus) {
+                        link =  `${rootState.url}/#/praise/active/${courseId}/${collectLikeId}?columnType=${rootState.columnType}` 
+                        }else {
+                        link = `${rootState.url}/#/${courseType[rootState.columnType]}${courseId}`
+                        } 
+                }
+                // console.log('groupmanager来自分享设置分享地址：', link, '   设置分享标题：', title)
+                let shareData = {
+                    link,
+                    title,
+                    desc: '你一定会爱上国学课...',
+                    imgUrl:`${rootState.columnDetail.sharePostUrl}?imageView2/1/w/100/h/100/format/jpg`,
+                    successCB: () => console.log('分享回调成功'),
+                    cancelCB: () => console.log('分享回调失败')
+                }
+                dispatch('setWxShareFriend',shareData,{root:true})
+                dispatch('setWxShareZone',shareData,{root:true})
+            })         
         },
 
-        initColumnInfo({commit,dispatch},{serviceType,courseId,profilePic,freeLesson}){
-            commit('bindColunmnInfo',{serviceType,courseId,profilePic,freeLesson})
+        initColumnInfo({commit,dispatch},{courseId,profilePic,freeLesson}){
+            commit('bindColunmnInfo',{courseId,profilePic,freeLesson})
             //获取专栏下所有课程
             let params = {
                 'courseId' :courseId,
@@ -237,7 +218,6 @@ const groupManagerData = {
                 "groupBuyId": toolsData.groupBuyId || "",
                 "groupBuyTemplateId" : toolsData.groupBuyTemplateId || ""
             }
-
             const userAccessStatus = toolsData.userAccessStatus
             let isShowGroupBuy;
             const personStr = groupData.groupBuyPersonCount > 3 ? "六人拼团" : "三人拼团"
@@ -294,16 +274,16 @@ const groupManagerData = {
                 case 1007:
                     console.log('集赞成功未领取')
                     isShowGroupBuy = false
-                    Object.assign(toolsObject,{ "collage":false })
+                    Object.assign(toolsObject,{ 'originPrice':'','collectText':'集赞成功未领取',"collage":false })
                 break
                 case 1008:
                     console.log('集赞成功已领取')
                     isShowGroupBuy = false
                     Object.assign(toolsObject,{ "isShow":false })               
                 break
-                case 1009: 
+                case 1009:                 
                     isShowGroupBuy = false
-                    Object.assign(toolsObject,{ "collage":false })                
+                    Object.assign(toolsObject,{ 'originPrice':'', 'collectText':'集赞中', "collage":false })         
                 break
             }
             const groupBuyId = groupData.groupBuyId
@@ -315,10 +295,7 @@ const groupManagerData = {
         //获取拼团详情
         async getGroupBuyDetail({commit,dispatch},groupBuyId) {
             const result = await getGroupBuyDetail({'groupBuyId':groupBuyId})
-            console.log('获取拼团详情成功')
-            console.log(result)
             if(result == null) return
-
             //1.获取当前订单状态
             let orderStatus = result.status;
             let userAccessStatus = result.userAccessStatus
@@ -337,14 +314,12 @@ const groupManagerData = {
             let isAllPay = 1  //是否都完成支付
             let isGroupCurrent = 0 //是否在当前列表中
             let currUserStatus = 0 //当前用户的支付状态
-
             result.userList.forEach(currentValue => {
                 if (currentValue.status == 2601 && isAllPay) { isAllPay = 0 }         
                 if (currentValue.id == currentUserId) { isGroupCurrent = 1, currUserStatus = currentValue.status}
             });
             //8.计算倒计时
             const countTime = (result.createTime + result.duration * 60 * 60 * 1000 - result.sysTime)/1000;
-
             //设置分享
             dispatch('setupShareOption',{
                 'courseName':result.course.name,
@@ -353,7 +328,6 @@ const groupManagerData = {
                 'leavePerson':personNum,
                 'orderStatus':orderStatus
             })
-
             console.log('orderStatus = '+orderStatus)
             console.log('currentUserId = '+currentUserId)
             console.log('isOwner = '+isOwner)
@@ -445,7 +419,6 @@ const groupManagerData = {
                 }
                 break
             }
-            console.log('更新状态条 + =',toolsObject)
            
             //更新工具条状态
             commit('bindOrderObject',{toolsObject,groupBuyId,isShowGroupBuy,userAccessStatus})
@@ -664,8 +637,8 @@ const groupManagerData = {
         },
         
         //从新获取专栏详情接口,刷新父组件显示
-        async updateFatherData({dispatch,state}){
-            switch(state.serviceType){
+        async updateFatherData({dispatch,state,getters,rootState}){
+            switch(rootState.columnType){
                 case "1003":
                     dispatch('visionData/getVisionDetail',{"courseId" : state.courseId},{root:true})
                 break
@@ -676,7 +649,6 @@ const groupManagerData = {
                     dispatch('readingsData/getBookDetail',{"courseId" : state.courseId},{root:true})
                 break
             }
-
         },
 
         //获取专栏下所有课程

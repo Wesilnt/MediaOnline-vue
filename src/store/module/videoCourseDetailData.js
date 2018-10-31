@@ -101,8 +101,7 @@ const videoCourseDetailData = {
     updateVideoPlayData({ dispatch, state }, lessonId) {
       let storage = window.localStorage
       //根据单集ID来存储视频播放数据对象
-      let videoData = JSON.parse(storage.getItem(lessonId))
-      // console.log('------------- videoData.historyPlayPosition',videoData.historyPlayPosition)
+      let videoData = JSON.parse(storage.getItem(lessonId)) 
       console.log(videoData)
       //服务器数据
       let servicePlayTotalTime = state.learnTotalTime || 0
@@ -300,7 +299,11 @@ const videoCourseDetailData = {
       //   dispatch('setWxShareFriend',shareData,{root:true})
       //   dispatch('setWxShareZone',shareData,{root:true})
       // })
-    }
+    },
+    //暂停音频
+    async pauseAudio({ dispatch }) {
+     dispatch('audiotaskData/asyncPause', null, { root: true })
+    },
   },
 
   modules: {

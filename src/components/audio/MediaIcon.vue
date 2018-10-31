@@ -1,5 +1,10 @@
 <template>
-  <div v-show="forceHidenFloat&&showFloat" ref="mediaIcon" class="media-icon-container" :style="{left:x,top:y}">
+  <div v-show="forceHidenFloat&&showFloat" 
+       ref="mediaIcon" 
+       class="media-icon-container" 
+       :class="{animation: dragableAnim}"
+       :style="{left:x,top:y}"
+       @click="goPlaying">
   
      <!-- <canvas width="68" height="68" ref="canvasArc"/> -->
      <div class="image-icon-container" v-lazy:background-image ="`${coverPic}?imageView2/1/w/100/h/100/format/jpg/q/50`">
@@ -45,7 +50,11 @@ export default {
       startTime: 0,
       outRingWidth: 6,
       progressgWidth: 4,
-      progress: 0
+      progress: 0,
+      tempX : window.screen.width - 74 - 12 + 'px',
+      tempY : ((window.screen.height - 68) * 3) / 4 + 'px',
+      dragable: true,             //是否可以拖拽
+      dragableAnim: true
     }
   },
   computed: {
@@ -70,6 +79,8 @@ export default {
     ...mapActions(['initAudio']),
     //触摸开始
     _touchStart: function(e) {
+      if(!this.dragable) return
+      this.dragableAnim = false
       this.startTime = new Date().getTime()
       this.startX = e.touches[0].clientX
       this.startY = e.touches[0].clientY
@@ -77,6 +88,7 @@ export default {
     },
     //触摸移动
     _touchMove: function(e) {
+      if(!this.dragable) return
       let left = e.touches[0].clientX - this.width / 2
       let top = e.touches[0].clientY - this.width / 2
       left = left < 0 ? 0 : left
@@ -91,143 +103,66 @@ export default {
     },
     //触摸结束
     _touchEnd: function(e) {
+      if(!this.dragable) return
       let offsetTime = new Date().getTime() - this.startTime
       let offsetX = e.changedTouches[0].clientX - this.startX
-      let offsetY = e.changedTouches[0].clientY - this.startY
-      if (offsetTime < 800 && Math.abs(offsetX) < 50 &&Math.abs(offsetY) < 50) {
-        console.log("columnType:=",this.columnType)
-        this.$router.push({
-          name: 'AudioPlay',
-          params: { id: this.audioId },
-          query: {courseId: this.courseId, columnType: this.columnType, courseName: this.courseName }
-        })
+      let offsetY = e.changedTouches[0].clientY - this.startY 
+      if(offsetTime < 800 && Math.abs(offsetX)<50 && Math.abs(offsetY)<50){
+        this.goPlaying()
       }
       e.preventDefault()
     },
-    _togglePlay() {
-      this._drawPlayIconBg()
-      let playIcon = new Image()
-      if (this.isPlaying) {
-        playIcon.src = require('../../assets/images/audio_play_play.png')
-      } else {
-        playIcon.src = require('../../assets/images/icon_pause.png')
-      }
-      playIcon.onload = () => {
-        this._ctx.drawImage(playIcon,this.width / 2 - 5,this.height / 2 - 8,10,16)
-      }
-    },
-    //设置进度
-    _setProgress: function(progress, max) {
-      this._drawProgress(progress, max)
-    },
-    //绘制进度底色
-    _drawProgressColor: function() {
-      this._ctx.beginPath()
-      this._ctx.arc(this.width / 2,this.height / 2,this.height / 2,0,2 * Math.PI,1)
-      this._ctx.fillStyle = 'white'
-      this._ctx.fill()
-
-      // this._ctx.fillStyle = '#EB852A';
-      // this._ctx.shadowOffsetX = 15; // 阴影Y轴偏移
-      // this._ctx.shadowOffsetY = 15; // 阴影X轴偏移
-      // this._ctx.shadowBlur = 14; // 模糊尺寸
-      // this._ctx.shadowColor = 'rgba(0, 0, 0, 0.5)'; // 颜色
-      // this._ctx.beginPath();
-      // this._ctx.arc(this.width/2, this.height/2 , this.height/2, 0, 2 * Math.PI, false);
-      // this._ctx.fill();
-    },
-    //绘制按鈕底色
-    _drawPlayIconBg: function() {
-      this._ctx.beginPath()
-      this._ctx.arc(
-        this.width / 2,
-        this.height / 2,
-        this.width / 2 - this.outRingWidth - this.progressgWidth + 2,
-        0,
-        2 * Math.PI,
-        1
-      )
-      this._ctx.fillStyle = '#FDE7E7'
-      this._ctx.fill()
-    },
-    //绘制进度
-    _drawProgress: function(progress, duration) {
-      let angle = (-1 / 2) * Math.PI + (progress / duration) * 2 * Math.PI
-      let max = parseInt(duration)
-      let value = parseInt(progress)
-      //1. 进度条
-      this._ctx.beginPath()
-      this._ctx.lineWidth = this.progressgWidth
-      this._ctx.strokeStyle = '#FFCD7D'
-      this._ctx.arc(
-        this.width / 2,
-        this.height / 2,
-        this.height / 2 - this.outRingWidth,
-        (-1 / 2) * Math.PI,
-        angle,
-        0
-      )
-      this._ctx.stroke()
-      this._ctx.closePath()
-      //2. 底色部分
-      this._ctx.beginPath()
-      this._ctx.lineWidth = this.progressgWidth
-      this._ctx.strokeStyle = 'white'
-      this._ctx.arc(
-        this.width / 2,
-        this.height / 2,
-        this.height / 2 - this.outRingWidth,
-        angle,
-        (3 / 2) * Math.PI,
-        0
-      )
-      this._ctx.stroke()
-      this._ctx.closePath()
+    goPlaying(){
+      this.$router.push({
+        name: 'AudioPlay',
+        params: { id: this.audioId },
+        query: {courseId: this.courseId, columnType: this.columnType, courseName: this.courseName }
+      })
     }
   },
   mounted() {
-    if (this.$route.path)
-      this.$refs.mediaIcon.addEventListener(
-        'touchstart',
-        this._touchStart,
-        true
-      )
+    this.$refs.mediaIcon.addEventListener( 'touchstart',this._touchStart,true)
     this.$refs.mediaIcon.addEventListener('touchmove', this._touchMove, true)
     this.$refs.mediaIcon.addEventListener('touchend', this._touchEnd, true)
-    // this._canvas = this.$refs.canvasArc
-    // this._ctx =  this._canvas.getContext('2d')
-    // if(window.devicePixelRatio){
-    //   this._canvas.style.width = this.width + "px";
-    //   this._canvas.style.height = height + "px";
-    //   this._canvas.height = height * window.devicePixelRatio;
-    //   this._canvas.width = width * window.devicePixelRatio;
-    // }
-    // this._drawProgressColor()
-    // this._drawPlayIconBg()
-    // this._setProgress(10, 100)
-    // this._togglePlay()
-
-    // if(window.devicePixelRatio){
-    //   this._ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-    // }
   },
   watch: {
     isPlaying: function(value) {
-      // this._togglePlay(value)
       return value
     },
     currentTime: function(value) {
-      // console.log(this.$route.path)
-      // this._setProgress(this.currentTime,this.maxTime)
       this.progress = (value * 100) / this.maxTime
       return value
     },
-    $route(to) { 
-      this.setFloatButton(!to.name || (to.name&&!to.name.includes('AudioPlay')))
+    $route(to,from) { 
+      this.setFloatButton(!to.name || (to.name&&!to.name.includes('AudioPlay'))) 
+      if(!this.showFloat) return
+      this.$nextTick(()=>{
+        this.dragableAnim = true
+        if(from.path !== '/' && from.path !== '/home'  && from.path !== '/my' &&
+          (to.path === '/'||to.path === '/home' || to.path === '/my'))  
+        {
+          console.log("路由切换",from.path, to.path)
+          let navBar = document.getElementById('navbar') 
+          let iconWidth = this.$refs.mediaIcon.clientWidth
+          let iconHeight = this.$refs.mediaIcon.clientHeight 
+          let boundingClientRect  = navBar.getBoundingClientRect()
+          this.tempX = this.x
+          this.tempY = this.y
+          this.x = navBar.getBoundingClientRect().right / 2 - iconWidth / 2  + 'px'
+          this.y = navBar.getBoundingClientRect().y - iconHeight / 2 +'px'
+        }
+        if((from.path === '/my' && to.path !== '/home') || (from.path === '/home' && to.path !== '/my')){
+          this.x = this.tempX
+          this.y = this.tempY
+        }
+        this.dragable = to.path !== '/home' && to.path !== '/my'
+      })
+      
     }
   }
 }
 </script>
+
 <style lang="scss" scoped>
 .media-icon-container {
   position: fixed;
@@ -240,8 +175,8 @@ export default {
   align-items: center;
   padding: 12px;
   background-color: white;
-  border-radius: 20px;
-  box-shadow: 0 0 12px #f7f7f7;
+  border-radius: 50%;
+  box-shadow: 0 0 12px #e0e0e0;
   .circle_container {
     position: absolute;
   }
@@ -266,5 +201,8 @@ export default {
     height: 32px;
     width: 28px;
   }
+}
+.animation{
+   transition: all 0.5s linear;
 }
 </style>

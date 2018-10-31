@@ -60,7 +60,7 @@ export default {
   background-color: #fff;
   padding: 48px 0;
   .courseIntroduce-content {
-    max-height: 168px;
+    max-height: 640px;
     overflow: hidden;
     font-size: 28px;
     word-wrap: break-word;

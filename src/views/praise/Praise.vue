@@ -1,7 +1,7 @@
 <template>
-  <div class="praise-container">
+  <div class="praise-container lazy-img-larger"  >
     <!-- 1. 头部封面图 -->
-    <div class="praise-header"/>
+    <div class="praise-header lazy-img-larger" v-lazy:background-image="`${pageBgUrl}?imageView2/1/format/jpg`"/>
     <!-- 2. 点赞信息 -->
     <div class="thumbs-detail">
       <!-- 2.1 集赞人提示 -->
@@ -17,11 +17,12 @@
       <!-- 2.2 点赞/集赞 操作按钮 -->
       <div class="btn-container">  
         <priasebtn 
-        :columntype="columnType"
-        :state="praiseData.btnState" 
-        :courseid="courseId" 
-        :collectlikeid="collectLikeId"
-         @share="onShare"/> 
+          :columntype="columnType"
+          :state="praiseData.btnState" 
+          :courseid="courseId" 
+          :collectlikeid="collectLikeId"
+          :posturl="sharePostUrl"
+          @share="onShare"/> 
       </div>
       <!-- 2.3 集赞人数提示 -->
       <div class="number-container">
@@ -82,7 +83,7 @@ export default {
     'share-pop': Share
   },
   computed: { 
-    ...mapState(['praiseDetail', 'rollerFlag', 'remainTime','userInfo']),
+    ...mapState(['praiseDetail','pageBgUrl','sharePostUrl', 'rollerFlag', 'remainTime','userInfo']),
     ...mapGetters(['praiseData','isCurrentUser'])
   },
   mounted: function() {
@@ -214,15 +215,21 @@ export default {
 .praise-container {
   display: flex;
   flex-direction: column;
-  background: url('http://qiniu.shbaoyuantech.com/FoonQymQNhQIIHH65SS8CNADpgvH?imageView2/1/format/jpg/interlace/1') center 20%/100%;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  background-position: center;
+  // background: url('http://qiniu.shbaoyuantech.com/FoonQymQNhQIIHH65SS8CNADpgvH?imageView2/1/format/jpg/interlace/1') center 20%/100%;
   min-height: 100vh;
   //1. 头部封面
   .praise-header {
     position: absolute;
     width: 100%;
-    top: -10vh; 
-    height: 98%;
-    background: url('http://qiniu.shbaoyuantech.com/FoonQymQNhQIIHH65SS8CNADpgvH?imageView2/1/format/jpg/interlace/1') center 20%/100% repeat-y;
+    top: 0; 
+    background-repeat: no-repeat;
+    background-size: 100%;
+    background-position: center;
+    height: 100%;
+    // background: url('http://qiniu.shbaoyuantech.com/FoonQymQNhQIIHH65SS8CNADpgvH?imageView2/1/format/jpg/interlace/1') center 20%/100% repeat-y;
   }
   //2. 中间点赞详情 2.66666667%  = 20px/750px
   .thumbs-detail {

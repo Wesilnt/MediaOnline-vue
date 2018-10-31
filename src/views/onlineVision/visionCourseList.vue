@@ -3,12 +3,14 @@
     <div class="listHeader">
       <span class="headerCount">共{{courseCount}}讲</span>
       <div class="ascButton" @click="reverseList">
-        <img class="sortIcon" :src="Ascending?ascDown:ascUp" alt=""> {{Ascending?'正序':'倒叙'}}
+        <img class="sortIcon" :src="Ascending?ascDown:ascUp" alt=""> {{Ascending?'正序':'倒序'}}
       </div>
 
     </div>
     <div class="category" v-for="item in categoryList" :key="item.id">
-      <div v-if="item.id != -1" @click="spreat(item.id)" :class="(item.id ===selectCate)&&spread?'categoryHeader selectShadow':'categoryHeader'" :style="{background:'url('+item.picUrl+')'}">
+      <div v-if="item.id != -1" @click="spreat(item.id)" 
+      :class="(item.id ===selectCate)&&spread?'categoryHeader selectShadow':'categoryHeader'" 
+      :style="{background:'url('+item.picUrl+')',backgroundSize:'100%'}">
         <div class="categoryHeaderCount"> {{item.lessonCount}}期 </div>
       </div>
       <SingleSetList
@@ -26,7 +28,7 @@
 import SingleSetList from '../../components/SingleSetList.vue'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
-  'visionData'
+  'columnData'
 )
 export default {
   data() {
@@ -117,11 +119,12 @@ export default {
   color: #3e3e3e;
   margin-left: 20px;
   border-radius: 8px;
+  
 }
 .categoryHeaderCount {
   display: inline-block;
   position: absolute;
-  right: 30px;
+  right: 40px;
   margin-top: 28px;
 }
 .categoryList {

@@ -64,7 +64,7 @@ let buttonDatas = [
 ]
 export default {
   components: { 'mobile-validate': MobileVali },
-  props: ['state', 'courseid', 'collectlikeid','columntype'],
+  props: ['state', 'courseid','posturl', 'collectlikeid','columntype'],
   data() {
     return {
       show: false,
@@ -109,8 +109,9 @@ export default {
           name: 'SharePoster',
           params:{},
           query: { 
+                  sharePostUrl:this.posturl,
                   courseId:this.courseid,
-                  columnType:this.columntype
+                  columnType:this.columntype,
                  }
         })
       }
@@ -124,7 +125,7 @@ export default {
       let columnName = this.columntype == "1005" ? 
                 'videoColumnDetail':this.columntype == '1003'?
                 'VisionDetail':this.columntype == '1007'? 
-                '1001':'BookDetail'
+                'BookDetail':'FreeZone'
       this.$router.push({name: columnName, params: { courseId: this.courseid }})
     }
   }

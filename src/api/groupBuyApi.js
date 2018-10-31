@@ -33,7 +33,7 @@ export function unlockCourse(params) {
 
 //判断用户是否关注公众号
 export async function wechatSubscribed() {
-  return request(`/auth/wechat/subscribed?`)
+  return request(`/auth/wechat/subscribed`)
 }
 
 //微信JDK授权
