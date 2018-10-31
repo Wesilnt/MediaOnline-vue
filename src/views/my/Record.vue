@@ -73,7 +73,7 @@
 
 <script>
   import {createNamespacedHelpers} from 'vuex'
-  import {courseType} from "../../utils/config";
+  import {getColumnType,courseType} from "../../utils/config";
   import {Vue} from 'vue'
 
   const {mapState, mapMutations,mapActions} = createNamespacedHelpers('myPlayRecordData')

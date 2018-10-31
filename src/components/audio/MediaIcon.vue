@@ -139,28 +139,28 @@ export default {
     $route(to,from) { 
       this.setFloatButton(!to.name || (to.name&&!to.name.includes('AudioPlay'))) 
       if(!this.showFloat) return
-      this.$nextTick(()=>{
-        this.dragableAnim = true
-        if(from.path !== '/' && from.path !== '/home'  && from.path !== '/my' &&
-          (to.path === '/'||to.path === '/home' || to.path === '/my'))  
-        {
+      // this.$nextTick(()=>{
+      //   this.dragableAnim = true
+      //   if(from.path !== '/' && from.path !== '/home'  && from.path !== '/my' &&
+      //     (to.path === '/'||to.path === '/home' || to.path === '/my'))  
+      //   {
           
-          let navBar = document.getElementById('navbar') 
-          if(!navBar) return
-          let iconWidth = this.$refs.mediaIcon.clientWidth
-          let iconHeight = this.$refs.mediaIcon.clientHeight 
-          let boundingClientRect  = navBar.getBoundingClientRect()
-          this.tempX = this.x
-          this.tempY = this.y
-          this.x = navBar.getBoundingClientRect().right / 2 - iconWidth / 2  + 'px'
-          this.y = navBar.getBoundingClientRect().y - iconHeight / 2 +'px'
-        }
-        if((from.path === '/my' && to.path !== '/home') || (from.path === '/home' && to.path !== '/my')){
-          this.x = this.tempX
-          this.y = this.tempY
-        }
-        this.dragable = to.path !== '/home' && to.path !== '/my'
-      })
+      //     let navBar = document.getElementById('navbar') 
+      //     if(!navBar) return
+      //     let iconWidth = this.$refs.mediaIcon.clientWidth
+      //     let iconHeight = this.$refs.mediaIcon.clientHeight 
+      //     let boundingClientRect  = navBar.getBoundingClientRect()
+      //     this.tempX = this.x
+      //     this.tempY = this.y
+      //     this.x = navBar.getBoundingClientRect().right / 2 - iconWidth / 2  + 'px'
+      //     this.y = navBar.getBoundingClientRect().y - iconHeight / 2 +'px'
+      //   }
+      //   if((from.path === '/my' && to.path !== '/home') || (from.path === '/home' && to.path !== '/my')){
+      //     this.x = this.tempX
+      //     this.y = this.tempY
+      //   }
+      //   this.dragable = to.path !== '/home' && to.path !== '/my'
+      // })
       
     }
   }

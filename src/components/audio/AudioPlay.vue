@@ -441,7 +441,7 @@ export default {
     min-height: 120px;
     max-height: 218px;
     height: 0;
-    flex: 1;
+    flex: 2;
     .btn-item {
       display: flex;
       align-items: center;
