@@ -30,7 +30,7 @@ export default {
   },
   mutations: {
     bindPraiseDetail(state, res) {
-      res.userList.map(item => state.isPraised = !state.isPraised && item.id == state.userId)\
+      res.userList.map(item => state.isPraised = !state.isPraised && item.id == state.userId)
       state.introBgUrl = res.introBgUrl
       state.pageBgUrl = res.pageBgUrl
       state.sharePostUrl = res.sharePostUrl

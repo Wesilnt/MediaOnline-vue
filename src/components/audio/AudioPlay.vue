@@ -4,6 +4,7 @@
   
     <!-- 封面 -->
     <div class="controller-container" ref='controller'>
+      <div class="empty-layout"></div>
       <!-- 主，副标题 -->
       <h3> {{audio.title}}</h3>
       <h4> {{audio.subTitle}}</h4>
@@ -322,6 +323,10 @@ export default {
     width: 100%;
     background-color: white;
   }
+  .empty-layout{ 
+    flex: 1;
+    width: 100%;
+  }
   h3 {
     line-height: 32px;
     font-size: 32px;
@@ -394,34 +399,7 @@ export default {
       color: rgb(146, 145, 150);
       margin-left: 30px;
     }
-    input[type='range'] {
-      // background-image: -webkit-linear-gradient(left,red, yellow);   //我咋记得是 to left
-      background: #e5e5e5;
-      /*-webkit-box-shadow: 0 1px 0 0px #424242, 0 1px 0 #060607 inset, 0px 2px 10px 0px black inset, 1px 0px 2px rgba(0, 0, 0, 0.4) inset, 0 0px 1px rgba(0, 0, 0, 0.6) inset;*/
-      -webkit-appearance: none; /*去除默认样式*/
-      background-color: #ebeff4;
-      /*border-radius: 15px;*/
-      width: 80% !important;
-      -webkit-appearance: none;
-      height: 4px;
-      padding: 0;
-      border: none;
-      /*input的长度为80%，margin-left的长度为10%*/
-    }
-    input[type='range']::-webkit-slider-thumb {
-      -webkit-appearance: none; /*去除默认样式*/
-      cursor: default;
-      top: 0;
-      height: 32px;
-      width: 32px;
-      transform: translateY(0px);
-      /*background: none repeat scroll 0 0 #5891f5;*/
-      background: url(../../assets/images/audio_play_slider.png) center/32px
-        no-repeat;
-      border-radius: 15px;
-      // border: 5px solid #006eb3;
-      /*-webkit-box-shadow: 0 -1px 1px #fc7701 inset;*/
-    }
+     
     .van-slider {
       background-color: #e5e5e5;
       /deep/.van-slider__bar {
@@ -447,6 +425,7 @@ export default {
     box-sizing: content-box;
     align-items: center;
     min-height: 120px;
+    max-height: 218px;
     height: 0;
     flex: 1;
     .btn-item {
