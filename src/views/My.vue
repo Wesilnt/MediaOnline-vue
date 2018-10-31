@@ -177,14 +177,14 @@
             border: 1px #000;
             flex-wrap: wrap;
             &-badge {
-             float: right;
-                width: 40px;
-                height: 40px;
+                float: right;
+                width: 36px;
+                height: 36px;
                 background: red;
                 color: white;
                 border-radius: 50%;
-                margin-bottom: 10px;
-                padding-top: 5px;
+                align-content: center;
+                padding: 3px 0px 0px 0px;
                 text-align: center;
             }
             &-img {
