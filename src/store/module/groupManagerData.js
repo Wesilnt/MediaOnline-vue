@@ -266,7 +266,7 @@ const groupManagerData = {
                 break
                 case 1003:
                     console.log('拼团成功')
-                    isShowGroupBuy = true
+                    isShowGroupBuy = false
                     Object.assign(toolsObject,{ "isShow":false })
                 break
                 case 1005:

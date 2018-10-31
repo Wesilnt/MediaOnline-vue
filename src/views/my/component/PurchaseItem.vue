@@ -18,7 +18,7 @@
 
 </template>
 <script>
-import { courseType } from '../../../utils/config'
+import { getColumnType,courseType } from '../../../utils/config'
 export default {
   name: 'PurchaseItem',
   props: ['type', 'title', 'total', 'list', 'grid'],
@@ -26,7 +26,7 @@ export default {
     onItemClick() {
       if (this.type === '1003' || this.type === '1007') {
         this.$router.push({
-          path: '/home/visionDetail/' + this.purchase - item.id
+          path: '/home/visionDetail/' + this.purchase - item.id 
         })
       } else {
         this.$router.push({
@@ -36,7 +36,8 @@ export default {
       }
     },
     routerToDetail({ id }) {
-      this.$router.push({ path: `/${courseType[this.type]}${id}` })
+      // this.$router.push({ path: `/${courseType[this.type]}${id}` })
+      this.$router.push({ path: `/detail/${getColumnType(this.type)}/${id}` })
     },
     displayMore() {
       if (this.list.length > 3) {
