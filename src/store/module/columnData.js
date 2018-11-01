@@ -3,9 +3,8 @@ import {
   getLessonListByCourse,
   getColumns
 } from '../../api/columnsApi.js'
+import { getCommentList, likeComment } from '../../api/commentApi.js'
 import { columnType as ColumnType } from '../../utils/config'
-
-import groupContentData from './groupContentData'
 import groupManagerData from './groupManagerData'
 
 const columnData = {
@@ -31,7 +30,9 @@ const columnData = {
     courseId: 0, //专栏ID
     lessonList: [], //单集列表/视频和读书会
     categoryList: [], //少年视野专栏下的分类
-    freeLessonList: [] //试听试看课程数组
+    freeLessonList: [], //试听试看课程数组
+    columnComments: [], //视频专栏留言数组
+    commentsTotalCount: 0 //精选留言总数
   },
   getters: {
     getBookIntroduce: function(state) {
@@ -44,35 +45,51 @@ const columnData = {
         description: state.columnDetail.description //内容介绍
       }
     },
-    playingId: (state, getters, rootState) =>
-      rootState.audiotaskData.audioDetail.id
+    playingId: (state, getters, rootState) => {
+      return rootState.audiotaskData.audioDetail.id
+    },
+    isNew: function(state) {
+      // 小於一個月標志上新
+      return (
+        new Date().getTime() -
+          new Date(state.columnDetail.createTime).getTime() <
+        30 * 24 * 3600 * 1000
+      )
+    }
   },
   mutations: {
     //初始化数据
-    initDatas(state, { courseId, groupBuyId }) {
-      state.courseId = courseId
+    isFromShare(state, { groupBuyId }) {
       state.isFromShare = groupBuyId ? true : false
     },
     saveStatus(state, payload) {
       Object.assign(state, payload)
     },
+    //更新播放列表是否点赞字段
+    updateUserCommentLikeId(state, payload) {
+      state.videoColumnComments.forEach(element => {
+        if (element.id == payload) {
+          element.userCommentLikeId = '1'
+        }
+      })
+    },
     resetState(state) {
-      ;(state.renderLoading = true),
-        (state.columnCurrentPage = 0),
-        (state.columnLoading = false),
-        (state.columnFinished = false),
-        (state.columnList = []),
-        (state.lessonCurrentPage = 0),
-        (state.lessonLoading = false),
-        (state.lessonFinished = false),
-        (state.lessonList = []),
-        (state.categoryList = []),
-        (state.freeLessonList = []),
-        (state.courseId = 0),
-        (state.userAccessStatus = 0),
-        (state.isFromShare = false),
-        (state.buyCount = 0),
-        (state.columnDetail = {})
+      state.renderLoading = true
+      state.columnCurrentPage = 0
+      state.columnLoading = false
+      state.columnFinished = false
+      state.columnList = []
+      state.lessonCurrentPage = 0
+      state.lessonLoading = false
+      state.lessonFinished = false
+      state.lessonList = []
+      state.categoryList = []
+      state.freeLessonList = []
+      state.courseId = 0
+      state.userAccessStatus = 0
+      state.isFromShare = false
+      state.buyCount = 0
+      state.columnDetail = {}
     }
   },
   actions: {
@@ -128,7 +145,6 @@ const columnData = {
         currentPage: page,
         pageSize: state.pageSize
       })
-      console.log(result)
       if (!result) return
       if (refresh) {
         commit('saveStatus', {
@@ -161,7 +177,6 @@ const columnData = {
         { courseId, columnType },
         { root: true }
       )
-      console.log(columnDetail)
       if (!columnDetail) return
       //绑定业务类型,专栏头图,试听列表,专栏ID到拼团仓库中
       const profilePic = columnDetail.profilePic
@@ -203,10 +218,24 @@ const columnData = {
         }
         dispatch('groupManagerData/initToolsBar', toolsData)
       }
+    },
+    async getCommentList({ commit }, params) {
+      const response = await getCommentList(params)
+      commit('saveStatus', {
+        columnComments: response.result,
+        commentsTotalCount: response.totalCount
+      })
+    },
+    async likeComment({ commit, state }, commentId) {
+      const result = await likeComment({ commentId: commentId })
+      console.log('点赞结果')
+      console.log(result)
+      if (!result) return
+      commit('updateUserCommentLikeId', result.commentId)
     }
   },
   modules: {
-    groupContentData,
+    // groupContentData,
     groupManagerData
   }
 }
