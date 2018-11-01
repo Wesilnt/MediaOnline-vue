@@ -56,7 +56,6 @@ export default {
       columnType: this.columnType
     })
     //获取专栏下的所有单集
-    console.log('columnType ==',this.columnType,this.courseId)
     if(this.columnType === 'onlineCourse'){
       this.getLessonList({
         courseId: this.courseId,
