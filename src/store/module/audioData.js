@@ -10,7 +10,7 @@ import {
 export default {
   namespaced: true,
   state: {
-    isLike: false,
+    isLike: -1,
     singleSetList: [],
     currentPage: 1,           //音频列表分页-页码
     pageSize: 10,             //分页-记录条数
@@ -18,15 +18,18 @@ export default {
     draftContent: { manuscript: '' },
     courseId:-1,
     finished:false,
-    pageLoading:false
+    pageLoading:false,
+    clickLike:false
   },
   mutations: {
-    bindAudioDetail(state, res) {
-      state.audioDetail = res
-      if(state.audioDetail)
+    bindAudioDetail(state, audio) {
+      if(!audio) return
+      state.audioDetail = audio 
+      state.clickLike = false
       state.isLike = state.audioDetail.isLike
     },
     bindFavorite(state, res) {
+      state.clickLike = true
       state.audioDetail.isLike = !state.audioDetail.isLike
       state.isLike = state.audioDetail.isLike
     },
@@ -54,10 +57,10 @@ export default {
     async playAudio({state, getters, commit, dispatch }, params) {
       if (params && params.lessonId) { 
         dispatch('audiotaskData/asyncPlay', params, { root: true })
-        .then(res => { 
-          if(!res)  return
-          commit('bindAudioDetail', res)                                          //绑定音频数据
-          let courseId = res.courseId
+        .then(audio => { 
+          if(!audio)  return
+          commit('bindAudioDetail', audio)                                          //绑定音频数据
+          let courseId = audio.courseId
           if(state.courseId === courseId) return 
           let columnType = params.columnType  
           dispatch('setShareInfo', { courseId, columnType })                      //设置分享信息 
@@ -80,12 +83,14 @@ export default {
       commit('audiotaskData/seekTo', progress, { root: true })
     },
     //下一集
-    async next({ dispatch }, params) {
+    async next({ dispatch ,commit}, params) {
       dispatch('audiotaskData/playNext', params, { root: true })
+      .then(audio =>commit('bindAudioDetail', audio))
     },
     //上一集
-    async pre({ dispatch }, params) {
+    async pre({ dispatch ,commit}, params) {
       dispatch('audiotaskData/playPre', params, { root: true })
+      .then(audio =>commit('bindAudioDetail', audio))
     },
     //悬浮按钮是否显示
     async toggleFloatButton({commit},isShow){ 

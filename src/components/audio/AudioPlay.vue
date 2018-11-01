@@ -94,33 +94,22 @@ export default {
       nextIcon:require('../../assets/images/audio_play_next.png'),
       playIcon:require('../../assets/images/audio_play_play.png'),
       pauseIcon:require('../../assets/images/icon_pause.png'),
-      loading:false,
-      lessonId: this.$route.params.id, 
-      courseId:this.$route.query.courseId,
-      columnType: this.$route.query.columnType, //播放类型 FreeZone(1001) 免费专区  OnlineCourse(1005) 在线课堂 OnlineVision(1003) 在线视野  Readings(1007) 读书会 
-      courseName: this.$route.query.courseName, //专栏名
-      isInit: true, 
-      play: true,
-      popupVisible: false, //是否显示音频列表弹框
-      showShare: false, //是否显示分享框
-      touching: false, //slider触摸
-      progress: 0 ,  
-      subBottom:35,
-      subTop:29,
-      subTab:30,   
+      loading:false,                              //单集列表分页loading
+      lessonId: this.$route.params.id,            //单集ID
+      courseId:this.$route.query.courseId,        //单集对应专栏ID
+      columnType: this.$route.query.columnType,   //播放类型 FreeZone(1001) 免费专区  OnlineCourse(1005) 在线课堂 OnlineVision(1003) 在线视野  Readings(1007) 读书会 
+      courseName: this.$route.query.courseName,   //专栏名  
+      popupVisible: false,                        //是否显示音频列表弹框
+      showShare: false,                           //是否显示分享框
+      touching: false,                            //slider触摸
+      progress: 0 ,                               //播放进度
     }
   },
   computed: {
     ...rootState(['url','columnDetail']),
     ...mapState({
-      isLike(state) {
-        let like = state.isLike
-        if (!this.isInit) {
-          if (like)this.$toast.success({ duration: 2000, message: '已添加到我喜欢的' })
-          else this.$toast.fail({ duration: 2000, message: '已取消喜欢' })
-        }
-        return state.isLike
-      },
+      clickLike:state=>state.clickLike,
+      isLike:state => state.isLike ,
       singleSetList:state=>state.singleSetList,
       pageLoading:state=>state.pageLoading,
       finished:state=>state.finished,
@@ -137,8 +126,7 @@ export default {
       'playing'
     ])
   },
-  created() {
-    this.isInit = true
+  created() { 
     this.bindCourseName(this.courseName) 
     this.playAudio({ lessonId: this.lessonId, columnType: this.columnType })
     this.setShareInfo({courseId:this.courseId,columnType: this.columnType})
@@ -153,6 +141,11 @@ export default {
     currentTime: function(value) {
       this.progress = (value * 100) / this.maxTime
       return value
+    },
+    isLike:function(newValue, oldValue){  
+      if(-1 === oldValue || -1 === newValue || !this.clickLike) return
+      if (newValue)this.$toast.success({ duration: 2000, message: '已添加到我喜欢的' })
+      else this.$toast.fail({ duration: 2000, message: '已取消喜欢' })
     }
   },
   methods: { 
@@ -178,8 +171,7 @@ export default {
       this.seekTo(this.progress*this.maxTime/100)
     }, 
     //收藏
-    onCollect() {
-      this.isInit = false
+    onCollect() { 
       if (this.isLike) {
         this.postUnFavorite({ lessonId: this.lessonId })
       } else {
@@ -281,8 +273,7 @@ export default {
       this.getSingleSetList({})
     },
     //列表Item点击事件
-    onItemClick(audio) {
-      this.isInit = true
+    onItemClick(audio) { 
       this.popupVisible = false
       this.$router.replace({
         name: 'AudioPlay',
@@ -390,8 +381,7 @@ export default {
       }
     }
     &-share {
-      width: 42px;
-      height: 40px;
+      width: 42px;  
       background-repeat: no-repeat;
       background-size: 41px 41px;
       background-image: url('../../assets/images/audio_play_share.jpg');
