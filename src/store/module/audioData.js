@@ -3,39 +3,41 @@ import {
   postFavorite,
   postUnFavorite,
   getAudioDesc,
-  // getSingleSetList,
+  getSingleSetList,
   getCommentList,
 } from '../../api/audioApi' 
 
 export default {
   namespaced: true,
   state: {
-    isLike: false,
+    isLike: -1,
     singleSetList: [],
     currentPage: 1,           //音频列表分页-页码
     pageSize: 10,             //分页-记录条数
     commentList: [],          //评论列表
     draftContent: { manuscript: '' },
-    courseId:-1, 
-    columnId:-1, 
+    courseId:-1,
     finished:false,
-    pageLoading:false 
+    pageLoading:false,
+    clickLike:false
   },
   mutations: {
-    bindAudioDetail(state, res) {
-      state.audioDetail = res
-      if(state.audioDetail)
+    bindAudioDetail(state, audio) {
+      if(!audio) return
+      state.audioDetail = audio 
+      state.clickLike = false
       state.isLike = state.audioDetail.isLike
     },
     bindFavorite(state, res) {
+      state.clickLike = true
       state.audioDetail.isLike = !state.audioDetail.isLike
       state.isLike = state.audioDetail.isLike
-    }, 
+    },
     bindSingleSetList(state, {currentPage,courseId,finished,res}) {
       state.currentPage = currentPage
       state.courseId = courseId
       state.finished = finished
-      state.singleSetList = 1==currentPage?res.result: state.singleSetList.concat(res.result) 
+      state.singleSetList = 1==currentPage?res.result: state.singleSetList.concat(res.result)
     },
     bindCommentList(state, res) {
       state.commentList = res.result
@@ -59,14 +61,14 @@ export default {
     async playAudio({state, commit, dispatch }, params) {
       if (params && params.lessonId) { 
         dispatch('audiotaskData/asyncPlay', params, { root: true })
-        .then(res => { 
-          if(!res)  return
-          commit('bindAudioDetail', res)                                          //绑定音频数据
-          let columnId = res.courseId
-          if(state.columnId === columnId) return  
+        .then(audio => { 
+          if(!audio)  return
+          commit('bindAudioDetail', audio)                                          //绑定音频数据
+          let courseId = audio.courseId
+          if(state.courseId === courseId) return 
           let columnType = params.columnType  
-          commit('bindColumnId',columnId)
-          dispatch('setShareInfo', { courseId:columnId, columnType })            //设置分享信息 
+          commit('bindColumnId',courseId)
+          dispatch('setShareInfo', { courseId, columnType })                      //设置分享信息 
           dispatch('getSingleSetList', { courseId, currentPage:1})                //获取单集列表
         })
       } else { 
@@ -86,12 +88,14 @@ export default {
       commit('audiotaskData/seekTo', progress, { root: true })
     },
     //下一集
-    async next({ dispatch }, params) {
+    async next({ dispatch ,commit}, params) {
       dispatch('audiotaskData/playNext', params, { root: true })
+      .then(audio =>commit('bindAudioDetail', audio))
     },
     //上一集
-    async pre({ dispatch }, params) {
+    async pre({ dispatch ,commit}, params) {
       dispatch('audiotaskData/playPre', params, { root: true })
+      .then(audio =>commit('bindAudioDetail', audio))
     },
     //悬浮按钮是否显示
     async toggleFloatButton({commit},isShow){ 

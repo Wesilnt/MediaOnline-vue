@@ -216,9 +216,10 @@ export default {
     //   }
       if (nextId && -1 != nextId) {
         commit('syncPause')
-        dispatch('asyncPlay', { lessonId: state.audioDetail.nextLessonId })
+        return dispatch('asyncPlay', { lessonId: state.audioDetail.nextLessonId })
       } else {
         // Toast('已经是最后一条')
+        return state.audioDetail
       }
     },
     //上一集
@@ -246,9 +247,10 @@ export default {
 
       if (preId && -1 != preId) {
         commit('syncPause')
-        dispatch('asyncPlay', { lessonId: state.audioDetail.preLessonId })
+        return dispatch('asyncPlay', { lessonId: state.audioDetail.preLessonId })
       } else {
         // Toast('这是第一条')
+        return state.audioDetail
       } 
     },
     //上传音频进度
