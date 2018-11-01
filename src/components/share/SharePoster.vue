@@ -28,9 +28,9 @@ export default {
       user:{}, 
       shareUrl: this.$route.query.shareUrl||`${location.href.split('#')[0]}#/home`,
       postType:this.$route.params.postType,   //海报类型  collage ： 拼团   praise ：集赞
+      shareType: this.$route.params.columnType,
+      courseId: this.$route.params.courseId, 
       sharePostUrl:this.$route.query.sharePostUrl,
-      shareType: this.$route.query.columnType,
-      courseId: this.$route.query.courseId, 
       pixelRatio: 1,
       radio: document.body.offsetWidth / 375,
       canvasW: document.body.offsetWidth , //canvas宽度
@@ -116,20 +116,20 @@ export default {
     ...mapActions(['getPosterInfo', 'getPosterforPraise','getColumnDetail']), 
     //設置海報分享地址
     setPosterConfig(){  
+    //0. 有专栏详情, 非集赞中和拼团中
+    //  if(this.columnDetail) this.shareUrl =   `${this.url}/#${courseType[this.shareType]}${this.columnDetail.id}`
+    if(!this.columnDetail) return
+    this.shareUrl =  `${this.url}/#/detail/${this.shareType}/${this.columnDetail.id}`
     //1. 有专栏详情, 拼团中
-    if(this.columnDetail && this.postType === 'collage' && this.columnDetail.userAccessStatus==1005){   
+    if(this.postType === 'collage' && this.columnDetail.userAccessStatus===1005){   
       //  this.shareUrl =  `${this.url}/#${courseType[this.shareType]}${this.columnDetail.id}?groupBuyId=${this.columnDetail.groupBuyId}`
-       this.shareUrl =  `${this.url}/#/detail/${this.shareType}/${this.columnDetail.id}?groupBuyId=${this.columnDetail.groupBuyId}`
-      return
+       this.shareUrl =  `${this.shareUrl}?groupBuyId=${this.columnDetail.groupBuyId}`
      } 
      //2. 有专栏详情, 集赞中
-     if(this.columnDetail && this.postType === 'praise' && this.columnDetail.userAccessStatus==1009){ 
+     if(this.postType === 'praise' && this.columnDetail.userAccessStatus===1009){ 
       this.shareUrl =  `${this.url}/#/praise/active/${this.columnDetail.id}/${this.columnDetail.collectLikeId}?columnType=${this.shareType}` 
-      return
      }
-     //3. 有专栏详情, 非集赞中和拼团中
-    //  if(this.columnDetail) this.shareUrl =   `${this.url}/#${courseType[this.shareType]}${this.columnDetail.id}`
-     if(this.columnDetail) this.shareUrl =  `${this.url}/#/detail/${this.shareType}/${this.columnDetail.id}`
+     console.log("SharePoster-Link:",this.shareUrl)
     },
     //绘制海报
     drawBottomMap:  function() { 

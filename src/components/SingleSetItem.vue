@@ -49,8 +49,16 @@ export default {
         break
       }
       if (item.isFree || unLock) {
-        if(this.columnType == '1005'){
-          this.$router.push({path: `/videoCourseDetail/${item.id}`})
+        if(this.columnType == 'onlineCourse'){
+          // this.$router.push({path: `/videoCourseDetail/${item.id}`})
+          this.$router.push({
+               name: 'videoCourseDetail',
+               params:{
+                 courseId : this. courseid,
+                 columnType:this.columnType,
+                 lessonId:item.id
+               }
+            })
         }else{
           this.$router.push({
             name: 'AudioPlay',

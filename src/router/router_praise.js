@@ -13,7 +13,7 @@ export default [
     component: PraiseActive
   },
   {
-    path: '/share/:postType/poster',
+    path: '/share/:columnType/:courseId/:postType/poster',
     name: 'SharePoster',
     component: SharePoster
   }

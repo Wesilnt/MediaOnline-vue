@@ -107,6 +107,7 @@ export default {
   computed: {
     ...rootState(['url','columnDetail']),
     ...mapState({
+      'columnId':state=>state.columnId,
       isLike(state) {
         let like = state.isLike
         if (!this.isInit) {
@@ -138,6 +139,7 @@ export default {
   watch: {
     columnId:{
      handler:function(courseId){
+       console.log("AudioPlay-courseId:",courseId)
         if(courseId>0) this.courseId = courseId
      },
      immediate: true

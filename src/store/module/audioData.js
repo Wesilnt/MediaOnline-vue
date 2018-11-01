@@ -57,6 +57,7 @@ export default {
           commit('bindAudioDetail', res)                                          //绑定音频数据
           let columnId = res.courseId
           if(state.columnId === columnId) return 
+          console.log("columnId==============:",columnId,state.columnId)
           let columnType = params.columnType  
           commit('bindColumnId',columnId)
           dispatch('setShareInfo', { courseId:columnId, columnType })            //设置分享信息

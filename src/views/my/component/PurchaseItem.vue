@@ -29,10 +29,18 @@ export default {
           path: '/home/visionDetail/' + this.purchase - item.id 
         })
       } else {
+        // this.$router.push({
+        //   name: 'videoCourseDetail',
+        //   params: { lessonId: this.purchase - item.id }
+        // })
         this.$router.push({
           name: 'videoCourseDetail',
-          params: { lessonId: this.purchase - item.id }
-        })
+          params:{
+            courseId : item.courseId,
+            columnType: getColumnType(this.type),
+            lessonId: this.purchase - item.id
+          }
+       })
       }
     },
     routerToDetail({ id }) {

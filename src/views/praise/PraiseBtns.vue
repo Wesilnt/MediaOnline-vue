@@ -108,12 +108,12 @@ export default {
         this.$router.push({
           name: 'SharePoster',
           params:{
+            courseId:this.courseid,
+            columnType:this.columntype,
             postType:'praise'
           },
           query: { 
                   sharePostUrl:this.posturl,
-                  courseId:this.courseid,
-                  columnType:this.columntype,
                  }
         })
       }

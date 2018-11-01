@@ -103,6 +103,7 @@
       ...mapMutations(['modifyLikeList']),
       ...mapActions(['queryList', 'delMyLike','batchDelMyLike']),
       toPlay:function (item) {
+        console.log('Like-CourseId:', item.courseId)
         if (item.courseType === '1003' || item.courseType === '1007' ) {
           this.$router.push({
             name: 'AudioPlay',
@@ -114,7 +115,15 @@
             query: {courseName: item.courseName }
           }) 
         } else if (item.courseType === '1005' ) {
-          this.$router.push({ name: 'videoCourseDetail', params: { lessonId: item.id} })
+          // this.$router.push({ name: 'videoCourseDetail', params: { lessonId: item.id} })
+          this.$router.push({
+            name: 'videoCourseDetail',
+            params:{
+              courseId : item.courseId,
+              columnType: getColumnType(this.type),
+              lessonId: item.id
+            }
+          })
         }
       },
       handleMenu: function () {

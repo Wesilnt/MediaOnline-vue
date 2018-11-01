@@ -114,7 +114,15 @@ export default {
       if (newVal == true) {
         //原价购买完成跳转到单集详情页
         const lessonId = this.freeLessonList[0].id
-        this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
+        // this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
+        this.$router.push({
+            name: 'videoCourseDetail',
+            params:{
+              courseId : this.courseId,
+              columnType:this.columnType,
+              lessonId
+            }
+        })
       }
     },
     userAccessStatus: function(value) {}
@@ -398,16 +406,24 @@ export default {
     }, 
     gotoInfoPage(id){   
       switch (this.columnType) {
-        case '1005':
-          this.$router.push({
-            name: 'videoCourseDetail',
-            params: { lessonId: id }
-          })
+        case 'onlineCourse':
+          // this.$router.push({
+          //   name: 'videoCourseDetail',
+          //   params: { lessonId: id }
+          // })
+            this.$router.push({
+               name: 'videoCourseDetail',
+               params:{
+                 courseId : this.courseId,
+                 columnType:this.columnType,
+                 lessonId:id
+               }
+            })
           break
         case 'FreeZone':
           break
-        case '1003': 
-        case '1007':
+        case 'onlineVision': 
+        case 'reading':
           this.$router.push({
               name: 'AudioPlay',
               params: { 

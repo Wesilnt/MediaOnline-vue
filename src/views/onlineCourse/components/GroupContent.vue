@@ -132,7 +132,15 @@ export default {
             query: {courseName: this.columnDetail.name}
          })
       if(this.columnType === 'onlineCourse')
-         this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
+        //  this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
+         this.$router.push({
+              name: 'videoCourseDetail',
+              params:{
+                courseId : this.courseId,
+                columnType:this.columnType,
+                lessonId
+              }
+        }) 
     },
   },
   created() {

@@ -86,13 +86,15 @@ export default {
     },
     toPoster(){ 
       let postType = postType? postType: 'default'
+      console.log("Share-courseId:",this.courseId)
      this.$router.push({
      name: 'SharePoster',
-     params:{postType},
-     query: {   
+     params:{
               courseId: this.courseId,
-              columnType:this.columnType
-            }
+              columnType:this.columnType,
+              postType,
+            },
+     query: {}
       })
     },
     onCancel() {
