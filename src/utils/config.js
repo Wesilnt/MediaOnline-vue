@@ -8,10 +8,10 @@ export const TEST_TOKEN = "47f9facc-0504-4c4c-9d59-12208b6cd577"
 
 // TODO router 设置未统一，后期需要统一格式
 export const courseType = {
-    '1007': 'home/readings/book/', // 读书会
-    '1005': 'home/videoColumnDetail/', // 线上课程
-    '1003': 'home/visionDetail/', // 少年视野
-    '1001': 'home/freezone' // 免费专区
+    '1007': 'detail/reading/', // 读书会
+    '1005': 'detail/onlineCourse/', // 线上课程
+    '1003': 'detail/onlineVision/', // 少年视野
+    '1001': 'detail/freezone/' // 免费专区
 }
 
 export const columnType = {
@@ -30,7 +30,6 @@ export const columnStatus = {
     'freezone':'1001' // 免费专区
 }
 
-// TODO router 设置未统一，后期需要统一格式
 export const homeColumnList = {
   // 'freezone': {componentName:'FreeList', title:'免费专区',listKey:'freeList',link:"/home/freezone"},// 免费专区
   // 少年视野
