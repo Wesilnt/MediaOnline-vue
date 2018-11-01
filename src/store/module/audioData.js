@@ -65,7 +65,7 @@ export default {
           let columnId = res.courseId
           if(state.columnId === columnId) return  
           let columnType = params.columnType  
-          await commit('bindColumnId',columnId)
+          commit('bindColumnId',columnId)
           dispatch('setShareInfo', { courseId:columnId, columnType })            //设置分享信息 
           dispatch('getSingleSetList', { courseId, currentPage:1})                //获取单集列表
         })
