@@ -52,13 +52,18 @@
         </div>
         <hr>
         <div class="list-container">
-          <div v-for="(item,index) of singleSetList" :key="item.id" class="list-item">
-            <div class="list-content" @click="onItemClick(item)">
-              <img v-if="lessonId==item.id" src="../../assets/images/audio_list_playing.png">
-              <p :class="{'p-playing':lessonId==item.id}">{{item.title}}</p>
-            </div>
-            <hr v-show="singleSetList.length-1 != index">
-          </div>
+          <van-list
+            v-model="loading"
+            :finished="finished"
+            @load="onLoad"> 
+              <div v-for="(item,index) of singleSetList" :key="item.id" class="list-item">
+                <div class="list-content" @click="onItemClick(item)">
+                  <img v-if="lessonId==item.id" src="../../assets/images/audio_list_playing.png">
+                  <p :class="{'p-playing':lessonId==item.id}">{{item.title}}</p>
+                </div>
+                <hr v-show="singleSetList.length-1 != index">
+              </div>
+          </van-list>
         </div>
         <div class="list-close" @click="onCloseList">关闭</div>
       </div>
@@ -93,6 +98,11 @@ export default {
       courseId:this.$route.params.courseId,        //专栏ID
       columnType: this.$route.params.columnType,   //专栏类型 freezone(1001) 免费专区  onlineCourse(1005) 在线课堂 onlineVision(1003) 在线视野  reading(1007) 读书会 
       courseName: this.$route.query.courseName,    //专栏名
+      loading:false,
+      lessonId: this.$route.params.id, 
+      courseId:this.$route.query.courseId,
+      columnType: this.$route.query.columnType, //播放类型 FreeZone(1001) 免费专区  OnlineCourse(1005) 在线课堂 OnlineVision(1003) 在线视野  Readings(1007) 读书会 
+      courseName: this.$route.query.courseName, //专栏名
       isInit: true, 
       play: true,
       popupVisible: false,   //是否显示音频列表弹框
@@ -115,7 +125,10 @@ export default {
           else this.$toast.fail({ duration: 2000, message: '已取消喜欢' })
         }
         return state.isLike
-      }
+      },
+      singleSetList:state=>state.singleSetList,
+      pageLoading:state=>state.pageLoading,
+      finished:state=>state.finished,
     }),
     ...mapGetters([
       'isLoading',
@@ -126,8 +139,7 @@ export default {
       'maxTime',
       'playMode',
       'status',
-      'playing',
-      'singleSetList'
+      'playing'
     ])
   },
   created() {
@@ -136,13 +148,16 @@ export default {
     this.playAudio({ lessonId: this.lessonId, columnType: this.columnType }) 
     this.setShareInfo({courseId:this.courseId,columnType: this.columnType})
   }, 
-  watch: {
+  watch: { 
     columnId:{
      handler:function(courseId){
        console.log("AudioPlay-courseId:",courseId)
         if(courseId>0) this.courseId = courseId
      },
      immediate: true
+    },
+    pageLoading:function(isLoading){
+     this.loading = isLoading 
     },
     audioId: function(id) {
       this.lessonId = id
@@ -163,7 +178,8 @@ export default {
       'seekTo',
       'pre',
       'next',
-      'bindCourseName' 
+      'bindCourseName' ,
+      'getSingleSetList'
     ]),
     ...mapMutations(['clearData']),
     //拖动进度改变进度
@@ -279,6 +295,10 @@ export default {
     //关闭列表窗口
     onCloseList() {
       this.popupVisible = false
+    },
+    //单集分页加载
+    onLoad(){
+      this.getSingleSetList({})
     },
     //列表Item点击事件
     onItemClick(audio) {
@@ -443,7 +463,7 @@ export default {
     min-height: 120px;
     max-height: 218px;
     height: 0;
-    flex: 2;
+    flex: 100;
     .btn-item {
       display: flex;
       align-items: center;
