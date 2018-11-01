@@ -7,7 +7,7 @@
       </div>
 
     </div>
-    <div class="category" v-for="item in categoryList" :key="item.id">
+    <div class="category" v-for="item in lessonList" :key="item.id">
       <div v-if="item.id != -1" @click="spreat(item.id)" 
       :class="(item.id ===selectCate)&&spread?'categoryHeader selectShadow':'categoryHeader'" 
       :style="{background:'url('+item.picUrl+')',backgroundSize:'100%'}">
@@ -15,7 +15,7 @@
       </div>
       <SingleSetList
         v-show="item.id == selectCate && spread" 
-        class="categoryList" 
+        class="lessonList" 
         :courseid="courseId"
         :columnType="columnType" 
         :list='item.lessonList' 
@@ -43,7 +43,7 @@ export default {
   },
   // props: ['courseId'],
   computed: { 
-    ...mapState(['categoryList','courseName','userAccessStatus'])
+    ...mapState(['lessonList','courseName','userAccessStatus'])
   },
   components: {
     SingleSetList
@@ -65,8 +65,8 @@ export default {
   },
   mounted() {
     this.getCategoryList(this.$route.params.courseId).then(() => {
-      this.selectCate = this.categoryList[0].id
-      this.categoryList.map(item => {
+      this.selectCate = this.lessonList[0].id
+      this.lessonList.map(item => {
         this.courseCount += item.lessonList.length
       })
     })
@@ -126,7 +126,7 @@ export default {
   right: 40px;
   margin-top: 28px;
 }
-.categoryList {
+.lessonList {
   margin-top: 20px;
 }
 .selectShadow {

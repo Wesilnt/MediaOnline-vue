@@ -7,7 +7,6 @@ import {
   unlockCourse,
   wechatSubscribed
 } from '../../api/groupBuyApi.js'
-import { getLessonListByCourse } from '../../api/columnsApi.js'
 import { getMyUserInfo } from '../../api/myApi'
 import { Toast } from 'vant'
 import {
@@ -32,8 +31,6 @@ const groupManagerData = {
     //专栏相关状态
     profilePic: '', //专栏头图
     courseId: 0, //专栏ID
-    freeLesson: {}, //试听对象  type字段用来区分点击试听按钮跳往哪里  freeLessonList是当前专栏的免费试听课程数组
-    lessonsArray: [], //专栏下的所有课程
     userAccessStatus: 0,
     //拼团相关状态
     achieveOriginBuy: false, //是否完成原价购买
@@ -53,67 +50,17 @@ const groupManagerData = {
   getters: {
     //专栏头图
     buyCount(state, getters, rootState) {
-      switch (state.serviceType) {
-        case '1003':
-          return rootState.visionData.buyCount
-        case '1005':
-          return rootState.videoColumnDetailData.buyCount
-        case '1007':
-          return rootState.readingsData.buyCount
-      }
+      return rootState.columnData.buyCount
     },
-    //专栏名称
-    // courseName(state,getters,{videoColumnDetailData},rootGetters) {
-    //     return rootGetters['videoColumnDetailData/courseName']
-    // },
     courseName(state, getters, rootState) {
-      let nameStr = ''
-      switch (state.serviceType) {
-        case '1003':
-          nameStr = rootState.visionData.courseName
-          break
-        case '1005':
-          nameStr = rootState.videoColumnDetailData.courseName
-          break
-        case '1007':
-          nameStr = rootState.readingsData.courseName
-          break
-      }
-      return nameStr
+      return rootState.columnData.courseName
     },
     //是否来自分享
     isFromShare: (state, getters, rootState) => {
-      if (rootState.columnType == '1003')
-        return rootState.visionData.isFromShare
-      if (rootState.columnType == '1005')
-        return rootState.videoColumnDetailData.isFromShare
-      if (rootState.columnType == '1007')
-        return rootState.readingsData.isFromShare
+      return rootState.columnData.isFromShare
     }
   },
   mutations: {
-    bindColumnObject(
-      state,
-      {
-        toolsObject,
-        groupBuyId,
-        collectLikeId,
-        isShowGroupBuy,
-        userAccessStatus,
-        profilePic,
-        courseId,
-        freeLesson
-      }
-    ) {
-      state.toolsObject = toolsObject || state.toolsObject
-      state.groupBuyId = groupBuyId || state.groupBuyId
-      state.isShowGroupBuy = isShowGroupBuy || state.isShowGroupBuy
-      state.userAccessStatus = userAccessStatus || state.userAccessStatus
-      state.collectLikeId = collectLikeId || state.collectLikeId
-      state.profilePic = profilePic || state.profilePic
-      state.courseId = courseId || state.courseId
-      state.freeLesson = freeLesson || state.freeLesson
-    },
     //集赞
     bindCollectLikeId(state, collectLikeId) {
       state.collectLikeId = collectLikeId
@@ -168,20 +115,15 @@ const groupManagerData = {
     bindIsShowMobileDialog(state, isShowMobileDialog) {
       state.isShowMobileDialog = isShowMobileDialog
     },
-    //专栏所有单集
-    bindLessonsArray(state, lessons) {
-      state.lessonsArray = lessons
-    },
     deleteCountTime(state) {
       state.countDownTime = 0
     },
     updateUserAccessStatus(state) {
       state.userAccessStatus = 0
     },
-    bindColunmnInfo(state, { profilePic, courseId, freeLesson }) {
+    bindColunmnInfo(state, { profilePic, courseId }) {
       state.profilePic = profilePic
       state.courseId = courseId
-      state.freeLesson = freeLesson
     },
     setLoading(state, isLoading) {
       state.isLoading = isLoading
@@ -273,15 +215,8 @@ const groupManagerData = {
       })
     },
 
-    initColumnInfo({ commit, dispatch }, { courseId, profilePic, freeLesson }) {
-      commit('bindColunmnInfo', { courseId, profilePic, freeLesson })
-      //获取专栏下所有课程
-      let params = {
-        courseId: courseId,
-        currentPage: 1,
-        pageSize: 10
-      }
-      dispatch('getAllLessons', params)
+    initColumnInfo({ commit, dispatch }, { courseId, profilePic }) {
+      commit('bindColunmnInfo', { courseId, profilePic })
     },
 
     //初始化工具条
@@ -821,14 +756,6 @@ const groupManagerData = {
           )
           break
       }
-    },
-
-    //获取专栏下所有课程
-    async getAllLessons({ commit }, params) {
-      const reponse = await getLessonListByCourse(params)
-      if (!reponse) return
-      const lessons = reponse.result
-      commit('bindLessonsArray', lessons)
     }
   }
 }

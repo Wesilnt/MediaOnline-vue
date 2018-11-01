@@ -9,30 +9,32 @@ import groupManagerData from './groupManagerData'
 
 const columnData = {
   namespaced: true,
-  state: {
-    //-3 拼团失败 0 默认状态 1001 单购成功 1003 拼团成功 1005拼团中 1007集赞成功未领取 1008集赞成功已领取 1009集赞中
-    userAccessStatus: 0, //当前用户与专栏之间的关系
-    isFromShare: false, //是否来自分享
-    renderLoading: true, //控制骨架屏的显示
-    pageSize: 10,
-    buyCount: 0, //购买数量
-    //专栏列表页
-    bannerPic: '', //专栏列表页的头图
-    columnLoading: false, //控制单集列表分页
-    columnCurrentPage: 0,
-    columnList: [], //专栏列表
-    columnFinished: false, //分页数据是否加载完成
-    //专栏详情页
-    lessonLoading: false, //控制专栏列表分页
-    lessonCurrentPage: 0,
-    lessonFinished: false, //分页数据是否加载完成
-    columnDetail: {}, //专栏对象
-    courseId: 0, //专栏ID
-    lessonList: [], //单集列表/视频和读书会
-    categoryList: [], //少年视野专栏下的分类
-    freeLessonList: [], //试听试看课程数组
-    columnComments: [], //视频专栏留言数组
-    commentsTotalCount: 0 //精选留言总数
+  state() {
+    return {
+      //-3 拼团失败 0 默认状态 1001 单购成功 1003 拼团成功 1005拼团中 1007集赞成功未领取 1008集赞成功已领取 1009集赞中
+      userAccessStatus: 0, //当前用户与专栏之间的关系
+      isFromShare: false, //是否来自分享
+      renderLoading: true, //控制骨架屏的显示
+      pageSize: 10,
+      buyCount: 0, //购买数量
+      courseName: '',
+      //专栏列表页
+      profilePic: null,
+      bannerPic: '', //专栏列表页的头图
+      columnLoading: false, //控制单集列表分页
+      columnCurrentPage: 0,
+      columnList: [], //专栏列表
+      columnFinished: false, //分页数据是否加载完成
+      //专栏详情页
+      lessonLoading: false, //控制专栏列表分页
+      lessonCurrentPage: 1,
+      lessonFinished: false, //分页数据是否加载完成
+      columnDetail: {}, //专栏对象
+      courseId: 0, //专栏ID
+      lessonList: [], //单集列表分类
+      columnComments: [], //视频专栏留言数组
+      commentsTotalCount: 0 //精选留言总数
+    }
   },
   getters: {
     getBookIntroduce: function(state) {
@@ -44,6 +46,10 @@ const columnData = {
         radioIntro: state.columnDetail.commentatorIntro, //播讲者介绍
         description: state.columnDetail.description //内容介绍
       }
+    },
+    freeLesson: function({ columnDetail }) {
+      const { freeLessonList } = columnDetail
+      return freeLessonList && freeLessonList.length ? freeLessonList[0] : false //试听试看课程
     },
     playingId: (state, getters, rootState) => {
       return rootState.audiotaskData.audioDetail.id
@@ -75,65 +81,50 @@ const columnData = {
     },
     resetState(state) {
       state.renderLoading = true
-      state.columnCurrentPage = 0
       state.columnLoading = false
       state.columnFinished = false
-      state.columnList = []
-      state.lessonCurrentPage = 0
       state.lessonLoading = false
       state.lessonFinished = false
-      state.lessonList = []
-      state.categoryList = []
-      state.freeLessonList = []
-      state.courseId = 0
-      state.userAccessStatus = 0
       state.isFromShare = false
-      state.buyCount = 0
-      state.columnDetail = {}
+      state.pageSize = 10
     }
   },
   actions: {
     //少年视野的分类列表排序
     reverse({ commit, state }) {
-      const result = JSON.parse(JSON.stringify(state.categoryList))
+      const result = JSON.parse(JSON.stringify(state.lessonList))
       result.map(item => {
         item.lessonList.reverse()
       })
-      const categoryList = result.slice().reverse()
-      commit('saveStatus', { categoryList })
+      const lessonList = result.slice().reverse()
+      commit('saveStatus', { lessonList })
     },
     //获取少年视野的分类列表
     async getCategoryList({ commit }, courseId) {
-      const categoryList = await getVisionCourseList({ courseId })
-      commit('saveStatus', { categoryList })
+      const lessonList = await getVisionCourseList({ courseId })
+      commit('saveStatus', { lessonList })
     },
     //获取专栏下单集列表
     async getLessonList({ commit, state }, { courseId, refresh }) {
       if (state.lessonFinished || state.lessonLoading) return
       commit('saveStatus', { lessonLoading: true })
-      const page = refresh ? 1 : state.lessonCurrentPage + 1
+      const pageSize = refresh
+        ? state.pageSize
+        : state.pageSize * (state.lessonCurrentPage + 1)
+      console.log(pageSize)
       const res = await getLessonListByCourse({
         courseId: courseId,
-        currentPage: page,
-        pageSize: state.pageSize
+        currentPage: state.lessonCurrentPage,
+        pageSize
       })
       if (!res) return
-      if (refresh) {
-        commit('saveStatus', {
-          lessonLoading: false,
-          lessonList: res.result,
-          lessonCurrentPage: page
-        })
-      } else {
-        const tempLessons = state.lessonList.concat(res.result)
-        const isFinished = tempLessons.length >= res.totalCount
-        commit('saveStatus', {
-          lessonLoading: false,
-          lessonList: tempLessons,
-          lessonCurrentPage: page,
-          lessonFinished: isFinished
-        })
-      }
+      const isFinished = res.result.length >= res.totalCount
+      commit('saveStatus', {
+        lessonLoading: false,
+        lessonList: res.result,
+        pageSize,
+        lessonFinished: isFinished
+      })
     },
     //获取专栏列表
     async getColumnList({ commit, state }, { refresh, columnType }) {
@@ -179,22 +170,23 @@ const columnData = {
       )
       if (!columnDetail) return
       //绑定业务类型,专栏头图,试听列表,专栏ID到拼团仓库中
+      const courseName = columnDetail.courseName
       const profilePic = columnDetail.profilePic
-      const freeLessonList = columnDetail.freeLessonList
       const buyCount = columnDetail.buyCount
       const userAccessStatus = columnDetail.userAccessStatus
       const renderLoading = false
       dispatch('groupManagerData/initColumnInfo', {
         courseId,
-        profilePic,
-        freeLesson: freeLessonList
+        profilePic
       })
       //绑定专栏详情
       commit('saveStatus', {
         columnDetail,
         buyCount,
         userAccessStatus,
-        renderLoading
+        renderLoading,
+        profilePic,
+        courseName
       })
       if (state.isFromShare) {
         //这里是分享链接进来的

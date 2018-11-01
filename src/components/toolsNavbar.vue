@@ -2,7 +2,7 @@
     <div class="purchase-toolbar" v-show="toolsObject&&toolsObject.isShow">
         <div class="toolbar-audition" @click="clickAuditionBtn">
             <i class="qhht-icon audition-icon"></i>
-            <p class="under-text">{{columnType == "onlineCourse"?'试看':'试听'}}</p>
+            <p class="under-text">{{columnType === "onlineCourse"?'试看':'试听'}}</p>
         </div>
         <hr class="vertical-line"/>
         <div v-show="toolsObject&&toolsObject.originPrice" :disabled="isLoading" class="toolbar-price" :class="{'toolbar-price-active':toolsObject&&!toolsObject.collage&&!toolsObject.collect }"  @click="clickOriginPriceBtn">
@@ -62,6 +62,7 @@ export default {
       type: String,
       default: '0'
     },
+    freeLesson: null,
     collage: {
       type: Boolean,
       default: false
@@ -94,9 +95,9 @@ export default {
      这里添加判断是否发起集赞的标志位是为了解决.当从一个集赞中的专栏点开另一个专栏时
      集赞ID也会发生改变,造成多余跳转
     */
-    'collectLikeId':{
-      handler(newVal){ 
-        if (newVal != 0 && this.startPraiseFlag) { 
+    collectLikeId: {
+      handler(newVal) {
+        if (newVal != 0 && this.startPraiseFlag) {
           this.toggolePraiseFlag(false)
           this.$router.push({
             name: 'Praise',
@@ -116,19 +117,19 @@ export default {
         const lessonId = this.freeLessonList[0].id
         // this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
         this.$router.push({
-            name: 'videoCourseDetail',
-            params:{
-              courseId : this.courseId,
-              columnType:this.columnType,
-              lessonId
-            }
+          name: 'videoCourseDetail',
+          params: {
+            courseId: this.courseId,
+            columnType: this.columnType,
+            lessonId
+          }
         })
       }
     },
     userAccessStatus: function(value) {}
   },
   computed: {
-    ...rootState(['url','columnDetail']),
+    ...rootState(['url', 'columnDetail']),
     ...mapState([
       'isLoading',
       'userList',
@@ -137,7 +138,6 @@ export default {
       'groupBuyId',
       'toolsObject',
       'userAccessStatus',
-      'freeLesson', //试听对象
       'courseId', //专栏ID
       'startPraiseFlag',
       'leavePerson',
@@ -149,7 +149,7 @@ export default {
       'achievePayment', //当前用户是否完成支付
       'isAllPay', //拼团用户列表中的用户是否都完成支付
       'currUserStatus', //当前用户的支付状态
-      'lessonsArray' //专栏下所有课程
+      'lessonList' //专栏下所有课程
     ]),
     ...mapGetters(['isFromShare', 'courseName'])
   },
@@ -178,8 +178,8 @@ export default {
     ]),
     //点击试听按钮 跳转
     clickAuditionBtn() {
-      if (this.freeLesson && this.freeLesson.length > 0) {
-        const { id } = this.freeLesson[0]
+      if (this.freeLesson) {
+        const { id } = this.freeLesson
         this.gotoInfoPage(id)
       } else {
         this.$toast('暂无试听课程')
@@ -202,8 +202,8 @@ export default {
           this.checkoutAuthorrization(params)
           break
         case 1001:
-          if (this.lessonsArray && this.lessonsArray.length > 0) {
-            const { id } = this.lessonsArray[0]
+          if (this.lessonList && this.lessonList.length > 0) {
+            const { id } = this.lessonList[0]
             this.gotoInfoPage(id)
           }
           break
@@ -236,8 +236,8 @@ export default {
             //拼团成功
             if (this.isGroupCurrent) {
               //当前用户在拼团用户列表中,显示我要学习,就解锁专栏,跳转到单集详情页
-              if (this.lessonsArray && this.lessonsArray.length > 0) {
-                const { id } = this.lessonsArray[0]
+              if (this.lessonList && this.lessonList.length > 0) {
+                const { id } = this.lessonList[0]
                 this.gotoInfoPage(id)
               }
             } else {
@@ -329,8 +329,8 @@ export default {
             break
           case 1003:
             //拼团成功
-            if (this.lessonsArray && this.lessonsArray.length > 0) {
-              const { id } = this.lessonsArray[0]
+            if (this.lessonList && this.lessonList.length > 0) {
+              const { id } = this.lessonList[0]
               this.gotoInfoPage(id)
             }
             break
@@ -357,8 +357,8 @@ export default {
           break
         case 1008:
           //集赞成功已领取  解锁专栏 跳转到单集详情页
-          if (this.lessonsArray && this.lessonsArray.length > 0) {
-            const { id } = this.lessonsArray[0]
+          if (this.lessonList && this.lessonList.length > 0) {
+            const { id } = this.lessonList[0]
             this.gotoInfoPage(id)
           }
           break
@@ -403,36 +403,36 @@ export default {
     //邀请好友拼团
     cancelSharePage() {
       this.sharePageShow = false
-    }, 
-    gotoInfoPage(id){   
+    },
+    gotoInfoPage(id) {
       switch (this.columnType) {
         case 'onlineCourse':
           // this.$router.push({
           //   name: 'videoCourseDetail',
           //   params: { lessonId: id }
           // })
-            this.$router.push({
-               name: 'videoCourseDetail',
-               params:{
-                 courseId : this.courseId,
-                 columnType:this.columnType,
-                 lessonId:id
-               }
-            })
+          this.$router.push({
+            name: 'videoCourseDetail',
+            params: {
+              courseId: this.courseId,
+              columnType: this.columnType,
+              lessonId: id
+            }
+          })
           break
         case 'FreeZone':
           break
-        case 'onlineVision': 
+        case 'onlineVision':
         case 'reading':
           this.$router.push({
-              name: 'AudioPlay',
-              params: { 
-                courseId: this.courseId,
-                columnType : this.columnType,
-                lessonId: id,
-              },  
-              query: {courseName: this.courseName }
-            })
+            name: 'AudioPlay',
+            params: {
+              courseId: this.courseId,
+              columnType: this.columnType,
+              lessonId: id
+            },
+            query: { courseName: this.courseName }
+          })
           break
       }
     }

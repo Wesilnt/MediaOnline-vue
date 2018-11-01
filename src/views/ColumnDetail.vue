@@ -4,36 +4,37 @@
         <div v-else>
             <GroupHeader />
             <div id="detailmain" ref="detailmain" v-if="!isReadType">
-                    <div class="lazy-img-larger column-banner" v-lazy:background-image="`${columnDetail.profilePic}?imageView2/1/format/jpg`">
-                        <div class="qhht-mask"></div>
-                        <span class="column-banner-bottom" v-show="columnDetail.buyCount == 0 ? false : true">{{columnDetail.buyCount}}人已购买</span>
+                <div class="lazy-img-larger column-banner" v-lazy:background-image="`${columnDetail.profilePic}?imageView2/1/format/jpg`">
+                    <div class="qhht-mask"></div>
+                    <span class="column-banner-bottom" v-show="columnDetail.buyCount == 0 ? false : true">{{columnDetail.buyCount}}人已购买</span>
+                </div>
+                <ScrollNavBar :bars="navBars" />
+                <!-- description(介绍) -->
+                <div class="column-base">
+                    <course-introduce  id="desc" :courseinfo="columnDetail.description"/>
+                </div>
+                <!-- 课程列表 -->
+                <div class="column-bigimage">
+                    <div class="column-sction-title">
+                        <h4>课程列表 <label>(共{{columnDetail.lessonCount}}讲)</label></h4>
                     </div>
-                    <ScrollNavBar :bars="navBars" />
-                    <!-- description(介绍) -->
-                    <div class="column-base">
-                        <course-introduce  id="desc" :courseinfo="columnDetail.description"/>
-                    </div>
-                    <!-- 课程列表 -->
-                    <div class="column-bigimage">
-                        <div class="column-sction-title">
-                            <h4>课程列表 <label>(共{{columnDetail.lessonCount}}讲)</label></h4>
+                    <videoBigimage :src="columnDetail.outlinePic"/>
+                </div>
+                <!-- 试看课程 -->
+                <div class="column-base">
+                    <div class="column-sction-title" id="tryCourse">
+                        <h4>{{this.columnType === 'onlineCourse'? '试看课程':'试听课程'}}</h4>
+                        <div class="column-all" @click="enterAllVideoList()">
+                            <span class="column-allbtn">全部</span>
+                            <img :src="require('../assets/images/arrow_right.png')" class="column-allbtn-icon">
                         </div>
-                        <videoBigimage :src="columnDetail.outlinePic"/>
                     </div>
-                    <!-- 试看课程 -->
-                    <div class="column-base">
-                        <div class="column-sction-title" id="tryCourse">
-                            <h4>{{this.columnType === 'onlineCourse'? '试看课程':'试听课程'}}</h4>
-                            <div class="column-all" @click="enterAllVideoList()">
-                                <span class="column-allbtn">全部</span>
-                                <img :src="require('../assets/images/arrow_right.png')" class="column-allbtn-icon">
-                            </div>
-                        </div>
-                        <playlist v-for="(item,index) of columnDetail.freeLessonList" :key="item.id" :iteminfo="item" :lastindex="index === (columnDetail.freeLessonList.length - 1)" @jumpEvent="toDetail(item.id)"/>
-                    </div>
+                    <playlist v-for="(item,index) of columnDetail.freeLessonList" :key="item.id" :iteminfo="item" :lastindex="index === (columnDetail.freeLessonList.length - 1)" @jumpEvent="toDetail(item.id)"/>
+                </div>
+                <div id="leaveMessage">
                     <!-- 精选留言 -->
                     <div class="column-base">
-                        <div class="column-sction-title" id="leaveMessage">
+                        <div class="column-sction-title">
                             <h4>精选留言</h4>
                             <div class="column-all" @click="enterVideoCommentsList">
                                 <span class="column-allbtn">{{commentsTotalCount}}条</span>
@@ -52,6 +53,7 @@
                         </div>
                     </div>
                 </div>
+            </div>
             <div v-else>
                 <!-- 1. 头部 -->
                 <div class="book-header">
@@ -105,7 +107,7 @@
                         :finished="lessonFinished"
                         :immediate-check="true"
                         @load="scrollBottom"
-                        @offset="10">
+                        @offset="3">
                     <SingleSetList
                             :courseid="courseId"
                             :list="lessonList"
@@ -114,14 +116,13 @@
                             :coursename="columnDetail.name"
                             :useraccessstatus="userAccessStatus"/>
                 </van-list>
-
             </div>
             <!-- 7. 底部工具条 -->
             <div class="load-more-container" v-if="lessonFinished">
                 没有更多了，不要再拉啦～
             </div>
             <!-- <Payment /> -->
-            <toolsNavbar/>
+            <toolsNavbar :freeLesson="freeLesson" :lessonList="lessonList"/>
         </div>
     </div>
 </template>
@@ -175,6 +176,7 @@ export default {
         }
       ],
       refreshing: false,
+      canLoadMore: false,
       isCourseType: columnType === COLUMNTYPE['onlineCourse'].name,
       isVisionType: columnType === COLUMNTYPE['onlineVision'].name,
       isReadType: columnType === COLUMNTYPE.reading.name
@@ -185,9 +187,7 @@ export default {
       this.refreshing = loading
     },
     courseId: {
-      handler() {
-        this.fetchColumnData()
-      },
+      handler: 'fetchColumnData',
       immediate: true
     }
   },
@@ -204,7 +204,7 @@ export default {
       'courseName',
       'userAccessStatus'
     ]),
-    ...mapGetters(['playingId', 'getBookIntroduce', 'isNew'])
+    ...mapGetters(['playingId', 'getBookIntroduce', 'isNew', 'freeLesson'])
   },
   mounted() {
     this.getUserInfo().then(user => {
@@ -233,14 +233,15 @@ export default {
       'getCommentList',
       'likeComment'
     ]),
-    fetchColumnData() {
+    async fetchColumnData() {
       const { courseId, columnType, isVisionType, groupBuyId } = this
+      await this.resetState()
       // 同类接口请求
       //初始化页面数据(将路由中带过来的专栏ID存储到仓库)
-      this.isFromShare({
+      await this.isFromShare({
         groupBuyId
       })
-      this.getColumnDetail({
+      await this.getColumnDetail({
         columnType,
         courseId,
         groupBuyId
@@ -248,10 +249,11 @@ export default {
       // 音频课程 视频课程 由于数据结构相同，使用同种配置
       //   1.获取专栏下的所有单集
       if (isVisionType) {
-        this.getCategoryList(this.courseId)
+        await this.getCategoryList(courseId)
       } else {
-        this.scrollBottom() //视频和读书会接口相同
+        await this.getLessonList({ courseId, refresh: true }) //视频和读书会接口相同
       }
+      this.canLoadMore = true
     },
     toLookWhole() {
       this.$router.push({ path: '/home/readings/summary' })
@@ -291,7 +293,8 @@ export default {
     },
     //分页加载
     scrollBottom() {
-      this.getLessonList({ courseId: this.courseId, refresh: false })
+      this.canLoadMore &&
+        this.getLessonList({ courseId: this.courseId, refresh: false })
     }
   },
   components: {
