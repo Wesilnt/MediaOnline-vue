@@ -2,7 +2,7 @@
     <div class="purchase-toolbar" v-show="toolsObject&&toolsObject.isShow">
         <div class="toolbar-audition" @click="clickAuditionBtn">
             <i class="qhht-icon audition-icon"></i>
-            <p class="under-text">{{columnType === "onlineCourse"?'试看':'试听'}}</p>
+            <p class="under-text">{{serviceType == "1005"?'试看':'试听'}}</p>
         </div>
         <hr class="vertical-line"/>
         <div v-show="toolsObject&&toolsObject.originPrice" :disabled="isLoading" class="toolbar-price" :class="{'toolbar-price-active':toolsObject&&!toolsObject.collage&&!toolsObject.collect }"  @click="clickOriginPriceBtn">
@@ -21,7 +21,7 @@
                 <div>{{toolsObject&&toolsObject.collectText}}</div>
             </div>
         </div>
-        <Share :show="sharePageShow" :courseId="courseId" :columnType ="columnType" :postType="'collage'" @close="cancelSharePage"></Share>
+        <Share :show="sharePageShow" :courseId="courseId" :columnType ="serviceType"  :posturl="'groupBuy'" @close="cancelSharePage"></Share>
         <PhoneVerif :style="{'z-index':100}" v-if="isShowMobileDialog" @callback="bindIsShowMobileDialog(false)"></PhoneVerif>
     </div>
 
@@ -53,8 +53,7 @@ export default {
       //点击原价购买按钮
       isClickOriginPriceBtn: false,
       //点击拼团按钮
-      isClickCollageBtn: false,
-      columnType: this.$route.params.columnType
+      isClickCollageBtn: false
     }
   },
   props: {
@@ -62,7 +61,6 @@ export default {
       type: String,
       default: '0'
     },
-    freeLesson: null,
     collage: {
       type: Boolean,
       default: false
@@ -90,40 +88,27 @@ export default {
     this.updateUserAccessStatus()
   },
   watch: {
-    /* 
-     仓库中的集赞ID绑定完成后发生改变且已经发起集赞,就自动跳到集赞详情页
-     这里添加判断是否发起集赞的标志位是为了解决.当从一个集赞中的专栏点开另一个专栏时
-     集赞ID也会发生改变,造成多余跳转
-    */
-    collectLikeId: {
-      handler(newVal) {
-        if (newVal != 0 && this.startPraiseFlag) {
+    'collectLikeId':{
+      handler(newVal){ 
+        if (newVal != 0 && this.startPraiseFlag) { 
           this.toggolePraiseFlag(false)
           this.$router.push({
             name: 'Praise',
             params: {
-              columnType: this.columnType,
               courseId: this.$route.params.courseId,
               collectLikeId: newVal
-            }
+            },
+            query: { columnType: this.serviceType }
           })
         }
       },
-      immediate: true
+       immediate: true
     },
     achieveOriginBuy: function(newVal) {
       if (newVal == true) {
         //原价购买完成跳转到单集详情页
         const lessonId = this.freeLessonList[0].id
-        // this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
-        this.$router.push({
-          name: 'videoCourseDetail',
-          params: {
-            courseId: this.courseId,
-            columnType: this.columnType,
-            lessonId
-          }
-        })
+        this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
       }
     },
     userAccessStatus: function(value) {}
@@ -138,8 +123,10 @@ export default {
       'groupBuyId',
       'toolsObject',
       'userAccessStatus',
+      'freeLesson', //试听对象
       'courseId', //专栏ID
       'startPraiseFlag',
+      'serviceType',
       'leavePerson',
       'isGroupCurrent',
       'orderStatus', //当前订单状态
@@ -149,7 +136,7 @@ export default {
       'achievePayment', //当前用户是否完成支付
       'isAllPay', //拼团用户列表中的用户是否都完成支付
       'currUserStatus', //当前用户的支付状态
-      'lessonList' //专栏下所有课程
+      'lessonsArray' //专栏下所有课程
     ]),
     ...mapGetters(['isFromShare', 'courseName'])
   },
@@ -178,8 +165,8 @@ export default {
     ]),
     //点击试听按钮 跳转
     clickAuditionBtn() {
-      if (this.freeLesson) {
-        const { id } = this.freeLesson
+      if (this.freeLesson && this.freeLesson.length > 0) {
+        const { id } = this.freeLesson[0]
         this.gotoInfoPage(id)
       } else {
         this.$toast('暂无试听课程')
@@ -202,8 +189,8 @@ export default {
           this.checkoutAuthorrization(params)
           break
         case 1001:
-          if (this.lessonList && this.lessonList.length > 0) {
-            const { id } = this.lessonList[0]
+          if (this.lessonsArray && this.lessonsArray.length > 0) {
+            const { id } = this.lessonsArray[0]
             this.gotoInfoPage(id)
           }
           break
@@ -236,8 +223,8 @@ export default {
             //拼团成功
             if (this.isGroupCurrent) {
               //当前用户在拼团用户列表中,显示我要学习,就解锁专栏,跳转到单集详情页
-              if (this.lessonList && this.lessonList.length > 0) {
-                const { id } = this.lessonList[0]
+              if (this.lessonsArray && this.lessonsArray.length > 0) {
+                const { id } = this.lessonsArray[0]
                 this.gotoInfoPage(id)
               }
             } else {
@@ -329,8 +316,8 @@ export default {
             break
           case 1003:
             //拼团成功
-            if (this.lessonList && this.lessonList.length > 0) {
-              const { id } = this.lessonList[0]
+            if (this.lessonsArray && this.lessonsArray.length > 0) {
+              const { id } = this.lessonsArray[0]
               this.gotoInfoPage(id)
             }
             break
@@ -357,8 +344,8 @@ export default {
           break
         case 1008:
           //集赞成功已领取  解锁专栏 跳转到单集详情页
-          if (this.lessonList && this.lessonList.length > 0) {
-            const { id } = this.lessonList[0]
+          if (this.lessonsArray && this.lessonsArray.length > 0) {
+            const { id } = this.lessonsArray[0]
             this.gotoInfoPage(id)
           }
           break
@@ -367,9 +354,11 @@ export default {
           this.$router.push({
             name: 'Praise',
             params: {
-              columnType: this.columnType,
-              courseId: this.courseId,
+              courseId: this.$route.params.courseId,
               collectLikeId: this.collectLikeId
+            },
+            query: {
+              columnType: this.serviceType
             }
           })
           break
@@ -405,33 +394,35 @@ export default {
       this.sharePageShow = false
     },
     gotoInfoPage(id) {
-      switch (this.columnType) {
-        case 'onlineCourse':
-          // this.$router.push({
-          //   name: 'videoCourseDetail',
-          //   params: { lessonId: id }
-          // })
+      switch (this.serviceType) {
+        case '1005':
           this.$router.push({
             name: 'videoCourseDetail',
-            params: {
-              courseId: this.courseId,
-              columnType: this.columnType,
-              lessonId: id
-            }
+            params: { lessonId: id }
           })
           break
         case 'FreeZone':
           break
-        case 'onlineVision':
-        case 'reading':
+        case '1003':
           this.$router.push({
             name: 'AudioPlay',
-            params: {
+            params: { id },
+            query: {
               courseId: this.courseId,
-              columnType: this.columnType,
-              lessonId: id
-            },
-            query: { courseName: this.courseName }
+              columnType: this.serviceType,
+              courseName: this.courseName
+            }
+          })
+          break
+        case '1007':
+          this.$router.push({
+            name: 'AudioPlay',
+            params: { id },
+            query: {
+              courseId: this.courseId,
+              columnType: this.serviceType,
+              courseName: this.courseName
+            }
           })
           break
       }
