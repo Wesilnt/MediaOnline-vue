@@ -21,7 +21,7 @@ export default {
     courseName:"", //专栏名
     courseId:-1,
     throttle: null,
-    pageSize: 20,
+    pageSize: 200,
     singleSetList:[],
     statusFunc: (commit, status) => commit('statusUpdate', status),
     saveProgress: (id, currentTime, maxTime) => {
@@ -156,10 +156,10 @@ export default {
         let lessonId = res.id
         dispatch('postLearnRate', { lessonId, listenTime, maxTime})
       } 
-      let courseId = state.courseId
+      // let courseId = state.courseId
       commit('bindAudioDetail', res)                                                                   //更新单集详情
-      if(courseId == res.courseId) return res
-      dispatch('getSingleSetList', { courseId:res.courseId, pageSize: state.pageSize })                //获取单集列表
+      // if(courseId == res.courseId) return res
+      // dispatch('getSingleSetList', { courseId:res.courseId, pageSize: state.pageSize })                //获取单集列表
       return res
     },
     //音频播放异步方式
@@ -186,61 +186,63 @@ export default {
     },
     //下一集
     async playNext({ state,commit,rootState, dispatch },params) { 
-     let nextId = params && params.learnId? params.lessonId : state.audioDetail.nextLessonId 
-     if(rootState.columnType
-        &&(rootState.columnType == "1003" 
-        || rootState.columnType == "1007")
-        &&rootState.columnDetail){
-        let useraccessstatus = rootState.columnDetail.userAccessStatus 
-       if(1001 != useraccessstatus 
-         && 1003 != useraccessstatus 
-         && 1008 != useraccessstatus) {
-           let listenable  = true
-           state.singleSetList.some(item=>{ 
-              if(item.id == nextId && !item.isFree){
-                listenable = false
-                // Toast('已经是最后一条')
-                return
-              }
-            }) 
-            if(!listenable)return
-         }
-      }
+     let nextId = params && params.lessonId? params.lessonId : state.audioDetail.nextLessonId 
+    //  if(rootState.columnType
+    //     &&(rootState.columnType == "1003" 
+    //     || rootState.columnType == "1007")
+    //     &&rootState.columnDetail){
+    //     let useraccessstatus = rootState.columnDetail.userAccessStatus 
+    //    if(1001 != useraccessstatus 
+    //      && 1003 != useraccessstatus 
+    //      && 1008 != useraccessstatus) {
+    //        let listenable  = true
+    //        state.singleSetList.some(item=>{ 
+    //           if(item.id == nextId && !item.isFree){
+    //             listenable = false
+    //             // Toast('已经是最后一条')
+    //             return
+    //           }
+    //         }) 
+    //         if(!listenable)return
+    //      }
+    //   }
       if (nextId && -1 != nextId) {
         commit('syncPause')
-        dispatch('asyncPlay', { lessonId: state.audioDetail.nextLessonId })
+        return dispatch('asyncPlay', { lessonId: state.audioDetail.nextLessonId })
       } else {
         // Toast('已经是最后一条')
+        return state.audioDetail
       }
     },
     //上一集
     async playPre({ state,commit,rootState, dispatch },params) { 
-      let preId = params && params.learnId? params.lessonId :state.audioDetail.preLessonId
-      if(rootState.columnType
-           &&(rootState.columnType == "1007" 
-           || rootState.columnType == "1003")
-           && rootState.columnDetail){
-          let useraccessstatus = rootState.columnDetail.userAccessStatus
-          if(useraccessstatus
-            && 1001 != useraccessstatus 
-            && 1003 != useraccessstatus 
-            && 1008 != useraccessstatus) {
-            let listenable  = true
-            state.singleSetList.some(item=>{ 
-               if(item.id == preId && !item.isFree){
-                 listenable = false 
-                 return
-               }
-             }) 
-             if(!listenable)return
-          }
-      } 
+      let preId = params && params.lessonId? params.lessonId :state.audioDetail.preLessonId
+      // if(rootState.columnType
+      //      &&(rootState.columnType == "1007" 
+      //      || rootState.columnType == "1003")
+      //      && rootState.columnDetail){
+      //     let useraccessstatus = rootState.columnDetail.userAccessStatus
+      //     if(useraccessstatus
+      //       && 1001 != useraccessstatus 
+      //       && 1003 != useraccessstatus 
+      //       && 1008 != useraccessstatus) {
+      //       let listenable  = true
+      //       state.singleSetList.some(item=>{ 
+      //          if(item.id == preId && !item.isFree){
+      //            listenable = false 
+      //            return
+      //          }
+      //        }) 
+      //        if(!listenable)return
+      //     }
+      // } 
 
       if (preId && -1 != preId) {
         commit('syncPause')
-        dispatch('asyncPlay', { lessonId: state.audioDetail.preLessonId })
+        return dispatch('asyncPlay', { lessonId: state.audioDetail.preLessonId })
       } else {
         // Toast('这是第一条')
+        return state.audioDetail
       } 
     },
     //上传音频进度

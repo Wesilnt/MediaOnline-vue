@@ -10,27 +10,34 @@ import {
 export default {
   namespaced: true,
   state: {
-    isLike: false,
+    isLike: -1,
     singleSetList: [],
     currentPage: 1,           //音频列表分页-页码
-    pageSize: 20,             //分页-记录条数
+    pageSize: 10,             //分页-记录条数
     commentList: [],          //评论列表
     draftContent: { manuscript: '' },
-    courseId:-1
+    courseId:-1,
+    finished:false,
+    pageLoading:false,
+    clickLike:false
   },
   mutations: {
-    bindAudioDetail(state, res) {
-      state.audioDetail = res
-      if(state.audioDetail)
+    bindAudioDetail(state, audio) {
+      if(!audio) return
+      state.audioDetail = audio 
+      state.clickLike = false
       state.isLike = state.audioDetail.isLike
     },
     bindFavorite(state, res) {
+      state.clickLike = true
       state.audioDetail.isLike = !state.audioDetail.isLike
       state.isLike = state.audioDetail.isLike
     },
-    bindSingleSetList(state, {courseId,res}) {
+    bindSingleSetList(state, {currentPage,courseId,finished,res}) {
+      state.currentPage = currentPage
       state.courseId = courseId
-      state.singleSetList = res.result
+      state.finished = finished
+      state.singleSetList = 1==currentPage?res.result: state.singleSetList.concat(res.result)
     },
     bindCommentList(state, res) {
       state.commentList = res.result
@@ -40,6 +47,9 @@ export default {
     },
     clearData(state, res) {
       state.courseId = -1
+    },
+    toggleLoading(state,isLoading){
+      state.pageLoading = isLoading
     }
   },
   actions: {
@@ -47,13 +57,14 @@ export default {
     async playAudio({state, getters, commit, dispatch }, params) {
       if (params && params.lessonId) { 
         dispatch('audiotaskData/asyncPlay', params, { root: true })
-        .then(res => { 
-          if(!res)  return
-          commit('bindAudioDetail', res)                                          //绑定音频数据
-          let courseId = res.courseId
+        .then(audio => { 
+          if(!audio)  return
+          commit('bindAudioDetail', audio)                                          //绑定音频数据
+          let courseId = audio.courseId
           if(state.courseId === courseId) return 
           let columnType = params.columnType  
-          dispatch('setShareInfo', { courseId, columnType })                      //设置分享信息
+          dispatch('setShareInfo', { courseId, columnType })                      //设置分享信息 
+          dispatch('getSingleSetList', { courseId, currentPage:1})                //获取单集列表
         })
       } else { 
         dispatch('audiotaskData/asyncPlay', params, { root: true })               //暂停、播放
@@ -72,12 +83,14 @@ export default {
       commit('audiotaskData/seekTo', progress, { root: true })
     },
     //下一集
-    async next({ dispatch }, params) {
+    async next({ dispatch ,commit}, params) {
       dispatch('audiotaskData/playNext', params, { root: true })
+      .then(audio =>commit('bindAudioDetail', audio))
     },
     //上一集
-    async pre({ dispatch }, params) {
+    async pre({ dispatch ,commit}, params) {
       dispatch('audiotaskData/playPre', params, { root: true })
+      .then(audio =>commit('bindAudioDetail', audio))
     },
     //悬浮按钮是否显示
     async toggleFloatButton({commit},isShow){ 
@@ -98,16 +111,22 @@ export default {
       if (res) commit('bindFavorite', res)
     },
     //音频单集文稿详情
-    async getAudioDesc({ state, commit, dispatch }, lessonId) {
+    async getAudioDesc({commit}, lessonId) {
       let params = { lessonId: lessonId }
       const res = await getAudioDesc(params)
       commit('bindDraftContnet', res)
     },
     //音频单集列表
-    async getSingleSetList({ commit }, params) {
-      params.currentPage = (params.currentPage || 1) + 1
+    async getSingleSetList({ commit ,state}, {courseId,currentPage}) {
+      commit('toggleLoading',true) 
+      let params = {pageSize: state.pageSize}
+      params.currentPage = currentPage||state.currentPage + 1
+      params.courseId = courseId || state.courseId
       const res = await getSingleSetList(params)
-      commit('bindSingleSetList', {courseId:params.courseId,res})
+      console.log("单集列表:",res)
+      let finished = state.singleSetList.length + res.result.length >= res.totalCount
+      commit('bindSingleSetList', {...params,finished,res})
+      commit('toggleLoading',false)
     },
     //音频单集列表
     async getCommentList({ commit }, params) {
