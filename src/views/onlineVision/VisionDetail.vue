@@ -25,7 +25,7 @@
         <SingleSetList
                 :courseid="courseId"
                 :list='visionDetail.freeLessonList'
-                :singletype="'1003'"/>
+                :columnType="columnType"/>
       </div>
     <!-- message -->
       <div id="message" class="vision-wrapper">
@@ -65,9 +65,7 @@ import {
   mapState as rootState,
   mapActions as rootActions
 } from 'vuex'
-const { mapState, mapActions, mapMutations } = createNamespacedHelpers(
-  'visionData'
-)
+const { mapState, mapActions, mapMutations } = createNamespacedHelpers('visionData')
 export default {
   components: {
     DetailHeader,
@@ -86,6 +84,8 @@ export default {
       arrowUp,
       arrowDown,
       banner: '',
+      columnType:this.$route.params.columnType,
+      courseId:this.$route.params.courseId,
       navBars: [
         {
           title: '介绍',
@@ -112,7 +112,7 @@ export default {
       courseId: this.courseId,
       groupBuyId: this.$route.query.groupById
     })
-    this.getCommentList(this.courseId)
+    this.getCommentList(this.$route.params.courseId)
   },
   mounted() {
     // this.getUserInfo().then(user => {
@@ -161,6 +161,7 @@ export default {
   &.wrapper-last{
     padding-bottom: 200px;
   }
+
 }
 .vision-title {
   font-size: 32px;

@@ -1,21 +1,21 @@
 <template>
-  <div class="qhht-flex cell" @click="enterVisionDetail(vision.id)">
-    <i v-lazy:background-image="`${vision.coverPic}?imageView2/1/format/jpg`" class="qhht-icon vision-avater"></i>
+  <div class="qhht-flex cell" @click="enterVisionDetail(data.id)">
+    <i v-lazy:background-image="`${data.coverPic}?imageView2/1/format/jpg`" class="qhht-icon vision-avater"></i>
     <ul class="cell-content">
-      <li class="cell-content-title">{{vision.name}}</li>
-      <li>{{vision.briefIntro}}</li>
-      <li>{{vision.authorName}}</li>
+      <li class="cell-content-title">{{data.name}}</li>
+      <li>{{data.briefIntro}}</li>
+      <li>{{data.authorName}}</li>
       <li class="footText">
-        <span class="price">¥{{vision.price}}</span>/共{{vision.lessonCount}}讲
+        <span class="price">¥{{data.price}}</span>/共{{data.lessonCount}}讲
       </li>
     </ul>
-    <div class="qhht-flex cell-footer">
-      <span class="fit">{{vision.fitFor}}岁</span>
-      <p v-if="1001 === vision.userAccessStatus  ||
-                1003 === vision.userAccessStatus || 
-                1008 === vision.userAccessStatus" 
+    <div class="qhht-flex cell-footer"> 
+      <span class="fit">{{data.fitFor}}岁</span>
+      <p v-if="1001 === data.userAccessStatus  ||
+                1003 === data.userAccessStatus ||  
+                1008 === data.userAccessStatus"    
                 class="purchase">已购买</p>
-      <a v-else-if="vision.freeLessonList" 
+      <a v-else-if="data.freeLessonList" 
                 class="cell-footer-btn" 
                 @click.stop="enterVisionPlay">
         <i class="qhht-icon play-tringle" />
@@ -28,25 +28,28 @@
 
 <script>
 export default {
-  props: ['vision'],
+  props: ['data','columnType'],
   methods: {
     enterVisionDetail(id) {
-      console.log(id)
-      this.$router.push({ path: '/home/visionDetail/' + id })
+      let columnType = this.columnType || this.$route.params.columnType
+      this.$router.push({
+        name: 'ColumnDetail',
+        params: { columnType, courseId: id }
+      })
+      // this.$router.push({ path: '/home/visionDetail/' + id })
     },
     enterVisionPlay() {
-      const { freeLessonList } = this.vision
-      if (!freeLessonList || freeLessonList.length === 0) {
-        return
-      }
+      const { freeLessonList } = this.data
+      if (!freeLessonList || freeLessonList.length === 0) return
+      let columnType = this.columnType || this.$route.params.columnType
       this.$router.push({
         name: 'AudioPlay',
-        params: { id: freeLessonList[0].id },
-        query: {
-          courseId: this.vision.id,
-          columnType: '1003',
-          courseName: this.vision.name
-        }
+        params: { 
+            courseId: this.data.id,
+            columnType,
+            lessonId: freeLessonList[0].id,
+          }, 
+        query: {courseName: this.data.name}
       })
     }
   }

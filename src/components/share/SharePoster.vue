@@ -17,19 +17,20 @@
   </div>
 </template> 
 <script>
-import { courseType } from '../../utils/config'
+import { columnType,courseType } from '../../utils/config'
 import LoadingDialog from '../LoadingDialog.vue'
 import { createNamespacedHelpers ,mapState as rootState,mapActions as rootActions} from 'vuex'
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers('shareData')
 export default {
-  name: 'shareposter', 
+  name: 'shareposter',  
   data() { 
     return {
       user:{}, 
       shareUrl: this.$route.query.shareUrl||`${location.href.split('#')[0]}#/home`,
+      postType:this.$route.params.postType,   //海报类型  collage ： 拼团   praise ：集赞
+      shareType: this.$route.params.columnType,
+      courseId: this.$route.params.courseId, 
       sharePostUrl:this.$route.query.sharePostUrl,
-      shareType: this.$route.query.columnType,
-      courseId: this.$route.query.courseId, 
       pixelRatio: 1,
       radio: document.body.offsetWidth / 375,
       canvasW: document.body.offsetWidth , //canvas宽度
@@ -55,12 +56,12 @@ export default {
             },
   created(){ 
     this.shareType = this.shareType || this.columnType  
-     //1. 传入分享地址 
+     // 1. 传入分享地址 
      if(this.shareUrl&&this.shareUrl != `${location.href.split('#')[0]}#/home`) {
         this.drawBottomMap()       //重新生成图片
        return  
      }
-     //2.  有专栏ID 
+     // 2.  有专栏ID 
      if(this.courseId){
         this.getColumnDetail({courseId:this.courseId,columnType:this.columnType,useCache:true}) 
         .then(()=>{
@@ -72,7 +73,7 @@ export default {
      //3. 有专栏详情和专栏类型
      if(this.shareType && this.columnDetail) {
         this.setPosterConfig()     //设置分享地址
-         this.drawBottomMap()      //重新生成图片
+        this.drawBottomMap()      //重新生成图片
        return
      }
  
@@ -102,59 +103,46 @@ export default {
     this.canvasData.height = this.canvasH * this.pixelRatio 
     this.canvasData.width = this.canvasW * this.pixelRatio 
 
-
-    const {saveimage} = this.$refs
-    
+    const {saveimage} = this.$refs 
     let bodyHeight = document.body.offsetHeight
     let bodyWidth = document.body.offsetWidth
 
     let scale = 1
-    if(bodyHeight < this.canvasH){
-      scale = bodyHeight /  this.canvasH
-    }  
+    if(bodyHeight < this.canvasH) scale = bodyHeight /  this.canvasH 
     saveimage.style.width = this.canvasW* scale + 'px'
   },
   methods: { 
     ...rootActions(['getUserInfo']),
     ...mapActions(['getPosterInfo', 'getPosterforPraise','getColumnDetail']), 
     //設置海報分享地址
-    setPosterConfig(){ 
+    setPosterConfig(){  
+    //0. 有专栏详情, 非集赞中和拼团中
+    //  if(this.columnDetail) this.shareUrl =   `${this.url}/#${courseType[this.shareType]}${this.columnDetail.id}`
+    if(!this.columnDetail) return
+    this.shareUrl =  `${this.url}/#/detail/${this.shareType}/${this.columnDetail.id}`
     //1. 有专栏详情, 拼团中
-    if(this.columnDetail && this.columnDetail.userAccessStatus==1005){   
-       this.shareUrl =  `${this.url}/#${courseType[this.shareType]}${this.columnDetail.id}?groupBuyId=${this.columnDetail.groupBuyId}`
-      return
-     }
+    if(this.postType === 'collage' && this.columnDetail.userAccessStatus===1005){   
+      //  this.shareUrl =  `${this.url}/#${courseType[this.shareType]}${this.columnDetail.id}?groupBuyId=${this.columnDetail.groupBuyId}`
+       this.shareUrl =  `${this.shareUrl}?groupBuyId=${this.columnDetail.groupBuyId}`
+     } 
      //2. 有专栏详情, 集赞中
-     if(this.columnDetail && this.columnDetail.userAccessStatus==1009){ 
+     if(this.postType === 'praise' && this.columnDetail.userAccessStatus===1009){ 
       this.shareUrl =  `${this.url}/#/praise/active/${this.columnDetail.id}/${this.columnDetail.collectLikeId}?columnType=${this.shareType}` 
-      return
      }
-     //3. 有专栏详情, 非集赞中和拼团中
-     if(this.columnDetail) { 
-       this.shareUrl =   `${this.url}/#${courseType[this.shareType]}${this.columnDetail.id}`
-      }
+     console.log("SharePoster-Link:",this.shareUrl)
     },
     //绘制海报
     drawBottomMap:  function() { 
       //指定绘制上下文, 放大 this.pixelRatio 比例进行绘制所有的内容
       this.ctx.scale(this.pixelRatio,this.pixelRatio)
       this.getUserInfo() 
-      .then((user)=>{ 
-        this.user = user
-         return new Promise((resolve,reject)=>{
-             this.drawBackground(resolve) 
-        })
-      }).then(p=>{
-          return new Promise((resolve)=>{
-                this.drawHeadImage(resolve)  
-            })
-        }).then(()=>{
-             this.drawUserName()
-             this.drawQrcode()
-        }) .then(()=>{
-           this.isLoading = false
-          },()=>this.isLoading = false).catch(()=>this.isLoading = false) 
-      
+      .then(user => this.user = user)
+      .then(user=> new Promise(resolve=>this.drawBackground(resolve)))
+      .then(p=> new Promise(resolve=>this.drawHeadImage(resolve)))
+      .then(()=>{this.drawUserName();this.drawQrcode()}) 
+      .then(()=>  this.$refs.saveimage.src = this.canvasData.toDataURL('images/png'))
+      .then(()=> this.isLoading = false ,()=>this.isLoading = false)
+      .catch(()=> this.isLoading = false) 
     },
 
     //1. 绘制背景图和颜色
@@ -191,7 +179,6 @@ export default {
         this.ctx.clip()
         this.ctx.drawImage(header, x, y, this.headImageW, this.headImageW)
         this.ctx.restore()
-        this.$refs.saveimage.src = this.canvasData.toDataURL('images/png')
         resolve() 
       }
     },
@@ -201,9 +188,7 @@ export default {
       this.ctx.fillStyle = '#262626'
       this.ctx.font = '15px Georgia'
       let textWidth = this.ctx.measureText(username).width
-      this.ctx.fillText(username,  this.userNameLeft* this.radio, this.userNameTop * this.radio)
-      this.$refs.saveimage.src = this.canvasData.toDataURL('images/png')
-      console.log("名字") 
+      this.ctx.fillText(username,  this.userNameLeft* this.radio, this.userNameTop * this.radio) 
     },
     //4. 绘制二维码
     async drawQrcode() {  
@@ -213,8 +198,7 @@ export default {
       this.ctx.drawImage(this.$children[0].$el.children[1],left,top,width, width) 
       let currentSrc =  this.$children[0].$el.children[1].currentSrc
       if("" !== currentSrc && this.shareUrl === currentSrc) return
-      this.$children[0].$el.children[1].onload = ()=>this.ctx.drawImage(this.$children[0].$el.children[1],left,top,width, width) 
-      this.$refs.saveimage.src = this.canvasData.toDataURL('images/png') 
+      this.$children[0].$el.children[1].onload = ()=>this.ctx.drawImage(this.$children[0].$el.children[1],left,top,width, width)  
     }
   }
 }

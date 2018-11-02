@@ -9,6 +9,7 @@ const editUserPhone = () => import(/* webpackChunkName: "index" */ '../views/my/
 const editUserInfo = () => import(/* webpackChunkName: "index" */ '../views/my/EditUserInfo')
 const displayUserInfo = () => import(/* webpackChunkName: "index" */ '../views/my/DisplayUserInfo')
 const WxConfig = () => import(/* webpackChunkName: "index" */ '../views/my/WxConfig')
+const Public = () => import(/* webpackChunkName: "index" */ '../views/my/Public')
 const PageInfo_From_My = [
   {
     path: '/my/Purchase',
@@ -58,6 +59,10 @@ const PageInfo_From_My = [
   {
     path: '/my/wx-config',
     component: WxConfig
+  },
+  {
+    path: '/my/Public',
+    component: Public
   }
 ]
 

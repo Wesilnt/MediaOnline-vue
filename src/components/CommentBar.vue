@@ -29,6 +29,9 @@
 import default_speaker_icon from '../assets/images/audio_cmt_speak.png'
 import default_inputer_icon from '../assets/images/audio_cmt_text.png'
 import default_submit_icon from '../assets/images/comment-submit.png'
+
+const { NODE_ENV } = process.env
+
 let inter = null,
   voiceRecord = null,
   commentBar = null,
@@ -132,8 +135,9 @@ export default {
       this.recordTime = 0
     },
     toggleRecord() {
-      return this.$toast('语音留言暂未开放')
-      this.record = !this.record
+      if (NODE_ENV === 'development') {
+        this.record = !this.record
+      } else return this.$toast('语音留言暂未开放')
     },
     intervalRocrdTime() {
       this.recordTime = 0

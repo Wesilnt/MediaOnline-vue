@@ -22,7 +22,7 @@
 <script>
 import CommentItem from './CommentItem.vue'
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions, mapMutations } = createNamespacedHelpers('commentData')
+const { mapState, mapActions } = createNamespacedHelpers('commentData')
 export default {
   data() {
     return {

@@ -68,7 +68,7 @@ export default {
   name: 'Praise',
   data() {
     return {
-      columnType: this.$route.query.columnType, //专栏类型 FreeZone(1001) 免费专区  OnlineCourse(1005) 在线课堂 OnlineVision(1003) 在线视野  Readings(1007) 读书会 
+      columnType: this.$route.params.columnType, //专栏类型 freezone(1001) 免费专区  onlineCourse(1005) 在线课堂 onlineVision(1003) 在线视野  reading(1007) 读书会 
       interval: null,
       courseId: this.$route.params.courseId,
       collectLikeId: this.$route.params.collectLikeId,
@@ -104,7 +104,7 @@ export default {
         //     successCB: () => console.log('分享回调成功') ,
         //     cancelCB: () =>  console.log('分享回调失败')
         //   }
-        //   console.log('user',"详情=============0000000====================================================",shareData)
+        //   console.log('user',"详情",shareData)
         //    this.setWxShareFriend(shareData)
         //    this.setWxShareZone(shareData)
         // })

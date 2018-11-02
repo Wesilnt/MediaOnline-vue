@@ -36,7 +36,8 @@
         </div>
 
         <div class="userinfo-submit-area">
-            <button class="userinfo-submit-area-button" @click="handleNext">
+            <button class="userinfo-submit-area-button-submit" :disabled="!isClickable"
+                    :class="{'userinfo-submit-area-button-submit-canclick':isClickable}" @click="handleNext">
                 下一步
             </button>
 
@@ -55,7 +56,6 @@
     data: function () {
       return {
         isInputPhone:true,
-        phone: '',
         countDownNumber: 60,
         validCode: '',
         showGetValidCode: false,
@@ -63,12 +63,18 @@
         validateCode: '',
         codeLength: 6,
         telDisabled: false,
-        focused: false
+        focused: false,
+        isClickable:false
       }
     },
     computed: {
       ...mapState(['remainTime', 'clickable', 'sending', 'validate']),
       codeArr() {
+        if(this.isInputPhone === false && this.validCode.length > 0) {
+          this.isClickable = true;
+        } else {
+          this.isClickable = false;
+        }
         return this.validCode.split('')
       },
       cursorIndex() {
@@ -79,6 +85,13 @@
       validate(newVal) {
         if(this.validate === true) {
           this.$router.push({ path: './EditUserInfo' })
+        }
+      },
+      mobileNumber(newVal){
+        if(this.isInputPhone === true && this.mobileNumber.length > 0) {
+          this.isClickable = true;
+        } else {
+          this.isClickable = false;
         }
       }
     },
@@ -94,6 +107,7 @@
           return
         }
         this.isInputPhone = false
+        this.isClickable = false
         this.directSendMobileCode({mobileNo: this.mobileNumber})
         this.countDown()
       },
@@ -202,22 +216,26 @@
         }
         &-submit-area {
             margin: 72px 55px 0;
-            &-button {
-                width: 100%;
-                height: 90px;
-                margin: 24px auto 80px;
-                font-size: 32px;
+            &-button-submit {
                 display: block;
+                width: 100%;
+                height: 80px;
+                margin: 24px auto 80px;
                 text-align: center;
                 border-radius: 50px;
                 border: 1px solid #d4d3d7;
+                background: #fbfcfc;
                 color: #b5b5b5;
+                pointer-events: none;
                 outline: none;
+                transition: background, color, border, box-shadow 0.4s linear;
+            }
+            &-button-submit-canclick {
                 background: #ffa32f;
                 color: white;
                 border: none;
                 box-shadow: 0 0 10px #ffaa3f;
-                transition: background, color, border, box-shadow 0.4s linear;
+                pointer-events: auto;
             }
         }
     }

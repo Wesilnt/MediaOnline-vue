@@ -52,7 +52,7 @@
                 <!-- <CommentItem class="video-course-comment" v-for="item in singleComments" :key="item.id" :comment="item" :unindent="true" :regiontype="2202"/> -->
             </div>
             <CommentBar :show="commentBarShow" v-on:toggle="toggleKeyboard"/>
-            <Share :show="sharePageShow" :courseId="courseId" :columnType ="'1005'" @close="cancelSharePage"></Share>
+            <Share :show="sharePageShow" :courseId="courseId" :columnType ="columnType" @close="cancelSharePage"></Share>
             <div v-show="videoShow" class='video-wrapper popup-modal-white' @click.self="handleVideoPause">
                <video class="videoitem"
                        ref="videoitem"
@@ -109,6 +109,7 @@ export default {
   data() {
     return {
       lessonId: this.$route.params.lessonId,
+      columnType: this.$route.params.columnType,
       navBars: [
         {
           title: '资料',

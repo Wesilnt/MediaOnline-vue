@@ -73,7 +73,7 @@ export default {
         //书详情
         async getBookDetail({dispatch, commit,state }, params) { 
             commit('setDataLoading',true)
-            const result = await dispatch('getColumnDetail',{...params,useCache:false},{root:true}) 
+            const result = await dispatch('getColumnDetail',{...params,columnType:'1007'},{root:true}) 
             console.log('读书会详情数据',result) 
             //获取专栏课程列表
             dispatch('getSingleSetList',true)
@@ -121,7 +121,6 @@ export default {
             } 
             const res = await getSingleSetList(params)
             if(null == res) return 
-            console.log(res)
             let totalCount = res.totalCount
             commit("bindSingleSetList", {res,page,totalCount})
         }

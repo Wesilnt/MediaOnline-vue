@@ -30,10 +30,10 @@ export default {
   },
   mutations: {
     bindPraiseDetail(state, res) {
-      res.userList.map(item => state.isPraised = !state.isPraised && item.id == state.userId)
+      res.userList.map(item => state.isPraised = !state.isPraised && item.id == state.userId) 
       state.introBgUrl = res.introBgUrl
       state.pageBgUrl = res.pageBgUrl
-      state.sharePostUrl = res.sharePostUrl
+      state.sharePostUrl = res.sharePostUrl 
       state.praiseDetail = res
     },
     bindUserInfo(state, res) {
@@ -65,6 +65,9 @@ export default {
     },
     //绑定集赞状态
     bindPraiseStatus(state, res) {
+      state.introBgUrl = res.introBgUrl
+      state.pageBgUrl = res.pageBgUrl
+      state.sharePostUrl = res.sharePostUrl
       state.courseName = res.courseName
     },
     //销毁定时器

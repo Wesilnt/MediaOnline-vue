@@ -7,9 +7,12 @@ import PageInfo_From_OnlineCourse from './router_onlineCourse'
 import PageInfo_From_Readings from './router_readings'
 import PageInfo_From_Audio from './router_audio'
 import PageInfo_From_Praise from './router_praise'
+import { getColumnDetail } from '../api/praiseApi';
 
 const Home = () => import(/* webpackChunkName: "home" */ '../views/Home')
 const My = () => import(/* webpackChunkName: "index" */ '../views/My')
+const ColumnDetail = () => import(/* webpackChunkName: "index" */ '../views/ColumnDetail')
+const ColumnList = () => import(/* webpackChunkName: "index" */ '../views/ColumnList')
 
 Vue.use(Router)
 
@@ -30,10 +33,20 @@ export default new Router({
         { path: '', component: Home },
         { path: 'home', component: Home },
         {
-          path: 'my',
-          component: My
+          path: '/my',
+          component: My,
         }
       ]
+    },
+    {
+      path:'/detail/:columnType/:courseId',
+      name:'ColumnDetail',
+      component:ColumnDetail,
+    },
+    {
+      path:'/home/:columnType/columnlist',
+      name:'ColumnList',
+      component:ColumnList,
     },
     ...PageInfo_From_Home,
     ...PageInfo_From_My,

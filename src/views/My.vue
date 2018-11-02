@@ -1,9 +1,9 @@
 <template>
     <div class="my">
-        <div class="my-user-info" @click="editUserInfo">
-            <i class="qhht-icon my-user-info-avatar" :style="{backgroundImage:`url(${userInfo.avatarUrl})`}"></i>
+        <div class="my-user-info">
+            <i class="qhht-icon my-user-info-avatar" :style="{backgroundImage:`url(${userInfo.avatarUrl})`}" @click="editUserInfo"></i>
             <span class="my-user-info-nickname">{{ userInfo.nickName }}</span>
-            <div v-if="showEdit" class="my-user-info-edit">编辑个人资料</div>
+            <div v-if="showEdit" class="my-user-info-edit" @click="editUserInfo">编辑个人资料</div>
         </div>
 
         <div class="my-grid-list">
@@ -73,6 +73,11 @@
             image: feedback,
             title: '意见反馈'
           },
+          /*{
+            name: '/my/Public',
+            image: feedback,
+            title: '公共内容'
+          },*/
           /* {
           name: '/my/SysMessage',
           image: sys,
@@ -172,14 +177,14 @@
             border: 1px #000;
             flex-wrap: wrap;
             &-badge {
-             float: right;
-                width: 40px;
-                height: 40px;
+                float: right;
+                width: 36px;
+                height: 36px;
                 background: red;
                 color: white;
                 border-radius: 50%;
-                margin-bottom: 10px;
-                padding-top: 5px;
+                align-content: center;
+                padding: 3px 0px 0px 0px;
                 text-align: center;
             }
             &-img {

@@ -10,7 +10,7 @@
         </div>
         <!-- 3. 读书会列表 -->  
           <div  class="read-list-container">
-            <div v-for="item of bookList" :key="item.id"  @click="toDetail(item.id)" class="list-item">
+            <div v-for="item of columnList" :key="item.id"  @click="toDetail(item.id)" class="list-item">
                 <div class="top-container" v-lazy:background-image="item.coverPic">
                     <span v-if="Date.now() - new Date(item.createTime).getTime()<30*24*3600*1000">上新</span>
                     <img src="../../assets/images/btn-play.png">
@@ -26,19 +26,21 @@
             </div> 
           </div> 
         <!-- 分页加载 -->
-        <div class="load-more-container" v-if="finished" v-scrollbottom="{scrollBottom,finished,refreshing}">
+        <div class="load-more-container" v-if="columnFinished" v-scrollbottom="{scrollBottom,columnFinished,refreshing}">
             <span>没有更多了，不要再拉啦～</span>
         </div>
     </div>
 </template>
 <script>
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions } = createNamespacedHelpers('readingsData')
+import {columnType,columnStatus} from '../../utils/config'
+const { mapState,mapMutations, mapActions } = createNamespacedHelpers('columnData')
 
 export default {
   data() {
     return {
-      refreshing: false
+      refreshing: false,
+      columnType:this.$route.params.columnType
     }
   },
   directives: {
@@ -84,8 +86,8 @@ export default {
         if (
           scrollTop - top > 0 &&
           scrollTop + windowHeight >= scrollHeight - 10 &&
-          !binding.value.finished &&
-          !refreshing
+          !binding.value.columnFinished &&
+          !this.refreshing
         ) {
           binding.value.scrollBottom()
         }
@@ -94,26 +96,34 @@ export default {
     }
   },
   computed: {
-    ...mapState(['bannerPic', 'bookList', 'loading', 'finished'])
+    ...mapState(['bannerPic', 'columnList', 'columnLoading', 'columnFinished'])
   },
   watch: {
-    loading: function(state) {
+    columnLoading: function(state) {
       this.refreshing = state.loading
     }
   },
   created() { 
-    this.getReadingsList(true)
+    this.getColumnList({ refresh: false, columnType:this.columnType })
   },
   methods: {
-    ...mapActions(['getReadingsList']),
+    ...mapMutations(['resetState']),
+    ...mapActions(['getColumnList']),
     scrollBottom() {
       console.log('分页')
-      this.getReadingsList(true)
+      this.getColumnList({ refresh: false, columnType:this.columnType })
     },
     //音频播放
     toDetail(id) {
-      this.$router.push({ name: 'BookDetail', params: { courseId:id } })
+      this.$router.push({ name: 'ColumnDetail', params: {
+                                                          courseId:id,
+                                                          columnType: this.columnType 
+                                                        } 
+                        })
     }
+  },
+  beforeDestroy() {
+    this.resetState()
   }
 }
 </script>

@@ -1,16 +1,17 @@
 <template>
     <div class="home_visionlist_bottom">
-        <VisionCell  v-for="(item, index) in visionList" :key="index" :vision="item"/>
+        <VisionCell  v-for="(item, index) in data" :key="index" :vision="item"/>
     </div>
 </template>
 
 <script>
 import VisionCell from './VisionCell.vue'
 export default {
+  name:'DisCoverVisionList',
   components: {
     VisionCell
   },
-  props: ['visionList']
+  props: ['data']
 }
 </script>
 
@@ -20,3 +21,5 @@ export default {
 }
 </style>
 
+ 
+  

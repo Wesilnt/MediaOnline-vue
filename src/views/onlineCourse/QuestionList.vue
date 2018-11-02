@@ -344,7 +344,6 @@ export default {
   color: @active;
   font-size: 46px;
   text-align: center;
-  letter-spacing: 2px;
   font-weight: lighter;
   margin-bottom: 40px;
 }

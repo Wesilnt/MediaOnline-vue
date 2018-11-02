@@ -19,6 +19,7 @@ export default {
     isPlaying: false, //是否正在播放
     isBuffering: false, //是否处于缓冲中
     courseName:"", //专栏名
+    columnType:'reading',
     courseId:-1,
     throttle: null,
     pageSize: 200,
@@ -44,6 +45,10 @@ export default {
       state.audioId = res.id
       state.courseId = res.courseId
       state.coverPic = res.coverPic
+    },
+    //绑定专栏类型
+    bindColumnType(state,columnType){
+      state.columnType = columnType
     },
     //音频播放同步方法
     syncPlay(state, params) {
@@ -164,6 +169,9 @@ export default {
     },
     //音频播放异步方式
     async asyncPlay({ state, commit, dispatch }, params) {
+      if(params && params.columnType){
+        commit('bindColumnType',params.columnType)
+      }
       //1. 如果播放的是当前音频，则直接播放
       if (params && params.lessonId == state.audioDetail.id) {
         if (!state.isPlaying) commit('syncPlay')

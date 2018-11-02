@@ -73,7 +73,7 @@
 
 <script>
   import {createNamespacedHelpers} from 'vuex'
-  import { courseType} from "../../utils/config";
+  import { courseType,getColumnType} from "../../utils/config";
   import {Vue} from 'vue'
 
   const {mapState, mapMutations,mapActions} = createNamespacedHelpers('myLikeData')
@@ -103,16 +103,28 @@
       ...mapMutations(['modifyLikeList']),
       ...mapActions(['queryList', 'delMyLike','batchDelMyLike']),
       toPlay:function (item) {
+        console.log('Like-CourseId:', item.courseId)
         if (item.courseType === '1003' || item.courseType === '1007' ) {
           this.$router.push({
-            name: 'AudioPlay'
-            , params: {id: item.id}
-            , query: {courseId:-1,columnType: courseType[item.courseType], courseName: item.title}
-          })
+            name: 'AudioPlay',
+            params: { 
+              columnType: getColumnType(item.courseType),
+              courseId: 0,
+              lessonId: item.id 
+            },
+            query: {courseName: item.courseName }
+          }) 
         } else if (item.courseType === '1005' ) {
-          this.$router.push({ name: 'videoCourseDetail', params: { lessonId: item.id} })
+          // this.$router.push({ name: 'videoCourseDetail', params: { lessonId: item.id} })
+          this.$router.push({
+            name: 'videoCourseDetail',
+            params:{
+              courseId : item.courseId,
+              columnType: getColumnType(this.type),
+              lessonId: item.id
+            }
+          })
         }
-
       },
       handleMenu: function () {
         this.setCheckToList()

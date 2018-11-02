@@ -58,7 +58,8 @@ import {
   puzzleTabs,
   praiseTypes,
   puzzleTypes,
-  courseType
+  courseType,
+  getColumnType
 } from '../../utils/config'
 
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
@@ -145,7 +146,8 @@ export default {
       })
     },
     routerToDetail({ type, id }) {
-      this.$router.push({ path: `/${courseType[type]}${id}` })
+      // this.$router.push({ path: `/${courseType[type]}${id}` })
+      this.$router.push({ path: `/detail/${getColumnType(type)}/${id}` })
     },
     routerToHome() {
       this.$router.push({ path: '/home' })

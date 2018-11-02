@@ -1,57 +1,62 @@
 <template>
     <div class="home-container">
-        <div class="lazy-img-larger home-header-img" v-lazy:background-image="`${columnHeaderImage}?imageView2/1/format/jpg`"></div>
+        <div class="lazy-img-larger home-header-img" v-lazy:background-image="`${bannerPic}?imageView2/1/format/jpg`"></div>
         <van-list
           class="home-video"
           v-model="refreshing"
-          :finished="finished"
+          :finished="columnFinished"
           :immediate-check="false"
           @load="scrollBottom"
           @offset="10">
-            <VideoCell   v-for="item in columns" :key="item.id" :video="item"/>
+            <VideoCell   v-for="item in columnList" :key="item.id" :data="item"/>
         </van-list>
         <!-- <div class="home-video">
             <videolistitem v-for="item of columns" :key="item.id" :iteminfo="item" @jumpEvent="jumpToVideoDetail(item.id)"/>
         </div> -->
-        <div class="home-warnTip" v-show="finished">没有更多了,不要在拉了~</div>
+        <div class="home-warnTip" v-show="columnFinished">没有更多了,不要在拉了~</div>
     </div>
 </template>
 <script>
 import VideoCell from '../../components/homeComponents/VideoCell'
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions } = createNamespacedHelpers('columnInfoData')
+import {columnType,columnStatus} from '../../utils/config'
+const { mapState,mapMutations, mapActions } = createNamespacedHelpers('columnData')
 export default {
   name: 'VideoList',
   data() {
     return {
-      refreshing: false
+      refreshing: false,
+      columnType:this.$route.params.columnType
     }
   },
   watch: {
-    loading: function(loading) {
+    columnLoading: function(loading) {
       this.refreshing = loading
     }
   },
   computed: {
     ...mapState([
-      'columnHeaderImage',
-      'columns',
-      'columnOriginData',
-      'finished',
-      'loading'
+      'bannerPic',//专栏列表头图
+      'columnList',//专栏列表
+      'columnFinished',
+      'columnLoading'
     ])
   },
   components: {
     VideoCell
   },
   created() {
-    this.getColumnList({ type: 1005, pageSize: 10, currentPage: 1 })
+    this.getColumnList({ refresh: false, columnType: this.columnType })
   },
   methods: {
+    ...mapMutations(['resetState']),
     ...mapActions(['getColumnList']),
     scrollBottom() {
-      this.getColumnList({ type: 1005, pageSize: 10 })
+      this.getColumnList({ refresh: false, columnType: this.columnType})
     }
+  },
+  beforeDestroy() {
+    this.resetState()
   }
 }
 </script>

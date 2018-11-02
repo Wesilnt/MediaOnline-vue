@@ -1,6 +1,6 @@
 <template>
   <div class="freeList">
-    <div v-for="item in freeList" :key="item.id" class="qhht-flex freeList-cell" @click="routerToPlayDetail(item.id)">
+    <div v-for="item in data" :key="item.id" class="qhht-flex freeList-cell" @click="routerToPlayDetail(item.id)">
       <i class="qhht-icon freeList-play-button" ></i>
       <div  class="content">
         <span class="content-type">{{item.type?item.type:'假装文学'}}</span>
@@ -13,14 +13,18 @@
 
 <script>
 export default {
-  props: ['freeList'],
+  props: ['data'],
   methods: {
     routerToPlayDetail(id) {
-      this.$router.push({
-        name: 'AudioPlay',
-        params: { id },
-        query: { courseId: -1 , columnType: 'FreeZone' }
-      })
+        this.$router.push({
+          name: 'AudioPlay',
+          params: { 
+            columnType: 'freezone',
+            courseId: 0,
+            lessonId: id 
+          },
+          query: {courseName: this.courseName }
+      }) 
     }
   }
 }

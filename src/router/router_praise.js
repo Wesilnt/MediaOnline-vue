@@ -3,7 +3,7 @@ const PraiseActive = () => import(/* webpackChunkName: "index" */ '../views/prai
 const SharePoster = () => import(/* webpackChunkName: "index" */ '../components/share/SharePoster')//分享海报
 export default [
   {
-    path: '/Praise/:courseId/:collectLikeId',
+    path: '/Praise/:columnType/:courseId/:collectLikeId/detail',
     name: 'Praise',
     component: Praise
   },
@@ -13,7 +13,7 @@ export default [
     component: PraiseActive
   },
   {
-    path: '/share/poster',
+    path: '/share/:columnType/:courseId/:postType/poster',
     name: 'SharePoster',
     component: SharePoster
   }
