@@ -14,7 +14,7 @@
             <div class="videocol-sction-title">
                 <h4>课程列表 <label>(共{{columnDetail.lessonCount}}讲)</label></h4>
             </div>
-            <videoBigimage :src="columnDetail.outlinePic"/>   
+            <ImagePreview :src="columnDetail.outlinePic"/>
             <!-- <img :src="require('../../../assets/images/icon_zoom.png')" class="videocol-bigimage-search"> -->
         </div>
         <!-- 试看课程 -->
@@ -59,7 +59,7 @@ import CourseIntroduce from '../../../components/CourseIntroduce.vue'
 import playlist from './playlist.vue'
 import videoComment from '../../../components/video-comment.vue'
 import CommentItem from '../../../components/comment/CommentItem.vue'
-import videoBigimage from '../../../components/videoBigimage.vue'
+import ImagePreview from '../../../components/ImagePreview.vue'
 
 import { createNamespacedHelpers } from 'vuex'
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
@@ -91,7 +91,7 @@ export default {
     playlist,
     videoComment,
     CommentItem,
-    videoBigimage,
+    ImagePreview,
     ScrollNavBar,
     CommentList
   },

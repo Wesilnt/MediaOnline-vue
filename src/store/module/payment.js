@@ -11,24 +11,23 @@ import {
 } from '../../api/groupBuyApi.js'
 
 export default {
-  name: 'payment',
   namespaced: true,
-  state: {},
-  getters: {
-    buyCount: (state, getters, { videoColumnDetailData }) => {
-      console.log(videoColumnDetailData)
-      return videoColumnDetailData.buyCount
-    }
-  },
+  name: 'payment',
+  state: () => ({
+    groupBuyDetail: {}
+  }),
   mutations: {
     saveState(state, payload) {
       Object.assign(state, payload)
     }
   },
   actions: {
-    async getGroupBuyDetail({ commit, dispatch }, payload) {
-      const result = await getGroupBuyDetail(payload)
-      console.log(result)
+    async getGroupBuyDetail({ commit }, payload) {
+      const response = await getGroupBuyDetail(payload)
+      Object.entries(response).map(item => {
+        console.log(`%c ${item.join(': ')}`, 'color: #009688')
+      })
+      commit('saveState', { groupBuyDetail: response })
     }
   }
 }

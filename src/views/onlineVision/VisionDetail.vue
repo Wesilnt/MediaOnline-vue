@@ -14,7 +14,7 @@
       <div class="vision-wrapper">
         <h3 class="vision-title">课程列表  <span class="vision-title-badge">(共{{visionDetail.lessonCount}}讲)</span></h3>
         <div class="vision-body">
-          <videoBigimage :src="visionDetail.outlinePic"></videoBigimage>
+          <ImagePreview :src="visionDetail.outlinePic"></ImagePreview>
         </div>
       </div>
     </div>
@@ -51,26 +51,28 @@
 <script>
 import ScrollNavBar from '../../components/ScrollNavBar'
 import DetailHeader from '../../components/visionComponents/DetailHeader.vue'
-import arrowUp from '../../assets/images/arrow_up.png'
-import arrowDown from '../../assets/images/arrow_down.png'
 import SingleSetList from '../../components/SingleSetList.vue'
 import CommentList from '../../components/comment/CommentList.vue'
 import toolsNavbar from '../../components/toolsNavbar.vue'
 import GroupHeader from '../onlineCourse/components/GroupHeader'
-import videoBigimage from '../../components/videoBigimage.vue'
+import ImagePreview from '../../components/ImagePreview'
 import CourseIntroduce from '../../components/CourseIntroduce.vue'
 import SkeletonFullScreen from '../../components/SkeletonFullScreen.vue'
+import arrowUp from '../../assets/images/arrow_up.png'
+import arrowDown from '../../assets/images/arrow_down.png'
 import {
   createNamespacedHelpers,
   mapState as rootState,
   mapActions as rootActions
 } from 'vuex'
-const { mapState, mapActions, mapMutations } = createNamespacedHelpers('visionData')
+const { mapState, mapActions, mapMutations } = createNamespacedHelpers(
+  'visionData'
+)
 export default {
   components: {
     DetailHeader,
     ScrollNavBar,
-    videoBigimage,
+    ImagePreview,
     SingleSetList,
     CommentList,
     toolsNavbar,
@@ -84,8 +86,8 @@ export default {
       arrowUp,
       arrowDown,
       banner: '',
-      columnType:this.$route.params.columnType,
-      courseId:this.$route.params.courseId,
+      columnType: this.$route.params.columnType,
+      courseId: this.$route.params.courseId,
       navBars: [
         {
           title: '介绍',
@@ -158,10 +160,9 @@ export default {
 <style lang="less" scoped>
 .vision-wrapper {
   border-bottom: 8px solid #f7f7f7;
-  &.wrapper-last{
+  &.wrapper-last {
     padding-bottom: 200px;
   }
-
 }
 .vision-title {
   font-size: 32px;

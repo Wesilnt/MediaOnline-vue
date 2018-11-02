@@ -18,7 +18,7 @@
                     <div class="column-sction-title">
                         <h4>课程列表 <label>(共{{columnDetail.lessonCount}}讲)</label></h4>
                     </div>
-                    <videoBigimage :src="columnDetail.outlinePic"/>
+                    <ImagePreview :src="columnDetail.outlinePic"/>
                 </div>
                 <!-- 试看课程 -->
                 <div class="column-base">
@@ -44,7 +44,7 @@
                         <CommentList  :regionid="courseId" :regiontype="2201" :unindent="true" ></CommentList>
                     </div>
                     <!-- 购买须知 -->
-                    <div class="column-base">
+                    <div class="column-base column-base-last">
                         <div class="column-sction-title">
                             <h4>购买须知</h4>
                         </div>
@@ -121,7 +121,11 @@
             <div class="load-more-container" v-if="lessonFinished">
                 没有更多了，不要再拉啦～
             </div>
-            <!-- <Payment /> -->
+             <!--<Payment
+                 :purchased="lessonList[0]"
+                 :isTryScan="isCourseType"
+                 :columnDetail="columnDetail"
+             />-->
             <toolsNavbar :freeLesson="freeLesson" :lessonList="lessonList"/>
         </div>
     </div>
@@ -138,7 +142,7 @@ import ScrollNavBar from '../components/ScrollNavBar'
 import CourseIntroduce from '../components/CourseIntroduce.vue'
 import playlist from './onlineCourse/components/playlist.vue'
 import videoComment from '../components/video-comment.vue'
-import videoBigimage from '../components/videoBigimage.vue'
+import ImagePreview from '../components/ImagePreview'
 import {
   createNamespacedHelpers,
   mapState as rootState,
@@ -306,7 +310,7 @@ export default {
     CourseIntroduce,
     playlist,
     videoComment,
-    videoBigimage,
+    ImagePreview,
     ScrollNavBar,
     CommentList
   }
@@ -399,6 +403,10 @@ export default {
   padding: 0 40px;
   background-color: #fff;
   border-bottom: 8px solid rgb(247, 247, 247);
+  &.column-base-last {
+    padding-bottom: 180px;
+    border-bottom: none;
+  }
 }
 //大图浏览
 .column-bigimage {
@@ -463,12 +471,5 @@ export default {
   font-size: 32px;
   color: rgb(128, 128, 128);
   margin: 20px 0 20px;
-}
-.column-purchase-tip-fatherView {
-  width: 100%;
-  margin-bottom: 120px;
-}
-.column-purchase-tip-fatherView :last-child {
-  margin-bottom: 60px;
 }
 </style>
