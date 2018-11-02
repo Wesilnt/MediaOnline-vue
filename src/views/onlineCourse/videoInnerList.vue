@@ -70,7 +70,15 @@ export default{
         break
       }
       if (item.isFree || unLock) {
-         this.$router.push({ name: 'videoCourseDetail', params: { lessonId:item.id } })
+        //  this.$router.push({ name: 'videoCourseDetail', params: { lessonId:item.id } })
+        this.$router.push({
+          name: 'videoCourseDetail',
+          params:{
+            courseId : this.courseId,
+            columnType:this.columnType,
+            lessonId:item.id
+          }
+        }) 
       } else {
         this.$toast.fail('您还未购买该专栏')
       }

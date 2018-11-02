@@ -4,22 +4,25 @@ const { NODE_ENV } = process.env
 // 调试选项，本地调试请改为 False
 export const IS_ONLINE = true
 // 测试 Token
-export const TEST_TOKEN ="b969ca01-e1bc-44f1-bec4-5fa03bcaf246"
+export const TEST_TOKEN = "47f9facc-0504-4c4c-9d59-12208b6cd577"
 
 // TODO router 设置未统一，后期需要统一格式
 export const courseType = {
-    '1007': 'home/readings/book/', // 读书会
-    '1005': 'home/videoColumnDetail/', // 线上课程
-    '1003': 'home/visionDetail/', // 少年视野
-    '1001': 'home/freezone' // 免费专区
+    '1007': 'detail/reading/', // 读书会
+    '1005': 'detail/onlineCourse/', // 线上课程
+    '1003': 'detail/onlineVision/', // 少年视野
+    '1001': 'detail/freezone/' // 免费专区
 }
 
 export const columnType = {
-    '1007': 'reading', // 读书会
-    '1005': 'onlineCourse', // 线上课程
-    '1003': 'onlineVision', // 少年视野
-    '1001': 'freezone' // 免费专区
+    'reading': {name:'reading',code:1007},             // 读书会
+    'onlineCourse': {name:'onlineCourse',code:1005},   // 线上课程
+    'onlineVision': {name:'onlineVision',code:1003},   // 少年视野
+    'freezone': {name:'freezone',code:1001}            // 免费专区
 }
+
+export const getColumnType = code => Object.keys(columnType).find(key=>  columnType[key].code == parseInt(code)) 
+
 export const columnStatus = {
     'reading':'1007', // 读书会
     'onlineCourse':'1005', // 线上课程
@@ -27,14 +30,14 @@ export const columnStatus = {
     'freezone':'1001' // 免费专区
 }
 
-// TODO router 设置未统一，后期需要统一格式
 export const homeColumnList = {
-  // '1001': {componentName:'FreeList', title:'免费专区',listKey:'freeList',link:"/home/freezone"},// 免费专区
+  // 'freezone': {componentName:'FreeList', title:'免费专区',listKey:'freeList',link:"/home/freezone"},// 免费专区
   // 少年视野
-  '1003': {componentName:'VisionCell', title:'音频课程',listKey:'visionList',link:`/home/${columnType['1003']}/columnlist`},// 线上课程
-  '1005': {componentName:'VideoCell', title:'视频课程',listKey:'videoList',link:`/home/${columnType['1005']}/columnlist`},
+  'onlineVision': {code: 1003, componentName:'VisionCell', title:'音频课程',listKey:'visionList',link:`/home/${columnType['onlineVision'].name}/columnlist`},
+  // 线上课程
+  'onlineCourse': {code: 1005, componentName:'VideoCell', title:'视频课程',listKey:'videoList',link:`/home/${columnType['onlineCourse'].name}/columnlist`}, 
   // 读书会
-  '1007': {componentName:'BookCell', title:'少年读书会',listKey:'bookList',link:`/home/${columnType['1007']}/columnlist`},
+  'reading': {code: 1007, componentName:'BookCell', title:'少年读书会',listKey:'bookList',link:`/home/${columnType['reading'].name}/columnlist`}, 
 }
 // 首页导航配置
 export const navbar = [

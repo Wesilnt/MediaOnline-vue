@@ -40,8 +40,11 @@ export default {
     toHelp() {
       this.$router.replace({
         name: 'Praise',
-        params: { courseId: this.courseId, collectLikeId: this.collectLikeId },
-        query:{columnType:this.$route.query.columnType}
+        params: { 
+                  columnType:this.$route.params.columnType,
+                  courseId: this.courseId, 
+                  collectLikeId: this.collectLikeId 
+              }, 
       })
     }
   },

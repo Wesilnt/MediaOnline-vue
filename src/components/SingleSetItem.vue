@@ -23,7 +23,7 @@
 <script>
 export default {
   //singleset 单集  playing是否正在播放
-  props: ['item', 'playing','singletype','courseid','coursename','useraccessstatus'],
+  props: ['item', 'playing','columnType','courseid','coursename','useraccessstatus'],
   methods: {
     onItemClick(item) {
       let unLock = false
@@ -49,22 +49,29 @@ export default {
         break
       }
       if (item.isFree || unLock) {
-     
-        if(this.singletype == '1005'){
-           console.log(this.singletype)
+        if(this.columnType == 'onlineCourse'){
+          // this.$router.push({path: `/videoCourseDetail/${item.id}`})
           this.$router.push({
-           path: `/videoCourseDetail/${item.id}`
-          })
+               name: 'videoCourseDetail',
+               params:{
+                 courseId : this. courseid,
+                 columnType:this.columnType,
+                 lessonId:item.id
+               }
+            })
         }else{
-        this.$router.push({
-          name: 'AudioPlay',
-          params: {id: item.id },
-          query:{courseId: this.courseid, columnType:this.singletype,courseName:this.coursename}
-        })
+          this.$router.push({
+            name: 'AudioPlay',
+            params: { 
+              courseId: this.courseid,
+              columnType: this.columnType,
+              lessonId: item.id,
+            },  
+            query:{courseName:this.coursename}
+          })
         }
       } else {
-          console.log(this.singletype);
-          this.$toast.fail('您还未购买该专栏')
+        this.$toast.fail('您还未购买该专栏')
       }
     }
   }

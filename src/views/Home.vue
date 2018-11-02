@@ -5,7 +5,7 @@
       <div>
         <van-swipe :autoplay="4000" class="index-swiper">
           <van-swipe-item v-for="list in bannerList" :key="list.url">
-            <i class="qhht-icon lazy-img-larger index-swiper-img" v-lazy:background-image="`${list.url}?imageView2/1/format/jpg`" @click="routerToSwiperDetail(list.link)"></i>
+            <i class="qhht-icon lazy-img-larger index-swiper-img" v-lazy:background-image="`${list.url}?imageView2/1/format/jpg`" @click="routerToSwiperDetail(list)"></i>
           </van-swipe-item>
 
         </van-swipe>
@@ -44,7 +44,7 @@ import HomeItem from '../components/HomeItem.vue'
 import homeData from '../store/module/homeData.js'
 import { homeColumnList } from '../utils/config'
 import { createNamespacedHelpers } from 'vuex'
-import { courseType } from '../utils/config'
+import { courseType,getColumnType } from '../utils/config'
 const { mapState, mapActions } = createNamespacedHelpers('homeData') 
 
 export default {
@@ -78,15 +78,24 @@ export default {
   ]),
   methods: {
     ...mapActions(['getIndexPageData']),
-    routerToSwiperDetail(url) {
-      if (!url) return
-      if (url.includes('&/&')) {
-        const [type, id] = url.split('&/&')
-        this.$router.push({ path: `/${courseType[type]}${id}` })
-      } else {
-        console.log(url)
-        window.location.href = url
-      }
+    // type :"2501"
+    routerToSwiperDetail(item) {
+      if (!item) return
+        if(item.type === '2501'){
+          let data = item.link.split('&/&')
+          this.$router.push({ path: `/detail/${getColumnType(data[0])}/${data[1]}` })
+        }
+        if(item.type === '2502'){
+          window.location.href = url
+        }
+      // if (url.includes('&/&')) {
+      //   const [type, id] = url.split('&/&')
+      //   // this.$router.push({ path: `/${courseType[type]}${id}` })
+      
+      // } else {
+      //   console.log(url)
+      //   window.location.href = url
+      // }
     }
   },
   mounted() {

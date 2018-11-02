@@ -1,7 +1,7 @@
 <template>
 <div>
    <div class="lazy-img-most audioplay-container" v-lazy:background-image="`${audio.coverPic}?imageView2/1/w/750/h/750`" ref='container'>
-  
+
     <!-- 封面 -->
     <div class="controller-container" ref='controller'>
       <div class="empty-layout"></div>
@@ -15,31 +15,31 @@
          ? 'url('+require('../../assets/images/love_collect.png')+')'
          : 'url('+require('../../assets/images/audio_love_normal.png')+')'}">
         </div>
-        <div v-if="'1007'!=columnType" class="tab-container-draft" @click="onDraft"/>
+        <div v-if="'reading'!==columnType" class="tab-container-draft" @click="onDraft"/>
         <div  class="tab-container-comment" @click="toComment">
           <span>{{audio.commentCount}}</span>
         </div>
         <div class="tab-container-share" @click="onShare"/>
       </div>
       <!-- 进度条 -->
-      <div class="slider-container"> 
+      <div class="slider-container">
         <div slot="start">{{currentTime | formatDuring}}</div>
-        <van-slider style="width:80%;" 
+        <van-slider style="width:80%;"
           v-model="progress"
-          :max="maxTime" 
+          :max="maxTime"
           :min="0"
-          bar-height="2px" 
+          bar-height="2px"
           @change="onSliderChnage"/>
         <div slot="end">{{ maxTime | formatDuring}}</div>
       </div>
       <!-- 播放按钮 -->
       <div class="play-btns" ref="playButton">
         <div class="btn-item" :style="{backgroundImage:`url(${'single'==playMode?singleIcon:orderIcon})`}" @click="onPlayMode" />
-        <div class="btn-item" :style="{backgroundImage:`url(${preIcon})`}" @click="onPlayPrv"/> 
+        <div class="btn-item" :style="{backgroundImage:`url(${preIcon})`}" @click="onPlayPrv"/>
         <div :class="{'btn-item':true,'play-btn-active':playing}"  @click="onPlayPause">
           <span :style="{backgroundImage:`url(${playing?playIcon:pauseIcon})`}"/>
         </div>
-        <div class="btn-item" :style="{backgroundImage:`url(${nextIcon})`}" @click="onPlayNext"/>  
+        <div class="btn-item" :style="{backgroundImage:`url(${nextIcon})`}" @click="onPlayNext"/>
         <div class="btn-item" :style="{backgroundImage:`url(${listIcon})`}" @click="onPlayList"/>
       </div>
     </div>
@@ -55,7 +55,7 @@
           <van-list
             v-model="loading"
             :finished="finished"
-            @load="onLoad"> 
+            @load="onLoad">
               <div v-for="(item,index) of singleSetList" :key="item.id" class="list-item">
                 <div class="list-content" @click="onItemClick(item)">
                   <img v-if="lessonId==item.id" src="../../assets/images/audio_list_playing.png">
@@ -95,10 +95,11 @@ export default {
       playIcon:require('../../assets/images/audio_play_play.png'),
       pauseIcon:require('../../assets/images/icon_pause.png'),
       loading:false,                              //单集列表分页loading
-      lessonId: this.$route.params.id,            //单集ID
-      courseId:this.$route.query.courseId,        //单集对应专栏ID
-      columnType: this.$route.query.columnType,   //播放类型 FreeZone(1001) 免费专区  OnlineCourse(1005) 在线课堂 OnlineVision(1003) 在线视野  Readings(1007) 读书会 
-      courseName: this.$route.query.courseName,   //专栏名  
+      lessonId: this.$route.params.lessonId,      //单集ID
+      courseId:this.$route.params.courseId,       //单集对应专栏ID
+      columnType: this.$route.params.columnType,  //播放类型 FreeZone(1001) 免费专区  OnlineCourse(1005) 在线课堂 OnlineVision(1003) 在线视野  Readings(1007) 读书会
+
+      courseName: this.$route.query.courseName,   //专栏名
       popupVisible: false,                        //是否显示音频列表弹框
       showShare: false,                           //是否显示分享框
       touching: false,                            //slider触摸
@@ -118,7 +119,7 @@ export default {
       'isLoading',
       'isBuffering',
       'audio',
-      'audioId', 
+      'audioId',
       'currentTime',
       'maxTime',
       'playMode',
@@ -126,12 +127,20 @@ export default {
       'playing'
     ])
   },
-  created() { 
-    this.bindCourseName(this.courseName) 
+  created() {
+    this.bindCourseName(this.courseName)
     this.playAudio({ lessonId: this.lessonId, columnType: this.columnType })
     this.setShareInfo({courseId:this.courseId,columnType: this.columnType})
-  }, 
+
+  },
   watch: {
+    columnId:{
+     handler:function(courseId){
+       console.log("AudioPlay-courseId:",courseId)
+        if(courseId>0) this.courseId = courseId
+     },
+     immediate: true
+    },
     pageLoading:function(isLoading){
      this.loading = isLoading
     },
@@ -142,14 +151,14 @@ export default {
       this.progress = (value * 100) / this.maxTime
       return value
     },
-    isLike:function(newValue, oldValue){  
+    isLike:function(newValue, oldValue){
       if(-1 === oldValue || -1 === newValue || !this.clickLike) return
       if (newValue)this.$toast.success({ duration: 2000, message: '已添加到我喜欢的' })
       else this.$toast.fail({ duration: 2000, message: '已取消喜欢' })
     }
   },
-  methods: { 
-    ...mapActions([ 
+  methods: {
+    ...mapActions([
       'setShareInfo',
       'postFavorite',
       'postUnFavorite',
@@ -166,12 +175,12 @@ export default {
     //拖动进度改变进度
     onInputChange(e) {
       this.progress = e.target.value
-    },  
-    onSliderChnage() { 
+    },
+    onSliderChnage() {
       this.seekTo(this.progress*this.maxTime/100)
-    }, 
+    },
     //收藏
-    onCollect() { 
+    onCollect() {
       if (this.isLike) {
         this.postUnFavorite({ lessonId: this.lessonId })
       } else {
@@ -182,14 +191,22 @@ export default {
     onDraft() {
       this.$router.push({
         name: 'AudioDraft',
-        params: { lessonid: this.lessonId }
+        params: {
+          columnType: this.columnType,
+          courseId: this.courseId,
+          lessonid: this.lessonId
+        }
       })
     },
     //评论
     toComment() {
       this.$router.push({
         name: 'AudioCmts',
-        params: { lessonid: this.lessonId }
+        params: {
+          columnType: this.columnType,
+          courseId: this.courseId,
+          lessonid: this.lessonId
+        }
       })
     },
     //分享
@@ -211,24 +228,24 @@ export default {
       this.playAudio()
     },
     //上一首
-    onPlayPrv() {  
-      if (!this.audio) return 
+    onPlayPrv() {
+      if (!this.audio) return
       let preId = this.audio.preLessonId
       // let useraccessstatus =this.columnDetail ? this.columnDetail.userAccessStatus : 1001
       // if(this.singleSetList
-      //   && 1001 != useraccessstatus 
-      //   && 1003 != useraccessstatus 
+      //   && 1001 != useraccessstatus
+      //   && 1003 != useraccessstatus
       //   && 1008 != useraccessstatus) {
       //   let listenable  = true
-      //   this.singleSetList.some(item=>{ 
+      //   this.singleSetList.some(item=>{
       //       if(item.id == preId && !item.isFree){
-      //         listenable = false   
+      //         listenable = false
       //         this.$toast.fail('这是第一条')
       //         return
       //       }
-      //     }) 
+      //     })
       //     if(!listenable)return
-      // } 
+      // }
       if (preId && -1 != preId) {
         this.pre({ lessonId: preId })
       } else {
@@ -236,25 +253,25 @@ export default {
       }
     },
     //下一首
-    onPlayNext() { 
-      if (!this.audio) return 
+    onPlayNext() {
+      if (!this.audio) return
       let nextId = this.audio.nextLessonId
       // let useraccessstatus =this.columnDetail ? this.columnDetail.userAccessStatus : 1001
       // if( this.singleSetList
-      //   && 1001 != useraccessstatus 
-      //   && 1003 != useraccessstatus 
+      //   && 1001 != useraccessstatus
+      //   && 1003 != useraccessstatus
       //   && 1008 != useraccessstatus) {
-      //     let listenable  = true 
-      //     this.singleSetList.some(item=>{ 
+      //     let listenable  = true
+      //     this.singleSetList.some(item=>{
       //       if(item.id == nextId && !item.isFree){
       //         listenable = false
       //         this.$toast.fail('已经是最后一条')
       //         return
       //       }
-      //     }) 
+      //     })
       //   if(!listenable)return
-      // } 
-      if (nextId && -1 != nextId) {  
+      // }
+      if (nextId && -1 != nextId) {
         this.next({ lessonId: nextId })
       } else {
         this.$toast.fail('已经是最后一条')
@@ -273,7 +290,7 @@ export default {
       this.getSingleSetList({})
     },
     //列表Item点击事件
-    onItemClick(audio) { 
+    onItemClick(audio) {
       this.popupVisible = false
       this.$router.replace({
         name: 'AudioPlay',
@@ -286,40 +303,40 @@ export default {
   /**
    * 监听页面离开，设置本页面是否缓存起来， 如果跳转到评论页面, 设置本页面router:meta.keepAlive = true, 否则 = false
    */
-  // beforeRouteLeave(to, from, next) {  
+  // beforeRouteLeave(to, from, next) {
   //     console.log("updated")
   //   // 设置下一个路由的 meta
   //   from.meta.keepAlive = false // 让 頁面缓存，即不刷新
   //   next()
-  // }, 
+  // },
   /**
    * 监听页面进入，设置本页面是否缓存起来， 如果跳转到评论页面, 设置本页面router:meta.keepAlive = true, 否则 = false
    */
-  // beforeRouteEnter(to, from, next) {   
+  // beforeRouteEnter(to, from, next) {
   //   next(vm => {
   //   console.log(to,from)
   //     // 通过 `vm` 访问组件实例
   //     to.meta.keepAlive = false // 让 頁面缓存，即不刷新
-  //   }) 
+  //   })
   // }
   mounted(){
      this.$nextTick(()=>{
         const {height,top,bottom}=this.$refs.controller.getBoundingClientRect()
-        const {innerHeight,innerWidth}=window 
+        const {innerHeight,innerWidth}=window
         this.$refs.controller.style.height =  innerHeight - innerWidth +'px'
         if(top<innerWidth)  this.$refs.container.style.height=top+'px'
-     }) 
-  }, 
+     })
+  },
   beforeDestroy(){
     this.clearData()
   }
 }
 </script>
 <style lang="scss" >
-.audioplay-containeraudioplay-container {
+.audioplay-container {
   background: #fff center/100% no-repeat;
   height: 0px;
-  padding-bottom: 100%; 
+  padding-bottom: 100%;
   .controller-container {
     display: flex;
     flex-direction: column;
@@ -330,7 +347,7 @@ export default {
     width: 100%;
     background-color: white;
   }
-  .empty-layout{ 
+  .empty-layout{
     flex: 1;
     width: 100%;
   }
@@ -381,7 +398,7 @@ export default {
       }
     }
     &-share {
-      width: 42px;  
+      width: 42px;
       background-repeat: no-repeat;
       background-size: 41px 41px;
       background-image: url('../../assets/images/audio_play_share.jpg');
@@ -405,14 +422,14 @@ export default {
       color: rgb(146, 145, 150);
       margin-left: 30px;
     }
-     
+
     .van-slider {
       background-color: #e5e5e5;
       /deep/.van-slider__bar {
         max-width: 100%;
       }
       .van-slider__button {
-        background: url(../../assets/images/audio_play_slider.png) center/18px
+        background: url('../../assets/images/audio_play_slider.png') center/18px
           no-repeat;
         border-radius: 15px;
         width: 18px;
@@ -440,7 +457,7 @@ export default {
       background-size: 50px;
       width: 50px;
       height: 50px;
-      background-repeat: no-repeat;   
+      background-repeat: no-repeat;
     }
     .btn-item:nth-child(2) {
       margin-left: 40px;
@@ -454,24 +471,24 @@ export default {
       background-color: #ff8a1f;
       border-radius: 50%;
       justify-content: center;
-      display: flex; 
+      display: flex;
       align-items: center;
 
       // padding: 26px 29px 26px 30px;
-      // padding: 26px 35px; 
+      // padding: 26px 35px;
       span {
         margin-left: 4px;
-        width: 31px; 
+        width: 31px;
         height: 38px;
         background-size: 31px 38px;
         background-repeat: no-repeat;
       }
     }
     .play-btn-active {
-      // padding: 26px 35px; 
+      // padding: 26px 35px;
       span {
-        margin-left: 2px; 
-        background-repeat: no-repeat; 
+        margin-left: 2px;
+        background-repeat: no-repeat;
       }
     }
   }

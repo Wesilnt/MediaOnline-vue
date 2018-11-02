@@ -12,17 +12,22 @@
 
 <script>
 export default {
-  props: ['data'],
+  data(){
+      return { 
+      }
+  },
+  props: ['data','columnType'],
   methods: {
     onItemClick() {
-      const {columnType}=this.$route.params
+      // const {columnType}=this.$route.params
       // this.$router.push({
       //   name: 'videoColumnDetail',
       //   params: { courseId: this.video.id }
       // })
+      let columnType = this.columnType ||  this.$route.params.columnType
       this.$router.push({ 
         name: 'ColumnDetail',
-        params: { columnType:"onlineCourse", courseId: this.data.id } 
+        params: { columnType, courseId: this.data.id } 
       })
     }
   }

@@ -29,6 +29,7 @@ export default {
       inter = setTimeout(() => {
         this.$nextTick(() => {
           const { content, contentChild } = this.$refs
+          if(!content.clientHeight)return
           const { clientHeight: contentClientHeight } = content
           const { clientHeight: contentChildClientHeight } = contentChild
           console.log(

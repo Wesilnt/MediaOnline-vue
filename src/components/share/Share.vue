@@ -37,7 +37,7 @@
  <script>
 import { mapActions, mapState } from 'vuex'
 export default {
-  props: ['show','posturl', 'courseId', 'columnType'],
+  props: ['show','postType', 'courseId', 'columnType'],
   data() {
     return {
       isOpen: false,
@@ -45,8 +45,7 @@ export default {
     }
   },
   watch: {
-    show(value) {
-      console.log(value)
+    show(value) { 
       this.isOpen = value
     }
   },
@@ -85,14 +84,17 @@ export default {
         // this.setWxShareZone(shareOption)
       }
     },
-    toPoster(){
+    toPoster(){ 
+      let postType = postType? postType: 'default'
+      console.log("Share-courseId:",this.courseId)
      this.$router.push({
      name: 'SharePoster',
-     query: {  
-              sharePostUrl:this.posturl,
+     params:{
               courseId: this.courseId,
-              columnType:this.columnType
-            }
+              columnType:this.columnType,
+              postType,
+            },
+     query: {}
       })
     },
     onCancel() {

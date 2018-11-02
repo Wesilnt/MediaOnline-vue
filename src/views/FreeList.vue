@@ -16,11 +16,15 @@ export default {
   props: ['data'],
   methods: {
     routerToPlayDetail(id) {
-      this.$router.push({
-        name: 'AudioPlay',
-        params: { id },
-        query: { courseId: -1 , columnType: 'FreeZone' }
-      })
+        this.$router.push({
+          name: 'AudioPlay',
+          params: { 
+            columnType: 'freezone',
+            courseId: 0,
+            lessonId: id 
+          },
+          query: {courseName: this.courseName }
+      }) 
     }
   }
 }

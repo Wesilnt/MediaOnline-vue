@@ -107,11 +107,13 @@ export default {
         //专栏类型columnType：  FreeZone(1001) 免费专区  OnlineCourse(1005) 在线课堂 OnlineVision(1003) 在线视野  Readings(1007) 读书会 
         this.$router.push({
           name: 'SharePoster',
-          params:{},
+          params:{
+            courseId:this.courseid,
+            columnType:this.columntype,
+            postType:'praise'
+          },
           query: { 
                   sharePostUrl:this.posturl,
-                  courseId:this.courseid,
-                  columnType:this.columntype,
                  }
         })
       }

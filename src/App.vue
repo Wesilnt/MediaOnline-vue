@@ -74,6 +74,7 @@ export default {
 @import 'publicUIConfig/common';
 .router-view {
   font-size: 24px;
+  letter-spacing: 2px;
 }
 .video-popup {
   left: 0;

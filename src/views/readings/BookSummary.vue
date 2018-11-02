@@ -28,12 +28,11 @@
 </template>
 <script>
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapGetters } = createNamespacedHelpers('columnData')
+const { mapGetters } = createNamespacedHelpers('columnData')
 export default {
   computed: {
     ...mapGetters(['getBookIntroduce'])
   },
-  methods: {}
 }
 </script>
 <style lang="scss" scoped>

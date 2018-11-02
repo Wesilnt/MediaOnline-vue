@@ -33,7 +33,7 @@
 </template>
 <script>
 import { createNamespacedHelpers } from 'vuex'
-import {columnStatus} from '../../utils/config'
+import {columnType,columnStatus} from '../../utils/config'
 const { mapState,mapMutations, mapActions } = createNamespacedHelpers('columnData')
 
 export default {
@@ -104,18 +104,22 @@ export default {
     }
   },
   created() { 
-    this.getColumnList({ refresh: false, columnType:columnStatus[this.columnType] })
+    this.getColumnList({ refresh: false, columnType:this.columnType })
   },
   methods: {
     ...mapMutations(['resetState']),
     ...mapActions(['getColumnList']),
     scrollBottom() {
       console.log('分页')
-      this.getColumnList({ refresh: false, columnType:columnStatus[this.columnType] })
+      this.getColumnList({ refresh: false, columnType:this.columnType })
     },
     //音频播放
     toDetail(id) {
-      this.$router.push({ name: 'BookDetail', params: { courseId:id } })
+      this.$router.push({ name: 'ColumnDetail', params: {
+                                                          courseId:id,
+                                                          columnType: this.columnType 
+                                                        } 
+                        })
     }
   },
   beforeDestroy() {

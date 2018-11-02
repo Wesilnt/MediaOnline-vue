@@ -28,28 +28,28 @@
 
 <script>
 export default {
-  props: ['data'],
+  props: ['data','columnType'],
   methods: {
     enterVisionDetail(id) {
+      let columnType = this.columnType || this.$route.params.columnType
       this.$router.push({
         name: 'ColumnDetail',
-        params: { columnType:"onlineVision", courseId: id }
+        params: { columnType, courseId: id }
       })
       // this.$router.push({ path: '/home/visionDetail/' + id })
     },
     enterVisionPlay() {
       const { freeLessonList } = this.data
-      if (!freeLessonList || freeLessonList.length === 0) {
-        return
-      }
+      if (!freeLessonList || freeLessonList.length === 0) return
+      let columnType = this.columnType || this.$route.params.columnType
       this.$router.push({
         name: 'AudioPlay',
-        params: { id: freeLessonList[0].id },
-        query: {
-          courseId: this.data.id,
-          columnType: '1003',
-          courseName: this.data.name
-        }
+        params: { 
+            courseId: this.data.id,
+            columnType,
+            lessonId: freeLessonList[0].id,
+          }, 
+        query: {courseName: this.data.name}
       })
     }
   }

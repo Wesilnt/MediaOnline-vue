@@ -21,9 +21,7 @@
         :speed="1"
         :clockwise="true"
         :stroke-width="60"
-        :rate="1"
-      >
-     </van-circle>
+        :rate="1"/>
   </div>
 </template>
 <script>
@@ -67,9 +65,10 @@ export default {
       'forceHidenFloat',
       'showFloat',
       'courseId', 
-      'courseName'
+      'courseName',
+      'columnType'
     ]),
-    ...rootState(['columnType'])
+    // ...rootState(['columnType'])
   },
   created() {
     this.initAudio()
@@ -112,11 +111,15 @@ export default {
       }
       e.preventDefault()
     },
-    goPlaying(){
+    goPlaying(){ 
       this.$router.push({
         name: 'AudioPlay',
-        params: { id: this.audioId },
-        query: {courseId: this.courseId, columnType: this.columnType, courseName: this.courseName }
+        params: { 
+          columnType:this.columnType,
+          courseId: this.courseId,
+          lessonId: this.audioId 
+        },
+        query: {courseName: this.courseName }
       })
     }
   },
@@ -136,27 +139,28 @@ export default {
     $route(to,from) { 
       this.setFloatButton(!to.name || (to.name&&!to.name.includes('AudioPlay'))) 
       if(!this.showFloat) return
-      this.$nextTick(()=>{
-        this.dragableAnim = true
-        if(from.path !== '/' && from.path !== '/home'  && from.path !== '/my' &&
-          (to.path === '/'||to.path === '/home' || to.path === '/my'))  
-        {
-          console.log("路由切换",from.path, to.path)
-          let navBar = document.getElementById('navbar') 
-          let iconWidth = this.$refs.mediaIcon.clientWidth
-          let iconHeight = this.$refs.mediaIcon.clientHeight 
-          let boundingClientRect  = navBar.getBoundingClientRect()
-          this.tempX = this.x
-          this.tempY = this.y
-          this.x = navBar.getBoundingClientRect().right / 2 - iconWidth / 2  + 'px'
-          this.y = navBar.getBoundingClientRect().y - iconHeight / 2 +'px'
-        }
-        if((from.path === '/my' && to.path !== '/home') || (from.path === '/home' && to.path !== '/my')){
-          this.x = this.tempX
-          this.y = this.tempY
-        }
-        this.dragable = to.path !== '/home' && to.path !== '/my'
-      })
+      // this.$nextTick(()=>{
+      //   this.dragableAnim = true
+      //   if(from.path !== '/' && from.path !== '/home'  && from.path !== '/my' &&
+      //     (to.path === '/'||to.path === '/home' || to.path === '/my'))  
+      //   {
+          
+      //     let navBar = document.getElementById('navbar') 
+      //     if(!navBar) return
+      //     let iconWidth = this.$refs.mediaIcon.clientWidth
+      //     let iconHeight = this.$refs.mediaIcon.clientHeight 
+      //     let boundingClientRect  = navBar.getBoundingClientRect()
+      //     this.tempX = this.x
+      //     this.tempY = this.y
+      //     this.x = navBar.getBoundingClientRect().right / 2 - iconWidth / 2  + 'px'
+      //     this.y = navBar.getBoundingClientRect().y - iconHeight / 2 +'px'
+      //   }
+      //   if((from.path === '/my' && to.path !== '/home') || (from.path === '/home' && to.path !== '/my')){
+      //     this.x = this.tempX
+      //     this.y = this.tempY
+      //   }
+      //   this.dragable = to.path !== '/home' && to.path !== '/my'
+      // })
       
     }
   }

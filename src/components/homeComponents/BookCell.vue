@@ -18,21 +18,26 @@
 <script>
 export default {
   name:'BookCell',
-  props: ['data'],
+  props: ['data','columnType'],
   methods: {
     onItemClick() {
+      let columnType = this.columnType || this.$route.params.columnType
       this.$router.push({ 
         name: 'ColumnDetail',
-        params: { columnType:"reading", courseId: this.data.id},
-        // query:{columnType:"1007"} 
+        params: { columnType, courseId: this.data.id},
       })
     },
     onPlayClick() { 
       if(this.data.freeLessonList&&this.data.freeLessonList.length>0){
+        let columnType = this.columnType || this.$route.params.columnType
         this.$router.push({
           name: 'AudioPlay',
-          params: {id: this.data.freeLessonList[0].id },
-          query:{courseId: this.data.id,columnType:"1007",courseName:this.data.name}
+          params: { 
+                    courseId: this.data.id,
+                    columnType,
+                    lessonId: this.data.freeLessonList[0].id,
+                  },
+          query:{courseName:this.data.name}
         })
       }else{
         this.$toast('本书籍暂时不支持试听')

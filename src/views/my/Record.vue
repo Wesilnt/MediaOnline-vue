@@ -73,7 +73,7 @@
 
 <script>
   import {createNamespacedHelpers} from 'vuex'
-  import {courseType} from "../../utils/config";
+  import {getColumnType,courseType} from "../../utils/config";
   import {Vue} from 'vue'
 
   const {mapState, mapMutations,mapActions} = createNamespacedHelpers('myPlayRecordData')
@@ -103,17 +103,28 @@
       ...mapMutations(['modifyPlayRecordList']),
       ...mapActions(['queryList', 'delPlayRecord','batchDelPlayRecord']),
       toPlay:function (item) {
-        console.log("courseType: " + item.courseType + '\t' + item.id)
-        if (item.courseType === '1003' || item.courseType === '1007' ) {
+        console.log("Record-courseType: " + item.courseType + '\t' + item.id)
+        if (item.courseType === '1003' || item.courseType === '1007' ) { 
           this.$router.push({
-            name: 'AudioPlay'
-            , params: {id: item.id}
-            , query: {courseId:-1,columnType: courseType[item.courseType], courseName: item.title}
-          })
+            name: 'AudioPlay',
+            params: { 
+              columnType: getColumnType(item.courseType),
+              courseId: 0,
+              lessonId: item.id 
+            },
+            query: {courseName: item.courseName }
+          }) 
         } else if (item.courseType === '1005' ) {
-          this.$router.push({ name: 'videoCourseDetail', params: { lessonId: item.id} })
-        }
-
+          // this.$router.push({ name: 'videoCourseDetail', params: { lessonId: item.id} })
+            this.$router.push({
+              name: 'videoCourseDetail',
+              params:{
+                courseId : item.courseId,
+                columnType: getColumnType(this.type),
+                lessonId: item.id
+              }
+            })
+          } 
       },
       handleMenu: function () {
         this.setCheckToList()

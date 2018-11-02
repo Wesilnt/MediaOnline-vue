@@ -121,7 +121,6 @@ export default {
             } 
             const res = await getSingleSetList(params)
             if(null == res) return 
-            console.log(res)
             let totalCount = res.totalCount
             commit("bindSingleSetList", {res,page,totalCount})
         }
