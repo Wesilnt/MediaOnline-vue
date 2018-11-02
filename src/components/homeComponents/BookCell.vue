@@ -16,6 +16,7 @@
 
 </template>
 <script>
+import { openAudioDetail } from '../../utils/config'
 export default {
   name:'BookCell',
   props: ['data','columnType'],
@@ -30,15 +31,16 @@ export default {
     onPlayClick() { 
       if(this.data.freeLessonList&&this.data.freeLessonList.length>0){
         let columnType = this.columnType || this.$route.params.columnType
-        this.$router.push({
-          name: 'AudioPlay',
-          params: { 
-                    courseId: this.data.id,
-                    columnType,
-                    lessonId: this.data.freeLessonList[0].id,
-                  },
-          query:{courseName:this.data.name}
-        })
+        openAudioDetail(this,{courseId:this.data.id, columnType, lessonId:this.data.freeLessonList[0].id})
+        // this.$router.push({
+        //   name: 'AudioPlay',
+        //   params: { 
+        //             courseId: this.data.id,
+        //             columnType,
+        //             lessonId: this.data.freeLessonList[0].id,
+        //           },
+        //   query:{courseName:this.data.name}
+        // })
       }else{
         this.$toast('本书籍暂时不支持试听')
       }

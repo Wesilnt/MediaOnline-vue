@@ -73,7 +73,7 @@
 
 <script>
   import {createNamespacedHelpers} from 'vuex'
-  import {getColumnType,courseType} from "../../utils/config";
+  import {getColumnType,courseType,openVideoDetail,openAudioDetail} from "../../utils/config";
   import {Vue} from 'vue'
 
   const {mapState, mapMutations,mapActions} = createNamespacedHelpers('myPlayRecordData')
@@ -104,26 +104,29 @@
       ...mapActions(['queryList', 'delPlayRecord','batchDelPlayRecord']),
       toPlay:function (item) {
         console.log("Record-courseType: " + item.courseType + '\t' + item.id)
+        let columnType = getColumnType(item.courseType)
         if (item.courseType === '1003' || item.courseType === '1007' ) { 
-          this.$router.push({
-            name: 'AudioPlay',
-            params: { 
-              columnType: getColumnType(item.courseType),
-              courseId: 0,
-              lessonId: item.id 
-            },
-            query: {courseName: item.courseName }
-          }) 
+           openAudioDetail(this,{courseId:0, columnType, lessonId: item.id})
+          // this.$router.push({
+          //   name: 'AudioPlay',
+          //   params: { 
+          //     columnType: getColumnType(item.courseType),
+          //     courseId: 0,
+          //     lessonId: item.id 
+          //   },
+          //   query: {courseName: item.courseName }
+          // }) 
         } else if (item.courseType === '1005' ) {
+           openVideoDetail(this,{ courseId:0, columnType, lessonId:item.id})
           // this.$router.push({ name: 'videoCourseDetail', params: { lessonId: item.id} })
-            this.$router.push({
-              name: 'videoCourseDetail',
-              params:{
-                courseId : item.courseId,
-                columnType: getColumnType(this.type),
-                lessonId: item.id
-              }
-            })
+            // this.$router.push({
+            //   name: 'videoCourseDetail',
+            //   params:{
+            //     courseId : item.courseId,
+            //     columnType: getColumnType(this.type),
+            //     lessonId: item.id
+            //   }
+            // })
           } 
       },
       handleMenu: function () {
@@ -224,8 +227,8 @@
 <style scoped lang="less">
     @active: #ffa32f;
     .playRecord {
-        &-container {
-        }
+        // &-container {
+        // }
         &-header-container {
             display: flex;
             flex-direction: column;

@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import { openAudioDetail } from '../../utils/config'
 export default {
   props: ['data','columnType'],
   methods: {
@@ -42,15 +43,16 @@ export default {
       const { freeLessonList } = this.data
       if (!freeLessonList || freeLessonList.length === 0) return
       let columnType = this.columnType || this.$route.params.columnType
-      this.$router.push({
-        name: 'AudioPlay',
-        params: { 
-            courseId: this.data.id,
-            columnType,
-            lessonId: freeLessonList[0].id,
-          }, 
-        query: {courseName: this.data.name}
-      })
+       openAudioDetail(this,{courseId:this.data.id, columnType, lessonId:this.data.freeLessonList[0].id})
+      // this.$router.push({
+      //   name: 'AudioPlay',
+      //   params: { 
+      //       courseId: this.data.id,
+      //       columnType,
+      //       lessonId: freeLessonList[0].id,
+      //     }, 
+      //   query: {courseName: this.data.name}
+      // })
     }
   }
 }

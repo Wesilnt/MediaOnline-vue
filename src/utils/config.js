@@ -2,7 +2,7 @@
 const { NODE_ENV } = process.env
 
 // 调试选项，本地调试请改为 False
-export const IS_ONLINE = true
+export const IS_ONLINE = false
 // 测试 Token
 export const TEST_TOKEN = "47f9facc-0504-4c4c-9d59-12208b6cd577"
 
@@ -54,6 +54,15 @@ export const navbar = [
         path: '/my'
     }
 ]
+import router from '../router/router'
+// 单集详情跳转： 视频详情
+export const openVideoDetail = (context,{columnType,courseId,lessonId})=>{
+  router.push({ name: 'videoCourseDetail', params:{ courseId , columnType ,lessonId} })
+}
+// 单集详情跳转： 音频详情
+export const openAudioDetail = (context,{columnType,courseId,lessonId,courseName})=>{
+  router.push({ name: 'AudioPlay', params: {courseId ,columnType ,lessonId},query:{courseName} })
+}
 
 // 公众号 URL
 export const WECHAT_SUBSCRIPTION_URL =

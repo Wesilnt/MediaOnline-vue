@@ -86,11 +86,11 @@ export function getDateDiff(dateStr) {
 
 //学习进度百分比格式化
 export const learntimeFormat = (learntime, totaltime, id) => {
-  let progressCache = localStorage.getItem('learntime-' + id)
-  let curTime = learntime
+  let progressCache = localStorage.getItem(id) 
+  let curTime = learntime 
   if (progressCache) {
     let learnJson = JSON.parse(progressCache)
-    curTime = learnJson.currentTime
+    curTime = learnJson.currentTime || learnJson.historyPlayPosition
   }
   if (!curTime || curTime <= 1) return '未收听'
   let percent = parseInt((curTime * 100) / totaltime)

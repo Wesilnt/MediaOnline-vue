@@ -1,13 +1,17 @@
 <template>
   <div class="singleset-list-conteiner">
-    <div v-for="item of list" :key="item.id" class="singleset-list">
+    <div>
       <singleset 
-      :courseid="courseid"
-      :item="item" 
-      :playing="item.id==playId" 
-      :columnType='columnType' 
-      :coursename='coursename' 
-      :useraccessstatus = 'useraccessstatus' />
+        v-for="item of list" 
+        class="singleset-list"
+        :key="item.id" 
+        :courseid="courseid"
+        :item="item" 
+        :playing="item.id==playId" 
+        :activeID='playId'
+        :columnType='columnType' 
+        :coursename='coursename' 
+        :useraccessstatus = 'useraccessstatus' />
     </div>
   </div>
 
@@ -27,6 +31,7 @@ export default {
 
 <style lang="scss" scoped>
 .singleset-list-conteiner {
+  margin:0 36px -2px;
   .singleset-list {
     display: flex;
     flex-direction: column;

@@ -2,7 +2,7 @@
     <div class="purchase-toolbar" v-show="toolsObject&&toolsObject.isShow">
         <div class="toolbar-audition" @click="clickAuditionBtn">
             <i class="qhht-icon audition-icon"></i>
-            <p class="under-text">{{serviceType == "1005"?'试看':'试听'}}</p>
+            <p class="under-text">{{serviceType == "onlineCourse"?'试看':'试听'}}</p>
         </div>
         <hr class="vertical-line"/>
         <div v-show="toolsObject&&toolsObject.originPrice" :disabled="isLoading" class="toolbar-price" :class="{'toolbar-price-active':toolsObject&&!toolsObject.collage&&!toolsObject.collect }"  @click="clickOriginPriceBtn">
@@ -21,7 +21,7 @@
                 <div>{{toolsObject&&toolsObject.collectText}}</div>
             </div>
         </div>
-        <Share :show="sharePageShow" :courseId="courseId" :columnType ="serviceType"  :posturl="'groupBuy'" @close="cancelSharePage"></Share>
+        <Share :show="sharePageShow" :courseId="courseId" :columnType ="serviceType"  :postType="'collage'" @close="cancelSharePage"></Share>
         <PhoneVerif :style="{'z-index':100}" v-if="isShowMobileDialog" @callback="bindIsShowMobileDialog(false)"></PhoneVerif>
     </div>
 
@@ -30,6 +30,7 @@
 <script>
 import Share from './share/Share'
 import PhoneVerif from './PhoneVerif'
+import {openVideoDetail, openAudioDetail } from '../utils/config'
 import {
   createNamespacedHelpers,
   mapState as rootState,
@@ -41,6 +42,7 @@ const {
   mapMutations,
   mapGetters
 } = createNamespacedHelpers('videoColumnDetailData/groupManagerData')
+
 export default {
   name: 'ToolsNavbar',
   data() {
@@ -53,7 +55,8 @@ export default {
       //点击原价购买按钮
       isClickOriginPriceBtn: false,
       //点击拼团按钮
-      isClickCollageBtn: false
+      isClickCollageBtn: false,
+      columnType:this.$route.params.columnType
     }
   },
   props: {
@@ -108,7 +111,8 @@ export default {
       if (newVal == true) {
         //原价购买完成跳转到单集详情页
         const lessonId = this.freeLessonList[0].id
-        this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
+        // this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
+         openVideoDetail(this,{ courseId:this.courseId, columnType:this.columnType, lessonId})
       }
     },
     userAccessStatus: function(value) {}
@@ -396,34 +400,37 @@ export default {
     gotoInfoPage(id) {
       switch (this.serviceType) {
         case '1005':
-          this.$router.push({
-            name: 'videoCourseDetail',
-            params: { lessonId: id }
-          })
+          // this.$router.push({
+          //   name: 'videoCourseDetail',
+          //   params: { lessonId: id }
+          // })
+          openVideoDetail(this,{courseId:this.courseId, columnType:this.serviceType, lessonId:id})
           break
         case 'FreeZone':
           break
         case '1003':
-          this.$router.push({
-            name: 'AudioPlay',
-            params: { id },
-            query: {
-              courseId: this.courseId,
-              columnType: this.serviceType,
-              courseName: this.courseName
-            }
-          })
+           openAudioDetail(this,{courseId:this.courseId, columnType:this.serviceType, lessonId:id})
+          // this.$router.push({
+          //   name: 'AudioPlay',
+          //   params: { id },
+          //   query: {
+          //     courseId: this.courseId,
+          //     columnType: this.serviceType,
+          //     courseName: this.courseName
+          //   }
+          // })
           break
         case '1007':
-          this.$router.push({
-            name: 'AudioPlay',
-            params: { id },
-            query: {
-              courseId: this.courseId,
-              columnType: this.serviceType,
-              courseName: this.courseName
-            }
-          })
+           openAudioDetail(this,{courseId:this.courseId, columnType:this.serviceType, lessonId:id})
+          // this.$router.push({
+          //   name: 'AudioPlay',
+          //   params: { id },
+          //   query: {
+          //     courseId: this.courseId,
+          //     columnType: this.serviceType,
+          //     courseName: this.courseName
+          //   }
+          // })
           break
       }
     }

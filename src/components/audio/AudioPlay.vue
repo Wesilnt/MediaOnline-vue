@@ -69,7 +69,7 @@
       </div>
     </van-popup>
     <!-- 分享框 -->
-    <share-pop :show="showShare" @close="closeShare" :courseId="courseId" :columnType ="columnType"/>
+    <SharePop :show="showShare" @close="closeShare" :courseId="courseId" :columnType ="columnType"/>
      <!--loading-->
      <div class="loading-container" v-show="isBuffering">
         <van-loading color="white" />
@@ -78,13 +78,13 @@
 </div>
 
 </template>
-<script>
-import { courseType } from '../../utils/config'
+<script> 
+import { courseType, openAudioDetail } from '../../utils/config'
 import SharePop from '../share/Share.vue'
 import {createNamespacedHelpers,mapState as rootState, mapActions as rootActions} from 'vuex'
 const {mapState,mapMutations, mapActions,mapGetters} = createNamespacedHelpers('audiotaskData/audioData')
 export default {
-  components: { 'share-pop': SharePop },
+  components: { SharePop },
   data() {
     return {
       singleIcon:require('../../assets/images/audio_play_single.png'),
@@ -113,6 +113,7 @@ export default {
       singleSetList:state=>state.singleSetList,
       pageLoading:state=>state.pageLoading,
       finished:state=>state.finished,
+      columnId:state=>state.columnId,
     }),
     ...mapGetters([
       'isLoading',
@@ -123,11 +124,11 @@ export default {
       'maxTime',
       'playMode',
       'status',
-      'playing'
+      'playing',
     ])
   },
   created() { 
-    this.bindCourseName(this.courseName) 
+    // this.bindCourseName(this.courseName) 
     this.playAudio({ lessonId: this.lessonId, columnType: this.columnType }) 
     this.setShareInfo({courseId:this.courseId,columnType: this.columnType})
   },  
@@ -290,11 +291,17 @@ export default {
     //列表Item点击事件
     onItemClick(audio) { 
       this.popupVisible = false
-      this.$router.replace({
-        name: 'AudioPlay',
-        params: { id: audio.id },
-        query: { courseId: this.courseId,columnType: this.columnType }
-      })
+      this.$router.replace({ name: 'AudioPlay', params: {
+                                                        courseId : this.courseId,
+                                                        columnType : this.columnType ,
+                                                        lessonId :audio.id
+                                                      }
+                        })
+      // this.$router.replace({
+      //   name: 'AudioPlay',
+      //   params: { id: audio.id },
+      //   query: { courseId: this.courseId,columnType: this.columnType }
+      // })
       this.playAudio({ lessonId: audio.id, columnType: this.columnType })
     }
   },
