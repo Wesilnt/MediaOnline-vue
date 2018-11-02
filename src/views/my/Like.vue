@@ -71,9 +71,9 @@
     </section>
 </template>
 
-<script>
+<script> 
   import {createNamespacedHelpers} from 'vuex'
-  import { courseType,getColumnType} from "../../utils/config";
+  import { courseType,getColumnType,openVideoDetail,openAudioDetail} from "../../utils/config";
   import {Vue} from 'vue'
 
   const {mapState, mapMutations,mapActions} = createNamespacedHelpers('myLikeData')
@@ -104,26 +104,29 @@
       ...mapActions(['queryList', 'delMyLike','batchDelMyLike']),
       toPlay:function (item) {
         console.log('Like-CourseId:', item.courseId)
+        let columnType = getColumnType(item.courseType)
         if (item.courseType === '1003' || item.courseType === '1007' ) {
-          this.$router.push({
-            name: 'AudioPlay',
-            params: { 
-              columnType: getColumnType(item.courseType),
-              courseId: 0,
-              lessonId: item.id 
-            },
-            query: {courseName: item.courseName }
-          }) 
+          openAudioDetail(this,{courseId:0, columnType, lessonId: item.id})
+          // this.$router.push({
+          //   name: 'AudioPlay',
+          //   params: { 
+          //     columnType: getColumnType(item.courseType),
+          //     courseId: 0,
+          //     lessonId: item.id 
+          //   },
+          //   query: {courseName: item.courseName }
+          // }) 
         } else if (item.courseType === '1005' ) {
           // this.$router.push({ name: 'videoCourseDetail', params: { lessonId: item.id} })
-          this.$router.push({
-            name: 'videoCourseDetail',
-            params:{
-              courseId : item.courseId,
-              columnType: getColumnType(this.type),
-              lessonId: item.id
-            }
-          })
+          openVideoDetail(this,{ courseId:0, columnType, lessonId:item.id})
+          // this.$router.push({
+          //   name: 'videoCourseDetail',
+          //   params:{
+          //     courseId : item.courseId,
+          //     columnType: getColumnType(this.type),
+          //     lessonId: item.id
+          //   }
+          // })
         }
       },
       handleMenu: function () {
@@ -220,8 +223,8 @@
 <style scoped lang="less">
     @active: #ffa32f;
     .like {
-        &-container {
-        }
+        // &-container {
+        // }
         &-header-container {
             display: flex;
             flex-direction: column;

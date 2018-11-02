@@ -62,6 +62,7 @@ import CommentItem from '../../../components/comment/CommentItem.vue'
 import ImagePreview from '../../../components/ImagePreview.vue'
 
 import { createNamespacedHelpers } from 'vuex'
+  import {openVideoDetail,openAudioDetail} from "../../../utils/config";
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
   'columnData/groupContentData'
 )
@@ -117,25 +118,28 @@ export default {
       this.$router.push(`/videoCourseCmts/${this.courseId}`)
     },
     toDetail(lessonId) {
+      let columnType = this.columnType
       if (this.columnType === 'onlineVision')
-        this.$router.push({
-          name: 'AudioPlay',
-          params: {
-            courseId: this.courseId,
-            columnType: this.columnType,
-            lessonId
-          },
-          query: { courseName: this.columnDetail.name }
-        })
+        openAudioDetail(this,{courseId:this.courseId, columnType, lessonId})
+        // this.$router.push({
+        //   name: 'AudioPlay',
+        //   params: {
+        //     courseId: this.courseId,
+        //     columnType: this.columnType,
+        //     lessonId
+        //   },
+        //   query: { courseName: this.columnDetail.name }
+        // })
       if (this.columnType === 'onlineCourse')
-        this.$router.push({
-          name: 'videoCourseDetail',
-          params: {
-            courseId: this.courseId,
-            columnType: this.columnType,
-            lessonId
-          }
-        })
+        openVideoDetail(this,{ courseId:this.courseId, columnType, lessonId})
+        // this.$router.push({
+        //   name: 'videoCourseDetail',
+        //   params: {
+        //     courseId: this.courseId,
+        //     columnType: this.columnType,
+        //     lessonId
+        //   }
+        // })
     }
   },
   created() {

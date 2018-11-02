@@ -15,11 +15,11 @@ export default {
     currentPage: 1,           //音频列表分页-页码
     pageSize: 10,             //分页-记录条数
     commentList: [],          //评论列表
-    draftContent: { manuscript: '' },
-    courseId:-1,
+    draftContent: { manuscript: '' }, 
     finished:false,
     pageLoading:false,
-    clickLike:false
+    clickLike:false,
+    columnId:-1
   },
   mutations: {
     bindAudioDetail(state, audio) {
@@ -34,8 +34,7 @@ export default {
       state.isLike = state.audioDetail.isLike
     },
     bindSingleSetList(state, {currentPage,courseId,finished,res}) {
-      state.currentPage = currentPage
-      state.courseId = courseId
+      state.currentPage = currentPage 
       state.finished = finished
       state.singleSetList = 1==currentPage?res.result: state.singleSetList.concat(res.result)
     },
@@ -43,14 +42,15 @@ export default {
       state.commentList = res.result
     },
     bindColumnId(state, columnId) {
-      state.columnId = columnId
+      state.columnId = columnId 
+      state.singleSetList = []
     },
     bindDraftContnet(state, res) {
       state.draftContent = res
     },
-    clearData(state, res) {
-      state.courseId = -1
-      state.columnId = -1
+    clearData(state, res) { 
+      state.columnId = -1 
+      state.singleSetList = []
     },
     toggleLoading(state,isLoading){
       state.pageLoading = isLoading
@@ -65,7 +65,7 @@ export default {
           if(!audio)  return
           commit('bindAudioDetail', audio)                                          //绑定音频数据
           let courseId = audio.courseId
-          if(state.courseId === courseId) return 
+          if(state.columnId === courseId) return 
           let columnType = params.columnType  
           commit('bindColumnId',courseId)
           dispatch('setShareInfo', { courseId, columnType })                      //设置分享信息 
@@ -126,7 +126,7 @@ export default {
       commit('toggleLoading',true) 
       let params = {pageSize: state.pageSize}
       params.currentPage = currentPage||state.currentPage + 1
-      params.courseId = courseId || state.courseId
+      params.courseId = courseId || state.columnId
       const res = await getSingleSetList(params)
       console.log("单集列表:",res)
       let finished = state.singleSetList.length + res.result.length >= res.totalCount
@@ -142,7 +142,6 @@ export default {
     //设置分享信息
     async setShareInfo({commit,dispatch,rootState},{courseId,columnType}){    
       if(courseId <= 0) return
-      commit('bindColumnId',courseId) 
       const course = await dispatch('getColumnDetail',{courseId,columnType,useCache:true},{root:true}) 
       if(!course) return
       let shareData = {

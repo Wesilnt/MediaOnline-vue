@@ -25,6 +25,7 @@
   </div>
 </template>
 <script>
+import { openAudioDetail } from '../../utils/config'
 import { createNamespacedHelpers,mapState as rootState } from 'vuex'
 const {
   mapState,
@@ -112,15 +113,16 @@ export default {
       e.preventDefault()
     },
     goPlaying(){ 
-      this.$router.push({
-        name: 'AudioPlay',
-        params: { 
-          columnType:this.columnType,
-          courseId: this.courseId,
-          lessonId: this.audioId 
-        },
-        query: {courseName: this.courseName }
-      })
+      openAudioDetail(this,{courseId:this.courseId, columnType:this.columnType, lessonId:this.audioId})
+      // this.$router.push({
+      //   name: 'AudioPlay',
+      //   params: { 
+      //     columnType:this.columnType,
+      //     courseId: this.courseId,
+      //     lessonId: this.audioId 
+      //   },
+      //   query: {courseName: this.courseName }
+      // })
     }
   },
   mounted() {

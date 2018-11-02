@@ -4,7 +4,7 @@ const AudioDraft = () => import(/* webpackChunkName: "index" */ '../components/a
 export default [
   {
     // path: '/audio/audioplay/:id',
-    path: '/audio/:columnType/:courseId/:lessonId/audiodetail',
+    path: '/audio/:columnType/:courseId/:lessonId',
     name: 'AudioPlay',
     component: AudioPlay,
     meta: {

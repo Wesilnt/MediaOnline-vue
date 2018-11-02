@@ -94,7 +94,7 @@ export default {
   mounted() {
     setTimeout(() => {
       const { content, contentChild } = this.$refs
-      if(!content.clientHeight) return
+      if(!content || !content.clientHeight) return
       let frameHeight = !content.clientHeight || content.clientHeight <= 0 ? content.scrollHeight : content.clientHeight
       let contentHeight =
         contentChild.offsetHeight <= 0

@@ -109,7 +109,7 @@ export default {
 
     let scale = 1
     if(bodyHeight < this.canvasH) scale = bodyHeight /  this.canvasH 
-    saveimage.style.width = this.canvasW* scale + 'px'
+    saveimage.style.width = this.canvasW * scale + 'px'
   },
   methods: { 
     ...rootActions(['getUserInfo']),

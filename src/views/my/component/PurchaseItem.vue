@@ -18,30 +18,36 @@
 
 </template>
 <script>
-import { getColumnType,courseType } from '../../../utils/config'
+import { getColumnType,courseType,openVideoDetail,openAudioDetail } from '../../../utils/config'
 export default {
   name: 'PurchaseItem',
   props: ['type', 'title', 'total', 'list', 'grid'],
   methods: {
     onItemClick() {
-      if (this.type === '1003' || this.type === '1007') {
-        this.$router.push({
-          path: '/home/visionDetail/' + this.purchase - item.id 
-        })
-      } else {
-        // this.$router.push({
-        //   name: 'videoCourseDetail',
-        //   params: { lessonId: this.purchase - item.id }
-        // })
-        this.$router.push({
-          name: 'videoCourseDetail',
-          params:{
-            courseId : item.courseId,
-            columnType: getColumnType(this.type),
-            lessonId: this.purchase - item.id
-          }
-       })
-      }
+      this.$router.push({
+        name: 'ColumnDetail',
+        params: { couseId: item.id ,columnType:getColumnType(this.type)}
+      })
+
+      // if (this.type === '1003' || this.type === '1007') {
+      //   this.$router.push({
+      //     path: '/home/visionDetail/' + this.purchase - item.id 
+      //   })
+      // } else {
+      //   this.$router.push({
+      //     name: 'ColumnDetail',
+      //     params: { couseId: item.id ,columnType:getColumnType(this.type)}
+      //   })
+        // openVideoDetail(this,{ courseId:item.courseId, columnType:getColumnType(this.type), lessonId:this.purchase - item.id})
+      //   this.$router.push({
+      //     name: 'videoCourseDetail',
+      //     params:{
+      //       courseId : item.courseId,
+      //       columnType: getColumnType(this.type),
+      //       lessonId: this.purchase - item.id
+      //     }
+      //  })
+      // }
     },
     routerToDetail({ id }) {
       // this.$router.push({ path: `/${courseType[this.type]}${id}` })

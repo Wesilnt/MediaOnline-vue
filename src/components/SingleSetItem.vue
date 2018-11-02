@@ -1,74 +1,66 @@
 <template> 
-    <div class="singleset-item-container" tag="div" @click="onItemClick(item)">
+    <li class="singleset-item-container" tag="div" @click="onItemClick(item)">
       <div class="item-content">
-        <div :class="{'icon-playing':playing}" class="item-icon" v-lazy:background-image="`${item.coverPic}?imageView2/1/w/100/h/100/format/jpg/q/50`">
-          <img :src="playing?require('../assets/images/icon_playing_shadow.png'):require('../assets/images/icon_pause_shadow.png')">
+        <div :class="{'icon-playing':playing}" class="item-icon" 
+        v-lazy:background-image="`${item.coverPic}?imageView2/1/w/100/h/100/format/jpg/q/50`">
+          <!-- <img :src="playing?require('../assets/images/icon_playing_shadow.png'):require('../assets/images/icon_pause_shadow.png')"> -->
+          <i class="qhht-icon playItem-item-badge" :class="{'playItem-item-badge-active':activeID === item.id}"></i>
         </div>
         <div class="item-describe">
-          <h3 :class="{'item-playing':playing}">
-            {{item.title}}
-          </h3>
-          <h4>
-            {{item.subTitle}}
-          </h4>
+          <h3 :class="{'item-playing':playing}">{{item.title}}</h3>
+          <h4> {{item.subTitle}}</h4>
           <div class="bottom-container">
-            <span v-if="item.isFree">试听</span> 
-            <p>{{item.totalTime | formatDuring}} | {{item.learnTime | learntimeFormat(item.totalTime,item.id)}}</p> 
+            <span v-if="item.isFree">{{this.columnType === 'onlineCourse'? '试看':'试听'}}</span> 
+            <p>{{item.totalTime | formatDuring}} | {{item.learnTime | learntimeFormat(item.totalTime, item.id)}}</p> 
           </div>
         </div>
       </div>
-    </div> 
+    </li> 
 </template>
 
 <script>
+import {openVideoDetail,openAudioDetail} from '../utils/config'
 export default {
+  data(){
+    return{
+      columnType : this.$route.params.columnType,
+      courseId : this.$route.params.courseId,
+    }
+  },
   //singleset 单集  playing是否正在播放
-  props: ['item', 'playing','columnType','courseid','coursename','useraccessstatus'],
+  props: ['item','isEmit', 'playing','activeID', 'coursename','useraccessstatus'],
   methods: {
     onItemClick(item) {
-      let unLock = false
-      switch(this.useraccessstatus){
-        case -3://拼团失败
-        break
-        case 0:
-        break
-        case 1001://单购成功
-          unLock = true
-        break
-        case 1003://拼团成功
-         unLock = true
-        break
-        case 1005://拼团中
-        break
-        case 1007://集赞成功未领取
-        break
-        case 1008://集赞成功已领取
-         unLock = true
-        break
-        case 1009://集赞中
-        break
+      if(this.isEmit)
+      {
+      this.$emit('jumpEvent', item.id)
+      return
       }
-      if (item.isFree || unLock) {
+      //单购成功、拼团成功、集赞成功已领取
+      let unLock =1001 === this.useraccessstatus ||  1003 === this.useraccessstatus || 1008 === this.useraccessstatus
+      if (item.isFree || unLock) { 
         if(this.columnType == 'onlineCourse'){
+          openVideoDetail(this,{ courseId : this.courseId, columnType:this.columnType, lessonId:item.id})
           // this.$router.push({path: `/videoCourseDetail/${item.id}`})
-          this.$router.push({
-               name: 'videoCourseDetail',
-               params:{
-                 courseId : this. courseid,
-                 columnType:this.columnType,
-                 lessonId:item.id
-               }
-            })
+          // this.$router.push({
+          //      name: 'videoCourseDetail',
+          //      params:{
+          //        courseId : this. courseid,
+          //        columnType:this.columnType,
+          //        lessonId:item.id
+          //      }
+          //   })
         }else{
-          this.$router.push({
-            name: 'AudioPlay',
-            params: { 
-              courseId: this.courseid,
-              columnType: this.columnType,
-              lessonId: item.id,
-            },  
-            query:{courseName:this.coursename}
-          })
+          openAudioDetail(this,{ courseId : this.courseId, columnType:this.columnType, lessonId:item.id})
+          // this.$router.push({
+          //   name: 'AudioPlay',
+          //   params: { 
+          //     courseId: this.courseid,
+          //     columnType: this.columnType,
+          //     lessonId: item.id,
+          //   },  
+          //   query:{courseName:this.coursename}
+          // })
         }
       } else {
         this.$toast.fail('您还未购买该专栏')
@@ -78,12 +70,17 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+li+li{
+  // border-bottom:none;
+  border-top: 2px solid #F1F1F1;
+}
 .singleset-item-container {
   display: block;
   flex-direction: column;
   justify-content: center;
-  border-bottom: 2px solid #F1F1F1;
-  margin: 0 36px -2px;
+  // margin: 0 36px -2px;
+  // margin: 0 0px -2px;
+
 
   .item-icon {
     align-self: center;
@@ -92,17 +89,29 @@ export default {
     // padding: 28px 31px 28px 35px;
     box-sizing: border-box;
     background-color: #fde3e3;
+    background-position: center;
+    background-repeat: no-repeat;
     background-size: 96px;
     display: flex;
     border-radius: 96px;
   }
-  .icon-playing {
-    padding: 31px 28px 31px 29px;
-  }
+  // .icon-playing {
+    // padding: 31px 28px 31px 29px;
+  // }
   .item-icon img {
     margin: auto 31px auto 35px;
     width: 28px;
     height: 40px;
+  }
+  .playItem-item-badge {
+    margin: auto 31px auto 35px;
+    width: 28px;
+    height: 40px;
+    background-image: url('../assets/images/icon_pause_shadow.png');
+    background-size: 36px;
+    &.playItem-item-badge-active { 
+      background-image: url('../assets/images/icon_playing_shadow.png');
+    }
   }
   .icon-playing img {
     width: 38px;

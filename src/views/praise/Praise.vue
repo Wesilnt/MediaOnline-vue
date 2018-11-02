@@ -68,8 +68,8 @@ export default {
   name: 'Praise',
   data() {
     return {
-      columnType: this.$route.params.columnType, //专栏类型 freezone(1001) 免费专区  onlineCourse(1005) 在线课堂 onlineVision(1003) 在线视野  reading(1007) 读书会 
       interval: null,
+      columnType: this.$route.params.columnType, //专栏类型 freezone(1001) 免费专区  onlineCourse(1005) 在线课堂 onlineVision(1003) 在线视野  reading(1007) 读书会 
       courseId: this.$route.params.courseId,
       collectLikeId: this.$route.params.collectLikeId,
       showShare: false,               //显示分享框

@@ -38,7 +38,15 @@
                 <div  ref="tryCourse" class="video-detail-sction-title">
                     <h4>目录</h4>
                 </div>
-                <playlist v-for="(item,index) of lessonList" :key="item.id" :iteminfo="item" :activeID="activeID" :lastindex="index == (lessonList.length - 1)" @jumpEvent="beActive"/>
+                <!-- <playlist v-for="(item,index) of lessonList" :key="item.id" :iteminfo="item" :activeID="activeID" :lastindex="index == (lessonList.length - 1)" @jumpEvent="beActive"/> -->
+                  <SingleSetItem v-for="item of lessonList" 
+                    :key="item.id" 
+                    :item="item"  
+                    :courseid="courseId"
+                    :activeID="activeID"
+                    :columnType="columnType" 
+                    :isEmit='1'
+                    @jumpEvent="beActive"/>
             </div>
             <!-- 留言 -->
             <div class="video-detail-base" id="leaveMessage">
@@ -77,6 +85,7 @@
 import CommentList from '../../components/comment/CommentList.vue'
 import ScrollNavBar from '../../components/ScrollNavBar'
 import CourseIntroduce from '../../components/CourseIntroduce.vue'
+import SingleSetItem from '../../components/SingleSetItem.vue'
 import playlist from './components/playlist.vue'
 import CommentItem from '../../components/comment/CommentItem.vue'
 import videoComment from '../../components/video-comment.vue'
@@ -95,6 +104,7 @@ const {
 export default {
   name: 'VideoCourseDetail',
   components: {
+    SingleSetItem,
     CourseIntroduce,
     playlist,
     'video-comment': videoComment,
