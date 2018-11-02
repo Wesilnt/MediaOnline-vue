@@ -1,5 +1,5 @@
 <template>
-  <div class="mobile-validate">
+  <div class="mobile-validate"  @click.self="closeWindow">
     <span class="mobile-close" @click="closeWindow"></span>
     <div class="validate-container">
       <div class="number-container">
