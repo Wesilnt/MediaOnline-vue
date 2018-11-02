@@ -15,7 +15,7 @@
          ? 'url('+require('../../assets/images/love_collect.png')+')'
          : 'url('+require('../../assets/images/audio_love_normal.png')+')'}">
         </div>
-        <div v-if="'1007'!=columnType" class="tab-container-draft" @click="onDraft"/>
+        <div v-if="'reading'!==columnType" class="tab-container-draft" @click="onDraft"/>
         <div  class="tab-container-comment" @click="toComment">
           <span>{{audio.commentCount}}</span>
         </div>
