@@ -129,10 +129,7 @@ export default {
     },
     //更新本地音频进度
     updateListenTime(state, params){
-      let localCache = localStorage.getItem(params.lessonId) 
-      console.log('localStorage:',localStorage)
-      console.log('lessonId:',params.lessonId)
-      console.log('localCache:',localCache)
+      let localCache = localStorage.getItem(params.lessonId)  
       let listenJson = localCache? JSON.parse(localCache):{}
       if(listenJson){
         listenJson.uploaded = 'yes' 

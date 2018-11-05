@@ -49,6 +49,7 @@ export default {
       state.draftContent = res
     },
     clearData(state, res) { 
+      state.pageLoading = false
       state.columnId = -1 
       state.singleSetList = []
     },
@@ -123,6 +124,7 @@ export default {
     },
     //音频单集列表
     async getSingleSetList({ commit ,state}, {courseId,currentPage}) {
+      if(state.isLoading) return
       commit('toggleLoading',true)
       let params = {pageSize: state.pageSize}
       params.currentPage = currentPage||state.currentPage + 1
@@ -142,7 +144,7 @@ export default {
     //设置分享信息
     async setShareInfo({commit,dispatch,rootState},{courseId,columnType}){
       if(courseId <= 0) return
-      commit('bindColumnId',courseId)
+      // commit('bindColumnId',courseId)
       const course = await dispatch('getColumnDetail',{courseId,columnType,useCache:true},{root:true})
       if(!course) return
       let shareData = {
