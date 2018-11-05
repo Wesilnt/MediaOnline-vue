@@ -14,7 +14,13 @@ export default {
   namespaced: true,
   name: 'payment',
   state: () => ({
-    groupBuyDetail: {}
+    masterId: '',
+    starterUid: '',
+    userList: [],
+    userAccessStatusFromGroup: 0,
+    createTime: null,
+    alreadyCount: 0,
+    status: 0
   }),
   mutations: {
     saveState(state, payload) {
@@ -25,9 +31,27 @@ export default {
     async getGroupBuyDetail({ commit }, payload) {
       const response = await getGroupBuyDetail(payload)
       Object.entries(response).map(item => {
-        console.log(`%c ${item.join(': ')}`, 'color: #009688')
+        // console.log(`%c ${item}`, 'color: #009688')
+        console.log(item)
       })
-      commit('saveState', { groupBuyDetail: response })
+      const {
+        userId: masterId,
+        starterUid,
+        userList,
+        userAccessStatusFromGroup,
+        createTime,
+        alreadyCount,
+        status
+      } = response
+      commit('saveState', {
+        masterId,
+        starterUid,
+        userList,
+        userAccessStatusFromGroup,
+        createTime,
+        alreadyCount,
+        status
+      })
     }
   }
 }

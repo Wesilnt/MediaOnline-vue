@@ -5,92 +5,32 @@ import {
   mapActions as rootActions
 } from 'vuex'
 const {
-  // mapState,
-  mapActions,
-  mapGetters
+  mapState,
+  mapActions
+  // mapGetters
 } = createNamespacedHelpers('columnData/payment')
-const viewType={
-    'owner':31000,// 发起人
-    'partner':31001,// 此拼团参与人
-    'passer':31002,// 非参与人
+const identityType = {
+  OWNER: 31000, // 发起人
+  PARTNER: 31001, // 此拼团参与人
+  PASSER: 31002, // 非参与人 拼团未满
+  PASSERFULL: 31003 // 非参与人 拼团已满
 }
 
-const userAccessStatusType={//完全是自己和这个专栏的状态
-    /*
-    REFUND_GROUPBUY("-3","拼团失败"),
-    REFUND_SINGLED("-1","单购退款"),
-    NO("0","没有购买、没有集赞行为"),
-    SINGLED("1001","单购成功"),
-    GROUPED("1003","拼团成功"),
-    GROUPING("1005","拼团中"),
-    GROUPING_OVERTIME("1006","拼团中但是已超时，等待系统处理"),
-    COLLECTED("1007","集赞成功未领取"),
-    COLLECTGET("1008","集赞成功并领取"),
-    COLLECTING("1009","集赞中");
-    */
-    fail:-3,
-    refund:-1,
-    normal:0,
+const userAccessStatusType = {
+  // 完全是自己和这个专栏的状态
+  GROUPBUY_FAIL: -3,
+  REFUND_SINGLED: -1,
+  NONE: 0,
 
-    bought:1001,
+  SINGLED: 1001,
 
-    grouped:1003,
-    grouping:1005,
-    groupOvertime: 1006,
+  GROUPED: 1003,
+  GROUPING: 1005,
+  GROUPING_OVERTIME: 1006, //拼团中但是已超时，等待系统处理
 
-    collectSuccing:1007,
-    collectSucced:1008,
-    collecting:1009,
-}
-const groupBuyTextType={
-    2001:  {txt:'我要学习'},
-    20020: {txt:'邀请好友拼团'},
-    20021: {txt:'邀请好友集赞'},
-    20022: {txt:'帮助好友分享拼团'},
-    20030: {txt:'我要开团'},
-    20031:  {txt:'拼团失败，重新开团'},
-    20032: {txt:'等待开团成功',disable:true},
-    2004: {txt:'参与拼团'},
-    2005: {txt:'领取专栏'},
-    2006: {txt:'拼团超时，请等待系统处理',disable:true},
-    2007: {txt:'当前拼团已满'},
-    2008: {txt:'您已有其他状态，不可参与当前拼团'},
-}
-const  paymentShowText ={
-    // 发起人
-    [`${viewType.owner},${userAccessStatusType.fail}`] : groupBuyTextType[20031],
-    [`${viewType.owner},${userAccessStatusType.refund}`] :null,
-    [`${viewType.owner},${userAccessStatusType.normal}`] : null,
-    [`${viewType.owner},${userAccessStatusType.bought}`] : {hide:true},
-    [`${viewType.owner},${userAccessStatusType.grouped}`] : {hide:true},
-    [`${viewType.owner},${userAccessStatusType.grouping}`] : groupBuyTextType[20020],
-    [`${viewType.owner},${userAccessStatusType.groupOvertime}`] : groupBuyTextType[2006],
-    [`${viewType.owner},${userAccessStatusType.collectSuccing}`] : groupBuyTextType[2005],
-    [`${viewType.owner},${userAccessStatusType.collectSucced}`] : {hide:true},
-    [`${viewType.owner},${userAccessStatusType.collecting}`] : groupBuyTextType[20021],
-    // 参与人与非参与人
-    // 参与人
-    [`${viewType.partner},${userAccessStatusType.fail}`]: { txt: groupBuyTextType[20031] },
-    [`${viewType.partner},${userAccessStatusType.refund}`]:  { txt: groupBuyTextType[20032] },
-    [`${viewType.partner},${userAccessStatusType.normal}`]: { txt: groupBuyTextType[20032] },
-    [`${viewType.partner},${userAccessStatusType.bought}`]: { hide: true },
-    [`${viewType.partner},${userAccessStatusType.grouped}`]: { hide: true },
-    [`${viewType.partner},${userAccessStatusType.grouping}`]: { txt: groupBuyTextType[20032] },
-    [`${viewType.partner},${userAccessStatusType.groupOvertime}`]: groupBuyTextType[2006],
-    [`${viewType.partner},${userAccessStatusType.collectSuccing}`]: { txt: groupBuyTextType[2005] },
-    [`${viewType.partner},${userAccessStatusType.collectSucced}`]: { hide: true },
-    [`${viewType.partner},${userAccessStatusType.collecting}`]: { txt: groupBuyTextType[20021] },
-    // 非参与人
-    [`${viewType.passer},${userAccessStatusType.fail}`] : {txt:groupBuyTextType[20022]},
-    [`${viewType.passer},${userAccessStatusType.refund}`] :{txt:groupBuyTextType[2004]},
-    [`${viewType.passer},${userAccessStatusType.normal}`] : {txt:groupBuyTextType[20030]},
-    [`${viewType.passer},${userAccessStatusType.bought}`] : {hide:true},
-    [`${viewType.passer},${userAccessStatusType.grouped}`] : {hide:true},
-    [`${viewType.passer},${userAccessStatusType.grouping}`] : {txt:groupBuyTextType[20032]},
-    [`${viewType.passer},${userAccessStatusType.groupOvertime}`] : groupBuyTextType[2006],
-    [`${viewType.passer},${userAccessStatusType.collectSuccing}`] : {txt:groupBuyTextType[2008]},
-    [`${viewType.passer},${userAccessStatusType.collectSucced}`] : {txt:groupBuyTextType[2008]},
-    [`${viewType.passer},${userAccessStatusType.collecting}`] : {txt:groupBuyTextType[2008]},
+  COLLECTED: 1007, //集赞成功未领取
+  COLLECTGET: 1008, //集赞成功并领取
+  COLLECTING: 1009 //集赞中
 }
 
 export default {
@@ -106,10 +46,27 @@ export default {
   data() {
     const { groupBuyId } = this.$route.query
     const { columnType, courseId } = this.$route.params
+    const groupBuyTextType = {
+      // 点击事件
+      20020: { txt: '邀请好友拼团', hidePrice: true }, // 弹出拼团界面
+      20021: { txt: '邀请好友集赞', hidePrice: true }, // 弹出集赞界面
+      20022: { txt: '您已拥有此专栏，帮助好友分享', hidePrice: true }, // 弹出拼团界面
+      20023: { txt: '您正在参与其他拼团,帮助好友分享', hidePrice: true }, // 弹出拼团界面
+      20024: { txt: '正在处理您的其他拼团,帮助好友分享', hidePrice: true }, // 弹出拼团界面
+      20031: { txt: '拼团失败，重新开团' }, // 支付事件->弹出拼团界面
+      20032: { txt: '参与拼团失败，请等待退款' }, // 返回主页
+      20033: { txt: '等待开团成功', hidePrice: true }, // 弹出拼团界面
+      2004: { txt: '参与拼团' }, // 支付事件->弹出拼团界面
+      2005: { txt: '您已集赞成功，领取专栏' }, //领取专栏
+      2006: { txt: '拼团超时，请等待系统处理' }, // 返回主页
+      2007: { txt: '当前拼团已满,返回主页' }, // 返回主页
+      2008: { txt: '您已参与集赞,帮助好友分享' } // 弹出拼团界面
+    }
     return {
       groupBuyId,
       columnType,
       courseId,
+      master: identityType.OWNER,
       userAccessStatus: 0,
       collectLikeId: null,
       price: null,
@@ -117,23 +74,127 @@ export default {
       groupBuyText: 0,
       groupBuyTemplateId: '',
       collectLikeTemplateId: '',
-      freeLesson: false
+      freeLesson: false,
+      paymentShowText: {
+        // 发起人
+        [`${identityType.OWNER}_${
+          userAccessStatusType.GROUPBUY_FAIL
+        }`]: groupBuyTextType[20031],
+        [`${identityType.OWNER}_${userAccessStatusType.REFUND_SINGLED}`]: null,
+        [`${identityType.OWNER}_${userAccessStatusType.NONE}`]: null,
+        [`${identityType.OWNER}_${userAccessStatusType.SINGLED}`]: {
+          hide: true
+        },
+        [`${identityType.OWNER}_${userAccessStatusType.GROUPED}`]: {
+          hide: true
+        },
+        [`${identityType.OWNER}_${
+          userAccessStatusType.GROUPING
+        }`]: groupBuyTextType[20020],
+        [`${identityType.OWNER}_${
+          userAccessStatusType.GROUPING_OVERTIME
+        }`]: groupBuyTextType[2006],
+        [`${identityType.OWNER}_${
+          userAccessStatusType.COLLECTED
+        }`]: groupBuyTextType[2005],
+        [`${identityType.OWNER}_${userAccessStatusType.COLLECTGET}`]: {
+          hide: true
+        },
+        [`${identityType.OWNER}_${
+          userAccessStatusType.COLLECTING
+        }`]: groupBuyTextType[20021],
+        // 参与人与非参与人
+        // 参与人
+        [`${identityType.PARTNER}_${
+          userAccessStatusType.GROUPBUY_FAIL
+        }`]: groupBuyTextType[20032],
+        [`${identityType.PARTNER}_${
+          userAccessStatusType.REFUND_SINGLED
+        }`]: groupBuyTextType[2004],
+        [`${identityType.PARTNER}_${
+          userAccessStatusType.NONE
+        }`]: groupBuyTextType[2004],
+        [`${identityType.PARTNER}_${
+          userAccessStatusType.SINGLED
+        }`]: groupBuyTextType[20022],
+        [`${identityType.PARTNER}_${
+          userAccessStatusType.GROUPED
+        }`]: groupBuyTextType[20022],
+        [`${identityType.PARTNER}_${
+          userAccessStatusType.GROUPING
+        }`]: groupBuyTextType[20033],
+        [`${identityType.PARTNER}_${
+          userAccessStatusType.GROUPING_OVERTIME
+        }`]: groupBuyTextType[2006],
+        [`${identityType.PARTNER}_${
+          userAccessStatusType.COLLECTED
+        }`]: groupBuyTextType[2008],
+        [`${identityType.PARTNER}_${
+          userAccessStatusType.COLLECTGET
+        }`]: groupBuyTextType[2008],
+        [`${identityType.PARTNER}_${
+          userAccessStatusType.COLLECTING
+        }`]: groupBuyTextType[2008],
+        // 非参与人 拼团未满
+        [`${identityType.PASSER}_${
+          userAccessStatusType.GROUPBUY_FAIL
+        }`]: groupBuyTextType[2004],
+        [`${identityType.PASSER}_${
+          userAccessStatusType.REFUND_SINGLED
+        }`]: groupBuyTextType[2004],
+        [`${identityType.PASSER}_${
+          userAccessStatusType.NONE
+        }`]: groupBuyTextType[2004],
+        [`${identityType.PASSER}_${
+          userAccessStatusType.SINGLED
+        }`]: groupBuyTextType[20022],
+        [`${identityType.PASSER}_${
+          userAccessStatusType.GROUPED
+        }`]: groupBuyTextType[20022],
+        [`${identityType.PASSER}_${
+          userAccessStatusType.GROUPING
+        }`]: groupBuyTextType[20023],
+        [`${identityType.PASSER}_${
+          userAccessStatusType.GROUPING_OVERTIME
+        }`]: groupBuyTextType[20024],
+        [`${identityType.PASSER}_${
+          userAccessStatusType.COLLECTED
+        }`]: groupBuyTextType[2008],
+        [`${identityType.PASSER}_${
+          userAccessStatusType.COLLECTGET
+        }`]: groupBuyTextType[2008],
+        [`${identityType.PASSER}_${
+          userAccessStatusType.COLLECTING
+        }`]: groupBuyTextType[2008],
+        [`${identityType.PASSERFULL}_`]: groupBuyTextType[2007]
+      }
     }
   },
   computed: {
-    // ...mapGetters(['buyCount'])
+    ...mapState([
+      'masterId',
+      'starterUid',
+      'userList',
+      'userAccessStatusFromGroup',
+      'createTime',
+      'alreadyCount',
+      'status'
+    ])
   },
-  created() {
-    const { groupBuyId } = this
-    if (groupBuyId) {
-      this.getGroupBuyDetail({ groupBuyId })
-    }
-    this.mapColumnDetailToData()
-    this.getGroupBuyDetail({ groupBuyId: '89013551171108864' }) //TODO 测试
+  async created() {
+    await this.mapColumnDetailToPayment()
+    await this.mapGroupBuyDetailToPayment()
+
+    console.log(
+      this.paymentShowText[
+        `${this.master}_${this.userAccessStatusFromGroup ||
+          this.userAccessStatus}`
+      ]
+    )
   },
   methods: {
     ...mapActions(['getGroupBuyDetail']),
-    mapColumnDetailToData() {
+    mapColumnDetailToPayment() {
       const {
         freeLessonList,
         groupBuyPrice,
@@ -151,10 +212,32 @@ export default {
         collectLikeTemplateId,
         userAccessStatus,
         collectLikeId,
+        groupBuyPersonCount,
         groupBuyText: groupBuyPersonCount === 3 ? '三人团' : '六人团'
       })
       this.freeLesson =
         freeLessonList && freeLessonList.length && freeLessonList[0] //试听试看课程
+    },
+    async mapGroupBuyDetailToPayment() {
+      const { groupBuyId } = this
+      if (groupBuyId) {
+        // 如果有拼团Id，请求拼团详情接口
+        await this.getGroupBuyDetail({ groupBuyId })
+        await this.judgeIdentity()
+      }
+      // await this.getGroupBuyDetail({ groupBuyId: '89013551171108864' })
+      // await this.judgeIdentity()
+    },
+    judgeIdentity() {
+      if (this.masterId === this.starterUid) return
+      if (this.userList.some(item => item.id === this.masterId)) {
+        return (this.master = identityType.PARTNER)
+      } else {
+        if (this.groupBuyPersonCount === this.userList.length) {
+          return (this.master = identityType.PASSERFULL)
+        }
+        return (this.master = identityType.PASSER)
+      }
     },
     renderOriginBuy(onlyPrice) {
       const { price } = this
