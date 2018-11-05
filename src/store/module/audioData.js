@@ -1,11 +1,11 @@
 import { courseType } from '../../utils/config'
-import { 
+import {
   postFavorite,
   postUnFavorite,
   getAudioDesc,
   getSingleSetList,
   getCommentList,
-} from '../../api/audioApi' 
+} from '../../api/audioApi'
 
 export default {
   namespaced: true,
@@ -24,7 +24,7 @@ export default {
   mutations: {
     bindAudioDetail(state, audio) {
       if(!audio) return
-      state.audioDetail = audio 
+      state.audioDetail = audio
       state.clickLike = false
       state.isLike = state.audioDetail.isLike
     },
@@ -59,19 +59,19 @@ export default {
   actions: {
     //播放音频
     async playAudio({state, commit, dispatch }, params) {
-      if (params && params.lessonId) { 
+      if (params && params.lessonId) {
         dispatch('audiotaskData/asyncPlay', params, { root: true })
-        .then(audio => { 
+        .then(audio => {
           if(!audio)  return
           commit('bindAudioDetail', audio)                                          //绑定音频数据
           let courseId = audio.courseId
-          if(state.columnId === courseId) return 
-          let columnType = params.columnType  
+          if(state.columnId === courseId) return
+          let columnType = params.columnType
           commit('bindColumnId',courseId)
-          dispatch('setShareInfo', { courseId, columnType })                      //设置分享信息 
+          dispatch('setShareInfo', { courseId, columnType })                      //设置分享信息
           dispatch('getSingleSetList', { courseId, currentPage:1})                //获取单集列表
         })
-      } else { 
+      } else {
         dispatch('audiotaskData/asyncPlay', params, { root: true })               //暂停、播放
       }
     },
@@ -98,13 +98,13 @@ export default {
       .then(audio =>commit('bindAudioDetail', audio))
     },
     //悬浮按钮是否显示
-    async toggleFloatButton({commit},isShow){ 
+    async toggleFloatButton({commit},isShow){
       commit('audiotaskData/setFloatButton', isShow, { root: true })
     },
     //绑定专栏名
     async bindCourseName({commit}, courseName){
       commit('audiotaskData/bindCourseName', courseName, { root: true })
-    }, 
+    },
     //音频收藏 我喜欢的
     async postFavorite({ commit }, params) {
       const res = await postFavorite(params)
@@ -123,7 +123,7 @@ export default {
     },
     //音频单集列表
     async getSingleSetList({ commit ,state}, {courseId,currentPage}) {
-      commit('toggleLoading',true) 
+      commit('toggleLoading',true)
       let params = {pageSize: state.pageSize}
       params.currentPage = currentPage||state.currentPage + 1
       params.courseId = courseId || state.columnId
@@ -140,9 +140,10 @@ export default {
       commit('bindCommentList', res)
     },
     //设置分享信息
-    async setShareInfo({commit,dispatch,rootState},{courseId,columnType}){    
+    async setShareInfo({commit,dispatch,rootState},{courseId,columnType}){
       if(courseId <= 0) return
-      const course = await dispatch('getColumnDetail',{courseId,columnType,useCache:true},{root:true}) 
+      commit('bindColumnId',courseId)
+      const course = await dispatch('getColumnDetail',{courseId,columnType,useCache:true},{root:true})
       if(!course) return
       let shareData = {
         // link:  `${rootState.url}/#/${courseType[columnType]}${courseId}`,
@@ -155,7 +156,7 @@ export default {
       }
       console.log('Audio-ShareLink:',shareData.link)
       dispatch('setWxShareFriend',shareData,{root:true})
-      dispatch('setWxShareZone',shareData,{root:true})  
+      dispatch('setWxShareZone',shareData,{root:true})
     }
   },
   getters: {
@@ -164,7 +165,7 @@ export default {
     audio: (state, getters, rootState) => rootState.audiotaskData.audioDetail,
     audioId: (state, getters, rootState) => rootState.audiotaskData.audioId,
     courseId: (state, getters, rootState) => rootState.audiotaskData.courseId,
-    currentTime: (state, getters, rootState) => Math.round(rootState.audiotaskData.currentTime), 
+    currentTime: (state, getters, rootState) => Math.round(rootState.audiotaskData.currentTime),
     maxTime: (state, getters, rootState) => Math.round(rootState.audiotaskData.maxTime),
     playMode: (state, getters, rootState) => rootState.audiotaskData.playMode,
     status: (state, getters, rootState) => rootState.audiotaskData.status,

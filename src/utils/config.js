@@ -21,7 +21,7 @@ export const columnType = {
     'freezone': {name:'freezone',code:1001}            // 免费专区
 }
 
-export const getColumnType = code => Object.keys(columnType).find(key=>  columnType[key].code == parseInt(code)) 
+export const getColumnType = code => Object.keys(columnType).find(key=>  columnType[key].code == parseInt(code))
 
 export const columnStatus = {
     'reading':'1007', // 读书会
@@ -35,9 +35,9 @@ export const homeColumnList = {
   // 少年视野
   'onlineVision': {code: 1003, componentName:'VisionCell', title:'音频课程',listKey:'visionList',link:`/home/${columnType['onlineVision'].name}/columnlist`},
   // 线上课程
-  'onlineCourse': {code: 1005, componentName:'VideoCell', title:'视频课程',listKey:'videoList',link:`/home/${columnType['onlineCourse'].name}/columnlist`}, 
+  'onlineCourse': {code: 1005, componentName:'VideoCell', title:'视频课程',listKey:'videoList',link:`/home/${columnType['onlineCourse'].name}/columnlist`},
   // 读书会
-  'reading': {code: 1007, componentName:'BookCell', title:'少年读书会',listKey:'bookList',link:`/home/${columnType['reading'].name}/columnlist`}, 
+  //'reading': {code: 1007, componentName:'BookCell', title:'少年读书会',listKey:'bookList',link:`/home/${columnType['reading'].name}/columnlist`},
 }
 // 首页导航配置
 export const navbar = [
