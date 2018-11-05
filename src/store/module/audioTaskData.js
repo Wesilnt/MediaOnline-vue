@@ -130,14 +130,17 @@ export default {
     //更新本地音频进度
     updateListenTime(state, params){
       let localCache = localStorage.getItem(params.lessonId) 
+      console.log('localStorage:',localStorage)
+      console.log('lessonId:',params.lessonId)
+      console.log('localCache:',localCache)
       let listenJson = localCache? JSON.parse(localCache):{}
       if(listenJson){
         listenJson.uploaded = 'yes' 
       }else{
         listenJson = {
-          lessonId:params.learnId,
+          lessonId:params.lessonId,
           uploaded:'yes',
-          currentTime : params.learnTime,
+          currentTime : params.listenTime,
           maxTime : params.maxTime
         }
       }
@@ -150,15 +153,15 @@ export default {
       const res = await getAudioDetail(params)
       if(!res) return
       let localCache = localStorage.getItem(res.id)
-      let listenJson = localCache ? JSON.parse(localCache):{}  
+      let listenJson = localCache ? JSON.parse(localCache):{}   
+      let listenTime = parseInt(listenJson.currentTime)
+      let maxTime = parseInt(listenJson.maxTime)
+      let lessonId = res.id
       //更新本地缓存
       if (listenJson.uploaded && listenJson.uploaded === 'yes') { 
-        await commit('updateListenTime',{lessonId: res.id, learnTime: res.learnTime,maxTime: res.totalTime}) 
+        await commit('updateListenTime',{lessonId, listenTime,maxTime}) 
       } else {
         //提交本地缓存 
-        let listenTime = parseInt(listenJson.currentTime)
-        let maxTime = parseInt(listenJson.maxTime)
-        let lessonId = res.id
         dispatch('postLearnRate', { lessonId, listenTime, maxTime})
       } 
       // let courseId = state.courseId
@@ -258,8 +261,11 @@ export default {
     async postLearnRate({commit}, params) {
       if (params && params.listenTime <= 0) return 
       if(isNaN(params.listenTime))return
-      const res = await postLearnRate(params)  
-      commit('updateListenTime', {learnId: params.lessonId,listenTime : params.listenTime,maxTime : params.maxTime})
+      const res = await postLearnRate(params) 
+      let listenTime = parseInt(params.listenTime)
+      let maxTime = parseInt(params.maxTime)
+      let lessonId = params.lessonId
+      commit('updateListenTime', {lessonId,listenTime,maxTime})
     },
     //音频单集列表
     async getSingleSetList({ commit }, params) {
