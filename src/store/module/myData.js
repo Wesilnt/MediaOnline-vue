@@ -22,16 +22,16 @@ const myData = {
   actions: {
     async queryNewMessageCount({ dispatch, commit, state }) {
       let response = await getNewMessageCount({ busiTypes: 3101 })
-      console.log(response)
+      console.log('replyMessageCount===',response)
       await commit('save',
         {
           replyMessageCount:response
         })
     },
     async getMyUserInfo({ dispatch, commit, state }) {
-      const response = await store.dispatch('getUserInfo',true)
-      // console.log(response)
+      const response = await store.dispatch('getUserInfo',true) 
       commit('saveUserInfo', response)
+      return response
     }
   }
 }

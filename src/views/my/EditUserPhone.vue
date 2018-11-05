@@ -26,7 +26,8 @@
                     <label
                             for="vcode"
                             class="line"
-                            v-for="item,index in codeLength"
+                            :key="index"
+                            v-for="(item,index) in codeLength"
                             :class="{'animated': focused && cursorIndex === index}"
                             v-text="codeArr[index]"
                     >

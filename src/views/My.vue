@@ -116,11 +116,9 @@
       }
     },
     created() {
-      this.queryNewMessageCount()
+      this.queryNewMessageCount() 
       this.getMyUserInfo()
-      if (this.userInfo.gender && this.userInfo.grade && this.userInfo.role && this.userInfo.mobileNo) {
-        this.showEdit = false
-      }
+      .then(response=>this.showEdit = !this.userInfo.gender || !this.userInfo.grade || !this.userInfo.role || !this.userInfo.mobileNo)
     }
   }
 </script>
