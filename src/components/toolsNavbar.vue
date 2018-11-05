@@ -169,6 +169,7 @@ export default {
     ]),
     //点击试听按钮 跳转
     clickAuditionBtn() {
+      console.log('freeLesson',this.freeLesson)
       if (this.freeLesson && this.freeLesson.length > 0) {
         const { id } = this.freeLesson[0]
         this.gotoInfoPage(id)

@@ -126,12 +126,12 @@
             <div class="load-more-container" v-if="lessonFinished">
                 没有更多了，不要再拉啦～
             </div>
-             <!--<Payment
+             <Payment
                  :purchased="lessonList[0]"
                  :isTryScan="isCourseType"
                  :columnDetail="columnDetail"
-             />-->
-            <toolsNavbar :freeLesson="freeLesson" :lessonList="lessonList"/>
+             />
+            <!-- <toolsNavbar :freeLesson="freeLesson" :lessonList="lessonList"/> -->
         </div>
     </div>
 </template>

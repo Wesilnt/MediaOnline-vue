@@ -45,7 +45,8 @@ const groupManagerData = {
     toolsObject: null, //工具条对象
     //集赞相关状态
     startPraiseFlag: false, //发起集赞标记位
-    collectLikeId: 0 //集赞ID
+    collectLikeId: 0, //集赞ID
+    freeLesson:{}
   },
   getters: {
     //专栏头图
@@ -121,9 +122,10 @@ const groupManagerData = {
     updateUserAccessStatus(state) {
       state.userAccessStatus = 0
     },
-    bindColunmnInfo(state, { profilePic, courseId }) {
+    bindColunmnInfo(state, { profilePic, courseId ,freeLesson}) { 
       state.profilePic = profilePic
       state.courseId = courseId
+      state.freeLesson =freeLesson
     },
     setLoading(state, isLoading) {
       state.isLoading = isLoading
@@ -215,8 +217,8 @@ const groupManagerData = {
       })
     },
 
-    initColumnInfo({ commit, dispatch }, { courseId, profilePic }) {
-      commit('bindColunmnInfo', { courseId, profilePic })
+    initColumnInfo({ commit, dispatch }, { courseId, profilePic ,freeLesson}) { 
+      commit('bindColunmnInfo', { courseId, profilePic ,freeLesson})
     },
 
     //初始化工具条
