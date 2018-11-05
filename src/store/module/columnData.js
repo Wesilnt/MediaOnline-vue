@@ -142,8 +142,8 @@ const columnData = {
           bannerPic: result.bannerPic,
           columnLoading: false,
           columnList: result.courseInfo.result,
-          columnCurrentPage: page,
-          pageSize
+          columnCurrentPage: page,   
+          pageSize: state.pageSize
         })
       } else {
         const tempColumns = state.columnList.concat(result.courseInfo.result)

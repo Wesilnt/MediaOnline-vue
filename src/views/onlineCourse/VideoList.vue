@@ -46,7 +46,7 @@ export default {
     VideoCell
   },
   created() {
-    this.getColumnList({ refresh: false, columnType: this.columnType })
+    this.getColumnList({ refresh: true, columnType: this.columnType })
   },
   methods: {
     ...mapMutations(['resetState']),

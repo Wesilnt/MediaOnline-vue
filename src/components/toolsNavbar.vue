@@ -2,7 +2,7 @@
     <div class="purchase-toolbar" v-show="toolsObject&&toolsObject.isShow">
         <div class="toolbar-audition" @click="clickAuditionBtn">
             <i class="qhht-icon audition-icon"></i>
-            <p class="under-text">{{serviceType == "onlineCourse"?'试看':'试听'}}</p>
+            <p class="under-text">{{columnType == "onlineCourse"?'试看':'试听'}}</p>
         </div>
         <hr class="vertical-line"/>
         <div v-show="toolsObject&&toolsObject.originPrice" :disabled="isLoading" class="toolbar-price" :class="{'toolbar-price-active':toolsObject&&!toolsObject.collage&&!toolsObject.collect }"  @click="clickOriginPriceBtn">
@@ -21,7 +21,7 @@
                 <div>{{toolsObject&&toolsObject.collectText}}</div>
             </div>
         </div>
-        <Share :show="sharePageShow" :courseId="courseId" :columnType ="serviceType"  :postType="'collage'" @close="cancelSharePage"></Share>
+        <Share :show="sharePageShow" :courseId="courseId" :columnType ="columnType"  :postType="'collage'" @close="cancelSharePage"></Share>
         <PhoneVerif :style="{'z-index':100}" v-if="isShowMobileDialog" @callback="bindIsShowMobileDialog(false)"></PhoneVerif>
     </div>
 
@@ -46,7 +46,7 @@ const {
 export default {
   name: 'ToolsNavbar',
   data() {
-    return {
+    return { 
       //是否显示分享
       sharePageShow: false,
       //分享内容
@@ -101,7 +101,7 @@ export default {
               courseId: this.$route.params.courseId,
               collectLikeId: newVal
             },
-            query: { columnType: this.serviceType }
+            query: { columnType: this.columnType }
           })
         }
       },
@@ -362,7 +362,7 @@ export default {
               collectLikeId: this.collectLikeId
             },
             query: {
-              columnType: this.serviceType
+              columnType: this.columnType
             }
           })
           break
@@ -398,39 +398,13 @@ export default {
       this.sharePageShow = false
     },
     gotoInfoPage(id) {
-      switch (this.serviceType) {
-        case '1005':
-          // this.$router.push({
-          //   name: 'videoCourseDetail',
-          //   params: { lessonId: id }
-          // })
-          openVideoDetail(this,{courseId:this.courseId, columnType:this.serviceType, lessonId:id})
-          break
-        case 'FreeZone':
-          break
+      switch (this.columnType) {
+        case '1005': 
+          openVideoDetail(this,{courseId:this.courseId, columnType:this.columnType, lessonId:id})
+          break 
         case '1003':
-           openAudioDetail(this,{courseId:this.courseId, columnType:this.serviceType, lessonId:id})
-          // this.$router.push({
-          //   name: 'AudioPlay',
-          //   params: { id },
-          //   query: {
-          //     courseId: this.courseId,
-          //     columnType: this.serviceType,
-          //     courseName: this.courseName
-          //   }
-          // })
-          break
-        case '1007':
-           openAudioDetail(this,{courseId:this.courseId, columnType:this.serviceType, lessonId:id})
-          // this.$router.push({
-          //   name: 'AudioPlay',
-          //   params: { id },
-          //   query: {
-          //     courseId: this.courseId,
-          //     columnType: this.serviceType,
-          //     courseName: this.courseName
-          //   }
-          // })
+        case '1007': 
+           openAudioDetail(this,{courseId:this.courseId, columnType:this.columnType, lessonId:id}) 
           break
       }
     }
