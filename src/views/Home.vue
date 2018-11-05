@@ -86,7 +86,7 @@ export default {
           this.$router.push({ path: `/detail/${getColumnType(data[0])}/${data[1]}` })
         }
         if(item.type === '2502'){
-          window.location.href = url
+          window.location.href = item.url
         }
       // if (url.includes('&/&')) {
       //   const [type, id] = url.split('&/&')
