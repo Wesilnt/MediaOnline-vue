@@ -2,7 +2,7 @@
     <div>
         <SkeletonFullScreen  v-if="renderLoading"/>
         <div v-else>
-            <GroupHeader />
+            <!--<GroupHeader />-->
             <div id="detailmain" ref="detailmain" v-if="!isReadType">
                 <div class="lazy-img-larger column-banner" v-lazy:background-image="`${columnDetail.profilePic}?imageView2/1/format/jpg`">
                     <div class="qhht-mask"></div>

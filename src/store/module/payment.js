@@ -1,5 +1,5 @@
 import { Toast } from 'vant'
-import { WECHAT_SUBSCRIPTION_URL, courseType } from '../../utils/config'
+import { WECHAT_SUBSCRIPTION_URL } from '../../utils/config'
 import {
   getGroupBuyDetail, // 获取拼团详情
   startGroupBuy, //发起拼团
@@ -10,6 +10,7 @@ import {
   wechatSubscribed // 判断用户是否关注公众号
 } from '../../api/groupBuyApi.js'
 
+let toast = null
 export default {
   namespaced: true,
   name: 'payment',
@@ -20,7 +21,8 @@ export default {
     userAccessStatusFromGroup: 0,
     createTime: null,
     alreadyCount: 0,
-    status: 0
+    status: 0,
+    toast: null
   }),
   mutations: {
     saveState(state, payload) {
@@ -30,10 +32,6 @@ export default {
   actions: {
     async getGroupBuyDetail({ commit }, payload) {
       const response = await getGroupBuyDetail(payload)
-      Object.entries(response).map(item => {
-        // console.log(`%c ${item}`, 'color: #009688')
-        console.log(item)
-      })
       const {
         userId: masterId,
         starterUid,
@@ -52,6 +50,78 @@ export default {
         alreadyCount,
         status
       })
-    }
+    },
+    hideToast() {
+      toast.clear()
+    },
+    //验证是否完成了公众号授权
+    async checkoutWxAuthor() {
+      toast = Toast('正在调起支付...')
+      const result = await wechatSubscribed()
+      if (result != 1) {
+        //跳转去关注公众号
+        toast.clear()
+        return (window.location.href = WECHAT_SUBSCRIPTION_URL)
+      }
+    },
+    checkoutUserInfo({ dispatch }) {
+      return dispatch('getUserInfo', null, { root: true })
+    },
+    //原价购买
+    async unlockCourse({ dispatch }, payload) {
+      const result = await unlockCourse(payload)
+      if (!result) return
+      dispatch('getWechatPayment', { ...result, ...payload })
+    },
+    //发起拼团
+    async startGroupBuy({ commit, dispatch }, payload) {
+      const result = await startGroupBuy(payload)
+      if (!result) return
+      dispatch('getWechatPayment', { ...result, ...payload })
+    },
+    //参与拼团
+    async joinGroupBuy({ dispatch, commit }, {groupBuyId,courseId}) {
+      const result = await joinGroupBuy({groupBuyId})
+      if (!result) return
+      dispatch('getWechatPayment', { ...result, courseId })
+    },
+    //发起集赞
+    async startCollectLike({ state, dispatch, commit }, payload) {
+      const result = await startCollectLike(payload)
+      if (!result) return
+      Toast('发起集赞成功')
+      dispatch('columnData/getColumnDetail', { courseId }, { root: true })
+    },
+    //领取集赞
+    async getCollectLike({ dispatch, commit }, {collectLikeId,courseId}) {
+      const result = await getCollectLike({collectLikeId})
+      if (!result) return
+      Toast('领取集赞成功')
+      dispatch('columnData/getColumnDetail', { courseId }, { root: true })
+    },
+    //调起微信支付
+    async getWechatPayment(
+      { commit, dispatch },
+      { timestamp, nonceStr, package: packageStr, paySign, courseId }
+    ) {
+      dispatch(
+        'wxPayment',
+        {
+          timestamp,
+          nonceStr, // 支付签名随机串，不长于 32 位
+          packageStr, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=***）
+          signType: 'MD5', // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+          paySign, // 支付签名
+          successCB: function(res) {
+            // 支付成功后的回调函数
+            dispatch('columnData/getColumnDetail', { courseId }, { root: true })
+          },
+          failCB: function() {
+            Toast.fail('支付失败')
+          }
+        },
+        { root: true }
+      )
+    },
   }
 }

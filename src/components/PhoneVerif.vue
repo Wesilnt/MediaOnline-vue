@@ -1,6 +1,6 @@
 <template>
-  <div class="mobile-validate"  @click.self="closeWindow">
-    <span class="mobile-close" @click="closeWindow"></span>
+  <div class="mobile-validate"  @click.self="hideTeleRegister">
+    <span class="mobile-close" @click.self="hideTeleRegister"></span>
     <div class="validate-container">
       <div class="number-container">
         <p>手机号:</p>
@@ -19,30 +19,33 @@
   </div>
 </template>
 <script>
-import {Toast} from 'vant'
+import { Toast } from 'vant'
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions, mapGetters } = createNamespacedHelpers('mobileData')
+const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
+  'mobileData'
+)
 export default {
+  props: ['hideTeleRegister'],
   data() {
     return {
       mobileNumber: '',
       validateCode: '',
-      numberError:'',
-      codeError:''
+      numberError: '',
+      codeError: ''
     }
   },
   computed: {
     ...mapState(['remainTime', 'clickable', 'sending', 'validate'])
-  }, 
+  },
   watch: {
-    validate: function(res) { 
+    validate: function(res) {
       if (res) this.$emit('callback')
     },
-    mobileNumber:function(newNum,oldNum){
-      if(newNum != oldNum) this.numberError = ''
+    mobileNumber: function(newNum, oldNum) {
+      if (newNum != oldNum) this.numberError = ''
     },
-    validateCode:function(newNum,oldNum){
-      if(newNum != oldNum) this.codeError = ''
+    validateCode: function(newNum, oldNum) {
+      if (newNum != oldNum) this.codeError = ''
     }
   },
   methods: {
@@ -50,36 +53,33 @@ export default {
     sendCode() {
       if (!this.clickable) return
       if (this.mobileNumber.trim() === '') {
-         Toast({position:'bottom',message:'请输入手机号'})
-          this.numberError = '请输入手机号'
+        Toast({ position: 'bottom', message: '请输入手机号' })
+        this.numberError = '请输入手机号'
         return
       }
-      if(!this.isPoneAvailable(this.mobileNumber)){
-          this.$toast({position:'bottom',message:'手机号格式不正确'})
-          this.numberError = '手机号格式不正确'
-         return
+      if (!this.isPoneAvailable(this.mobileNumber)) {
+        this.$toast({ position: 'bottom', message: '手机号格式不正确' })
+        this.numberError = '手机号格式不正确'
+        return
       }
       this.sendMobileCode({ mobileNo: this.mobileNumber })
     },
     onConfirm() {
       if (this.validateCode === '') {
-        this.$toast({position:'bottom',message:'请输入正确的验证码'})
+        this.$toast({ position: 'bottom', message: '请输入正确的验证码' })
         this.codeError = '请输入正确的验证码'
         return
       }
       this.validateMobileCode({ code: this.validateCode })
     },
-    closeWindow(){
-      this.$emit('callback',false)
-    },
     isPoneAvailable(str) {
-          var myreg=/^[1][3,4,5,7,8][0-9]{9}$/;
-          if (!myreg.test(str)) {
-              return false;
-          } else {
-              return true;
-          }
-      } 
+      var myreg = /^[1][3,4,5,7,8][0-9]{9}$/
+      if (!myreg.test(str)) {
+        return false
+      } else {
+        return true
+      }
+    }
   }
 }
 </script>
@@ -95,9 +95,9 @@ export default {
   justify-content: center;
   align-items: center;
   top: 0;
-  left:0;
-  right:0;
-  bottom:0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 .validate-container {
   height: auto;
@@ -130,7 +130,7 @@ export default {
     outline: none;
   }
 }
-.number-error-hint{
+.number-error-hint {
   color: red;
   font-size: 28px;
   align-self: flex-start;
@@ -174,7 +174,7 @@ export default {
     align-items: center;
   }
 }
-.code-error-hint{
+.code-error-hint {
   color: red;
   font-size: 28px;
   align-self: flex-start;
@@ -191,17 +191,16 @@ export default {
   height: 90px;
   background-color: rgb(255, 163, 47);
 }
-.mobile-close{
-  width: 68px; 
-  height: 68px; 
+.mobile-close {
+  width: 68px;
+  height: 68px;
   margin-bottom: 50px;
   background-image: url('../assets/images/close.png');
   background-size: 68px;
 }
-.van-toast{
+.van-toast {
   z-index: 3000;
-  /deep/.van-toast--text
-  {
+  /deep/.van-toast--text {
     z-index: 3000;
   }
 }
