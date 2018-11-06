@@ -55,6 +55,9 @@ export default {
     },
     selfCollectLikeId: {
       default: null
+    },
+    userAccessStatus: {
+      default: null
     }
   },
   data() {
@@ -68,7 +71,6 @@ export default {
       collectLikeTemplateId,
       price,
       name: courseName,
-      userAccessStatus,
       sharePostUrl
     } = this.columnDetail
     return {
@@ -76,7 +78,6 @@ export default {
       columnType,
       courseId,
       master: identityType.OWNER,
-      userAccessStatus,
       groupBuyId: groupBuyId || this.selfGroupBuyId,
       collectLikeId: collectLikeId || this.selfCollectLikeId,
       sharePostUrl: `${sharePostUrl}?imageView2/1/w/100/h/100/format/jpg`,

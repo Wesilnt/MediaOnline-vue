@@ -132,6 +132,7 @@
                  :columnDetail="columnDetail"
                  :selfCollectLikeId="columnDetail.collectLikeId" 
                  :selfGroupBuyId='columnDetail.groupBuyId'
+                 :userAccessStatus='columnDetail.userAccessStatus'
              />
             <!-- <toolsNavbar :freeLesson="freeLesson" :lessonList="lessonList"/> -->
         </div>
