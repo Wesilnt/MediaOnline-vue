@@ -1,3 +1,5 @@
+/** @format */
+
 import { getNewMessageCount } from '../../api/myApi'
 import store from './../store'
 const myData = {
@@ -20,16 +22,15 @@ const myData = {
     }
   },
   actions: {
-    async queryNewMessageCount({ dispatch, commit, state }) {
+    async queryNewMessageCount({ dispatch, commit }) {
       let response = await getNewMessageCount({ busiTypes: 3101 })
-      console.log('replyMessageCount===',response)
-      await commit('save',
-        {
-          replyMessageCount:response
-        })
+      console.log('replyMessageCount===', response)
+      await commit('save', {
+        replyMessageCount: response
+      })
     },
-    async getMyUserInfo({ dispatch, commit, state }) {
-      const response = await store.dispatch('getUserInfo',true) 
+    async getMyUserInfo({ dispatch, commit }) {
+      const response = await store.dispatch('getUserInfo', true)
       commit('saveUserInfo', response)
       return response
     }
