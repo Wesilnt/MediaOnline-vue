@@ -49,6 +49,12 @@ export default {
     },
     columnDetail: {
       type: Object
+    },
+    selfGroupBuyId: {
+      default: null
+    },
+    selfCollectLikeId: {
+      default: null
     }
   },
   data() {
@@ -63,8 +69,6 @@ export default {
       price,
       name: courseName,
       userAccessStatus,
-      collectLikeId: oldcollectLikeId, // 领取时用
-      groupBuyId: oldGroupBuyId,
       sharePostUrl
     } = this.columnDetail
     return {
@@ -73,8 +77,8 @@ export default {
       courseId,
       master: identityType.OWNER,
       userAccessStatus,
-      groupBuyId: groupBuyId || oldGroupBuyId,
-      collectLikeId: collectLikeId || oldcollectLikeId,
+      groupBuyId: groupBuyId || this.selfGroupBuyId,
+      collectLikeId: collectLikeId || this.selfCollectLikeId,
       sharePostUrl: `${sharePostUrl}?imageView2/1/w/100/h/100/format/jpg`,
       courseName,
       groupBuyTemplateId,
@@ -302,7 +306,8 @@ export default {
         this.toggleTeleRegister(true)
         this.payDisabled = false
       }
-      this[paymentQueryType]({ courseId, ...params })
+      await this[paymentQueryType]({ courseId, ...params })
+      this.payDisabled = false
     },
     judgeIdentity() {
       if (this.masterId === this.starterUid) return
@@ -481,12 +486,11 @@ export default {
         </div>
         {paymentBtn}
         <Share
-          style={{
-            display: sharePageShow ? 'initial' : 'none'
-          }}
+          show={sharePageShow}
           courseId={courseId}
+          close={this.toggleSharePage}
           columnType={columnType}
-          nativeOnClose={this.toggleSharePage}
+          // nativeOnClose={this.toggleSharePage}
           postType={isGroupShare}
         />
         {showTeleRegister && (

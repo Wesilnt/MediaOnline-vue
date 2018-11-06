@@ -6,7 +6,7 @@
         "serve": "vue-cli-service serve --open",
         "build": "vue-cli-service build --modern",
         "lint": "vue-cli-service lint",
-        "test": "vue-cli-service build --modern  --mode=development",
+        "test": "vue-cli-service build  --mode=development",
         "test:unit": "vue-cli-service test:unit",
         "precommit": "lint-staged",
         "prettier": "prettier --write ./src/**/**/**/*",

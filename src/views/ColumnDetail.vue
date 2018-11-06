@@ -130,6 +130,8 @@
                  :purchased="lessonList[0]"
                  :isTryScan="isCourseType"
                  :columnDetail="columnDetail"
+                 :selfCollectLikeId="columnDetail.collectLikeId" 
+                 :selfGroupBuyId='columnDetail.groupBuyId'
              />
             <!-- <toolsNavbar :freeLesson="freeLesson" :lessonList="lessonList"/> -->
         </div>
@@ -153,8 +155,12 @@ import {
   createNamespacedHelpers,
   mapState as rootState,
   mapActions as rootActions
-} from 'vuex' 
-import {openVideoDetail, openAudioDetail , columnType as COLUMNTYPE } from '../utils/config'
+} from 'vuex'
+import {
+  openVideoDetail,
+  openAudioDetail,
+  columnType as COLUMNTYPE
+} from '../utils/config'
 
 const {
   mapState,
@@ -272,7 +278,9 @@ export default {
       if (this.columnType === 'onlineCourse') {
         this.$router.push(`/videoInnerList/${this.columnType}/${this.courseId}`)
       } else if (this.columnType === 'onlineVision') {
-        this.$router.push({path: `/home/visionDetail/visionCourseList/${this.courseId}`})
+        this.$router.push({
+          path: `/home/visionDetail/visionCourseList/${this.courseId}`
+        })
       }
     },
     enterVideoCommentsList() {
@@ -280,26 +288,35 @@ export default {
     },
     toDetail(lessonId) {
       if (this.columnType === 'onlineVision')
-       openAudioDetail(this,{courseId:this.courseId, columnType:this.columnType, lessonId,courseName:this.columnDetail.name})
-        // this.$router.push({
-        //   name: 'AudioPlay',
-        //   params: {
-        //     courseId: this.courseId,
-        //     columnType: this.columnType,
-        //     lessonId
-        //   },
-        //   query: { courseName: this.columnDetail.name }
-        // })
+        openAudioDetail(this, {
+          courseId: this.courseId,
+          columnType: this.columnType,
+          lessonId,
+          courseName: this.columnDetail.name
+        })
+      // this.$router.push({
+      //   name: 'AudioPlay',
+      //   params: {
+      //     courseId: this.courseId,
+      //     columnType: this.columnType,
+      //     lessonId
+      //   },
+      //   query: { courseName: this.columnDetail.name }
+      // })
       if (this.columnType === 'onlineCourse')
-       openVideoDetail(this,{courseId:this.courseId, columnType:this.columnType, lessonId})
-        // this.$router.push({
-        //   name: 'videoCourseDetail',
-        //   params: {
-        //     courseId: this.courseId,
-        //     columnType: this.columnType,
-        //     lessonId
-        //   }
-        // })
+        openVideoDetail(this, {
+          courseId: this.courseId,
+          columnType: this.columnType,
+          lessonId
+        })
+      // this.$router.push({
+      //   name: 'videoCourseDetail',
+      //   params: {
+      //     courseId: this.courseId,
+      //     columnType: this.columnType,
+      //     lessonId
+      //   }
+      // })
     },
     //分页加载
     scrollBottom() {
