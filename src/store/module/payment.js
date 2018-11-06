@@ -56,7 +56,7 @@ export default {
     },
     //验证是否完成了公众号授权
     async checkoutWxAuthor() {
-      toast = Toast('正在调起支付...')
+      toast = Toast('waiting...')
       const result = await wechatSubscribed()
       if (result != 1) {
         //跳转去关注公众号

@@ -106,45 +106,13 @@ export default {
       'createTime',
       'alreadyCount',
       'status'
-    ]),
-    shareLink_title: function() {
-      const {
-        columnType,
-        courseId,
-        groupBuyId,
-        collectLikeId,
-        url,
-        courseName,
-        alreadyCount,
-        groupBuyPersonCount,
-        userInfo
-      } = this
-      console.log('shareLink_title changed')
-      let title = null,
-        link = null
-      if (groupBuyId) {
-        ;(title = `我正在参加《${courseName}》拼团活动,仅差${groupBuyPersonCount -
-          alreadyCount}人,快来和我一起拼团吧!`),
-          (link = `${url}/#/detail/${columnType}/${courseId}?groupBuyId=${groupBuyId}`)
-      }
-      if (collectLikeId) {
-        ;(title = `我是${userInfo.nickName}, ${
-          this.master === identityType.OWNER ? '我想免费' : '正在帮朋友'
-        }领取《${courseName}》,求助攻~`),
-          (link = `${url}/#/praise/active/${courseId}/${collectLikeId}?columnType=${columnType}`)
-      }
-      const share = {
-        title,
-        link
-      }
-      this.setWxShare(share)
-      return share
-    }
+    ])
   },
   watch: {
     userAccessStatus(newval) {
-        console.log('userAccessStatus'+newval);
-        this.mapGroupBuyDetailToPayment()
+      console.log('userAccessStatus' + newval)
+      this.mapGroupBuyDetailToPayment()
+      this.setWxShare()
     }
   },
   async created() {
@@ -438,15 +406,43 @@ export default {
       this.sharePageShow = sharePageShow
       this.isGroupShare = isGroupShare
     },
-    setWxShare(shareLink_title = {}) {
+    setWxShare() {
+      const {
+        columnType,
+        courseId,
+        groupBuyId,
+        collectLikeId,
+        url,
+        courseName,
+        alreadyCount,
+        groupBuyPersonCount,
+        userInfo
+      } = this
+      let title = null,
+        link = null
+      if (groupBuyId) {
+        ;(title = `我正在参加《${courseName}》拼团活动,仅差${groupBuyPersonCount -
+          alreadyCount}人,快来和我一起拼团吧!`),
+          (link = `${url}/#/detail/${columnType}/${courseId}?groupBuyId=${groupBuyId}`)
+      }
+      if (collectLikeId) {
+        ;(title = `我是${userInfo.nickName}, ${
+          this.master === identityType.OWNER ? '我想免费' : '正在帮朋友'
+        }领取《${courseName}》,求助攻~`),
+          (link = `${url}/#/praise/active/${courseId}/${collectLikeId}?columnType=${columnType}`)
+      }
+      const share = {
+        title,
+        link
+      }
       const shareData = {
-        title: `我正在学习《${this.courseName}》，你也来看看`,
+        title: `我正在学习《${this.courseName}》，快来一起学习吧`,
         link: window.location.href,
         desc: '你一定会爱上国学课...',
         imgUrl: this.sharePostUrl,
-        ...shareLink_title
+        ...share
       }
-      console.log(shareData)
+      console.log('shareLink_title changed', shareData)
       this.setWxShareFriend(shareData)
       this.setWxShareZone(shareData)
     }
@@ -471,10 +467,10 @@ export default {
       `${this.master}_${this.userAccessStatusFromGroup ||
         this.userAccessStatus}`
     ]
-    console.log(paymentObj)
-    const { hide } = paymentObj
+    console.log(paymentObj, groupBuyId, collectLikeId)
+    const { hide, showPrice } = paymentObj
     let paymentBtn = this.renderPayment({
-      origin: price && this.renderOriginBuy,
+      origin: price && showPrice && this.renderOriginBuy,
       group: groupBuyTemplateId && this.renderGroupBuy.bind(this, paymentObj),
       collect:
         collectLikeTemplateId && this.renderCollectBuy.bind(this, paymentObj)
