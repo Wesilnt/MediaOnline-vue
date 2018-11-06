@@ -1,4 +1,4 @@
-<template>
+<template xmlns:v-lazy="http://www.w3.org/1999/xhtml">
 <div>
    <div class="lazy-img-most audioplay-container" v-lazy:background-image="`${audio.coverPic}?imageView2/1/w/750/h/750`" ref='container'>
 
@@ -15,11 +15,11 @@
          ? 'url('+require('../../assets/images/love_collect.png')+')'
          : 'url('+require('../../assets/images/audio_love_normal.png')+')'}">
         </div>
-        <div v-if="'reading'!==columnType" class="tab-container-draft" @click="onDraft"/>
+        <div v-if="'reading'!==columnType" class="tab-container-draft" @click="onDraft"></div>
         <div  class="tab-container-comment" @click="toComment">
           <span>{{audio.commentCount}}</span>
         </div>
-        <div class="tab-container-share" @click="onShare"/>
+        <div class="tab-container-share" @click="onShare"></div>
       </div>
       <!-- 进度条 -->
       <div class="slider-container">
@@ -29,18 +29,18 @@
           :max="maxTime"
           :min="0"
           bar-height="2px"
-          @change="onSliderChnage"/>
+          @change="onSliderChnage"></van-slider>
         <div slot="end">{{ maxTime | formatDuring}}</div>
       </div>
       <!-- 播放按钮 -->
       <div class="play-btns" ref="playButton">
-        <div class="btn-item" :style="{backgroundImage:`url(${'single'==playMode?singleIcon:orderIcon})`}" @click="onPlayMode" />
-        <div class="btn-item" :style="{backgroundImage:`url(${preIcon})`}" @click="onPlayPrv"/>
+        <div class="btn-item" :style="{backgroundImage:`url(${'single'==playMode?singleIcon:orderIcon})`}" @click="onPlayMode"></div>
+        <div class="btn-item" :style="{backgroundImage:`url(${preIcon})`}" @click="onPlayPrv"></div>
         <div :class="{'btn-item':true,'play-btn-active':playing}"  @click="onPlayPause">
-          <span :style="{backgroundImage:`url(${playing?playIcon:pauseIcon})`}"/>
+          <span :style="{backgroundImage:`url(${playing?playIcon:pauseIcon})`}"></span>
         </div>
-        <div class="btn-item" :style="{backgroundImage:`url(${nextIcon})`}" @click="onPlayNext"/>
-        <div class="btn-item" :style="{backgroundImage:`url(${listIcon})`}" @click="onPlayList"/>
+        <div class="btn-item" :style="{backgroundImage:`url(${nextIcon})`}" @click="onPlayNext"></div>
+        <div class="btn-item" :style="{backgroundImage:`url(${listIcon})`}" @click="onPlayList"></div>
       </div>
     </div>
     <!-- 音频列表弹框 -->
@@ -59,9 +59,9 @@
               <div v-for="(item,index) of singleSetList" :key="item.id" class="list-item">
                 <div class="list-content" @click="onItemClick(item)">
                   <img v-if="lessonId==item.id" src="../../assets/images/audio_list_playing.png">
-                  <p :class="{'p-playing':lessonId==item.id}">{{item.title}}</p>
+                  <p :class="{'p-playing':lessonId===item.id}">{{item.title}}</p>
                 </div>
-                <hr v-show="singleSetList.length-1 != index">
+                <hr v-show="singleSetList.length-1 !== index">
               </div>
           </van-list>
         </div>
@@ -72,49 +72,53 @@
     <SharePop :show="showShare" @close="closeShare" :courseId="courseId" :columnType ="columnType"/>
      <!--loading-->
      <div class="loading-container" v-show="isBuffering">
-        <van-loading color="white" />
+        <van-loading color="white"></van-loading>
      </div>
   </div>
 </div>
 
 </template>
-<script> 
-import { courseType, openAudioDetail } from '../../utils/config'
+<script>
 import SharePop from '../share/Share.vue'
-import {createNamespacedHelpers,mapState as rootState, mapActions as rootActions} from 'vuex'
-const {mapState,mapMutations, mapActions,mapGetters} = createNamespacedHelpers('audiotaskData/audioData')
+import { createNamespacedHelpers, mapState as rootState } from 'vuex'
+const {
+  mapState,
+  mapMutations,
+  mapActions,
+  mapGetters
+} = createNamespacedHelpers('audiotaskData/audioData')
 export default {
   components: { SharePop },
   data() {
     return {
-      singleIcon:require('../../assets/images/audio_play_single.png'),
-      orderIcon:require('../../assets/images/audio_play_sort.png'),
-      listIcon:require('../../assets/images/audio_play_list.png'),
-      preIcon:require('../../assets/images/audio_play_prv.png'),
-      nextIcon:require('../../assets/images/audio_play_next.png'),
-      playIcon:require('../../assets/images/audio_play_play.png'),
-      pauseIcon:require('../../assets/images/icon_pause.png'),
-      loading:false,                              //单集列表分页loading
-      lessonId: this.$route.params.lessonId,      //单集ID
-      courseId:this.$route.params.courseId,       //单集对应专栏ID
-      columnType: this.$route.params.columnType,  //播放类型 FreeZone(1001) 免费专区  OnlineCourse(1005) 在线课堂 OnlineVision(1003) 在线视野  Readings(1007) 读书会
+      singleIcon: require('../../assets/images/audio_play_single.png'),
+      orderIcon: require('../../assets/images/audio_play_sort.png'),
+      listIcon: require('../../assets/images/audio_play_list.png'),
+      preIcon: require('../../assets/images/audio_play_prv.png'),
+      nextIcon: require('../../assets/images/audio_play_next.png'),
+      playIcon: require('../../assets/images/audio_play_play.png'),
+      pauseIcon: require('../../assets/images/icon_pause.png'),
+      loading: false, //单集列表分页loading
+      lessonId: this.$route.params.lessonId, //单集ID
+      courseId: this.$route.params.courseId, //单集对应专栏ID
+      columnType: this.$route.params.columnType, //播放类型 FreeZone(1001) 免费专区  OnlineCourse(1005) 在线课堂 OnlineVision(1003) 在线视野  Readings(1007) 读书会
 
-      courseName: this.$route.query.courseName,   //专栏名
-      popupVisible: false,                        //是否显示音频列表弹框
-      showShare: false,                           //是否显示分享框
-      touching: false,                            //slider触摸
-      progress: 0 ,                               //播放进度
+      courseName: this.$route.query.courseName, //专栏名
+      popupVisible: false, //是否显示音频列表弹框
+      showShare: false, //是否显示分享框
+      touching: false, //slider触摸
+      progress: 0 //播放进度
     }
   },
   computed: {
-    ...rootState(['url','columnDetail']),
+    ...rootState(['url', 'columnDetail']),
     ...mapState({
-      clickLike:state=>state.clickLike,
-      isLike:state => state.isLike ,
-      singleSetList:state=>state.singleSetList,
-      pageLoading:state=>state.pageLoading,
-      finished:state=>state.finished,
-      columnId:state=>state.columnId,
+      clickLike: state => state.clickLike,
+      isLike: state => state.isLike,
+      singleSetList: state => state.singleSetList,
+      pageLoading: state => state.pageLoading,
+      finished: state => state.finished,
+      columnId: state => state.columnId
     }),
     ...mapGetters([
       'isLoading',
@@ -125,25 +129,24 @@ export default {
       'maxTime',
       'playMode',
       'status',
-      'playing',
+      'playing'
     ])
   },
-  created() { 
-    // this.bindCourseName(this.courseName) 
-    this.playAudio({ lessonId: this.lessonId, columnType: this.columnType }) 
-    this.setShareInfo({courseId:this.courseId,columnType: this.columnType})
-
+  created() {
+    // this.bindCourseName(this.courseName)
+    this.playAudio({ lessonId: this.lessonId, columnType: this.columnType })
+    this.setShareInfo({ courseId: this.courseId, columnType: this.columnType })
   },
   watch: {
-    columnId:{
-     handler:function(courseId){
-       console.log("AudioPlay-courseId:",courseId)
-        if(courseId>0) this.courseId = courseId
-     },
-     immediate: true
+    columnId: {
+      handler: function(courseId) {
+        console.log('AudioPlay-courseId:', courseId)
+        if (courseId > 0) this.courseId = courseId
+      },
+      immediate: true
     },
-    pageLoading:function(isLoading){
-     this.loading = isLoading
+    pageLoading: function(isLoading) {
+      this.loading = isLoading
     },
     audioId: function(id) {
       this.lessonId = id
@@ -152,9 +155,10 @@ export default {
       this.progress = (value * 100) / this.maxTime
       return value
     },
-    isLike:function(newValue, oldValue){
-      if(-1 === oldValue || -1 === newValue || !this.clickLike) return
-      if (newValue)this.$toast.success({ duration: 2000, message: '已添加到我喜欢的' })
+    isLike: function(newValue, oldValue) {
+      if (-1 === oldValue || -1 === newValue || !this.clickLike) return
+      if (newValue)
+        this.$toast.success({ duration: 2000, message: '已添加到我喜欢的' })
       else this.$toast.fail({ duration: 2000, message: '已取消喜欢' })
     }
   },
@@ -169,7 +173,7 @@ export default {
       'seekTo',
       'pre',
       'next',
-      'bindCourseName' ,
+      'bindCourseName',
       'getSingleSetList'
     ]),
     ...mapMutations(['clearData']),
@@ -178,7 +182,7 @@ export default {
       this.progress = e.target.value
     },
     onSliderChnage() {
-      this.seekTo(this.progress*this.maxTime/100)
+      this.seekTo((this.progress * this.maxTime) / 100)
     },
     //收藏
     onCollect() {
@@ -287,18 +291,20 @@ export default {
       this.popupVisible = false
     },
     //单集分页加载
-    onLoad(){
+    onLoad() {
       this.getSingleSetList({})
     },
     //列表Item点击事件
     onItemClick(audio) {
       this.popupVisible = false
-      this.$router.replace({ name: 'AudioPlay', params: {
-                                                        courseId : this.courseId,
-                                                        columnType : this.columnType ,
-                                                        lessonId :audio.id
-                                                      }
-                        })
+      this.$router.replace({
+        name: 'AudioPlay',
+        params: {
+          courseId: this.courseId,
+          columnType: this.columnType,
+          lessonId: audio.id
+        }
+      })
       // this.$router.replace({
       //   name: 'AudioPlay',
       //   params: { id: audio.id },
@@ -326,15 +332,15 @@ export default {
   //     to.meta.keepAlive = false // 让 頁面缓存，即不刷新
   //   })
   // }
-  mounted(){
-     this.$nextTick(()=>{
-        const {height,top,bottom}=this.$refs.controller.getBoundingClientRect()
-        const {innerHeight,innerWidth}=window
-        this.$refs.controller.style.height =  innerHeight - innerWidth +'px'
-        if(top<innerWidth)  this.$refs.container.style.height=top+'px'
-     })
+  mounted() {
+    this.$nextTick(() => {
+      const { top } = this.$refs.controller.getBoundingClientRect()
+      const { innerHeight, innerWidth } = window
+      this.$refs.controller.style.height = innerHeight - innerWidth + 'px'
+      if (top < innerWidth) this.$refs.container.style.height = top + 'px'
+    })
   },
-  beforeDestroy(){
+  beforeDestroy() {
     this.clearData()
   }
 }
@@ -354,7 +360,7 @@ export default {
     width: 100%;
     background-color: white;
   }
-  .empty-layout{
+  .empty-layout {
     flex: 1;
     width: 100%;
   }

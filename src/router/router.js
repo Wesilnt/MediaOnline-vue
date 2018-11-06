@@ -1,3 +1,5 @@
+/** @format */
+
 import Vue from 'vue'
 import Router from 'vue-router'
 import NavBar from '../components/NavBar'
@@ -10,8 +12,10 @@ import PageInfo_From_Praise from './router_praise'
 
 const Home = () => import(/* webpackChunkName: "home" */ '../views/Home')
 const My = () => import(/* webpackChunkName: "index" */ '../views/My')
-const ColumnDetail = () => import(/* webpackChunkName: "index" */ '../views/ColumnDetail')
-const ColumnList = () => import(/* webpackChunkName: "index" */ '../views/ColumnList')
+const ColumnDetail = () =>
+  import(/* webpackChunkName: "index" */ '../views/ColumnDetail')
+const ColumnList = () =>
+  import(/* webpackChunkName: "index" */ '../views/ColumnList')
 
 Vue.use(Router)
 
@@ -33,19 +37,19 @@ export default new Router({
         { path: 'home', component: Home },
         {
           path: '/my',
-          component: My,
+          component: My
         }
       ]
     },
     {
-      path:'/detail/:columnType/:courseId',
-      name:'ColumnDetail',
-      component:ColumnDetail,
+      path: '/detail/:columnType/:courseId',
+      name: 'ColumnDetail',
+      component: ColumnDetail
     },
     {
-      path:'/home/:columnType/columnlist',
-      name:'ColumnList',
-      component:ColumnList,
+      path: '/home/:columnType/columnlist',
+      name: 'ColumnList',
+      component: ColumnList
     },
     ...PageInfo_From_Home,
     ...PageInfo_From_My,

@@ -1,6 +1,6 @@
 <template>
   <div class="loading-container">
-       <van-loading color="white" />
+       <van-loading color="white"></van-loading>
   </div>
 </template>
 <script>
