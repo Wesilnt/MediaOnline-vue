@@ -7,11 +7,7 @@ import {
 import { openVideoDetail, openAudioDetail } from '../utils/config'
 import PhoneVerif from './PhoneVerif'
 import Share from './share/Share'
-const {
-  mapState,
-  mapActions
-  // mapGetters
-} = createNamespacedHelpers('columnData/payment')
+const { mapState, mapActions } = createNamespacedHelpers('columnData/payment')
 const identityType = {
   OWNER: 31000, // 发起人
   PARTNER: 31001, // 此拼团参与人
@@ -143,6 +139,12 @@ export default {
       }
       this.setWxShare(share)
       return share
+    }
+  },
+  watch: {
+    userAccessStatus(newval) {
+        console.log('userAccessStatus'+newval);
+        this.mapGroupBuyDetailToPayment()
     }
   },
   async created() {
