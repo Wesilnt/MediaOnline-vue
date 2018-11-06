@@ -93,7 +93,6 @@ export default {
       initialPayment: {
         txt: groupBuyPersonCount === 3 ? '三人团' : '六人团',
         showPrice: true,
-        showOrigin: true,
         handler: false
       },
       freeLesson: freeLessonList && freeLessonList.length && freeLessonList[0], //试听试看课程
@@ -461,7 +460,9 @@ export default {
       collectLikeTemplateId,
       showTeleRegister,
       sharePageShow,
-      isGroupShare
+      isGroupShare,
+      groupBuyId,
+      collectLikeId
     } = this
     const tryTxt = isTryScan ? '试看' : '试听'
     const paymentObj = this.paymentShowText[
@@ -469,13 +470,24 @@ export default {
         this.userAccessStatus}`
     ]
     console.log(paymentObj)
-    const { hide, showOrigin = false } = paymentObj
-    const paymentBtn = this.renderPayment({
-      origin: price && showOrigin && this.renderOriginBuy,
+    const { hide } = paymentObj
+    let paymentBtn = this.renderPayment({
+      origin: price && this.renderOriginBuy,
       group: groupBuyTemplateId && this.renderGroupBuy.bind(this, paymentObj),
       collect:
         collectLikeTemplateId && this.renderCollectBuy.bind(this, paymentObj)
     })
+    if (groupBuyId) {
+      paymentBtn = this.renderPayment({
+        group: this.renderGroupBuy.bind(this, paymentObj)
+      })
+    }
+    if (collectLikeId) {
+      paymentBtn = this.renderPayment({
+        collect:
+          collectLikeTemplateId && this.renderCollectBuy.bind(this, paymentObj)
+      })
+    }
     return hide ? null : (
       <div class="qhht-flex payment-wrapper">
         <div
