@@ -138,12 +138,14 @@ const columnData = {
       })
       if (!result) return
       if (refresh) {
+          let isFinished = tempColumns.length >= result.courseInfo.totalCount
         commit('saveStatus', {
           bannerPic: result.bannerPic,
           columnLoading: false,
           columnList: result.courseInfo.result,
           columnCurrentPage: page,   
-          pageSize: state.pageSize
+          pageSize: state.pageSize,
+          columnFinished: isFinished
         })
       } else {
         const tempColumns = state.columnList.concat(result.courseInfo.result)

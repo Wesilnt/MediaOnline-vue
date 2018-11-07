@@ -10,9 +10,6 @@
           @offset="10">
             <VideoCell   v-for="item in columnList" :key="item.id" :data="item"/>
         </van-list>
-        <!-- <div class="home-video">
-            <videolistitem v-for="item of columns" :key="item.id" :iteminfo="item" @jumpEvent="jumpToVideoDetail(item.id)"/>
-        </div> -->
         <div class="home-warnTip" v-show="columnFinished">没有更多了,不要在拉了~</div>
     </div>
 </template>
