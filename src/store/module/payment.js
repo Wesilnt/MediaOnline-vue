@@ -25,7 +25,7 @@ export default {
     starterUid: '',
     userList: [],
     userAccessStatusFromGroup: 0,
-    createTime: null,
+      timeDuration: null,
     alreadyCount: 0,
     status: 0,
     toast: null
@@ -76,16 +76,20 @@ export default {
         starterUid,
         userList,
         userAccessStatusFromGroup,
-        createTime,
+        createTime,duration,sysTime,
         alreadyCount,
         status
       } = response
+
+        //8.计算倒计时
+        const timeDuration =
+            (createTime + duration * 60 * 60 * 1000 - sysTime) / 1000
       commit('saveState', {
         masterId,
         starterUid,
         userList,
         userAccessStatusFromGroup,
-        createTime,
+          timeDuration,
         alreadyCount,
         status
       })

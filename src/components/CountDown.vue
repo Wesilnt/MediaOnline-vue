@@ -11,42 +11,27 @@
 
 <script>
 import { startCountDown } from '../utils/utils'
-import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapMutations, mapGetters, mapActions } = createNamespacedHelpers(
-  'videoColumnDetailData/groupManagerData'
-)
 export default {
   name: 'CountDown',
-  props: ['duration'],
+  props: ['timeDuration'],
   data() {
     return {
       countdown: null,
       times: ['00', '00', '00']
     }
   },
-  created() {},
-  methods: {
-    ...mapMutations(['deleteCountTime'])
-  },
   beforeDestroy() {
-    if (this.countdown) {
-      clearInterval(this.countdown)
-      this.countdown = null
-      //清空仓库中保存的倒计时
-      this.deleteCountTime()
-    }
+    clearInterval(this.countdown)
   },
   computed: {
-    ...mapState(['countDownTime']),
     doDuration: function() {
-      let tempDuration = this.duration
-      console.log('tempDuration =',tempDuration)
-      if (this.countdown) clearInterval(this.countdown)
+      let tempDuration = this.timeDuration
+      clearInterval(this.countdown)
       if (tempDuration > 0) {
-        this.countdown = startCountDown(this.duration, times => {
-          (this.times = times)
+        this.countdown = startCountDown(this.timeDuration, times => {
+          this.times = times
         })
-      } 
+      }
       return tempDuration
     }
   }

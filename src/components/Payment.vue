@@ -7,6 +7,7 @@ import {
 import { openVideoDetail, openAudioDetail } from '../utils/config'
 import PhoneVerif from './PhoneVerif'
 import Share from './share/Share'
+import GroupHeader from './GroupHeader'
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
   'columnData/payment'
 )
@@ -71,7 +72,7 @@ export default {
       showTeleRegister: false,
       paymentShowText: null,
       sharePageShow: false,
-      paymentType: null,
+      paymentType: null
     }
   },
   computed: {
@@ -95,10 +96,23 @@ export default {
       'userAccessStatusFromGroup',
       'createTime',
       'alreadyCount',
-      'status'
+      'status',
+        'timeDuration'
     ])
   },
   watch: {
+    groupBuyId(newGroupBuyId) {
+      if (newGroupBuyId) {
+        console.error(newGroupBuyId)
+        this.paymentType = PAYMENTTYPE.groupBuy
+      }
+    },
+    collectLikeId(newCollectLikeId) {
+      if (newCollectLikeId) {
+        console.error(newCollectLikeId)
+        this.paymentType = PAYMENTTYPE.groupBuy
+      }
+    },
     paymentType: {
       handler(paymentType) {
         if (!paymentType) return
@@ -464,7 +478,7 @@ export default {
     toggleTeleRegister(showTeleRegister) {
       this.showTeleRegister = showTeleRegister
     },
-    toggleSharePage(sharePageShow = false, ) {
+    toggleSharePage(sharePageShow = false) {
       this.sharePageShow = sharePageShow
     },
     setWxShare(paymentType) {
@@ -479,8 +493,8 @@ export default {
         groupBuyPersonCount,
         userInfo
       } = this
-      let title = null,
-        link = null
+      let title = `我正在学习《${this.courseName}》，快来一起学习吧`,
+        link = window.location.href
       if (paymentType === groupBuy) {
         title = `我正在参加《${courseName}》拼团活动,仅差${groupBuyPersonCount -
           alreadyCount}人,快来和我一起拼团吧!`
@@ -497,8 +511,6 @@ export default {
         link
       }
       const shareData = {
-        title: `我正在学习《${this.courseName}》，快来一起学习吧`,
-        link: window.location.href,
         desc: '你一定会爱上国学课...',
         imgUrl: this.sharePostUrl,
         ...share
@@ -520,7 +532,8 @@ export default {
       showTeleRegister,
       sharePageShow,
       groupBuyId,
-      collectLikeId
+      collectLikeId,userList,
+        groupBuyPersonCount
     } = this
     const tryTxt = isTryScan ? '试看' : '试听'
     const paymentObj = this.paymentShowText[
@@ -545,36 +558,51 @@ export default {
         collect: this.renderCollectBuy.bind(this, paymentObj)
       })
     }
+    let userListTop=[],userListBot=[];
+    if(groupBuyPersonCount>3 && userList){
+        userListTop= userList.slice(0,3)
+        userListBot= userList.slice(3)
+    }
     return hide ? null : (
-      <div class="qhht-flex payment-wrapper">
-        <div
-          class="payment-flex-column payment-audition"
-          onClick={this.routerToSingleSet}
-        >
-          <i class="audition-icon" />
-          <span class="payment-low-attention">{tryTxt}</span>
-        </div>
-        {paymentBtn}
-        <Share
-          show={sharePageShow}
-          courseId={courseId}
-          close={this.toggleSharePage}
-          columnType={columnType}
-          // nativeOnClose={this.toggleSharePage}
-          // postType={isGroupShare}
-        />
-        {showTeleRegister && (
-          <PhoneVerif
-            style={{ zIndex: 100 }}
-            hideTeleRegister={this.toggleTeleRegister.bind(this, false)}
+      <div>
+        {this.paymentType === groupBuy && <GroupHeader
+            timeDuration={this.timeDuration}
+            leavePerson={this.groupBuyPersonCount - this.alreadyCount}
+            isSixGroup={this.groupBuyPersonCount >3}
+            userListTop={userListTop}
+            userListBot={userListBot}
+            userAccessStatusFromGroup={this.userAccessStatusFromGroup}
+        />}
+        <div class="qhht-flex payment-wrapper">
+          <div
+            class="payment-flex-column payment-audition"
+            onClick={this.routerToSingleSet}
+          >
+            <i class="audition-icon" />
+            <span class="payment-low-attention">{tryTxt}</span>
+          </div>
+          {paymentBtn}
+          <Share
+            show={sharePageShow}
+            courseId={courseId}
+            close={this.toggleSharePage}
+            columnType={columnType}
+            // nativeOnClose={this.toggleSharePage}
+            // postType={isGroupShare}
           />
-        )}
+          {showTeleRegister && (
+            <PhoneVerif
+              style={{ zIndex: 100 }}
+              hideTeleRegister={this.toggleTeleRegister.bind(this, false)}
+            />
+          )}
+        </div>
       </div>
     )
   }
 }
 </script>
-<style scoped lang='less' >
+<style lang='less' >
 .payment-wrapper {
   position: fixed;
   bottom: 0;

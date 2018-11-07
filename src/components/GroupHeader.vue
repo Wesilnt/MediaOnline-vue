@@ -1,81 +1,63 @@
 <template>
     <div class="groupBuy-container">
-        <div v-show="isShowGroupBuy">
-            <div class="groupBuy-usericon" v-if="isSixGroup === true" >
-                <div class="qhht-flex groupBuy-usericon-top">
-                        <div class="groupBuy-usericon-item" v-for="(item,index) in userListTop" :key="index" :style="item.avatarUrl==null?{}:{ background : 'url('+item.avatarUrl+')', 'background-size' : '100%'}">
-                            <div class="groupBuy-usericon-manager" v-show="item.isStarter">团长</div>            
-                        </div>
-                </div>
-                <div class="qhht-flex groupBuy-usericon-bot">
-                        <div class="groupBuy-usericon-item" v-for="(item,index) in userListBot" :key="index" :style="item.avatarUrl==null?{}:{ background : 'url('+item.avatarUrl+')', 'background-size' : '100%'}">
-                        </div>
-                </div>
-            </div>
-            <div class="groupBuy-usericon" v-else>
-                <div class="qhht-flex groupBuy-usericon-top-three">
-                    <div class="groupBuy-usericon-item" v-for="(item,index) in userListTop" :key="index" :style="item.avatarUrl==null?{}:{ background : 'url('+item.avatarUrl+')','background-size' : '100%' }">
+        <div class="groupBuy-usericon" v-show="isSixGroup" >
+            <div class="qhht-flex groupBuy-usericon-top">
+                    <div class="groupBuy-usericon-item" v-for="(item,index) in userListTop" :key="index" :style="item.avatarUrl==null?{}:{ background : 'url('+item.avatarUrl+')', 'background-size' : '100%'}">
                         <div class="groupBuy-usericon-manager" v-show="item.isStarter">团长</div>
                     </div>
-                </div>
             </div>
-            <div v-if="headerType==100">
-                <div class="groupBuy-info">剩余<span>{{leavePerson}}</span>个名额</div>
-                <div class="groupBuy-countDown-container">
-                    <CountDown :duration="countDownTime"></CountDown>                  
-                </div>
-                <div class="groupBuy-deadline">距离截止时间</div>               
+            <div class="qhht-flex groupBuy-usericon-bot">
+                    <div class="groupBuy-usericon-item" v-for="(item,index) in userListBot" :key="index" :style="item.avatarUrl==null?{}:{ background : 'url('+item.avatarUrl+')', 'background-size' : '100%'}">
+                    </div>
             </div>
-            <div v-else-if="headerType==101">
-                <div class="groupBuy-info">拼团成功</div>
-            </div>
-            <div v-else-if="headerType==102">
-                <div class="groupBuy-info">拼团失败</div>
-            </div>
-            <div v-else-if="headerType==103">
-                <div class="groupBuy-info">拼团已满</div>
-            </div>
-            <div class="groupBuy-circleline" v-show="false"></div>
         </div>
-
+        <div class="groupBuy-usericon" v-show="!isSixGroup">
+            <div class="qhht-flex groupBuy-usericon-top-three">
+                <div class="groupBuy-usericon-item" v-for="(item,index) in userListTop" :key="index" :style="item.avatarUrl==null?{}:{ background : 'url('+item.avatarUrl+')','background-size' : '100%' }">
+                    <div class="groupBuy-usericon-manager" v-show="item.isStarter">团长</div>
+                </div>
+            </div>
+        </div>
+        <div v-if="userAccessStatusFromGroup==1005">
+            <div class="groupBuy-info">剩余<span>{{leavePerson}}</span>个名额</div>
+            <div class="groupBuy-countDown-container">
+                <CountDown :timeDuration="timeDuration"></CountDown>
+            </div>
+            <div class="groupBuy-deadline">距离截止时间</div>
+        </div>
+        <div v-else-if="userAccessStatusFromGroup==1003">
+            <div class="groupBuy-info">拼团成功</div>
+        </div>
+        <div v-else-if="userAccessStatusFromGroup==-3 && userAccessStatusFromGroup==1006">
+            <div class="groupBuy-info">拼团失败</div>
+        </div>
+        <div v-else-if="leavePerson===0">
+            <div class="groupBuy-info">拼团已满</div>
+        </div>
+        <!--<div class="groupBuy-circleline" v-show="false"></div>-->
     </div>
 </template>
 
 <script>
-import {
-  createNamespacedHelpers,
-  mapState as rootState,
-} from 'vuex'
-const { mapState, mapGetters } = createNamespacedHelpers(
-  'videoColumnDetailData/groupManagerData'
-)
-import CountDown from '../../../components/CountDown'
+import CountDown from './CountDown'
 export default {
   name: 'GroupHeader',
-  data() {
-    return {}
-  },
+  props: [
+    'leavePerson',
+    'timeDuration',
+    'userListTop',
+    'userListBot',
+    'isSixGroup',
+    'userAccessStatusFromGroup'
+  ],
   components: {
     CountDown
-  },
-  computed: {
-    ...rootState(['columnType']),
-    ...mapState([
-      'leavePerson',
-      'countDownTime',
-      'userListTop',
-      'userListBot',
-      'isSixGroup',
-      'headerType',
-      'isShowGroupBuy',
-    ]),
-    ...mapGetters(['buyCount'])
   }
 }
 </script>
 
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 .groupBuy-container {
   background-color: white;
   text-align: center;

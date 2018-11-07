@@ -2,7 +2,10 @@
     <div>
         <SkeletonFullScreen  v-if="renderLoading"/>
         <div v-else>
-            <!--<GroupHeader />-->
+            <Payment
+                    :isTryScan="isCourseType"
+                    :columnDetail="columnDetail"
+            />
             <div id="detailmain" ref="detailmain" v-if="!isReadType">
                 <div class="lazy-img-larger column-banner" v-lazy:background-image="`${columnDetail.profilePic}?imageView2/1/format/jpg`">
                     <div class="qhht-mask"></div>
@@ -126,10 +129,7 @@
             <div class="load-more-container" v-if="lessonFinished">
                 没有更多了，不要再拉啦～
             </div>
-             <Payment
-                 :isTryScan="isCourseType"
-                 :columnDetail="columnDetail"
-             />
+
             <!-- <toolsNavbar :freeLesson="freeLesson" :lessonList="lessonList"/> -->
         </div>
     </div>
@@ -137,7 +137,6 @@
 
 <script>
 import SkeletonFullScreen from '../components/SkeletonFullScreen'
-import GroupHeader from './onlineCourse/components/GroupHeader'
 import Payment from '../components/Payment'
 import toolsNavbar from '../components/toolsNavbar.vue'
 import SingleSetItem from '../components/SingleSetItem.vue'
@@ -150,8 +149,6 @@ import videoComment from '../components/video-comment.vue'
 import ImagePreview from '../components/ImagePreview'
 import {
   createNamespacedHelpers,
-  mapState as rootState,
-  mapActions as rootActions
 } from 'vuex'
 import {
   openVideoDetail,
@@ -205,11 +202,9 @@ export default {
     }
   },
   computed: {
-    ...rootState(['url']),
     ...mapState([
       'renderLoading',
       'columnDetail',
-      'columnComments',
       'commentsTotalCount',
       'lessonLoading',
       'lessonFinished',
@@ -219,25 +214,7 @@ export default {
     ]),
     ...mapGetters(['playingId', 'getBookIntroduce', 'isNew', 'freeLesson'])
   },
-  mounted() {
-    this.getUserInfo().then(user => {
-      //拼装分享内容
-      this.shareData = {
-        link: this.url + `/#/home/readings/book/${this.courseId}`,
-        title: this.courseName,
-        desc: '你一定会爱上国学课...',
-        imgUrl: `${
-          this.columnDetail.sharePostUrl
-        }?imageView2/1/w/100/h/100/format/jpg`,
-        successCB: () => console.log('分享回调成功'),
-        cancelCB: () => console.log('分享回调失败')
-      }
-      this.setWxShareFriend(this.shareData)
-      this.setWxShareZone(this.shareData)
-    })
-  },
   methods: {
-    ...rootActions(['getUserInfo', 'setWxShareFriend', 'setWxShareZone']),
     ...mapMutations(['isFromShare', 'resetState']),
     ...mapActions([
       'getLessonList',
@@ -325,7 +302,6 @@ export default {
     SingleSetList,
     toolsNavbar,
     SkeletonFullScreen,
-    GroupHeader,
     Payment,
     CourseIntroduce,
     playlist,
