@@ -85,7 +85,7 @@ export default {
             commit('setDataLoading',false)
             commit("bindBookDetail", result)
             //绑定与拼团相关的内容
-            dispatch('groupManagerData/initColumnInfo',{serviceType,courseId,profilePic,'freeLesson':freeLessonList})
+            dispatch('groupManagerData/initColumnInfo',{serviceType,courseId,profilePic,freeLesson:freeLessonList})
             if (state.isFromShare) {
                 //这里是分享链接进来的
               dispatch('groupManagerData/getGroupBuyDetail', groupBuyId)

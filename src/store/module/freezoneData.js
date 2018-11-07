@@ -44,7 +44,7 @@ export default {
       commit('bindFreezoneList', { freeZoneList: res.result, page, totalCount })
       //上传最新学习进度
       res.result.map(item => {
-        let localCache = localStorage.getItem('learntime-' + item.id)
+        let localCache = localStorage.getItem(item.id)
         if (!localCache) return
         let learnJson = JSON.parse(localCache)
         let lessonId = item.id

@@ -10,9 +10,7 @@ import {
 import { getMyUserInfo } from '../../api/myApi'
 import { Toast } from 'vant'
 import {
-  WECHAT_SUBSCRIPTION_URL,
-  courseType,
-  columnType
+  WECHAT_SUBSCRIPTION_URL
 } from '../../utils/config'
 
 const groupManagerData = {
@@ -45,7 +43,8 @@ const groupManagerData = {
     toolsObject: null, //工具条对象
     //集赞相关状态
     startPraiseFlag: false, //发起集赞标记位
-    collectLikeId: 0 //集赞ID
+    collectLikeId: 0, //集赞ID
+    freeLesson:{}
   },
   getters: {
     //专栏头图
@@ -121,9 +120,10 @@ const groupManagerData = {
     updateUserAccessStatus(state) {
       state.userAccessStatus = 0
     },
-    bindColunmnInfo(state, { profilePic, courseId }) {
+    bindColunmnInfo(state, { profilePic, courseId ,freeLesson}) { 
       state.profilePic = profilePic
       state.courseId = courseId
+      state.freeLesson =freeLesson
     },
     setLoading(state, isLoading) {
       state.isLoading = isLoading
@@ -215,8 +215,8 @@ const groupManagerData = {
       })
     },
 
-    initColumnInfo({ commit, dispatch }, { courseId, profilePic }) {
-      commit('bindColunmnInfo', { courseId, profilePic })
+    initColumnInfo({ commit, dispatch }, { courseId, profilePic ,freeLesson}) { 
+      commit('bindColunmnInfo', { courseId, profilePic ,freeLesson})
     },
 
     //初始化工具条
@@ -733,6 +733,11 @@ const groupManagerData = {
 
     //从新获取专栏详情接口,刷新父组件显示
     async updateFatherData({ dispatch, state, getters, rootState }) {
+        dispatch(
+            'columnData/getColumnDetail',
+            { courseId: state.courseId },
+            { root: true }
+        )
       switch (rootState.columnType) {
         case '1003':
           dispatch(

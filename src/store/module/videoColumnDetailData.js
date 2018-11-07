@@ -65,6 +65,7 @@ const videoColumnDetailData = {
       const profilePic = result.profilePic
       const freeLessonList = result.freeLessonList
       // const serviceType = '1005'
+  
       dispatch('groupManagerData/initColumnInfo', {
         // serviceType,
         courseId,

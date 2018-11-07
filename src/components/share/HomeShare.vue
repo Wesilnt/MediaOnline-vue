@@ -4,9 +4,12 @@
     </div>
     <transition @after-leave="afterLeave">
       <div v-show="isOpen" class="share-content">
-        <div class="share-src">
-          此网页由www.shbaoyuantech.com提供
-        </div>
+        <p class="share-src">
+          立即分享给好友
+        </p>
+        <p class="share-tip">
+           朋友通过你分享得页面成功购买后，你可获得对应的佣金，佣金可在"分销中心查看"
+        </p>
         <div class="share-list">
           <div class="share-item" @click="toPoster">
             <div class="share-icon">
@@ -126,6 +129,9 @@ export default {
     background-repeat: no-repeat;
     background-size: 320px 164px;
     background-image: url('../../assets/images/share_tip.jpg');
+  }
+  .share-tip{
+
   }
   .share-content {
     position: fixed;

@@ -10,7 +10,6 @@ import { getCommentList, postComment } from '../../api/commentApi.js'
 import questionListData from './questionListData'
 import commentData from './commentData'
 import router from '../../router/router'
-import { Toast } from 'vant'
 const videoCourseDetailData = {
   namespaced: true,
   state: {
@@ -197,7 +196,7 @@ const videoCourseDetailData = {
       //绑定目录列表哪一个单集处于播放状态
       commit('bindActiveId', lessonId)
       //刷新路由参数里的单集ID
-      router.push({ name: 'videoCourseDetail', params: { lessonId } })
+      // router.push({ name: 'videoCourseDetail', params: { lessonId } })
       //获取专栏单集目录列表数据
       let params = {
         courseId: result.courseId,

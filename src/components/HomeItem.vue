@@ -32,7 +32,6 @@ export default {
 }
 .video-list{
   padding-bottom: 28px;
-  border-bottom: 2px solid #F1F1F1;
 }
 .book-list {
   flex-wrap: wrap;

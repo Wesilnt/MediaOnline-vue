@@ -14,7 +14,7 @@
             <div class="videocol-sction-title">
                 <h4>课程列表 <label>(共{{columnDetail.lessonCount}}讲)</label></h4>
             </div>
-            <videoBigimage :src="columnDetail.outlinePic"/>   
+            <ImagePreview :src="columnDetail.outlinePic"/>
             <!-- <img :src="require('../../../assets/images/icon_zoom.png')" class="videocol-bigimage-search"> -->
         </div>
         <!-- 试看课程 -->
@@ -59,9 +59,10 @@ import CourseIntroduce from '../../../components/CourseIntroduce.vue'
 import playlist from './playlist.vue'
 import videoComment from '../../../components/video-comment.vue'
 import CommentItem from '../../../components/comment/CommentItem.vue'
-import videoBigimage from '../../../components/videoBigimage.vue'
+import ImagePreview from '../../../components/ImagePreview.vue'
 
 import { createNamespacedHelpers } from 'vuex'
+  import {openVideoDetail,openAudioDetail} from "../../../utils/config";
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
   'columnData/groupContentData'
 )
@@ -91,7 +92,7 @@ export default {
     playlist,
     videoComment,
     CommentItem,
-    videoBigimage,
+    ImagePreview,
     ScrollNavBar,
     CommentList
   },
@@ -117,25 +118,28 @@ export default {
       this.$router.push(`/videoCourseCmts/${this.courseId}`)
     },
     toDetail(lessonId) {
+      let columnType = this.columnType
       if (this.columnType === 'onlineVision')
-        this.$router.push({
-          name: 'AudioPlay',
-          params: {
-            courseId: this.courseId,
-            columnType: this.columnType,
-            lessonId
-          },
-          query: { courseName: this.columnDetail.name }
-        })
+        openAudioDetail(this,{courseId:this.courseId, columnType, lessonId})
+        // this.$router.push({
+        //   name: 'AudioPlay',
+        //   params: {
+        //     courseId: this.courseId,
+        //     columnType: this.columnType,
+        //     lessonId
+        //   },
+        //   query: { courseName: this.columnDetail.name }
+        // })
       if (this.columnType === 'onlineCourse')
-        this.$router.push({
-          name: 'videoCourseDetail',
-          params: {
-            courseId: this.courseId,
-            columnType: this.columnType,
-            lessonId
-          }
-        })
+        openVideoDetail(this,{ courseId:this.courseId, columnType, lessonId})
+        // this.$router.push({
+        //   name: 'videoCourseDetail',
+        //   params: {
+        //     courseId: this.courseId,
+        //     columnType: this.columnType,
+        //     lessonId
+        //   }
+        // })
     }
   },
   created() {

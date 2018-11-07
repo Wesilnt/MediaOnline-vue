@@ -6,6 +6,7 @@ import {
 import { getCommentList, likeComment } from '../../api/commentApi.js'
 import { columnType as ColumnType } from '../../utils/config'
 import groupManagerData from './groupManagerData'
+import payment from './payment'
 
 const columnData = {
   namespaced: true,
@@ -111,7 +112,6 @@ const columnData = {
       const pageSize = refresh
         ? state.pageSize
         : state.pageSize * (state.lessonCurrentPage + 1)
-      console.log(pageSize)
       const res = await getLessonListByCourse({
         courseId: courseId,
         currentPage: state.lessonCurrentPage,
@@ -142,8 +142,8 @@ const columnData = {
           bannerPic: result.bannerPic,
           columnLoading: false,
           columnList: result.courseInfo.result,
-          columnCurrentPage: page,
-          pageSize
+          columnCurrentPage: page,   
+          pageSize: state.pageSize
         })
       } else {
         const tempColumns = state.columnList.concat(result.courseInfo.result)
@@ -220,14 +220,13 @@ const columnData = {
     },
     async likeComment({ commit, state }, commentId) {
       const result = await likeComment({ commentId: commentId })
-      console.log('点赞结果')
       console.log(result)
       if (!result) return
       commit('updateUserCommentLikeId', result.commentId)
     }
   },
   modules: {
-    // groupContentData,
+    payment,
     groupManagerData
   }
 }

@@ -26,7 +26,7 @@ export default {
     singleSetList:[],
     statusFunc: (commit, status) => commit('statusUpdate', status),
     saveProgress: (id, currentTime, maxTime) => {
-      localStorage.setItem('learntime-' + id,
+      localStorage.setItem(id,
       JSON.stringify({lessonId: id,currentTime,maxTime,uploaded: 'no' }))
     }
   },
@@ -54,7 +54,7 @@ export default {
     syncPlay(state, params) {
       if (params) state._at.src = params.audioUrl  
       state._at.play().then(()=>{
-        let localCache = localStorage.getItem('learntime-' + state.audioDetail.id) 
+        let localCache = localStorage.getItem(state.audioDetail.id) 
         let listenJson = localCache? JSON.parse(localCache): null 
         if(listenJson){ 
           if(listenJson.currentTime + 3 > listenJson.maxTime) listenJson.currentTime = 0
@@ -101,7 +101,7 @@ export default {
         state.isBuffering = false
       }
       if(status == 'canplay'){      //设置播放进度
-        // let localCache = localStorage.getItem('learntime-' + state.audioDetail.id) 
+        // let localCache = localStorage.getItem(state.audioDetail.id) 
         // let listenJson = localCache? JSON.parse(localCache): null 
         // if(listenJson){
         //   state.maxTime = parseInt(listenJson.maxTime) 
@@ -125,23 +125,23 @@ export default {
     //本地缓存音频播放进度
     setListenTime(state,params){
       let data = JSON.stringify(params)
-      localStorage.setItem('learntime-' + params.lessonId, data)
+      localStorage.setItem(params.lessonId, data)
     },
     //更新本地音频进度
     updateListenTime(state, params){
-      let localCache = localStorage.getItem('learntime-' + params.lessonId) 
+      let localCache = localStorage.getItem(params.lessonId)  
       let listenJson = localCache? JSON.parse(localCache):{}
       if(listenJson){
         listenJson.uploaded = 'yes' 
       }else{
         listenJson = {
-          lessonId:params.learnId,
+          lessonId:params.lessonId,
           uploaded:'yes',
-          currentTime : params.learnTime,
+          currentTime : params.listenTime,
           maxTime : params.maxTime
         }
       }
-      localStorage.setItem('learntime-' + params.lessonId,JSON.stringify(listenJson))
+      localStorage.setItem(params.lessonId,JSON.stringify(listenJson))
     }
   },
   actions: {
@@ -149,16 +149,16 @@ export default {
     async getAudioDetail({ state, commit, dispatch }, params) {
       const res = await getAudioDetail(params)
       if(!res) return
-      let localCache = localStorage.getItem('learntime-' + res.id)
-      let listenJson = localCache ? JSON.parse(localCache):{} 
+      let localCache = localStorage.getItem(res.id)
+      let listenJson = localCache ? JSON.parse(localCache):{}   
+      let listenTime = parseInt(listenJson.currentTime)
+      let maxTime = parseInt(listenJson.maxTime)
+      let lessonId = res.id
       //更新本地缓存
       if (listenJson.uploaded && listenJson.uploaded === 'yes') { 
-        await commit('updateListenTime',{lessonId: res.id, learnTime: res.learnTime,maxTime: res.totalTime}) 
+        await commit('updateListenTime',{lessonId, listenTime,maxTime}) 
       } else {
         //提交本地缓存 
-        let listenTime = parseInt(listenJson.currentTime)
-        let maxTime = parseInt(listenJson.maxTime)
-        let lessonId = res.id
         dispatch('postLearnRate', { lessonId, listenTime, maxTime})
       } 
       // let courseId = state.courseId
@@ -189,7 +189,8 @@ export default {
       }
     },
     //音频暂停异步方式
-    async asyncPause({ commit }) {
+    async asyncPause({state,dispatch, commit }) {
+      // dispatch('postLearnRate', { lessonId:state.audioDetail.id, listenTime:state.currentTime, maxTime:state.maxTime})
       commit('syncPause')
     },
     //下一集
@@ -258,7 +259,10 @@ export default {
       if (params && params.listenTime <= 0) return 
       if(isNaN(params.listenTime))return
       const res = await postLearnRate(params) 
-      commit('updateListenTime', {learnId: params.lessonId,listenTime : params.listenTime,maxTime : params.maxTime})
+      let listenTime = parseInt(params.listenTime)
+      let maxTime = parseInt(params.maxTime)
+      let lessonId = params.lessonId
+      commit('updateListenTime', {lessonId,listenTime,maxTime})
     },
     //音频单集列表
     async getSingleSetList({ commit }, params) {
@@ -300,7 +304,7 @@ export default {
         if (state.playMode == 'order') { 
           dispatch('playNext') //播放下一集
         }
-        localStorage.setItem('learntime-' + state.audioDetail.id,JSON.stringify(data))
+        localStorage.setItem(state.audioDetail.id,JSON.stringify(data))
         //更新播放时间
         let lessonId = state.audioDetail.id 
         dispatch('postLearnRate', { lessonId, listenTime: parseInt(maxTime)})

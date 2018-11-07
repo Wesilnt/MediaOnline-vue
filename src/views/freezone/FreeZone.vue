@@ -7,7 +7,7 @@
           :immediate-check="false"
           @load="scrollBottom"
           @offset="10">
-            <router-link class="qhht-flex freeZone-item" v-for="item of freeZoneList" :key="item.id" :to="{name:'AudioPlay', params:{id:item.id},query:{columnType:'FreeZone'}}">
+            <div class="qhht-flex freeZone-item" v-for="item of freeZoneList" :key="item.id" @click="onItemClick">
                     <img  class="freeZone-infoBtn" :src="playingId===item.id?playingIcon:pauseIcon" >
                     <div class="freeZone-content">
                         <p class="freeZone-item-title" :class="{'book-title-playing':playingId === item.id}">
@@ -16,13 +16,14 @@
                         <span class="book-datetime" v-if="isNewest(item.createTime,timeLen)">{{item.createTime| createtimeFormat(timeLen)}}</span>
                         <span>时长{{item.totalTime | formatDuring}} | {{item.learnTime |learntimeFormat(item.totalTime,item.id)}}</span>
                 </div>
-            </router-link>
+            </div>
             </van-list>
         <p class="footer-warn">没有更多啦</p>
            <a class="qhht-blockButton subscribe-btn" :class="{'subscribe-disabled':isSubscribe}" @click="subscribe">{{isSubscribe?'已订阅':'订阅'}}</a>
     </div>
 </template> 
 <script>
+import {openAudioDetail } from '../../utils/config'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers('freezoneData')
 export default {
@@ -72,6 +73,9 @@ export default {
     isNewest(createTime, timeLen) {
       let createDate = new Date(createTime)
       return Date.now() - createDate.getTime() < timeLen
+    },
+    onItemClick(){
+      openAudioDetail(this,{courseId:0, columnType:'freezone', lessonId:id})
     },
     subscribe() {
       if (this.isSubscribe) {

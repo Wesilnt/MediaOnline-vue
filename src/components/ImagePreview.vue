@@ -1,8 +1,8 @@
 <template>
-  <div class="video-bigimage-container">
+  <div class="img-preview-container">
     <div class="originImage">
       <img :src="`${src}?imageView2/1/format/jpg`" class="lazy-img-larger img" @click="isExtend=true">
-      <img :src="require('../assets/images/icon_zoom.png')" class="videocol-bigimage-search" @click="isExtend=true">
+      <img :src="require('../assets/images/icon_zoom.png')" class="img-preview-search" @click="isExtend=true">
     </div>
     <transition enter-active-class="fadeIn" leave-active-class="fadeOut">
       <div v-if="isExtend&&src" class="imageExtend" @click="isExtend=false">
@@ -13,7 +13,7 @@
 </template>
 <script>
 export default {
-  name: 'Bigimage',
+  name: 'ImagePreview',
   props: ['src'],
   data() {
     return {
@@ -29,14 +29,14 @@ export default {
   max-height: 800px;
   overflow: hidden;
 }
-.videocol-bigimage-search {
+.img-preview-search {
   position: absolute;
   width: 80px;
   height: 80px;
   right: 0;
   bottom: 0;
 }
-.video-bigimage-container {
+.img-preview-container {
   display: block;
   margin-bottom: 40px;
   .imageExtend {

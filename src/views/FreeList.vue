@@ -12,19 +12,21 @@
 </template>
 
 <script>
+import {openAudioDetail } from '../utils/config'
 export default {
   props: ['data'],
   methods: {
     routerToPlayDetail(id) {
-        this.$router.push({
-          name: 'AudioPlay',
-          params: { 
-            columnType: 'freezone',
-            courseId: 0,
-            lessonId: id 
-          },
-          query: {courseName: this.courseName }
-      }) 
+       openAudioDetail(this,{courseId:0, columnType:'freezone', lessonId:id})
+      //   this.$router.push({
+      //     name: 'AudioPlay',
+      //     params: { 
+      //       columnType: 'freezone',
+      //       courseId: 0,
+      //       lessonId: id 
+      //     },
+      //     query: {courseName: this.courseName }
+      // }) 
     }
   }
 }

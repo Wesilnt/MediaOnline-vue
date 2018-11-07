@@ -2,7 +2,7 @@
     <div class="purchase-toolbar" v-show="toolsObject&&toolsObject.isShow">
         <div class="toolbar-audition" @click="clickAuditionBtn">
             <i class="qhht-icon audition-icon"></i>
-            <p class="under-text">{{serviceType == "1005"?'试看':'试听'}}</p>
+            <p class="under-text">{{columnType == "onlineCourse"?'试看':'试听'}}</p>
         </div>
         <hr class="vertical-line"/>
         <div v-show="toolsObject&&toolsObject.originPrice" :disabled="isLoading" class="toolbar-price" :class="{'toolbar-price-active':toolsObject&&!toolsObject.collage&&!toolsObject.collect }"  @click="clickOriginPriceBtn">
@@ -21,7 +21,7 @@
                 <div>{{toolsObject&&toolsObject.collectText}}</div>
             </div>
         </div>
-        <Share :show="sharePageShow" :courseId="courseId" :columnType ="serviceType"  :posturl="'groupBuy'" @close="cancelSharePage"></Share>
+        <Share :show="sharePageShow" :courseId="courseId" :columnType ="columnType"  :postType="'collage'" @close="cancelSharePage"></Share>
         <PhoneVerif :style="{'z-index':100}" v-if="isShowMobileDialog" @callback="bindIsShowMobileDialog(false)"></PhoneVerif>
     </div>
 
@@ -30,6 +30,7 @@
 <script>
 import Share from './share/Share'
 import PhoneVerif from './PhoneVerif'
+import {openVideoDetail, openAudioDetail } from '../utils/config'
 import {
   createNamespacedHelpers,
   mapState as rootState,
@@ -40,11 +41,12 @@ const {
   mapActions,
   mapMutations,
   mapGetters
-} = createNamespacedHelpers('videoColumnDetailData/groupManagerData')
+} = createNamespacedHelpers('columnData/groupManagerData')
+
 export default {
   name: 'ToolsNavbar',
   data() {
-    return {
+    return { 
       //是否显示分享
       sharePageShow: false,
       //分享内容
@@ -53,10 +55,14 @@ export default {
       //点击原价购买按钮
       isClickOriginPriceBtn: false,
       //点击拼团按钮
-      isClickCollageBtn: false
+      isClickCollageBtn: false,
+      columnType:this.$route.params.columnType
     }
   },
   props: {
+      'freeLesson':{
+          default: []
+      },
     originPrice: {
       type: String,
       default: '0'
@@ -98,7 +104,7 @@ export default {
               courseId: this.$route.params.courseId,
               collectLikeId: newVal
             },
-            query: { columnType: this.serviceType }
+            query: { columnType: this.columnType }
           })
         }
       },
@@ -108,7 +114,8 @@ export default {
       if (newVal == true) {
         //原价购买完成跳转到单集详情页
         const lessonId = this.freeLessonList[0].id
-        this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
+        // this.$router.push({ name: 'videoCourseDetail', params: { lessonId } })
+         openVideoDetail(this,{ courseId:this.courseId, columnType:this.columnType, lessonId})
       }
     },
     userAccessStatus: function(value) {}
@@ -123,7 +130,7 @@ export default {
       'groupBuyId',
       'toolsObject',
       'userAccessStatus',
-      'freeLesson', //试听对象
+      // 'freeLesson', //试听对象
       'courseId', //专栏ID
       'startPraiseFlag',
       'serviceType',
@@ -165,6 +172,7 @@ export default {
     ]),
     //点击试听按钮 跳转
     clickAuditionBtn() {
+      console.log('freeLesson',this.freeLesson)
       if (this.freeLesson && this.freeLesson.length > 0) {
         const { id } = this.freeLesson[0]
         this.gotoInfoPage(id)
@@ -358,7 +366,7 @@ export default {
               collectLikeId: this.collectLikeId
             },
             query: {
-              columnType: this.serviceType
+              columnType: this.columnType
             }
           })
           break
@@ -394,36 +402,13 @@ export default {
       this.sharePageShow = false
     },
     gotoInfoPage(id) {
-      switch (this.serviceType) {
-        case '1005':
-          this.$router.push({
-            name: 'videoCourseDetail',
-            params: { lessonId: id }
-          })
-          break
-        case 'FreeZone':
-          break
-        case '1003':
-          this.$router.push({
-            name: 'AudioPlay',
-            params: { id },
-            query: {
-              courseId: this.courseId,
-              columnType: this.serviceType,
-              courseName: this.courseName
-            }
-          })
-          break
-        case '1007':
-          this.$router.push({
-            name: 'AudioPlay',
-            params: { id },
-            query: {
-              courseId: this.courseId,
-              columnType: this.serviceType,
-              courseName: this.courseName
-            }
-          })
+      switch (this.columnType) {
+        case 'onlineCourse':
+          openVideoDetail(this,{courseId:this.courseId, columnType:this.columnType, lessonId:id})
+          break 
+        case 'onlineVision':
+        case 'reading':
+           openAudioDetail(this,{courseId:this.courseId, columnType:this.columnType, lessonId:id}) 
           break
       }
     }

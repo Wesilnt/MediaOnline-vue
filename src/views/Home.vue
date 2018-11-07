@@ -13,14 +13,6 @@
       </div>
       <Notice :message-count="newMessageCount" :fromAvatarUrl= "fromAvatarUrl"/>
       <div class="index-container">
-        <!-- <Header v-if="false" :link="'/home/freezone'" title="免费专区" subtitle="探索更多" />
-        <FreeList v-if="false" :free-list="freeList" />
-        <Header :link="'/home/visionList'" title="音频课程" subtitle="探索更多" />
-        <DisCoverVisionList :vision-list="visionList" />
-        <Header :link="'/home/videoList'" title="视频课程" subtitle="探索更多" />
-        <DisCoverVideoList :video-list="videoList" />
-        <Header :link="'/home/readings'" title="少年读书会" subtitle="探索更多" />
-        <BookList :book-list="bookList" /> -->
         <HomeItem v-for="item of Object.keys(homeColumnList)" 
                   :key="item" 
                   :item="homeColumnList[item]" 
@@ -28,6 +20,8 @@
                   :list='columns[homeColumnList[item].listKey]'/>
       </div>
     </div>
+    <!--赚字-->
+    <!--<div v-if="true" class="earn-label">赚</div>-->
   </div>
 
 </template>
@@ -86,7 +80,7 @@ export default {
           this.$router.push({ path: `/detail/${getColumnType(data[0])}/${data[1]}` })
         }
         if(item.type === '2502'){
-          window.location.href = url
+          window.location.href = item.url
         }
       // if (url.includes('&/&')) {
       //   const [type, id] = url.split('&/&')
@@ -138,4 +132,21 @@ export default {
 .index-container {
   padding: 0 28px;
 }
+.earn-label{
+    right: 30px;
+    bottom: 206px;
+    position: fixed;
+    z-index: 125;
+    width: 114px;
+    height: 114px;
+    border-radius: 50%;
+    background-color: #fa7725;
+    line-height: 114px;
+    text-align: center;
+    font-size: 56px;
+    color: #ffffff;
+    border: 6px solid #ffffff;
+    font-weight: 300;
+}
 </style>
+

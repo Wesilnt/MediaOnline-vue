@@ -23,7 +23,6 @@ import audiotaskData from './module/audioTaskData'
 import shareData from './module/shareData'
 import praiseData from './module/praiseData'
 import mobileData from './module/mobileData'
-import payment from './module/payment'
 import columnActions from './column'
 
 import {
@@ -255,6 +254,5 @@ export default new Vuex.Store({
     shareData,
     praiseData,
     mobileData,
-    payment
   }
 })

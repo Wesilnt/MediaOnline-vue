@@ -108,9 +108,9 @@
     watch: {
       loading: function (loading) {
 
-        if (this.loading === false) {
-          this.$router.history.go(-2)
-        }
+        // if (this.loading === false) {
+        //   this.$router.history.go(-2)
+        // }
       }
     },
     methods: {
@@ -133,6 +133,8 @@
               role: this.identity,
               gender: this.gender,
               grade: this.grade
+            }).then(()=>{
+              this.$router.replace({path: './DisplayUserInfo'})
             })
           }
         }

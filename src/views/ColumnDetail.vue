@@ -18,7 +18,7 @@
                     <div class="column-sction-title">
                         <h4>课程列表 <label>(共{{columnDetail.lessonCount}}讲)</label></h4>
                     </div>
-                    <videoBigimage :src="columnDetail.outlinePic"/>
+                    <ImagePreview :src="columnDetail.outlinePic"/>
                 </div>
                 <!-- 试看课程 -->
                 <div class="column-base">
@@ -29,7 +29,12 @@
                             <img :src="require('../assets/images/arrow_right.png')" class="column-allbtn-icon">
                         </div>
                     </div>
-                    <playlist v-for="(item,index) of columnDetail.freeLessonList" :key="item.id" :iteminfo="item" :lastindex="index === (columnDetail.freeLessonList.length - 1)" @jumpEvent="toDetail(item.id)"/>
+                    <!-- <playlist v-for="(item,index) of columnDetail.freeLessonList" :key="item.id" :iteminfo="item" :lastindex="index === (columnDetail.freeLessonList.length - 1)" @jumpEvent="toDetail(item.id)"/> -->
+                 <SingleSetItem v-for="item of columnDetail.freeLessonList" 
+                    :key="item.id" 
+                    :item="item"  
+                    :courseid="courseId"
+                    :columnType="columnType" />
                 </div>
                 <div id="leaveMessage">
                     <!-- 精选留言 -->
@@ -44,7 +49,7 @@
                         <CommentList  :regionid="courseId" :regiontype="2201" :unindent="true" ></CommentList>
                     </div>
                     <!-- 购买须知 -->
-                    <div class="column-base">
+                    <div class="column-base column-base-last">
                         <div class="column-sction-title">
                             <h4>购买须知</h4>
                         </div>
@@ -121,8 +126,12 @@
             <div class="load-more-container" v-if="lessonFinished">
                 没有更多了，不要再拉啦～
             </div>
-            <!-- <Payment /> -->
-            <toolsNavbar :freeLesson="freeLesson" :lessonList="lessonList"/>
+             <!--<Payment-->
+                 <!--:purchased="lessonList[0]"-->
+                 <!--:isTryScan="isCourseType"-->
+                 <!--:columnDetail="columnDetail"-->
+             <!--/>-->
+             <toolsNavbar :freeLesson="columnDetail.freeLessonList" :lessonList="lessonList"/>
         </div>
     </div>
 </template>
@@ -132,19 +141,20 @@ import SkeletonFullScreen from '../components/SkeletonFullScreen'
 import GroupHeader from './onlineCourse/components/GroupHeader'
 import Payment from '../components/Payment'
 import toolsNavbar from '../components/toolsNavbar.vue'
+import SingleSetItem from '../components/SingleSetItem.vue'
 import SingleSetList from '../components/SingleSetList.vue'
 import CommentList from '../components/comment/CommentList.vue'
 import ScrollNavBar from '../components/ScrollNavBar'
 import CourseIntroduce from '../components/CourseIntroduce.vue'
 import playlist from './onlineCourse/components/playlist.vue'
 import videoComment from '../components/video-comment.vue'
-import videoBigimage from '../components/videoBigimage.vue'
+import ImagePreview from '../components/ImagePreview'
 import {
   createNamespacedHelpers,
   mapState as rootState,
   mapActions as rootActions
-} from 'vuex'
-import { columnType as COLUMNTYPE } from '../utils/config'
+} from 'vuex' 
+import {openVideoDetail, openAudioDetail , columnType as COLUMNTYPE } from '../utils/config'
 
 const {
   mapState,
@@ -167,7 +177,7 @@ export default {
           ref: 'desc'
         },
         {
-          title: this.columnType === 'onlineCourse' ? '试看' : '试听',
+          title: columnType === 'onlineCourse' ? '试看' : '试听',
           ref: 'tryCourse'
         },
         {
@@ -262,9 +272,7 @@ export default {
       if (this.columnType === 'onlineCourse') {
         this.$router.push(`/videoInnerList/${this.columnType}/${this.courseId}`)
       } else if (this.columnType === 'onlineVision') {
-        this.$router.push({
-          path: `/home/visionDetail/visionCourseList/${this.courseId}`
-        })
+        this.$router.push({path: `/home/visionDetail/visionCourseList/${this.courseId}`})
       }
     },
     enterVideoCommentsList() {
@@ -272,24 +280,26 @@ export default {
     },
     toDetail(lessonId) {
       if (this.columnType === 'onlineVision')
-        this.$router.push({
-          name: 'AudioPlay',
-          params: {
-            courseId: this.courseId,
-            columnType: this.columnType,
-            lessonId
-          },
-          query: { courseName: this.columnDetail.name }
-        })
+       openAudioDetail(this,{courseId:this.courseId, columnType:this.columnType, lessonId,courseName:this.columnDetail.name})
+        // this.$router.push({
+        //   name: 'AudioPlay',
+        //   params: {
+        //     courseId: this.courseId,
+        //     columnType: this.columnType,
+        //     lessonId
+        //   },
+        //   query: { courseName: this.columnDetail.name }
+        // })
       if (this.columnType === 'onlineCourse')
-        this.$router.push({
-          name: 'videoCourseDetail',
-          params: {
-            courseId: this.courseId,
-            columnType: this.columnType,
-            lessonId
-          }
-        })
+       openVideoDetail(this,{courseId:this.courseId, columnType:this.columnType, lessonId})
+        // this.$router.push({
+        //   name: 'videoCourseDetail',
+        //   params: {
+        //     courseId: this.courseId,
+        //     columnType: this.columnType,
+        //     lessonId
+        //   }
+        // })
     },
     //分页加载
     scrollBottom() {
@@ -298,6 +308,7 @@ export default {
     }
   },
   components: {
+    SingleSetItem,
     SingleSetList,
     toolsNavbar,
     SkeletonFullScreen,
@@ -306,7 +317,7 @@ export default {
     CourseIntroduce,
     playlist,
     videoComment,
-    videoBigimage,
+    ImagePreview,
     ScrollNavBar,
     CommentList
   }
@@ -399,6 +410,10 @@ export default {
   padding: 0 40px;
   background-color: #fff;
   border-bottom: 8px solid rgb(247, 247, 247);
+  &.column-base-last {
+    padding-bottom: 180px;
+    border-bottom: none;
+  }
 }
 //大图浏览
 .column-bigimage {
@@ -463,12 +478,5 @@ export default {
   font-size: 32px;
   color: rgb(128, 128, 128);
   margin: 20px 0 20px;
-}
-.column-purchase-tip-fatherView {
-  width: 100%;
-  margin-bottom: 120px;
-}
-.column-purchase-tip-fatherView :last-child {
-  margin-bottom: 60px;
 }
 </style>
