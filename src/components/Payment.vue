@@ -80,6 +80,8 @@ export default {
     ...mapGetters([
       'groupBuyId',
       'collectLikeId',
+      'collectLikeTemplateId',
+      'groupBuyTemplateId',
       'sharePostUrl',
       'groupBuyPrice',
       'price',
@@ -103,20 +105,17 @@ export default {
   watch: {
     groupBuyId(newGroupBuyId) {
       if (newGroupBuyId) {
-        console.error(newGroupBuyId)
         this.paymentType = PAYMENTTYPE.groupBuy
       }
     },
     collectLikeId(newCollectLikeId) {
       if (newCollectLikeId) {
-        console.error(newCollectLikeId)
         this.paymentType = PAYMENTTYPE.groupBuy
       }
     },
     paymentType: {
       handler(paymentType) {
         if (!paymentType) return
-        console.log('拼团状态  是  ' + paymentType)
         this.mapGroupBuyDetailToPayment()
         this.setWxShare(paymentType)
       },
@@ -499,12 +498,13 @@ export default {
       userList,
       groupBuyPersonCount
     } = this
-    const tryTxt = isTryScan ? '试看' : '试听'
+      const tryTxt = isTryScan ? '试看' : '试听'
     const paymentObj = this.paymentShowText[
       `${this.master}_${this.userAccessStatusFromGroup ||
         this.userAccessStatus}`
     ]
-    console.log(paymentObj, groupBuyId, collectLikeId)
+      console.log('拼团状态  是  ' + this.paymentType)
+    console.log(paymentObj,price, groupBuyId, collectLikeId)
     const { hide, showPrice } = paymentObj
     let paymentBtn = this.renderPayment({
       origin: price && showPrice && this.renderOriginBuy,

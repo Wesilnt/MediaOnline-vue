@@ -34,6 +34,12 @@ export default {
       collectLikeId(state, getters, {columnData}) {
           return columnData.collectLikeId
       },
+      groupBuyTemplateId(state, getters, {columnData}) {
+          return columnData.groupBuyTemplateId
+      },
+      collectLikeTemplateId(state, getters, {columnData}) {
+          return columnData.collectLikeTemplateId
+      },
       groupBuyId(state, getters, {columnData}) {
           return columnData.groupBuyId
       },
