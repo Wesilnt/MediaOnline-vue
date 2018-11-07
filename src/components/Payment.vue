@@ -255,15 +255,9 @@ export default {
     ]),
     async mapGroupBuyDetailToPayment() {
       const { groupBuyId, groupBuyIdFromShare } = this
-      if (groupBuyIdFromShare) {
-        await this.getGroupBuyDetail({ groupBuyId: groupBuyIdFromShare })
+        await this.getGroupBuyDetail({ groupBuyId: groupBuyIdFromShare || groupBuyId })
         return await this.judgeIdentity()
-      }
-      if (groupBuyId) {
-        // 如果有拼团Id，请求拼团详情接口
-        await this.getGroupBuyDetail({ groupBuyId })
-        await this.judgeIdentity()
-      }
+
     },
     async handlePayment(paymentQueryType, params) {
       this.payDisabled = true
@@ -366,7 +360,7 @@ export default {
       )
     },
     handleJoinGroupBuy() {
-      this.handlePayment('joinGroupBuy', { groupBuyId: this.groupBuyId })
+      this.handlePayment('joinGroupBuy', { groupBuyId: this.groupBuyIdFromShare })
     },
     handleStartGroupBuy() {
       this.handlePayment('startGroupBuy')
