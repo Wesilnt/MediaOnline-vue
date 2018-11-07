@@ -504,7 +504,13 @@ export default {
         this.userAccessStatus}`
     ]
     console.log('拼团状态  是  ' + this.paymentType)
-    console.log(paymentObj, price, groupBuyTemplateId, collectLikeTemplateId,userList)
+    console.log(
+      paymentObj,
+      price,
+      groupBuyTemplateId,
+      collectLikeTemplateId,
+      userList
+    )
     const { hide, showPrice } = paymentObj
     let paymentBtn = this.renderPayment({
       origin: price && showPrice && this.renderOriginBuy,
@@ -537,7 +543,11 @@ export default {
             isSixGroup={this.groupBuyPersonCount > 3}
             userListTop={userListTop}
             userListBot={userListBot}
-            userAccessStatusFromGroup={this.userAccessStatusFromGroup}
+            userAccessStatus={
+              this.master === identityType.OWNER
+                ? this.userAccessStatus
+                : this.userAccessStatusFromGroup
+            }
           />
         )}
         <div class="qhht-flex payment-wrapper">
