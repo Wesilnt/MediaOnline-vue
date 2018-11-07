@@ -1,9 +1,7 @@
 <template> 
     <li class="singleset-item-container" tag="div" @click="onItemClick(item)">
       <div class="item-content">
-        <div :class="{'icon-playing':playing}" class="item-icon" 
-        v-lazy:background-image="`${item.coverPic}?imageView2/1/w/100/h/100/format/jpg/q/50`">
-          <!-- <img :src="playing?require('../assets/images/icon_playing_shadow.png'):require('../assets/images/icon_pause_shadow.png')"> -->
+        <div :class="{'icon-playing':playing}" class="item-icon" v-lazy:background-image="`${item.coverPic}?imageView2/1/w/100/h/100/format/jpg/q/50`">
           <i class="qhht-icon playItem-item-badge" :class="{'playItem-item-badge-active':activeID === item.id}"></i>
         </div>
         <div class="item-describe">
@@ -28,42 +26,24 @@ export default {
     }
   },
   //singleset 单集  playing是否正在播放
-  props: ['item','isEmit', 'playing','activeID', 'coursename','useraccessstatus'],
+  props: ['item','isEmit', 'playing','activeID','useraccessstatus'],
   methods: {
     onItemClick(item) {
       if(this.isEmit)
       {
-      this.$emit('jumpEvent', item.id)
-      return
+        this.$emit('jumpEvent', item.id)
+        return
       }
       //单购成功、拼团成功、集赞成功已领取
-      let unLock =1001 === this.useraccessstatus ||  1003 === this.useraccessstatus || 1008 === this.useraccessstatus
-      if (item.isFree || unLock) { 
-        if(this.columnType == 'onlineCourse'){
-          openVideoDetail(this,{ courseId : this.courseId, columnType:this.columnType, lessonId:item.id})
-          // this.$router.push({path: `/videoCourseDetail/${item.id}`})
-          // this.$router.push({
-          //      name: 'videoCourseDetail',
-          //      params:{
-          //        courseId : this. courseid,
-          //        columnType:this.columnType,
-          //        lessonId:item.id
-          //      }
-          //   })
-        }else{
-          openAudioDetail(this,{ courseId : this.courseId, columnType:this.columnType, lessonId:item.id})
-          // this.$router.push({
-          //   name: 'AudioPlay',
-          //   params: { 
-          //     courseId: this.courseid,
-          //     columnType: this.columnType,
-          //     lessonId: item.id,
-          //   },  
-          //   query:{courseName:this.coursename}
-          // })
-        }
-      } else {
-        this.$toast.fail('您还未购买该专栏')
+      let unLock =1001 == this.useraccessstatus ||  1003 == this.useraccessstatus || 1008 == this.useraccessstatus
+      if (!item.isFree && !unLock) {
+          this.$toast.fail('您还未购买该专栏')
+          return
+      }
+      if(this.columnType === 'onlineCourse'){
+        openVideoDetail(this,{ courseId : this.courseId, columnType:this.columnType, lessonId:item.id})
+      }else{
+        openAudioDetail(this,{ courseId : this.courseId, columnType:this.columnType, lessonId:item.id})
       }
     }
   }

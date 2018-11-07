@@ -7,12 +7,12 @@
       :immediate-check="true"
       @load="scrollBottom"
       @offset="10">
-          <!-- <playlist v-for="(item,index) of lessonList" :key="item.id" :iteminfo="item" :lastindex="index == (lessonList.length - 1)" @jumpEvent="gotoVideoCourseDetailPage(item)"/> -->
           <SingleSetItem v-for="item of lessonList" 
             :key="item.id" 
             :item="item"  
             :courseid="courseId"
-            :columnType="columnType" />
+            :columnType="columnType"
+            :useraccessstatus="userAccessStatus"/>
     </van-list>
     <div class="home-warnTip" v-show="lessonFinished">没有更多了,不要在拉了~</div>
   </div>
@@ -22,7 +22,7 @@
 import playlist from './components/playlist.vue'
 import SingleSetItem from '../../components/SingleSetItem.vue'
 import { createNamespacedHelpers } from 'vuex'
-const { mapState,mapMutations, mapActions, mapGetters } = createNamespacedHelpers('columnData')
+const { mapState,mapMutations, mapActions } = createNamespacedHelpers('columnData')
 
 export default{
   data(){

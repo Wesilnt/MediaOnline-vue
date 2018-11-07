@@ -19,7 +19,7 @@
 <script>
 import { createNamespacedHelpers,mapState as mapRootState } from 'vuex'
 import MobileVali from '../../components/PhoneVerif.vue'
-const { mapState, mapActions, mapGetters } = createNamespacedHelpers('praiseData')
+const {  mapActions } = createNamespacedHelpers('praiseData')
 let buttonDatas = [
   {
     isSingle: false, //单按钮还是双按钮  0
@@ -69,7 +69,8 @@ export default {
     return {
       show: false,
       buttonDatas: buttonDatas,
-      btnState: buttonDatas[this.state]
+      btnState: buttonDatas[this.state],
+      columnType: this.$route.params.columnType
     }
   },
   watch: {
@@ -101,15 +102,14 @@ export default {
       this.$emit('share')
     },
     onRight() {
-      if (0 == this.state) { 
-        // let params = { courseId:  this.courseid,collectLikeId :this.collectlikeid, }
+      if (0 == this.state) {
+         let columnType = this.columnType || this.columntype
         //分享海报
-        //专栏类型columnType：  FreeZone(1001) 免费专区  OnlineCourse(1005) 在线课堂 OnlineVision(1003) 在线视野  Readings(1007) 读书会 
         this.$router.push({
           name: 'SharePoster',
           params:{
             courseId:this.courseid,
-            columnType:this.columntype,
+            columnType,
             postType:'praise'
           },
           query: { 
@@ -123,12 +123,13 @@ export default {
       }
     },
     goColumnDetail(){  
-      //专栏类型  FreeZone(1001) 免费专区  OnlineCourse(1005) 在线课堂 OnlineVision(1003) 在线视野  Readings(1007) 读书会 
-      let columnName = this.columntype == "1005" ? 
-                'videoColumnDetail':this.columntype == '1003'?
-                'VisionDetail':this.columntype == '1007'? 
+      //专栏类型  FreeZone(1001) 免费专区  OnlineCourse(1005) 在线课堂 OnlineVision(1003) 在线视野  Readings(1007) 读书会
+      let columnType = this.columnType || this.columntype
+      let columnName = columnType == "onlineCourse" ?
+                'videoColumnDetail':columnType == 'onlineVision'?
+                'VisionDetail':columnType == 'reading'?
                 'BookDetail':'FreeZone'
-      this.$router.push({name: columnName, params: { courseId: this.courseid }})
+      this.$router.push({name: columnName, params: { columnType, courseId: this.courseid }})
     }
   }
 }
@@ -158,11 +159,12 @@ export default {
     text-align: center;
   }
   .btn-single .solid-small {
-    width: 312px;
+    min-width: 312px;
     padding: 0 60px;
     height: 96px;
     line-height: 96px;
     border-radius: 90px;
+    text-align: center;
     background-color: rgb(255, 163, 47);
     color: white;
     font-size: 36px;

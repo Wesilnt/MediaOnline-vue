@@ -10,17 +10,15 @@
     <loading-dialog v-if="loading"></loading-dialog>
     <!-- 二维码生成组件 -->
     <qr-code  :style="{display:'none'}"   :text="shareUrl" error-level="Q" />
-     <!--loading-->
      <div class="loading-container" v-show="isLoading">
         <van-loading color="white" />
      </div>
   </div>
 </template> 
 <script>
-import { columnType,courseType } from '../../utils/config'
 import LoadingDialog from '../LoadingDialog.vue'
 import { createNamespacedHelpers ,mapState as rootState,mapActions as rootActions} from 'vuex'
-const { mapState, mapActions, mapGetters } = createNamespacedHelpers('shareData')
+const { mapState, mapActions } = createNamespacedHelpers('shareData')
 export default {
   name: 'shareposter',  
   data() { 
@@ -97,8 +95,6 @@ export default {
         return (window.devicePixelRatio || 1) / backingStore;
       }
     this.pixelRatio = getPixelRatio(this.ctx)
-    // this.canvasData.style.height = this.canvasH * this.pixelRatio +"px"
-    // this.canvasData.style.width = this.canvasW * this.pixelRatio +'px'
     //将画布放 屏幕像素比
     this.canvasData.height = this.canvasH * this.pixelRatio 
     this.canvasData.width = this.canvasW * this.pixelRatio 
@@ -117,12 +113,10 @@ export default {
     //設置海報分享地址
     setPosterConfig(){  
     //0. 有专栏详情, 非集赞中和拼团中
-    //  if(this.columnDetail) this.shareUrl =   `${this.url}/#${courseType[this.shareType]}${this.columnDetail.id}`
     if(!this.columnDetail) return
     this.shareUrl =  `${this.url}/#/detail/${this.shareType}/${this.columnDetail.id}`
     //1. 有专栏详情, 拼团中
-    if(this.postType === 'collage' && this.columnDetail.userAccessStatus===1005){   
-      //  this.shareUrl =  `${this.url}/#${courseType[this.shareType]}${this.columnDetail.id}?groupBuyId=${this.columnDetail.groupBuyId}`
+    if(this.postType === 'collage' && this.columnDetail.userAccessStatus===1005){
        this.shareUrl =  `${this.shareUrl}?groupBuyId=${this.columnDetail.groupBuyId}`
      } 
      //2. 有专栏详情, 集赞中
@@ -137,8 +131,8 @@ export default {
       this.ctx.scale(this.pixelRatio,this.pixelRatio)
       this.getUserInfo() 
       .then(user => this.user = user)
-      .then(user=> new Promise(resolve=>this.drawBackground(resolve)))
-      .then(p=> new Promise(resolve=>this.drawHeadImage(resolve)))
+      .then(()=> new Promise(resolve=>this.drawBackground(resolve)))
+      .then(()=> new Promise(resolve=>this.drawHeadImage(resolve)))
       .then(()=>{this.drawUserName();this.drawQrcode()}) 
       .then(()=>  this.$refs.saveimage.src = this.canvasData.toDataURL('images/png'))
       .then(()=> this.isLoading = false ,()=>this.isLoading = false)
@@ -149,12 +143,14 @@ export default {
      async drawBackground(resolve) {
       this.ctx.fillStyle = '#ffffff'
       this.ctx.fillRect(0, this.bottomY, this.canvasW, this.bottomH)
-      var cover = new Image() 
-      cover.setAttribute('crossOrigin', 'anonymous') 
-      let sharePoster =  this.columnDetail.sharePostUrl  //默认专栏海报分享
-      if(this.sharePostUrl) {  //groupBuy拼团分享海报,  集赞分享海报
-        sharePoster = this.sharePostUrl === 'groupBuy' ? this.columnDetail.groupBuySharePostUrl : this.sharePostUrl
-      }
+      let cover = new Image()
+      cover.setAttribute('crossOrigin', 'anonymous')
+      //默认专栏海报分享
+      let sharePoster =  this.columnDetail.sharePostUrl
+      //拼团分享海报
+      if('collage' === this.postType)  sharePoster = this.columnDetail.groupBuySharePostUrl
+      // 集赞分享海报
+      if('praise' === this.postType)  sharePoster = this.sharePostUrl
       cover.src = sharePoster
       cover.onload = () => {
         this.ctx.save()
@@ -187,7 +183,6 @@ export default {
       let username = this.user.nickName
       this.ctx.fillStyle = '#262626'
       this.ctx.font = '15px Georgia'
-      let textWidth = this.ctx.measureText(username).width
       this.ctx.fillText(username,  this.userNameLeft* this.radio, this.userNameTop * this.radio) 
     },
     //4. 绘制二维码

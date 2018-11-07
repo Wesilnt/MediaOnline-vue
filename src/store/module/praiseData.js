@@ -101,9 +101,9 @@ export default {
       await dispatch('setShareInfo',{user, res}) 
       await commit('bindPraiseDetail', res) 
       console.log(res)
-      if (res.status != 1202) return res
       await commit('destroyInterval')
-      let totalTime = res.duration * 3600 +  (res.createTime - res.sysTime) / 1000  
+      if (res.status != 1202) return res
+      let totalTime = res.duration * 3600 +  (res.createTime - res.sysTime) / 1000
       let timerInterval = setInterval(() => {
         var hours = parseInt(totalTime / (60 * 60))
         var minutes = parseInt((totalTime % (60 * 60)) / 60)
