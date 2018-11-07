@@ -97,7 +97,7 @@ export default {
       'createTime',
       'alreadyCount',
       'status',
-        'timeDuration'
+      'timeDuration'
     ])
   },
   watch: {
@@ -136,7 +136,7 @@ export default {
     await this.judgePaymentType()
     let handler = this.toggleSharePage.bind(this, true)
     if (collectLikeId) {
-      handler = this.toggleSharePage.bind(this, true, false)
+      handler = this.gotoPraising
     }
     const groupBuyTextType = {
       20020: {
@@ -387,72 +387,35 @@ export default {
     handleStartCollectLike() {
       this.handlePayment('startCollectLike')
     },
-    //点击集赞按钮
-    clickCollectBtn() {
-      this.isClickCollageBtn = false
-      this.isClickOriginPriceBtn = false
-      let params = null
-      switch (this.userAccessStatus) {
-        case 1007:
-          //集赞成功未领取
-          params = {
-            collectLikeId: this.collectLikeId
-          }
-          this.getCollectLike(params)
-          break
-        case 1008:
-          //集赞成功已领取  解锁专栏 跳转到单集详情页
-          if (this.lessonsArray && this.lessonsArray.length > 0) {
-            const { id } = this.lessonsArray[0]
-            this.gotoInfoPage(id)
-          }
-          break
-        case 1009:
-          //集赞中
-          this.$router.push({
-            name: 'Praise',
-            params: {
-              courseId: this.$route.params.courseId,
-              collectLikeId: this.collectLikeId
-            },
-            query: {
-              columnType: this.columnType
-            }
-          })
-          break
-        case 0:
-          //没有购买和集赞行为
-          params = {
-            courseId: this.courseId,
-            payType: 3
-          }
-          this.checkoutAuthorrization(params)
-          break
-        case -3:
-          //拼团失败后,此时工具条标准显示,此时可以发起集赞
-          params = {
-            courseId: this.courseId,
-            payType: 3
-          }
-          this.checkoutAuthorrization(params)
-          break
-      }
-    },
     handleGetCollectLike() {
       this.handlePayment('getCollectLike', {
         collectLikeId: this.collectLikeId
       })
     },
+    //点击集赞按钮
+    gotoPraising() {
+      this.$router.push({
+        name: 'Praise',
+        params: {
+          courseId: this.courseId,
+          collectLikeId: this.collectLikeId
+        },
+        query: {
+          columnType: this.columnType
+        }
+      })
+    },
+
     goBackHome() {
       this.$router.push({ path: '/home' })
     },
 
-    routerToSingleSet() {
-      if (!this.freeLesson) {
+    routerToSingleSet(Lesson) {
+      if (!Lesson) {
         return this.$toast('暂无试听课程')
       }
       const { courseId, columnType, courseName } = this
-      const { id } = this.freeLesson
+      const { id } = Lesson
       switch (this.columnType) {
         case 'onlineCourse':
           openVideoDetail(this, {
@@ -532,8 +495,9 @@ export default {
       showTeleRegister,
       sharePageShow,
       groupBuyId,
-      collectLikeId,userList,
-        groupBuyPersonCount
+      collectLikeId,
+      userList,
+      groupBuyPersonCount
     } = this
     const tryTxt = isTryScan ? '试看' : '试听'
     const paymentObj = this.paymentShowText[
@@ -558,25 +522,28 @@ export default {
         collect: this.renderCollectBuy.bind(this, paymentObj)
       })
     }
-    let userListTop=[],userListBot=[];
-    if(groupBuyPersonCount>3 && userList){
-        userListTop= userList.slice(0,3)
-        userListBot= userList.slice(3)
+    let userListTop = [],
+      userListBot = []
+    if (groupBuyPersonCount > 3 && userList) {
+      userListTop = userList.slice(0, 3)
+      userListBot = userList.slice(3)
     }
     return hide ? null : (
       <div>
-        {this.paymentType === groupBuy && <GroupHeader
+        {this.paymentType === groupBuy && (
+          <GroupHeader
             timeDuration={this.timeDuration}
             leavePerson={this.groupBuyPersonCount - this.alreadyCount}
-            isSixGroup={this.groupBuyPersonCount >3}
+            isSixGroup={this.groupBuyPersonCount > 3}
             userListTop={userListTop}
             userListBot={userListBot}
             userAccessStatusFromGroup={this.userAccessStatusFromGroup}
-        />}
+          />
+        )}
         <div class="qhht-flex payment-wrapper">
           <div
             class="payment-flex-column payment-audition"
-            onClick={this.routerToSingleSet}
+            onClick={this.routerToSingleSet.bind(this, this.freeLesson)}
           >
             <i class="audition-icon" />
             <span class="payment-low-attention">{tryTxt}</span>
