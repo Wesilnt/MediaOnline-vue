@@ -101,8 +101,9 @@ export default {
         starterUid,
         userList: userList.reduce((prev, item, index) => {
           if (item.id) {
-            return prev[index] = item
+            prev[index] = item
           }
+          return prev
         }, userListArr),
         userAccessStatusFromGroup,
         timeDuration,
