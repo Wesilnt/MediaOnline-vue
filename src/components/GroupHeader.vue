@@ -50,6 +50,9 @@ export default {
     'isSixGroup',
     'userAccessStatusFromGroup'
   ],
+  updated() {
+    console.log(this)
+  },
   components: {
     CountDown
   }
