@@ -2,7 +2,7 @@
     <div class="display-user-info">
         <div class="display-user-info-column" @click="handleUpdateUserInfo('gender')">
             <p class="display-user-info-column-label">性别</p>
-            <p class="display-user-info-column-content">{{userInfo.gender === '0' ? '男': '女'}}</p>
+            <p class="display-user-info-column-content">{{userInfo.gender == '0' ? '男': '女'}}</p>
             <img class="display-user-info-column-image-arraw" :src="require('../../assets/images/arrow_right.png')"/>
         </div>
         <div class="display-user-info-column" @click="handleUpdateUserInfo('grade')">
@@ -20,8 +20,7 @@
                     show-toolbar
                     :columns="whichPicker ==='gender' ? genders : grades"
                     @confirm="onConfirm"
-                    @cancel="onCancel"
-            />
+                    @cancel="onCancel"></van-picker>
         </van-popup>
     </div>
 </template>

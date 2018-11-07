@@ -138,18 +138,14 @@ const columnData = {
       })
       if (!result) return
       if (refresh) {
-          let isFinished = tempColumns.length >= result.courseInfo.totalCount
+        let isFinished = result.courseInfo.result.length >= result.courseInfo.totalCount
         commit('saveStatus', {
           bannerPic: result.bannerPic,
           columnLoading: false,
           columnList: result.courseInfo.result,
-          columnCurrentPage: page,   
-<<<<<<< HEAD
-          pageSize: state.pageSize
-=======
+          columnCurrentPage: page,
           pageSize: state.pageSize,
           columnFinished: isFinished
->>>>>>> 81aa81f632d2bed1bda5f10c9289317feaad7da6
         })
       } else {
         const tempColumns = state.columnList.concat(result.courseInfo.result)
