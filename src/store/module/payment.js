@@ -101,7 +101,7 @@ export default {
         starterUid,
         userList: userList.reduce((prev, item, index) => {
           if (item.id) {
-            return prev[index] === item
+            return prev[index] = item
           }
         }, userListArr),
         userAccessStatusFromGroup,

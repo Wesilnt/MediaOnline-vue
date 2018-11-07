@@ -504,7 +504,7 @@ export default {
         this.userAccessStatus}`
     ]
     console.log('拼团状态  是  ' + this.paymentType)
-    console.log(paymentObj, price, groupBuyTemplateId, collectLikeTemplateId)
+    console.log(paymentObj, price, groupBuyTemplateId, collectLikeTemplateId,userList)
     const { hide, showPrice } = paymentObj
     let paymentBtn = this.renderPayment({
       origin: price && showPrice && this.renderOriginBuy,
