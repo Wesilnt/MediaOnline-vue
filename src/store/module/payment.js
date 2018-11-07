@@ -31,14 +31,14 @@ export default {
     toast: null
   }),
   getters: {
-      collectLikeId(state, getters, {columnData}) {
-          return columnData.collectLikeId
-      },
       groupBuyTemplateId(state, getters, {columnData}) {
-          return columnData.groupBuyTemplateId
+          return columnData.columnDetail.groupBuyTemplateId
       },
       collectLikeTemplateId(state, getters, {columnData}) {
-          return columnData.collectLikeTemplateId
+          return columnData.columnDetail.collectLikeTemplateId
+      },
+      collectLikeId(state, getters, {columnData}) {
+          return columnData.collectLikeId
       },
       groupBuyId(state, getters, {columnData}) {
           return columnData.groupBuyId
