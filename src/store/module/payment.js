@@ -10,6 +10,12 @@ import {
   wechatSubscribed // 判断用户是否关注公众号
 } from '../../api/groupBuyApi.js'
 
+const formatPrice= price => {
+    if (!price) return null
+    if (price.toString().indexOf('.') !== -1) return price
+    else return price + '.00'
+}
+
 let toast = null
 export default {
   namespaced: true,
@@ -24,6 +30,39 @@ export default {
     status: 0,
     toast: null
   }),
+  getters: {
+      collectLikeId(state, getters, {columnData}) {
+          return columnData.collectLikeId
+      },
+      groupBuyId(state, getters, {columnData}) {
+          return columnData.groupBuyId
+      },
+      sharePostUrl(state, getters, {columnData}) {
+          return   `${columnData.columnDetail.sharePostUrl}?imageView2/1/w/100/h/100/format/jpg`
+      },
+      groupBuyPrice(state, getters, {columnData}) {
+          return   formatPrice(columnData.columnDetail.groupBuyPrice)
+      },
+      price(state, getters, {columnData}) {
+          return   formatPrice(columnData.columnDetail.price)
+      },
+      groupBuyPersonCount(state, getters, {columnData}) {
+          return   columnData.columnDetail.groupBuyPersonCount
+      },freeLesson(state, getters, {columnData}) {
+        const {freeLessonList}=columnData.columnDetail
+          return   freeLessonList && freeLessonList.length && freeLessonList[0]
+      },
+      userAccessStatus(state, getters, {columnData}) {
+          return columnData.userAccessStatus
+      },
+
+      courseName(state, getters, {columnData}) {
+          return columnData.courseName
+      },
+      purchased(state, getters, {columnData}) {
+          return columnData.lessonList[0]
+      },
+  },
   mutations: {
     saveState(state, payload) {
       Object.assign(state, payload)
@@ -80,8 +119,8 @@ export default {
       dispatch('getWechatPayment', { ...result, ...payload })
     },
     //参与拼团
-    async joinGroupBuy({ dispatch, commit }, {groupBuyId,courseId}) {
-      const result = await joinGroupBuy({groupBuyId})
+    async joinGroupBuy({ dispatch, commit }, { groupBuyId, courseId }) {
+      const result = await joinGroupBuy({ groupBuyId })
       if (!result) return
       dispatch('getWechatPayment', { ...result, courseId })
     },
@@ -93,8 +132,8 @@ export default {
       dispatch('columnData/getColumnDetail', { courseId }, { root: true })
     },
     //领取集赞
-    async getCollectLike({ dispatch, commit }, {collectLikeId,courseId}) {
-      const result = await getCollectLike({collectLikeId})
+    async getCollectLike({ dispatch, commit }, { collectLikeId, courseId }) {
+      const result = await getCollectLike({ collectLikeId })
       if (!result) return
       Toast('领取集赞成功')
       dispatch('columnData/getColumnDetail', { courseId }, { root: true })
@@ -122,6 +161,6 @@ export default {
         },
         { root: true }
       )
-    },
+    }
   }
 }

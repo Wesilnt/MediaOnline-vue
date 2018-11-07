@@ -7,12 +7,22 @@ import {
 import { openVideoDetail, openAudioDetail } from '../utils/config'
 import PhoneVerif from './PhoneVerif'
 import Share from './share/Share'
-const { mapState, mapActions } = createNamespacedHelpers('columnData/payment')
+const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
+  'columnData/payment'
+)
 const identityType = {
   OWNER: 31000, // 发起人
   PARTNER: 31001, // 此拼团参与人
   PASSER: 31002, // 非参与人 拼团未满
   PASSERFULL: 31003 // 非参与人 拼团已满
+}
+const origin = 'origin',
+  groupBuy = 'groupBuy',
+  collect = 'collect'
+const PAYMENTTYPE = {
+  origin,
+  groupBuy,
+  collect
 }
 
 const userAccessStatusType = {
@@ -42,62 +52,42 @@ export default {
   props: {
     isTryScan: {
       default: false
-    },
-    columnDetail: {
-      type: Object
-    },
-    selfGroupBuyId: {
-      default: null
-    },
-    selfCollectLikeId: {
-      default: null
-    },
-    userAccessStatus: {
-      default: null
     }
   },
   data() {
-    const { groupBuyId, collectLikeId } = this.$route.query
-    const { columnType, courseId } = this.$route.params
     const {
-      freeLessonList,
-      groupBuyPrice,
-      groupBuyPersonCount,
-      groupBuyTemplateId,
-      collectLikeTemplateId,
-      price,
-      name: courseName,
-      sharePostUrl
-    } = this.columnDetail
+      groupBuyId: groupBuyIdFromShare,
+      collectLikeId: collectLikeIdFromShare
+    } = this.$route.query
+    const { columnType, courseId } = this.$route.params
     return {
       userInfo: {},
       columnType,
       courseId,
       master: identityType.OWNER,
-      groupBuyId: groupBuyId || this.selfGroupBuyId,
-      collectLikeId: collectLikeId || this.selfCollectLikeId,
-      sharePostUrl: `${sharePostUrl}?imageView2/1/w/100/h/100/format/jpg`,
-      courseName,
-      groupBuyTemplateId,
-      collectLikeTemplateId,
+      groupBuyIdFromShare,
+      collectLikeIdFromShare,
       payDisabled: false,
       showTeleRegister: false,
       paymentShowText: null,
-      price: this.formatPrice(price),
-      groupBuyPrice: this.formatPrice(groupBuyPrice),
-      groupBuyPersonCount,
-      initialPayment: {
-        txt: groupBuyPersonCount === 3 ? '三人团' : '六人团',
-        showPrice: true,
-        handler: false
-      },
-      freeLesson: freeLessonList && freeLessonList.length && freeLessonList[0], //试听试看课程
       sharePageShow: false,
-      isGroupShare: true
+      paymentType: null,
     }
   },
   computed: {
     ...rootState(['url']),
+    ...mapGetters([
+      'groupBuyId',
+      'collectLikeId',
+      'sharePostUrl',
+      'groupBuyPrice',
+      'price',
+      'groupBuyPersonCount',
+      'freeLesson',
+      'userAccessStatus',
+      'courseName',
+      'purchased'
+    ]),
     ...mapState([
       'masterId',
       'starterUid',
@@ -109,18 +99,27 @@ export default {
     ])
   },
   watch: {
-    userAccessStatus(newval) {
-      console.log('userAccessStatus' + newval)
-      this.mapGroupBuyDetailToPayment()
-      this.setWxShare()
+    paymentType: {
+      handler(paymentType) {
+        if (!paymentType) return
+        console.log('拼团状态  是  ' + paymentType)
+        this.mapGroupBuyDetailToPayment()
+        this.setWxShare(paymentType)
+      },
+      immediate: true
     }
   },
   async created() {
     this.userInfo = await this.checkoutUserInfo()
     await this.mapGroupBuyDetailToPayment()
     // 配置状态
-    const { initialPayment, collectLikeId } = this
-    await this.setWxShare()
+    const { groupBuyPersonCount, collectLikeId } = this
+    const initialPayment = {
+      txt: groupBuyPersonCount === 3 ? '三人团' : '六人团',
+      showPrice: true,
+      handler: false
+    }
+    await this.judgePaymentType()
     let handler = this.toggleSharePage.bind(this, true)
     if (collectLikeId) {
       handler = this.toggleSharePage.bind(this, true, false)
@@ -279,6 +278,22 @@ export default {
       await this[paymentQueryType]({ courseId, ...params })
       this.payDisabled = false
     },
+    judgePaymentType() {
+      const {
+        groupBuyIdFromShare, //来自于分享进入的拼团Id
+        collectLikeIdFromShare, //来自于分享进入的集赞Id
+        collectLikeId, // 来自于开团获取的id
+        groupBuyId // 来自于集赞获取的id
+      } = this
+      let paymentType = PAYMENTTYPE.origin
+      if (groupBuyIdFromShare || groupBuyId) {
+        paymentType = PAYMENTTYPE.groupBuy
+      }
+      if (collectLikeIdFromShare || collectLikeId) {
+        paymentType = PAYMENTTYPE.collect
+      }
+      this.paymentType = paymentType
+    },
     judgeIdentity() {
       if (this.masterId === this.starterUid) return
       if (this.userList.some(item => item.id === this.masterId)) {
@@ -358,6 +373,57 @@ export default {
     handleStartCollectLike() {
       this.handlePayment('startCollectLike')
     },
+    //点击集赞按钮
+    clickCollectBtn() {
+      this.isClickCollageBtn = false
+      this.isClickOriginPriceBtn = false
+      let params = null
+      switch (this.userAccessStatus) {
+        case 1007:
+          //集赞成功未领取
+          params = {
+            collectLikeId: this.collectLikeId
+          }
+          this.getCollectLike(params)
+          break
+        case 1008:
+          //集赞成功已领取  解锁专栏 跳转到单集详情页
+          if (this.lessonsArray && this.lessonsArray.length > 0) {
+            const { id } = this.lessonsArray[0]
+            this.gotoInfoPage(id)
+          }
+          break
+        case 1009:
+          //集赞中
+          this.$router.push({
+            name: 'Praise',
+            params: {
+              courseId: this.$route.params.courseId,
+              collectLikeId: this.collectLikeId
+            },
+            query: {
+              columnType: this.columnType
+            }
+          })
+          break
+        case 0:
+          //没有购买和集赞行为
+          params = {
+            courseId: this.courseId,
+            payType: 3
+          }
+          this.checkoutAuthorrization(params)
+          break
+        case -3:
+          //拼团失败后,此时工具条标准显示,此时可以发起集赞
+          params = {
+            courseId: this.courseId,
+            payType: 3
+          }
+          this.checkoutAuthorrization(params)
+          break
+      }
+    },
     handleGetCollectLike() {
       this.handlePayment('getCollectLike', {
         collectLikeId: this.collectLikeId
@@ -366,11 +432,7 @@ export default {
     goBackHome() {
       this.$router.push({ path: '/home' })
     },
-    formatPrice: price => {
-      if (!price) return null
-      if (price.toString().indexOf('.') !== -1) return price
-      else return price + '.00'
-    },
+
     routerToSingleSet() {
       if (!this.freeLesson) {
         return this.$toast('暂无试听课程')
@@ -402,11 +464,10 @@ export default {
     toggleTeleRegister(showTeleRegister) {
       this.showTeleRegister = showTeleRegister
     },
-    toggleSharePage(sharePageShow = false, isGroupShare = true) {
+    toggleSharePage(sharePageShow = false, ) {
       this.sharePageShow = sharePageShow
-      this.isGroupShare = isGroupShare
     },
-    setWxShare() {
+    setWxShare(paymentType) {
       const {
         columnType,
         courseId,
@@ -420,16 +481,16 @@ export default {
       } = this
       let title = null,
         link = null
-      if (groupBuyId) {
-        ;(title = `我正在参加《${courseName}》拼团活动,仅差${groupBuyPersonCount -
-          alreadyCount}人,快来和我一起拼团吧!`),
-          (link = `${url}/#/detail/${columnType}/${courseId}?groupBuyId=${groupBuyId}`)
+      if (paymentType === groupBuy) {
+        title = `我正在参加《${courseName}》拼团活动,仅差${groupBuyPersonCount -
+          alreadyCount}人,快来和我一起拼团吧!`
+        link = `${url}/#/detail/${columnType}/${courseId}?groupBuyId=${groupBuyId}`
       }
-      if (collectLikeId) {
-        ;(title = `我是${userInfo.nickName}, ${
+      if (paymentType === collect) {
+        title = `我是${userInfo.nickName}, ${
           this.master === identityType.OWNER ? '我想免费' : '正在帮朋友'
-        }领取《${courseName}》,求助攻~`),
-          (link = `${url}/#/praise/active/${courseId}/${collectLikeId}?columnType=${columnType}`)
+        }领取《${courseName}》,求助攻~`
+        link = `${url}/#/praise/active/${courseId}/${collectLikeId}?columnType=${columnType}`
       }
       const share = {
         title,
@@ -451,14 +512,13 @@ export default {
     if (!this.paymentShowText) return null
     const {
       isTryScan,
-      price,
       courseId,
       columnType,
+      price,
       groupBuyTemplateId,
       collectLikeTemplateId,
       showTeleRegister,
       sharePageShow,
-      isGroupShare,
       groupBuyId,
       collectLikeId
     } = this
@@ -482,8 +542,7 @@ export default {
     }
     if (collectLikeId) {
       paymentBtn = this.renderPayment({
-        collect:
-          collectLikeTemplateId && this.renderCollectBuy.bind(this, paymentObj)
+        collect: this.renderCollectBuy.bind(this, paymentObj)
       })
     }
     return hide ? null : (
@@ -502,7 +561,7 @@ export default {
           close={this.toggleSharePage}
           columnType={columnType}
           // nativeOnClose={this.toggleSharePage}
-          postType={isGroupShare}
+          // postType={isGroupShare}
         />
         {showTeleRegister && (
           <PhoneVerif

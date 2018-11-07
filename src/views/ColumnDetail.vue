@@ -127,12 +127,8 @@
                 没有更多了，不要再拉啦～
             </div>
              <Payment
-                 :purchased="lessonList[0]"
                  :isTryScan="isCourseType"
                  :columnDetail="columnDetail"
-                 :selfCollectLikeId="columnDetail.collectLikeId" 
-                 :selfGroupBuyId='columnDetail.groupBuyId'
-                 :userAccessStatus='columnDetail.userAccessStatus'
              />
             <!-- <toolsNavbar :freeLesson="freeLesson" :lessonList="lessonList"/> -->
         </div>
@@ -261,7 +257,6 @@ export default {
       await this.getColumnDetail({
         columnType,
         courseId,
-        groupBuyId
       })
       // 音频课程 视频课程 由于数据结构相同，使用同种配置
       //   1.获取专栏下的所有单集

@@ -13,7 +13,9 @@ const columnData = {
   state() {
     return {
       //-3 拼团失败 0 默认状态 1001 单购成功 1003 拼团成功 1005拼团中 1007集赞成功未领取 1008集赞成功已领取 1009集赞中
-      userAccessStatus: 0, //当前用户与专栏之间的关系
+      userAccessStatus: null, //当前用户与专栏之间的关系
+      collectLikeId: null,
+      groupBuyId: null,
       isFromShare: false, //是否来自分享
       renderLoading: true, //控制骨架屏的显示
       pageSize: 10,
@@ -142,7 +144,7 @@ const columnData = {
           bannerPic: result.bannerPic,
           columnLoading: false,
           columnList: result.courseInfo.result,
-          columnCurrentPage: page,   
+          columnCurrentPage: page,
           pageSize: state.pageSize
         })
       } else {
@@ -160,7 +162,7 @@ const columnData = {
     //获取专栏详情
     async getColumnDetail(
       { state, commit, dispatch },
-      { courseId, groupBuyId, columnType }
+      { courseId, columnType }
     ) {
       //获取视频专栏数据
       const columnDetail = await dispatch(
@@ -170,10 +172,14 @@ const columnData = {
       )
       if (!columnDetail) return
       //绑定业务类型,专栏头图,试听列表,专栏ID到拼团仓库中
-      const courseName = columnDetail.courseName
-      const profilePic = columnDetail.profilePic
-      const buyCount = columnDetail.buyCount
-      const userAccessStatus = columnDetail.userAccessStatus
+      const {
+        name: courseName,
+        profilePic,
+        buyCount,
+        userAccessStatus,
+        collectLikeId,
+        groupBuyId
+      } = columnDetail
       const renderLoading = false
       dispatch('groupManagerData/initColumnInfo', {
         courseId,
@@ -184,11 +190,13 @@ const columnData = {
         columnDetail,
         buyCount,
         userAccessStatus,
+        collectLikeId,
+        groupBuyId,
         renderLoading,
         profilePic,
         courseName
       })
-      if (state.isFromShare) {
+     /* if (state.isFromShare) {
         //这里是分享链接进来的
         dispatch('groupManagerData/getGroupBuyDetail', groupBuyId)
       } else {
@@ -209,7 +217,7 @@ const columnData = {
           price: columnDetail.price
         }
         dispatch('groupManagerData/initToolsBar', toolsData)
-      }
+      }*/
     },
     async getCommentList({ commit }, params) {
       const response = await getCommentList(params)
@@ -220,7 +228,6 @@ const columnData = {
     },
     async likeComment({ commit, state }, commentId) {
       const result = await likeComment({ commentId: commentId })
-      console.log(result)
       if (!result) return
       commit('updateUserCommentLikeId', result.commentId)
     }
