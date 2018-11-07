@@ -1,7 +1,7 @@
 <template>
   <div v-lazy:background-image="`${data.coverPicH}?imageView2/1/format/jpg`" @click="onItemClick" class="qhht-flex lazy-img-larger cell">
       <i class="qhht-icon videoPlayTringle" ></i>
-    <p class="videoTitle">{{data.name}}</p>
+    <p style="color:#333333" class="videoTitle">{{data.name}}</p>
     <p>{{data.briefIntro}}</p>
     <p>{{data.authorName}}</p>
     <p>
@@ -51,6 +51,7 @@ export default {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+    color:rgb(102,102,102);
   }
 }
 .videoPlayTringle {

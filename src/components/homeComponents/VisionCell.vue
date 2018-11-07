@@ -75,11 +75,11 @@ export default {
   margin-left: 20px;
   padding: 20px 0;
   /deep/ li {
-    color: #949aaa;
+    color: #666666;
   }
   .cell-content-title {
     font-size: 32px;
-    color: rgb(68, 78, 98);
+    color: rgb(51, 51, 51);
     font-weight: bolder;
   }
 }
