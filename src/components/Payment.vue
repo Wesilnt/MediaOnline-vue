@@ -275,7 +275,7 @@ export default {
         this.toggleTeleRegister(true)
         this.payDisabled = false
       }
-      console.log(this.courseId)
+      console.log({ courseId: this.courseId, ...params })
       await this[paymentQueryType]({ courseId: this.courseId, ...params })
       this.payDisabled = false
     },
