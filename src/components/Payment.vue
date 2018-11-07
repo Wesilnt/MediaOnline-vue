@@ -281,14 +281,16 @@ export default {
     },
     async handlePayment(paymentQueryType, params) {
       this.payDisabled = true
-      const { courseId, userInfo } = this
+      const { userInfo } = this
+
       await this.checkoutWxAuthor()
-      this.hideToast()
+      await this.hideToast()
       if (!userInfo.mobileNo) {
         this.toggleTeleRegister(true)
         this.payDisabled = false
       }
-      await this[paymentQueryType]({ courseId, ...params })
+      console.log(this.courseId)
+      await this[paymentQueryType]({ courseId: this.courseId, ...params })
       this.payDisabled = false
     },
     judgePaymentType() {

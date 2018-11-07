@@ -116,7 +116,7 @@ export default {
     },
     //验证是否完成了公众号授权
     async checkoutWxAuthor() {
-      toast = Toast('waiting...')
+      toast = Toast('请等待操作...')
       const result = await wechatSubscribed()
       if (result != 1) {
         //跳转去关注公众号
@@ -146,8 +146,8 @@ export default {
       dispatch('getWechatPayment', { ...result, courseId })
     },
     //发起集赞
-    async startCollectLike({ state, dispatch, commit }, payload) {
-      const result = await startCollectLike(payload)
+    async startCollectLike({ state, dispatch, commit }, {courseId}) {
+      const result = await startCollectLike({courseId})
       if (!result) return
       Toast('发起集赞成功')
       dispatch('columnData/getColumnDetail', { courseId }, { root: true })
