@@ -498,13 +498,13 @@ export default {
       userList,
       groupBuyPersonCount
     } = this
-      const tryTxt = isTryScan ? '试看' : '试听'
+    const tryTxt = isTryScan ? '试看' : '试听'
     const paymentObj = this.paymentShowText[
       `${this.master}_${this.userAccessStatusFromGroup ||
         this.userAccessStatus}`
     ]
-      console.log('拼团状态  是  ' + this.paymentType)
-    console.log(paymentObj,price, groupBuyTemplateId, collectLikeTemplateId)
+    console.log('拼团状态  是  ' + this.paymentType)
+    console.log(paymentObj, price, groupBuyTemplateId, collectLikeTemplateId)
     const { hide, showPrice } = paymentObj
     let paymentBtn = this.renderPayment({
       origin: price && showPrice && this.renderOriginBuy,
@@ -522,12 +522,12 @@ export default {
         collect: this.renderCollectBuy.bind(this, paymentObj)
       })
     }
-    let userListTop = [],
+    let userListTop = userList.slice(0, 3),
       userListBot = []
-    if (groupBuyPersonCount > 3 && userList) {
-      userListTop = userList.slice(0, 3)
+    if (groupBuyPersonCount > 3) {
       userListBot = userList.slice(3)
     }
+
     return hide ? null : (
       <div>
         {this.paymentType === groupBuy && (

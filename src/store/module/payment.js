@@ -10,10 +10,10 @@ import {
   wechatSubscribed // 判断用户是否关注公众号
 } from '../../api/groupBuyApi.js'
 
-const formatPrice= price => {
-    if (!price) return null
-    if (price.toString().indexOf('.') !== -1) return price
-    else return price + '.00'
+const formatPrice = price => {
+  if (!price) return null
+  if (price.toString().indexOf('.') !== -1) return price
+  else return price + '.00'
 }
 
 let toast = null
@@ -25,49 +25,52 @@ export default {
     starterUid: '',
     userList: [],
     userAccessStatusFromGroup: 0,
-      timeDuration: null,
+    timeDuration: null,
     alreadyCount: 0,
     status: 0,
     toast: null
   }),
   getters: {
-      groupBuyTemplateId(state, getters, {columnData}) {
-          return columnData.columnDetail.groupBuyTemplateId
-      },
-      collectLikeTemplateId(state, getters, {columnData}) {
-          return columnData.columnDetail.collectLikeTemplateId
-      },
-      collectLikeId(state, getters, {columnData}) {
-          return columnData.collectLikeId
-      },
-      groupBuyId(state, getters, {columnData}) {
-          return columnData.groupBuyId
-      },
-      sharePostUrl(state, getters, {columnData}) {
-          return   `${columnData.columnDetail.sharePostUrl}?imageView2/1/w/100/h/100/format/jpg`
-      },
-      groupBuyPrice(state, getters, {columnData}) {
-          return   formatPrice(columnData.columnDetail.groupBuyPrice)
-      },
-      price(state, getters, {columnData}) {
-          return   formatPrice(columnData.columnDetail.price)
-      },
-      groupBuyPersonCount(state, getters, {columnData}) {
-          return   columnData.columnDetail.groupBuyPersonCount
-      },freeLesson(state, getters, {columnData}) {
-        const {freeLessonList}=columnData.columnDetail
-          return   freeLessonList && freeLessonList.length && freeLessonList[0]
-      },
-      userAccessStatus(state, getters, {columnData}) {
-          return columnData.userAccessStatus
-      },
+    groupBuyTemplateId(state, getters, { columnData }) {
+      return columnData.columnDetail.groupBuyTemplateId
+    },
+    collectLikeTemplateId(state, getters, { columnData }) {
+      return columnData.columnDetail.collectLikeTemplateId
+    },
+    collectLikeId(state, getters, { columnData }) {
+      return columnData.collectLikeId
+    },
+    groupBuyId(state, getters, { columnData }) {
+      return columnData.groupBuyId
+    },
+    sharePostUrl(state, getters, { columnData }) {
+      return `${
+        columnData.columnDetail.sharePostUrl
+      }?imageView2/1/w/100/h/100/format/jpg`
+    },
+    groupBuyPrice(state, getters, { columnData }) {
+      return formatPrice(columnData.columnDetail.groupBuyPrice)
+    },
+    price(state, getters, { columnData }) {
+      return formatPrice(columnData.columnDetail.price)
+    },
+    groupBuyPersonCount(state, getters, { columnData }) {
+      return columnData.columnDetail.groupBuyPersonCount
+    },
+    freeLesson(state, getters, { columnData }) {
+      const { freeLessonList } = columnData.columnDetail
+      return freeLessonList && freeLessonList.length && freeLessonList[0]
+    },
+    userAccessStatus(state, getters, { columnData }) {
+      return columnData.userAccessStatus
+    },
 
-      courseName(state, getters, {columnData}) {
-          return columnData.courseName
-      },
-      purchased(state, getters, {columnData}) {
-          return columnData.lessonList[0]
-      },
+    courseName(state, getters, { columnData }) {
+      return columnData.courseName
+    },
+    purchased(state, getters, { columnData }) {
+      return columnData.lessonList[0]
+    }
   },
   mutations: {
     saveState(state, payload) {
@@ -82,20 +85,27 @@ export default {
         starterUid,
         userList,
         userAccessStatusFromGroup,
-        createTime,duration,sysTime,
+        createTime,
+        duration,
+        sysTime,
         alreadyCount,
         status
       } = response
+      const userListArr = Array(6).fill({})
 
-        //8.计算倒计时
-        const timeDuration =
-            (createTime + duration * 60 * 60 * 1000 - sysTime) / 1000
+      //8.计算倒计时
+      const timeDuration =
+        (createTime + duration * 60 * 60 * 1000 - sysTime) / 1000
       commit('saveState', {
         masterId,
         starterUid,
-        userList,
+        userList: userList.reduce((prev, item, index) => {
+          if (item.id) {
+            return prev[index] === item
+          }
+        }, userListArr),
         userAccessStatusFromGroup,
-          timeDuration,
+        timeDuration,
         alreadyCount,
         status
       })
