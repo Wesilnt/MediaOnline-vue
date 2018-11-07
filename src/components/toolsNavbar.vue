@@ -41,7 +41,7 @@ const {
   mapActions,
   mapMutations,
   mapGetters
-} = createNamespacedHelpers('videoColumnDetailData/groupManagerData')
+} = createNamespacedHelpers('columnData/groupManagerData')
 
 export default {
   name: 'ToolsNavbar',
@@ -60,6 +60,9 @@ export default {
     }
   },
   props: {
+      'freeLesson':{
+          default: []
+      },
     originPrice: {
       type: String,
       default: '0'
@@ -127,7 +130,7 @@ export default {
       'groupBuyId',
       'toolsObject',
       'userAccessStatus',
-      'freeLesson', //试听对象
+      // 'freeLesson', //试听对象
       'courseId', //专栏ID
       'startPraiseFlag',
       'serviceType',
@@ -400,11 +403,11 @@ export default {
     },
     gotoInfoPage(id) {
       switch (this.columnType) {
-        case '1005': 
+        case 'onlineCourse':
           openVideoDetail(this,{courseId:this.courseId, columnType:this.columnType, lessonId:id})
           break 
-        case '1003':
-        case '1007': 
+        case 'onlineVision':
+        case 'reading':
            openAudioDetail(this,{courseId:this.courseId, columnType:this.columnType, lessonId:id}) 
           break
       }

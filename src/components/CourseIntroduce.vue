@@ -29,7 +29,7 @@ export default {
       inter = setTimeout(() => {
         this.$nextTick(() => {
           const { content, contentChild } = this.$refs
-          if(content||!content.clientHeight||!this.courseinfo)return
+          if(content && !content.clientHeight)return this.ExpandWatched()
           const { clientHeight: contentClientHeight } = content
           const { clientHeight: contentChildClientHeight } = contentChild
           console.log(

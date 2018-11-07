@@ -190,7 +190,7 @@ export default {
     },
     //音频暂停异步方式
     async asyncPause({state,dispatch, commit }) {
-      dispatch('postLearnRate', { lessonId:state.audioDetail.id, listenTime:state.currentTime, maxTime:state.maxTime})
+      // dispatch('postLearnRate', { lessonId:state.audioDetail.id, listenTime:state.currentTime, maxTime:state.maxTime})
       commit('syncPause')
     },
     //下一集
