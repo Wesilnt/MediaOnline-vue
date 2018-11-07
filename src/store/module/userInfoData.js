@@ -4,7 +4,7 @@ import store from "../store";
 const userInfoData = {
   namespaced: true,
   state: {
-    userInfo: [],
+    userInfo: {},
     loading: false
   },
   mutations: {

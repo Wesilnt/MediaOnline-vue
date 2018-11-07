@@ -35,7 +35,7 @@ export default {
     return {
       nickName: '',
       avatarUrl: praise,
-      showEdit: true,
+      showEdit: false,
       list: [
         {
           name: '/my/Purchase',
