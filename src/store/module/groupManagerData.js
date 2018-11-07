@@ -10,9 +10,7 @@ import {
 import { getMyUserInfo } from '../../api/myApi'
 import { Toast } from 'vant'
 import {
-  WECHAT_SUBSCRIPTION_URL,
-  courseType,
-  columnType
+  WECHAT_SUBSCRIPTION_URL
 } from '../../utils/config'
 
 const groupManagerData = {
@@ -735,6 +733,11 @@ const groupManagerData = {
 
     //从新获取专栏详情接口,刷新父组件显示
     async updateFatherData({ dispatch, state, getters, rootState }) {
+        dispatch(
+            'columnData/getColumnDetail',
+            { courseId: state.courseId },
+            { root: true }
+        )
       switch (rootState.columnType) {
         case '1003':
           dispatch(
