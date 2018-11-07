@@ -272,7 +272,11 @@ export default {
       'getCollectLike'
     ]),
     async mapGroupBuyDetailToPayment() {
-      const { groupBuyId } = this
+      const { groupBuyId, groupBuyIdFromShare } = this
+      if (groupBuyIdFromShare) {
+         await this.getGroupBuyDetail({ groupBuyId: groupBuyIdFromShare })
+          return await this.judgeIdentity()
+      }
       if (groupBuyId) {
         // 如果有拼团Id，请求拼团详情接口
         await this.getGroupBuyDetail({ groupBuyId })
