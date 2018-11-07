@@ -24,7 +24,6 @@ export default {
     masterId: '',
     starterUid: '',
     userList: [],
-    userAccessStatusFromGroup: 0,
     timeDuration: null,
     alreadyCount: 0,
     status: 0,
@@ -84,7 +83,6 @@ export default {
         userId: masterId,
         starterUid,
         userList,
-        userAccessStatusFromGroup,
         createTime,
         duration,
         sysTime,
@@ -105,7 +103,6 @@ export default {
           }
           return prev
         }, userListArr),
-        userAccessStatusFromGroup,
         timeDuration,
         alreadyCount,
         status

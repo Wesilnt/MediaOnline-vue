@@ -27,11 +27,6 @@ const PAYMENTTYPE = {
 }
 
 const userAccessStatusType = {
-  /* status:
-   * 1201/2:拼团中
-   * 3：成功
-   * 4：失败
-   * */
   // 完全是自己和这个专栏的状态
   GROUPBUY_FAIL: -3,
   REFUND_SINGLED: -1,
@@ -95,10 +90,9 @@ export default {
       'masterId',
       'starterUid',
       'userList',
-      'userAccessStatusFromGroup',
       'createTime',
       'alreadyCount',
-      'status',
+      'status' /* 120 1 / 2:拼团中 3：成功  4：失败 */,
       'timeDuration'
     ])
   },
@@ -146,7 +140,7 @@ export default {
       20022: { txt: '您已拥有此专栏，帮助好友分享', handler }, // 弹出拼团界面
       20023: { txt: '您正在参与其他拼团,帮助好友分享', handler }, // 弹出拼团界面
       20024: { txt: '正在处理您的其他拼团,帮助好友分享', handler }, // 弹出拼团界面
-      20032: { txt: '参与拼团失败，请等待退款', handler: this.goBackHome }, // 返回主页
+      20032: { txt: '开团失败，重新开团', handler: this.handleStartGroupBuy },
       20033: { txt: '等待开团成功', handler }, // 弹出拼团界面
       2004: {
         txt: '参与拼团',
@@ -158,8 +152,22 @@ export default {
         handler: this.handleGetCollectLike
       }, //领取专栏
       2006: { txt: '拼团超时，请等待系统处理', handler: this.goBackHome }, // 返回主页
-      2007: { txt: '当前拼团已满,返回主页', handler: this.goBackHome }, // 返回主页
+      2007: { txt: '当前拼团已满,看看其他', handler: this.goBackHome }, // 返回主页
       2008: { txt: '您已参与集赞,帮助好友分享', handler } // 弹出拼团界面
+    }
+    const groupBuyStatusType = {
+      1201: {
+        txt: '您已参与拼团，邀请其他好友',
+        handler
+      },
+      1202: {
+        txt: '您已参与拼团，邀请其他好友',
+        handler
+      },
+      1203: {
+        hide: true
+      },
+      1204: { txt: '开团失败，重新开团', handler: this.handleStartGroupBuy }
     }
 
     this.paymentShowText = {
@@ -194,36 +202,10 @@ export default {
       }`]: groupBuyTextType[20021],
       // 参与人与非参与人
       // 参与人
-      [`${identityType.PARTNER}_${
-        userAccessStatusType.GROUPBUY_FAIL
-      }`]: groupBuyTextType[20032],
-      [`${identityType.PARTNER}_${
-        userAccessStatusType.REFUND_SINGLED
-      }`]: groupBuyTextType[2004],
-      [`${identityType.PARTNER}_${
-        userAccessStatusType.NONE
-      }`]: groupBuyTextType[2004],
-      [`${identityType.PARTNER}_${
-        userAccessStatusType.SINGLED
-      }`]: groupBuyTextType[20022],
-      [`${identityType.PARTNER}_${
-        userAccessStatusType.GROUPED
-      }`]: groupBuyTextType[20022],
-      [`${identityType.PARTNER}_${
-        userAccessStatusType.GROUPING
-      }`]: groupBuyTextType[20033],
-      [`${identityType.PARTNER}_${
-        userAccessStatusType.GROUPING_OVERTIME
-      }`]: groupBuyTextType[2006],
-      [`${identityType.PARTNER}_${
-        userAccessStatusType.COLLECTED
-      }`]: groupBuyTextType[2008],
-      [`${identityType.PARTNER}_${
-        userAccessStatusType.COLLECTGET
-      }`]: groupBuyTextType[2008],
-      [`${identityType.PARTNER}_${
-        userAccessStatusType.COLLECTING
-      }`]: groupBuyTextType[2008],
+      [`${identityType.PARTNER}_1201`]: groupBuyTextType[1201],
+      [`${identityType.PARTNER}_1202`]: groupBuyTextType[1202],
+      [`${identityType.PARTNER}_1203`]: groupBuyTextType[1203],
+      [`${identityType.PARTNER}_1204`]: groupBuyTextType[1204],
       // 非参与人 拼团未满
       [`${identityType.PASSER}_${
         userAccessStatusType.GROUPBUY_FAIL
@@ -274,8 +256,8 @@ export default {
     async mapGroupBuyDetailToPayment() {
       const { groupBuyId, groupBuyIdFromShare } = this
       if (groupBuyIdFromShare) {
-         await this.getGroupBuyDetail({ groupBuyId: groupBuyIdFromShare })
-          return await this.judgeIdentity()
+        await this.getGroupBuyDetail({ groupBuyId: groupBuyIdFromShare })
+        return await this.judgeIdentity()
       }
       if (groupBuyId) {
         // 如果有拼团Id，请求拼团详情接口
@@ -505,10 +487,10 @@ export default {
       groupBuyPersonCount
     } = this
     const tryTxt = isTryScan ? '试看' : '试听'
-    const paymentObj = this.paymentShowText[
-      `${this.master}_${this.userAccessStatusFromGroup ||
-        this.userAccessStatus}`
-    ]
+    const paymentObj =
+      this.master === identityType.PARTNER
+        ? this.paymentShowText[`${this.master}_${this.status}`]
+        : this.paymentShowText[`${this.master}_${this.userAccessStatus}`]
     console.log('拼团状态  是  ' + this.paymentType)
     console.log(
       paymentObj,
@@ -549,11 +531,7 @@ export default {
             isSixGroup={this.groupBuyPersonCount > 3}
             userListTop={userListTop}
             userListBot={userListBot}
-            userAccessStatus={
-              this.master === identityType.OWNER
-                ? this.userAccessStatus
-                : this.userAccessStatusFromGroup
-            }
+            status={this.status}
           />
         )}
         <div class="qhht-flex payment-wrapper">
@@ -584,6 +562,38 @@ export default {
     )
   }
 }
+/*废码暂存
+*      [`${identityType.PARTNER}_${
+        userAccessStatusType.GROUPBUY_FAIL
+      }`]: groupBuyTextType[20032],
+      [`${identityType.PARTNER}_${
+        userAccessStatusType.REFUND_SINGLED
+      }`]: groupBuyTextType[2004],
+      [`${identityType.PARTNER}_${
+        userAccessStatusType.NONE
+      }`]: groupBuyTextType[2004],
+      [`${identityType.PARTNER}_${
+        userAccessStatusType.SINGLED
+      }`]: groupBuyTextType[20022],
+      [`${identityType.PARTNER}_${
+        userAccessStatusType.GROUPED
+      }`]: groupBuyTextType[20022],
+      [`${identityType.PARTNER}_${
+        userAccessStatusType.GROUPING
+      }`]: groupBuyTextType[20033],
+      [`${identityType.PARTNER}_${
+        userAccessStatusType.GROUPING_OVERTIME
+      }`]: groupBuyTextType[2006],
+      [`${identityType.PARTNER}_${
+        userAccessStatusType.COLLECTED
+      }`]: groupBuyTextType[2008],
+      [`${identityType.PARTNER}_${
+        userAccessStatusType.COLLECTGET
+      }`]: groupBuyTextType[2008],
+      [`${identityType.PARTNER}_${
+        userAccessStatusType.COLLECTING
+      }`]: groupBuyTextType[2008],
+* */
 </script>
 <style lang='less' >
 .payment-wrapper {
