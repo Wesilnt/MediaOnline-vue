@@ -121,13 +121,13 @@ export default {
   },
   created() {
     this.queryNewMessageCount()
-    this.getMyUserInfo().then(() => {
+    this.getMyUserInfo(true).then(() => {
       this.showEdit =
         undefined == this.userInfo.gender ||
         undefined == this.userInfo.grade ||
         undefined == this.userInfo.role ||
         undefined == this.userInfo.mobileNo
-    })
+    }) 
   }
 }
 </script>
