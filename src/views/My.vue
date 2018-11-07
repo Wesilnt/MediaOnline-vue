@@ -27,6 +27,8 @@ import like from '../assets/images/my_like.png'
 import puzzle from '../assets/images/my_puzzle.png'
 import reply from '../assets/images/my_reply.png'
 import praise from '../assets/images/my_praise.png'
+import wallet from '../assets/images/my_wallet.png'
+import distribution from '../assets/images/my_distribution.png'
 import feedback from '../assets/images/my_feedback.png'
 
 export default {
@@ -67,6 +69,16 @@ export default {
           image: praise,
           title: '我的集赞'
         },
+        //  {
+        //   name: '/my/my-wallet',
+        //   image: wallet,
+        //   title: '胡同书币'
+        // },
+        //  {
+        //   name: '/my/my-distribution',
+        //   image: distribution,
+        //   title: '分销中心'
+        // },
         {
           name: '/my/Feedback',
           image: feedback,

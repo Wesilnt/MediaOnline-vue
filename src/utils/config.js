@@ -6,7 +6,7 @@ const { NODE_ENV } = process.env
 // 调试选项，本地调试请改为 False
 export const IS_ONLINE = false
 // 测试 Token
-export const TEST_TOKEN = "e93fedb6-42a0-434a-bd2d-29448bb87c30"
+export const TEST_TOKEN = "47f9facc-0504-4c4c-9d59-12208b6cd577"
 
 // TODO router 设置未统一，后期需要统一格式
 export const courseType = {
@@ -50,9 +50,9 @@ export const homeColumnList = {
     title: '视频课程',
     listKey: 'videoList',
     link: `/home/${columnType['onlineCourse'].name}/columnlist`
-  }
+  },
   // 读书会
-  //'reading': {code: 1007, componentName:'BookCell', title:'少年读书会',listKey:'bookList',link:`/home/${columnType['reading'].name}/columnlist`},
+  // 'reading': {code: 1007, componentName:'BookCell', title:'少年读书会',listKey:'bookList',link:`/home/${columnType['reading'].name}/columnlist`},
 }
 // 首页导航配置
 export const navbar = [
