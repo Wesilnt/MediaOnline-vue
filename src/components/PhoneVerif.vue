@@ -72,7 +72,7 @@ export default {
       }
       await this.validateMobileCode({ code: this.validateCode })
       this.hideTeleRegister()
-      succFun()
+      this.succFun()
     },
     isPoneAvailable(str) {
       var myreg = /^[1][3,4,5,7,8][0-9]{9}$/

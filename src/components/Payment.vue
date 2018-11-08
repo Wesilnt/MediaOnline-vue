@@ -190,6 +190,8 @@ export default {
       [`${identityType.PARTNER}_1204`]: groupBuyStatusType[1204],
       [`${identityType.PARTNER}_1201ELSERING`]: groupBuyStatusType['1201ELSERING'],
       [`${identityType.PARTNER}_1202SELFING`]: groupBuyStatusType['1202SELFING'],
+        [`${identityType.PARTNER}_1202ELSERING`]: groupBuyStatusType['1201ELSERING'],
+        [`${identityType.PARTNER}_1201SELFING`]: groupBuyStatusType['1202SELFING'],
       // 非参与人 拼团未满
       [`${identityType.PASSER}_${
         userAccessStatusType.GROUPBUY_FAIL
@@ -490,6 +492,7 @@ export default {
       collectLikeId
     } = this
     const tryTxt = isTryScan ? '试看' : '试听'
+        console.log(`${this.master}_${this.groupBuystatus}${this.paySuccStatus}`)
     const paymentObj =
       this.master === identityType.PARTNER
         ? this.paymentShowText[
