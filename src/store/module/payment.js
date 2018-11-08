@@ -91,7 +91,7 @@ export default {
         userList,
         timeDuration,
         alreadyCount,
-        groupBuystatus,
+        groupBuystatus
       })
     },
     hideToast() {
@@ -126,7 +126,9 @@ export default {
     async joinGroupBuy({ dispatch, commit }, { groupBuyId, courseId }) {
       const result = await joinGroupBuy({ groupBuyId })
       if (!result) return
-      dispatch('getWechatPayment', { ...result, courseId })
+      dispatch('getWechatPayment', { ...result, courseId }).then(res => {
+        console.log(res)
+      })
     },
     //发起集赞
     async startCollectLike({ state, dispatch, commit }, { courseId }) {
@@ -147,7 +149,7 @@ export default {
       { commit, dispatch },
       { timestamp, nonceStr, package: packageStr, paySign, courseId }
     ) {
-      dispatch(
+     await dispatch(
         'wxPayment',
         {
           timestamp,
@@ -156,8 +158,15 @@ export default {
           signType: 'MD5', // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
           paySign, // 支付签名
           successCB: function(res) {
-            // 支付成功后的回调函数
-            dispatch('columnData/getColumnDetail', { courseId }, { root: true })
+            console.log(res)
+            if (res.errMsg !== 'chooseWXPay:cancel')
+              // 支付成功后的回调函数
+              dispatch(
+                'columnData/getColumnDetail',
+                { courseId },
+                { root: true }
+              )
+              return res
           },
           failCB: function() {
             Toast.fail('支付失败')

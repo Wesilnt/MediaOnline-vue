@@ -372,7 +372,8 @@ export default {
       await this.handlePayment('joinGroupBuy', {
         groupBuyId: this.groupBuyIdFromShare
       })
-      this.mapGroupBuyDetailToPayment()
+        this.mapGroupBuyDetailToPayment();
+
     },
     async handleStartGroupBuy() {
       await this.handlePayment('startGroupBuy')

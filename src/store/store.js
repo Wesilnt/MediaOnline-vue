@@ -130,7 +130,7 @@ export default new Vuex.Store({
             failCB(errmsg)
           },
           complete: function(res) {
-              console.log(res);
+              successCB(res)
               if (res.errMsg === 'chooseWXPay:cancel') {
               console.log('支付取消')
             }
