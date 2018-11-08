@@ -19,56 +19,54 @@
 </template>
 
 <script>
-import playlist from './components/playlist.vue'
 import SingleSetItem from '../../components/SingleSetItem.vue'
 import { createNamespacedHelpers } from 'vuex'
-const { mapState,mapMutations, mapActions } = createNamespacedHelpers('columnData')
+const { mapState, mapMutations, mapActions } = createNamespacedHelpers(
+  'columnData'
+)
 
-export default{
-  data(){
-    return{
-      refreshing:false,
-      courseId:this.$route.params.courseId,
-      columnType:this.$route.params.columnType
+export default {
+  data() {
+    return {
+      refreshing: false,
+      courseId: this.$route.params.courseId,
+      columnType: this.$route.params.columnType
     }
   },
-  created(){
-
-  },
+  created() {},
   watch: {
     lessonLoading: function(loading) {
       this.refreshing = loading
     }
   },
-  computed: { 
-    ...mapState(['lessonList','lessonLoading','lessonFinished', 'userAccessStatus'])
+  computed: {
+    ...mapState([
+      'lessonList',
+      'lessonLoading',
+      'lessonFinished',
+      'userAccessStatus'
+    ])
   },
   components: {
-    playlist,SingleSetItem
-
-
-
+    SingleSetItem
   },
   methods: {
     ...mapMutations(['resetState']),
     ...mapActions(['getLessonList']),
     scrollBottom() {
-      console.log('scrollBottom ==',this.courseId)
+      console.log('scrollBottom ==', this.courseId)
       this.getLessonList({ refresh: false, courseId: this.courseId })
     }
   },
-  mounted(){
-
-  },
+  mounted() {},
   beforeDestroy() {
     this.resetState()
   }
 }
-
 </script>
 
 <style lang="scss" scoped>
-.home-video{
+.home-video {
   margin: 0 36px 0;
 }
 .home-warnTip {
@@ -78,4 +76,3 @@ export default{
   color: rgb(200, 200, 200);
 }
 </style>
-

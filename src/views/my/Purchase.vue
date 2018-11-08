@@ -18,7 +18,6 @@
 import { createNamespacedHelpers } from 'vuex'
 import PurchaseItem from './component/PurchaseItem'
 import { purchaseQueryType, purchaseSortType } from '../../utils/config'
-import {log} from "../../store/module/typeData";
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
   'myPurchaseData'
 )

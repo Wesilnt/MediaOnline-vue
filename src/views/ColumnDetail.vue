@@ -36,8 +36,7 @@
                             <img :src="require('../assets/images/arrow_right.png')" class="column-allbtn-icon">
                         </div>
                     </div>
-                    <!-- <playlist v-for="(item,index) of columnDetail.freeLessonList" :key="item.id" :iteminfo="item" :lastindex="index === (columnDetail.freeLessonList.length - 1)" @jumpEvent="toDetail(item.id)"/> -->
-                 <SingleSetItem v-for="item of columnDetail.freeLessonList" 
+                 <SingleSetItem v-for="item of columnDetail.freeLessonList"
                     :key="item.id" 
                     :item="item"  
                     :courseid="courseId"
@@ -149,7 +148,6 @@ import SingleSetList from '../components/SingleSetList.vue'
 import CommentList from '../components/comment/CommentList.vue'
 import ScrollNavBar from '../components/ScrollNavBar'
 import CourseIntroduce from '../components/CourseIntroduce.vue'
-import playlist from './onlineCourse/components/playlist.vue'
 import videoComment from '../components/video-comment.vue'
 import ImagePreview from '../components/ImagePreview'
 import { createNamespacedHelpers } from 'vuex'
@@ -302,7 +300,6 @@ export default {
     SkeletonFullScreen,
     Payment,
     CourseIntroduce,
-    playlist,
     videoComment,
     ImagePreview,
     ScrollNavBar,
