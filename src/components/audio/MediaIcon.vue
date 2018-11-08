@@ -149,7 +149,7 @@
         align-items: center;
         background-color: white;
         border-radius: 50%;
-        border: 24px solid #ffffff;
+        border: 24px solid #ff0000;
         box-shadow: 0 0 12px #e0e0e0;
         box-sizing: border-box;
         .circle_container {
