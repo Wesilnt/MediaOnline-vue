@@ -88,9 +88,9 @@ export default {
       commit('saveState', {
         masterId,
         starterUid,
-        userList: userList.reduce((prev, item, index) => {
+        userList: userList.reverse().reduce((prev, item, index) => {
           if (item.id) {
-            item.isStarter === 1 ? (prev[0] = item) : (prev[index + 1] = item)
+            prev[index] = item
           }
           return prev
         }, userListArr),

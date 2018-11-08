@@ -508,10 +508,10 @@ export default {
         collect: this.renderCollectBuy.bind(this, paymentObj)
       })
     }
-    let userListTop = userList.slice(0, 3),
+    let userListTop = userList.slice(0, 2),
       userListBot = []
     if (groupBuyPersonCount > 3) {
-      userListBot = userList.slice(3)
+      userListBot = userList.slice(2)
     }
 
     return hide ? null : (

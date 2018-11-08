@@ -5,7 +5,6 @@
         <span class="time-number">{{times[1]}}</span>
         <span class="time-symbol">:</span>
         <span class="time-number">{{times[2]}}</span>
-        <span v-show="false">{{doDuration}}</span>
     </div>
 </template>
 
@@ -17,23 +16,26 @@ export default {
   data() {
     return {
       countdown: null,
-      times: ['00', '00', '00']
+      times: ['NA', 'NA', 'NA']
+    }
+  },
+  watch: {
+    timeDuration: {
+      handler(tempDuration) {
+        if (isNaN(tempDuration)) return
+        clearInterval(this.countdown)
+        if (tempDuration > 0) {
+          this.countdown = startCountDown(this.timeDuration, times => {
+            this.times = times
+          })
+        }
+        return tempDuration
+      },
+      immediate: true
     }
   },
   beforeDestroy() {
     clearInterval(this.countdown)
-  },
-  computed: {
-    doDuration: function() {
-      let tempDuration = this.timeDuration
-      clearInterval(this.countdown)
-      if (tempDuration > 0) {
-        this.countdown = startCountDown(this.timeDuration, times => {
-          this.times = times
-        })
-      }
-      return tempDuration
-    }
   }
 }
 </script>
