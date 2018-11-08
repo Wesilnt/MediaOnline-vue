@@ -50,11 +50,12 @@ export default new Router({
       name: 'ColumnList',
       component: ColumnList
     },
-      {
-          path: '/home/readings/summary',
-          name: 'BookSummary',
-          component: () => import(/* webpackChunkName: "index" */ '../views/readings/BookSummary')//书详情-书简介
-      },
+    {
+      path: '/home/readings/summary',
+      name: 'BookSummary',
+      component: () =>
+        import(/* webpackChunkName: "index" */ '../views/readings/BookSummary') //书详情-书简介
+    },
     ...PageInfo_From_Home,
     ...PageInfo_From_My,
     ...PageInfo_From_OnlineCourse,
