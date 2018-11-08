@@ -102,27 +102,7 @@ export default {
       'timeDuration'
     ])
   },
-  watch: {
-    groupBuyId(newGroupBuyId) {
-      if (newGroupBuyId) {
-        this.paymentType = PAYMENTTYPE.groupBuy
-      }
-    },
-    collectLikeId(newCollectLikeId) {
-      if (newCollectLikeId) {
-        this.paymentType = PAYMENTTYPE.collect
-      }
-    },
-    paymentType: {
-      handler(paymentType) {
-        if (!paymentType) return
-        this.mapGroupBuyDetailToPayment()
-        this.setWxShare(paymentType)
-      },
-      immediate: true
-    }
-  },
-  async created() {
+  async mounted() {
     this.userInfo = await this.checkoutUserInfo()
     await this.mapGroupBuyDetailToPayment()
     // 配置状态
@@ -132,7 +112,6 @@ export default {
       showPrice: true,
       handler: false
     }
-    await this.judgePaymentType()
     let handler = this.toggleSharePage.bind(this, true)
     if (collectLikeId) {
       handler = this.gotoPraising
@@ -260,13 +239,13 @@ export default {
       'getCollectLike'
     ]),
     async mapGroupBuyDetailToPayment() {
-      const { groupBuyId, groupBuyIdFromShare, collectLikeIdFromShare } = this
-      console.log(groupBuyIdFromShare, collectLikeIdFromShare)
+      const { groupBuyId, groupBuyIdFromShare } = this
       if (groupBuyIdFromShare || groupBuyId) {
-          await this.getGroupBuyDetail({
-              groupBuyId: groupBuyIdFromShare || groupBuyId
-          })
+        await this.getGroupBuyDetail({
+          groupBuyId: groupBuyIdFromShare || groupBuyId
+        })
       }
+      await this.judgePaymentType()
       return await this.judgeIdentity()
     },
     async handlePayment(paymentQueryType, params) {
@@ -279,7 +258,6 @@ export default {
         this.toggleTeleRegister(true)
         this.payDisabled = false
       }
-      console.log({ courseId: this.courseId, ...params })
       await this[paymentQueryType]({ courseId: this.courseId, ...params })
       this.payDisabled = false
     },
@@ -298,6 +276,8 @@ export default {
         paymentType = PAYMENTTYPE.collect
       }
       this.paymentType = paymentType
+      // this.mapGroupBuyDetailToPayment()
+      this.setWxShare(paymentType)
     },
     judgeIdentity() {
       if (this.masterId === this.starterUid) return
