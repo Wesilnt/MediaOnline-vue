@@ -135,7 +135,7 @@ const columnData = {
       })
       if (!result) return
       if (refresh) {
-          let isFinished = tempColumns.length >= result.courseInfo.totalCount
+          let isFinished = result.courseInfo.result.length >= result.courseInfo.totalCount
         commit('saveStatus', {
           bannerPic: result.bannerPic,
           columnLoading: false,

@@ -2,9 +2,6 @@ import {
   getBannerList,
   getFreeList,
   getNewMessageCount,
-  getVisionList,
-  getVideoList,
-  getBookList,
   getAllList
 } from '../../api/homeApi'
 const homeData = {
@@ -22,14 +19,10 @@ const homeData = {
     }
   },
   actions: {
-    async getIndexPageData({ dispatch, commit }) {
+    async getIndexPageData({ dispatch }) {
       await dispatch('getBannerList')
       dispatch('getNewMessageCount')
       await dispatch('getFreeList')
-      // dispatch('getVisionList')
-      commit('setLoading', false)
-      // dispatch('getVideoList')
-      // dispatch('getBookList')
       dispatch('getAllList')
     },
     async getBannerList({ commit }) {
@@ -48,23 +41,12 @@ const homeData = {
     },
     async getAllList({ commit }) {
       let result = await getAllList()
-      commit('setVisionList', result.visionList)
-      commit('setVideoList', result.videoList)
-      commit('setBookList', result.bookList)
-      commit('setList', result)
+        await commit('setVisionList', result.visionList)
+        await commit('setVideoList', result.videoList)
+        await commit('setBookList', result.bookList)
+        await commit('setList', result)
+        commit('setLoading', false)
     },
-    async getVisionList({ commit }) {
-      let result = await getVisionList()
-      commit('setVisionList', result)
-    },
-    async getVideoList({ commit }) {
-      let result = await getVideoList()
-      commit('setVideoList', result)
-    },
-    async getBookList({ commit }) {
-      let result = await getBookList()
-      commit('setBookList', result)
-    }
   },
   mutations: {
     setLoading(state, loading) {
@@ -87,7 +69,6 @@ const homeData = {
       state.visionList = visionList
     },
     setList(state, result) {
-      // state.columns = result
       state.columns = { ...state.columns, ...result }
     },
     setVideoList(state, videoList) {

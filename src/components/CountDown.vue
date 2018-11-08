@@ -10,13 +10,7 @@
 
 <script>
 import { startCountDown } from '../utils/utils'
-<<<<<<< HEAD
-import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapMutations, mapGetters, mapActions } = createNamespacedHelpers(
-  'columnData/groupManagerData'
-)
-=======
->>>>>>> testPayment
+
 export default {
   name: 'CountDown',
   props: ['timeDuration'],

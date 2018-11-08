@@ -70,8 +70,7 @@ export default new Vuex.Store({
       noAccessToken() && dispatch('getAccessToken')
     },
     async getUserInfo({ state, commit }, forceUpdate = false) {
-        console.log('forceUpdate'+forceUpdate);
-        const { userInfo } = state
+      const { userInfo } = state
       if (userInfo && !forceUpdate) return userInfo
       const response = await getUserByToken()
       commit('saveUserInfo', { userInfo: response })
@@ -131,8 +130,8 @@ export default new Vuex.Store({
             failCB(errmsg)
           },
           complete: function(res) {
-              // successCB(res)
-              if (res.errMsg === 'chooseWXPay:cancel') {
+            // successCB(res)
+            if (res.errMsg === 'chooseWXPay:cancel') {
               console.log('支付取消')
             }
           }
@@ -255,6 +254,6 @@ export default new Vuex.Store({
     audioData,
     shareData,
     praiseData,
-    mobileData,
+    mobileData
   }
 })
