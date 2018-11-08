@@ -48,6 +48,15 @@ export default {
   props: {
     isTryScan: {
       default: false
+    },
+    userAccessStatus: {
+      default: null
+    },
+    groupBuyId: {
+      default: null
+    },
+    collectLikeId: {
+      default: null
     }
   },
   data() {
@@ -73,8 +82,6 @@ export default {
   computed: {
     ...rootState(['url']),
     ...mapGetters([
-      'groupBuyId',
-      'collectLikeId',
       'collectLikeTemplateId',
       'groupBuyTemplateId',
       'sharePostUrl',
@@ -82,7 +89,6 @@ export default {
       'price',
       'groupBuyPersonCount',
       'freeLesson',
-      'userAccessStatus',
       'courseName',
       'purchased'
     ]),
@@ -92,7 +98,7 @@ export default {
       'userList',
       'createTime',
       'alreadyCount',
-      'status' /* 120 1 / 2:拼团中 3：成功  4：失败 */,
+      'groupBuystatus' /* 120 1 / 2:拼团中 3：成功  4：失败 */,
       'timeDuration'
     ])
   },
@@ -104,7 +110,7 @@ export default {
     },
     collectLikeId(newCollectLikeId) {
       if (newCollectLikeId) {
-        this.paymentType = PAYMENTTYPE.groupBuy
+        this.paymentType = PAYMENTTYPE.collect
       }
     },
     paymentType: {
@@ -202,10 +208,10 @@ export default {
       }`]: groupBuyTextType[20021],
       // 参与人与非参与人
       // 参与人
-      [`${identityType.PARTNER}_1201`]: groupBuyTextType[1201],
-      [`${identityType.PARTNER}_1202`]: groupBuyTextType[1202],
-      [`${identityType.PARTNER}_1203`]: groupBuyTextType[1203],
-      [`${identityType.PARTNER}_1204`]: groupBuyTextType[1204],
+      [`${identityType.PARTNER}_1201`]: groupBuyStatusType[1201],
+      [`${identityType.PARTNER}_1202`]: groupBuyStatusType[1202],
+      [`${identityType.PARTNER}_1203`]: groupBuyStatusType[1203],
+      [`${identityType.PARTNER}_1204`]: groupBuyStatusType[1204],
       // 非参与人 拼团未满
       [`${identityType.PASSER}_${
         userAccessStatusType.GROUPBUY_FAIL
@@ -254,10 +260,14 @@ export default {
       'getCollectLike'
     ]),
     async mapGroupBuyDetailToPayment() {
-      const { groupBuyId, groupBuyIdFromShare } = this
-        await this.getGroupBuyDetail({ groupBuyId: groupBuyIdFromShare || groupBuyId })
-        return await this.judgeIdentity()
-
+      const { groupBuyId, groupBuyIdFromShare, collectLikeIdFromShare } = this
+      console.log(groupBuyIdFromShare, collectLikeIdFromShare)
+      if (groupBuyIdFromShare || groupBuyId) {
+          await this.getGroupBuyDetail({
+              groupBuyId: groupBuyIdFromShare || groupBuyId
+          })
+      }
+      return await this.judgeIdentity()
     },
     async handlePayment(paymentQueryType, params) {
       this.payDisabled = true
@@ -360,7 +370,9 @@ export default {
       )
     },
     handleJoinGroupBuy() {
-      this.handlePayment('joinGroupBuy', { groupBuyId: this.groupBuyIdFromShare })
+      this.handlePayment('joinGroupBuy', {
+        groupBuyId: this.groupBuyIdFromShare
+      })
     },
     handleStartGroupBuy() {
       this.handlePayment('startGroupBuy')
@@ -483,7 +495,7 @@ export default {
     const tryTxt = isTryScan ? '试看' : '试听'
     const paymentObj =
       this.master === identityType.PARTNER
-        ? this.paymentShowText[`${this.master}_${this.status}`]
+        ? this.paymentShowText[`${this.master}_${this.groupBuystatus}`]
         : this.paymentShowText[`${this.master}_${this.userAccessStatus}`]
     console.log('拼团状态  是  ' + this.paymentType)
     console.log(
@@ -525,7 +537,7 @@ export default {
             isSixGroup={this.groupBuyPersonCount > 3}
             userListTop={userListTop}
             userListBot={userListBot}
-            status={this.status}
+            groupBuystatus={this.groupBuystatus}
           />
         )}
         <div class="qhht-flex payment-wrapper">

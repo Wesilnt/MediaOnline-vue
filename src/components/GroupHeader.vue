@@ -18,17 +18,17 @@
                 </div>
             </div>
         </div>
-        <div v-if="status==1201 || status==1202">
+        <div v-if="groupBuystatus==1201 || groupBuystatus==1202">
             <div class="groupBuy-info">剩余<span>{{leavePerson}}</span>个名额</div>
             <div class="groupBuy-countDown-container">
                 <CountDown :timeDuration="timeDuration"></CountDown>
             </div>
             <div class="groupBuy-deadline">距离截止时间</div>
         </div>
-        <div v-else-if="status==1203">
+        <div v-else-if="groupBuystatus==1203">
             <div class="groupBuy-info">拼团成功</div>
         </div>
-        <div v-else-if="status=1204">
+        <div v-else-if="groupBuystatus==1204">
             <div class="groupBuy-info">拼团失败</div>
         </div>
         <div v-else-if="leavePerson===0">
@@ -48,11 +48,8 @@ export default {
     'userListTop',
     'userListBot',
     'isSixGroup',
-    'status'
+    'groupBuystatus'
   ],
-  updated() {
-    console.log(this)
-  },
   components: {
     CountDown
   }

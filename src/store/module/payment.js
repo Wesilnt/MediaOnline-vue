@@ -26,7 +26,7 @@ export default {
     userList: [],
     timeDuration: null,
     alreadyCount: 0,
-    status: 0,
+    groupBuystatus: 0,
     toast: null
   }),
   getters: {
@@ -35,12 +35,6 @@ export default {
     },
     collectLikeTemplateId(state, getters, { columnData }) {
       return columnData.columnDetail.collectLikeTemplateId
-    },
-    collectLikeId(state, getters, { columnData }) {
-      return columnData.collectLikeId
-    },
-    groupBuyId(state, getters, { columnData }) {
-      return columnData.groupBuyId
     },
     sharePostUrl(state, getters, { columnData }) {
       return `${
@@ -60,10 +54,6 @@ export default {
       const { freeLessonList } = columnData.columnDetail
       return freeLessonList && freeLessonList.length && freeLessonList[0]
     },
-    userAccessStatus(state, getters, { columnData }) {
-      return columnData.userAccessStatus
-    },
-
     courseName(state, getters, { columnData }) {
       return columnData.courseName
     },
@@ -79,6 +69,7 @@ export default {
   actions: {
     async getGroupBuyDetail({ commit }, payload) {
       const response = await getGroupBuyDetail(payload)
+      if (!response) return
       const {
         userId: masterId,
         starterUid,
@@ -87,7 +78,7 @@ export default {
         duration,
         sysTime,
         alreadyCount,
-        status
+        status: groupBuystatus
       } = response
       const userListArr = Array(6).fill({})
 
@@ -105,7 +96,7 @@ export default {
         }, userListArr),
         timeDuration,
         alreadyCount,
-        status
+        groupBuystatus
       })
     },
     hideToast() {
@@ -143,8 +134,8 @@ export default {
       dispatch('getWechatPayment', { ...result, courseId })
     },
     //发起集赞
-    async startCollectLike({ state, dispatch, commit }, {courseId}) {
-      const result = await startCollectLike({courseId})
+    async startCollectLike({ state, dispatch, commit }, { courseId }) {
+      const result = await startCollectLike({ courseId })
       if (!result) return
       Toast('发起集赞成功')
       dispatch('columnData/getColumnDetail', { courseId }, { root: true })

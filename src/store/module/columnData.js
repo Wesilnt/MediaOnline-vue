@@ -67,10 +67,6 @@ const columnData = {
     }
   },
   mutations: {
-    //初始化数据
-    isFromShare(state, { groupBuyId }) {
-      state.isFromShare = groupBuyId ? true : false
-    },
     saveStatus(state, payload) {
       Object.assign(state, payload)
     },
@@ -88,7 +84,6 @@ const columnData = {
       state.columnFinished = false
       state.lessonLoading = false
       state.lessonFinished = false
-      state.isFromShare = false
       state.pageSize = 10
     }
   },
@@ -196,28 +191,6 @@ const columnData = {
         profilePic,
         courseName
       })
-     /* if (state.isFromShare) {
-        //这里是分享链接进来的
-        dispatch('groupManagerData/getGroupBuyDetail', groupBuyId)
-      } else {
-        //这里是正常途径进来的
-        const toolsData = {
-          courseName: columnDetail.name,
-          courseId: columnDetail.id,
-          collectLikeDuration: columnDetail.collectLikeDuration,
-          collectLikeId: columnDetail.collectLikeId,
-          collectLikePersonCount: columnDetail.collectLikePersonCount,
-          collectLikeTemplateId: columnDetail.collectLikeTemplateId,
-          groupBuyDuration: columnDetail.groupBuyDuration,
-          groupBuyPersonCount: columnDetail.groupBuyPersonCount,
-          groupBuyPrice: columnDetail.groupBuyPrice,
-          groupBuyId: columnDetail.groupBuyId,
-          groupBuyTemplateId: columnDetail.groupBuyTemplateId,
-          userAccessStatus: columnDetail.userAccessStatus,
-          price: columnDetail.price
-        }
-        dispatch('groupManagerData/initToolsBar', toolsData)
-      }*/
     },
     async getCommentList({ commit }, params) {
       const response = await getCommentList(params)

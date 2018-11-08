@@ -3,8 +3,12 @@
         <SkeletonFullScreen  v-if="renderLoading"/>
         <div v-else>
             <Payment
-                    :isTryScan="isCourseType"
-                    :columnDetail="columnDetail"
+                :isTryScan="isCourseType"
+                :columnDetail="columnDetail"
+                :groupBuyId="groupBuyId"
+                :collectLikeId="collectLikeId"
+                :userAccessStatus="userAccessStatus"
+                :key="groupBuyId+collectLikeId+userAccessStatus"
             />
             <div id="detailmain" ref="detailmain" v-if="!isReadType">
                 <div class="lazy-img-larger column-banner" v-lazy:background-image="`${columnDetail.profilePic}?imageView2/1/format/jpg`">
@@ -147,9 +151,7 @@ import CourseIntroduce from '../components/CourseIntroduce.vue'
 import playlist from './onlineCourse/components/playlist.vue'
 import videoComment from '../components/video-comment.vue'
 import ImagePreview from '../components/ImagePreview'
-import {
-  createNamespacedHelpers,
-} from 'vuex'
+import { createNamespacedHelpers } from 'vuex'
 import {
   openVideoDetail,
   openAudioDetail,
@@ -166,10 +168,8 @@ export default {
   name: 'ColumnDetail',
   data() {
     const { columnType, courseId } = this.$route.params
-    const { groupBuyId } = this.$route.query
     return {
       courseId,
-      groupBuyId,
       columnType,
       navBars: [
         {
@@ -210,12 +210,14 @@ export default {
       'lessonFinished',
       'lessonList',
       'courseName',
-      'userAccessStatus'
+      'userAccessStatus',
+      'collectLikeId',
+      'groupBuyId'
     ]),
     ...mapGetters(['playingId', 'getBookIntroduce', 'isNew', 'freeLesson'])
   },
   methods: {
-    ...mapMutations(['isFromShare', 'resetState']),
+    ...mapMutations(['resetState']),
     ...mapActions([
       'getLessonList',
       'getColumnDetail',
@@ -224,16 +226,11 @@ export default {
       'likeComment'
     ]),
     async fetchColumnData() {
-      const { courseId, columnType, isVisionType, groupBuyId } = this
+      const { courseId, columnType, isVisionType } = this
       await this.resetState()
-      // 同类接口请求
-      //初始化页面数据(将路由中带过来的专栏ID存储到仓库)
-      await this.isFromShare({
-        groupBuyId
-      })
       await this.getColumnDetail({
         columnType,
-        courseId,
+        courseId
       })
       // 音频课程 视频课程 由于数据结构相同，使用同种配置
       //   1.获取专栏下的所有单集
