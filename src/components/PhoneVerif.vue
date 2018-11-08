@@ -1,7 +1,7 @@
 <template>
   <div class="mobile-validate"  @click.self="hideTeleRegister">
-    <span class="mobile-close" @click.self="hideTeleRegister"></span>
     <div class="validate-container">
+      <span class="mobile-close" @click.self="hideTeleRegister">X</span>
       <div class="number-container">
         <p>手机号:</p>
         <input v-model="mobileNumber" placeholder="手机号" type="number">
@@ -91,23 +91,21 @@ export default {
   position: fixed;
   width: 100%;
   height: 100%;
-  display: flex;
   z-index: 100;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
 }
 .validate-container {
-  height: auto;
+  position: absolute;
+  top: 10%;
+  left: 0;
+  right: 0;
   width: 670px;
+  margin: 0 auto;
   background-color: white;
-  border-radius: 20px;
-  display: flex;
-  flex-direction: column;
+  border-radius: 12px;
   z-index: 100;
 }
 .number-container {
@@ -156,7 +154,7 @@ export default {
     align-self: flex-end;
     color: rgb(28, 28, 28);
     font-size: 30px;
-    width: 0px;
+    width: 0;
     flex: 1;
     outline: none;
     line-height: 30px;
@@ -184,6 +182,7 @@ export default {
   margin-left: 40px;
 }
 .validate-confirm {
+  display: block;
   margin: 67px 40px 40px;
   color: white;
   border-radius: 90px;
@@ -194,12 +193,15 @@ export default {
   background-color: rgb(255, 163, 47);
 }
 .mobile-close {
-  width: 68px;
-  height: 68px;
-  margin-bottom: 50px;
-  background-image: url('../assets/images/close.png');
-  background-size: 68px;
+  position: absolute;
+  padding: 6px 20px;
+  top: 16px;
+  right: 24px;
+  color: #ffbc66;
+  font-size: 40px;
+  font-weight: bolder;
 }
+
 .van-toast {
   z-index: 3000;
   /deep/.van-toast--text {

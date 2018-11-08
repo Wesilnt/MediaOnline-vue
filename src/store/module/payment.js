@@ -107,8 +107,8 @@ export default {
         return (window.location.href = WECHAT_SUBSCRIPTION_URL)
       }
     },
-    checkoutUserInfo({ dispatch }) {
-      return dispatch('getUserInfo', null, { root: true })
+    checkoutUserInfo({ dispatch },forceUpdate) {
+      return dispatch('getUserInfo', forceUpdate, { root: true })
     },
     //原价购买
     async unlockCourse({ dispatch }, payload) {
@@ -159,7 +159,7 @@ export default {
           paySign, // 支付签名
           successCB: function(res) {
             console.log(res)
-            if (res.errMsg !== 'chooseWXPay:cancel')
+            // if (res.errMsg !== 'chooseWXPay:cancel')
               // 支付成功后的回调函数
               dispatch(
                 'columnData/getColumnDetail',

@@ -78,7 +78,7 @@ export default {
       paymentShowText: null,
       sharePageShow: false,
       paymentType: null,
-      paySuccStatus: ''
+      paySuccStatus: '',
     }
   },
   computed: {
@@ -239,8 +239,8 @@ export default {
       'startCollectLike',
       'getCollectLike'
     ]),
-      async getUserInfo(){
-          this.userInfo = await this.checkoutUserInfo()
+      async getUserInfo(forceUpdate){
+          this.userInfo = await this.checkoutUserInfo(forceUpdate)
       },
     async mapGroupBuyDetailToPayment() {
       const { groupBuyId, groupBuyIdFromShare } = this
@@ -373,7 +373,6 @@ export default {
         groupBuyId: this.groupBuyIdFromShare
       })
         this.mapGroupBuyDetailToPayment();
-
     },
     async handleStartGroupBuy() {
       await this.handlePayment('startGroupBuy')
@@ -549,7 +548,7 @@ export default {
             <PhoneVerif
               style={{ zIndex: 100 }}
               hideTeleRegister={this.toggleTeleRegister.bind(this, false)}
-              succFun={this.getUserInfo}
+              succFun={this.getUserInfo.bind(this,true)}
             />
           )}
         </div>
