@@ -90,7 +90,7 @@ export default {
         starterUid,
         userList: userList.reduce((prev, item, index) => {
           if (item.id) {
-            prev[index] = item
+            item.isStarter === 1 ? (prev[0] = item) : (prev[index + 1] = item)
           }
           return prev
         }, userListArr),

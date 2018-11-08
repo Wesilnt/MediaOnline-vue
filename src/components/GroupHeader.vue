@@ -2,18 +2,18 @@
     <div class="groupBuy-container">
         <div class="groupBuy-usericon" v-show="isSixGroup" >
             <div class="qhht-flex groupBuy-usericon-top">
-                    <div class="groupBuy-usericon-item" v-for="(item,index) in userListTop" :key="index" :style="item.avatarUrl==null?{}:{ background : 'url('+item.avatarUrl+')', 'background-size' : '100%'}">
-                        <div class="groupBuy-usericon-manager" v-show="item.isStarter">团长</div>
-                    </div>
+                <div class="groupBuy-usericon-item" v-for="(item,index) in userListTop" :key="index" :style=" {backgroundImage : `url(${item.avatarUrl})`}">
+                    <div class="groupBuy-usericon-manager" v-show="item.isStarter">团长</div>
+                </div>
             </div>
             <div class="qhht-flex groupBuy-usericon-bot">
-                    <div class="groupBuy-usericon-item" v-for="(item,index) in userListBot" :key="index" :style="item.avatarUrl==null?{}:{ background : 'url('+item.avatarUrl+')', 'background-size' : '100%'}">
-                    </div>
+                <div class="groupBuy-usericon-item" v-for="(item,index) in userListBot" :key="index" :style="{backgroundImage : `url(${item.avatarUrl})`}">
+                </div>
             </div>
         </div>
         <div class="groupBuy-usericon" v-show="!isSixGroup">
             <div class="qhht-flex groupBuy-usericon-top-three">
-                <div class="groupBuy-usericon-item" v-for="(item,index) in userListTop" :key="index" :style="item.avatarUrl==null?{}:{ background : 'url('+item.avatarUrl+')','background-size' : '100%' }">
+                <div class="groupBuy-usericon-item" v-for="(item,index) in userListTop" :key="index" :style="{backgroundImage : `url(${item.avatarUrl})`}">
                     <div class="groupBuy-usericon-manager" v-show="item.isStarter">团长</div>
                 </div>
             </div>
@@ -113,7 +113,7 @@ export default {
 .groupBuy-usericon-item {
   width: 120px;
   height: 120px;
-  background-color: rgb(250, 219, 162);
+  background: rgb(250, 219, 162) center/100% no-repeat;
   border-radius: 50%;
 }
 .groupBuy-info {
