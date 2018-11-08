@@ -21,23 +21,24 @@ import VisionCell from './homeComponents/VisionCell.vue'
 import VideoCell from './homeComponents/VideoCell.vue'
 import BookCell from './homeComponents/BookCell.vue'
 export default {
-    props:['columnType','item','list'],
-    components:{ Header,FreeList,VisionCell,VideoCell,BookCell,}
+  props: ['columnType', 'item', 'list'],
+  components: { Header, FreeList, VisionCell, VideoCell, BookCell },
 }
 </script> 
 
 <style lang="less" scoped>
-.vision-list{
-  border-bottom: 2px solid #F1F1F1;
+.vision-list {
+  border-bottom: 2px solid #f1f1f1;
 }
-.video-list{
+.video-list {
   padding-bottom: 28px;
+  border-bottom: 2px solid #f1f1f1;
 }
 .book-list {
   flex-wrap: wrap;
   justify-content: space-between;
 }
-.emptyItem { 
+.emptyItem {
   visibility: hidden;
- }
+}
 </style>

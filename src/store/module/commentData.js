@@ -51,16 +51,13 @@ export default {
         currentPage,
         pageSize: state.pageSize
       }
-      console.log("评论参数",params)
       let res = await getCommentList(params)
-      console.log("评论列表：",res)
       if (!res.result) return
       commit('setCommentList', { list: res.result, currentPage })
     },
     //发布评论
     async postComment({ state, commit, dispatch }, params) {
       const res = await postComment(params)
-      console.log('发布评论：' + res)
       if (null == res) return
       dispatch('getCommentList', {regionId: params.regionId, regionType: 2202,isLoadMore: false})
     },

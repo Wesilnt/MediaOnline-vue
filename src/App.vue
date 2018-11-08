@@ -33,7 +33,7 @@ export default {
     $route: {
       handler({ fullPath }) {
         if (fullPath === '/') return
-        console.log(fullPath)
+        // console.log(fullPath)
         if (fullPath.includes('/my')) {
           /*
         * 隐藏我的相关页的分享及其他按钮

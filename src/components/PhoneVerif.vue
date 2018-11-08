@@ -1,7 +1,7 @@
 <template>
-  <div class="mobile-validate"  @click.self="closeWindow">
-    <span class="mobile-close" @click="closeWindow"></span>
+  <div class="mobile-validate"  @click.self="hideTeleRegister">
     <div class="validate-container">
+      <span class="mobile-close" @click.self="hideTeleRegister">X</span>
       <div class="number-container">
         <p>手机号:</p>
         <input v-model="mobileNumber" placeholder="手机号" type="number">
@@ -19,30 +19,33 @@
   </div>
 </template>
 <script>
-import {Toast} from 'vant'
+import { Toast } from 'vant'
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapActions, mapGetters } = createNamespacedHelpers('mobileData')
+const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
+  'mobileData'
+)
 export default {
+  props: ['hideTeleRegister', 'succFun'],
   data() {
     return {
       mobileNumber: '',
       validateCode: '',
-      numberError:'',
-      codeError:''
+      numberError: '',
+      codeError: ''
     }
   },
   computed: {
     ...mapState(['remainTime', 'clickable', 'sending', 'validate'])
-  }, 
+  },
   watch: {
-    validate: function(res) { 
+    validate: function(res) {
       if (res) this.$emit('callback')
     },
-    mobileNumber:function(newNum,oldNum){
-      if(newNum != oldNum) this.numberError = ''
+    mobileNumber: function(newNum, oldNum) {
+      if (newNum != oldNum) this.numberError = ''
     },
-    validateCode:function(newNum,oldNum){
-      if(newNum != oldNum) this.codeError = ''
+    validateCode: function(newNum, oldNum) {
+      if (newNum != oldNum) this.codeError = ''
     }
   },
   methods: {
@@ -50,36 +53,35 @@ export default {
     sendCode() {
       if (!this.clickable) return
       if (this.mobileNumber.trim() === '') {
-         Toast({position:'bottom',message:'请输入手机号'})
-          this.numberError = '请输入手机号'
+        Toast({ position: 'bottom', message: '请输入手机号' })
+        this.numberError = '请输入手机号'
         return
       }
-      if(!this.isPoneAvailable(this.mobileNumber)){
-          this.$toast({position:'bottom',message:'手机号格式不正确'})
-          this.numberError = '手机号格式不正确'
-         return
+      if (!this.isPoneAvailable(this.mobileNumber)) {
+        this.$toast({ position: 'bottom', message: '手机号格式不正确' })
+        this.numberError = '手机号格式不正确'
+        return
       }
       this.sendMobileCode({ mobileNo: this.mobileNumber })
     },
-    onConfirm() {
+    async onConfirm() {
       if (this.validateCode === '') {
-        this.$toast({position:'bottom',message:'请输入正确的验证码'})
+        this.$toast({ position: 'bottom', message: '请输入正确的验证码' })
         this.codeError = '请输入正确的验证码'
         return
       }
-      this.validateMobileCode({ code: this.validateCode })
-    },
-    closeWindow(){
-      this.$emit('callback',false)
+      await this.validateMobileCode({ code: this.validateCode })
+      this.hideTeleRegister()
+      this.succFun()
     },
     isPoneAvailable(str) {
-          var myreg=/^[1][3,4,5,7,8][0-9]{9}$/;
-          if (!myreg.test(str)) {
-              return false;
-          } else {
-              return true;
-          }
-      } 
+      var myreg = /^[1][3,4,5,7,8][0-9]{9}$/
+      if (!myreg.test(str)) {
+        return false
+      } else {
+        return true
+      }
+    }
   }
 }
 </script>
@@ -89,23 +91,21 @@ export default {
   position: fixed;
   width: 100%;
   height: 100%;
-  display: flex;
   z-index: 100;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   top: 0;
-  left:0;
-  right:0;
-  bottom:0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
 .validate-container {
-  height: auto;
+  position: absolute;
+  top: 10%;
+  left: 0;
+  right: 0;
   width: 670px;
+  margin: 0 auto;
   background-color: white;
-  border-radius: 20px;
-  display: flex;
-  flex-direction: column;
+  border-radius: 12px;
   z-index: 100;
 }
 .number-container {
@@ -130,7 +130,7 @@ export default {
     outline: none;
   }
 }
-.number-error-hint{
+.number-error-hint {
   color: red;
   font-size: 28px;
   align-self: flex-start;
@@ -154,7 +154,7 @@ export default {
     align-self: flex-end;
     color: rgb(28, 28, 28);
     font-size: 30px;
-    width: 0px;
+    width: 0;
     flex: 1;
     outline: none;
     line-height: 30px;
@@ -174,7 +174,7 @@ export default {
     align-items: center;
   }
 }
-.code-error-hint{
+.code-error-hint {
   color: red;
   font-size: 28px;
   align-self: flex-start;
@@ -182,6 +182,7 @@ export default {
   margin-left: 40px;
 }
 .validate-confirm {
+  display: block;
   margin: 67px 40px 40px;
   color: white;
   border-radius: 90px;
@@ -191,17 +192,19 @@ export default {
   height: 90px;
   background-color: rgb(255, 163, 47);
 }
-.mobile-close{
-  width: 68px; 
-  height: 68px; 
-  margin-bottom: 50px;
-  background-image: url('../assets/images/close.png');
-  background-size: 68px;
+.mobile-close {
+  position: absolute;
+  padding: 6px 20px;
+  top: 16px;
+  right: 24px;
+  color: #ffbc66;
+  font-size: 40px;
+  font-weight: bolder;
 }
-.van-toast{
+
+.van-toast {
   z-index: 3000;
-  /deep/.van-toast--text
-  {
+  /deep/.van-toast--text {
     z-index: 3000;
   }
 }
