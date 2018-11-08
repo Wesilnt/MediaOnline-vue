@@ -110,6 +110,7 @@ export default {
     const initialPayment = {
       txt: groupBuyPersonCount === 3 ? '三人团' : '六人团',
       showPrice: true,
+        showOrigin:true,
       handler: false
     }
     let handler = this.toggleSharePage.bind(this, true)
@@ -487,9 +488,9 @@ export default {
       collectLikeTemplateId,
       userList
     )
-    const { hide, showPrice } = paymentObj
+    const { hide, showOrigin=false } = paymentObj
     let paymentBtn = this.renderPayment({
-      origin: price && showPrice && this.renderOriginBuy,
+      origin: price && showOrigin && this.renderOriginBuy,
       group: groupBuyTemplateId && this.renderGroupBuy.bind(this, paymentObj),
       collect:
         collectLikeTemplateId && this.renderCollectBuy.bind(this, paymentObj)
