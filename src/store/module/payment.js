@@ -80,23 +80,18 @@ export default {
         alreadyCount,
         status: groupBuystatus
       } = response
-      const userListArr = Array(6).fill({})
 
       //8.计算倒计时
       const timeDuration =
         (createTime + duration * 60 * 60 * 1000 - sysTime) / 1000
+
       commit('saveState', {
         masterId,
         starterUid,
-        userList: userList.reverse().reduce((prev, item, index) => {
-          if (item.id) {
-            prev[index] = item
-          }
-          return prev
-        }, userListArr),
+        userList,
         timeDuration,
         alreadyCount,
-        groupBuystatus
+        groupBuystatus,
       })
     },
     hideToast() {

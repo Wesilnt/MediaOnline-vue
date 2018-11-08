@@ -8,6 +8,7 @@ import { openVideoDetail, openAudioDetail } from '../utils/config'
 import PhoneVerif from './PhoneVerif'
 import Share from './share/Share'
 import GroupHeader from './GroupHeader'
+
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
   'columnData/payment'
 )
@@ -76,7 +77,8 @@ export default {
       showTeleRegister: false,
       paymentShowText: null,
       sharePageShow: false,
-      paymentType: null
+      paymentType: null,
+      paySuccStatus: ''
     }
   },
   computed: {
@@ -142,17 +144,11 @@ export default {
       2008: { txt: '您已参与集赞,帮助好友分享', handler } // 弹出拼团界面
     }
     const groupBuyStatusType = {
-      1201: {
-        txt: '您已参与拼团，邀请其他好友',
-        handler
-      },
-      1202: {
-        txt: '您已参与拼团，邀请其他好友',
-        handler
-      },
-      1203: {
-        hide: true
-      },
+      1201: { txt: '您已参与拼团，邀请其他好友', handler },
+      1202: { txt: '您已参与拼团，邀请其他好友', handler },
+      '1201ELSERING': { txt: '请等待其他参与者完成支付', handler },
+      '1202SELFING': { txt: '继续支付', handler: this.handleJoinGroupBuy },
+      1203: { hide: true },
       1204: { txt: '开团失败，重新开团', handler: this.handleStartGroupBuy }
     }
 
@@ -256,10 +252,10 @@ export default {
       await this.checkoutWxAuthor()
 
       console.log(userInfo)
-      if (!userInfo.mobileNo) {
+      if (!userInfo || !userInfo.mobileNo) {
         await this.hideToast()
         this.toggleTeleRegister(true)
-        this.payDisabled = false
+        return (this.payDisabled = false)
       }
       await this.hideToast()
       await this[paymentQueryType]({ courseId: this.courseId, ...params })
@@ -286,6 +282,19 @@ export default {
     judgeIdentity() {
       if (this.masterId === this.starterUid) return
       if (this.userList.some(item => item.id === this.masterId)) {
+        // paySuccStatus 状态(2602:已完成，2603:失败,2601:支付中)
+        this.paySuccStatus = ''
+        this.userList.some(item => {
+          console.log(this.masterId, item.id, item.status)
+          if (this.masterId !== item.id && item.status === 2601) {
+            this.paySuccStatus = 'ELSERING'
+            return
+          }
+          if (this.masterId === item.id && item.status === 2601) {
+            this.paySuccStatus = 'SELFING'
+            return
+          }
+        })
         return (this.master = identityType.PARTNER)
       } else {
         if (this.groupBuyPersonCount === this.userList.length) {
@@ -457,7 +466,7 @@ export default {
         imgUrl: this.sharePostUrl,
         ...share
       }
-      console.log('shareLink_title changed', shareData)
+      console.log('shareLink_title ', shareData)
       this.setWxShareFriend(shareData)
       this.setWxShareZone(shareData)
     }
@@ -474,23 +483,15 @@ export default {
       showTeleRegister,
       sharePageShow,
       groupBuyId,
-      collectLikeId,
-      userList,
-      groupBuyPersonCount
+      collectLikeId
     } = this
     const tryTxt = isTryScan ? '试看' : '试听'
     const paymentObj =
       this.master === identityType.PARTNER
-        ? this.paymentShowText[`${this.master}_${this.groupBuystatus}`]
+        ? this.paymentShowText[
+            `${this.master}_${this.groupBuystatus}${this.paySuccStatus}`
+          ]
         : this.paymentShowText[`${this.master}_${this.userAccessStatus}`]
-    console.log('拼团状态  是  ' + this.paymentType)
-    console.log(
-      paymentObj,
-      price,
-      groupBuyTemplateId,
-      collectLikeTemplateId,
-      userList
-    )
     const { hide, showOrigin = false } = paymentObj
     let paymentBtn = this.renderPayment({
       origin: price && showOrigin && this.renderOriginBuy,
@@ -508,13 +509,6 @@ export default {
         collect: this.renderCollectBuy.bind(this, paymentObj)
       })
     }
-    let userListTop = userList.slice(0, 3),
-      userListBot = []
-    if (groupBuyPersonCount > 3) {
-        userListTop = userList.slice(0, 2),
-      userListBot = userList.slice(2)
-    }
-
     return hide ? null : (
       <div>
         {this.paymentType === groupBuy && (
@@ -522,8 +516,7 @@ export default {
             timeDuration={this.timeDuration}
             leavePerson={this.groupBuyPersonCount - this.alreadyCount}
             isSixGroup={this.groupBuyPersonCount > 3}
-            userListTop={userListTop}
-            userListBot={userListBot}
+            userList={this.userList}
             groupBuystatus={this.groupBuystatus}
           />
         )}
@@ -555,40 +548,8 @@ export default {
     )
   }
 }
-/*废码暂存
-*      [`${identityType.PARTNER}_${
-        userAccessStatusType.GROUPBUY_FAIL
-      }`]: groupBuyTextType[20032],
-      [`${identityType.PARTNER}_${
-        userAccessStatusType.REFUND_SINGLED
-      }`]: groupBuyTextType[2004],
-      [`${identityType.PARTNER}_${
-        userAccessStatusType.NONE
-      }`]: groupBuyTextType[2004],
-      [`${identityType.PARTNER}_${
-        userAccessStatusType.SINGLED
-      }`]: groupBuyTextType[20022],
-      [`${identityType.PARTNER}_${
-        userAccessStatusType.GROUPED
-      }`]: groupBuyTextType[20022],
-      [`${identityType.PARTNER}_${
-        userAccessStatusType.GROUPING
-      }`]: groupBuyTextType[20033],
-      [`${identityType.PARTNER}_${
-        userAccessStatusType.GROUPING_OVERTIME
-      }`]: groupBuyTextType[2006],
-      [`${identityType.PARTNER}_${
-        userAccessStatusType.COLLECTED
-      }`]: groupBuyTextType[2008],
-      [`${identityType.PARTNER}_${
-        userAccessStatusType.COLLECTGET
-      }`]: groupBuyTextType[2008],
-      [`${identityType.PARTNER}_${
-        userAccessStatusType.COLLECTING
-      }`]: groupBuyTextType[2008],
-* */
 </script>
-<style lang='less' >
+<style lang='less'>
 .payment-wrapper {
   position: fixed;
   bottom: 0;
@@ -600,6 +561,7 @@ export default {
   font-size: 20px;
   z-index: 200;
 }
+
 .payment-flex-column {
   display: flex;
   justify-content: space-between;
@@ -608,11 +570,13 @@ export default {
   height: 80px;
   padding-left: 28px;
 }
+
 .payment-audition {
   padding: 0;
   padding-right: 28px;
   border-right: 1px solid #f8f8f8;
 }
+
 .audition-icon {
   display: block;
   width: 40px;
@@ -620,15 +584,18 @@ export default {
   background-image: url('../assets/images/onlinecourse-tabbar-try.png');
   background-size: 40px;
 }
+
 .payment-low-attention {
   color: #939393;
 }
+
 .payment-button-wrapper {
   flex-grow: 1;
   &.disabled {
     pointer-events: none;
   }
 }
+
 .payment-button-group {
   flex-grow: 1;
   overflow: hidden;
@@ -657,6 +624,7 @@ export default {
     color: #fff;
   }
 }
+
 .payment-onlyOrigin {
   flex-grow: 1;
   text-align: center;

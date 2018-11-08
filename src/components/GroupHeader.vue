@@ -2,18 +2,18 @@
     <div class="groupBuy-container">
         <div class="groupBuy-usericon" v-show="isSixGroup" >
             <div class="qhht-flex groupBuy-usericon-top">
-                <div class="groupBuy-usericon-item" v-for="(item,index) in userListTop" :key="index" :style=" {backgroundImage : `url(${item.avatarUrl})`}">
+                <div class="groupBuy-usericon-item" v-for="(item,index) in userListTop" :key="index" :style="item.avatarUrl&& {backgroundImage : `url(${item.avatarUrl})`}">
                     <div class="groupBuy-usericon-manager" v-show="item.isStarter">团长</div>
                 </div>
             </div>
             <div class="qhht-flex groupBuy-usericon-bot">
-                <div class="groupBuy-usericon-item" v-for="(item,index) in userListBot" :key="index" :style="{backgroundImage : `url(${item.avatarUrl})`}">
+                <div class="groupBuy-usericon-item" v-for="(item,index) in userListBot" :key="index" :style="item.avatarUrl&&{backgroundImage : `url(${item.avatarUrl})`}">
                 </div>
             </div>
         </div>
         <div class="groupBuy-usericon" v-show="!isSixGroup">
             <div class="qhht-flex groupBuy-usericon-top-three">
-                <div class="groupBuy-usericon-item" v-for="(item,index) in userListTop" :key="index" :style="{backgroundImage : `url(${item.avatarUrl})`}">
+                <div class="groupBuy-usericon-item" v-for="(item,index) in userListTop" :key="index" :style="item.avatarUrl&&{backgroundImage : `url(${item.avatarUrl})`}">
                     <div class="groupBuy-usericon-manager" v-show="item.isStarter">团长</div>
                 </div>
             </div>
@@ -45,11 +45,37 @@ export default {
   props: [
     'leavePerson',
     'timeDuration',
-    'userListTop',
-    'userListBot',
+    'userList',
     'isSixGroup',
     'groupBuystatus'
   ],
+  data() {
+    return {
+      userListTop: [],
+      userListBot: []
+    }
+  },
+  watch: {
+    userList: {
+      handler(List) {
+        const userListArr = Array(6).fill({})
+        const formatUserList = List.concat()
+          .reverse()
+          .reduce((prev, item, index) => {
+            if (item.id) {
+              prev[index] = item
+            }
+            return prev
+          }, userListArr)
+        this.userListTop = formatUserList.slice(0, 3)
+        if (this.isSixGroup) {
+          this.userListTop = formatUserList.slice(0, 2)
+          this.userListBot = formatUserList.slice(2)
+        }
+      },
+      immediate: true
+    }
+  },
   components: {
     CountDown
   }
