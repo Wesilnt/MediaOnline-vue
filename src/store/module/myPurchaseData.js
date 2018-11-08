@@ -11,9 +11,8 @@ const myPurchaseData = {
   state: { lists, totalCounts, loading: true },
   getters: {
     noPurChaseData({ lists }) {
-      return Object.values(lists).reduce((prev, item) => {
-        prev += item.length
-        return prev === 0
+      return Object.values(lists).reduce((prev, item) => { 
+        return prev & item.length
       }, 0)
     }
   },
