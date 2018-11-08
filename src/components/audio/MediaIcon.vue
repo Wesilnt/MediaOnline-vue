@@ -15,7 +15,7 @@
                 layer-color="#fff"
                 :speed="1"
                 :clockwise="true"
-                :stroke-width="80"
+                :stroke-width="70"
                 :rate="1">
             <div class="image-icon-container"
                  v-lazy:background-image="`${coverPic}?imageView2/1/w/100/h/100/format/jpg/q/50`">
@@ -28,11 +28,10 @@
 </template>
 <script>
     import { openAudioDetail } from '../../utils/config';
-    import { createNamespacedHelpers, mapState as rootState } from 'vuex';
+    import { createNamespacedHelpers } from 'vuex';
 
     const {
         mapState,
-        mapGetters,
         mapActions,
         mapMutations
     } = createNamespacedHelpers('audiotaskData');
@@ -72,7 +71,6 @@
                 'courseName',
                 'columnType'
             ])
-            // ...rootState(['columnType'])
         },
         created() {
             this.initAudio();
@@ -117,15 +115,6 @@
             },
             goPlaying() {
                 openAudioDetail(this, { courseId: this.courseId, columnType: this.columnType, lessonId: this.audioId });
-                // this.$router.push({
-                //   name: 'AudioPlay',
-                //   params: {
-                //     columnType:this.columnType,
-                //     courseId: this.courseId,
-                //     lessonId: this.audioId
-                //   },
-                //   query: {courseName: this.courseName }
-                // })
             }
         },
         mounted() {
@@ -160,7 +149,9 @@
         align-items: center;
         background-color: white;
         border-radius: 50%;
+        border: 24px solid #ffffff;
         box-shadow: 0 0 12px #e0e0e0;
+        box-sizing: border-box;
         .circle_container {
             display: flex;
             justify-content: center;
@@ -171,7 +162,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 98%;
+            width: 105%;
             height: 0px;
             padding-bottom: 100%;
             border-radius: 50%;
