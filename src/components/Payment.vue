@@ -349,13 +349,15 @@ export default {
         </div>
       )
     },
-    handleJoinGroupBuy() {
-      this.handlePayment('joinGroupBuy', {
+    async handleJoinGroupBuy() {
+      await this.handlePayment('joinGroupBuy', {
         groupBuyId: this.groupBuyIdFromShare
       })
+      this.mapGroupBuyDetailToPayment()
     },
-    handleStartGroupBuy() {
-      this.handlePayment('startGroupBuy')
+    async handleStartGroupBuy() {
+      await this.handlePayment('startGroupBuy')
+      this.mapGroupBuyDetailToPayment()
     },
     handleStartCollectLike() {
       this.handlePayment('startCollectLike')
