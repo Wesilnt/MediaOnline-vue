@@ -105,7 +105,7 @@ export default {
     ])
   },
   async mounted() {
-    this.userInfo = await this.checkoutUserInfo()
+      await this.getUserInfo();
     await this.mapGroupBuyDetailToPayment()
     // 配置状态
     const { groupBuyPersonCount, collectLikeId } = this
@@ -188,6 +188,8 @@ export default {
       [`${identityType.PARTNER}_1202`]: groupBuyStatusType[1202],
       [`${identityType.PARTNER}_1203`]: groupBuyStatusType[1203],
       [`${identityType.PARTNER}_1204`]: groupBuyStatusType[1204],
+      [`${identityType.PARTNER}_1201ELSERING`]: groupBuyStatusType['1201ELSERING'],
+      [`${identityType.PARTNER}_1202SELFING`]: groupBuyStatusType['1202SELFING'],
       // 非参与人 拼团未满
       [`${identityType.PASSER}_${
         userAccessStatusType.GROUPBUY_FAIL
@@ -235,6 +237,9 @@ export default {
       'startCollectLike',
       'getCollectLike'
     ]),
+      async getUserInfo(){
+          this.userInfo = await this.checkoutUserInfo()
+      },
     async mapGroupBuyDetailToPayment() {
       const { groupBuyId, groupBuyIdFromShare } = this
       if (groupBuyIdFromShare || groupBuyId) {
@@ -251,7 +256,6 @@ export default {
 
       await this.checkoutWxAuthor()
 
-      console.log(userInfo)
       if (!userInfo || !userInfo.mobileNo) {
         await this.hideToast()
         this.toggleTeleRegister(true)
@@ -541,6 +545,7 @@ export default {
             <PhoneVerif
               style={{ zIndex: 100 }}
               hideTeleRegister={this.toggleTeleRegister.bind(this, false)}
+              succFun={this.getUserInfo}
             />
           )}
         </div>

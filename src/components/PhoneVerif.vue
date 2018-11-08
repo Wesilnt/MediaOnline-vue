@@ -25,7 +25,7 @@ const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
   'mobileData'
 )
 export default {
-  props: ['hideTeleRegister'],
+  props: ['hideTeleRegister', 'succFun'],
   data() {
     return {
       mobileNumber: '',
@@ -64,13 +64,15 @@ export default {
       }
       this.sendMobileCode({ mobileNo: this.mobileNumber })
     },
-    onConfirm() {
+    async onConfirm() {
       if (this.validateCode === '') {
         this.$toast({ position: 'bottom', message: '请输入正确的验证码' })
         this.codeError = '请输入正确的验证码'
         return
       }
-      this.validateMobileCode({ code: this.validateCode })
+      await this.validateMobileCode({ code: this.validateCode })
+      this.hideTeleRegister()
+      succFun()
     },
     isPoneAvailable(str) {
       var myreg = /^[1][3,4,5,7,8][0-9]{9}$/
