@@ -120,14 +120,10 @@ export default {
       handler = this.gotoPraising
     }
     const groupBuyTextType = {
-      20020: {
-        txt: '邀请好友拼团',
-        handler
-      }, // 弹出拼团界面
+      20020: { txt: '邀请好友拼团',handler}, // 弹出拼团界面
       20021: { txt: '邀请好友集赞', handler }, // 弹出集赞界面
       20022: { txt: '您已拥有此专栏，帮助好友分享', handler }, // 弹出拼团界面
-      20023: { txt: '您正在参与其他拼团,帮助好友分享', handler }, // 弹出拼团界面
-      20024: { txt: '正在处理您的其他拼团,帮助好友分享', handler }, // 弹出拼团界面
+      20023: { txt: '您已参与他人的拼团,帮助好友分享', handler }, // 弹出拼团界面
       20032: { txt: '开团失败，重新开团', handler: this.handleStartGroupBuy },
       20033: { txt: '等待开团成功', handler }, // 弹出拼团界面
       2004: {
@@ -213,7 +209,7 @@ export default {
       }`]: groupBuyTextType[20023],
       [`${identityType.PASSER}_${
         userAccessStatusType.GROUPING_OVERTIME
-      }`]: groupBuyTextType[20024],
+      }`]: groupBuyTextType[20023],
       [`${identityType.PASSER}_${
         userAccessStatusType.COLLECTED
       }`]: groupBuyTextType[2008],
