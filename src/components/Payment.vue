@@ -110,7 +110,7 @@ export default {
     const initialPayment = {
       txt: groupBuyPersonCount === 3 ? '三人团' : '六人团',
       showPrice: true,
-        showOrigin:true,
+      showOrigin: true,
       handler: false
     }
     let handler = this.toggleSharePage.bind(this, true)
@@ -254,11 +254,14 @@ export default {
       const { userInfo } = this
 
       await this.checkoutWxAuthor()
-      await this.hideToast()
+
+      console.log(userInfo)
       if (!userInfo.mobileNo) {
+        await this.hideToast()
         this.toggleTeleRegister(true)
         this.payDisabled = false
       }
+      await this.hideToast()
       await this[paymentQueryType]({ courseId: this.courseId, ...params })
       this.payDisabled = false
     },
@@ -488,7 +491,7 @@ export default {
       collectLikeTemplateId,
       userList
     )
-    const { hide, showOrigin=false } = paymentObj
+    const { hide, showOrigin = false } = paymentObj
     let paymentBtn = this.renderPayment({
       origin: price && showOrigin && this.renderOriginBuy,
       group: groupBuyTemplateId && this.renderGroupBuy.bind(this, paymentObj),
