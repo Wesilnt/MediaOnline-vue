@@ -56,10 +56,7 @@ export default {
 <style lang="scss" scoped>
 .active-item { 
   width: 100%; 
-  height: 100vh;
   background-size: 100%;
-  background-position: center; 
-  background-repeat: no-repeat;
 }
 .help-btn {
   background-color: rgb(255, 163, 47);
