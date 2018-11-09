@@ -156,12 +156,8 @@ const columnData = {
       })
       if (!result) return
       if (refresh) {
-<<<<<<< HEAD
-        let isFinished = result.courseInfo.result.length >= result.courseInfo.totalCount
-=======
         let isFinished =
           result.courseInfo.result.length >= result.courseInfo.totalCount
->>>>>>> dev
         commit('saveStatus', {
           bannerPic: result.bannerPic,
           columnLoading: false,
