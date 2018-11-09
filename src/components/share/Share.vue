@@ -37,15 +37,19 @@
  <script>
 import { mapActions, mapState } from 'vuex'
 export default {
+<<<<<<< HEAD
   props: ['show','postType', 'courseId','posterImg', 'columnType'],
+=======
+  props: ['show', 'postType', 'courseId', 'columnType', 'close'],
+>>>>>>> dev
   data() {
     return {
       isOpen: false,
-      showTip:false
+      showTip: false
     }
   },
   watch: {
-    show(value) { 
+    show(value) {
       this.isOpen = value
     }
   },
@@ -53,10 +57,10 @@ export default {
     ...mapState(['url'])
   },
   methods: {
-    ...mapActions([ 'setWxShareFriend', 'setWxShareZone']),
+    ...mapActions(['setWxShareFriend', 'setWxShareZone']),
     onShareItem(shareScore) {
       // this.isOpen = false
-      // const nickname = 'nihao' 
+      // const nickname = 'nihao'
       // const shareOption = {
       //   link: this.url + this.shareInfo.link,
       //   title: this.shareInfo.title,
@@ -68,7 +72,7 @@ export default {
       //   cancelCB: () => {
       //     this.$toast('分享回调失败')
       //   }
-      // } 
+      // }
       // console.log(shareOption)
       if (shareScore === 'poster') {
         this.$toast('分享海报')
@@ -84,6 +88,7 @@ export default {
         // this.setWxShareZone(shareOption)
       }
     },
+<<<<<<< HEAD
     toPoster(){ 
       let postType = this.postType? this.postType: 'default'
       console.log("Share-courseId:",this.courseId)
@@ -97,13 +102,29 @@ export default {
      query: {
          sharePostUrl: this.posterImg
      }
+=======
+    toPoster() {
+      let postType = postType ? postType : 'default'
+      console.log('Share-courseId:', this.courseId)
+      this.$router.push({
+        name: 'SharePoster',
+        params: {
+          courseId: this.courseId,
+          columnType: this.columnType,
+          postType
+        },
+        query: {}
+>>>>>>> dev
       })
     },
     onCancel() {
-      this.isOpen = false,
+      this.isOpen = false
       this.showTip = false
     },
     afterLeave(el) {
+      if (this.close) {
+        return this.close()
+      }
       this.$emit('close')
     }
   }
@@ -113,15 +134,15 @@ export default {
 .share-container {
   position: fixed;
   top: 0;
-  left:0;
-  right:0;
-  bottom:0;
-  
+  left: 0;
+  right: 0;
+  bottom: 0;
+
   z-index: 2004;
   width: 100%;
   background-color: rgba(00, 00, 00, 0.5);
   height: 100%;
-  .share-tip{
+  .share-tip {
     margin: 40px 30px 0px 400px;
     width: 320px;
     height: 164px;
@@ -138,7 +159,6 @@ export default {
     flex-direction: column;
     transition: all 0.2s ease;
     .share-src {
-
       color: rgb(82, 82, 77);
       text-align: center;
       margin-top: 16px;
@@ -170,7 +190,6 @@ export default {
       .share-label {
         margin-top: 20px;
         color: rgb(82, 81, 77);
-
       }
     }
   }

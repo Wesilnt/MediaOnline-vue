@@ -6,11 +6,13 @@ const myPuzzle_Praise = () =>import(/* webpackChunkName: "index" */ '../views/my
 const sysMessage = () => import(/* webpackChunkName: "index" */ '../views/my/SysMessage')
 const feedback = () => import(/* webpackChunkName: "index" */ '../views/my/Feedback')
 const wallet = () => import(/* webpackChunkName: "index" */ '../views/my/Wallet')
-const distribution = () => import(/* webpackChunkName: "index" */ '../views/my/Distribution')
+const BookCoinRules = () => import(/* webpackChunkName: "index" */ '../views/my/BookCoinRules')
+const distributionCenter = () => import(/* webpackChunkName: "index" */ '../views/my/DistributionCenter')
+const distributorApply = () => import(/* webpackChunkName: "index" */ '../views/my/DistributorApply')
 const editUserPhone = () => import(/* webpackChunkName: "index" */ '../views/my/EditUserPhone')
 const editUserInfo = () => import(/* webpackChunkName: "index" */ '../views/my/EditUserInfo')
 const displayUserInfo = () => import(/* webpackChunkName: "index" */ '../views/my/DisplayUserInfo')
-const WxConfig = () => import(/* webpackChunkName: "index" */ '../views/my/WxConfig')
+// const WxConfig = () => import(/* webpackChunkName: "index" */ '../views/my/WxConfig')
 const Public = () => import(/* webpackChunkName: "index" */ '../views/my/Public')
 const PageInfo_From_My = [
   {
@@ -47,8 +49,14 @@ const PageInfo_From_My = [
     component: wallet
   },
   {
-    path: '/my/my-distribution',
-    component: distribution
+    path: '/my/my-distributionCenter',
+      name:'distributionCenter',
+    component: distributionCenter
+  },
+  {
+    path: '/my/my-distributorApply',
+      name:'distributorApply',
+    component: distributorApply
   },
   {
     path: '/my/Feedback',
@@ -66,13 +74,18 @@ const PageInfo_From_My = [
     path: '/my/DisplayUserInfo',
     component: displayUserInfo
   },
-  {
-    path: '/my/wx-config',
-    component: WxConfig
-  },
+  // {
+  //   path: '/my/wx-config',
+  //   component: WxConfig
+  // },
   {
     path: '/my/Public',
     component: Public
+  },
+  {
+    path:'/my/wallet/rules',
+    name:'BookCoinRules',
+    component:BookCoinRules
   }
 ]
 

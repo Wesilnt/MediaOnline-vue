@@ -6,7 +6,7 @@ const { NODE_ENV } = process.env
 // 调试选项，本地调试请改为 False
 export const IS_ONLINE = true
 // 测试 Token
-export const TEST_TOKEN = "47f9facc-0504-4c4c-9d59-12208b6cd577"
+export const TEST_TOKEN = "1bd353d2-1c90-4e6d-8f7e-eaa40b732f2a"
 
 // TODO router 设置未统一，后期需要统一格式
 export const courseType = {
@@ -152,3 +152,34 @@ export const purchaseQueryType = {
   '1005': '线上课程',
   '1003': '少年视野'
 }
+
+export const distributionShare = [
+    {
+       id:0,
+       icon: require('../assets/images/share-poster.png'),
+       text:'生成海报',
+       width: '32px',
+       fillColor: '#facb37',
+    },
+    {
+        id:1,
+        icon: require('../assets/images/share-friend.png'),
+        text:'发送给朋友',
+        width: '22px',
+        fillColor: '#51A938',
+    },
+    {
+        id:2,
+        icon: require('../assets/images/share-circle.png'),
+        text:'分享到朋友圈',
+        width: '30px',
+        fillColor: '#55CAFE',
+    },
+    {
+        id:3,
+        icon: require('../assets/images/share-link.png'),
+        text:'复制链接',
+        width: '28px',
+        fillColor: '#acb5c6',
+    },
+]

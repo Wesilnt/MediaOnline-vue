@@ -13,7 +13,9 @@ const columnData = {
   state() {
     return {
       //-3 拼团失败 0 默认状态 1001 单购成功 1003 拼团成功 1005拼团中 1007集赞成功未领取 1008集赞成功已领取 1009集赞中
-      userAccessStatus: 0, //当前用户与专栏之间的关系
+      userAccessStatus: null, //当前用户与专栏之间的关系
+      collectLikeId: null,
+      groupBuyId: null,
       isFromShare: false, //是否来自分享
       renderLoading: true, //控制骨架屏的显示
       pageSize: 10,
@@ -65,10 +67,6 @@ const columnData = {
     }
   },
   mutations: {
-    //初始化数据
-    isFromShare(state, { groupBuyId }) {
-      state.isFromShare = groupBuyId ? true : false
-    },
     saveStatus(state, payload) {
       Object.assign(state, payload)
     },
@@ -81,13 +79,33 @@ const columnData = {
       })
     },
     resetState(state) {
-      state.renderLoading = true
-      state.columnLoading = false
-      state.columnFinished = false
-      state.lessonLoading = false
-      state.lessonFinished = false
-      state.isFromShare = false
-      state.pageSize = 10
+      state = {
+        //-3 拼团失败 0 默认状态 1001 单购成功 1003 拼团成功 1005拼团中 1007集赞成功未领取 1008集赞成功已领取 1009集赞中
+        userAccessStatus: null, //当前用户与专栏之间的关系
+        collectLikeId: null,
+        groupBuyId: null,
+        isFromShare: false, //是否来自分享
+        renderLoading: true, //控制骨架屏的显示
+        pageSize: 10,
+        buyCount: 0, //购买数量
+        courseName: '',
+        //专栏列表页
+        profilePic: null,
+        bannerPic: '', //专栏列表页的头图
+        columnLoading: false, //控制单集列表分页
+        columnCurrentPage: 0,
+        columnList: [], //专栏列表
+        columnFinished: false, //分页数据是否加载完成
+        //专栏详情页
+        lessonLoading: false, //控制专栏列表分页
+        lessonCurrentPage: 1,
+        lessonFinished: false, //分页数据是否加载完成
+        columnDetail: {}, //专栏对象
+        courseId: 0, //专栏ID
+        lessonList: [], //单集列表分类
+        columnComments: [], //视频专栏留言数组
+        commentsTotalCount: 0 //精选留言总数
+      }
     }
   },
   actions: {
@@ -138,7 +156,12 @@ const columnData = {
       })
       if (!result) return
       if (refresh) {
+<<<<<<< HEAD
         let isFinished = result.courseInfo.result.length >= result.courseInfo.totalCount
+=======
+        let isFinished =
+          result.courseInfo.result.length >= result.courseInfo.totalCount
+>>>>>>> dev
         commit('saveStatus', {
           bannerPic: result.bannerPic,
           columnLoading: false,
@@ -162,7 +185,7 @@ const columnData = {
     //获取专栏详情
     async getColumnDetail(
       { state, commit, dispatch },
-      { courseId, groupBuyId, columnType }
+      { courseId, columnType }
     ) {
       //获取视频专栏数据
       const columnDetail = await dispatch(
@@ -172,10 +195,14 @@ const columnData = {
       )
       if (!columnDetail) return
       //绑定业务类型,专栏头图,试听列表,专栏ID到拼团仓库中
-      const courseName = columnDetail.courseName
-      const profilePic = columnDetail.profilePic
-      const buyCount = columnDetail.buyCount
-      const userAccessStatus = columnDetail.userAccessStatus
+      const {
+        name: courseName,
+        profilePic,
+        buyCount,
+        userAccessStatus,
+        collectLikeId,
+        groupBuyId
+      } = columnDetail
       const renderLoading = false
       dispatch('groupManagerData/initColumnInfo', {
         courseId,
@@ -186,32 +213,12 @@ const columnData = {
         columnDetail,
         buyCount,
         userAccessStatus,
+        collectLikeId,
+        groupBuyId,
         renderLoading,
         profilePic,
         courseName
       })
-      if (state.isFromShare) {
-        //这里是分享链接进来的
-        dispatch('groupManagerData/getGroupBuyDetail', groupBuyId)
-      } else {
-        //这里是正常途径进来的
-        const toolsData = {
-          courseName: columnDetail.name,
-          courseId: columnDetail.id,
-          collectLikeDuration: columnDetail.collectLikeDuration,
-          collectLikeId: columnDetail.collectLikeId,
-          collectLikePersonCount: columnDetail.collectLikePersonCount,
-          collectLikeTemplateId: columnDetail.collectLikeTemplateId,
-          groupBuyDuration: columnDetail.groupBuyDuration,
-          groupBuyPersonCount: columnDetail.groupBuyPersonCount,
-          groupBuyPrice: columnDetail.groupBuyPrice,
-          groupBuyId: columnDetail.groupBuyId,
-          groupBuyTemplateId: columnDetail.groupBuyTemplateId,
-          userAccessStatus: columnDetail.userAccessStatus,
-          price: columnDetail.price
-        }
-        dispatch('groupManagerData/initToolsBar', toolsData)
-      }
     },
     async getCommentList({ commit }, params) {
       const response = await getCommentList(params)
@@ -222,7 +229,6 @@ const columnData = {
     },
     async likeComment({ commit, state }, commentId) {
       const result = await likeComment({ commentId: commentId })
-      console.log(result)
       if (!result) return
       commit('updateUserCommentLikeId', result.commentId)
     }

@@ -5,50 +5,38 @@
         <span class="time-number">{{times[1]}}</span>
         <span class="time-symbol">:</span>
         <span class="time-number">{{times[2]}}</span>
-        <span v-show="false">{{doDuration}}</span>
     </div>
 </template>
 
 <script>
 import { startCountDown } from '../utils/utils'
-import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapMutations, mapGetters, mapActions } = createNamespacedHelpers(
-  'columnData/groupManagerData'
-)
+
 export default {
   name: 'CountDown',
-  props: ['duration'],
+  props: ['timeDuration'],
   data() {
     return {
       countdown: null,
-      times: ['00', '00', '00']
+      times: ['NA', 'NA', 'NA']
     }
   },
-  created() {},
-  methods: {
-    ...mapMutations(['deleteCountTime'])
+  watch: {
+    timeDuration: {
+      handler(tempDuration) {
+        if (isNaN(tempDuration)) return
+        clearInterval(this.countdown)
+        if (tempDuration > 0) {
+          this.countdown = startCountDown(this.timeDuration, times => {
+            this.times = times
+          })
+        }
+        return tempDuration
+      },
+      immediate: true
+    }
   },
   beforeDestroy() {
-    if (this.countdown) {
-      clearInterval(this.countdown)
-      this.countdown = null
-      //清空仓库中保存的倒计时
-      this.deleteCountTime()
-    }
-  },
-  computed: {
-    ...mapState(['countDownTime']),
-    doDuration: function() {
-      let tempDuration = this.duration
-      console.log('tempDuration =',tempDuration)
-      if (this.countdown) clearInterval(this.countdown)
-      if (tempDuration > 0) {
-        this.countdown = startCountDown(this.duration, times => {
-          (this.times = times)
-        })
-      } 
-      return tempDuration
-    }
+    clearInterval(this.countdown)
   }
 }
 </script>

@@ -1,12 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import myPuzzle_PraiseData from './module/myPuzzle_PraiseData'
-import columnInfoData from './module/columnInfoData'
 import homeData from './module/homeData'
 import columnData from './module/columnData'
-import videoColumnDetailData from './module/videoColumnDetailData'
 import videoCourseDetailData from './module/videoCourseDetailData'
-import visionData from './module/visionData'
 import audioData from './module/audioData'
 import readingsData from './module/readingsData'
 import myData from './module/myData'
@@ -130,7 +127,8 @@ export default new Vuex.Store({
             failCB(errmsg)
           },
           complete: function(res) {
-            if (res.errMsg == 'chooseWXPay:cancel') {
+            // successCB(res)
+            if (res.errMsg === 'chooseWXPay:cancel') {
               console.log('支付取消')
             }
           }
@@ -232,9 +230,7 @@ export default new Vuex.Store({
   modules: {
     myPuzzle_PraiseData,
     homeData,
-    columnInfoData,
     columnData,
-    videoColumnDetailData,
     videoCourseDetailData, // 内建 问题列表modul
     myData,
     myFeedbackData,
@@ -244,7 +240,6 @@ export default new Vuex.Store({
     myPlayRecordData,
     myPurchaseData,
     userInfoData,
-    visionData,
     readingsData,
     // audio,
     commentData,
@@ -253,6 +248,6 @@ export default new Vuex.Store({
     audioData,
     shareData,
     praiseData,
-    mobileData,
+    mobileData
   }
 })

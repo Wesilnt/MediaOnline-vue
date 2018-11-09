@@ -2,7 +2,14 @@
     <div>
         <SkeletonFullScreen  v-if="renderLoading"/>
         <div v-else>
-            <GroupHeader />
+            <Payment
+                :isTryScan="isCourseType"
+                :columnDetail="columnDetail"
+                :groupBuyId="groupBuyId"
+                :collectLikeId="collectLikeId"
+                :userAccessStatus="userAccessStatus"
+                :key="courseId+groupBuyId+collectLikeId+userAccessStatus"
+            />
             <div id="detailmain" ref="detailmain" v-if="!isReadType">
                 <div class="lazy-img-larger column-banner" v-lazy:background-image="`${columnDetail.profilePic}?imageView2/1/format/jpg`">
                     <div class="qhht-mask"></div>
@@ -29,8 +36,7 @@
                             <img :src="require('../assets/images/arrow_right.png')" class="column-allbtn-icon">
                         </div>
                     </div>
-                    <!-- <playlist v-for="(item,index) of columnDetail.freeLessonList" :key="item.id" :iteminfo="item" :lastindex="index === (columnDetail.freeLessonList.length - 1)" @jumpEvent="toDetail(item.id)"/> -->
-                 <SingleSetItem v-for="item of columnDetail.freeLessonList" 
+                 <SingleSetItem v-for="item of columnDetail.freeLessonList"
                     :key="item.id" 
                     :item="item"  
                     :courseid="courseId"
@@ -126,19 +132,15 @@
             <div class="load-more-container" v-if="lessonFinished">
                 没有更多了，不要再拉啦～
             </div>
-             <!--<Payment-->
-                 <!--:purchased="lessonList[0]"-->
-                 <!--:isTryScan="isCourseType"-->
-                 <!--:columnDetail="columnDetail"-->
-             <!--/>-->
-             <toolsNavbar :freeLesson="columnDetail.freeLessonList" :lessonList="lessonList"/>
+             <!--<toolsNavbar :freeLesson="columnDetail.freeLessonList" :lessonList="lessonList"/>-->
+
+            <!-- <toolsNavbar :freeLesson="freeLesson" :lessonList="lessonList"/> -->
         </div>
     </div>
 </template>
 
 <script>
 import SkeletonFullScreen from '../components/SkeletonFullScreen'
-import GroupHeader from './onlineCourse/components/GroupHeader'
 import Payment from '../components/Payment'
 import toolsNavbar from '../components/toolsNavbar.vue'
 import SingleSetItem from '../components/SingleSetItem.vue'
@@ -146,15 +148,14 @@ import SingleSetList from '../components/SingleSetList.vue'
 import CommentList from '../components/comment/CommentList.vue'
 import ScrollNavBar from '../components/ScrollNavBar'
 import CourseIntroduce from '../components/CourseIntroduce.vue'
-import playlist from './onlineCourse/components/playlist.vue'
 import videoComment from '../components/video-comment.vue'
 import ImagePreview from '../components/ImagePreview'
+import { createNamespacedHelpers } from 'vuex'
 import {
-  createNamespacedHelpers,
-  mapState as rootState,
-  mapActions as rootActions
-} from 'vuex' 
-import {openVideoDetail, openAudioDetail , columnType as COLUMNTYPE } from '../utils/config'
+  openVideoDetail,
+  openAudioDetail,
+  columnType as COLUMNTYPE
+} from '../utils/config'
 
 const {
   mapState,
@@ -166,10 +167,8 @@ export default {
   name: 'ColumnDetail',
   data() {
     const { columnType, courseId } = this.$route.params
-    const { groupBuyId } = this.$route.query
     return {
       courseId,
-      groupBuyId,
       columnType,
       navBars: [
         {
@@ -202,40 +201,22 @@ export default {
     }
   },
   computed: {
-    ...rootState(['url']),
     ...mapState([
       'renderLoading',
       'columnDetail',
-      'columnComments',
       'commentsTotalCount',
       'lessonLoading',
       'lessonFinished',
       'lessonList',
       'courseName',
-      'userAccessStatus'
+      'userAccessStatus',
+      'collectLikeId',
+      'groupBuyId'
     ]),
     ...mapGetters(['playingId', 'getBookIntroduce', 'isNew', 'freeLesson'])
   },
-  mounted() {
-    this.getUserInfo().then(user => {
-      //拼装分享内容
-      this.shareData = {
-        link: this.url + `/#/home/readings/book/${this.courseId}`,
-        title: this.courseName,
-        desc: '你一定会爱上国学课...',
-        imgUrl: `${
-          this.columnDetail.sharePostUrl
-        }?imageView2/1/w/100/h/100/format/jpg`,
-        successCB: () => console.log('分享回调成功'),
-        cancelCB: () => console.log('分享回调失败')
-      }
-      this.setWxShareFriend(this.shareData)
-      this.setWxShareZone(this.shareData)
-    })
-  },
   methods: {
-    ...rootActions(['getUserInfo', 'setWxShareFriend', 'setWxShareZone']),
-    ...mapMutations(['isFromShare', 'resetState']),
+    ...mapMutations(['resetState']),
     ...mapActions([
       'getLessonList',
       'getColumnDetail',
@@ -244,17 +225,11 @@ export default {
       'likeComment'
     ]),
     async fetchColumnData() {
-      const { courseId, columnType, isVisionType, groupBuyId } = this
+      const { courseId, columnType, isVisionType } = this
       await this.resetState()
-      // 同类接口请求
-      //初始化页面数据(将路由中带过来的专栏ID存储到仓库)
-      await this.isFromShare({
-        groupBuyId
-      })
       await this.getColumnDetail({
         columnType,
-        courseId,
-        groupBuyId
+        courseId
       })
       // 音频课程 视频课程 由于数据结构相同，使用同种配置
       //   1.获取专栏下的所有单集
@@ -272,7 +247,9 @@ export default {
       if (this.columnType === 'onlineCourse') {
         this.$router.push(`/videoInnerList/${this.columnType}/${this.courseId}`)
       } else if (this.columnType === 'onlineVision') {
-        this.$router.push({path: `/home/visionDetail/visionCourseList/${this.courseId}`})
+        this.$router.push({
+          path: `/home/visionDetail/visionCourseList/${this.courseId}`
+        })
       }
     },
     enterVideoCommentsList() {
@@ -280,26 +257,35 @@ export default {
     },
     toDetail(lessonId) {
       if (this.columnType === 'onlineVision')
-       openAudioDetail(this,{courseId:this.courseId, columnType:this.columnType, lessonId,courseName:this.columnDetail.name})
-        // this.$router.push({
-        //   name: 'AudioPlay',
-        //   params: {
-        //     courseId: this.courseId,
-        //     columnType: this.columnType,
-        //     lessonId
-        //   },
-        //   query: { courseName: this.columnDetail.name }
-        // })
+        openAudioDetail(this, {
+          courseId: this.courseId,
+          columnType: this.columnType,
+          lessonId,
+          courseName: this.columnDetail.name
+        })
+      // this.$router.push({
+      //   name: 'AudioPlay',
+      //   params: {
+      //     courseId: this.courseId,
+      //     columnType: this.columnType,
+      //     lessonId
+      //   },
+      //   query: { courseName: this.columnDetail.name }
+      // })
       if (this.columnType === 'onlineCourse')
-       openVideoDetail(this,{courseId:this.courseId, columnType:this.columnType, lessonId})
-        // this.$router.push({
-        //   name: 'videoCourseDetail',
-        //   params: {
-        //     courseId: this.courseId,
-        //     columnType: this.columnType,
-        //     lessonId
-        //   }
-        // })
+        openVideoDetail(this, {
+          courseId: this.courseId,
+          columnType: this.columnType,
+          lessonId
+        })
+      // this.$router.push({
+      //   name: 'videoCourseDetail',
+      //   params: {
+      //     courseId: this.courseId,
+      //     columnType: this.columnType,
+      //     lessonId
+      //   }
+      // })
     },
     //分页加载
     scrollBottom() {
@@ -312,10 +298,8 @@ export default {
     SingleSetList,
     toolsNavbar,
     SkeletonFullScreen,
-    GroupHeader,
     Payment,
     CourseIntroduce,
-    playlist,
     videoComment,
     ImagePreview,
     ScrollNavBar,

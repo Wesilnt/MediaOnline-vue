@@ -2,7 +2,6 @@ const FreeList = () => import(/* webpackChunkName: "index" */ '../views/FreeList
 const VisionList = () => import(/* webpackChunkName: "index" */ '../views/onlineVision/VisionList')
 const VideoList = () => import(/* webpackChunkName: "index" */ '../views/onlineCourse/VideoList')
 const BookList = () => import(/* webpackChunkName: "index" */ '../views/BookList')
-const VisionDetail = () => import(/* webpackChunkName: "index" */ '../views/onlineVision/VisionDetail')
 const visionCourseList = () => import(/* webpackChunkName: "index" */ '../views/onlineVision/visionCourseList')
 const FreeZone = () => import(/* webpackChunkName: "index" */ '../views/freezone/FreeZone')
 
@@ -22,12 +21,6 @@ const PageInfo_From_Home = [
     path: '/home/visionList',
     name: 'VisionList',
     component: VisionList
-  },
-  {
-    path: '/home/visionDetail/:courseId',
-    name: 'VisionDetail',
-    component: VisionDetail,
-    props: true
   },
   {
     path: '/home/videoList',

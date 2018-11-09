@@ -1,12 +1,10 @@
 /** @format */
-
 import Vue from 'vue'
 import Router from 'vue-router'
 import NavBar from '../components/NavBar'
 import PageInfo_From_Home from './router_home'
 import PageInfo_From_My from './router_my'
 import PageInfo_From_OnlineCourse from './router_onlineCourse'
-import PageInfo_From_Readings from './router_readings'
 import PageInfo_From_Audio from './router_audio'
 import PageInfo_From_Praise from './router_praise'
 
@@ -51,10 +49,15 @@ export default new Router({
       name: 'ColumnList',
       component: ColumnList
     },
+    {
+      path: '/home/readings/summary',
+      name: 'BookSummary',
+      component: () =>
+        import(/* webpackChunkName: "index" */ '../views/readings/BookSummary') //书详情-书简介
+    },
     ...PageInfo_From_Home,
     ...PageInfo_From_My,
     ...PageInfo_From_OnlineCourse,
-    ...PageInfo_From_Readings,
     ...PageInfo_From_Audio,
     ...PageInfo_From_Praise
   ]
