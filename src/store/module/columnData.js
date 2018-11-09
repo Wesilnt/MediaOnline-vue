@@ -79,12 +79,33 @@ const columnData = {
       })
     },
     resetState(state) {
-      state.renderLoading = true
-      state.columnLoading = false
-      state.columnFinished = false
-      state.lessonLoading = false
-      state.lessonFinished = false
-      state.pageSize = 10
+      state = {
+        //-3 拼团失败 0 默认状态 1001 单购成功 1003 拼团成功 1005拼团中 1007集赞成功未领取 1008集赞成功已领取 1009集赞中
+        userAccessStatus: null, //当前用户与专栏之间的关系
+        collectLikeId: null,
+        groupBuyId: null,
+        isFromShare: false, //是否来自分享
+        renderLoading: true, //控制骨架屏的显示
+        pageSize: 10,
+        buyCount: 0, //购买数量
+        courseName: '',
+        //专栏列表页
+        profilePic: null,
+        bannerPic: '', //专栏列表页的头图
+        columnLoading: false, //控制单集列表分页
+        columnCurrentPage: 0,
+        columnList: [], //专栏列表
+        columnFinished: false, //分页数据是否加载完成
+        //专栏详情页
+        lessonLoading: false, //控制专栏列表分页
+        lessonCurrentPage: 1,
+        lessonFinished: false, //分页数据是否加载完成
+        columnDetail: {}, //专栏对象
+        courseId: 0, //专栏ID
+        lessonList: [], //单集列表分类
+        columnComments: [], //视频专栏留言数组
+        commentsTotalCount: 0 //精选留言总数
+      }
     }
   },
   actions: {
@@ -135,12 +156,13 @@ const columnData = {
       })
       if (!result) return
       if (refresh) {
-          let isFinished = result.courseInfo.result.length >= result.courseInfo.totalCount
+        let isFinished =
+          result.courseInfo.result.length >= result.courseInfo.totalCount
         commit('saveStatus', {
           bannerPic: result.bannerPic,
           columnLoading: false,
           columnList: result.courseInfo.result,
-          columnCurrentPage: page,   
+          columnCurrentPage: page,
           pageSize: state.pageSize,
           columnFinished: isFinished
         })

@@ -97,6 +97,17 @@ export default {
     hideToast() {
       toast.clear()
     },
+    resetState({commit}) {
+      commit('saveState', {
+        masterId: '',
+        starterUid: '',
+        userList: [],
+        timeDuration: null,
+        alreadyCount: 0,
+        groupBuystatus: 0,
+        toast: null
+      })
+    },
     //验证是否完成了公众号授权
     async checkoutWxAuthor() {
       toast = Toast('请等待操作...')
@@ -107,7 +118,7 @@ export default {
         return (window.location.href = WECHAT_SUBSCRIPTION_URL)
       }
     },
-    checkoutUserInfo({ dispatch },forceUpdate) {
+    checkoutUserInfo({ dispatch }, forceUpdate) {
       return dispatch('getUserInfo', forceUpdate, { root: true })
     },
     //原价购买
@@ -149,7 +160,7 @@ export default {
       { commit, dispatch },
       { timestamp, nonceStr, package: packageStr, paySign, courseId }
     ) {
-     await dispatch(
+      await dispatch(
         'wxPayment',
         {
           timestamp,
@@ -160,13 +171,9 @@ export default {
           successCB: function(res) {
             console.log(res)
             // if (res.errMsg !== 'chooseWXPay:cancel')
-              // 支付成功后的回调函数
-              dispatch(
-                'columnData/getColumnDetail',
-                { courseId },
-                { root: true }
-              )
-              return res
+            // 支付成功后的回调函数
+            dispatch('columnData/getColumnDetail', { courseId }, { root: true })
+            return res
           },
           failCB: function() {
             Toast.fail('支付失败')

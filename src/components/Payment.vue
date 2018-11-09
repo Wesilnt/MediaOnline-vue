@@ -111,6 +111,7 @@ export default {
     }
   },
   async mounted() {
+    console.log('mounted')
     await this.getUserInfo()
     await this.mapGroupBuyDetailToPayment()
     // 配置状态
@@ -236,10 +237,14 @@ export default {
       [`${identityType.PASSERFULL}`]: groupBuyTextType[2007]
     }
   },
+  beforeDestroy() {
+    this.resetState()
+  },
   methods: {
     ...rootActions(['setWxShareFriend', 'setWxShareZone']),
     ...mapActions([
       'getGroupBuyDetail',
+      'resetState',
       'checkoutWxAuthor',
       'checkoutUserInfo',
       'hideToast',
@@ -504,6 +509,13 @@ export default {
         : this.master === identityType.PASSERFULL
           ? this.paymentShowText[`${this.master}`]
           : this.paymentShowText[`${this.master}_${this.userAccessStatus}`]
+    console.log(
+      this.master === identityType.PARTNER
+        ? `${this.master}_${this.groupBuystatus}${this.groupReturnStatus}`
+        : this.master === identityType.PASSERFULL
+          ? `${this.master}`
+          : `${this.master}_${this.userAccessStatus}`
+    )
     const { hide, showOrigin = false } = paymentObj
     let paymentBtn = this.renderPayment({
       origin: price && showOrigin && this.renderOriginBuy,
@@ -521,7 +533,6 @@ export default {
         collect: this.renderCollectBuy.bind(this, paymentObj)
       })
     }
-    console.log(this.paymentGroupBuyId, this.paymentCollectLikeId)
     return hide ? null : (
       <div>
         {this.paymentType === groupBuy && (
@@ -612,7 +623,7 @@ export default {
     bottom: 0;
     z-index: 100;
     background-color: rgba(255, 255, 255, 0.7);
-    transition: background-color 1s linear .4s;
+    transition: background-color 1s linear 0.4s;
   }
   &.disabled {
     pointer-events: none;

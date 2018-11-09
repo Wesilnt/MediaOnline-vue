@@ -8,7 +8,7 @@
                 :groupBuyId="groupBuyId"
                 :collectLikeId="collectLikeId"
                 :userAccessStatus="userAccessStatus"
-                :key="groupBuyId+collectLikeId+userAccessStatus"
+                :key="courseId+groupBuyId+collectLikeId+userAccessStatus"
             />
             <div id="detailmain" ref="detailmain" v-if="!isReadType">
                 <div class="lazy-img-larger column-banner" v-lazy:background-image="`${columnDetail.profilePic}?imageView2/1/format/jpg`">
@@ -226,7 +226,7 @@ export default {
     ]),
     async fetchColumnData() {
       const { courseId, columnType, isVisionType } = this
-      await this.resetState()
+        await this.resetState()
       await this.getColumnDetail({
         columnType,
         courseId
