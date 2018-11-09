@@ -33,8 +33,7 @@ export default {
   },
   computed: mapState(['bannerPic','columnList','columnFinished','columnLoading']),
   methods: {
-    ...mapMutations(['resetState']),
-    ...mapActions(['getColumnList']),
+    ...mapActions(['getColumnList','resetState']),
     loadMore() { 
       this.getColumnList({ refresh: false, columnType:this.columnType })
       // console.log(this.visionList)

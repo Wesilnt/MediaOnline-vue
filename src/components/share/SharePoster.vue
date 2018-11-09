@@ -31,6 +31,7 @@ export default {
       collectLikeId: this.$route.query.collectLikeId,          //集赞海报分享得集赞ID
       sharePostUrl:this.$route.query.sharePostUrl,             //集赞分享海报
       startUserName:this.$route.query.startUserName,           //集赞发起人姓名
+      startAvatar:this.$route.query.startAvatar,               //集赞发起人头像
       pixelRatio: 1,
       radio: document.body.offsetWidth / 375,
       canvasW: document.body.offsetWidth , //canvas宽度
@@ -122,7 +123,7 @@ export default {
      } 
      //2. 有专栏详情, 集赞中
      if(this.postType === 'praise'){
-      this.shareUrl =  `${this.url}/#/praise/${this.shareType}/${this.courseId}/${this.collectLikeId}/active?startUserName=${this.startUserName}`
+      this.shareUrl =  `${this.url}/#/praise/${this.shareType}/${this.courseId}/${this.collectLikeId}/active?startUserName=${this.startUserName}&startAvatar=${this.startAvatar}`
      }
      console.log("SharePoster-Link:",this.shareUrl)
     },
@@ -165,7 +166,7 @@ export default {
     async drawHeadImage(resolve) {
       var header = new Image()
       header.setAttribute('crossOrigin', 'anonymous')
-      header.src = this.user.avatarUrl + '?timeStamp=' + Date.now()
+      header.src = (this.startAvatar || this.user.avatarUrl) + '?timeStamp=' + Date.now()
       header.onload = () => {
         let radius = this.headImageW * this.radio
         let x = this.headLeft* this.radio

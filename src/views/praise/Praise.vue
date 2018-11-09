@@ -23,7 +23,8 @@
           :collectlikeid="collectLikeId"
           :posturl="sharePostUrl"
           :startUserName="startUserName"
-          @share="onShare"/> 
+          :startAvatar="startAvatar"
+          @share="onShare"/>
       </div>
       <!-- 2.3 集赞人数提示 -->
       <div class="number-container">
@@ -58,6 +59,7 @@
                :postType="'praise'"
                :collectLikeId="collectLikeId"
                :startUserName="startUserName"
+               :startAvatar="startAvatar"
                :courseId="courseId"/>
   </div>
 </template>
@@ -81,6 +83,7 @@ export default {
       courseId: this.$route.params.courseId,
       collectLikeId: this.$route.params.collectLikeId,
       startUserName: this.$route.query.startUserName,
+      startAvatar: this.$route.query.startAvatar,
       showShare: false,               //显示分享框
       showExplain: false,
       shareData: {}
@@ -97,7 +100,7 @@ export default {
   },
   mounted: function() {
     this._setBtnAndTips({ status: 1202 }, false, true) 
-    this.getCollectDetail({ collectLikeId: this.collectLikeId,columnType:this.columnType ,startUserName:this.startUserName })
+    this.getCollectDetail({ collectLikeId: this.collectLikeId,columnType:this.columnType ,startUserName:this.startUserName,startAvatar:this.startAvatar })
   }, 
   methods: { 
     ...rootState(['url']),

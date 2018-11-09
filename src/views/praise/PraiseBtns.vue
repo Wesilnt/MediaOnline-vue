@@ -64,7 +64,7 @@ let buttonDatas = [
 ]
 export default {
   components: { 'mobile-validate': MobileVali },
-  props: ['state', 'courseid','posturl', 'collectlikeid','startUserName','columntype'],
+  props: ['state', 'courseid','posturl', 'collectlikeid','startUserName','startAvatar','columntype'],
   data() {
     return {
       show: false,
@@ -115,7 +115,8 @@ export default {
           query: {
               sharePostUrl:this.posturl,
               collectLikeId:this.collectlikeid,
-              startUserName:this.startUserName
+              startUserName:this.startUserName,
+              startAvatar:this.startAvatar
           }
         })
       }

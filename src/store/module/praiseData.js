@@ -80,7 +80,8 @@ export default {
       const user = await dispatch('getUserInfo',null,{root:true})
       await commit('bindUserInfo', user)
       let startUserName = params.startUserName || user.nickName
-      await dispatch('setShareInfo',{user, res,columnType:params.columnType,startUserName})
+      let startAvatar = params.startAvatar || user.avatarUrl
+      await dispatch('setShareInfo',{user, res,columnType:params.columnType,startUserName,startAvatar})
       await commit('bindPraiseDetail', res)
       console.log(res)
       await commit('destroyInterval')
@@ -135,14 +136,15 @@ export default {
         return await dispatch('getColumnDetail',{courseId,columnType,useCache:true},{root:true})
     },
     //设置分享信息
-    async setShareInfo({state,dispatch},{user, res,columnType,startUserName}){
+    async setShareInfo({state,dispatch},{user, res,columnType,startUserName,startAvatar}){
+      console.log("startUserName:",startUserName)
        dispatch('getColumnDetail',{courseId:res.course.id,columnType})
       .then(columnDetail=>{ 
         let currentUser  =  user.id == res.starterUid
         let title = `我是${user.nickName}, ${currentUser?'我想免费':'正在帮朋友'}领取《${columnDetail.name}》,求助攻~` 
         //拼装分享内容
         let shareData = {
-          link:  window.location.href.split('#')[0]+`/#/praise/${columnType}/${columnDetail.id}/${res.id}/active?startUserName=${startUserName}`,
+          link:  window.location.href.split('#')[0]+`/#/praise/${columnType}/${columnDetail.id}/${res.id}/active?startUserName=${startUserName}&startAvatar=${startAvatar}`,
           title,
           desc: '你一定会爱上国学课...',
           imgUrl:`${columnDetail.sharePostUrl}?imageView2/1/w/100/h/100/format/jpg`,
