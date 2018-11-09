@@ -226,7 +226,7 @@ export default {
     ]),
     async fetchColumnData() {
       const { courseId, columnType, isVisionType } = this
-        await this.resetState()
+      await this.resetState()
       await this.getColumnDetail({
         columnType,
         courseId

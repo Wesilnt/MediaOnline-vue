@@ -101,7 +101,8 @@ export default {
       'createTime',
       'alreadyCount',
       'groupBuystatus' /* 120 1 / 2:拼团中 3：成功  4：失败 */,
-      'timeDuration'
+      'timeDuration',
+      'loading'
     ]),
     paymentGroupBuyId: function() {
       return this.groupBuyIdFromShare || this.groupBuyId
@@ -236,6 +237,7 @@ export default {
       }`]: groupBuyTextType[2008],
       [`${identityType.PASSERFULL}`]: groupBuyTextType[2007]
     }
+    this.endLoading()
   },
   beforeDestroy() {
     this.resetState()
@@ -252,7 +254,8 @@ export default {
       'joinGroupBuy',
       'startGroupBuy',
       'startCollectLike',
-      'getCollectLike'
+      'getCollectLike',
+      'endLoading'
     ]),
     async getUserInfo(forceUpdate) {
       this.userInfo = await this.checkoutUserInfo(forceUpdate)
@@ -487,7 +490,7 @@ export default {
     }
   },
   render() {
-    if (!this.paymentShowText) return null
+    if (!this.paymentShowText || this.loading) return null
     const {
       isTryScan,
       courseId,

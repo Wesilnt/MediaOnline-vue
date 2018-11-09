@@ -27,7 +27,8 @@ export default {
     timeDuration: null,
     alreadyCount: 0,
     groupBuystatus: 0,
-    toast: null
+    toast: null,
+    loading: true
   }),
   getters: {
     groupBuyTemplateId(state, getters, { columnData }) {
@@ -97,7 +98,12 @@ export default {
     hideToast() {
       toast.clear()
     },
-    resetState({commit}) {
+    endLoading({ commit }) {
+      commit('saveState', {
+        loading: false
+      })
+    },
+    resetState({ commit }) {
       commit('saveState', {
         masterId: '',
         starterUid: '',
@@ -105,7 +111,8 @@ export default {
         timeDuration: null,
         alreadyCount: 0,
         groupBuystatus: 0,
-        toast: null
+        toast: null,
+        loading: true
       })
     },
     //验证是否完成了公众号授权
