@@ -68,6 +68,11 @@
                 this.$emit('input', false);
             },
             onPhoneConfirm() {
+                let phoneNum = this.number.trim();
+                if (phoneNum === '') {
+                    Toast({ position: 'bottom', message: '请输入手机号' });
+                    return;
+                }
                 if (this.code === '') {
                     this.$toast({ position: 'bottom', message: '请输入正确的验证码' });
                     return;
