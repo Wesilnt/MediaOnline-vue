@@ -67,18 +67,18 @@ export default {
     } = this.$route.query
     const { columnType, courseId } = this.$route.params
     return {
-      userInfo: {},
+      userInfo: {}, // 用户信息
       columnType,
       courseId,
-      master: identityType.OWNER,
-      groupBuyIdFromShare,
-      collectLikeIdFromShare,
-      payDisabled: false,
-      showTeleRegister: false,
-      paymentShowText: null,
-      sharePageShow: false,
-      paymentType: null,
-      paySuccStatus: ''
+      master: identityType.OWNER, // 当前页面交互的用户身份
+      groupBuyIdFromShare, // 记录从分享进入的拼团
+      collectLikeIdFromShare, // 从分享进入的集赞
+      payDisabled: false, // 所有支付是否可点击
+      showTeleRegister: false, // 手机号注册弹窗
+      paymentShowText: null, // 储存支付状态文本
+      sharePageShow: false, // 分享弹框页
+      paymentType: null, // 支付类型 原价/拼团/集赞
+      groupReturnStatus: '' // 拼团返回的status
     }
   },
   computed: {
@@ -253,7 +253,7 @@ export default {
       this.userInfo = await this.checkoutUserInfo(forceUpdate)
     },
     async mapGroupBuyDetailToPayment() {
-      const { paymentGroupBuyId } =await this
+      const { paymentGroupBuyId } = await this
       if (paymentGroupBuyId) {
         await this.getGroupBuyDetail({
           groupBuyId: paymentGroupBuyId
@@ -287,22 +287,20 @@ export default {
         paymentType = PAYMENTTYPE.collect
       }
       this.paymentType = paymentType
-      // this.mapGroupBuyDetailToPayment()
       this.setWxShare(paymentType)
     },
     judgeIdentity() {
       if (this.masterId === this.starterUid) return
       if (this.userList.some(item => item.id === this.masterId)) {
-        // paySuccStatus 状态(2602:已完成，2603:失败,2601:支付中)
-        this.paySuccStatus = ''
+        // groupReturnStatus 状态(2602:已完成，2603:失败,2601:支付中)
+        this.groupReturnStatus = ''
         this.userList.some(item => {
-          console.log(this.masterId, item.id, item.status)
           if (this.masterId !== item.id && item.status === 2601) {
-            this.paySuccStatus = 'ELSERING'
+            this.groupReturnStatus = 'ELSERING'
             return
           }
           if (this.masterId === item.id && item.status === 2601) {
-            this.paySuccStatus = 'SELFING'
+            this.groupReturnStatus = 'SELFING'
             return
           }
         })
@@ -363,6 +361,7 @@ export default {
         : 'qhht-flex payment-button-wrapper'
       return (
         <div class={className}>
+          {this.payDisabled && <div class="payment-button-disabled" />}
           {origin && origin(onlyPrice)}
           {!onlyPrice && (
             <div class="qhht-flex payment-button-group">
@@ -500,7 +499,7 @@ export default {
     const paymentObj =
       this.master === identityType.PARTNER
         ? this.paymentShowText[
-            `${this.master}_${this.groupBuystatus}${this.paySuccStatus}`
+            `${this.master}_${this.groupBuystatus}${this.groupReturnStatus}`
           ]
         : this.master === identityType.PASSERFULL
           ? this.paymentShowText[`${this.master}`]
@@ -603,7 +602,18 @@ export default {
 }
 
 .payment-button-wrapper {
+  position: relative;
   flex-grow: 1;
+  .payment-button-disabled {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+    background-color: rgba(255, 255, 255, 0.7);
+    transition: background-color 1s linear .4s;
+  }
   &.disabled {
     pointer-events: none;
   }
