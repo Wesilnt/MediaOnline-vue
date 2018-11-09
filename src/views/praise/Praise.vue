@@ -89,32 +89,11 @@ export default {
   mounted: function() {
     this._setBtnAndTips({ status: 1202 }, false, true) 
     this.getCollectDetail({ collectLikeId: this.collectLikeId,columnType:this.columnType })
-    .then(res=>{
-        // this.setShareInfo({user:this.userInfo,res : collectLikeDetail})
-        // this.getColumnDetail({courseId:res.course.id})
-        // .then(columnDetail=>{
-        //   let currentUser  =  this.userInfo.id == res.starterUid
-        //   let title = `我是${this.userInfo.nickName}, ${currentUser?'我想免费':'正在帮朋友'}领取《${columnDetail.name}》,求助攻~` 
-        //   //拼装分享内容
-        //   let shareData = {
-        //     link:  window.location.href.split('#')[0]+`/#/praise/active/${columnDetail.id}/${res.id}?columnType=${this.columnType}`,
-        //     title,
-        //     desc: '你一定会爱上国学课...',
-        //     imgUrl:`${columnDetail.sharePostUrl}?imageView2/1/w/100/h/100/format/jpg`,
-        //     successCB: () => console.log('分享回调成功') ,
-        //     cancelCB: () =>  console.log('分享回调失败')
-        //   }
-        //   console.log('user',"详情",shareData)
-        //    this.setWxShareFriend(shareData)
-        //    this.setWxShareZone(shareData)
-        // })
-    })  
   }, 
   methods: { 
     ...rootState(['url']),
     ...rootActions(['setWxShareFriend','setWxShareZone']),
     ...mapActions([
-      'checkStatus',
       'getUserInfo',
       'getUserByToken',
       'startCollectLike',

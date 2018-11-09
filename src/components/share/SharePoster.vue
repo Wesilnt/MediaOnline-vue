@@ -121,7 +121,7 @@ export default {
      } 
      //2. 有专栏详情, 集赞中
      if(this.postType === 'praise' && this.columnDetail.userAccessStatus===1009){ 
-      this.shareUrl =  `${this.url}/#/praise/active/${this.columnDetail.id}/${this.columnDetail.collectLikeId}?columnType=${this.shareType}` 
+      this.shareUrl =  `${this.url}/#/praise/${this.shareType}/${this.columnDetail.id}/${this.columnDetail.collectLikeId}/active`
      }
      console.log("SharePoster-Link:",this.shareUrl)
     },

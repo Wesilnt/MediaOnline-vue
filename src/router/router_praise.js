@@ -8,7 +8,7 @@ export default [
     component: Praise
   },
   {
-    path: '/praise/active/:courseId/:collectLikeId',
+    path: '/praise/:columnType/:courseId/:collectLikeId/active',
     name: 'PraiseActive',
     component: PraiseActive
   },

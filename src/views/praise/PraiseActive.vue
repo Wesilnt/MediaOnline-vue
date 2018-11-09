@@ -14,6 +14,7 @@ const { mapState,mapMutations, mapActions, mapGetters } = createNamespacedHelper
 export default {
   data() {
     return {
+      columnType:this.$route.params.columnType,
       courseId: this.$route.params.courseId,
       collectLikeId: this.$route.params.collectLikeId,
       isNewUser:false
@@ -21,27 +22,20 @@ export default {
   },
   computed: { ...mapState(['userId','introBgUrl', 'courseName','praiseDetail','isPraised']) },
   created() {
-    let response = this.checkStatus({ collectLikeId: this.collectLikeId })
+    let response = this.checkStatus({ collectLikeId: this.collectLikeId,columnType:this.columnType })
     if(response)response.then(()=>{
        this.isNewUser = this.userId == this.praiseDetail.starterUid||this.isPraised
        if(this.isNewUser) this.toHelp()
     })
-    // this.checkStatus({ collectLikeId: this.collectLikeId }) 
-    // this.getCollectDetail({ collectLikeId: this.collectLikeId })
-    // .then(()=>{
-    //    if(this.userId == praiseDetail.starterUid||this.isPraised){
-    //      this.toHelp()
-    //    }
-    // })
   },
   methods: {
-    ...mapMutations(['destroyInterval']),
-    ...mapActions(['checkoutAuthorrization','checkStatus','getUserByToken','getCollectDetail']),
+    ...mapMutations(['destroyInterval','bindColumnType']),
+    ...mapActions(['checkStatus','getUserByToken','getCollectDetail']),
     toHelp() {
       this.$router.replace({
         name: 'Praise',
         params: { 
-                  columnType:this.$route.params.columnType,
+                  columnType:this.columnType,
                   courseId: this.courseId, 
                   collectLikeId: this.collectLikeId 
               }, 

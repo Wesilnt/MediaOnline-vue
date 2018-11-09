@@ -24,7 +24,6 @@ export default {
     pageBgUrl: '',        //集赞页面背景图
     sharePostUrl: '',     //集赞分享海报图
     courseName: '',
-    columnType: '1007',
     userInfo:{},
     time:0
   },
@@ -39,13 +38,6 @@ export default {
     bindUserInfo(state, res) {
       state.userId = res.id
       state.userInfo = res
-    },
-    bindColumnTYpe(state, columnType) {
-      state.columnType = columnType
-    },
-    //设置滚动提示定时器
-    setRollerInterval(state) {
-      state.rollerFlag = !state.rollerFlag
     },
     //设置时间提示定时器
     setTimerInterval( state, { timerInterval, rollerInterval, isEnded, remainTime } ) {
@@ -77,16 +69,6 @@ export default {
     }
   },
   actions: {
-    //验证是否完成了公众号授权
-    async checkoutAuthorrization({dispatch},params){ 
-      const result = await wechatSubscribed()  
-      // if(result && result==1){
-          dispatch('checkStatus',params)
-          return dispatch('getCollectDetail',params)
-      // }else{          //跳转去关注公众号
-      //     window.location.href = WECHAT_SUBSCRIPTION_URL
-      // }
-    },
     //积攒状态检查
     async checkStatus({ commit ,dispatch}, params) {
       const res = await checkStatus(params) 
@@ -96,18 +78,18 @@ export default {
     //集赞详情  
     async getCollectDetail({ state, commit,dispatch }, params) {
       const res = await getCollectDetail(params)
-      const user = await dispatch('getUserInfo',null,{root:true}) 
+      const user = await dispatch('getUserInfo',null,{root:true})
       await commit('bindUserInfo', user)
-      await dispatch('setShareInfo',{user, res}) 
-      await commit('bindPraiseDetail', res) 
+      await dispatch('setShareInfo',{user, res,columnType:params.columnType})
+      await commit('bindPraiseDetail', res)
       console.log(res)
       await commit('destroyInterval')
       if (res.status != 1202) return res
       let totalTime = res.duration * 3600 +  (res.createTime - res.sysTime) / 1000
       let timerInterval = setInterval(() => {
-        var hours = parseInt(totalTime / (60 * 60))
-        var minutes = parseInt((totalTime % (60 * 60)) / 60)
-        var seconds = totalTime % 60
+        let hours = parseInt(totalTime / (60 * 60))
+        let minutes = parseInt((totalTime % (60 * 60)) / 60)
+        let seconds = totalTime % 60
         hours = parseInt(hours)
         minutes = parseInt(minutes)
         seconds = parseInt(seconds)
@@ -149,21 +131,18 @@ export default {
       commit('bindUserInfo', res) 
     },
     //获取专栏详情
-    async getColumnDetail({commit,rootState }, params) { 
-      if(rootState.columnDetail.id) return rootState.columnDetail
-      const result = await getColumnDetail(params)  
-      commit('bindCurrentColumn', {columnType: params.columnType , columnDetail:result},{root:true})
-      return result
+    async getColumnDetail({commit,rootState }, {courseId,columnType}) {
+        return await dispatch('getColumnDetail',{courseId,columnType,useCache:true},{root:true})
     },
     //设置分享信息
-    async setShareInfo({state,dispatch},{user, res}){ 
-      dispatch('getColumnDetail',{courseId:res.course.id})
+    async setShareInfo({state,dispatch},{user, res,columnType}){
+       dispatch('getColumnDetail',{courseId:res.course.id,columnType})
       .then(columnDetail=>{ 
         let currentUser  =  user.id == res.starterUid
         let title = `我是${user.nickName}, ${currentUser?'我想免费':'正在帮朋友'}领取《${columnDetail.name}》,求助攻~` 
         //拼装分享内容
         let shareData = {
-          link:  window.location.href.split('#')[0]+`/#/praise/active/${columnDetail.id}/${res.id}?columnType=${state.columnType}`,
+          link:  window.location.href.split('#')[0]+`/#/praise/${columnType}/${columnDetail.id}/${res.id}/active`,
           title,
           desc: '你一定会爱上国学课...',
           imgUrl:`${columnDetail.sharePostUrl}?imageView2/1/w/100/h/100/format/jpg`,
