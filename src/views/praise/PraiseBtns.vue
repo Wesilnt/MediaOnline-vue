@@ -64,7 +64,7 @@ let buttonDatas = [
 ]
 export default {
   components: { 'mobile-validate': MobileVali },
-  props: ['state', 'courseid','posturl', 'collectlikeid','columntype'],
+  props: ['state', 'courseid','posturl', 'collectlikeid','startUserName','columntype'],
   data() {
     return {
       show: false,
@@ -112,7 +112,11 @@ export default {
             columnType,
             postType:'praise'
           },
-          query: {sharePostUrl:this.posturl}
+          query: {
+              sharePostUrl:this.posturl,
+              collectLikeId:this.collectlikeid,
+              startUserName:this.startUserName
+          }
         })
       }
       if (2 == this.state) {
@@ -138,7 +142,7 @@ export default {
     flex-direction: row;
     justify-content: center;
     span {
-      width: 650px;
+      width: auto;
       height: 100%;
     }
   }
@@ -166,7 +170,7 @@ export default {
     border: 1px rgb(255, 163, 47) solid; /*no*/
   }
   .btn-single .hollow-small {
-    width: 312px;
+    min-width: 312px;
     padding: 0 60px;
     height: 96px;
     line-height: 96px;

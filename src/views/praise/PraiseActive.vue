@@ -17,12 +17,13 @@ export default {
       columnType:this.$route.params.columnType,
       courseId: this.$route.params.courseId,
       collectLikeId: this.$route.params.collectLikeId,
+      startUserName: this.$route.query.startUserName,
       isNewUser:false
     }
   },
   computed: { ...mapState(['userId','introBgUrl', 'courseName','praiseDetail','isPraised']) },
   created() {
-    let response = this.checkStatus({ collectLikeId: this.collectLikeId,columnType:this.columnType })
+    let response = this.checkStatus({ collectLikeId: this.collectLikeId,columnType:this.columnType,startUserName:this.startUserName })
     if(response)response.then(()=>{
        this.isNewUser = this.userId == this.praiseDetail.starterUid||this.isPraised
        if(this.isNewUser) this.toHelp()
@@ -38,7 +39,10 @@ export default {
                   columnType:this.columnType,
                   courseId: this.courseId, 
                   collectLikeId: this.collectLikeId 
-              }, 
+              },
+          query:{
+              startUserName:this.startUserName
+          }
       })
     }
   },

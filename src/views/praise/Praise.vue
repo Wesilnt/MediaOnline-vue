@@ -18,10 +18,11 @@
       <div class="btn-container">  
         <priasebtn 
           :columntype="columnType"
-          :state="praiseData.btnState" 
+          :state="praiseData.btnState"
           :courseid="courseId" 
           :collectlikeid="collectLikeId"
           :posturl="sharePostUrl"
+          :startUserName="startUserName"
           @share="onShare"/> 
       </div>
       <!-- 2.3 集赞人数提示 -->
@@ -50,7 +51,14 @@
     <!-- 集赞说明框 -->
     <PraiseExplain v-if="showExplain" @close="closeExplain"/>
     <!-- 分享框 --> 
-    <share-pop :show="showShare" @close="closeShare" :posterImg="sharePostUrl" :columnType ="columnType" :postType="'praise'" :courseId="courseId"/>
+    <share-pop :show="showShare"
+               @close="closeShare"
+               :posterImg="sharePostUrl"
+               :columnType ="columnType"
+               :postType="'praise'"
+               :collectLikeId="collectLikeId"
+               :startUserName="startUserName"
+               :courseId="courseId"/>
   </div>
 </template>
 <script>
@@ -69,9 +77,10 @@ export default {
   data() {
     return {
       interval: null,
-      columnType: this.$route.params.columnType, //专栏类型 freezone(1001) 免费专区  onlineCourse(1005) 在线课堂 onlineVision(1003) 在线视野  reading(1007) 读书会 
+      columnType: this.$route.params.columnType,
       courseId: this.$route.params.courseId,
       collectLikeId: this.$route.params.collectLikeId,
+      startUserName: this.$route.query.startUserName,
       showShare: false,               //显示分享框
       showExplain: false,
       shareData: {}
@@ -88,7 +97,7 @@ export default {
   },
   mounted: function() {
     this._setBtnAndTips({ status: 1202 }, false, true) 
-    this.getCollectDetail({ collectLikeId: this.collectLikeId,columnType:this.columnType })
+    this.getCollectDetail({ collectLikeId: this.collectLikeId,columnType:this.columnType ,startUserName:this.startUserName })
   }, 
   methods: { 
     ...rootState(['url']),

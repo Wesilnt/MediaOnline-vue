@@ -27,8 +27,10 @@ export default {
       shareUrl: this.$route.query.shareUrl||`${location.href.split('#')[0]}#/home`,
       postType:this.$route.params.postType,   //海报类型  collage ： 拼团   praise ：集赞
       shareType: this.$route.params.columnType,
-      courseId: this.$route.params.courseId, 
-      sharePostUrl:this.$route.query.sharePostUrl,
+      courseId: this.$route.params.courseId,
+      collectLikeId: this.$route.query.collectLikeId,          //集赞海报分享得集赞ID
+      sharePostUrl:this.$route.query.sharePostUrl,             //集赞分享海报
+      startUserName:this.$route.query.startUserName,           //集赞发起人姓名
       pixelRatio: 1,
       radio: document.body.offsetWidth / 375,
       canvasW: document.body.offsetWidth , //canvas宽度
@@ -77,7 +79,7 @@ export default {
  
   },
   mounted: function() {
-    var canvasData = this.$refs.canvasId
+    let canvasData = this.$refs.canvasId
     this.canvasData = canvasData
     this.ctx = canvasData.getContext('2d')
     this.ctx.mozImageSmoothingEnabled = false
@@ -86,7 +88,7 @@ export default {
     this.ctx.imageSmoothingEnabled = false 
 
       let getPixelRatio = function(context) {
-      var backingStore = context.backingStorePixelRatio ||
+      let backingStore = context.backingStorePixelRatio ||
           context.webkitBackingStorePixelRatio ||
           context.mozBackingStorePixelRatio ||
           context.msBackingStorePixelRatio ||
@@ -101,7 +103,6 @@ export default {
 
     const {saveimage} = this.$refs 
     let bodyHeight = document.body.offsetHeight
-    let bodyWidth = document.body.offsetWidth
 
     let scale = 1
     if(bodyHeight < this.canvasH) scale = bodyHeight /  this.canvasH 
@@ -116,12 +117,12 @@ export default {
     if(!this.columnDetail) return
     this.shareUrl =  `${this.url}/#/detail/${this.shareType}/${this.columnDetail.id}`
     //1. 有专栏详情, 拼团中
-    if(this.postType === 'collage' && this.columnDetail.userAccessStatus===1005){
+    if(this.postType === 'collage'){
        this.shareUrl =  `${this.shareUrl}?groupBuyId=${this.columnDetail.groupBuyId}`
      } 
      //2. 有专栏详情, 集赞中
-     if(this.postType === 'praise' && this.columnDetail.userAccessStatus===1009){ 
-      this.shareUrl =  `${this.url}/#/praise/${this.shareType}/${this.columnDetail.id}/${this.columnDetail.collectLikeId}/active`
+     if(this.postType === 'praise'){
+      this.shareUrl =  `${this.url}/#/praise/${this.shareType}/${this.courseId}/${this.collectLikeId}/active?startUserName=${this.startUserName}`
      }
      console.log("SharePoster-Link:",this.shareUrl)
     },
@@ -148,9 +149,9 @@ export default {
       //默认专栏海报分享
       let sharePoster =  this.columnDetail.sharePostUrl
       //拼团分享海报
-      if('collage' === this.postType)  sharePoster = this.columnDetail.groupBuySharePostUrl
+      if('collage' == this.postType)  sharePoster = this.columnDetail.groupBuySharePostUrl
       // 集赞分享海报
-      if('praise' === this.postType)  sharePoster = this.sharePostUrl
+      if('praise' == this.postType)  sharePoster = this.sharePostUrl
       cover.src = sharePoster
       cover.onload = () => {
         this.ctx.save()
@@ -180,7 +181,7 @@ export default {
     },
     //3. 绘制名字
     async drawUserName() {
-      let username = this.user.nickName
+      let username = this.startUserName || this.user.nickName
       this.ctx.fillStyle = '#262626'
       this.ctx.font = '15px Georgia'
       this.ctx.fillText(username,  this.userNameLeft* this.radio, this.userNameTop * this.radio) 

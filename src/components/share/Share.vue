@@ -37,7 +37,7 @@
  <script>
 import { mapActions, mapState } from 'vuex'
 export default {
-  props: ['show', 'postType', 'courseId', 'posterImg', 'columnType', 'close'],
+  props: ['show','postType', 'courseId','collectLikeId','posterImg', 'columnType', 'close'],
   data() {
     return {
       isOpen: false,
@@ -84,19 +84,21 @@ export default {
         // this.setWxShareZone(shareOption)
       }
     },
-    toPoster() {
-      let postType = this.postType ? this.postType : 'default'
-      console.log('Share-courseId:', this.courseId)
-      this.$router.push({
-        name: 'SharePoster',
-        params: {
-          courseId: this.courseId,
-          columnType: this.columnType,
-          postType
-        },
-        query: {
-          sharePostUrl: this.posterImg
-        }
+ 
+    toPoster(){ 
+      let postType = this.postType|| 'default'
+      console.log("Share-courseId:",this.courseId)
+     this.$router.push({
+     name: 'SharePoster',
+     params:{
+              courseId: this.courseId,
+              columnType:this.columnType,
+              postType,
+            },
+     query: {
+         collectLikeId: this.collectLikeId,
+         sharePostUrl: this.posterImg
+     }
       })
     },
     onCancel() {

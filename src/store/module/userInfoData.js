@@ -43,6 +43,7 @@ const userInfoData = {
     async updateUserInfoGender({ dispatch, commit, state }, { gender }) {
       //更新性别
       const response = await postUserInfo({ gender:gender })
+        console.log("更新用户性别：", response)
       if (!response)return
       commit('updateGender', {gender: gender})
       // 更新本地用户信息
