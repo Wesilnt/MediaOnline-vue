@@ -69,16 +69,16 @@ export default {
           image: praise,
           title: '我的集赞'
         },
-         {
-          name: '/my/my-wallet',
-          image: wallet,
-          title: '胡同书币'
-        },
-         {
-          name: '/my/my-distributorApply',
-          image: distribution,
-          title: '分销中心'
-        },
+        //  {
+        //   name: '/my/my-wallet',
+        //   image: wallet,
+        //   title: '胡同书币'
+        // },
+        //  {
+        //   name: '/my/my-distributorApply',
+        //   image: distribution,
+        //   title: '分销中心'
+        // },
         {
           name: '/my/Feedback',
           image: feedback,
