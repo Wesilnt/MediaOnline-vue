@@ -325,12 +325,14 @@ export default {
       this.$router.push({ path: '/home' })
     },
     async returnToCorrectGroupBuy() {
-      await this.$router.push({
-        name: 'ColumnDetail',
-        params: { columnType: this.columnType, courseId: this.courseId },
-        query: { groupBuyId: this.groupBuyId }
-      })
-      location.reload()
+      if (this.groupBuyId) {
+        await this.$router.push({
+          name: 'ColumnDetail',
+          params: { columnType: this.columnType, courseId: this.courseId },
+          query: { groupBuyId: this.groupBuyId }
+        })
+        location.reload()
+      }
     },
     routerToSingleSet(Lesson) {
       if (!Lesson) {
@@ -450,7 +452,10 @@ export default {
       '1201ELSERING': { txt: '请等待其他参与者完成支付', handler },
       '1202SELFING': { txt: '继续支付', handler: this.handleJoinGroupBuy },
       1203: { hide: true },
-      1204: { txt: '我要重新开团（若参与其他拼团勿点）', handler: this.handleStartGroupBuy }
+      1204: {
+        txt: '我要重新开团（若参与其他拼团勿点）',
+        handler: this.handleStartGroupBuy
+      }
     }
 
     this.paymentShowText = {
