@@ -2,7 +2,7 @@
     <div class="display-user-info">
         <div class="display-user-info-column" @click="handleUpdateUserInfo('gender')">
             <p class="display-user-info-column-label">性别</p>
-            <p class="display-user-info-column-content">{{userInfo.gender == '0' ? '男': '女'}}</p>
+            <p class="display-user-info-column-content">{{userInfo.gender == '1' ? '男': userInfo.gender == '2'? '女':'未知'}}</p>
             <img class="display-user-info-column-image-arraw" :src="require('../../assets/images/arrow_right.png')"/>
         </div>
         <div class="display-user-info-column" @click="handleUpdateUserInfo('grade')">
@@ -81,7 +81,8 @@ export default {
       this.isShow = false
       if (this.genders.indexOf(value) != -1) {
         if (!(value === this.userInfo.gender)) {
-          let gender = value === '男' ? '0' : '1'
+            //值为1时是男性，值为2时是女性，值为0时是未知
+          let gender = value === '男' ? '1' :  value === '女'?'2':'0'
           this.updateUserInfoGender({ gender })
         }
       } else if (this.grades.indexOf(value) != -1) {

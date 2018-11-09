@@ -31,22 +31,22 @@
             <div class="userinfo-identity-container">
                 <van-radio-group v-model="gender">
                     <div class="userinfo-identity-container-item"
-                         :class="{'userinfo-identity-container-item-selected':gender === '0'}"
-                         @click="genderChoice('0')">
-                        <div class="userinfo-identity-container-item-circle"
-                             :class="{'userinfo-identity-container-item-selected-boy-circle':gender === '0'}"/>
-                        <p class="userinfo-identity-container-item-text"
-                           :class="{'userinfo-identity-container-item-selected-text':gender === '0'}">我是男生</p>
-                        <van-radio v-if="gender === '0'" name="0"/>
-                    </div>
-                    <div class="userinfo-identity-container-item"
-                         :class="{'userinfo-identity-container-item-selected-girl':gender === '1'}"
+                         :class="{'userinfo-identity-container-item-selected':gender === '1'}"
                          @click="genderChoice('1')">
                         <div class="userinfo-identity-container-item-circle"
-                             :class="{'userinfo-identity-container-item-selected-girl-circle':gender === '1'}"/>
+                             :class="{'userinfo-identity-container-item-selected-boy-circle':gender === '1'}"/>
                         <p class="userinfo-identity-container-item-text"
-                           :class="{'userinfo-identity-container-item-selected-text':gender === '1'}">我是女生</p>
+                           :class="{'userinfo-identity-container-item-selected-text':gender === '1'}">我是男生</p>
                         <van-radio v-if="gender === '1'" name="1"/>
+                    </div>
+                    <div class="userinfo-identity-container-item"
+                         :class="{'userinfo-identity-container-item-selected-girl':gender === '2'}"
+                         @click="genderChoice('2')">
+                        <div class="userinfo-identity-container-item-circle"
+                             :class="{'userinfo-identity-container-item-selected-girl-circle':gender === '2'}"/>
+                        <p class="userinfo-identity-container-item-text"
+                           :class="{'userinfo-identity-container-item-selected-text':gender === '2'}">我是女生</p>
+                        <van-radio v-if="gender === '2'" name="2"/>
                     </div>
                 </van-radio-group>
             </div>
