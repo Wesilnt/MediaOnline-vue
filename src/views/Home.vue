@@ -20,6 +20,8 @@
                   :list='columns[homeColumnList[item].listKey]'/>
       </div>
     </div>
+      <!--首页分享-->
+      <HomeShare :show="false"></HomeShare>
     <!--赚字-->
     <!--<div v-if="true" class="earn-label">赚</div>-->
   </div>
@@ -28,12 +30,8 @@
 
 <script>
 import SkeletonFullScreen from '../components/SkeletonFullScreen'
+import HomeShare from '../components/share/HomeShare'
 import Notice from '../components/homeComponents/Notice.vue'
-import Header from '../components/homeComponents/Header.vue'
-// import FreeList from './FreeList.vue'
-// import DisCoverVisionList from '../components/homeComponents/DisCoverVisionList.vue'
-// import DisCoverVideoList from '../components/homeComponents/HomeVideoList.vue'
-// import BookList from './BookList.vue' 
 import HomeItem from '../components/HomeItem.vue'
 import homeData from '../store/module/homeData.js'
 import { homeColumnList } from '../utils/config'
@@ -50,12 +48,8 @@ export default {
   },
   components: {
     SkeletonFullScreen,
+    HomeShare,
     Notice,
-    // Header,
-    // FreeList,
-    // DisCoverVisionList,
-    // DisCoverVideoList,
-    // BookList,
     HomeItem
   },
   computed: mapState([

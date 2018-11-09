@@ -35,7 +35,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['remainTime', 'clickable', 'sending', 'validate'])
+    ...mapState(['remainTime', 'clickAble', 'sending', 'validate'])
   },
   watch: {
     validate: function(res) {

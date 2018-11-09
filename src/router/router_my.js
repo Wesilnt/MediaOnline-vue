@@ -1,17 +1,19 @@
-const purchase = () => import(/* webpackChunkName: "my" */ '../views/my/Purchase')
-const record = () => import(/* webpackChunkName: "my" */ '../views/my/Record')
-const like = () => import(/* webpackChunkName: "my" */ '../views/my/Like')
-const reply = () => import(/* webpackChunkName: "my" */ '../views/my/Reply')
-const myPuzzle_Praise = () =>import(/* webpackChunkName: "my" */ '../views/my/MyPuzzle_Praise')
-const sysMessage = () => import(/* webpackChunkName: "my" */ '../views/my/SysMessage')
-const feedback = () => import(/* webpackChunkName: "my" */ '../views/my/Feedback')
-const wallet = () => import(/* webpackChunkName: "my" */ '../views/my/Wallet')
-const distribution = () => import(/* webpackChunkName: "my" */ '../views/my/Distribution')
-const editUserPhone = () => import(/* webpackChunkName: "my" */ '../views/my/EditUserPhone')
-const editUserInfo = () => import(/* webpackChunkName: "my" */ '../views/my/EditUserInfo')
-const displayUserInfo = () => import(/* webpackChunkName: "my" */ '../views/my/DisplayUserInfo')
-// const WxConfig = () => import(/* webpackChunkName: "my" */ '../views/my/WxConfig')
-const Public = () => import(/* webpackChunkName: "my" */ '../views/my/Public')
+const purchase = () => import(/* webpackChunkName: "index" */ '../views/my/Purchase')
+const record = () => import(/* webpackChunkName: "index" */ '../views/my/Record')
+const like = () => import(/* webpackChunkName: "index" */ '../views/my/Like')
+const reply = () => import(/* webpackChunkName: "index" */ '../views/my/Reply')
+const myPuzzle_Praise = () =>import(/* webpackChunkName: "index" */ '../views/my/MyPuzzle_Praise')
+const sysMessage = () => import(/* webpackChunkName: "index" */ '../views/my/SysMessage')
+const feedback = () => import(/* webpackChunkName: "index" */ '../views/my/Feedback')
+const wallet = () => import(/* webpackChunkName: "index" */ '../views/my/Wallet')
+const BookCoinRules = () => import(/* webpackChunkName: "index" */ '../views/my/BookCoinRules')
+const distributionCenter = () => import(/* webpackChunkName: "index" */ '../views/my/DistributionCenter')
+const distributorApply = () => import(/* webpackChunkName: "index" */ '../views/my/DistributorApply')
+const editUserPhone = () => import(/* webpackChunkName: "index" */ '../views/my/EditUserPhone')
+const editUserInfo = () => import(/* webpackChunkName: "index" */ '../views/my/EditUserInfo')
+const displayUserInfo = () => import(/* webpackChunkName: "index" */ '../views/my/DisplayUserInfo')
+// const WxConfig = () => import(/* webpackChunkName: "index" */ '../views/my/WxConfig')
+const Public = () => import(/* webpackChunkName: "index" */ '../views/my/Public')
 const PageInfo_From_My = [
   {
     path: '/my/Purchase',
@@ -47,8 +49,14 @@ const PageInfo_From_My = [
     component: wallet
   },
   {
-    path: '/my/my-distribution',
-    component: distribution
+    path: '/my/my-distributionCenter',
+      name:'distributionCenter',
+    component: distributionCenter
+  },
+  {
+    path: '/my/my-distributorApply',
+      name:'distributorApply',
+    component: distributorApply
   },
   {
     path: '/my/Feedback',
@@ -73,6 +81,11 @@ const PageInfo_From_My = [
   {
     path: '/my/Public',
     component: Public
+  },
+  {
+    path:'/my/wallet/rules',
+    name:'BookCoinRules',
+    component:BookCoinRules
   }
 ]
 
