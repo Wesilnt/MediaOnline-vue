@@ -131,7 +131,7 @@ export default {
       commit('bindUserInfo', res) 
     },
     //获取专栏详情
-    async getColumnDetail({commit,rootState }, {courseId,columnType}) {
+    async getColumnDetail({commit,rootState,dispatch }, {courseId,columnType}) {
         return await dispatch('getColumnDetail',{courseId,columnType,useCache:true},{root:true})
     },
     //设置分享信息
