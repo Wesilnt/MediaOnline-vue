@@ -37,7 +37,7 @@
  <script>
 import { mapActions, mapState } from 'vuex'
 export default {
-  props: ['show','postType', 'courseId','collectLikeId','posterImg', 'columnType', 'close'],
+  props: ['show','postType', 'courseId','collectLikeId','startUserName','startAvatar','posterImg', 'columnType', 'close'],
   data() {
     return {
       isOpen: false,
@@ -97,7 +97,9 @@ export default {
             },
      query: {
          collectLikeId: this.collectLikeId,
-         sharePostUrl: this.posterImg
+         sharePostUrl: this.posterImg,
+         startUserName:this.startUserName,
+         startAvatar:this.startAvatar
      }
       })
     },

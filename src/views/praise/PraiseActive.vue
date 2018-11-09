@@ -18,7 +18,7 @@ export default {
       courseId: this.$route.params.courseId,
       collectLikeId: this.$route.params.collectLikeId,
       startUserName: this.$route.query.startUserName,
-        startAvatar: this.$route.query.startAvatar,
+      startAvatar: this.$route.query.startAvatar,
       isNewUser:false
     }
   },
