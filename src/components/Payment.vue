@@ -539,14 +539,14 @@ export default {
     return hide ? null : (
       <div>
         {this.paymentType === groupBuy && (
-          <GroupHeader
-            timeDuration={this.timeDuration}
-            leavePerson={this.groupBuyPersonCount - this.alreadyCount}
-            isSixGroup={this.groupBuyPersonCount > 3}
-            userList={this.userList}
-            groupBuystatus={this.groupBuystatus}
-          />
-        )}
+            <GroupHeader
+              timeDuration={this.timeDuration}
+              leavePerson={this.groupBuyPersonCount - this.alreadyCount}
+              isSixGroup={this.groupBuyPersonCount > 3}
+              userList={this.userList}
+              groupBuystatus={this.groupBuystatus}
+            />
+          )}
         <div class="qhht-flex payment-wrapper">
           <div
             class="payment-flex-column payment-audition"
@@ -595,6 +595,7 @@ export default {
   align-items: inherit;
   height: 80px;
   padding-left: 28px;
+  transition: all 1s linear;
 }
 
 .payment-audition {
@@ -640,6 +641,7 @@ export default {
   line-height: 1;
   border-radius: 80px;
   margin-left: 28px;
+  transition: all 1s linear;
   .payment-flex-column {
     flex-grow: 1;
     padding: 12px;
