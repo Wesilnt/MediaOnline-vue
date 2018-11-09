@@ -58,6 +58,9 @@ export default {
     },
     collectLikeId: {
       default: null
+    },
+    callback: {
+      type: Function
     }
   },
   data() {
@@ -257,7 +260,13 @@ export default {
     },
     async handleStartGroupBuy() {
       await this.handlePayment('startGroupBuy')
-      this.mapGroupBuyDetailToPayment()
+      await this.mapGroupBuyDetailToPayment()
+      await this.$router.push({
+        name: 'ColumnDetail',
+        params: { columnType: this.columnType, courseId: this.courseId },
+        query: { groupBuyId: this.groupBuyId }
+      })
+      location.reload()
     },
     handleStartCollectLike() {
       this.handlePayment('startCollectLike')
@@ -513,13 +522,6 @@ export default {
         : this.master === identityType.PASSERFULL
           ? this.paymentShowText[`${this.master}`]
           : this.paymentShowText[`${this.master}_${this.userAccessStatus}`]
-    console.log(
-      this.master === identityType.PARTNER
-        ? `${this.master}_${this.groupBuystatus}${this.groupReturnStatus}`
-        : this.master === identityType.PASSERFULL
-          ? `${this.master}`
-          : `${this.master}_${this.userAccessStatus}`
-    )
     const { hide, showOrigin = false } = paymentObj || {
       txt: '当前状态错误，前去反馈',
       handler: this.goToFeedBack

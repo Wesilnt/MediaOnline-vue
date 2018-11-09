@@ -8,6 +8,7 @@
                 :groupBuyId="groupBuyId"
                 :collectLikeId="collectLikeId"
                 :userAccessStatus="userAccessStatus"
+                :callback="fetchColumnData"
                 :key="courseId+groupBuyId+collectLikeId+userAccessStatus"
             />
             <div id="detailmain" ref="detailmain" v-if="!isReadType">
@@ -223,7 +224,6 @@ export default {
     ]),
     async fetchColumnData() {
       const { courseId, columnType, isVisionType } = this
-      console.log(this.renderLoading)
       await this.getColumnDetail({
         columnType,
         courseId
