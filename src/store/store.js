@@ -5,7 +5,6 @@ import homeData from './module/homeData'
 import columnData from './module/columnData'
 import videoCourseDetailData from './module/videoCourseDetailData'
 import audioData from './module/audioData'
-import readingsData from './module/readingsData'
 import myData from './module/myData'
 import myFeedbackData from './module/myFeedbackData'
 import mySysMessageData from './module/mySysMessageData'
@@ -240,7 +239,6 @@ export default new Vuex.Store({
     myPlayRecordData,
     myPurchaseData,
     userInfoData,
-    readingsData,
     // audio,
     commentData,
     freezoneData,

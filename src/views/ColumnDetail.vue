@@ -1,6 +1,6 @@
 <template>
     <div>
-        <SkeletonFullScreen  v-if="renderLoading"/>
+        <SkeletonFullScreen  v-if="renderLoading" />
         <div v-else>
             <Payment
                 :isTryScan="isCourseType"
@@ -157,12 +157,9 @@ import {
   columnType as COLUMNTYPE
 } from '../utils/config'
 
-const {
-  mapState,
-  mapMutations,
-  mapActions,
-  mapGetters
-} = createNamespacedHelpers('columnData')
+const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
+  'columnData'
+)
 export default {
   name: 'ColumnDetail',
   data() {
@@ -216,17 +213,17 @@ export default {
     ...mapGetters(['playingId', 'getBookIntroduce', 'isNew', 'freeLesson'])
   },
   methods: {
-    ...mapMutations(['resetState']),
     ...mapActions([
       'getLessonList',
       'getColumnDetail',
       'getCategoryList',
       'getCommentList',
-      'likeComment'
+      'likeComment',
+      'resetState'
     ]),
     async fetchColumnData() {
       const { courseId, columnType, isVisionType } = this
-      await this.resetState()
+      console.log(this.renderLoading)
       await this.getColumnDetail({
         columnType,
         courseId
@@ -304,6 +301,9 @@ export default {
     ImagePreview,
     ScrollNavBar,
     CommentList
+  },
+  beforeDestroy() {
+    this.resetState()
   }
 }
 </script>
