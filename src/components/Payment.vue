@@ -599,7 +599,6 @@ export default {
   align-items: inherit;
   height: 80px;
   padding-left: 28px;
-  transition: all 1s linear;
 }
 
 .payment-audition {
@@ -645,7 +644,6 @@ export default {
   line-height: 1;
   border-radius: 80px;
   margin-left: 28px;
-  transition: all 1s linear;
   .payment-flex-column {
     flex-grow: 1;
     padding: 12px;
