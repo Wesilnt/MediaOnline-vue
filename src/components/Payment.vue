@@ -109,38 +109,31 @@ export default {
     ]),
     paymentGroupBuyId: function() {
       const { groupBuyIdFromShare, groupBuyId } = this
+      if (this.groupBuystatus === 1204) {
+        this.$dialog
+          .alert({
+            message: `<p style='text-align: center'>当前拼团失败</p>`
+          })
+          .then(() => {
+            this.returnToCorrectGroupBuy()
+          })
+      }
       if (
         groupBuyIdFromShare &&
         groupBuyId &&
-        groupBuyIdFromShare !== groupBuyId
+        groupBuyIdFromShare !== groupBuyId &&
+        this.master === identityType.OWNER
       ) {
-        if (this.master === identityType.OWNER) {
-          this.$dialog
-            .alert({
-              title: '已有更新的拼团',
-              message: `<ul style='text-align: center'>
+        this.$dialog
+          .alert({
+            title: '已有更新的拼团',
+            message: `<ul style='text-align: center'>
                 <li>您当前专栏拼团已过期</li><li>请返回最新的拼团</li>
             </ul>`
-            })
-            .then(() => {
-              this.returnToCorrectGroupBuy()
-            })
-        }
-        if (
-          this.groupBuystatus === 1204 &&
-          this.master === identityType.PARTNER
-        ) {
-          this.$dialog
-            .alert({
-              title: '拼团异常',
-              message: `<ul style='text-align: center'>
-                <li>当前拼团失败</li><li>且您已有其他拼团状态</li>
-            </ul>`
-            })
-            .then(() => {
-              this.returnToCorrectGroupBuy()
-            })
-        }
+          })
+          .then(() => {
+            this.returnToCorrectGroupBuy()
+          })
       }
       return groupBuyIdFromShare || groupBuyId
     },
@@ -294,7 +287,6 @@ export default {
     },
     async handleStartGroupBuy() {
       await this.handlePayment('startGroupBuy')
-      await this.mapGroupBuyDetailToPayment()
       await this.returnToCorrectGroupBuy()
     },
     handleStartCollectLike() {
@@ -328,8 +320,7 @@ export default {
       if (this.groupBuyId) {
         await this.$router.push({
           name: 'ColumnDetail',
-          params: { columnType: this.columnType, courseId: this.courseId },
-          query: { groupBuyId: this.groupBuyId }
+          params: { columnType: this.columnType, courseId: this.courseId }
         })
         location.reload()
       }
@@ -426,7 +417,7 @@ export default {
     const groupBuyTextType = {
       20020: { txt: '邀请好友拼团', handler }, // 弹出拼团界面
       20021: { txt: '邀请好友集赞', handler }, // 弹出集赞界面
-      20022: { txt: '您已拥有此专栏，帮助好友分享', handler }, // 弹出拼团界面
+      20022: { txt: '您已获得此专栏，帮助好友分享', handler }, // 弹出拼团界面
       20023: { txt: '您已参与他人的拼团,帮助好友分享', handler }, // 弹出拼团界面
       20032: {
         txt: '开团失败，重新开团',
@@ -442,8 +433,11 @@ export default {
         txt: '您已集赞成功，领取专栏',
         handler: this.handleGetCollectLike
       }, //领取专栏
-      2006: { txt: '拼团超时，请等待系统处理', handler: this.goBackHome }, // 返回主页
-      2007: { txt: '当前拼团已满,看看其他', handler: this.goBackHome }, // 返回主页
+      2006: { txt: '拼团失败，请等待系统处理', handler: this.goBackHome }, // 返回主页
+      2007: {
+        txt: '当前拼团已满,发起我的拼团',
+        handler: this.handleStartGroupBuy
+      }, // 返回主页
       2008: { txt: '您已参与集赞,帮助好友分享', handler } // 弹出拼团界面
     }
     const groupBuyStatusType = {
@@ -453,7 +447,7 @@ export default {
       '1202SELFING': { txt: '继续支付', handler: this.handleJoinGroupBuy },
       1203: { hide: true },
       1204: {
-        txt: '我要重新开团（若参与其他拼团勿点）',
+        txt: '重新开团',
         handler: this.handleStartGroupBuy
       }
     }
@@ -509,7 +503,7 @@ export default {
       // 非参与人 拼团未满
       [`${identityType.PASSER}_${
         userAccessStatusType.GROUPBUY_FAIL
-      }`]: groupBuyTextType[2004],
+      }`]: groupBuyTextType[2006],
       [`${identityType.PASSER}_${
         userAccessStatusType.REFUND_SINGLED
       }`]: groupBuyTextType[2004],
