@@ -78,7 +78,7 @@ export default {
       paymentShowText: null,
       sharePageShow: false,
       paymentType: null,
-      paySuccStatus: '',
+      paySuccStatus: ''
     }
   },
   computed: {
@@ -102,13 +102,19 @@ export default {
       'alreadyCount',
       'groupBuystatus' /* 120 1 / 2:拼团中 3：成功  4：失败 */,
       'timeDuration'
-    ])
+    ]),
+    paymentGroupBuyId: function() {
+      return this.groupBuyIdFromShare || this.groupBuyId
+    },
+    paymentCollectLikeId: function() {
+      return this.collectLikeIdFromShare || this.collectLikeId
+    }
   },
   async mounted() {
-      await this.getUserInfo();
+    await this.getUserInfo()
     await this.mapGroupBuyDetailToPayment()
     // 配置状态
-    const { groupBuyPersonCount, collectLikeId } = this
+    const { groupBuyPersonCount, paymentCollectLikeId } = this
     const initialPayment = {
       txt: groupBuyPersonCount === 3 ? '三人团' : '六人团',
       showPrice: true,
@@ -116,11 +122,11 @@ export default {
       handler: false
     }
     let handler = this.toggleSharePage.bind(this, true)
-    if (collectLikeId) {
+    if (paymentCollectLikeId) {
       handler = this.gotoPraising
     }
     const groupBuyTextType = {
-      20020: { txt: '邀请好友拼团',handler}, // 弹出拼团界面
+      20020: { txt: '邀请好友拼团', handler }, // 弹出拼团界面
       20021: { txt: '邀请好友集赞', handler }, // 弹出集赞界面
       20022: { txt: '您已拥有此专栏，帮助好友分享', handler }, // 弹出拼团界面
       20023: { txt: '您已参与他人的拼团,帮助好友分享', handler }, // 弹出拼团界面
@@ -184,10 +190,18 @@ export default {
       [`${identityType.PARTNER}_1202`]: groupBuyStatusType[1202],
       [`${identityType.PARTNER}_1203`]: groupBuyStatusType[1203],
       [`${identityType.PARTNER}_1204`]: groupBuyStatusType[1204],
-      [`${identityType.PARTNER}_1201ELSERING`]: groupBuyStatusType['1201ELSERING'],
-      [`${identityType.PARTNER}_1202SELFING`]: groupBuyStatusType['1202SELFING'],
-        [`${identityType.PARTNER}_1202ELSERING`]: groupBuyStatusType['1201ELSERING'],
-        [`${identityType.PARTNER}_1201SELFING`]: groupBuyStatusType['1202SELFING'],
+      [`${identityType.PARTNER}_1201ELSERING`]: groupBuyStatusType[
+        '1201ELSERING'
+      ],
+      [`${identityType.PARTNER}_1202SELFING`]: groupBuyStatusType[
+        '1202SELFING'
+      ],
+      [`${identityType.PARTNER}_1202ELSERING`]: groupBuyStatusType[
+        '1201ELSERING'
+      ],
+      [`${identityType.PARTNER}_1201SELFING`]: groupBuyStatusType[
+        '1202SELFING'
+      ],
       // 非参与人 拼团未满
       [`${identityType.PASSER}_${
         userAccessStatusType.GROUPBUY_FAIL
@@ -219,7 +233,7 @@ export default {
       [`${identityType.PASSER}_${
         userAccessStatusType.COLLECTING
       }`]: groupBuyTextType[2008],
-      [`${identityType.PASSERFULL}_`]: groupBuyTextType[2007]
+      [`${identityType.PASSERFULL}`]: groupBuyTextType[2007]
     }
   },
   methods: {
@@ -235,14 +249,14 @@ export default {
       'startCollectLike',
       'getCollectLike'
     ]),
-      async getUserInfo(forceUpdate){
-          this.userInfo = await this.checkoutUserInfo(forceUpdate)
-      },
+    async getUserInfo(forceUpdate) {
+      this.userInfo = await this.checkoutUserInfo(forceUpdate)
+    },
     async mapGroupBuyDetailToPayment() {
-      const { groupBuyId, groupBuyIdFromShare } = this
-      if (groupBuyIdFromShare || groupBuyId) {
+      const { paymentGroupBuyId } =await this
+      if (paymentGroupBuyId) {
         await this.getGroupBuyDetail({
-          groupBuyId: groupBuyIdFromShare || groupBuyId
+          groupBuyId: paymentGroupBuyId
         })
       }
       await this.judgePaymentType()
@@ -264,17 +278,12 @@ export default {
       this.payDisabled = false
     },
     judgePaymentType() {
-      const {
-        groupBuyIdFromShare, //来自于分享进入的拼团Id
-        collectLikeIdFromShare, //来自于分享进入的集赞Id
-        collectLikeId, // 来自于开团获取的id
-        groupBuyId // 来自于集赞获取的id
-      } = this
+      const { paymentGroupBuyId, paymentCollectLikeId } = this
       let paymentType = PAYMENTTYPE.origin
-      if (groupBuyIdFromShare || groupBuyId) {
+      if (paymentGroupBuyId) {
         paymentType = PAYMENTTYPE.groupBuy
       }
-      if (collectLikeIdFromShare || collectLikeId) {
+      if (paymentCollectLikeId) {
         paymentType = PAYMENTTYPE.collect
       }
       this.paymentType = paymentType
@@ -368,7 +377,7 @@ export default {
       await this.handlePayment('joinGroupBuy', {
         groupBuyId: this.groupBuyIdFromShare
       })
-        this.mapGroupBuyDetailToPayment();
+      this.mapGroupBuyDetailToPayment()
     },
     async handleStartGroupBuy() {
       await this.handlePayment('startGroupBuy')
@@ -379,7 +388,7 @@ export default {
     },
     handleGetCollectLike() {
       this.handlePayment('getCollectLike', {
-        collectLikeId: this.collectLikeId
+        collectLikeId: this.paymentCollectLikeId
       })
     },
     //点击集赞按钮
@@ -388,7 +397,7 @@ export default {
         name: 'Praise',
         params: {
           courseId: this.courseId,
-          collectLikeId: this.collectLikeId
+          collectLikeId: this.paymentCollectLikeId
         },
         query: {
           columnType: this.columnType
@@ -438,8 +447,8 @@ export default {
       const {
         columnType,
         courseId,
-        groupBuyId,
-        collectLikeId,
+        paymentGroupBuyId,
+        paymentCollectLikeId,
         url,
         courseName,
         alreadyCount,
@@ -451,13 +460,13 @@ export default {
       if (paymentType === groupBuy) {
         title = `我正在参加《${courseName}》拼团活动,仅差${groupBuyPersonCount -
           alreadyCount}人,快来和我一起拼团吧!`
-        link = `${url}/#/detail/${columnType}/${courseId}?groupBuyId=${groupBuyId}`
+        link = `${url}/#/detail/${columnType}/${courseId}?groupBuyId=${paymentGroupBuyId}`
       }
       if (paymentType === collect) {
         title = `我是${userInfo.nickName}, ${
           this.master === identityType.OWNER ? '我想免费' : '正在帮朋友'
         }领取《${courseName}》,求助攻~`
-        link = `${url}/#/praise/active/${courseId}/${collectLikeId}?columnType=${columnType}`
+        link = `${url}/#/praise/active/${courseId}/${paymentCollectLikeId}?columnType=${columnType}`
       }
       const share = {
         title,
@@ -484,17 +493,18 @@ export default {
       collectLikeTemplateId,
       showTeleRegister,
       sharePageShow,
-      groupBuyId,
-      collectLikeId
+      paymentGroupBuyId,
+      paymentCollectLikeId
     } = this
     const tryTxt = isTryScan ? '试看' : '试听'
-        console.log(`${this.master}_${this.groupBuystatus}${this.paySuccStatus}`)
     const paymentObj =
       this.master === identityType.PARTNER
         ? this.paymentShowText[
             `${this.master}_${this.groupBuystatus}${this.paySuccStatus}`
           ]
-        : this.paymentShowText[`${this.master}_${this.userAccessStatus}`]
+        : this.master === identityType.PASSERFULL
+          ? this.paymentShowText[`${this.master}`]
+          : this.paymentShowText[`${this.master}_${this.userAccessStatus}`]
     const { hide, showOrigin = false } = paymentObj
     let paymentBtn = this.renderPayment({
       origin: price && showOrigin && this.renderOriginBuy,
@@ -502,16 +512,17 @@ export default {
       collect:
         collectLikeTemplateId && this.renderCollectBuy.bind(this, paymentObj)
     })
-    if (groupBuyId) {
+    if (paymentGroupBuyId) {
       paymentBtn = this.renderPayment({
         group: this.renderGroupBuy.bind(this, paymentObj)
       })
     }
-    if (collectLikeId) {
+    if (paymentCollectLikeId) {
       paymentBtn = this.renderPayment({
         collect: this.renderCollectBuy.bind(this, paymentObj)
       })
     }
+    console.log(this.paymentGroupBuyId, this.paymentCollectLikeId)
     return hide ? null : (
       <div>
         {this.paymentType === groupBuy && (
@@ -537,14 +548,12 @@ export default {
             courseId={courseId}
             close={this.toggleSharePage}
             columnType={columnType}
-            // nativeOnClose={this.toggleSharePage}
-            // postType={isGroupShare}
           />
           {showTeleRegister && (
             <PhoneVerif
               style={{ zIndex: 100 }}
               hideTeleRegister={this.toggleTeleRegister.bind(this, false)}
-              succFun={this.getUserInfo.bind(this,true)}
+              succFun={this.getUserInfo.bind(this, true)}
             />
           )}
         </div>
