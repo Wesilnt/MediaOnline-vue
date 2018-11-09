@@ -81,7 +81,7 @@ export default {
       paymentShowText: null, // 储存支付状态文本
       sharePageShow: false, // 分享弹框页
       paymentType: null, // 支付类型 原价/拼团/集赞
-      groupReturnStatus: '' // 拼团返回的status
+      userPaymentStatus: '' // 拼团返回的status
     }
   },
   computed: {
@@ -108,7 +108,41 @@ export default {
       'loading'
     ]),
     paymentGroupBuyId: function() {
-      return this.groupBuyIdFromShare || this.groupBuyId
+      const { groupBuyIdFromShare, groupBuyId } = this
+      if (
+        groupBuyIdFromShare &&
+        groupBuyId &&
+        groupBuyIdFromShare !== groupBuyId
+      ) {
+        if (this.master === identityType.OWNER) {
+          this.$dialog
+            .alert({
+              title: '已有更新的拼团',
+              message: `<ul style='text-align: center'>
+                <li>您当前专栏拼团已过期</li><li>请返回最新的拼团</li>
+            </ul>`
+            })
+            .then(() => {
+              this.returnToCorrectGroupBuy()
+            })
+        }
+        if (
+          this.groupBuystatus === 1204 &&
+          this.master === identityType.PARTNER
+        ) {
+          this.$dialog
+            .alert({
+              title: '拼团异常',
+              message: `<ul style='text-align: center'>
+                <li>当前拼团失败</li><li>且您已有其他拼团状态</li>
+            </ul>`
+            })
+            .then(() => {
+              this.returnToCorrectGroupBuy()
+            })
+        }
+      }
+      return groupBuyIdFromShare || groupBuyId
     },
     paymentCollectLikeId: function() {
       return this.collectLikeIdFromShare || this.collectLikeId
@@ -172,15 +206,15 @@ export default {
     judgeIdentity() {
       if (this.masterId === this.starterUid) return
       if (this.userList.some(item => item.id === this.masterId)) {
-        // groupReturnStatus 状态(2602:已完成，2603:失败,2601:支付中)
-        this.groupReturnStatus = ''
+        // userPaymentStatus 状态(2602:已完成，2603:失败,2601:支付中)
+        this.userPaymentStatus = ''
         this.userList.some(item => {
           if (this.masterId !== item.id && item.status === 2601) {
-            this.groupReturnStatus = 'ELSERING'
+            this.userPaymentStatus = 'ELSERING'
             return
           }
           if (this.masterId === item.id && item.status === 2601) {
-            this.groupReturnStatus = 'SELFING'
+            this.userPaymentStatus = 'SELFING'
             return
           }
         })
@@ -261,12 +295,7 @@ export default {
     async handleStartGroupBuy() {
       await this.handlePayment('startGroupBuy')
       await this.mapGroupBuyDetailToPayment()
-      await this.$router.push({
-        name: 'ColumnDetail',
-        params: { columnType: this.columnType, courseId: this.courseId },
-        query: { groupBuyId: this.groupBuyId }
-      })
-      location.reload()
+      await this.returnToCorrectGroupBuy()
     },
     handleStartCollectLike() {
       this.handlePayment('startCollectLike')
@@ -295,7 +324,14 @@ export default {
     goBackHome() {
       this.$router.push({ path: '/home' })
     },
-
+    async returnToCorrectGroupBuy() {
+      await this.$router.push({
+        name: 'ColumnDetail',
+        params: { columnType: this.columnType, courseId: this.courseId },
+        query: { groupBuyId: this.groupBuyId }
+      })
+      location.reload()
+    },
     routerToSingleSet(Lesson) {
       if (!Lesson) {
         return this.$toast('暂无试听课程')
@@ -340,11 +376,12 @@ export default {
         courseName,
         alreadyCount,
         groupBuyPersonCount,
-        userInfo
+        userInfo,
+        groupBuystatus
       } = this
       let title = `我正在学习《${this.courseName}》，快来一起学习吧`,
         link = window.location.href
-      if (paymentType === groupBuy) {
+      if (paymentType === groupBuy && groupBuystatus !== 1204) {
         title = `我正在参加《${courseName}》拼团活动,仅差${groupBuyPersonCount -
           alreadyCount}人,快来和我一起拼团吧!`
         link = `${url}/#/detail/${columnType}/${courseId}?groupBuyId=${paymentGroupBuyId}`
@@ -389,7 +426,10 @@ export default {
       20021: { txt: '邀请好友集赞', handler }, // 弹出集赞界面
       20022: { txt: '您已拥有此专栏，帮助好友分享', handler }, // 弹出拼团界面
       20023: { txt: '您已参与他人的拼团,帮助好友分享', handler }, // 弹出拼团界面
-      20032: { txt: '开团失败，重新开团', handler: this.handleStartGroupBuy },
+      20032: {
+        txt: '开团失败，重新开团',
+        handler: this.handleStartGroupBuy
+      },
       20033: { txt: '等待开团成功', handler }, // 弹出拼团界面
       2004: {
         txt: '参与拼团',
@@ -410,7 +450,7 @@ export default {
       '1201ELSERING': { txt: '请等待其他参与者完成支付', handler },
       '1202SELFING': { txt: '继续支付', handler: this.handleJoinGroupBuy },
       1203: { hide: true },
-      1204: { txt: '开团失败，重新开团', handler: this.handleStartGroupBuy }
+      1204: { txt: '我要重新开团（若参与其他拼团勿点）', handler: this.handleStartGroupBuy }
     }
 
     this.paymentShowText = {
@@ -517,7 +557,7 @@ export default {
     const paymentObj =
       this.master === identityType.PARTNER
         ? this.paymentShowText[
-            `${this.master}_${this.groupBuystatus}${this.groupReturnStatus}`
+            `${this.master}_${this.groupBuystatus}${this.userPaymentStatus}`
           ]
         : this.master === identityType.PASSERFULL
           ? this.paymentShowText[`${this.master}`]
