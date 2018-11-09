@@ -29,6 +29,8 @@
 </template>
 
 <script>
+    import { createNamespacedHelpers } from 'vuex'
+    const { mapState, mapActions } = createNamespacedHelpers('distributionData')
     export default {
         data() {
             return {}

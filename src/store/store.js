@@ -12,6 +12,8 @@ import myReplyData from './module/myReplyData'
 import myLikeData from './module/myLikeData'
 import myPlayRecordData from './module/myPlayRecordData'
 import myPurchaseData from './module/myPurchaseData'
+import distributionData from './module/distributionData'
+import walletData from './module/walletData'
 import userInfoData from './module/userInfoData'
 import commentData from './module/commentData'
 import freezoneData from './module/freezoneData'
@@ -246,6 +248,8 @@ export default new Vuex.Store({
     audioData,
     shareData,
     praiseData,
-    mobileData
+    mobileData,
+    distributionData,
+      walletData
   }
 })

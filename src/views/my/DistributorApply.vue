@@ -17,13 +17,12 @@
         </footer>
 
         <!--手机号验证-->
-        <PhoneDialog v-model='show'></PhoneDialog>
+        <PhoneDialog v-model='show' @success="applySuccess"></PhoneDialog>
     </div>
 </template>
 
 <script>
     import PhoneDialog from '../../components/DialogPhone';
-
     export default {
         data() {
             return {
@@ -33,15 +32,11 @@
         components: { PhoneDialog },
         methods: {
             becomeDistributor() {
-                // this.$router.push({ name: 'distributionCenter' });
                 this.show = true;
             },
-            onMaskClick() {
-                this.$refs.dialog.close();
-            },
-            onPhoneConfirm() {
-                this.$refs.dialog.close();
-                this.$router.push({ name: 'distributionCenter' });
+            applySuccess() {
+                // this.$router.push({ name: 'distributionCenter' });
+                this.$router.push({ name: 'DistributionApplyResult' });
             }
         }
     };

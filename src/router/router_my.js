@@ -9,6 +9,7 @@ const wallet = () => import(/* webpackChunkName: "index" */ '../views/my/Wallet'
 const BookCoinRules = () => import(/* webpackChunkName: "index" */ '../views/my/BookCoinRules')
 const distributionCenter = () => import(/* webpackChunkName: "index" */ '../views/my/DistributionCenter')
 const distributorApply = () => import(/* webpackChunkName: "index" */ '../views/my/DistributorApply')
+const DistributionApplyResult = () => import(/* webpackChunkName: "index" */ '../views/my/distribution/DistributionApplyResult')
 const editUserPhone = () => import(/* webpackChunkName: "index" */ '../views/my/EditUserPhone')
 const editUserInfo = () => import(/* webpackChunkName: "index" */ '../views/my/EditUserInfo')
 const displayUserInfo = () => import(/* webpackChunkName: "index" */ '../views/my/DisplayUserInfo')
@@ -57,6 +58,11 @@ const PageInfo_From_My = [
     path: '/my/my-distributorApply',
       name:'distributorApply',
     component: distributorApply
+  },
+  {
+    path: '/my/distribution/apply',
+    name:'DistributionApplyResult',
+    component: DistributionApplyResult
   },
   {
     path: '/my/Feedback',
