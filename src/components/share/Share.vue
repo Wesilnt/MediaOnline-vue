@@ -37,7 +37,7 @@
  <script>
 import { mapActions, mapState } from 'vuex'
 export default {
-  props: ['show','postType', 'courseId', 'columnType'],
+  props: ['show','postType', 'courseId','posterImg', 'columnType'],
   data() {
     return {
       isOpen: false,
@@ -85,7 +85,7 @@ export default {
       }
     },
     toPoster(){ 
-      let postType = postType? postType: 'default'
+      let postType = this.postType? this.postType: 'default'
       console.log("Share-courseId:",this.courseId)
      this.$router.push({
      name: 'SharePoster',
@@ -94,7 +94,9 @@ export default {
               columnType:this.columnType,
               postType,
             },
-     query: {}
+     query: {
+         sharePostUrl: this.posterImg
+     }
       })
     },
     onCancel() {
