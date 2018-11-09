@@ -22,8 +22,8 @@
           :courseid="courseId" 
           :collectlikeid="collectLikeId"
           :posturl="sharePostUrl"
-          :startUserName="startUserName"
-          :startAvatar="startAvatar"
+          :startUserName="startUserName||userInfo.nickName"
+          :startAvatar="startAvatar||userInfo.avatarUrl"
           @share="onShare"/>
       </div>
       <!-- 2.3 集赞人数提示 -->
@@ -58,8 +58,8 @@
                :columnType ="columnType"
                :postType="'praise'"
                :collectLikeId="collectLikeId"
-               :startUserName="startUserName"
-               :startAvatar="startAvatar"
+               :startUserName="startUserName||userInfo.nickName"
+               :startAvatar="startAvatar||userInfo.avatarUrl"
                :courseId="courseId"/>
   </div>
 </template>
