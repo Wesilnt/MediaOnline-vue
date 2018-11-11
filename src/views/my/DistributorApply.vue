@@ -54,7 +54,7 @@
                 margin-top: 50px;
                 width: 205px;
                 height: 120px;
-                background: url("../../assets/images/logo.png") center/100% no-repeat;
+                background: url("../../assets/images/distribution_logo.png") center/100% no-repeat;
             }
             &-title {
                 margin-top: 40px;

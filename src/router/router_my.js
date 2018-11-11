@@ -10,6 +10,9 @@ const BookCoinRules = () => import(/* webpackChunkName: "index" */ '../views/my/
 const distributionCenter = () => import(/* webpackChunkName: "index" */ '../views/my/DistributionCenter')
 const distributorApply = () => import(/* webpackChunkName: "index" */ '../views/my/DistributorApply')
 const DistributionApplyResult = () => import(/* webpackChunkName: "index" */ '../views/my/distribution/DistributionApplyResult')
+const DistributionProfitDetail = () => import(/* webpackChunkName: "index" */ '../views/my/distribution/DistributionProfitDetail')
+const DistributionGradeRule = () => import(/* webpackChunkName: "index" */ '../views/my/distribution/DistributionGradeRule')
+const DistributionTransferDetail = () => import(/* webpackChunkName: "index" */ '../views/my/distribution/DistributionTransferDetail')
 const editUserPhone = () => import(/* webpackChunkName: "index" */ '../views/my/EditUserPhone')
 const editUserInfo = () => import(/* webpackChunkName: "index" */ '../views/my/EditUserInfo')
 const displayUserInfo = () => import(/* webpackChunkName: "index" */ '../views/my/DisplayUserInfo')
@@ -63,6 +66,21 @@ const PageInfo_From_My = [
     path: '/my/distribution/apply',
     name:'DistributionApplyResult',
     component: DistributionApplyResult
+  },
+  {
+    path: '/my/distribution/profit',
+    name:'DistributionProfitDetail',
+    component: DistributionProfitDetail
+  },
+    {
+    path: '/my/distribution/gradeRule',
+    name:'DistributionGradeRule',
+    component: DistributionGradeRule
+  },
+    {
+    path: '/my/distribution/transfer',
+    name:'DistributionTransferDetail',
+    component: DistributionTransferDetail
   },
   {
     path: '/my/Feedback',

@@ -1,0 +1,181 @@
+<template>
+    <div class="distribution-profit">
+        <!--头部-->
+        <header class="distribution-profit-header" @click="toTransferDetail">
+            <h4>累计收益 (元)</h4>
+            <h3 class="profit-coin">9360.00<i></i></h3>
+            <dd>包含待结算1200.00元</dd>
+        </header>
+
+        <!--布局-->
+        <main class="profit-main">
+            <h4 class="profit-main-title">
+                <hr class="title-line">
+                2018
+                <hr class="title-line">
+            </h4>
+            <ul class="profit-main-list">
+                <li class="profit-main-item" v-for="item of profitList" :key="item.id">
+                    <aside class="item-left">
+                        <i v-lazy:background-image="`${item.userAvatar}?imageView2/1/w/100/h/100/format/jpg/q/50`"></i>
+                        <div class="item-left-content">
+                            <p>{{item.username}} </p>
+                            <p class="item-text bottom"> {{item.datetime | formatDuring}} </p>
+                        </div>
+                    </aside>
+                    <aside class="item-right">
+                        <p class="item-text">收益：<span>{{item.profit.toFixed(2)}}</span>元</p>
+                        <p class="item-text bottom">成交额： <span>{{item.purchase.toFixed(2)}}</span>元</p>
+                    </aside>
+                </li>
+                <div class="profit-main-more" @click="onLoadMore">
+                    <p v-show="isLoading">加载中</p>
+                    <p v-show="!isLoading">{{finished?'无更多收益明细':'查看更多'}}</p>
+                </div>
+            </ul>
+        </main>
+
+    </div>
+</template>
+
+<script>
+    import { createNamespacedHelpers } from 'vuex';
+    const { mapState, mapActions } = createNamespacedHelpers('distributionData');
+
+    export default {
+        data() {
+            return {};
+        },
+        created() {
+            this.getProfitList();
+        },
+        filters: {
+            formatDuring: date => {
+                let mss = new Date(date)
+                let year = mss.getFullYear()
+                let month = mss.getMonth()
+                let day = mss.getDate()
+                return `${year}年${month < 9 ? '0' + month : month}月${day < 9 ? '0' + day : day}日`
+            }
+        },
+        computed: { ...mapState(['isDistributor', 'profitList', 'isLoading', 'finished']) },
+        methods: {
+            ...mapActions(['getProfitList', 'onDestroy']),
+            //转账明细
+            toTransferDetail() {
+                this.$router.push({ name: 'DistributionTransferDetail' });
+            },
+            onLoadMore() {
+                if (!this.isLoading && !finished) {
+                    //TODO 分页加载
+                }
+            }
+        },
+        beforeDestroy() {
+            this.onDestroy();
+        }
+    };
+</script>
+
+<style lang="less" scoped>
+    .distribution-profit {
+        text-align: center;
+        dd {
+            margin: 0;
+        }
+        /*头部*/
+        &-header {
+            width: 100%;
+            background-color: #FFA32F;
+            font-size: 28px;
+            color: #ffffff;
+            padding: 56px 0;
+            line-height: 28px;
+            h3 {
+                display: inline-flex;
+                align-items: center;
+                margin: 24px 0;
+                font-size: 60px;
+                line-height: 60px;
+            }
+            i {
+                position: absolute;
+                right: 30px;
+                width: 14px;
+                height: 24px;
+                background: url("../../../assets/images/ic_arrow_white.png") center/100% no-repeat;
+            }
+        }
+        /*内容*/
+        .profit-main {
+            margin: 40px 0;
+            font-size: 26px;
+            color: #333333;
+            li + li {
+                border-top: 1px solid #e3e3e3; /*no*/
+            }
+            &-title {
+                display: inline-flex;
+                align-items: center;
+                color: #808080;
+                margin-bottom: 40px;
+                font-weight: 500;
+                .title-line {
+                    margin: auto 32px;
+                    width: 48px;
+                    border: 0;
+                    height: 1px; /*no*/
+                    background-color: #e3e3e3;
+                }
+            }
+            &-list {
+                text-align: left;
+                padding: 0 30px;
+            }
+            &-item {
+                width: 100%;
+                box-sizing: content-box;
+                display: inline-flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+            .item-left {
+                display: inline-flex;
+                flex-direction: row;
+                align-items: center;
+                i {
+                    margin: 28px 0;
+                    display: inline-block;
+                    width: 88px;
+                    height: 88px;
+                    border-radius: 50%;
+                    background-color: #FFD7D7;
+                    background-size: 100%;
+                    background-repeat: no-repeat;
+                    background-position: center;
+                }
+                &-content {
+                    margin-left: 24px;
+                }
+            }
+            .item-right {
+                text-align: right;
+            }
+            .item-text {
+                color: #808080;
+            }
+            .item-text.bottom {
+                margin-top: 24px;
+            }
+            .item-text span {
+                color: #ffa32f;
+            }
+            &-more {
+                margin-top: 40px;
+                text-align: center;
+                color: #737373;
+            }
+        }
+    }
+</style>

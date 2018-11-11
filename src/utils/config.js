@@ -183,3 +183,8 @@ export const distributionShare = [
         fillColor: '#acb5c6',
     },
 ]
+export const distributionGrades = {
+     '1': {grade:'普通分销员', totalAmount:200,extensionRatio: '15%'},
+     '2': {grade:'初级分销员', totalAmount:2000,extensionRatio: '20%'},
+     '3': {grade:'高级分销员', totalAmount:5000,extensionRatio: '35%'},
+}
