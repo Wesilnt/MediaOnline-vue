@@ -46,7 +46,7 @@
         "dom-to-image": "^2.6.0",
         "es6-promise": "^4.2.5",
         "postcss-px-to-viewport": "0.0.3",
-        "vant": "^1.4.2",
+        "vant": "^1.4.3",
         "vue": "^2.5.17",
         "vue-qrcode-component": "^2.1.1",
         "vue-router": "^3.0.1",
