@@ -16,14 +16,14 @@
 <script>
 import VideoCell from '../../components/homeComponents/VideoCell'
 import { createNamespacedHelpers } from 'vuex'
-import {columnType,columnStatus} from '../../utils/config'
-const { mapState,mapMutations, mapActions } = createNamespacedHelpers('columnData')
+import { columnType, columnStatus } from '../../utils/config'
+const { mapState, mapActions } = createNamespacedHelpers('columnData')
 export default {
   name: 'VideoList',
   data() {
     return {
       refreshing: false,
-      columnType:this.$route.params.columnType
+      columnType: this.$route.params.columnType
     }
   },
   watch: {
@@ -33,8 +33,8 @@ export default {
   },
   computed: {
     ...mapState([
-      'bannerPic',//专栏列表头图
-      'columnList',//专栏列表
+      'bannerPic', //专栏列表头图
+      'columnList', //专栏列表
       'columnFinished',
       'columnLoading'
     ])
@@ -46,10 +46,9 @@ export default {
     this.getColumnList({ refresh: true, columnType: this.columnType })
   },
   methods: {
-    ...mapMutations(['resetState']),
-    ...mapActions(['getColumnList']),
+    ...mapActions(['getColumnList', 'resetState']),
     scrollBottom() {
-      this.getColumnList({ refresh: false, columnType: this.columnType})
+      this.getColumnList({ refresh: false, columnType: this.columnType })
     }
   },
   beforeDestroy() {
