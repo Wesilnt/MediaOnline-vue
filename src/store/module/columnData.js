@@ -117,10 +117,8 @@ const columnData = {
     //获取专栏列表
     async getColumnList({ commit, state }, { refresh, columnType }) {
       if (state.columnFinished || state.columnLoading) return
-        console.log("刷新数据",state.columnCurrentPage, "refresh=",refresh)
-      if(!refresh && 0 === state.columnCurrentPage)return
       await commit('saveStatus', { columnLoading: true })
-      const page = refresh ? 1 : state.columnCurrentPage + 1
+      const page = refresh ? 1 : 0 === state.columnCurrentPage ? 2 : state.columnCurrentPage + 1
       const result = await getColumns({
         type: ColumnType[columnType].code,
         currentPage: page,
