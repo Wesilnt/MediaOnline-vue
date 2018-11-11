@@ -109,7 +109,7 @@ export default {
     ]),
     paymentGroupBuyId: function() {
       const { groupBuyIdFromShare, groupBuyId } = this
-      if (this.groupBuystatus === 1204) {
+      if (groupBuyIdFromShare && this.groupBuystatus === 1204) {
         this.$dialog
           .alert({
             message: `<p style='text-align: center'>当前拼团失败</p>`

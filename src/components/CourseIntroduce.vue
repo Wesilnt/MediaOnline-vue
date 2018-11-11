@@ -1,7 +1,7 @@
 <template>
     <div class="courseIntroduce">
-        <div ref="content" class="courseIntroduce-content" :class="{'content-expand':isExpand}" >
-           <div ref="contentChild" v-html="courseinfo"></div>
+        <div class="courseIntroduce-content" :class="{'content-expand':isExpand}" >
+           <div  v-html="courseinfo" v-judgeHeight="needExpand"></div>
         </div>
         <div class="arrow-container" :class="{'arrow-container-expand':isExpand}" v-if="needExpand" @click="handleExpand">
           <a class="icon-arrow" ></a>
@@ -10,7 +10,8 @@
 </template>
 
 <script>
-let inter = null
+let inter = null,
+  vm = null
 export default {
   name: 'CourseIntroduce',
   props: ['courseinfo'],
@@ -20,36 +21,22 @@ export default {
       isExpand: false
     }
   },
+  directives: {
+    judgeHeight: {
+      // 指令的定义
+      inserted: function(el) {
+        setTimeout(() => {
+          vm('needExpand', el.parentElement.clientHeight < el.clientHeight)
+        }, 60)
+      }
+    }
+  },
+  created() {
+    vm = (status, val) => (this[status] = val)
+  },
   methods: {
     handleExpand() {
       this.isExpand = !this.isExpand
-    },
-    ExpandWatched() {
-      clearTimeout(inter)
-      inter = setTimeout(() => {
-        this.$nextTick(() => {
-          const { content, contentChild } = this.$refs
-          if(content && !content.clientHeight)return this.ExpandWatched()
-          const { clientHeight: contentClientHeight } = content
-          const { clientHeight: contentChildClientHeight } = contentChild
-          console.log(
-            '正在判定介绍高度',
-            contentClientHeight,
-            contentChildClientHeight
-          )
-          if (!contentClientHeight) {
-            return this.ExpandWatched()
-          }
-          this.needExpand = contentChildClientHeight > contentClientHeight
-          console.log('介绍高度判定结束')
-        })
-      }, 100)
-    }
-  },
-  watch: {
-    courseinfo: {
-      handler: 'ExpandWatched',
-      immediate: true
     }
   }
 }
