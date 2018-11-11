@@ -48,7 +48,10 @@ export default {
   methods: {
     ...mapActions(['getColumnList', 'resetState']),
     scrollBottom() {
-      this.getColumnList({ refresh: false, columnType: this.columnType })
+        //单集详情滑动到底部时，返回专栏列表，专栏列表分页加载立马执行导致分页错乱
+      setTimeout(()=>{
+          this.getColumnList({ refresh: false, columnType: this.columnType })
+      },300)
     }
   },
   beforeDestroy() {
