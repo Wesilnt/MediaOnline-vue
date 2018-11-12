@@ -21,19 +21,18 @@
 <script>
 import SingleSetItem from '../../components/SingleSetItem.vue'
 import { createNamespacedHelpers } from 'vuex'
-const { mapState, mapMutations, mapActions } = createNamespacedHelpers(
-  'columnData'
-)
+const { mapState, mapMutations, mapActions } = createNamespacedHelpers('columnData')
 
 export default {
   data() {
     return {
       refreshing: false,
+      userAccessStatus:0,
       courseId: this.$route.params.courseId,
       columnType: this.$route.params.columnType
     }
   },
-  created() {},
+  created() {this.getColumnDetailCache({courseId:this.courseId}).then(res=>this.userAccessStatus = res.userAccessStatus)},
   watch: {
     lessonLoading: function(loading) {
       this.refreshing = loading
@@ -52,7 +51,7 @@ export default {
   },
   methods: {
     ...mapMutations(['resetState']),
-    ...mapActions(['getLessonList']),
+    ...mapActions(['getLessonList','getColumnDetailCache']),
     scrollBottom() {
       console.log('scrollBottom ==', this.courseId)
       this.getLessonList({ refresh: false, courseId: this.courseId })
