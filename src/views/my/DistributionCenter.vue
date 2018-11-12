@@ -10,14 +10,14 @@
             <hr>
             <a class="distribute-header-link" @click="toGradeRule">
                 <span>升级到中级分销员，推广佣金比高达20%</span>
-                <i class="arrow-white"></i>
+                <i class="icon arrow-white"></i>
             </a>
         </header>
 
         <!--收入布局-->
         <main class="distribute-income" @click="toProfitDetail">
             <h4 class="distribute-income-title">累计收益 (元)</h4>
-            <h3 class="distribute-income-coin">9360.00<i></i></h3>
+            <h3 class="distribute-income-coin">9360.00<i class="icon"></i></h3>
             <dd class="distribute-income-desc">包含待结算1200.00元</dd>
         </main>
 
@@ -30,7 +30,6 @@
 
 <script>
     import { createNamespacedHelpers } from 'vuex';
-
     const { mapState, mapActions } = createNamespacedHelpers('distributionData');
     export default {
         data() {
@@ -55,14 +54,14 @@
         flex-direction: column;
         height: 100vh;
         /**通用样式 i向右箭头  hr 水平线*/
-        i {
+        .icon {
             position: absolute;
             right: 30px;
             width: 14px;
             height: 24px;
             background: url("../../assets/images/arrow_right.png") center/100% no-repeat;
         }
-        i.arrow-white {
+        .icon.arrow-white {
             background: url("../../assets/images/ic_arrow_white.png") center/100% no-repeat;
         }
         hr {
@@ -136,12 +135,18 @@
             padding-bottom: 64px;
             background-color: #ffffff;
             &-coin {
+                position: relative;
                 margin: 24px 0;
                 font-size: 60px;
                 color: #ffa32f;
                 line-height: 60px;
-                display: inline-flex;
-                align-items: center;
+            }
+            dd{
+                margin-bottom: 0px;
+            }
+            &-coin i{
+                top: 50%;
+                margin-top: -12px;
             }
         }
         /**底部*/

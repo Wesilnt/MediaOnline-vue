@@ -127,7 +127,7 @@
             &-label {
                 min-width: 200px;
                 position: absolute;
-                left: -100px;
+                left: -94px;
                 top: 24px;
                 color: #bb9c6d;
             }
@@ -199,7 +199,7 @@
                 color: #ffffff;
                 width: 180px;
                 line-height: 50px;
-                font-size: 30px;
+                font-size: 28px;
                 text-align: center;
             }
             &-detail{

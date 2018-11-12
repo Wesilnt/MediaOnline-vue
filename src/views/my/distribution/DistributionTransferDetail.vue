@@ -31,10 +31,10 @@
     const { mapState, mapActions } = createNamespacedHelpers('distributionData')
     export default {
         data() {
-            return {};
+            return {}
         },
         created() {
-            this.getTransferDetail({});
+            this.getTransferDetail();
         },
         filters: {
             formatDuring: date => {
@@ -48,7 +48,7 @@
         methods: {
             ...mapActions(['getTransferDetail', 'onDestroy']),
             onLoadMore() {
-                if(!this.isLoading && !finished){
+                if(!this.isLoading && !this.finished){
                     //TODO 分页加载
                 }
             }

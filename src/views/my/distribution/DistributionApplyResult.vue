@@ -7,7 +7,7 @@
         <!--布局-->
         <article class="apply-success-introduce">
             <p v-if="isDistributor">您已成功申请成为分销员</p>
-            <p v-else>您目前的推广金额为<em>{{extensionMoney.toFixed(2)}}</em>元，还差<em>{{remainMoney.toFixed(2)}}</em>元就可以成为分销员啦！
+            <p v-else>您目前的推广金额为<em>{{noSettlement.toFixed(2)}}</em>元，还差<em>{{(200-noSettlement).toFixed(2)}}</em>元就可以成为分销员啦！
             </p>
         </article>
 
@@ -21,21 +21,19 @@
 
 <script>
     import { createNamespacedHelpers } from 'vuex';
-
-    const { mapState, mapActions } = createNamespacedHelpers('distributionData');
+    const { mapState, mapActions,mapGetters } = createNamespacedHelpers('distributionData')
     export default {
         data() {
             return {
                 successIcon: require('../../../assets/images/distributor_success.png'),
                 failureIcon: require('../../../assets/images/distributor_failure.png'),
-                extensionMoney: 0,
-                remainMoney: 200
             };
         },
-        computed: { ...mapState(['isDistributor']) },
+        computed: { ...mapState(['isDistributor','distributorInfo']),
+                    ...mapGetters(['noSettlement'])},
         methods: {
             seeDetail() {
-                this.$router.push({ name: 'distributionCenter' });
+                if(isDistributor)this.$router.replace({ name: 'distributionCenter' })
             }
         }
     };

@@ -47,7 +47,7 @@
             return {};
         },
         created() {
-            this.getProfitList();
+            // this.getProfitList(true);
         },
         filters: {
             formatDuring: date => {
@@ -66,9 +66,8 @@
                 this.$router.push({ name: 'DistributionTransferDetail' });
             },
             onLoadMore() {
-                if (!this.isLoading && !finished) {
-                    //TODO 分页加载
-                }
+                if (this.isLoading || this.finished)  return
+                setTimeout(()=>this.getProfitList(false),300)
             }
         },
         beforeDestroy() {
@@ -92,7 +91,7 @@
             padding: 56px 0;
             line-height: 28px;
             h3 {
-                display: inline-flex;
+                position: relative;
                 align-items: center;
                 margin: 24px 0;
                 font-size: 60px;
@@ -103,6 +102,8 @@
                 right: 30px;
                 width: 14px;
                 height: 24px;
+                top: 50%;
+                margin-top: -12px;
                 background: url("../../../assets/images/ic_arrow_white.png") center/100% no-repeat;
             }
         }

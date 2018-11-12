@@ -3,7 +3,7 @@
         <!--头部-->
         <header class="wallet-header">
             <section class="wallet-header-section">
-                <span class="wallet-header-money">1500.00<small>书币</small></span>
+                <span class="wallet-header-money">{{coinNumber.toFixed(2)}}<small>书币</small></span>
                 <span class="wallet-header-tip">书币在购买时可直接抵扣现金哦</span>
             </section>
             <div class="wallet-header-rules" @click="toRulesDetail">规则明细</div>
@@ -15,49 +15,66 @@
         <ul class="wallet-list">
             <li class="wallet-item" v-for="item of list">
                 <div class="wallet-item-section">
-                    <span class="wallet-item-title">{{item.title}}</span>
+                    <span class="wallet-item-title">{{item.channel}}</span>
                     <span class="wallet-item-time">{{item.createTime}}</span>
                 </div>
-                <span class="wallet-item-number">{{`${item.isIncome?'+':'-'}${item.coin}`}}</span>
+                <span class="wallet-item-number">{{`${item.coinNum.toFixed(2)}`}}</span>
             </li>
+            <div class="wallet-list-more" @click="onLoadMore">
+                <p v-show="isLoading">加载中</p>
+                <p v-show="!isLoading">{{finished?'无更多收益明细':'查看更多'}}</p>
+            </div>
         </ul>
     </div>
 </template>
 
 <script>
+    import { createNamespacedHelpers } from 'vuex';
+    const { mapState, mapActions } = createNamespacedHelpers('walletData');
     export default {
         data() {
             return {
                 list: [{
                     id:1,
-                    title:'完善资料',
+                    channel:'完善资料',
                     createTime:'2018-08-08 18:38:50',
                     isIncome:1,
-                    coin:'20.00'
+                    coinNum:20
                 }, {
                     id:2,
-                    title:'伍老师说历史',
+                    channel:'伍老师说历史',
                     createTime:'2018-08-08 15:20:50',
                     isIncome:0,
-                    coin:'10.00'
+                    coinNum:10
                 }, {
                     id:3,
-                    title:'完成自测题',
+                    channel:'完成自测题',
                     createTime:'2018-12-08 09:38:20',
                     isIncome:1,
-                    coin:'10.00'
+                    coinNum:10
                 }, {
                     id:4,
-                    title:'好友购买',
+                    channel:'好友购买',
                     createTime:'2018-08-08 12:23:50',
                     isIncome:1,
-                    coin:'199.00'
+                    coinNum:199
                 }]
             };
         },
+        computed:{...mapState(['coinNumber','coinRecords', 'isLoading', 'finished'])},
+        created(){
+         this.getCoinNumber()
+        },
         methods:{
+            ...mapActions(['getCoinNumber','getCoinRecord']),
             toRulesDetail(){
                 this.$router.push({name:"BookCoinRules"})
+            },
+            onLoadMore() {
+                if (!this.isLoading && !this.finished) {
+                    //TODO 分页加载
+                    this.getCoinRecord()
+                }
             }
         }
     };
@@ -113,6 +130,11 @@
     .wallet-list {
         display: flex;
         flex-direction: column;
+        &-more {
+            margin-top: 40px;
+            text-align: center;
+            color: #737373;
+        }
     }
 
     .wallet-item {

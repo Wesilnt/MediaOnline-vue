@@ -12,34 +12,49 @@
         </article>
 
         <!--底部描述-->
-        <footer class="apply-footer" @click="becomeDistributor">
+        <footer class="apply-footer" @click="checkMobile">
             申请成为分销员
         </footer>
 
         <!--手机号验证-->
-        <PhoneDialog v-model='show' @success="applySuccess"></PhoneDialog>
+        <PhoneDialog v-model='show' @success="becomeDistributor"></PhoneDialog>
     </div>
 </template>
 
 <script>
+    import { createNamespacedHelpers } from 'vuex';
+    const { mapState, mapActions } = createNamespacedHelpers('distributionData');
     import PhoneDialog from '../../components/DialogPhone';
+
     export default {
+        components: { PhoneDialog },
         data() {
             return {
                 show: false
             };
         },
-        components: { PhoneDialog },
+        computed: { ...mapState(['isBindMobile', 'isDistributor']) },
+        created() {
+            // this.getDistributorInfo().then(() => {
+            //     if (!this.isDistributor) return;
+            //     this.$router.push({ name: 'distributionCenter' });
+            // });
+        },
         methods: {
-            becomeDistributor() {
-                this.show = true;
+            ...mapActions(['getDistributorInfo', 'applyDistributor']),
+            //手机号校验, 已校验直接申请分销员
+            checkMobile() {
+                this.show = !this.isBindMobile
+                if (!this.isBindMobile) return
+                this.becomeDistributor()
             },
-            applySuccess() {
-                // this.$router.push({ name: 'distributionCenter' });
-                this.$router.push({ name: 'DistributionApplyResult' });
+            //申请成为分销员
+            becomeDistributor() {
+                //preUserId分会长ID
+                this.applyDistributor({ preUserId: 0 }).then(() => this.$router.push({ name: 'DistributionApplyResult' }))
             }
         }
-    };
+    }
 </script>
 
 <style lang="less" scoped>
