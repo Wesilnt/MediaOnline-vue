@@ -11,7 +11,7 @@
             </fieldset>
             <fieldset>
                 <label class="form-label"> 验证码:</label>
-                <input class="form-input" v-model="code" type="text"/><br>
+                <input class="form-input" v-model="code" type="text" placeholder="请输入验证码"/><br>
             </fieldset>
             <input class="form-submit" :class="{'code-input':code.length>0}" type="submit"
                    @click.prevent="onPhoneConfirm" value="确认"/>
@@ -104,7 +104,6 @@
         padding: 0;
         background-color: rgba(0, 0, 0, 0.5);
     }
-
     .form {
         align-self: flex-end;
         padding: 8px 80px 0;
