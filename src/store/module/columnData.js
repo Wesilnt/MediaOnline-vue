@@ -39,6 +39,7 @@ const columnData = {
     }
   },
   getters: {
+    userAccessStatus:(state,getters, rootState) => rootState.columnDetail.userAccessStatus,
     getBookIntroduce: function(state) {
       return {
         name: state.columnDetail.name, //单集名称
@@ -180,6 +181,9 @@ const columnData = {
         profilePic,
         courseName
       })
+    },
+    async getColumnDetailCache({dispatch }, { courseId, columnType }){
+        return await dispatch('getColumnDetail',{ courseId, columnType ,useCache:true},{ root: true })
     },
     async getCommentList({ commit }, params) {
       const response = await getCommentList(params)

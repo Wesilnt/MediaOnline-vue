@@ -245,7 +245,7 @@ export default {
         this.$router.push(`/videoInnerList/${this.columnType}/${this.courseId}`)
       } else if (this.columnType === 'onlineVision') {
         this.$router.push({
-          path: `/home/visionDetail/visionCourseList/${this.courseId}`
+          path: `/home/visionDetail/visionCourseList/${this.columnType}/${this.courseId}`
         })
       }
     },

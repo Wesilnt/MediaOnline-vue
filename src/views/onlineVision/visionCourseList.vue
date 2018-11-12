@@ -33,6 +33,7 @@ export default {
     return {
       courseId:this.$route.params.courseId,
       columnType:this.$route.params.columnType,
+      userAccessStatus:0,
       selectCate: 0,
       spread: true,
       ascDown: require('../../assets/images/vision_list_down.png'),
@@ -43,13 +44,16 @@ export default {
   },
   // props: ['courseId'],
   computed: { 
-    ...mapState(['lessonList','courseName','userAccessStatus'])
+    ...mapState(['lessonList','courseName'])
   },
   components: {
     SingleSetList
   },
+    created(){
+      this.getColumnDetailCache({courseId:this.courseId}).then(res=>this.userAccessStatus = res.userAccessStatus)
+    },
   methods: {
-    ...mapActions(['reverse', 'getCategoryList']),
+    ...mapActions(['reverse', 'getCategoryList','getColumnDetailCache']),
     spreat(id) {
       if (id === this.selectCate) {
         this.spread = !this.spread
