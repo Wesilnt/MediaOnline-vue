@@ -19,7 +19,8 @@ export default {
     finished:false,
     pageLoading:false,
     clickLike:false,
-    columnId:-1
+    isPurchase:false,  //专栏是否购买
+    columnId:-1,
   },
   mutations: {
     bindAudioDetail(state, audio) {
@@ -45,13 +46,16 @@ export default {
       state.columnId = columnId 
       state.singleSetList = []
     },
-    bindDraftContnet(state, res) {
+    bindDraftContent(state, res) {
       state.draftContent = res
     },
-    clearData(state, res) { 
+    clearData(state) {
       state.pageLoading = false
       state.columnId = -1 
       state.singleSetList = []
+    },
+    setPurchaseStatus(state,userAccesssStatus){
+      this.isPurchase = 1001 == userAccesssStatus || 1003 == userAccesssStatus || 1008 == userAccesssStatus
     },
     toggleLoading(state,isLoading){
       state.pageLoading = isLoading
@@ -120,7 +124,7 @@ export default {
     async getAudioDesc({commit}, lessonId) {
       let params = { lessonId: lessonId }
       const res = await getAudioDesc(params)
-      commit('bindDraftContnet', res)
+      commit('bindDraftContent', res)
     },
     //音频单集列表
     async getSingleSetList({ commit ,state}, {courseId,currentPage}) {
@@ -144,9 +148,9 @@ export default {
     //设置分享信息
     async setShareInfo({commit,dispatch,rootState},{courseId,columnType}){
       if(courseId <= 0) return
-      // commit('bindColumnId',courseId)
       const course = await dispatch('getColumnDetail',{courseId,columnType,useCache:true},{root:true})
       if(!course) return
+      commit('setPurchaseStatus',course.userAccessStatus) //绑定单集对应专栏是否购买
       let shareData = {
         // link:  `${rootState.url}/#/${courseType[columnType]}${courseId}`,
         link:  `${rootState.url}/#/detail/${columnType}/${courseId}`,
