@@ -118,7 +118,8 @@ export default {
       singleSetList: state => state.singleSetList,
       pageLoading: state => state.pageLoading,
       finished: state => state.finished,
-      columnId: state => state.columnId
+      columnId: state => state.columnId,
+      isPurchase:state => state.isPurchase
     }),
     ...mapGetters([
       'isLoading',
@@ -236,21 +237,6 @@ export default {
     onPlayPrv() {
       if (!this.audio) return
       let preId = this.audio.preLessonId
-      // let useraccessstatus =this.columnDetail ? this.columnDetail.userAccessStatus : 1001
-      // if(this.singleSetList
-      //   && 1001 != useraccessstatus
-      //   && 1003 != useraccessstatus
-      //   && 1008 != useraccessstatus) {
-      //   let listenable  = true
-      //   this.singleSetList.some(item=>{
-      //       if(item.id == preId && !item.isFree){
-      //         listenable = false
-      //         this.$toast.fail('这是第一条')
-      //         return
-      //       }
-      //     })
-      //     if(!listenable)return
-      // }
       if (preId && -1 != preId) {
         this.pre({ lessonId: preId })
       } else {
@@ -261,21 +247,6 @@ export default {
     onPlayNext() {
       if (!this.audio) return
       let nextId = this.audio.nextLessonId
-      // let useraccessstatus =this.columnDetail ? this.columnDetail.userAccessStatus : 1001
-      // if( this.singleSetList
-      //   && 1001 != useraccessstatus
-      //   && 1003 != useraccessstatus
-      //   && 1008 != useraccessstatus) {
-      //     let listenable  = true
-      //     this.singleSetList.some(item=>{
-      //       if(item.id == nextId && !item.isFree){
-      //         listenable = false
-      //         this.$toast.fail('已经是最后一条')
-      //         return
-      //       }
-      //     })
-      //   if(!listenable)return
-      // }
       if (nextId && -1 != nextId) {
         this.next({ lessonId: nextId })
       } else {
@@ -296,21 +267,16 @@ export default {
     },
     //列表Item点击事件
     onItemClick(audio) {
-      this.popupVisible = false
-      this.$router.replace({
-        name: 'AudioPlay',
-        params: {
-          courseId: this.courseId,
-          columnType: this.columnType,
-          lessonId: audio.id
-        }
-      })
-      // this.$router.replace({
-      //   name: 'AudioPlay',
-      //   params: { id: audio.id },
-      //   query: { courseId: this.courseId,columnType: this.columnType }
-      // })
-      this.playAudio({ lessonId: audio.id, columnType: this.columnType })
+        this.popupVisible = false
+        let courseId = this.courseId
+        let columnType = this.columnType
+        let lessonId = audio.id 
+         if(this.isPurchase || audio.isFree){
+            this.$router.replace({ name: 'AudioPlay', params: { courseId, columnType, lessonId }})
+            this.playAudio({ lessonId: audio.id, columnType: this.columnType })
+         }else{
+             this.$toast('您还未购买该专栏！')
+         }
     }
   },
   /**

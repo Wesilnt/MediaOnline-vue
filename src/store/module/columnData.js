@@ -182,8 +182,9 @@ const columnData = {
         courseName
       })
     },
-    async getColumnDetailCache({dispatch }, { courseId, columnType }){
-        return await dispatch('getColumnDetail',{ courseId, columnType ,useCache:true},{ root: true })
+    async isPurchase({dispatch }, { courseId, columnType }){
+        const res = await dispatch('getColumnDetail',{ courseId, columnType ,useCache:true},{ root: true })
+        return 1001 == res.userAccessStatus ||  1003 == this.userAccessStatus || 1008 == this.userAccessStatus
     },
     async getCommentList({ commit }, params) {
       const response = await getCommentList(params)
