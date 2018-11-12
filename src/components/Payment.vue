@@ -604,6 +604,7 @@ export default {
           <Share
             show={sharePageShow}
             courseId={courseId}
+            postType='collage'
             close={this.toggleSharePage}
             columnType={columnType}
           />
