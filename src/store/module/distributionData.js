@@ -5,7 +5,6 @@ export default {
     state: {
         distributorInfo:{},                                         //分销员信息
         isBindMobile: false,                                       //用户是否绑定手机号
-        isDistributor: false,                                      //是否是分销员
         distributorLevel: 2,                                        //分销员等级
         profitList: [],                                             //收益列表
         transferList: [],                                           //转账列表
@@ -40,16 +39,16 @@ export default {
     },
     actions: {
         /**获取分销员信息*/
-        async getDistributorInfo({ state, commit,dispatch }, params) {
+        async getDistributorInfo({ state, commit,dispatch }) {
             const user =  await dispatch('getUserInfo',{forceUpdate:false},{root:true})
             await commit('setBindMobile',{isBindMobile: user && user.mobileNo.length>0})
-            const res = await  getDistributorInfo(params)
-            let isDistributor = res && res.level > 0
-            commit('bindDistributorInfo',{distributorInfo:res,isDistributor})
+            const res = await  getDistributorInfo()
+            if(!res) return
+            commit('bindDistributorInfo',{distributorInfo:res})
         },
         /**申请成为分销员*/
         async applyDistributor({ state, commit,dispatch }, params) {
-            const res = await applyDistributor(params)
+            const res = await dispatch('myData/applyDistributor',params,{root:true})
             if(!res) return
             await dispatch('getDistributorInfo')  //刷新分销员信息
             return res
@@ -185,7 +184,8 @@ export default {
         }
     },
     getters: {
-        noSettlement:state=>state.distributionInfo.noSettlement,
-        totalIncome:state=>state.distributionInfo.totalIncome
+        noSettlement:state=>state.distributionInfo.noSettlement,                                                        //
+        totalIncome:state=>state.distributionInfo.totalIncome,                                                          //总收入
+        isDistributor:(state,getters,rootState)=>rootState.myData.isDistributor                                         //是否是分销员
     }
 }

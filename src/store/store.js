@@ -12,7 +12,6 @@ import myReplyData from './module/myReplyData'
 import myLikeData from './module/myLikeData'
 import myPlayRecordData from './module/myPlayRecordData'
 import myPurchaseData from './module/myPurchaseData'
-import distributionData from './module/distributionData'
 import walletData from './module/walletData'
 import userInfoData from './module/userInfoData'
 import commentData from './module/commentData'
@@ -155,6 +154,8 @@ export default new Vuex.Store({
       }
       dispatch('getUserInfo').then(user => {
         const nickname = user.nickName
+          // user.id
+        link = `${link}${-1!=link.indexOf('?')?'?':'&'}userId=${user.id}`
         const shareOptions = {
           title: title || `${nickname}邀请您一起上课啦！`, // 分享标题
           desc, // 分享描述
@@ -249,7 +250,6 @@ export default new Vuex.Store({
     shareData,
     praiseData,
     mobileData,
-    distributionData,
-      walletData
+    walletData
   }
 })

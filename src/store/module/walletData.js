@@ -24,10 +24,10 @@ export default {
     },
     actions: {
         /**获取用户书币*/
-        async getCoinNumber({ commit, dispatch }, params) {
+        async getCoinNumber({ commit, dispatch }) {
             dispatch('getCoinRecord', true)
             const res = await getCoinNumber()
-            if (!res) return
+            if (undefined == res) return
             console.log('我的书币:', res)
             commit('bindUserCoinNumber', res)
         },
@@ -41,8 +41,10 @@ export default {
             const res = await getCoinRecord(params)
             await commit('toggleLoading', false)
             if (!res) return
-            console.log("书币列表数据：",res)
-            commit('bindCoinRecord', {coinRecords:res, currentPage})
+            console.log("书币列表数据：",res.result)
+            const data = refresh ?res.result : state.coinRecords.concat(res.result)
+            let finished = data.length >= res.totalCount
+            commit('bindCoinRecord', {coinRecords: data, currentPage,finished})
         }
 
     },

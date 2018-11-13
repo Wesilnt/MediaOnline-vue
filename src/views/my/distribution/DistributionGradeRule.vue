@@ -56,7 +56,7 @@
     import { createNamespacedHelpers } from 'vuex';
     import { distributionGrades } from  '../../../utils/config'
 
-    const { mapState, mapActions } = createNamespacedHelpers('distributionData');
+    const { mapState, mapActions } = createNamespacedHelpers('myData/distributionData');
     export default {
         data() {
             return {

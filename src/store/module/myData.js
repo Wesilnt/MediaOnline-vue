@@ -1,13 +1,15 @@
 /** @format */
 
-import { getNewMessageCount } from '../../api/myApi'
+import { getNewMessageCount,isDistributor,applyDistributor } from '../../api/myApi'
 import store from './../store'
+import distributionData from '../module/distributionData'
 const myData = {
   namespaced: true,
   state: {
     replyMessageCount: 0,
     userInfo: [],
-    loading: false
+    loading: false,
+    isDistributor:false
   },
   mutations: {
     save(state, payload) {
@@ -22,8 +24,19 @@ const myData = {
     }
   },
   actions: {
+    /**是否是分销员*/
+    async isDistributor({ commit }) {
+      const response = await isDistributor()
+      await commit('save', {isDistributor: response})
+    },
+    /**申请成为分销员*/
+    async applyDistributor({ state, commit,dispatch }, params) {
+          const res = await applyDistributor(params)
+          await commit('save', {isDistributor: res})
+          return res
+      },
     async queryNewMessageCount({ dispatch, commit }) {
-      let response = await getNewMessageCount({ busiTypes: 3101 })
+      const response = await getNewMessageCount({ busiTypes: 3101 })
       console.log('replyMessageCount===', response)
       await commit('save', {
         replyMessageCount: response
@@ -34,6 +47,9 @@ const myData = {
       commit('saveUserInfo', response)
       return response
     }
+  },
+  module:{
+    distributionData
   }
 }
 export default myData

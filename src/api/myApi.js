@@ -69,3 +69,11 @@ export async function postUserInfo(params) {
 export function getNewMessageCount(params) {
   return request(`/user/getUserMsgCountByBusiTypes?${stringify(params)}`)
 }
+//是否是分销员
+export function isDistributor(params) {
+  return request(`/distribution/isDistributor`)
+}
+//申请为分销员
+export async function applyDistributor(params) {
+    return request.post(`/distribution/applyForDistribution`, params)
+}

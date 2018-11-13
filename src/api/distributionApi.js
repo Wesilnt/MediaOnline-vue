@@ -2,8 +2,8 @@ import { stringify } from 'qs'
 import request from '../utils/request'
 
 
-export async function getDistributorInfo(params) {
-    return request(`/distribution/distributorDetail?${stringify(params)}`)
+export async function getDistributorInfo() {
+    return request(`/distribution/distributorDetail`)
 }
 
 export async function applyDistributor(params) {

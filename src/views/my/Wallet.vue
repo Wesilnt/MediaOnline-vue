@@ -13,7 +13,7 @@
         <hr/>
         <!--书币列表-->
         <ul class="wallet-list">
-            <li class="wallet-item" v-for="item of list">
+            <li class="wallet-item" v-for="item of coinRecords">
                 <div class="wallet-item-section">
                     <span class="wallet-item-title">{{item.channel}}</span>
                     <span class="wallet-item-time">{{item.createTime}}</span>
@@ -72,7 +72,6 @@
             },
             onLoadMore() {
                 if (!this.isLoading && !this.finished) {
-                    //TODO 分页加载
                     this.getCoinRecord()
                 }
             }
