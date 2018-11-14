@@ -144,9 +144,17 @@ export default {
         paymentCollectLikeId,
         userAccessStatus,
         groupBuystatus,
+          userPaymentStatus,
         groupBuyFull
       } = this
-
+      console.log(
+        viewer,
+        paymentGroupBuyId,
+        paymentCollectLikeId,
+        userAccessStatus,
+        groupBuystatus,
+        groupBuyFull
+      )
       let paymentStatus = null
       if (paymentCollectLikeId) {
         // 他人集赞不进入此页面 可简单判断
@@ -352,7 +360,7 @@ export default {
     handleOriginBuy() {
       return this.$router.push({
         path: '/payment',
-          query: {
+        query: {
           payType: 'origin',
           courseId: this.courseId
         }
@@ -361,7 +369,7 @@ export default {
     handleJoinGroupBuy() {
       return this.$router.push({
         path: '/payment',
-          query: {
+        query: {
           payType: 'groupBuy',
           courseId: this.courseId,
           groupBuyId: this.paymentGroupBuyId
@@ -371,7 +379,7 @@ export default {
     handleStartGroupBuy() {
       return this.$router.push({
         path: '/payment',
-          query: {
+        query: {
           payType: 'groupBuy',
           courseId: this.courseId
         }

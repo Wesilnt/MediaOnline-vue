@@ -130,7 +130,7 @@ export default {
         }
       )
       const { isPartner, userPaymentStatus } = checkIsPartner
-      viewer = isPartner
+        viewer = isPartner
         ? identityType.PARTNER
         : groupBuyFull
           ? identityType.PASSERFULL
