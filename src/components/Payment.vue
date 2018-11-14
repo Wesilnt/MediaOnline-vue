@@ -115,17 +115,13 @@ export default {
             groupBuyId: this.groupBuyIdFromShare
           })
         } else {
-          await this.handleStartGroupBuy({ courseId: this.courseId })
+          await this.startGroupBuy({ courseId: this.courseId })
         }
       }
       if (this.payType === 'origin') {
         await this.unlockCourse({ courseId: this.courseId })
       }
       this.payDisabled = false
-    },
-    async handleStartGroupBuy() {
-      await this.handlePayment('startGroupBuy')
-      // await this.returnToSelfColumn()
     },
     toggleDiscount() {
       this.checked = !this.checked
