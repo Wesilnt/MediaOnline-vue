@@ -153,14 +153,14 @@
         box-shadow: 0 0 12px #e0e0e0;
         .image-icon-container {
             position: absolute;
-            left: 6px;/*no*/
+            left: 7px;
+            top: 7px;
             display: flex;
             justify-content: center;
             align-items: center;
             width: 100px;
             height: 100px;
             border-radius: 50%;
-            top: 6px;
             background-size: 100%;
             background-repeat: no-repeat;
         }
