@@ -11,7 +11,7 @@ const ErrorHandler = response => {
   return errorText === '系统异常'
     ? Dialog.alert({
         title: '网络异常',
-        message: '网络环境异常，请重新加载页面'
+        message: '加载错误，返回主页'
       }).then(() => {
         window.location.href = originUrl
       })
