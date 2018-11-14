@@ -119,7 +119,7 @@ export default {
     this.shareUrl =  `${this.url}/#/detail/${this.shareType}/${this.columnDetail.id}`
     //1. 有专栏详情, 拼团中
     if(this.postType === 'collage'){
-       this.shareUrl =  `${this.shareUrl}?groupBuyId=${this.columnDetail.groupBuyId}`
+       this.shareUrl =  `${this.shareUrl}?groupBuyId=${this.columnDetail.groupBuyId}&startUserName=${this.startUserName}&startAvatar=${this.startAvatar}`
      } 
      //2. 有专栏详情, 集赞中
      if(this.postType === 'praise'){

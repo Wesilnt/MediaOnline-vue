@@ -179,6 +179,7 @@ const columnData = {
       //绑定专栏详情
       commit('saveStatus', {
         columnDetail,
+        commentsTotalCount:columnDetail.commentCount,
         buyCount,
         userAccessStatus,
         collectLikeId,
