@@ -132,7 +132,7 @@ export default {
     }
   },
   created() {
-    this.isDistributor()
+    // this.isDistributor()
     this.queryNewMessageCount()
     this.getMyUserInfo(true).then(() => {
       this.showEdit =
