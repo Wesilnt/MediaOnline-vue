@@ -11,7 +11,7 @@
                 class="circle_container"
                 v-model="progress"
                 color="#FFCD7D"
-                size="54px"
+                size="15vw"
                 layer-color="#fff"
                 :speed="1"
                 :clockwise="true"
@@ -149,34 +149,26 @@
         align-items: center;
         background-color: white;
         border-radius: 50%;
-        border: 24px solid #ffffff;
+        border: 12px solid #ffffff;
         box-shadow: 0 0 12px #e0e0e0;
-        box-sizing: border-box;
-        .circle_container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: absolute;
-            padding: 8px;
-        }
         .image-icon-container {
+            position: absolute;
+            left: 6px;/*no*/
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 105%;
-            height: 0px;
-            padding-bottom: 100%;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
+            top: 6px;
             background-size: 100%;
             background-repeat: no-repeat;
         }
         .icon-mask {
-            margin-top: 100%;
             border-radius: 50%;
             background-color: rgba(43, 43, 43, 0.3);
             width: 100%;
-            height: 0px;
-            padding-bottom: 100%;
+            height: 100%;
         }
         .play-icon {
             position: absolute;
