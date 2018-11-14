@@ -112,7 +112,7 @@ export default {
         if (this.groupBuyId) {
           await this.joinGroupBuy({
             courseId: this.courseId,
-            groupBuyId: this.groupBuyIdFromShare
+            groupBuyId: this.groupBuyId
           })
         } else {
           await this.startGroupBuy({ courseId: this.courseId })
