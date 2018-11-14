@@ -25,19 +25,18 @@ const myData = {
   },
   actions: {
     /**是否是分销员*/
-    async isDistributor({ commit }) {
+    async checkDistributor({ commit }) {
       const response = await isDistributor()
-      await commit('save', {isDistributor: response})
+      await commit('save', {isDistributor: response.data})
     },
     /**申请成为分销员*/
     async applyDistributor({ state, commit,dispatch }, params) {
           const res = await applyDistributor(params)
           await commit('save', {isDistributor: res})
           return res
-      },
+    },
     async queryNewMessageCount({ dispatch, commit }) {
       const response = await getNewMessageCount({ busiTypes: 3101 })
-      console.log('replyMessageCount===', response)
       await commit('save', {
         replyMessageCount: response
       })
@@ -48,7 +47,7 @@ const myData = {
       return response
     }
   },
-  module:{
+  modules:{
     distributionData
   }
 }

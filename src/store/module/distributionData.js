@@ -1,10 +1,16 @@
-import {getDistributorInfo,applyDistributor,getDistributorIncomeList,getTransferRecords} from '../../api/distributionApi';
+import {
+    getDistributorInfo,
+    applyDistributor,
+    getDistributorIncomeList,
+    getTransferRecords
+} from '../../api/distributionApi'
 
 export default {
     namespaced: true,
     state: {
-        distributorInfo:{},                                         //分销员信息
-        isBindMobile: false,                                       //用户是否绑定手机号
+        isBindMobile: false,                                       //是否绑定手机号
+        distributorInfo: {},                                        //分销员信息
+        extendAmount: 0,                                            //推广金额
         distributorLevel: 2,                                        //分销员等级
         profitList: [],                                             //收益列表
         transferList: [],                                           //转账列表
@@ -14,22 +20,22 @@ export default {
         finished: false                                            //分页加载完成
     },
     mutations: {
-        setBindMobile(state,data){
-          Object.assign(state,data)
+        setBindMobile(state, data) {
+            Object.assign(state, data);
         },
-        bindDistributorInfo(state, data){
-            Object.assign(state,data)
+        bindDistributorInfo(state, data) {
+            Object.assign(state, data);
         },
-        bindProfitList(state, {res,finished}) {
-            state.finished = finished
+        bindProfitList(state, { res, finished }) {
+            state.finished = finished;
             state.profitList = res;
         },
-        bindTransferDetail(state, {res,finished}) {
-            state.finished = finished
+        bindTransferDetail(state, { res, finished }) {
+            state.finished = finished;
             state.transferList = res;
         },
-        toggleLoading(state, loading){
-            state.isLoading = loading
+        toggleLoading(state, loading) {
+            state.isLoading = loading;
         },
         resetData(state) {
             state.isLoading = false;
@@ -39,18 +45,17 @@ export default {
     },
     actions: {
         /**获取分销员信息*/
-        async getDistributorInfo({ state, commit,dispatch }) {
-            const user =  await dispatch('getUserInfo',{forceUpdate:false},{root:true})
-            await commit('setBindMobile',{isBindMobile: user && user.mobileNo.length>0})
-            const res = await  getDistributorInfo()
-            if(!res) return
-            commit('bindDistributorInfo',{distributorInfo:res})
+        async getDistributorInfo({ state, commit }) {
+            const res = await getDistributorInfo();
+            if (!res) return;
+            commit('bindDistributorInfo', { distributorInfo: res });
         },
         /**申请成为分销员*/
-        async applyDistributor({ state, commit,dispatch }, params) {
-            const res = await dispatch('myData/applyDistributor',params,{root:true})
-            if(!res) return
-            await dispatch('getDistributorInfo')  //刷新分销员信息
+        async applyDistributor({ state, commit, dispatch }, params) {
+            const res = await dispatch('myData/applyDistributor', params, { root: true })
+            if (!res) return
+            await commit('bindDistributorInfo',{distributorInfo:res,extendAmount:res.extendAmount})
+            await dispatch('myData/checkDistributor', null, { root: true })
             return res
         },
         async getProfitList({ state, commit }, refresh) {
@@ -64,7 +69,7 @@ export default {
             // let finished = data.length >= res.totalCount
             // commit('bindProfitList', {profitList : data ,finished});
 
-            await commit('toggleLoading',true)
+            await commit('toggleLoading', true)
             const res = [
                 {
                     id: 1,
@@ -114,10 +119,10 @@ export default {
                     purchase: 1200,
                     userAvatar: ''
                 }
-            ];
+            ]
             let finished = res.length < state.pageSize
-            await commit('bindProfitList', {res,finished});
-            commit('toggleLoading',false)
+            await commit('bindProfitList', { res, finished })
+            commit('toggleLoading', false)
         },
         async getTransferDetail({ state, commit }, refresh) {
             // await commit('toggleLoading',true)
@@ -130,7 +135,7 @@ export default {
             // let finished = data.length >= res.totalCount
             // commit('bindTransferDetail', {transferList : data ,finished})
 
-            await commit('toggleLoading',true)
+            await commit('toggleLoading', true)
             const res = [
                 {
                     id: 1,
@@ -176,16 +181,20 @@ export default {
                 }
             ]
             let finished = res.length < state.pageSize
-            await commit('bindTransferDetail', {res,finished})
-            commit('toggleLoading',false)
+            await commit('bindTransferDetail', { res, finished })
+            commit('toggleLoading', false)
+        },
+        async getUserInfo({commit,dispatch}) {
+            const userInfo = await dispatch('getUserInfo', false,{root:true})
+            commit('setBindMobile', { isBindMobile: userInfo && userInfo.mobileNo.length > 0 })
         },
         onDestroy({ commit }) {
             commit('resetData')
         }
     },
     getters: {
-        noSettlement:state=>state.distributionInfo.noSettlement,                                                        //
-        totalIncome:state=>state.distributionInfo.totalIncome,                                                          //总收入
-        isDistributor:(state,getters,rootState)=>rootState.myData.isDistributor                                         //是否是分销员
+        // noSettlement:state=>state.distributionInfo.noSettlement,                                                     //
+        // totalIncome:state=>state.distributionInfo.totalIncome,                                                       //总收入
+        isDistributor: (state, getters, rootState) => rootState.myData.isDistributor                                    //是否是分销员
     }
-}
+};

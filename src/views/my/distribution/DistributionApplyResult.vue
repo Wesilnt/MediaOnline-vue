@@ -7,12 +7,12 @@
         <!--布局-->
         <article class="apply-success-introduce">
             <p v-if="isDistributor">您已成功申请成为分销员</p>
-            <p v-else>您目前的推广金额为<em>{{noSettlement.toFixed(2)}}</em>元，还差<em>{{(200-noSettlement).toFixed(2)}}</em>元就可以成为分销员啦！
+            <p v-else>您目前的推广金额为<em>{{ extendAmount.toFixed(2)}}</em>元，还差<em>{{(200-extendAmount).toFixed(2)}}</em>元就可以成为分销员啦！
             </p>
         </article>
 
         <!--底部描述-->
-        <footer class="apply-success-footer" @click="seeDetail">
+        <footer class="apply-success-footer" @click="nextOperate">
             {{isDistributor?'查看详情':'去分享'}}
         </footer>
 
@@ -21,7 +21,7 @@
 
 <script>
     import { createNamespacedHelpers } from 'vuex';
-    const { mapState, mapActions,mapGetters } = createNamespacedHelpers('myData/distributionData')
+    const { mapState ,mapGetters} = createNamespacedHelpers('myData/distributionData')
     export default {
         data() {
             return {
@@ -29,11 +29,13 @@
                 failureIcon: require('../../../assets/images/distributor_failure.png'),
             };
         },
-        computed: { ...mapState(['isDistributor','distributorInfo']),
-                    ...mapGetters(['noSettlement'])},
+        computed: { ...mapState(['distributorInfo','extendAmount']),...mapGetters(['isDistributor'])},
+        created(){
+          if(!this.distributorInfo || undefined == this.distributorInfo.extendAmount) this.$router.go(-1)
+        },
         methods: {
-            seeDetail() {
-                if(isDistributor)this.$router.replace({ name: 'distributionCenter' })
+            nextOperate() {
+                this.$router.replace({ name: `${this.isDistributor?'distributionCenter':'HOME'}` })
             }
         }
     };
