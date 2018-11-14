@@ -11,7 +11,7 @@
                 </li>
             </ul>
         </div>
-        <div class="qhht-flex clearinghouse-body" @click="toggleDiscount">
+        <div v-if="!IS_ONLINE" class="qhht-flex clearinghouse-body" @click="toggleDiscount">
             <span>优惠书币：消耗{{spen}}书币</span>
             <span   class="qhht-flex clearinghouse-discount" :class="{checked}">
                 <span>-￥{{lv}}</span>
@@ -19,10 +19,10 @@
             </span>
         </div>
         <div class="clearinghouse-explain">
-            balabalbalabnalan
-            <p>又一个balabalbalabnalan</p>
+            您将购买的商品为虚拟内容服务，购买后不支持退订、转让、退换，请斟酌确认。
+            <p>购买后可在 “我的——已购清单”内查看。</p>
         </div>
-        <div class="clearinghouse-pay" @click="handlePayment">确认支付 ￥<Counter :prev="prevPrice" :cur="currentPrice" :key="currentPrice"  /></div>
+        <div class="clearinghouse-pay" :class="{disabled:payDisabled}" @click="handlePayment">确认支付 ￥<Counter :prev="parseFloat(payDetail.price)" :cur="parseFloat(payDetail.price)" :key="currentPrice"  /></div>
     </div>
 </template>
 
@@ -32,6 +32,7 @@ import {
   mapState as rootState,
   mapActions as rootActions
 } from 'vuex'
+import { IS_ONLINE } from '../utils/config'
 import Counter from './Counter'
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
   'columnData/payment'
@@ -41,8 +42,9 @@ export default {
   data() {
     const { courseId, groupBuyId, payType } = this.$route.query
     return {
-      spen: 100, // 瞎取得，等接口
-      lv: 10,
+      IS_ONLINE,
+      spen: 'null', // 瞎取得，等接口
+      lv: 'null',
       checked: false,
       payDisabled: false,
       groupBuyId,
@@ -61,6 +63,7 @@ export default {
       'price',
       'lessonCount'
     ]),
+    ...mapState(['paySucceed']),
     payDetail: function() {
       const {
         courseName,
@@ -90,27 +93,35 @@ export default {
     checked: function(newChecked) {
       this.currentPrice = newChecked ? 80 : this.spen
       this.prevPrice = newChecked ? this.spen : 80
+    },
+    paySucceed: function(isSucceed) {
+        if(isSucceed){
+            this.$toast('您已支付成功，即将返回专栏');
+            setTimeout(()=>{
+                this.$router.go(-1)
+            },400)
+        }
     }
   },
   methods: {
     ...mapActions(['unlockCourse', 'joinGroupBuy', 'startGroupBuy']),
     async handlePayment() {
       this.payDisabled = true
-      if (this.groupBuyId) {
-        await this.joinGroupBuy({
-          courseId: this.courseId,
-          groupBuyId: this.groupBuyIdFromShare
-        })
-        return (this.payDisabled = false)
-      }
+
       if (this.payType === 'groupBuy') {
-        await this.handleStartGroupBuy({ courseId: this.courseId })
-        return (this.payDisabled = false)
+        if (this.groupBuyId) {
+          await this.joinGroupBuy({
+            courseId: this.courseId,
+            groupBuyId: this.groupBuyIdFromShare
+          })
+        } else {
+          await this.handleStartGroupBuy({ courseId: this.courseId })
+        }
       }
       if (this.payType === 'origin') {
         await this.unlockCourse({ courseId: this.courseId })
-        return (this.payDisabled = false)
       }
+      this.payDisabled = false
     },
     async handleStartGroupBuy() {
       await this.handlePayment('startGroupBuy')
@@ -146,6 +157,7 @@ export default {
   },
   destroyed() {
     document.title = '秦汉胡同'
+    sessionStorage.setItem('payDetail', null)
   },
   components: {
     Counter

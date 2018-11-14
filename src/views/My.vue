@@ -69,12 +69,12 @@ export default {
           image: praise,
           title: '我的集赞'
         },
-         {
+        {
           name: 'Wallet',
           image: wallet,
           title: '胡同书币'
         },
-         {
+        {
           name: 'DistributorApply',
           image: distribution,
           title: '分销中心'
@@ -103,10 +103,14 @@ export default {
     }
   },
   computed: {
-    ...mapState(['isDistributor','replyMessageCount', 'userInfo'])
+    ...mapState(['isDistributor', 'replyMessageCount', 'userInfo'])
   },
   methods: {
-    ...mapActions(['queryNewMessageCount','checkDistributor', 'getMyUserInfo']),
+    ...mapActions([
+      'queryNewMessageCount',
+      'checkDistributor',
+      'getMyUserInfo'
+    ]),
     editUserInfo: function() {
       if (
         undefined != this.userInfo.gender &&
@@ -128,11 +132,17 @@ export default {
       }
     },
     itemClick: function(name) {
-        this.$router.push({ name: (name === 'DistributorApply' && this.isDistributor)? 'DistributionCenter':name })
+      this.$router.push({
+        name:
+          name === 'DistributorApply' && this.isDistributor
+            ? 'DistributionCenter'
+            : name
+      })
     }
   },
   created() {
     this.checkDistributor()
+
     this.queryNewMessageCount()
     this.getMyUserInfo(true).then(() => {
       this.showEdit =
@@ -140,7 +150,7 @@ export default {
         undefined == this.userInfo.grade ||
         undefined == this.userInfo.role ||
         undefined == this.userInfo.mobileNo
-    }) 
+    })
   }
 }
 </script>
