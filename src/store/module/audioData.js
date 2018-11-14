@@ -147,7 +147,7 @@ export default {
     },
     //设置分享信息
     async setShareInfo({state,commit,dispatch,rootState},{courseId,columnType}){
-      if(courseId <= 0 || state.columnId === courseId) return
+      if(courseId <= 0) return
       const course = await dispatch('getColumnDetail',{courseId,columnType,useCache:true},{root:true})
       if(!course) return
       commit('setPurchaseStatus',course.userAccessStatus) //绑定单集对应专栏是否购买

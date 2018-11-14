@@ -44,15 +44,13 @@ export default {
       'lessonList',
       'lessonLoading',
       'lessonFinished',
-      'userAccessStatus'
     ])
   },
   components: {
     SingleSetItem
   },
   methods: {
-    ...mapMutations(['resetState']),
-    ...mapActions(['getLessonList','getUserAccessStatus']),
+    ...mapActions(['resetState','getLessonList','getUserAccessStatus']),
     scrollBottom() {
       console.log('scrollBottom ==', this.courseId)
       this.getLessonList({ refresh: false, courseId: this.courseId })
