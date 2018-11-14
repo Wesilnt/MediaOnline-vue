@@ -54,8 +54,8 @@ export default {
       state.columnId = -1 
       state.singleSetList = []
     },
-    setPurchaseStatus(state,userAccesssStatus){
-      this.isPurchase = 1001 == userAccesssStatus || 1003 == userAccesssStatus || 1008 == userAccesssStatus
+    setPurchaseStatus(state,userAccessStatus){
+      state.isPurchase = 1001 == userAccessStatus || 1003 == userAccessStatus || 1008 == userAccessStatus
     },
     toggleLoading(state,isLoading){
       state.pageLoading = isLoading
@@ -146,8 +146,8 @@ export default {
       commit('bindCommentList', res)
     },
     //设置分享信息
-    async setShareInfo({commit,dispatch,rootState},{courseId,columnType}){
-      if(courseId <= 0) return
+    async setShareInfo({state,commit,dispatch,rootState},{courseId,columnType}){
+      if(courseId <= 0 || state.columnId === courseId) return
       const course = await dispatch('getColumnDetail',{courseId,columnType,useCache:true},{root:true})
       if(!course) return
       commit('setPurchaseStatus',course.userAccessStatus) //绑定单集对应专栏是否购买
