@@ -21,45 +21,53 @@ const Public = () => import(/* webpackChunkName: "index" */ '../views/my/Public'
 const PageInfo_From_My = [
   {
     path: '/my/Purchase',
+    name:'Purchase',
     component: purchase
   },
   {
     path: '/my/Record',
+    name:'Record',
     component: record
   },
   {
     path: '/my/Like',
+    name:'Like',
     component: like,
     props: true
   },
   {
     path: '/my/my-puzzle',
+    name:'MyPuzzle',
     component: myPuzzle_Praise
   },
   {
     path: '/my/Reply',
+    name:'Reply',
     component: reply
   },
   {
     path: '/my/my-praise',
+    name:'MyPraise',
     component: myPuzzle_Praise
   },
   {
     path: '/my/SysMessage',
+    name:'sysMessage',
     component: sysMessage
   },
   {
     path: '/my/my-wallet',
+    name:'Wallet',
     component: wallet
   },
   {
     path: '/my/my-distributionCenter',
-      name:'distributionCenter',
+    name:'DistributionCenter',
     component: distributionCenter
   },
   {
     path: '/my/my-distributorApply',
-      name:'distributorApply',
+    name:'DistributorApply',
     component: distributorApply
   },
   {
@@ -84,18 +92,22 @@ const PageInfo_From_My = [
   },
   {
     path: '/my/Feedback',
+    name:'Feedback',
     component: feedback
   },
   {
     path: '/my/EditUserInfo',
+    name:'editUserInfo',
     component: editUserInfo
   },
   {
     path: '/my/EditUserPhone',
+    name:'editUserPhone',
     component: editUserPhone
   },
   {
     path: '/my/DisplayUserInfo',
+    name:'displayUserInfo',
     component: displayUserInfo
   },
   // {
@@ -104,6 +116,7 @@ const PageInfo_From_My = [
   // },
   {
     path: '/my/Public',
+    name:'Public',
     component: Public
   },
   {

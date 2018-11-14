@@ -32,10 +32,10 @@
                 show: false
             };
         },
-        computed: { ...mapState(['isBindMobile', 'isDistributor']) },
-        created() {  },
+        computed: { ...mapState([ 'isDistributor','isBindMobile'])},
+        created() { this.getUserInfo() },
         methods: {
-            ...mapActions(['getDistributorInfo', 'applyDistributor']),
+            ...mapActions(['getUserInfo','getDistributorInfo', 'applyDistributor']),
             //手机号校验, 已校验直接申请分销员
             checkMobile() {
                 this.show = !this.isBindMobile
@@ -45,7 +45,7 @@
             //申请成为分销员
             becomeDistributor() {
                 //preUserId分会长ID
-                this.applyDistributor({ preUserId: 0 }).then(() => this.$router.push({ name: 'DistributionApplyResult' }))
+                this.applyDistributor({ preUserId: 0 }).then(() => this.$router.replace({ name: 'DistributionApplyResult' }))
             }
         }
     }

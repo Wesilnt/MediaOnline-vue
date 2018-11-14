@@ -16,7 +16,7 @@
             <li class="wallet-item" v-for="item of coinRecords">
                 <div class="wallet-item-section">
                     <span class="wallet-item-title">{{item.channel}}</span>
-                    <span class="wallet-item-time">{{item.createTime}}</span>
+                    <span class="wallet-item-time">{{item.createTime|formatDuring}}</span>
                 </div>
                 <span class="wallet-item-number">{{`${item.coinNum.toFixed(2)}`}}</span>
             </li>
@@ -33,35 +33,18 @@
     const { mapState, mapActions } = createNamespacedHelpers('walletData');
     export default {
         data() {
-            return {
-                list: [{
-                    id:1,
-                    channel:'完善资料',
-                    createTime:'2018-08-08 18:38:50',
-                    isIncome:1,
-                    coinNum:20
-                }, {
-                    id:2,
-                    channel:'伍老师说历史',
-                    createTime:'2018-08-08 15:20:50',
-                    isIncome:0,
-                    coinNum:10
-                }, {
-                    id:3,
-                    channel:'完成自测题',
-                    createTime:'2018-12-08 09:38:20',
-                    isIncome:1,
-                    coinNum:10
-                }, {
-                    id:4,
-                    channel:'好友购买',
-                    createTime:'2018-08-08 12:23:50',
-                    isIncome:1,
-                    coinNum:199
-                }]
-            };
+            return {  }
         },
         computed:{...mapState(['coinNumber','coinRecords', 'isLoading', 'finished'])},
+        filters: {
+            formatDuring: date => {
+                let mss = new Date(date)
+                let year = mss.getFullYear()
+                let month = mss.getMonth()
+                let day = mss.getDate()
+                return `${year}年${month < 9 ? '0' + month : month}月${day < 9 ? '0' + day : day}日`
+            }
+        },
         created(){
          this.getCoinNumber()
         },
@@ -71,9 +54,7 @@
                 this.$router.push({name:"BookCoinRules"})
             },
             onLoadMore() {
-                if (!this.isLoading && !this.finished) {
-                    this.getCoinRecord()
-                }
+                if (!this.isLoading && !this.finished)  this.getCoinRecord()
             }
         }
     };
