@@ -40,47 +40,47 @@ export default {
       showEdit: false,
       list: [
         {
-          name: 'Purchase',
+          name: '/my/Purchase',
           image: purchase,
           title: '已购清单'
         },
         {
-          name: 'Record',
+          name: '/my/Record',
           image: record,
           title: '播放记录'
         },
         {
-          name: 'Like',
+          name: '/my/Like',
           image: like,
           title: '我喜欢的'
         },
         {
-          name: 'MyPuzzle',
+          name: '/my/my-puzzle',
           image: puzzle,
           title: '我的拼团'
         },
         {
-          name: 'Reply',
+          name: '/my/Reply',
           image: reply,
           title: '回应我的'
         },
         {
-          name: 'MyPraise',
+          name: '/my/my-praise',
           image: praise,
           title: '我的集赞'
         },
+        //  {
+        //   name: '/my/my-wallet',
+        //   image: wallet,
+        //   title: '胡同书币'
+        // },
+        //  {
+        //   name: '/my/my-distributorApply',
+        //   image: distribution,
+        //   title: '分销中心'
+        // },
         {
-          name: 'Wallet',
-          image: wallet,
-          title: '胡同书币'
-        },
-        {
-          name: 'DistributorApply',
-          image: distribution,
-          title: '分销中心'
-        },
-        {
-          name: 'Feedback',
+          name: '/my/Feedback',
           image: feedback,
           title: '意见反馈'
         }
@@ -103,14 +103,10 @@ export default {
     }
   },
   computed: {
-    ...mapState(['isDistributor', 'replyMessageCount', 'userInfo'])
+    ...mapState(['replyMessageCount', 'userInfo'])
   },
   methods: {
-    ...mapActions([
-      'queryNewMessageCount',
-      'checkDistributor',
-      'getMyUserInfo'
-    ]),
+    ...mapActions(['queryNewMessageCount','isDistributor', 'getMyUserInfo']),
     editUserInfo: function() {
       if (
         undefined != this.userInfo.gender &&
@@ -132,17 +128,11 @@ export default {
       }
     },
     itemClick: function(name) {
-      this.$router.push({
-        name:
-          name === 'DistributorApply' && this.isDistributor
-            ? 'DistributionCenter'
-            : name
-      })
+      this.$router.push({ path: name })
     }
   },
   created() {
-    this.checkDistributor()
-
+    // this.isDistributor()
     this.queryNewMessageCount()
     this.getMyUserInfo(true).then(() => {
       this.showEdit =
