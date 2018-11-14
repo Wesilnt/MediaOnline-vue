@@ -96,7 +96,7 @@ export default {
     },
     paySucceed: function(isSucceed) {
         if(isSucceed){
-            this.$toast('您已支付成功，即将返回专栏');
+            this.$toast('您已支付成功');
             setTimeout(()=>{
                 this.$router.go(-1)
             },400)

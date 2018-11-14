@@ -576,7 +576,7 @@ export default {
       paymentCollectLikeId
     } = this
     const tryTxt = isTryScan ? '试看' : '试听'
-    const { hide, showOrigin = false } = this.renderPaymentStatus() || {
+    const { hide, showOrigin = false } = paymentObj || {
       txt: '当前状态错误，前去反馈',
       handler: this.goToFeedBack
     }
