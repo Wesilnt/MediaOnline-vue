@@ -32,7 +32,8 @@ export default {
       columnType: this.$route.params.columnType
     }
   },
-  created() {this.getColumnDetailCache({courseId:this.courseId}).then(res=>this.userAccessStatus = res.userAccessStatus)},
+  created() {
+      this.getUserAccessStatus({courseId:this.courseId}).then(res=>this.userAccessStatus = res)},
   watch: {
     lessonLoading: function(loading) {
       this.refreshing = loading
@@ -51,7 +52,7 @@ export default {
   },
   methods: {
     ...mapMutations(['resetState']),
-    ...mapActions(['getLessonList','getColumnDetailCache']),
+    ...mapActions(['getLessonList','getUserAccessStatus']),
     scrollBottom() {
       console.log('scrollBottom ==', this.courseId)
       this.getLessonList({ refresh: false, courseId: this.courseId })

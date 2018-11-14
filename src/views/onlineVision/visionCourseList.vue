@@ -49,11 +49,11 @@ export default {
   components: {
     SingleSetList
   },
-    created(){
-      this.getColumnDetailCache({courseId:this.courseId}).then(res=>this.userAccessStatus = res.userAccessStatus)
-    },
+  created(){
+    this.getUserAccessStatus({courseId:this.courseId}).then(res=>this.userAccessStatus = res)
+  },
   methods: {
-    ...mapActions(['reverse', 'getCategoryList','getColumnDetailCache']),
+    ...mapActions(['reverse', 'getCategoryList','getUserAccessStatus']),
     spreat(id) {
       if (id === this.selectCate) {
         this.spread = !this.spread
