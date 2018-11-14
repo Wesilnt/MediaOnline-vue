@@ -22,7 +22,7 @@
             您将购买的商品为虚拟内容服务，购买后不支持退订、转让、退换，请斟酌确认。
             <p>购买后可在 “我的——已购清单”内查看。</p>
         </div>
-        <div class="clearinghouse-pay" @click="handlePayment">确认支付 ￥<Counter :prev="parseFloat(payDetail.price)" :cur="parseFloat(payDetail.price)" :key="currentPrice"  /></div>
+        <div class="clearinghouse-pay" :class="{disabled:payDisabled}" @click="handlePayment">确认支付 ￥<Counter :prev="parseFloat(payDetail.price)" :cur="parseFloat(payDetail.price)" :key="currentPrice"  /></div>
     </div>
 </template>
 
@@ -63,6 +63,7 @@ export default {
       'price',
       'lessonCount'
     ]),
+    ...mapState(['paySucceed']),
     payDetail: function() {
       const {
         courseName,
@@ -92,6 +93,14 @@ export default {
     checked: function(newChecked) {
       this.currentPrice = newChecked ? 80 : this.spen
       this.prevPrice = newChecked ? this.spen : 80
+    },
+    paySucceed: function(isSucceed) {
+        if(isSucceed){
+            this.$toast('您已支付成功，即将返回专栏');
+            setTimeout(()=>{
+                this.$router.go(-1)
+            },400)
+        }
     }
   },
   methods: {
@@ -113,7 +122,6 @@ export default {
         await this.unlockCourse({ courseId: this.courseId })
       }
       this.payDisabled = false
-      this.$router.go(-1)
     },
     async handleStartGroupBuy() {
       await this.handlePayment('startGroupBuy')

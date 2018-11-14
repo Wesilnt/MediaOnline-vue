@@ -30,6 +30,7 @@ export default {
     groupBuystatus: 0,
     toast: null,
     loading: true,
+    paySucceed: false,
     groupBuyErr: false
   }),
   getters: {
@@ -171,7 +172,8 @@ export default {
         groupBuystatus: 0,
         toast: null,
         loading: true,
-        groupBuyErr: false
+        groupBuyErr: false,
+        paySucceed: false
       })
     },
     //验证是否完成了公众号授权
@@ -239,6 +241,9 @@ export default {
             // if (res.errMsg !== 'chooseWXPay:cancel')
             // 支付成功后的回调函数
             // dispatch('columnData/getColumnDetail', { courseId }, { root: true })
+            commit('saveState', {
+              paySucceed: true
+            })
             return res
           },
           failCB: function() {
