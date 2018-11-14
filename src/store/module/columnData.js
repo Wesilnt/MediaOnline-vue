@@ -39,7 +39,8 @@ const columnData = {
     }
   },
   getters: {
-    userAccessStatus:(state,getters, rootState) => rootState.columnDetail.userAccessStatus,
+    userAccessStatus: (state, getters, rootState) =>
+      rootState.columnDetail.userAccessStatus,
     getBookIntroduce: function(state) {
       return {
         name: state.columnDetail.name, //单集名称
@@ -119,7 +120,11 @@ const columnData = {
     async getColumnList({ commit, state }, { refresh, columnType }) {
       if (state.columnFinished || state.columnLoading) return
       await commit('saveStatus', { columnLoading: true })
-      const page = refresh ? 1 : 0 === state.columnCurrentPage ? 2 : state.columnCurrentPage + 1
+      const page = refresh
+        ? 1
+        : 0 === state.columnCurrentPage
+          ? 2
+          : state.columnCurrentPage + 1
       const result = await getColumns({
         type: ColumnType[columnType].code,
         currentPage: page,
@@ -154,6 +159,7 @@ const columnData = {
       { state, commit, dispatch },
       { courseId, columnType }
     ) {
+      await dispatch('resetState')
       //获取视频专栏数据
       const columnDetail = await dispatch(
         'getColumnDetail',
@@ -182,13 +188,25 @@ const columnData = {
         courseName
       })
     },
-    async isPurchase({dispatch }, { courseId, columnType }){
-        const res = await dispatch('getColumnDetail',{ courseId, columnType ,useCache:true},{ root: true })
-        return 1001 == res.userAccessStatus ||  1003 == res.userAccessStatus || 1008 == res.userAccessStatus
+    async getUserAccessStatus({ dispatch }, { courseId, columnType }) {
+      const res = await dispatch(
+        'getColumnDetail',
+        { courseId, columnType, useCache: true },
+        { root: true }
+      )
+      return res.userAccessStatus
     },
-    async getUserAccessStatus({dispatch }, { courseId, columnType }){
-        const res = await dispatch('getColumnDetail',{ courseId, columnType ,useCache:true},{ root: true })
-        return  res.userAccessStatus
+    async isPurchase({ dispatch }, { courseId, columnType }) {
+      const res = await dispatch(
+        'getColumnDetail',
+        { courseId, columnType, useCache: true },
+        { root: true }
+      )
+      return (
+        1001 == res.userAccessStatus ||
+        1003 == this.userAccessStatus ||
+        1008 == this.userAccessStatus
+      )
     },
     async getCommentList({ commit }, params) {
       const response = await getCommentList(params)

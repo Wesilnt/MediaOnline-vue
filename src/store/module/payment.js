@@ -1,5 +1,5 @@
 import { Toast } from 'vant'
-import { WECHAT_SUBSCRIPTION_URL } from '../../utils/config'
+import { WECHAT_SUBSCRIPTION_URL, identityType } from '../../utils/config'
 import {
   getGroupBuyDetail, // 获取拼团详情
   startGroupBuy, //发起拼团
@@ -21,14 +21,16 @@ export default {
   namespaced: true,
   name: 'payment',
   state: () => ({
-    masterId: '',
-    starterUid: '',
+    viewer: '',
+    userPaymentStatus: null,
     userList: [],
+    groupBuyFull: false,
     timeDuration: null,
     alreadyCount: 0,
     groupBuystatus: 0,
     toast: null,
-    loading: true
+    loading: true,
+    groupBuyErr: false
   }),
   getters: {
     groupBuyTemplateId(state, getters, { columnData }) {
@@ -42,8 +44,24 @@ export default {
         columnData.columnDetail.sharePostUrl
       }?imageView2/1/w/100/h/100/format/jpg`
     },
+    coverPic(state, getters, { columnData }) {
+      const {
+        coverPic,
+        coverPicV,
+        coverPiH,
+        profilePic
+      } = columnData.columnDetail
+      const pic = coverPic || coverPicV || coverPiH || profilePic
+      return pic ? `${pic}?imageView2/1/w/136/h/180/format/jpg` : null
+    },
     groupBuyPrice(state, getters, { columnData }) {
       return formatPrice(columnData.columnDetail.groupBuyPrice)
+    },
+    briefIntro(state, getters, { columnData }) {
+      return columnData.columnDetail.briefIntro
+    },
+    lessonCount(state, getters, { columnData }) {
+      return columnData.columnDetail.lessonCount
     },
     price(state, getters, { columnData }) {
       return formatPrice(columnData.columnDetail.price)
@@ -68,9 +86,15 @@ export default {
     }
   },
   actions: {
-    async getGroupBuyDetail({ commit }, payload) {
+    async getGroupBuyDetail({ commit, dispatch, getters }, payload) {
+      await dispatch('resetState')
       const response = await getGroupBuyDetail(payload)
-      if (!response) return
+      if (!response) {
+        return commit('saveState', {
+          groupBuyErr: true
+        })
+      }
+      const { groupBuyPersonCount } = getters
       const {
         userId: masterId,
         starterUid,
@@ -82,17 +106,50 @@ export default {
         status: groupBuystatus
       } = response
 
+      // 判断角色
+      let viewer = null
+      const groupBuyFull = groupBuyPersonCount === userList.length
+      const checkIsPartner = userList.reduce(
+        (prev, item) => {
+          if (item.id === masterId) {
+            prev.isPartner = true
+          }
+          if (masterId !== item.id && item.status === 2601) {
+            // userPaymentStatus 状态(2602:已完成，2603:失败,2601:支付中)
+            prev.userPaymentStatus = 'someonePaymentNotSuccess'
+          }
+          if (masterId === item.id && item.status === 2601) {
+            prev.userPaymentStatus = 'selfPaymentNotSuccess'
+          }
+          return prev
+        },
+        {
+          userPaymentStatus: '',
+          isPartner: false
+        }
+      )
+      const { isPartner, userPaymentStatus } = checkIsPartner
+      viewer = isPartner
+        ? identityType.PARTNER
+        : groupBuyFull
+          ? identityType.PASSERFULL
+          : identityType.PASSER
+      if (masterId === starterUid) {
+        viewer = identityType.OWNER
+      }
+
       //8.计算倒计时
       const timeDuration =
         (createTime + duration * 60 * 60 * 1000 - sysTime) / 1000
 
       commit('saveState', {
-        masterId,
-        starterUid,
+        viewer,
+        userPaymentStatus,
         userList,
         timeDuration,
         alreadyCount,
-        groupBuystatus
+        groupBuystatus,
+        groupBuyFull
       })
     },
     hideToast() {
@@ -105,14 +162,16 @@ export default {
     },
     resetState({ commit }) {
       commit('saveState', {
-        masterId: '',
-        starterUid: '',
+        viewer: '',
         userList: [],
+        userPaymentStatus: null,
+        groupBuyFull: false,
         timeDuration: null,
         alreadyCount: 0,
         groupBuystatus: 0,
         toast: null,
-        loading: true
+        loading: true,
+        groupBuyErr: false
       })
     },
     //验证是否完成了公众号授权
@@ -179,7 +238,7 @@ export default {
             console.log(res)
             // if (res.errMsg !== 'chooseWXPay:cancel')
             // 支付成功后的回调函数
-            dispatch('columnData/getColumnDetail', { courseId }, { root: true })
+            // dispatch('columnData/getColumnDetail', { courseId }, { root: true })
             return res
           },
           failCB: function() {

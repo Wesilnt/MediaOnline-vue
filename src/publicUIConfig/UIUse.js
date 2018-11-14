@@ -30,7 +30,8 @@ import {
   Picker,
   Checkbox,
   CheckboxGroup,
-  Circle
+  Circle,
+  Switch
 } from 'vant'
 
 Vue.use(Cell)
@@ -52,10 +53,11 @@ Vue.use(Circle)
 Vue.use(Tab).use(Tabs)
 Vue.use(Swipe).use(SwipeItem)
 Vue.use(Checkbox).use(CheckboxGroup)
+Vue.use(Switch)
 Vue.use(Lazyload, {
   error: loading,
   loading: loading,
-    lazyComponent: true,
-    attempt:5
+  lazyComponent: true,
+  attempt: 5
 })
 Vue.use(PullRefresh)

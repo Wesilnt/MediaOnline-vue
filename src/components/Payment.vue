@@ -1,734 +1,242 @@
+<template>
+    <div class="clearinghouse">
+        <div class="qhht-flex clearinghouse-header">
+            <i class="lazy-img-larger clearinghouse-header-img" v-lazy:background-image="payDetail.coverPic"></i>
+            <ul class="clearinghouse-header-content">
+                <li><h3>{{payDetail.courseName}}</h3></li>
+                <li class="van-ellipsis clearinghouse-header-brief">{{payDetail.briefIntro}}</li>
+                <li class="qhht-flex">
+                    <strong class="clearinghouse-header-price">￥{{payDetail.price}}</strong>
+                    <span>共 {{payDetail.lessonCount}} 讲</span>
+                </li>
+            </ul>
+        </div>
+        <div class="qhht-flex clearinghouse-body" @click="toggleDiscount">
+            <span>优惠书币：消耗{{spen}}书币</span>
+            <span   class="qhht-flex clearinghouse-discount" :class="{checked}">
+                <span>-￥{{lv}}</span>
+                <i class="clearinghouse-check"></i>
+            </span>
+        </div>
+        <div class="clearinghouse-explain">
+            balabalbalabnalan
+            <p>又一个balabalbalabnalan</p>
+        </div>
+        <div class="clearinghouse-pay" @click="handlePayment">确认支付 ￥<Counter :prev="prevPrice" :cur="currentPrice" :key="currentPrice"  /></div>
+    </div>
+</template>
+
 <script>
 import {
   createNamespacedHelpers,
   mapState as rootState,
   mapActions as rootActions
 } from 'vuex'
-import { openVideoDetail, openAudioDetail } from '../utils/config'
-import PhoneVerif from './PhoneVerif'
-import Share from './share/Share'
-import GroupHeader from './GroupHeader'
-
+import Counter from './Counter'
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
   'columnData/payment'
 )
-const identityType = {
-  OWNER: 31000, // 发起人
-  PARTNER: 31001, // 此拼团参与人
-  PASSER: 31002, // 非参与人 拼团未满
-  PASSERFULL: 31003 // 非参与人 拼团已满
-}
-const origin = 'origin',
-  groupBuy = 'groupBuy',
-  collect = 'collect'
-const PAYMENTTYPE = {
-  origin,
-  groupBuy,
-  collect
-}
-
-const userAccessStatusType = {
-  // 完全是自己和这个专栏的状态
-  GROUPBUY_FAIL: -3,
-  REFUND_SINGLED: -1,
-  NONE: 0,
-
-  SINGLED: 1001,
-
-  GROUPED: 1003,
-  GROUPING: 1005,
-  GROUPING_OVERTIME: 1006, //拼团中但是已超时，等待系统处理
-
-  COLLECTED: 1007, //集赞成功未领取
-  COLLECTGET: 1008, //集赞成功并领取
-  COLLECTING: 1009 //集赞中
-}
-
 export default {
   name: 'Payment',
-  props: {
-    isTryScan: {
-      default: false
-    },
-    userAccessStatus: {
-      default: null
-    },
-    groupBuyId: {
-      default: null
-    },
-    collectLikeId: {
-      default: null
-    },
-    callback: {
-      type: Function
-    }
-  },
   data() {
-    const {
-      groupBuyId: groupBuyIdFromShare,
-      collectLikeId: collectLikeIdFromShare
-    } = this.$route.query
-    const { columnType, courseId } = this.$route.params
+    const { courseId, groupBuyId, payType } = this.$route.query
     return {
-      userInfo: {}, // 用户信息
-      columnType,
+      spen: 100, // 瞎取得，等接口
+      lv: 10,
+      checked: false,
+      payDisabled: false,
+      groupBuyId,
       courseId,
-      master: identityType.OWNER, // 当前页面交互的用户身份
-      groupBuyIdFromShare, // 记录从分享进入的拼团
-      collectLikeIdFromShare, // 从分享进入的集赞
-      payDisabled: false, // 所有支付是否可点击
-      showTeleRegister: false, // 手机号注册弹窗
-      paymentShowText: null, // 储存支付状态文本
-      sharePageShow: false, // 分享弹框页
-      paymentType: null, // 支付类型 原价/拼团/集赞
-      userPaymentStatus: '' // 拼团返回的status
+      payType,
+      currentPrice: 100,
+      prevPrice: 100
     }
   },
   computed: {
-    ...rootState(['url']),
     ...mapGetters([
-      'collectLikeTemplateId',
-      'groupBuyTemplateId',
-      'sharePostUrl',
+      'courseName',
+      'coverPic',
+      'briefIntro',
       'groupBuyPrice',
       'price',
-      'groupBuyPersonCount',
-      'freeLesson',
-      'courseName',
-      'purchased'
+      'lessonCount'
     ]),
-    ...mapState([
-      'masterId',
-      'starterUid',
-      'userList',
-      'createTime',
-      'alreadyCount',
-      'groupBuystatus' /* 120 1 / 2:拼团中 3：成功  4：失败 */,
-      'timeDuration',
-      'loading'
-    ]),
-    paymentGroupBuyId: function() {
-      const { groupBuyIdFromShare, groupBuyId } = this
-      if (groupBuyIdFromShare && this.groupBuystatus === 1204) {
-        this.$dialog
-          .alert({
-            message: `<p style='text-align: center'>当前拼团失败</p>`
-          })
-          .then(() => {
-            this.returnToCorrectGroupBuy()
-          })
-      }
-      if (
-        groupBuyIdFromShare &&
-        groupBuyId &&
-        groupBuyIdFromShare !== groupBuyId &&
-        this.master === identityType.OWNER
-      ) {
-        this.$dialog
-          .alert({
-            title: '已有更新的拼团',
-            message: `<ul style='text-align: center'>
-                <li>您当前专栏拼团已过期</li><li>请返回最新的拼团</li>
-            </ul>`
-          })
-          .then(() => {
-            this.returnToCorrectGroupBuy()
-          })
-      }
-      return groupBuyIdFromShare || groupBuyId
-    },
-    paymentCollectLikeId: function() {
-      return this.collectLikeIdFromShare || this.collectLikeId
+    payDetail: function() {
+      const {
+        courseName,
+        coverPic,
+        briefIntro,
+        groupBuyPrice,
+        price: origin,
+        lessonCount
+      } = this
+      const payDetail = JSON.parse(sessionStorage.getItem('payDetail'))
+      const { payType } = this.$route.params
+      console.log(payDetail)
+      const price = payType === 'groupBuy' ? groupBuyPrice : origin
+      return courseName
+        ? {
+            courseName,
+            coverPic,
+            briefIntro,
+            groupBuyPrice,
+            price,
+            lessonCount
+          }
+        : payDetail
+    }
+  },
+  watch: {
+    checked: function(newChecked) {
+      this.currentPrice = newChecked ? 80 : this.spen
+      this.prevPrice = newChecked ? this.spen : 80
     }
   },
   methods: {
-    ...rootActions(['setWxShareFriend', 'setWxShareZone']),
-    ...mapActions([
-      'getGroupBuyDetail',
-      'resetState',
-      'checkoutWxAuthor',
-      'checkoutUserInfo',
-      'hideToast',
-      'unlockCourse',
-      'joinGroupBuy',
-      'startGroupBuy',
-      'startCollectLike',
-      'getCollectLike',
-      'endLoading'
-    ]),
-    async getUserInfo(forceUpdate) {
-      this.userInfo = await this.checkoutUserInfo(forceUpdate)
-    },
-    async mapGroupBuyDetailToPayment() {
-      const { paymentGroupBuyId } = await this
-      if (paymentGroupBuyId) {
-        await this.getGroupBuyDetail({
-          groupBuyId: paymentGroupBuyId
-        })
-      }
-      await this.judgePaymentType()
-      return await this.judgeIdentity()
-    },
-    async handlePayment(paymentQueryType, params) {
+    ...mapActions(['unlockCourse', 'joinGroupBuy', 'startGroupBuy']),
+    async handlePayment() {
       this.payDisabled = true
-      const { userInfo } = this
-
-      await this.checkoutWxAuthor()
-
-      if (!userInfo || !userInfo.mobileNo) {
-        await this.hideToast()
-        this.toggleTeleRegister(true)
+      if (this.groupBuyId) {
+        await this.joinGroupBuy({
+          courseId: this.courseId,
+          groupBuyId: this.groupBuyIdFromShare
+        })
         return (this.payDisabled = false)
       }
-      await this.hideToast()
-      await this[paymentQueryType]({ courseId: this.courseId, ...params })
-      this.payDisabled = false
-    },
-    judgePaymentType() {
-      const { paymentGroupBuyId, paymentCollectLikeId } = this
-      let paymentType = PAYMENTTYPE.origin
-      if (paymentGroupBuyId) {
-        paymentType = PAYMENTTYPE.groupBuy
+      if (this.payType === 'groupBuy') {
+        await this.handleStartGroupBuy({ courseId: this.courseId })
+        return (this.payDisabled = false)
       }
-      if (paymentCollectLikeId) {
-        paymentType = PAYMENTTYPE.collect
+      if (this.payType === 'origin') {
+        await this.unlockCourse({ courseId: this.courseId })
+        return (this.payDisabled = false)
       }
-      this.paymentType = paymentType
-      this.setWxShare(paymentType)
-    },
-    judgeIdentity() {
-      if (this.masterId === this.starterUid) return
-      if (this.userList.some(item => item.id === this.masterId)) {
-        // userPaymentStatus 状态(2602:已完成，2603:失败,2601:支付中)
-        this.userPaymentStatus = ''
-        this.userList.some(item => {
-          if (this.masterId !== item.id && item.status === 2601) {
-            this.userPaymentStatus = 'ELSERING'
-            return
-          }
-          if (this.masterId === item.id && item.status === 2601) {
-            this.userPaymentStatus = 'SELFING'
-            return
-          }
-        })
-        return (this.master = identityType.PARTNER)
-      } else {
-        if (this.groupBuyPersonCount === this.userList.length) {
-          return (this.master = identityType.PASSERFULL)
-        }
-        return (this.master = identityType.PASSER)
-      }
-    },
-    renderOriginBuy(onlyPrice) {
-      const { price } = this
-      const originPriceClass = `payment-flex-column ${
-        onlyPrice ? 'payment-onlyOrigin' : ''
-      }`
-      return (
-        <div
-          class={originPriceClass}
-          onClick={this.handlePayment.bind(this, 'unlockCourse')}
-        >
-          <div class="payment-price">￥{price}</div>
-          <span class="payment-low-attention">原价购买</span>
-        </div>
-      )
-    },
-    renderGroupBuy({ txt, showPrice = false, handler }) {
-      const { groupBuyPrice } = this
-      return (
-        <div
-          class="payment-flex-column"
-          style={{ justifyContent: !showPrice ? 'center' : 'inherit' }}
-          onClick={handler ? handler : this.handleStartGroupBuy}
-        >
-          {showPrice && <div class="payment-price">￥{groupBuyPrice}</div>}
-          <span class="payment-low-attention">{txt}</span>
-        </div>
-      )
-    },
-    renderCollectBuy({ txt, showPrice = false, handler }) {
-      return (
-        <div
-          class="payment-flex-column payment-collect"
-          style={{ justifyContent: !showPrice ? 'center' : 'inherit' }}
-          onClick={handler ? handler : this.handleStartCollectLike}
-        >
-          {showPrice && <div class="payment-price">￥00.00</div>}
-          <span class="payment-low-attention">
-            {showPrice ? '我要集赞' : txt}
-          </span>
-        </div>
-      )
-    },
-    renderPayment({ origin, group, collect } = {}) {
-      const onlyPrice = !group && !collect
-      const className = this.payDisabled
-        ? 'qhht-flex payment-button-wrapper disabled'
-        : 'qhht-flex payment-button-wrapper'
-      return (
-        <div class={className}>
-          {this.payDisabled && <div class="payment-button-disabled" />}
-          {origin && origin(onlyPrice)}
-          {!onlyPrice && (
-            <div class="qhht-flex payment-button-group">
-              {group && group(!origin)}
-              {collect && collect(!origin)}
-            </div>
-          )}
-        </div>
-      )
-    },
-    async handleJoinGroupBuy() {
-      await this.handlePayment('joinGroupBuy', {
-        groupBuyId: this.groupBuyIdFromShare
-      })
-      this.mapGroupBuyDetailToPayment()
     },
     async handleStartGroupBuy() {
       await this.handlePayment('startGroupBuy')
-      await this.returnToCorrectGroupBuy()
+      // await this.returnToSelfColumn()
     },
-    handleStartCollectLike() {
-      this.handlePayment('startCollectLike')
-    },
-    handleGetCollectLike() {
-      this.handlePayment('getCollectLike', {
-        collectLikeId: this.paymentCollectLikeId
-      })
-    },
-    //点击集赞按钮
-    gotoPraising() {
-      this.$router.push({
-        name: 'Praise',
-        params: {
-          courseId: this.courseId,
-          collectLikeId: this.paymentCollectLikeId
-        },
-        query: {
-          columnType: this.columnType
-        }
-      })
-    },
-    goToFeedBack() {
-      this.$router.push({ path: '/my/Feedback' })
-    },
-    goBackHome() {
-      this.$router.push({ path: '/home' })
-    },
-    async returnToCorrectGroupBuy() {
-      if (this.groupBuyId) {
-        await this.$router.push({
-          name: 'ColumnDetail',
-          params: { columnType: this.columnType, courseId: this.courseId }
-        })
-        location.reload()
-      }
-    },
-    routerToSingleSet(Lesson) {
-      if (!Lesson) {
-        return this.$toast('暂无试听课程')
-      }
-      const { courseId, columnType, courseName } = this
-      const { id } = Lesson
-      switch (this.columnType) {
-        case 'onlineCourse':
-          openVideoDetail(this, {
-            courseId,
-            columnType,
-            lessonId: id
-          })
-          break
-        case 'FreeZone':
-          break
-        // case 'reading':
-        //   case 'onlineVision':
-        default:
-          openAudioDetail(this, {
-            courseId,
-            columnType,
-            lessonId: id,
-            courseName
-          })
-          break
-      }
-    },
-    toggleTeleRegister(showTeleRegister) {
-      this.showTeleRegister = showTeleRegister
-    },
-    toggleSharePage(sharePageShow = false) {
-      this.sharePageShow = sharePageShow
-    },
-    setWxShare(paymentType) {
-      const {
-        columnType,
-        courseId,
-        paymentGroupBuyId,
-        paymentCollectLikeId,
-        url,
-        courseName,
-        alreadyCount,
-        groupBuyPersonCount,
-        userInfo,
-        groupBuystatus
-      } = this
-      let title = `我正在学习《${this.courseName}》，快来一起学习吧`,
-        link = window.location.href
-      if (paymentType === groupBuy && groupBuystatus !== 1204) {
-        title = `我正在参加《${courseName}》拼团活动,仅差${groupBuyPersonCount -
-          alreadyCount}人,快来和我一起拼团吧!`
-        link = `${url}/#/detail/${columnType}/${courseId}?groupBuyId=${paymentGroupBuyId}`
-      }
-      if (paymentType === collect) {
-        title = `我是${userInfo.nickName}, ${
-          this.master === identityType.OWNER ? '我想免费' : '正在帮朋友'
-        }领取《${courseName}》,求助攻~`
-        link = `${url}/#/praise/active/${courseId}/${paymentCollectLikeId}?columnType=${columnType}`
-      }
-      const share = {
-        title,
-        link
-      }
-      const shareData = {
-        desc: '你一定会爱上国学课...',
-        imgUrl: this.sharePostUrl,
-        ...share
-      }
-      console.log('shareLink_title ', shareData)
-      this.setWxShareFriend(shareData)
-      this.setWxShareZone(shareData)
+    toggleDiscount() {
+      this.checked = !this.checked
     }
   },
-  async mounted() {
-    await this.getUserInfo()
-    await this.mapGroupBuyDetailToPayment()
-    // 配置状态
-    const { groupBuyPersonCount, paymentCollectLikeId } = this
-    const initialPayment = {
-      txt: groupBuyPersonCount === 3 ? '三人团' : '六人团',
-      showPrice: true,
-      showOrigin: true,
-      handler: false
-    }
-    let handler = this.toggleSharePage.bind(this, true)
-    if (paymentCollectLikeId) {
-      handler = this.gotoPraising
-    }
-    const groupBuyTextType = {
-      20020: { txt: '邀请好友拼团', handler }, // 弹出拼团界面
-      20021: { txt: '邀请好友集赞', handler }, // 弹出集赞界面
-      20022: { txt: '您已获得此专栏，帮助好友分享', handler }, // 弹出拼团界面
-      20023: { txt: '您已参与他人的拼团,帮助好友分享', handler }, // 弹出拼团界面
-      20032: {
-        txt: '开团失败，重新开团',
-        handler: this.handleStartGroupBuy
-      },
-      20033: { txt: '等待开团成功', handler }, // 弹出拼团界面
-      2004: {
-        txt: '参与拼团',
-        showPrice: true,
-        handler: this.handleJoinGroupBuy
-      }, // 支付事件->弹出拼团界面
-      2005: {
-        txt: '您已集赞成功，领取专栏',
-        handler: this.handleGetCollectLike
-      }, //领取专栏
-      2006: { txt: '拼团失败，请等待系统处理', handler: this.goBackHome }, // 返回主页
-      2007: {
-        txt: '当前拼团已满,发起我的拼团',
-        handler: this.handleStartGroupBuy
-      }, // 返回主页
-      2008: { txt: '您已参与集赞,帮助好友分享', handler } // 弹出拼团界面
-    }
-    const groupBuyStatusType = {
-      1201: { txt: '您已参与拼团，邀请其他好友', handler },
-      1202: { txt: '您已参与拼团，邀请其他好友', handler },
-      '1201ELSERING': { txt: '请等待其他参与者完成支付', handler },
-      '1202SELFING': { txt: '继续支付', handler: this.handleJoinGroupBuy },
-      1203: { hide: true },
-      1204: {
-        txt: '重新开团',
-        handler: this.handleStartGroupBuy
-      }
-    }
-
-    this.paymentShowText = {
-      // 发起人
-      [`${identityType.OWNER}_${
-        userAccessStatusType.GROUPBUY_FAIL
-      }`]: initialPayment,
-      [`${identityType.OWNER}_${
-        userAccessStatusType.REFUND_SINGLED
-      }`]: initialPayment,
-      [`${identityType.OWNER}_${userAccessStatusType.NONE}`]: initialPayment,
-      [`${identityType.OWNER}_${userAccessStatusType.SINGLED}`]: {
-        hide: true
-      },
-      [`${identityType.OWNER}_${userAccessStatusType.GROUPED}`]: {
-        hide: true
-      },
-      [`${identityType.OWNER}_${
-        userAccessStatusType.GROUPING
-      }`]: groupBuyTextType[20020],
-      [`${identityType.OWNER}_${
-        userAccessStatusType.GROUPING_OVERTIME
-      }`]: groupBuyTextType[2006],
-      [`${identityType.OWNER}_${
-        userAccessStatusType.COLLECTED
-      }`]: groupBuyTextType[2005],
-      [`${identityType.OWNER}_${userAccessStatusType.COLLECTGET}`]: {
-        hide: true
-      },
-      [`${identityType.OWNER}_${
-        userAccessStatusType.COLLECTING
-      }`]: groupBuyTextType[20021],
-      // 参与人与非参与人
-      // 参与人
-      [`${identityType.PARTNER}_1201`]: groupBuyStatusType[1201],
-      [`${identityType.PARTNER}_1202`]: groupBuyStatusType[1202],
-      [`${identityType.PARTNER}_1203`]: groupBuyStatusType[1203],
-      [`${identityType.PARTNER}_1204`]: groupBuyStatusType[1204],
-      [`${identityType.PARTNER}_1201ELSERING`]: groupBuyStatusType[
-        '1201ELSERING'
-      ],
-      [`${identityType.PARTNER}_1202SELFING`]: groupBuyStatusType[
-        '1202SELFING'
-      ],
-      [`${identityType.PARTNER}_1202ELSERING`]: groupBuyStatusType[
-        '1201ELSERING'
-      ],
-      [`${identityType.PARTNER}_1201SELFING`]: groupBuyStatusType[
-        '1202SELFING'
-      ],
-      // 非参与人 拼团未满
-      [`${identityType.PASSER}_${
-        userAccessStatusType.GROUPBUY_FAIL
-      }`]: groupBuyTextType[2006],
-      [`${identityType.PASSER}_${
-        userAccessStatusType.REFUND_SINGLED
-      }`]: groupBuyTextType[2004],
-      [`${identityType.PASSER}_${
-        userAccessStatusType.NONE
-      }`]: groupBuyTextType[2004],
-      [`${identityType.PASSER}_${
-        userAccessStatusType.SINGLED
-      }`]: groupBuyTextType[20022],
-      [`${identityType.PASSER}_${
-        userAccessStatusType.GROUPED
-      }`]: groupBuyTextType[20022],
-      [`${identityType.PASSER}_${
-        userAccessStatusType.GROUPING
-      }`]: groupBuyTextType[20023],
-      [`${identityType.PASSER}_${
-        userAccessStatusType.GROUPING_OVERTIME
-      }`]: groupBuyTextType[20023],
-      [`${identityType.PASSER}_${
-        userAccessStatusType.COLLECTED
-      }`]: groupBuyTextType[2008],
-      [`${identityType.PASSER}_${
-        userAccessStatusType.COLLECTGET
-      }`]: groupBuyTextType[2008],
-      [`${identityType.PASSER}_${
-        userAccessStatusType.COLLECTING
-      }`]: groupBuyTextType[2008],
-      [`${identityType.PASSERFULL}`]: groupBuyTextType[2007]
-    }
-    this.endLoading()
-  },
-  beforeDestroy() {
-    this.resetState()
-  },
-  render() {
-    if (!this.paymentShowText || this.loading) return null
+  mounted() {
+    document.title = '结算中心'
     const {
-      isTryScan,
-      courseId,
-      columnType,
+      courseName,
+      coverPic,
+      briefIntro,
+      groupBuyPrice,
       price,
-      groupBuyTemplateId,
-      collectLikeTemplateId,
-      showTeleRegister,
-      sharePageShow,
-      paymentGroupBuyId,
-      paymentCollectLikeId
+      lessonCount
     } = this
-    const tryTxt = isTryScan ? '试看' : '试听'
-    const paymentObj =
-      this.master === identityType.PARTNER
-        ? this.paymentShowText[
-            `${this.master}_${this.groupBuystatus}${this.userPaymentStatus}`
-          ]
-        : this.master === identityType.PASSERFULL
-          ? this.paymentShowText[`${this.master}`]
-          : this.paymentShowText[`${this.master}_${this.userAccessStatus}`]
-    const { hide, showOrigin = false } = paymentObj || {
-      txt: '当前状态错误，前去反馈',
-      handler: this.goToFeedBack
+    if (courseName) {
+      sessionStorage.setItem(
+        'payDetail',
+        JSON.stringify({
+          courseName,
+          coverPic,
+          briefIntro,
+          groupBuyPrice,
+          price,
+          lessonCount
+        })
+      )
     }
-    let paymentBtn = this.renderPayment({
-      origin: price && showOrigin && this.renderOriginBuy,
-      group: groupBuyTemplateId && this.renderGroupBuy.bind(this, paymentObj),
-      collect:
-        collectLikeTemplateId && this.renderCollectBuy.bind(this, paymentObj)
-    })
-    if (paymentGroupBuyId) {
-      paymentBtn = this.renderPayment({
-        group: this.renderGroupBuy.bind(this, paymentObj)
-      })
-    }
-    if (paymentCollectLikeId) {
-      paymentBtn = this.renderPayment({
-        collect: this.renderCollectBuy.bind(this, paymentObj)
-      })
-    }
-    return hide ? null : (
-      <div>
-        {this.paymentType === groupBuy && (
-          <GroupHeader
-            timeDuration={this.timeDuration}
-            leavePerson={this.groupBuyPersonCount - this.alreadyCount}
-            isSixGroup={this.groupBuyPersonCount > 3}
-            userList={this.userList}
-            groupBuystatus={this.groupBuystatus}
-          />
-        )}
-        <div class="qhht-flex payment-wrapper">
-          <div
-            class="payment-flex-column payment-audition"
-            onClick={this.routerToSingleSet.bind(this, this.freeLesson)}
-          >
-            <i class="audition-icon" />
-            <span class="payment-low-attention">{tryTxt}</span>
-          </div>
-          {paymentBtn}
-          <Share
-            show={sharePageShow}
-            courseId={courseId}
-            postType='collage'
-            close={this.toggleSharePage}
-            columnType={columnType}
-          />
-          {showTeleRegister && (
-            <PhoneVerif
-              style={{ zIndex: 100 }}
-              hideTeleRegister={this.toggleTeleRegister.bind(this, false)}
-              succFun={this.getUserInfo.bind(this, true)}
-            />
-          )}
-        </div>
-      </div>
-    )
+  },
+  destroyed() {
+    document.title = '秦汉胡同'
+  },
+  components: {
+    Counter
   }
 }
 </script>
-<style lang='less'>
-.payment-wrapper {
-  position: fixed;
+
+<style lang="less">
+.clearinghouse {
+  position: relative;
+  height: 100vh;
+  padding-top: 20px;
+  background: #f7f7f7;
+}
+.clearinghouse-header {
+  margin-bottom: 20px;
+  padding: 32px 40px;
+  background: #fff;
+  &-img {
+    width: 136px;
+    height: 180px;
+    border-radius: 16px;
+    background: transparent center/cover no-repeat;
+  }
+  &-content {
+    flex-grow: 1;
+    display: flex;
+    height: 180px;
+    flex-direction: column;
+    justify-content: space-around;
+    padding: 8px 0;
+    margin-left: 32px;
+  }
+  &--brief {
+    max-width: 638px;
+  }
+  &-price {
+    font-size: 30px;
+    color: #fea330;
+  }
+}
+.clearinghouse-body {
+  padding: 30px 40px;
+  background-color: #fff;
+  font-size: 28px;
+}
+.clearinghouse-discount {
+  font-size: 30px;
+  color: #b3b3b3;
+  transition: color 0.2s ease-in-out;
+  &.checked {
+    color: #ff4f05;
+    font-weight: bold;
+    .clearinghouse-check {
+      background-color: #ff4f05;
+      box-shadow: 0 0 0 2px #ff0f05;
+    }
+  }
+}
+.clearinghouse-check {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  border: 6px solid #fff;
+  margin-left: 24px;
+  box-shadow: 0 0 0 2px #fea330;
+  border-radius: 50%;
+  background-color: #fff;
+  transition: background-color 0.2s ease-in-out;
+}
+.clearinghouse-explain {
+  padding: 30px 40px;
+  color: #ccc;
+  p {
+    padding-top: 48px;
+  }
+}
+.clearinghouse-pay {
+  position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 20px 28px;
-  border-top: 1px solid #efefef;
-  background-color: #fff;
-  font-size: 20px;
-  z-index: 200;
-}
-
-.payment-flex-column {
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
-  align-items: inherit;
-  height: 80px;
-  padding-left: 28px;
-}
-
-.payment-audition {
-  padding: 0;
-  padding-right: 28px;
-  border-right: 1px solid #f8f8f8;
-}
-
-.audition-icon {
-  display: block;
-  width: 40px;
-  height: 40px;
-  background-image: url('../assets/images/onlinecourse-tabbar-try.png');
-  background-size: 40px;
-}
-
-.payment-low-attention {
-  color: #939393;
-}
-
-.payment-button-wrapper {
-  position: relative;
-  flex-grow: 1;
-  .payment-button-disabled {
-    position: absolute;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 100;
-    background-color: rgba(255, 255, 255, 0.7);
-    transition: background-color 1s linear 0.4s;
-  }
+  height: 96px;
+  line-height: 96px;
+  font-size: 32px;
+  text-align: center;
+  background-color: #fea330;
+  color: #fff;
   &.disabled {
     pointer-events: none;
+    background-color: rgba(254, 163, 48, 0.72);
   }
-}
-
-.payment-button-group {
-  flex-grow: 1;
-  overflow: hidden;
-  height: 80px;
-  line-height: 1;
-  border-radius: 80px;
-  margin-left: 28px;
-  .payment-flex-column {
-    flex-grow: 1;
-    padding: 12px;
-    background: linear-gradient(
-      to right,
-      rgb(254, 202, 0) 0,
-      rgb(254, 149, 2) 100%
-    );
-    &.payment-collect {
-      background: linear-gradient(
-        to right,
-        rgb(254, 119, 0) 0,
-        rgb(255, 79, 5) 100%
-      );
-    }
-  }
-  .payment-price,
-  .payment-low-attention {
-    color: #fff;
-  }
-}
-
-.payment-onlyOrigin {
-  flex-grow: 1;
-  text-align: center;
-  margin-left: 28px;
-  border-radius: 80px;
-  padding: 12px;
-  line-height: 1;
-  background: linear-gradient(
-    to right,
-    rgb(254, 202, 0) 0,
-    rgb(254, 149, 2) 100%
-  );
-  .payment-price,
-  .payment-low-attention {
-    color: #fff;
-  }
-}
-
-.payment-price {
-  font-weight: bold;
-  font-size: 30px;
-  color: #ffa32f;
 }
 </style>

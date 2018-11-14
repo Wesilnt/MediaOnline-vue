@@ -12,6 +12,8 @@ const Home = () => import(/* webpackChunkName: "home" */ '../views/Home')
 const My = () => import(/* webpackChunkName: "index" */ '../views/My')
 const ColumnDetail = () =>
   import(/* webpackChunkName: "index" */ '../views/ColumnDetail')
+const Payment = () =>
+  import(/* webpackChunkName: "index" */ '../components/Payment')
 const ColumnList = () =>
   import(/* webpackChunkName: "index" */ '../views/ColumnList')
 
@@ -43,6 +45,11 @@ export default new Router({
       path: '/detail/:columnType/:courseId',
       name: 'ColumnDetail',
       component: ColumnDetail
+    },
+    {
+      path: '/payment',
+      name: 'Payment',
+      component: Payment
     },
     {
       path: '/home/:columnType/columnlist',

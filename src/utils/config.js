@@ -188,3 +188,10 @@ export const distributionGrades = {
      '2': {grade:'初级分销员', totalAmount:2000,extensionRatio: '20%'},
      '3': {grade:'高级分销员', totalAmount:5000,extensionRatio: '35%'},
 }
+
+export const identityType = {
+    OWNER: 31000, // 发起人
+    PARTNER: 31001, // 此拼团参与人
+    PASSER: 31002, // 非参与人 拼团未满
+    PASSERFULL: 31003 // 非参与人 拼团已满
+}

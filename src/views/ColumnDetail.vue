@@ -2,7 +2,7 @@
     <div>
         <SkeletonFullScreen  v-if="renderLoading" />
         <div v-else>
-            <Payment
+            <PaymentBar
                 :isTryScan="isCourseType"
                 :columnDetail="columnDetail"
                 :groupBuyId="groupBuyId"
@@ -133,17 +133,13 @@
             <div class="load-more-container" v-if="lessonFinished">
                 没有更多了，不要再拉啦～
             </div>
-             <!--<toolsNavbar :freeLesson="columnDetail.freeLessonList" :lessonList="lessonList"/>-->
-
-            <!-- <toolsNavbar :freeLesson="freeLesson" :lessonList="lessonList"/> -->
         </div>
     </div>
 </template>
 
 <script>
 import SkeletonFullScreen from '../components/SkeletonFullScreen'
-import Payment from '../components/Payment'
-import toolsNavbar from '../components/toolsNavbar.vue'
+import PaymentBar from '../components/PaymentBar'
 import SingleSetItem from '../components/SingleSetItem.vue'
 import SingleSetList from '../components/SingleSetList.vue'
 import CommentList from '../components/comment/CommentList.vue'
@@ -213,14 +209,16 @@ export default {
     ]),
     ...mapGetters(['playingId', 'getBookIntroduce', 'isNew', 'freeLesson'])
   },
+  destroyed() {
+    document.title = '秦汉胡同'
+  },
   methods: {
     ...mapActions([
       'getLessonList',
       'getColumnDetail',
       'getCategoryList',
       'getCommentList',
-      'likeComment',
-      'resetState'
+      'likeComment'
     ]),
     async fetchColumnData() {
       const { courseId, columnType, isVisionType } = this
@@ -228,6 +226,7 @@ export default {
         columnType,
         courseId
       })
+      document.title = this.courseName
       // 音频课程 视频课程 由于数据结构相同，使用同种配置
       //   1.获取专栏下的所有单集
       if (isVisionType) {
@@ -235,6 +234,7 @@ export default {
       } else {
         await this.getLessonList({ courseId, refresh: true }) //视频和读书会接口相同
       }
+
       this.canLoadMore = true
     },
     toLookWhole() {
@@ -245,7 +245,9 @@ export default {
         this.$router.push(`/videoInnerList/${this.columnType}/${this.courseId}`)
       } else if (this.columnType === 'onlineVision') {
         this.$router.push({
-          path: `/home/visionDetail/visionCourseList/${this.columnType}/${this.courseId}`
+          path: `/home/visionDetail/visionCourseList/${this.columnType}/${
+            this.courseId
+          }`
         })
       }
     },
@@ -293,17 +295,13 @@ export default {
   components: {
     SingleSetItem,
     SingleSetList,
-    toolsNavbar,
     SkeletonFullScreen,
-    Payment,
+    PaymentBar,
     CourseIntroduce,
     videoComment,
     ImagePreview,
     ScrollNavBar,
     CommentList
-  },
-  beforeDestroy() {
-    this.resetState()
   }
 }
 </script>
