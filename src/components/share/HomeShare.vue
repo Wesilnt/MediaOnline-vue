@@ -1,84 +1,95 @@
 <template>
-    <div v-show="show" class="share-container" @click.self="onCancel">
-        <div v-show="showTip" class="indicator-container">
-            <div class="indicator-container-icon"></div>
-            <p class="indicator-container-title">立即推广给好友吧</p>
-            <p class="indicator-container-subtitle">点击屏幕右上角将本页面分享给好友</p>
-        </div>
-        <transition @after-leave="afterLeave">
-            <div v-show="isOpen" class="share-content">
-                <p class="share-src">
-                    立即分享给好友
-                </p>
-                <p class="share-desc">
-                    朋友通过你分享得页面成功购买后，你可获得对应的佣金，佣金可在"分销中心"查看
-                </p>
-                <ul class="share-list">
-                    <li v-for="item of shareConfigs" :key="item.text" class="share-item" @click="onShareItem(item)">
-                        <div class="share-icon" :style="{backgroundColor: item.fillColor}">
-                            <img :src="item.icon" :style="{width: item.width}">
-                        </div>
-                        <span class="share-label">{{item.text}}</span>
-                    </li>
-                </ul>
-                <div class="share-cancel" @click="onCancel">
-                    取消
-                </div>
+    <dialog open>
+        <div v-show="value" class="share-container" @click.self="onCancel">
+            <div v-show="showTip" class="indicator-container">
+                <div class="indicator-container-icon"></div>
+                <p class="indicator-container-title">立即推广给好友吧</p>
+                <p class="indicator-container-subtitle">点击屏幕右上角将本页面分享给好友</p>
             </div>
-        </transition>
-    </div>
+            <transition @after-leave="afterLeave">
+                <div v-show="value && isOpen" class="share-content">
+                    <p class="share-src">
+                        立即分享给好友
+                    </p>
+                    <p class="share-desc">
+                        朋友通过你分享得页面成功购买后，你可获得对应的佣金，佣金可在"分销中心"查看
+                    </p>
+                    <input style="position: absolute;top:9999px" type="text" id="success_form_input" readonly="readonly" v-model="url"/>
+                    <ul class="share-list">
+                        <li v-for="item of shareConfigs"
+                            class="share-item"
+                            :id="item.ref"
+                            :key="item.text"
+                            data-clipboard-action="copy"
+                            data-clipboard-target="#success_form_input"
+                            @click="onShareItem(item)">
+                            <div class="share-icon" :style="{backgroundColor: item.fillColor}">
+                                <img :src="item.icon" :style="{width: item.width}">
+                            </div>
+                            <span class="share-label">{{item.text}}</span>
+                        </li>
+                    </ul>
+                    <div class="share-cancel" @click="onCancel">
+                        取消
+                    </div>
+                </div>
+            </transition>
+        </div>
+        <!--赚字-->
+        <div v-if="true" class="earn-label" @click="openShareDialog">赚</div>
+    </dialog>
 </template>
 <script>
-    import { distributionShare } from '../../utils/config';
-    import { mapActions, mapState } from 'vuex';
+    import Clipboard from 'clipboard'
+
+    import { distributionShare } from '../../utils/config'
+    import { mapActions, mapState } from 'vuex'
 
     export default {
-        props: ['show', 'postType', 'courseId', 'columnType'],
+        props: ['value', 'postType', 'courseId', 'columnType'],
         data() {
             return {
                 isOpen: true,
                 showTip: false,
-                shareConfigs: distributionShare
+                shareConfigs: distributionShare,
+                clipboardLink: null,
             };
-        },
-        watch: {
-            show(value) {
-                this.isOpen = value
-            }
         },
         computed: {
             ...mapState(['url'])
         },
+        watch: {
+            value: function(value) {
+                this.isOpen = value;
+            }
+        },
+        mounted() {
+            this.clipboardLink = new Clipboard('#link');
+        },
         methods: {
             ...mapActions(['setWxShareFriend', 'setWxShareZone']),
             onShareItem(item) {
-                if (item.id === 'poster') {
-                    this.$toast('分享海报');
-                }
-                if (item.id === 1) {
-                    this.showTip = true;
-                }
-                if (item.id == 2) {
-                    this.showTip = true;
-                }
-                if (item.id == 3) {
-                    this.showTip = true;
+                switch (item.id) {
+                    case 0:         //海报分享
+                        this.$router.push({name: 'DistributorPoster'});
+                        break;
+                    case 1:
+                    case 2:
+                        this.showTip = true;
+                        break;
+                    case 3:        //分享链接
+                        this.clipboardLink.on('success', () => this.$toast('复制成功,快去分享吧'));
+                        break;
                 }
             },
-            toPoster() {
-                let postType = postType ? postType : 'default';
-                this.$router.push({
-                    name: 'SharePoster',
-                    params: {
-                        courseId: this.courseId,
-                        columnType: this.columnType,
-                        postType
-                    }
-                });
+            openShareDialog() {
+                this.$emit('input', true);
+                this.isOpen = true;
             },
             onCancel() {
-                this.isOpen = false
-                this.showTip = false
+                this.isOpen = false;
+                this.showTip = false;
+                setTimeout(() => this.$emit('input', false), 200);
             },
             afterLeave(el) {
                 this.$emit('close');
@@ -183,6 +194,23 @@
             text-align: center;
             line-height: 98px;
         }
+    }
+
+    .earn-label {
+        right: 30px;
+        bottom: 206px;
+        position: fixed;
+        z-index: 125;
+        width: 114px;
+        height: 114px;
+        border-radius: 50%;
+        background-color: #fa7725;
+        line-height: 114px;
+        text-align: center;
+        font-size: 56px;
+        color: #ffffff;
+        border: 6px solid #ffffff;
+        font-weight: 300;
     }
 
     .v-enter,

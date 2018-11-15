@@ -74,6 +74,9 @@
             padding: 0 60px;
 
         }
-
+        &-footer:active{
+          margin-top: 10px;
+          opacity: 0.6;
+        }
     }
 </style>

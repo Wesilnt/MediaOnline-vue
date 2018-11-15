@@ -21,9 +21,7 @@
       </div>
     </div>
       <!--首页分享-->
-      <HomeShare :show="false"></HomeShare>
-    <!--赚字-->
-    <!--<div v-if="true" class="earn-label">赚</div>-->
+      <HomeShare v-model="show"></HomeShare>
   </div>
 
 </template>
@@ -43,6 +41,7 @@ export default {
   name: 'Homepage',
   data(){
      return{
+       show: false,
        homeColumnList:homeColumnList
      }
   },
@@ -125,22 +124,6 @@ export default {
 }
 .index-container {
   padding: 0 28px;
-}
-.earn-label{
-    right: 30px;
-    bottom: 206px;
-    position: fixed;
-    z-index: 125;
-    width: 114px;
-    height: 114px;
-    border-radius: 50%;
-    background-color: #fa7725;
-    line-height: 114px;
-    text-align: center;
-    font-size: 56px;
-    color: #ffffff;
-    border: 6px solid #ffffff;
-    font-weight: 300;
 }
 </style>
 

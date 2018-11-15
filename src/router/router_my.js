@@ -16,6 +16,7 @@ const DistributionTransferDetail = () => import(/* webpackChunkName: "index" */ 
 const editUserPhone = () => import(/* webpackChunkName: "index" */ '../views/my/EditUserPhone')
 const editUserInfo = () => import(/* webpackChunkName: "index" */ '../views/my/EditUserInfo')
 const displayUserInfo = () => import(/* webpackChunkName: "index" */ '../views/my/DisplayUserInfo')
+const DistributorPoster = () => import(/* webpackChunkName: "index" */ '../components/share/DistributorPoster')
 // const WxConfig = () => import(/* webpackChunkName: "index" */ '../views/my/WxConfig')
 const Public = () => import(/* webpackChunkName: "index" */ '../views/my/Public')
 const PageInfo_From_My = [
@@ -123,6 +124,11 @@ const PageInfo_From_My = [
     path:'/my/wallet/rules',
     name:'BookCoinRules',
     component:BookCoinRules
+  },
+  {
+     path: '/share/distribution/poster',
+     name: 'DistributorPoster',
+     component: DistributorPoster
   }
 ]
 

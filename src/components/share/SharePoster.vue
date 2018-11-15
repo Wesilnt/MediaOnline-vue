@@ -106,7 +106,7 @@ export default {
     let bodyHeight = document.body.offsetHeight
 
     let scale = 1
-    if(bodyHeight < this.canvasH) scale = bodyHeight /  this.canvasH 
+    if(bodyHeight < this.canvasH) scale = bodyHeight /  this.canvasH
     saveimage.style.width = this.canvasW * scale + 'px'
   },
   methods: { 

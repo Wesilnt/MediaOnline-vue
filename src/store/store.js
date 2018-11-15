@@ -155,6 +155,7 @@ export default new Vuex.Store({
       dispatch('getUserInfo').then(user => {
         const nickname = user.nickName
           // user.id
+          console.log("print",)
         const shareOptions = {
           title: title || `${nickname}邀请您一起上课啦！`, // 分享标题
           desc, // 分享描述

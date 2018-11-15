@@ -4,7 +4,7 @@
 const { NODE_ENV } = process.env
 
 // 调试选项，本地调试请改为 False
-export const IS_ONLINE = true
+export const IS_ONLINE = false
 // 测试 Token
 export const TEST_TOKEN = "3181eb90-c504-47d8-84d5-77296584d805"
 
@@ -156,6 +156,7 @@ export const purchaseQueryType = {
 export const distributionShare = [
     {
        id:0,
+       ref:'poster',
        icon: require('../assets/images/share-poster.png'),
        text:'生成海报',
        width: '32px',
@@ -163,6 +164,7 @@ export const distributionShare = [
     },
     {
         id:1,
+        ref:'friend',
         icon: require('../assets/images/share-friend.png'),
         text:'发送给朋友',
         width: '22px',
@@ -170,6 +172,7 @@ export const distributionShare = [
     },
     {
         id:2,
+        ref:'circle',
         icon: require('../assets/images/share-circle.png'),
         text:'分享到朋友圈',
         width: '30px',
@@ -177,6 +180,7 @@ export const distributionShare = [
     },
     {
         id:3,
+        ref:'link',
         icon: require('../assets/images/share-link.png'),
         text:'复制链接',
         width: '28px',

@@ -88,6 +88,10 @@
             left: 0;
             background-color: #ffa32f;
         }
+        .apply-footer:active{
+            opacity: 0.6;
+            bottom: -2px;
+        }
 
     }
 </style>
