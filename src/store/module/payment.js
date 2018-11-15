@@ -178,7 +178,7 @@ export default {
     },
     //验证是否完成了公众号授权
     async checkoutWxAuthor() {
-      toast = Toast('请等待操作...')
+      toast = Toast('loading...')
       const result = await wechatSubscribed()
       if (result != 1) {
         //跳转去关注公众号
