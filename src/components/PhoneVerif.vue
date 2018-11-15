@@ -51,7 +51,7 @@ export default {
   methods: {
     ...mapActions(['init', 'sendMobileCode', 'validateMobileCode']),
     sendCode() {
-      if (!this.clickable) return
+      if (!this.clickAble) return
       if (this.mobileNumber.trim() === '') {
         Toast({ position: 'bottom', message: '请输入手机号' })
         this.numberError = '请输入手机号'

@@ -47,7 +47,7 @@
                             <div class="playRecord-list-item-content-info">
                                 <p class="playRecord-list-item-content-info-name">{{item.title}}</p>
                                 <p class="playRecord-list-item-content-info-detail">{{item.courseName}} -
-                                    {{item.subTitle}} - {{item.learnTime}} / {{item.totalTime}}</p>
+                                    {{item.subTitle}} - {{item.learnTime|formatDuring}} / {{item.totalTime|formatDuring}}</p>
                             </div>
                         </div>
                         <div v-if="!showCheck" class="playRecord-list-item-more"

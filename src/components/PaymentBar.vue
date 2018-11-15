@@ -618,7 +618,7 @@ export default {
           {paymentBtn}
           <Share
             show={sharePageShow}
-            courseId={courseId}
+            courseId={courseId} 
             postType="collage"
             close={this.toggleSharePage}
             columnType={columnType}
