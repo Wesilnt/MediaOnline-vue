@@ -1,5 +1,5 @@
 <template>
-    <dialog open>
+    <dialog ref="dialog" class="dialog">
         <div v-show="value" class="share-container" @click.self="onCancel">
             <div v-show="showTip" class="indicator-container">
                 <div class="indicator-container-icon"></div>
@@ -14,7 +14,11 @@
                     <p class="share-desc">
                         朋友通过你分享得页面成功购买后，你可获得对应的佣金，佣金可在"分销中心"查看
                     </p>
-                    <input style="position: absolute;top:9999px" type="text" id="success_form_input" readonly="readonly" v-model="url"/>
+                    <input style="position: absolute;top:9999px"
+                           type="text"
+                           id="success_form_input"
+                           readonly="readonly"
+                           v-model="shareUrl"/>
                     <ul class="share-list">
                         <li v-for="item of shareConfigs"
                             class="share-item"
@@ -35,69 +39,103 @@
                 </div>
             </transition>
         </div>
-        <!--赚字-->
+        <!--分销-->
         <div v-if="true" class="earn-label" @click="openShareDialog">赚</div>
     </dialog>
 </template>
 <script>
-    import Clipboard from 'clipboard'
+    import Clipboard from 'clipboard';
 
-    import { distributionShare } from '../../utils/config'
-    import { mapActions, mapState } from 'vuex'
+    import { distributionShare } from '../../utils/config';
+    import { createNamespacedHelpers, mapActions as rootActions, mapState as rootState } from 'vuex';
+
+    const { mapState, mapActions } = createNamespacedHelpers('myData/distributionData');
 
     export default {
-        props: ['value', 'postType', 'courseId', 'columnType'],
+        props: ['value', 'path'],
         data() {
             return {
+                shareUrl: `${location.href}`,
                 isOpen: true,
                 showTip: false,
                 shareConfigs: distributionShare,
                 clipboardLink: null,
             };
         },
+        created() {
+            const preUserId = this.$route.query.preUserId
+            console.log('分销人员ID：', preUserId)
+            if(preUserId && preUserId>0)
+            {
+                const distributorJSON = JSON.stringify({ preUserId: preUserId })
+                sessionStorage.setItem('distributor', distributorJSON)
+            }
+            this.getUserInfo().then(user =>  this.setWxShare(user))
+        },
         computed: {
-            ...mapState(['url'])
+            ...mapState(['isDistributor'])
         },
         watch: {
             value: function(value) {
-                this.isOpen = value;
+                this.isOpen = value
             }
         },
         mounted() {
-            this.clipboardLink = new Clipboard('#link');
+            this.checkDistributor({ useCache: true }).then(() => {
+                if (!this.isDistributor) this.$refs.dialog.show()
+            });
+            this.clipboardLink = new Clipboard('#link')
         },
         methods: {
-            ...mapActions(['setWxShareFriend', 'setWxShareZone']),
+            ...rootActions(['setWxShareFriend', 'setWxShareZone']),
+            ...mapActions(['checkDistributor', 'getUserInfo']),
             onShareItem(item) {
                 switch (item.id) {
                     case 0:         //海报分享
-                        this.$router.push({name: 'DistributorPoster'});
-                        break;
+                        this.$router.push({ name: 'DistributorPoster', query: { shareUrl: this.shareUrl } })
+                        break
                     case 1:
                     case 2:
-                        this.showTip = true;
-                        break;
+                        this.showTip = true
+                        break
                     case 3:        //分享链接
-                        this.clipboardLink.on('success', () => this.$toast('复制成功,快去分享吧'));
-                        break;
+                        this.clipboardLink.on('success', () => this.$toast('复制成功,快去分享吧'))
+                        break
                 }
             },
             openShareDialog() {
-                this.$emit('input', true);
-                this.isOpen = true;
+                this.$emit('input', true)
+                this.isOpen = true
             },
             onCancel() {
-                this.isOpen = false;
-                this.showTip = false;
-                setTimeout(() => this.$emit('input', false), 200);
+                this.isOpen = false
+                this.showTip = false
+                setTimeout(() => this.$emit('input', false), 200)
             },
-            afterLeave(el) {
-                this.$emit('close');
+            afterLeave() {
+                this.$emit('close')
+            },
+            setWxShare(user) {
+                const href = `${location.href}${-1 != location.href.indexOf('?') ? '&' : '?'}`
+                this.shareUrl = `${href}preUserId=${user.id}`
+                const shareData = {
+                    title: '',
+                    link:this.shareUrl,
+                    desc: '你一定会爱上国学课...',
+                    imgUrl: require('../../assets/images/logo.png'),
+                }
+                console.log('shareLink_title ', shareData)
+                this.setWxShareFriend(shareData)
+                this.setWxShareZone(shareData)
             }
         }
     };
 </script>
 <style lang="scss" scoped>
+    .dialog {
+        border: 0;
+    }
+
     .share-container {
         position: fixed;
         top: 0;

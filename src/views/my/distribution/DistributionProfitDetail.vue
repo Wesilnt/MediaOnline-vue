@@ -176,6 +176,7 @@
                 margin-top: 40px;
                 text-align: center;
                 color: #737373;
+                margin-bottom: 40px;
             }
         }
     }

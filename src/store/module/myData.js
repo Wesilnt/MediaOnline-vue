@@ -9,7 +9,7 @@ const myData = {
     replyMessageCount: 0,
     userInfo: [],
     loading: false,
-    isDistributor:false
+    isDistributor: null
   },
   mutations: {
     save(state, payload) {
@@ -25,15 +25,11 @@ const myData = {
   },
   actions: {
     /**是否是分销员*/
-    async checkDistributor({ commit }) {
+    async checkDistributor({state, commit }, useCache = false) {
+      if(undefined != state.isDistributor && useCache) return state.isDistributor
       const response = await isDistributor()
       await commit('save', {isDistributor: response.data})
-    },
-    /**申请成为分销员*/
-    async applyDistributor({ state, commit,dispatch }, params) {
-          const res = await applyDistributor(params)
-          await commit('save', {isDistributor: res})
-          return res
+      return response.data
     },
     async queryNewMessageCount({ dispatch, commit }) {
       const response = await getNewMessageCount({ busiTypes: 3101 })

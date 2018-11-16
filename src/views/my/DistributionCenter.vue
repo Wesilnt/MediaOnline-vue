@@ -29,23 +29,23 @@
 </template>
 
 <script>
-    import { createNamespacedHelpers } from 'vuex';
-    const { mapState, mapActions } = createNamespacedHelpers('distributionData');
+    import { createNamespacedHelpers } from 'vuex'
+    const { mapState, mapActions } = createNamespacedHelpers('myData/distributionData')
     export default {
         data() {
-            return {};
+            return {}
         },
         methods: {
             toDistributorUpgrade() {
             },
             toGradeRule() {
-                this.$router.push({ name: 'DistributionGradeRule' });
+                this.$router.push({ name: 'DistributionGradeRule' })
             },
             toProfitDetail() {
-                this.$router.push({ name: 'DistributionProfitDetail' });
+                this.$router.push({ name: 'DistributionProfitDetail' })
             }
         }
-    };
+    }
 </script>
 
 <style lang="less" scoped>

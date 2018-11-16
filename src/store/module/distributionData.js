@@ -4,10 +4,12 @@ import {
     getDistributorIncomeList,
     getTransferRecords
 } from '../../api/distributionApi'
+import { isDistributor } from '../../api/myApi';
 
 export default {
     namespaced: true,
     state: {
+        isDistributor: false,                                      //是否是分销员
         isBindMobile: false,                                       //是否绑定手机号
         distributorInfo: {},                                        //分销员信息
         extendAmount: 0,                                            //推广金额
@@ -20,30 +22,39 @@ export default {
         finished: false                                            //分页加载完成
     },
     mutations: {
+        setDistributor(state,data){
+            Object.assign(state, data)
+        },
         setBindMobile(state, data) {
-            Object.assign(state, data);
+            Object.assign(state, data)
         },
         bindDistributorInfo(state, data) {
-            Object.assign(state, data);
+            Object.assign(state, data)
         },
         bindProfitList(state, { res, finished }) {
-            state.finished = finished;
-            state.profitList = res;
+            state.finished = finished
+            state.profitList = res
         },
         bindTransferDetail(state, { res, finished }) {
-            state.finished = finished;
-            state.transferList = res;
+            state.finished = finished
+            state.transferList = res
         },
         toggleLoading(state, loading) {
-            state.isLoading = loading;
+            state.isLoading = loading
         },
         resetData(state) {
-            state.isLoading = false;
-            state.finished = false;
-            state.currentPage = 1;
+            state.isLoading = false
+            state.finished = false
+            state.currentPage = 1
         }
     },
     actions: {
+        /**是否是分销员*/
+        async checkDistributor({ commit ,dispatch},{useCache}) {
+            const res  = await dispatch('myData/checkDistributor',{useCache},{root:true})
+            await commit('setDistributor', {isDistributor: res})
+            return res
+        },
         /**获取分销员信息*/
         async getDistributorInfo({ state, commit }) {
             const res = await getDistributorInfo();
@@ -52,10 +63,10 @@ export default {
         },
         /**申请成为分销员*/
         async applyDistributor({ state, commit, dispatch }, params) {
-            const res = await dispatch('myData/applyDistributor', params, { root: true })
+            const res = await applyDistributor()
             if (!res) return
             await commit('bindDistributorInfo',{distributorInfo:res,extendAmount:res.extendAmount})
-            await dispatch('myData/checkDistributor', null, { root: true })
+            await dispatch('checkDistributor', {useCache: false})
             return res
         },
         async getProfitList({ state, commit }, refresh) {
@@ -187,6 +198,11 @@ export default {
         async getUserInfo({commit,dispatch}) {
             const userInfo = await dispatch('getUserInfo', false,{root:true})
             commit('setBindMobile', { isBindMobile: userInfo && userInfo.mobileNo.length > 0 })
+            return userInfo
+        },
+        setDistributor({commit,dispatch},{preUserId}){
+          if(!preUserId || preUserId <=0) return
+          dispatch('setDistributor',{preUserId},{root:true})
         },
         onDestroy({ commit }) {
             commit('resetData')
@@ -195,6 +211,6 @@ export default {
     getters: {
         // noSettlement:state=>state.distributionInfo.noSettlement,                                                     //
         // totalIncome:state=>state.distributionInfo.totalIncome,                                                       //总收入
-        isDistributor: (state, getters, rootState) => rootState.myData.isDistributor                                    //是否是分销员
+        // isDistributor: (state, getters, rootState) => rootState.myData.isDistributor                                 //是否是分销员
     }
 };

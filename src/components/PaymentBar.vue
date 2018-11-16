@@ -147,14 +147,14 @@ export default {
           userPaymentStatus,
         groupBuyFull
       } = this
-      console.log(
-        viewer,
-        paymentGroupBuyId,
-        paymentCollectLikeId,
-        userAccessStatus,
-        groupBuystatus,
-        groupBuyFull
-      )
+      // console.log(
+      //   viewer,
+      //   paymentGroupBuyId,
+      //   paymentCollectLikeId,
+      //   userAccessStatus,
+      //   groupBuystatus,
+      //   groupBuyFull
+      // )
       let paymentStatus = null
       if (paymentCollectLikeId) {
         // 他人集赞不进入此页面 可简单判断
@@ -468,7 +468,7 @@ export default {
       if (paymentGroupBuyId && groupBuystatus !== 1204) {
         title = `我正在参加《${courseName}》拼团活动,仅差${groupBuyPersonCount -
           alreadyCount}人,快来和我一起拼团吧!`
-        link = `${url}/#/detail/${columnType}/${courseId}?groupBuyId=${paymentGroupBuyId}`
+        link = `${url}/#/detail/${columnType}/${courseId}?groupBuyId=${paymentGroupBuyId}&preUserId=${userInfo.id}`
       }
       if (paymentCollectLikeId) {
         title = `我是${userInfo.nickName}, ${

@@ -20,15 +20,15 @@
                   :list='columns[homeColumnList[item].listKey]'/>
       </div>
     </div>
-      <!--首页分享-->
-      <HomeShare v-model="show"></HomeShare>
+      <!--分销分享组件-->
+      <DistributorShare v-model="show"></DistributorShare>
   </div>
 
 </template>
 
 <script>
 import SkeletonFullScreen from '../components/SkeletonFullScreen'
-import HomeShare from '../components/share/HomeShare'
+import DistributorShare from '../components/share/DistributorShare'
 import Notice from '../components/homeComponents/Notice.vue'
 import HomeItem from '../components/HomeItem.vue'
 import homeData from '../store/module/homeData.js'
@@ -47,7 +47,7 @@ export default {
   },
   components: {
     SkeletonFullScreen,
-    HomeShare,
+    DistributorShare,
     Notice,
     HomeItem
   },

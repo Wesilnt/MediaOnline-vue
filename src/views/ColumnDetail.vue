@@ -133,6 +133,8 @@
             <div class="load-more-container" v-if="lessonFinished">
                 没有更多了，不要再拉啦～
             </div>
+            <!--分销分享组件-->
+            <DistributorShare v-model="show"></DistributorShare>
         </div>
     </div>
 </template>
@@ -147,6 +149,7 @@ import ScrollNavBar from '../components/ScrollNavBar'
 import CourseIntroduce from '../components/CourseIntroduce.vue'
 import videoComment from '../components/video-comment.vue'
 import ImagePreview from '../components/ImagePreview'
+import DistributorShare from '../components/share/DistributorShare'
 import { createNamespacedHelpers } from 'vuex'
 import {
   openVideoDetail,
@@ -154,14 +157,13 @@ import {
   columnType as COLUMNTYPE
 } from '../utils/config'
 
-const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
-  'columnData'
-)
+const { mapState, mapActions, mapGetters } = createNamespacedHelpers('columnData')
 export default {
   name: 'ColumnDetail',
   data() {
     const { columnType, courseId } = this.$route.params
     return {
+      show:false,
       courseId,
       columnType,
       navBars: [
@@ -288,7 +290,7 @@ export default {
     },
     //分页加载
     scrollBottom() {
-      this.canLoadMore &&
+        this.canLoadMore &&
         this.getLessonList({ courseId: this.courseId, refresh: false })
     }
   },
@@ -301,7 +303,8 @@ export default {
     videoComment,
     ImagePreview,
     ScrollNavBar,
-    CommentList
+    CommentList,
+    DistributorShare
   }
 }
 </script>

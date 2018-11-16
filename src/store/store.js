@@ -12,7 +12,7 @@ import myReplyData from './module/myReplyData'
 import myLikeData from './module/myLikeData'
 import myPlayRecordData from './module/myPlayRecordData'
 import myPurchaseData from './module/myPurchaseData'
-import walletData from './module/walletData'
+// import walletData from './module/walletData'
 import userInfoData from './module/userInfoData'
 import commentData from './module/commentData'
 import freezoneData from './module/freezoneData'
@@ -21,11 +21,11 @@ import shareData from './module/shareData'
 import praiseData from './module/praiseData'
 import mobileData from './module/mobileData'
 import columnActions from './column'
+import {walletState,walletMutations,walletActions} from './wallet'
 
 import {
   getToken,
-  getUserByToken,
-  getColumnDetail
+  getUserByToken
 } from '../api/accessTokenApi'
 import { noAccessToken } from '../utils/userAuth'
 import { wxConfig as wxConfigApi } from '../api/groupBuyApi.js'
@@ -40,7 +40,8 @@ export default new Vuex.Store({
     wxRegisterPath: '',
     userInfo: null,
     columnDetail: {},
-    columnType: null
+    columnType: null,
+    ...walletState
   },
   mutations: {
     saveWxRegisterPath(state, { wxRegisterPath }) {
@@ -49,15 +50,15 @@ export default new Vuex.Store({
     saveUserInfo(state, { userInfo }) {
       state.userInfo = userInfo
     },
-    //设置当前用户选中专栏columnDetail  ,
-    //专栏类型 columnType : FreeZone(1007) 免费专区 OnlineCourse(1005) 在线课堂  OnlineVision(1003) 在线视野  Readings(1001) 读书会
+    //专栏类型 onlineCourse(1005) 在线课堂  onlineVision(1003) 在线视野  reading(1001) 读书会
     bindColumnType(state, { columnType }) {
       state.columnType = columnType
     },
-    //设置当前用户选中专栏columnDetail  ,
+    //设置当前用户选中专栏columnDetail
     bindCurrentColumn(state, { columnDetail }) {
       state.columnDetail = columnDetail
-    }
+    },
+      ...walletMutations
   },
   actions: {
     async getAccessToken() {
@@ -155,7 +156,6 @@ export default new Vuex.Store({
       dispatch('getUserInfo').then(user => {
         const nickname = user.nickName
           // user.id
-          console.log("print",)
         const shareOptions = {
           title: title || `${nickname}邀请您一起上课啦！`, // 分享标题
           desc, // 分享描述
@@ -217,15 +217,8 @@ export default new Vuex.Store({
         }
       })
     },
-    //获取专栏详情
-    // async getColumnDetail({commit,state }, {courseId,columnType,forceFresh=true}) {
-    //   let cacheId = state.columnDetail && state.columnDetail.id
-    //   if(cacheId && cacheId === courseId&&!forceFresh) return state.columnDetail
-    //   const result = await getColumnDetail({courseId})
-    //   commit('bindCurrentColumn', {columnType, columnDetail:result})
-    //   return result
-    // },
-    ...columnActions
+    ...columnActions,
+    ...walletActions
   },
   modules: {
     myPuzzle_PraiseData,
@@ -248,6 +241,6 @@ export default new Vuex.Store({
     shareData,
     praiseData,
     mobileData,
-    walletData
+    // walletData
   }
 })

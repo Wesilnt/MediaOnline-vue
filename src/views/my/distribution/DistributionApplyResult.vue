@@ -21,7 +21,7 @@
 
 <script>
     import { createNamespacedHelpers } from 'vuex';
-    const { mapState ,mapGetters} = createNamespacedHelpers('myData/distributionData')
+    const { mapState ,mapActions} = createNamespacedHelpers('myData/distributionData')
     export default {
         data() {
             return {
@@ -29,11 +29,12 @@
                 failureIcon: require('../../../assets/images/distributor_failure.png'),
             };
         },
-        computed: { ...mapState(['distributorInfo','extendAmount']),...mapGetters(['isDistributor'])},
+        computed: { ...mapState(['distributorInfo','extendAmount','isDistributor'])},
         created(){
           if(!this.distributorInfo || undefined == this.distributorInfo.extendAmount) this.$router.go(-1)
         },
         methods: {
+            ...mapActions(['checkDistributor']),
             nextOperate() {
                 this.$router.replace({ name: `${this.isDistributor?'distributionCenter':'HOME'}` })
             }

@@ -1,20 +1,30 @@
 <template>
     <div class="distributor-poster">
         <main class="distributor-poster-main">
-            <canvas ref="canvasId" :width="canvasW" :height="canvasH"/>
+            <canvas ref="canvasId" :width="canvasW" :height="canvasH" />
             <div class="top-container">
                 <img ref="saveImage"/>
                 <p>长按分享图片</p>
             </div>
         </main>
         <!-- 二维码生成组件 -->
-        <qr-code :style="{display:'none'}" :text="shareUrl" error-level="Q"/>
+        <vue-qr :logoSrc="imageUrl"
+                :logoScale="20* radio"
+                :style="{display:'none'}"
+                colorDark="#CE3B33"
+                colorLight="#ff0000"
+                :text="shareUrl"
+                error-level="Q"
+                :margin="0"
+        />
+        <!--<qr-code :logoSrc="imageUrl" :style="{display:'none'}" :text="shareUrl" error-level="Q"/>-->
         <div class="loading-container" v-show="isLoading">
             <van-loading color="white"/>
         </div>
     </div>
 </template>
 <script>
+    import VueQr from 'vue-qr'
     import LoadingDialog from '../LoadingDialog.vue';
     import { createNamespacedHelpers, mapState as rootState, mapActions as rootActions } from 'vuex';
 
@@ -22,30 +32,27 @@
     export default {
         data() {
             let screenW = document.body.offsetWidth;
-            let screenH = document.body.offsetHeight;
-            let canvasW = screenW * 2 / 3;
-            let canvasH = 667 * screenW / 375 / 2;
-            let centerX = canvasW / 2;
+            let radio = screenW / 375
+            let canvasW = screenW * 2 / 3  * radio
+            let canvasH = 667 * screenW / 375 / 2 * radio
+            let centerX = canvasW / 2 * radio
+            console.log(this)
             return {
-                shareUrl: 'https://www.baidu.com',
-                pixelRatio: 1,
-                radio: screenW / 375,
-                canvasW,                          //canvas宽度
-                canvasH,                           //canvas高度
-                centerX,                           //canvas中心x坐标
-                headImageW: 36,    //用户头像宽度
-                headLeft: 51,      //头像Left
-                headTop: 462,      //头像Top
-                qrcodeWidth: 100, //二维码大小
-                qrcodeLeft: canvasW / 2 - 50,   //二维码Left
-                qrcodeTop: (canvasH - 50) / 2,    //二维码Top
+                shareUrl: this.$route.query.shareUrl,
+                pixelRatio: 1,                          //像素比
+                radio,                                  //
+                canvasW,                                //canvas宽度
+                canvasH,                                //canvas高度
+                centerX,                                //canvas中心x坐标
+                qrcodeWidth: 100,                       //二维码大小
+                qrcodeTop: (canvasH - 50) * 0.382,      //二维码Top
                 ctx: null,
                 canvasData: null,
-                posterData: {},
-                isLoading: true
+                isLoading: true,
+                imageUrl: require('../../assets/images/logo.png')
             };
         },
-        components: { 'loading-dialog': LoadingDialog },
+        components: { 'loading-dialog': LoadingDialog ,VueQr},
         computed: {
             ...rootState(['url', 'columnDetail', 'columnType']),
             ...mapState(['loading', 'poster'])
@@ -67,26 +74,26 @@
                     context.mozBackingStorePixelRatio ||
                     context.msBackingStorePixelRatio ||
                     context.oBackingStorePixelRatio ||
-                    context.backingStorePixelRatio || 1;
-                return (window.devicePixelRatio || 1) / backingStore;
+                    context.backingStorePixelRatio || 1
+                return (window.devicePixelRatio || 1) / backingStore
             };
-            this.pixelRatio = getPixelRatio(this.ctx);
+            this.pixelRatio = getPixelRatio(this.ctx)
             //1. 将画布放 屏幕像素比
-            this.canvasData.height = this.canvasH * this.pixelRatio;
-            this.canvasData.width = this.canvasW * this.pixelRatio;
+            this.canvasData.height = this.canvasH * this.pixelRatio
+            this.canvasData.width = this.canvasW * this.pixelRatio
             //2. 指定绘制上下文, 放大 this.pixelRatio 比例进行绘制所有的内容
-            this.ctx.scale(this.pixelRatio, this.pixelRatio);
+            this.ctx.scale(this.pixelRatio, this.pixelRatio)
             //3. 显示画布大小时 按原来大小显示, 这里的用的图片，所以下面两行可以不要
-            this.canvasData.style.height = this.canvasH + 'px';
-            this.canvasData.style.width = this.canvasW + 'px';
+            // this.canvasData.style.height = this.canvasH + 'px'
+            // this.canvasData.style.width = this.canvasW + 'px'
             //重新生成图片
-            this.drawBottomMap();
+            this.drawBottomMap()
             //制定显示大小
-            const { saveImage } = this.$refs;
-            let bodyHeight = document.body.offsetHeight;
-            let scale = 1;
-            if (bodyHeight < this.canvasH) scale = bodyHeight / this.canvasH;
-            saveImage.style.width = this.canvasW * scale + 'px';
+            const { saveImage } = this.$refs
+            let bodyHeight = document.body.offsetHeight
+            let scale = 1
+            if (bodyHeight < this.canvasH) scale = bodyHeight / this.canvasH
+            saveImage.style.width = this.canvasW * scale + 'px'
         },
         methods: {
             ...rootActions(['getUserInfo']),
@@ -101,19 +108,18 @@
                     .then(() => new Promise(resolve => this.drawBackground(resolve)))
                     .then(() => new Promise(resolve => this.drawTitle(resolve)))
                     .then(() => new Promise(resolve => this.drawDashLine(resolve)))
-                    .then(() => new Promise(resolve => this.drawHeadImage(resolve)))
                     .then(() => new Promise(resolve => this.drawQrcode(resolve)))
+                    .then(() => new Promise(resolve => this.drawHeadImage(resolve)))
                     .then(() => this.drawTip())
                     .then(() => this.$refs.saveImage.src = this.canvasData.toDataURL('images/png'))
                     .then(() => this.isLoading = false, () => this.isLoading = false)
-                    .catch(() => this.isLoading = false);
+                    .catch(() => this.isLoading = false)
             },
 
             //1. 绘制背景图和颜色
             async drawBackground(resolve) {
-                this.ctx.fillStyle = '#eeeeee';
-                // this.ctx.fillRect(0, 0, this.canvasW * this.pixelRatio, this.canvasH * this.pixelRatio)
-                this.roundedRect(this.ctx,0, 0, this.canvasW, this.canvasH , 10)
+                this.ctx.fillStyle = '#FFFFFF'
+                this.roundedRect(this.ctx,0, 0, this.canvasW, this.canvasH, 10)
                 resolve();
                 // let cover = new Image();
                 // cover.setAttribute('crossOrigin', 'anonymous');
@@ -129,68 +135,79 @@
                 //     this.ctx.drawImage(cover, 0, 0, this.canvasW, this.canvasH);
                 //     this.ctx.restore();
                 //     resolve();
-                // };
-
+                // }
             },
             //2. 顶部提示
             async drawTitle(resolve) {
-                let title = '发现一些好货,邀你一起看看';
-                this.ctx.fillStyle = '#262626';
-                this.ctx.font = '15px Georgia';
-                let textW = this.ctx.measureText(title).width;
-                this.ctx.fillText(title, (this.centerX - textW / 2) * this.radio, 30 * this.radio);
-                resolve();
+                let title = '发现一些好货,邀你一起看看'
+                this.ctx.fillStyle = '#262626'
+                this.ctx.font = '15px Georgia'
+                let textW = this.ctx.measureText(title).width
+                this.ctx.fillText(title, (this.centerX - textW / 2)  , 30  )
+                resolve()
             },
             //3. 虚线
             async drawDashLine(resolve) {
                 this.ctx.save()
-                this.ctx.strokeStyle = '#999999'
+                this.ctx.strokeStyle = '#E0E0E0'
                 this.ctx.translate(0.5, 0.5)
                 this.ctx.lineWidth = 1
                 this.ctx.beginPath()
-                this.ctx.setLineDash([6, 6])
+                this.ctx.setLineDash([6, 3])
                 this.ctx.moveTo(0, 50)
-                this.ctx.lineTo(this.canvasW, 50)
+                this.ctx.lineTo(this.canvasW , 50)
                 this.ctx.stroke()
+                 //左半圆
+                this.ctx.beginPath()
+                this.ctx.fillStyle = '#F5F5F5'
+                this.ctx.arc(0,50,10,0,Math.PI*2,true)
+                this.ctx.fill()
+                this.ctx.restore()
+                //右半圆
+                this.ctx.beginPath()
+                this.ctx.fillStyle = '#F5F5F5'
+                this.ctx.arc(this.canvasW ,50,10,0,Math.PI*2,true)
+                this.ctx.fill()
                 this.ctx.restore()
                 resolve();
             },
             //4. 绘制二维码
             async drawQrcode(resolve) {
-                let left = this.qrcodeLeft * this.radio;
-                let top = this.qrcodeTop * this.radio;
-                let width = this.qrcodeWidth * this.radio;
-                this.ctx.drawImage(this.$children[0].$el.children[1], left, top, width, width);
-                let currentSrc = this.$children[0].$el.children[1].currentSrc;
-                if ('' !== currentSrc && this.shareUrl === currentSrc) return;
-                this.$children[0].$el.children[1].onload = () => this.ctx.drawImage(this.$children[0].$el.children[1], left, top, width, width);
-                resolve();
+                let top = this.qrcodeTop
+                let width = this.qrcodeWidth
+                let left =  this.centerX   - width  /2
+                let img =  this.$el.children[1].children[0]
+                this.ctx.drawImage(img, left, top, width, width)
+                let currentSrc =  img.currentSrc
+                if("" !== currentSrc) return //如果二维码没有加载则走下面的加载回调绘制
+                img.onload = () =>  this.ctx.drawImage(img, left, top, width, width)
+                resolve()
             },
             //5. 绘制头像
             async drawHeadImage(resolve) {
-                var header = new Image();
+                const header = new Image();
                 header.setAttribute('crossOrigin', 'anonymous');
                 header.src = (this.startAvatar || this.user.avatarUrl) + '?timeStamp=' + Date.now();
                 header.onload = () => {
-                    let radius = this.headImageW * this.radio;
-                    let x = this.headLeft * this.radio;
-                    let y = this.headTop * this.radio;
-                    this.ctx.save();
-                    this.ctx.beginPath();
-                    this.ctx.arc(x + this.headImageW / 2, y + this.headImageW / 2, this.headImageW / 2, 0, Math.PI * 2, false);
-                    this.ctx.clip();
-                    this.ctx.drawImage(header, x, y, this.headImageW, this.headImageW);
-                    this.ctx.restore();
-                    resolve();
-                };
+                    // let radius = this.headImageW * this.radio
+                    // let x = this.qrcodeLeft * this.radio
+                    // let y =  this.qrcodeTop * this.radio
+                    // this.ctx.save()
+                    // this.ctx.beginPath()
+                    // this.ctx.arc(x + this.headImageW / 2, y + this.headImageW / 2, this.headImageW / 2, 0, Math.PI * 2, false)
+                    // this.ctx.clip()
+                    // this.ctx.drawImage(header, x, y, this.headImageW, this.headImageW)
+                    // this.ctx.restore()
+                    resolve()
+                }
             },
-            //6. 绘制二维码
+            //6. 绘制二维码提示
             async drawTip() {
-                let tip = '长按识别二维码';
-                this.ctx.fillStyle = '#262626';
-                this.ctx.font = '15px Georgia';
-                let textW = this.ctx.measureText(tip).width;
-                this.ctx.fillText(tip, (this.centerX - textW / 2) * this.radio, this.canvasH - 40);
+                let tip = '长按识别二维码'
+                this.ctx.fillStyle = '#262626'
+                this.ctx.font = '15px Georgia'
+                let textW = this.ctx.measureText(tip).width
+                this.ctx.fillText(tip, (this.centerX - textW / 2) , this.canvasH - 40)
             },
             //圆角矩形
             roundedRect(ctx, x, y, width, height, radius) {
@@ -231,7 +248,7 @@
                 width: 100%;
                 display: inline-flex;
                 text-align: center;
-                background-color: rgba(41, 41, 41, 0.6)
+                background-color: rgba(245, 245, 245,1)
             }
             .top-container img {
                 z-index: 999;

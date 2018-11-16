@@ -3,7 +3,7 @@
         <!--头部-->
         <header class="wallet-header">
             <section class="wallet-header-section">
-                <span class="wallet-header-money">{{coinNumber.toFixed(2)}}<small>书币</small></span>
+                <span class="wallet-header-money">{{coinNum && coinNum.toFixed(2)}}<small>书币</small></span>
                 <span class="wallet-header-tip">书币在购买时可直接抵扣现金哦</span>
             </section>
             <div class="wallet-header-rules" @click="toRulesDetail">规则明细</div>
@@ -29,13 +29,12 @@
 </template>
 
 <script>
-    import { createNamespacedHelpers } from 'vuex';
-    const { mapState, mapActions } = createNamespacedHelpers('walletData');
+    import {  mapState , mapActions  } from 'vuex'
     export default {
         data() {
             return {  }
         },
-        computed:{...mapState(['coinNumber','coinRecords', 'isLoading', 'finished'])},
+        computed:{...mapState(['coinNum','coinRecords', 'isLoading', 'finished'])},
         filters: {
             formatDuring: date => {
                 let mss = new Date(date)
@@ -46,10 +45,10 @@
             }
         },
         created(){
-         this.getCoinNumber()
+         this.getBookCoinInfo()
         },
         methods:{
-            ...mapActions(['getCoinNumber','getCoinRecord']),
+            ...mapActions(['getBookCoinInfo','getCoinRecord']),
             toRulesDetail(){
                 this.$router.push({name:"BookCoinRules"})
             },
@@ -114,6 +113,7 @@
             margin-top: 40px;
             text-align: center;
             color: #737373;
+            margin-bottom: 40px;
         }
     }
 

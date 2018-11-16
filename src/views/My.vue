@@ -106,7 +106,7 @@ export default {
     ...mapState(['replyMessageCount', 'userInfo'])
   },
   methods: {
-    ...mapActions(['queryNewMessageCount','isDistributor', 'getMyUserInfo']),
+    ...mapActions(['queryNewMessageCount','checkDistributor', 'getMyUserInfo']),
     editUserInfo: function() {
       if (
         undefined != this.userInfo.gender &&
@@ -132,7 +132,7 @@ export default {
     }
   },
   created() {
-    // this.isDistributor()
+    // this.checkDistributor()
     this.queryNewMessageCount()
     this.getMyUserInfo(true).then(() => {
       this.showEdit =

@@ -1,9 +1,11 @@
-import { getCoinNumber, getCoinRecord } from '../../api/walletApi';
+import { getBookCoinInfo, getCoinRecord } from '../../api/walletApi';
 
 export default {
     namespaced: true,
     state: {
-        coinNumber: 0,                                      //当前用户书币总数
+        coinNum: 0,                                         //当前用户书币总数
+        deductionOrder: 0,                                  //书币抵扣订单比例
+        deductionProp: 0,                                   //书币与现金兑换比例
         coinRecords: [],                                    //用户书币明细列表
         finished: false,                                   //明细加载是否完成
         isLoading: false,                                  //明细列表loading
@@ -13,7 +15,7 @@ export default {
     },
     mutations: {
         bindUserCoinNumber(state, res) {
-            state.coinNumber = res
+           Object.assign(state,res)
         },
         bindCoinRecord(state, data) {
             Object.assign(state,data)
@@ -26,7 +28,7 @@ export default {
         /**获取用户书币*/
         async getCoinNumber({ commit, dispatch }) {
             dispatch('getCoinRecord', true)
-            const res = await getCoinNumber()
+            const res = await getBookCoinInfo()
             if (undefined == res) return
             commit('bindUserCoinNumber', res)
         },

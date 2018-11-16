@@ -67,6 +67,7 @@
         &-footer {
             font-size: 24px;
             color: #cccccc;
+            margin-bottom: 40px;
         }
     }
 
