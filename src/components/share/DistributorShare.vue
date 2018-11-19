@@ -120,7 +120,6 @@
                 this.$emit('close')
             },
             setWxShare(user) {
-                console.log(user)
                 const href = `${location.href}${-1 != location.href.indexOf('?') ? '&' : '?'}`
                 const distributor = btoa(encodeURIComponent(JSON.stringify({id:user.id,avatarUrl:user.avatarUrl,nickName:user.nickName})))
                 this.shareUrl = `${href}preUserId=${user.id}&distributor=${distributor}`

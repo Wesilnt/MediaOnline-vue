@@ -17,7 +17,7 @@
                 error-level="Q"
                 :margin="0"
         />
-        <!--<qr-code :logoSrc="imageUrl" :style="{display:'none'}" :text="shareUrl" error-level="Q"/>-->
+        <!--<qr-code :style="{display:'none'}" :text="shareUrl" error-level="Q"/>-->
         <div class="loading-container" v-show="isLoading">
             <van-loading color="white"/>
         </div>

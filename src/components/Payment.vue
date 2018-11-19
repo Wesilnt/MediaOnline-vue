@@ -22,7 +22,7 @@
             您将购买的商品为虚拟内容服务，购买后不支持退订、转让、退换，请斟酌确认。
             <p>购买后可在 “我的——已购清单”内查看。</p>
         </div>
-        <div class="clearinghouse-pay" :class="{disabled:payDisabled}" @click="handlePayment">{{preUserId}}确认支付 ￥
+        <div class="clearinghouse-pay" :class="{disabled:payDisabled}" @click="handlePayment">确认支付 ￥
             <Counter :prev="parseFloat(payAmount)" :cur="parseFloat(payAmount)" :key="currentPrice"/>
         </div>
     </div>
@@ -117,7 +117,7 @@
             async handlePayment() {
                 this.payDisabled = true;
                 const preUserIdStr =  sessionStorage.getItem('preUserId')
-                const preUserIdJSON = JSON.parse(preUserIdStr || {})
+                const preUserIdJSON = JSON.parse(preUserIdStr || '{}')
                 const preUserId = preUserIdJSON.preUserId || 0
                 this.preUserId = preUserId
                 const payParams = {
