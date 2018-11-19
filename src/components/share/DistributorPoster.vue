@@ -117,10 +117,13 @@
 
             //1. 绘制背景图和颜色
             async drawBackground(resolve) {
-                this.ctx.fillStyle = 'rgba(0,0,0,0)'
+                this.ctx.fillStyle = '#ffffff'
                 this.ctx.fillRect(0, 0, this.canvasW, this.canvasH)
+                this.ctx.save()
                 this.ctx.fillStyle = '#FFFFFF'
+                this.ctx.globalCompositeOperation = 'source-in'
                 this.roundedRect(this.ctx,0, 0, this.canvasW, this.canvasH, 10)
+                this.ctx.restore()
                 resolve()
                 // let cover = new Image();
                 // cover.setAttribute('crossOrigin', 'anonymous');
@@ -169,6 +172,7 @@
                 this.ctx.fillStyle = '#F5F5F5'
                 this.ctx.globalCompositeOperation = 'xor'
                 this.ctx.arc(this.canvasW ,50,8,0,Math.PI*2,true)
+                this.ctx.clip()
                 this.ctx.fill()
                 this.ctx.restore()
                 resolve()

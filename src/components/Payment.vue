@@ -11,7 +11,7 @@
                 </li>
             </ul>
         </div>
-        <div v-if="!IS_ONLINE||IS_ONLINE" class="qhht-flex clearinghouse-body" @click="toggleDiscount">
+        <div v-if="!IS_ONLINE||IS_ONLINE" class="qhht-flex clearinghouse-body" :style="{pointerEvents: `${deductionBookCoin>0?'':'none'}`}" @click="toggleDiscount">
             <span>优惠书币：消耗{{deductionBookCoin}}书币</span>
             <span class="qhht-flex clearinghouse-discount" :class="{checked}">
                 <span>-￥{{ deductionAmount }}</span>
@@ -51,7 +51,7 @@
                 payType,
                 currentPrice: 100,
                 prevPrice: 100,
-                preUserId:0
+                preUserId: 0,
             };
         },
         computed: {
@@ -66,15 +66,19 @@
             ...mapState(['paySucceed']),
             ...rootState(['coinNum', 'deductionOrder', 'deductionProp']),
             deductionBookCoin: function() {
-                let totalCoin = this.payDetail.price * this.deductionOrder / this.deductionProp
-                return this.coinNum <= totalCoin ? this.coinNum : totalCoin
+                const price = parseFloat(this.payDetail.price)                                  //比抵扣书币金额
+                let totalAmount = price * this.deductionOrder / 100                              //最多能抵扣金额
+                totalAmount = price - totalAmount < 0.01 ? price - 0.01 : totalAmount             //书币抵扣完,剩余支付金额不能小于0.01
+                let totalCoin = (totalAmount * this.deductionProp).toFixed(0)                    //最多抵扣需要花费多少书币
+                return this.coinNum <= totalCoin ? this.coinNum : totalCoin                     //计算可用书币总数
             },
             deductionAmount: function() {
-                return Math.round(this.deductionBookCoin * this.deductionProp)/ 100
+                return (Math.round(this.deductionBookCoin * 100 / this.deductionProp) / 100).toFixed(2)
             },
             payAmount: function() {
-                let amount = this.checked ? (this.payDetail.price - this.deductionAmount) : this.payDetail.price
-                return amount.toFixed(2)
+                const price = parseFloat(this.payDetail.price)
+                let amount = this.checked ? (price - this.deductionAmount) : price
+                return amount.toFixed(2);
             },
             payDetail: function() {
                 const {
@@ -85,9 +89,9 @@
                     price: origin,
                     lessonCount
                 } = this;
-                const payDetail = JSON.parse(sessionStorage.getItem('payDetail'))
+                const payDetail = JSON.parse(sessionStorage.getItem('payDetail'));
                 const { payType } = this.$route.params;
-                const price = payType === 'groupBuy' ? groupBuyPrice : origin
+                const price = payType === 'groupBuy' ? groupBuyPrice : origin;
                 return courseName
                     ? {
                         courseName,
@@ -102,13 +106,13 @@
         },
         watch: {
             checked: function(newChecked) {
-                this.currentPrice = newChecked ? 80 : this.spen
-                this.prevPrice = newChecked ? this.spen : 80
+                this.currentPrice = newChecked ? 80 : this.spen;
+                this.prevPrice = newChecked ? this.spen : 80;
             },
             paySucceed: function(isSucceed) {
                 if (isSucceed) {
-                    this.$toast('您已支付成功')
-                    setTimeout(() => this.$router.go(-1), 400)
+                    this.$toast('您已支付成功');
+                    setTimeout(() => this.$router.go(-1), 400);
                 }
             }
         },
@@ -117,36 +121,36 @@
             ...rootActions(['getBookCoinInfo']),
             async handlePayment() {
                 this.payDisabled = true;
-                const preUserIdStr =  sessionStorage.getItem('preUserId')
-                const preUserIdJSON = JSON.parse(preUserIdStr || '{}')
-                const preUserId = preUserIdJSON.preUserId || 0
-                this.preUserId = preUserId
+                const preUserIdStr = sessionStorage.getItem('preUserId');
+                const preUserIdJSON = JSON.parse(preUserIdStr || '{}');
+                const preUserId = preUserIdJSON.preUserId || 0;
+                this.preUserId = preUserId;
                 const payParams = {
                     courseId: this.courseId,              //购买专栏ID
                     useFlag: this.checked,                //是否使用书币
                     preUserId                             //是否来自分销员分享
-                }
+                };
                 if (this.payType === 'groupBuy') {
                     if (this.groupBuyId) {
-                        await this.joinGroupBuy({ ...payParams, groupBuyId: this.groupBuyId })
+                        await this.joinGroupBuy({ ...payParams, groupBuyId: this.groupBuyId });
                     } else {
-                        await this.startGroupBuy(payParams)
+                        await this.startGroupBuy(payParams);
                     }
                 }
                 if (this.payType === 'origin') {
-                    await this.unlockCourse(payParams)
+                    await this.unlockCourse(payParams);
                 }
-                this.payDisabled = false
+                this.payDisabled = false;
             },
             toggleDiscount() {
-                this.checked = !this.checked
+                this.checked = !this.checked;
             }
         },
         created() {
-            this.getBookCoinInfo()
+            this.getBookCoinInfo();
         },
         mounted() {
-            document.title = '结算中心'
+            document.title = '结算中心';
             const {
                 courseName,
                 coverPic,
@@ -170,8 +174,8 @@
             }
         },
         destroyed() {
-            document.title = '秦汉胡同'
-            sessionStorage.setItem('payDetail', null)
+            document.title = '秦汉胡同';
+            sessionStorage.setItem('payDetail', null);
         },
         components: {
             Counter
