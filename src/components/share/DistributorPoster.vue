@@ -11,7 +11,7 @@
         <vue-qr :logoSrc="imageUrl"
                 :logoScale="20* radio"
                 :style="{display:'none'}"
-                colorDark="#CE3B33"
+                colorDark="#123456"
                 colorLight="#ff0000"
                 :text="shareUrl"
                 error-level="Q"
@@ -28,15 +28,14 @@
     import LoadingDialog from '../LoadingDialog.vue';
     import { createNamespacedHelpers, mapState as rootState, mapActions as rootActions } from 'vuex';
 
-    const { mapState } = createNamespacedHelpers('shareData');
+    const { mapState } = createNamespacedHelpers('shareData')
     export default {
         data() {
-            let screenW = document.body.offsetWidth;
+            let screenW = document.body.offsetWidth
             let radio = screenW / 375
             let canvasW = screenW * 2 / 3  * radio
             let canvasH = 667 * screenW / 375 / 2 * radio
             let centerX = canvasW / 2 * radio
-            console.log(this)
             return {
                 shareUrl: this.$route.query.shareUrl,
                 pixelRatio: 1,                          //像素比
@@ -61,13 +60,13 @@
             this.setPosterConfig();     //设置分享地址
         },
         mounted: function() {
-            let canvasData = this.$refs.canvasId;
-            this.canvasData = canvasData;
-            this.ctx = canvasData.getContext('2d');
-            this.ctx.mozImageSmoothingEnabled = false;
-            this.ctx.webkitImageSmoothingEnabled = false;
-            this.ctx.msImageSmoothingEnabled = false;
-            this.ctx.imageSmoothingEnabled = false;
+            let canvasData = this.$refs.canvasId
+            this.canvasData = canvasData
+            this.ctx = canvasData.getContext('2d')
+            this.ctx.mozImageSmoothingEnabled = false
+            this.ctx.webkitImageSmoothingEnabled = false
+            this.ctx.msImageSmoothingEnabled = false
+            this.ctx.imageSmoothingEnabled = false
             let getPixelRatio = function(context) {
                 let backingStore = context.backingStorePixelRatio ||
                     context.webkitBackingStorePixelRatio ||
@@ -76,7 +75,7 @@
                     context.oBackingStorePixelRatio ||
                     context.backingStorePixelRatio || 1
                 return (window.devicePixelRatio || 1) / backingStore
-            };
+            }
             this.pixelRatio = getPixelRatio(this.ctx)
             //1. 将画布放 屏幕像素比
             this.canvasData.height = this.canvasH * this.pixelRatio
@@ -99,7 +98,7 @@
             ...rootActions(['getUserInfo']),
             //設置海報分享地址
             setPosterConfig() {
-                // console.log('SharePoster-Link:', this.shareUrl);
+                // console.log('SharePoster-Link:', this.shareUrl)
             },
             //绘制海报
             drawBottomMap: function() {
@@ -120,7 +119,7 @@
             async drawBackground(resolve) {
                 this.ctx.fillStyle = '#FFFFFF'
                 this.roundedRect(this.ctx,0, 0, this.canvasW, this.canvasH, 10)
-                resolve();
+                resolve()
                 // let cover = new Image();
                 // cover.setAttribute('crossOrigin', 'anonymous');
                 //默认专栏海报分享
@@ -160,16 +159,17 @@
                  //左半圆
                 this.ctx.beginPath()
                 this.ctx.fillStyle = '#F5F5F5'
-                this.ctx.arc(0,50,10,0,Math.PI*2,true)
+                this.ctx.globalCompositeOperation = 'xor'
+                this.ctx.arc(0,50,8,0,Math.PI*2,true)
                 this.ctx.fill()
-                this.ctx.restore()
                 //右半圆
                 this.ctx.beginPath()
                 this.ctx.fillStyle = '#F5F5F5'
-                this.ctx.arc(this.canvasW ,50,10,0,Math.PI*2,true)
+                this.ctx.globalCompositeOperation = 'xor'
+                this.ctx.arc(this.canvasW ,50,8,0,Math.PI*2,true)
                 this.ctx.fill()
                 this.ctx.restore()
-                resolve();
+                resolve()
             },
             //4. 绘制二维码
             async drawQrcode(resolve) {
@@ -179,7 +179,7 @@
                 let img =  this.$el.children[1].children[0]
                 this.ctx.drawImage(img, left, top, width, width)
                 let currentSrc =  img.currentSrc
-                if("" !== currentSrc) return //如果二维码没有加载则走下面的加载回调绘制
+                if("" !== currentSrc && img.complete) return resolve() //如果二维码没有加载则走下面的加载回调绘制
                 img.onload = () =>  this.ctx.drawImage(img, left, top, width, width)
                 resolve()
             },
@@ -187,7 +187,7 @@
             async drawHeadImage(resolve) {
                 const header = new Image();
                 header.setAttribute('crossOrigin', 'anonymous');
-                header.src = (this.startAvatar || this.user.avatarUrl) + '?timeStamp=' + Date.now();
+                header.src = (this.startAvatar || this.user.avatarUrl) + '?timeStamp=' + Date.now()
                 header.onload = () => {
                     // let radius = this.headImageW * this.radio
                     // let x = this.qrcodeLeft * this.radio
@@ -248,7 +248,7 @@
                 width: 100%;
                 display: inline-flex;
                 text-align: center;
-                background-color: rgba(245, 245, 245,1)
+                background-color: rgba(33, 33, 33,0.5)
             }
             .top-container img {
                 z-index: 999;
