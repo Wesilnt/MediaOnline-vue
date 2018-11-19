@@ -464,7 +464,7 @@ export default {
         groupBuystatus
       } = this
       let title = `我正在学习《${this.courseName}》，快来一起学习吧`,
-        link = `${window.location.href}${location.href.contains('?')?'&':'?'}preUserId=${userInfo.id}`
+        link = `${window.location.href}${-1!=location.href.indexOf('?')?'&':'?'}preUserId=${userInfo.id}`
       if (paymentGroupBuyId && groupBuystatus !== 1204) {
         title = `我正在参加《${courseName}》拼团活动,仅差${groupBuyPersonCount -
           alreadyCount}人,快来和我一起拼团吧!`
