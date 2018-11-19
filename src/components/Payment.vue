@@ -116,9 +116,9 @@
             ...rootActions(['getBookCoinInfo']),
             async handlePayment() {
                 this.payDisabled = true;
-                const distributorStr =  sessionStorage.getItem('distributor')
-                const distributorJSON = JSON.parse(distributorStr || {})
-                const preUserId = distributorJSON.preUserId || 0
+                const preUserIdStr =  sessionStorage.getItem('preUserId')
+                const preUserIdJSON = JSON.parse(preUserIdStr || {})
+                const preUserId = preUserIdJSON.preUserId || 0
                 this.preUserId = preUserId
                 const payParams = {
                     courseId: this.courseId,              //购买专栏ID

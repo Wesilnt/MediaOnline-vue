@@ -64,11 +64,15 @@
         },
         created() {
             const preUserId = this.$route.query.preUserId
+            const distributor = this.$route.query.distributor
             console.log('分销人员ID：', preUserId)
             if(preUserId && preUserId>0)
             {
-                const distributorJSON = JSON.stringify({ preUserId: preUserId })
-                sessionStorage.setItem('distributor', distributorJSON)
+                const distributorStr = JSON.stringify({ preUserId: preUserId })
+                sessionStorage.setItem('preUserId', distributorStr)
+            }
+            if(distributor){
+                sessionStorage.setItem('distributor', distributor)
             }
             this.getUserInfo().then(user =>  this.setWxShare(user))
         },
@@ -116,8 +120,10 @@
                 this.$emit('close')
             },
             setWxShare(user) {
+                console.log(user)
                 const href = `${location.href}${-1 != location.href.indexOf('?') ? '&' : '?'}`
-                this.shareUrl = `${href}preUserId=${user.id}`
+                const distributor = btoa(encodeURIComponent(JSON.stringify({id:user.id,avatarUrl:user.avatarUrl,nickName:user.nickName})))
+                this.shareUrl = `${href}preUserId=${user.id}&distributor=${distributor}`
                 const shareData = {
                     title: '',
                     link:this.shareUrl,
