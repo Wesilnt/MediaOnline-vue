@@ -103,7 +103,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['replyMessageCount', 'userInfo'])
+    ...mapState(['replyMessageCount', 'userInfo','isDistributor'])
   },
   methods: {
     ...mapActions(['queryNewMessageCount','checkDistributor', 'getMyUserInfo']),
@@ -128,11 +128,13 @@ export default {
       }
     },
     itemClick: function(name) {
+        console.log("name-",name)
+      name = name === 'DistributorApply' && this.isDistributor?'DistributionCenter':name
       this.$router.push({ path: name })
     }
   },
   created() {
-    // this.checkDistributor()
+    this.checkDistributor()
     this.queryNewMessageCount()
     this.getMyUserInfo(true).then(() => {
       this.showEdit =

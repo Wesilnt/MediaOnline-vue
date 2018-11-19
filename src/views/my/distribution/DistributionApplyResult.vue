@@ -7,7 +7,7 @@
         <!--布局-->
         <article class="apply-success-introduce">
             <p v-if="isDistributor">您已成功申请成为分销员</p>
-            <p v-else>您目前的推广金额为<em>{{ extendAmount.toFixed(2)}}</em>元，还差<em>{{(200-extendAmount).toFixed(2)}}</em>元就可以成为分销员啦！
+            <p v-else>您目前的推广金额为<em>{{ extendAmount.toFixed(2)}}</em>元，还差<em>{{(200-extendAmount<0?0:200-extendAmount).toFixed(2)}}</em>元就可以成为分销员啦！
             </p>
         </article>
 

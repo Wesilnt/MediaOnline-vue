@@ -9,7 +9,7 @@ const myData = {
     replyMessageCount: 0,
     userInfo: [],
     loading: false,
-    isDistributor: null
+    isDistributor: false
   },
   mutations: {
     save(state, payload) {
@@ -28,14 +28,12 @@ const myData = {
     async checkDistributor({state, commit }, useCache = false) {
       if(undefined != state.isDistributor && useCache) return state.isDistributor
       const response = await isDistributor()
-      await commit('save', {isDistributor: response.data})
+      await commit('save', {isDistributor: response})
       return response.data
     },
     async queryNewMessageCount({ dispatch, commit }) {
       const response = await getNewMessageCount({ busiTypes: 3101 })
-      await commit('save', {
-        replyMessageCount: response
-      })
+      await commit('save', {replyMessageCount: response})
     },
     async getMyUserInfo({ dispatch, commit }) {
       const response = await store.dispatch('getUserInfo', true)

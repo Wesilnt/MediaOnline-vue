@@ -4,7 +4,7 @@
 const { NODE_ENV } = process.env
 
 // 调试选项，本地调试请改为 False
-export const IS_ONLINE = true
+export const IS_ONLINE = false
 // 测试 Token
 export const TEST_TOKEN = "3181eb90-c504-47d8-84d5-77296584d805"
 
@@ -187,6 +187,15 @@ export const distributionShare = [
         fillColor: '#acb5c6',
     },
 ]
+
+export const bookCoinChannel = {
+    "3501":{name: 'SELF_TEST',code: "3501", title:"自测题"},
+    "3502":{name: 'PERFECT_INFO',code: "3502", title:"完善资料"},
+    "3503":{name: 'FIRSRT_FOCUS',code: "3503", title:"首次关注"},
+    "3504":{name: 'FRIEND_BUY',code: "3504", title:"好友购买"},
+    "3505":{name: 'SPEND',code: "3505", title:"支出"},
+}
+
 export const distributionGrades = {
      '1': {grade:'普通分销员', totalAmount:200,extensionRatio: '15%'},
      '2': {grade:'初级分销员', totalAmount:2000,extensionRatio: '20%'},
