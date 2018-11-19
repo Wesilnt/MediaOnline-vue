@@ -34,7 +34,7 @@
             return {}
         },
         created() {
-            this.getTransferDetail();
+            this.getTransferDetail(true)
         },
         filters: {
             formatDuring: date => {
@@ -50,13 +50,14 @@
             onLoadMore() {
                 if(!this.isLoading && !this.finished){
                     //TODO 分页加载
+                    this.getTransferDetail()
                 }
             }
         },
         beforeDestroy() {
-            this.onDestroy();
+            this.onDestroy()
         }
-    };
+    }
 </script>
 
 <style lang="less" scoped>

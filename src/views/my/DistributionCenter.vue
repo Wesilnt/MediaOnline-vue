@@ -3,13 +3,15 @@
         <!--头部-->
         <header class="distribute-header">
             <section class="distribute-header-section">
-                <span class="distribute-header-icon"></span>
-                <span class="distribute-header-phone">15221781998</span>
-                <div class="distribute-header-grade" @click="toDistributorUpgrade"><i></i>初级分销员</div>
+                <span class="distribute-header-icon" :style="{backgroundImage:`url(${avatarUrl})`}"></span>
+                <span class="distribute-header-phone">{{mobileNo}}</span>
+                <div class="distribute-header-grade" @click="toDistributorUpgrade">
+                    <i></i>{{level && distributorGrades[level].grade}}
+                </div>
             </section>
             <hr>
             <a class="distribute-header-link" @click="toGradeRule">
-                <span>升级到中级分销员，推广佣金比高达20%</span>
+                <span>{{`升级到${'1' == distributorInfo.level?'中':'高'}级分销员，推广佣金比高达${'1' == distributorInfo.level?'20%':'35%'}`}}</span>
                 <i class="icon arrow-white"></i>
             </a>
         </header>
@@ -17,8 +19,8 @@
         <!--收入布局-->
         <main class="distribute-income" @click="toProfitDetail">
             <h4 class="distribute-income-title">累计收益 (元)</h4>
-            <h3 class="distribute-income-coin">9360.00<i class="icon"></i></h3>
-            <dd class="distribute-income-desc">包含待结算1200.00元</dd>
+            <h3 class="distribute-income-coin">{{totalIncome&&totalIncome.toFixed(2)}}<i class="icon"></i></h3>
+            <dd class="distribute-income-desc">包含待结算{{noSettlement&&noSettlement.toFixed(2)}}元</dd>
         </main>
 
         <!--底部描述-->
@@ -29,13 +31,17 @@
 </template>
 
 <script>
+    import {distributorGrades} from '../../utils/config'
     import { createNamespacedHelpers } from 'vuex'
     const { mapState, mapActions } = createNamespacedHelpers('myData/distributionData')
     export default {
         data() {
-            return {}
+            return {distributorGrades}
         },
+        created(){this.getDistributorInfo({useCache:false})},
+        computed:{...mapState(['distributorInfo','mobileNo','avatarUrl','level','totalIncome','noSettlement'])},
         methods: {
+            ...mapActions(['getDistributorInfo']),
             toDistributorUpgrade() {
             },
             toGradeRule() {
@@ -89,6 +95,7 @@
                 border-radius: 50%;
                 color: #ffa32f;
                 background-color: #FFD7D7;
+                background-size: 100%;
             }
             &-phone {
                 flex: 1;
@@ -109,8 +116,10 @@
                 border-bottom-left-radius: 30px;
                 border-top-left-radius: 30px;
                 i {
+                    display: inline-block;
                     position: absolute;
                     width: 20px;
+                    height: 24px;
                     left: 24px;
                     top: 50%;
                     margin-top: -14px;

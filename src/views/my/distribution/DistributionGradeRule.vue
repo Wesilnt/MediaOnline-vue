@@ -2,13 +2,13 @@
     <div class="distribution-grade">
         <!--头部-->
         <header class="grade-header">
-            <h3>{{distributionGrades[distributorLevel].grade}}</h3>
+            <h3>{{distributorGrades[level].grade}}</h3>
             <ul class="grade-header-map">
-                <li class="grade-header-level" v-for="level in Object.keys(distributionGrades)">
-                    <hr v-if="'1' !== level" class="grade-header-line"/>
+                <li class="grade-header-level" v-for="item in Object.keys(distributorGrades)">
+                    <hr v-if="'1' !== item" class="grade-header-line"/>
                     <div class="grade-header-dot">
-                        <label class="grade-header-label">{{distributionGrades[level].grade}}</label>
-                        <span v-if="level<=distributorLevel" class="grade-header-active"></span>
+                        <label class="grade-header-label">{{distributorGrades[item].grade}}</label>
+                        <span v-if="item<=level" class="grade-header-active"></span>
                     </div>
                 </li>
             </ul>
@@ -19,7 +19,7 @@
                  <span class="grade-aside-img">
                      <i class="grade-aside-icon"></i>
                  </span>
-                <p class="grade-aside-text">10%<br>推广佣金比</p>
+                <p class="grade-aside-text">{{distributorGrades[level].extensionRatio}}<br>推广佣金比</p>
             </div>
         </aside>
         <div class="grade-divide"></div>
@@ -30,20 +30,20 @@
                 等级规则
                 <hr class="title-line">
             </h4>
-            <dl class="grade-introduce-item" v-for="level of Object.keys(distributionGrades)">
-                <dt class="grade-introduce-grade">{{distributionGrades[level].grade}}</dt>
+            <dl class="grade-introduce-item" v-for="level of Object.keys(distributorGrades)">
+                <dt class="grade-introduce-grade">{{distributorGrades[level].grade}}</dt>
                 <dd class="grade-introduce-detail">
                     <li class="grade-introduce-li">
                         <summary class="grade-introduce-topic">
                             <i class="icon-rule"></i>规则介绍
                         </summary>
-                        <p class="grade-introduce-desc">累计推广金与消费总和达{{distributionGrades[level].totalAmount}}元</p>
+                        <p class="grade-introduce-desc">累计推广金与消费总和达{{distributorGrades[level].totalAmount}}元</p>
                     </li>
                     <li class="grade-introduce-li">
                         <summary class="grade-introduce-topic">
                             <i class="icon-legal"></i>权益介绍
                         </summary>
-                        <p class="grade-introduce-desc">推广佣金比为{{distributionGrades[level].extensionRatio}}</p>
+                        <p class="grade-introduce-desc">推广佣金比为{{distributorGrades[level].extensionRatio}}</p>
                     </li>
                 </dd>
                 <hr>
@@ -54,18 +54,17 @@
 
 <script>
     import { createNamespacedHelpers } from 'vuex';
-    import { distributionGrades } from  '../../../utils/config'
-
-    const { mapState, mapActions } = createNamespacedHelpers('myData/distributionData');
+    import {distributorGrades} from '../../../utils/config'
+    const { mapState,mapActions } = createNamespacedHelpers('myData/distributionData');
     export default {
         data() {
             return {
-                distributionGrades
+                distributorGrades
             };
         },
-        computed: { ...mapState(['isDistributor','distributorLevel']) },
-        methods: {
-        }
+        computed: { ...mapState(['isDistributor','level']) },
+        created(){this.getDistributorInfo({useCache:true})},
+        methods:{...mapActions(['getDistributorInfo'])}
     };
 </script>
 

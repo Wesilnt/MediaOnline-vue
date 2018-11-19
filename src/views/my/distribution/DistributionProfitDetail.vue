@@ -3,8 +3,8 @@
         <!--头部-->
         <header class="distribution-profit-header" @click="toTransferDetail">
             <h4>累计收益 (元)</h4>
-            <h3 class="profit-coin">9360.00<i></i></h3>
-            <dd>包含待结算1200.00元</dd>
+            <h3 class="profit-coin">{{totalIncome&&totalIncome.toFixed(2)}}<i></i></h3>
+            <dd>包含待结算{{noSettlement&&noSettlement.toFixed(2)}}元</dd>
         </header>
 
         <!--布局-->
@@ -47,7 +47,8 @@
             return {};
         },
         created() {
-            // this.getProfitList(true);
+            this.getDistributorInfo({useCache:true})
+            this.getProfitList(true)
         },
         filters: {
             formatDuring: date => {
@@ -58,9 +59,9 @@
                 return `${year}年${month < 9 ? '0' + month : month}月${day < 9 ? '0' + day : day}日`
             }
         },
-        computed: { ...mapState(['isDistributor', 'profitList', 'isLoading', 'finished']) },
+        computed: { ...mapState(['isDistributor', 'totalIncome','noSettlement','profitList', 'isLoading', 'finished']) },
         methods: {
-            ...mapActions(['getProfitList', 'onDestroy']),
+            ...mapActions(['getProfitList', 'onDestroy','getDistributorInfo']),
             //转账明细
             toTransferDetail() {
                 this.$router.push({ name: 'DistributionTransferDetail' });
@@ -153,8 +154,6 @@
                     border-radius: 50%;
                     background-color: #FFD7D7;
                     background-size: 100%;
-                    background-repeat: no-repeat;
-                    background-position: center;
                 }
                 &-content {
                     margin-left: 24px;

@@ -40,47 +40,56 @@ export default {
       showEdit: false,
       list: [
         {
-          name: '/my/Purchase',
+          path: '/my/Purchase',
+          name: 'Purchase',
           image: purchase,
           title: '已购清单'
         },
         {
-          name: '/my/Record',
+          path: '/my/Record',
+          name: 'Record',
           image: record,
           title: '播放记录'
         },
         {
-          name: '/my/Like',
+          path: '/my/Like',
+          name: 'Like',
           image: like,
           title: '我喜欢的'
         },
         {
-          name: '/my/my-puzzle',
+          path: '/my/my-puzzle',
+          name: 'MyPuzzle',
           image: puzzle,
           title: '我的拼团'
         },
         {
-          name: '/my/Reply',
+          path: '/my/Reply',
+          name: 'Reply',
           image: reply,
           title: '回应我的'
         },
         {
-          name: '/my/my-praise',
+          path: '/my/my-praise',
+          name: 'MyPraise',
           image: praise,
           title: '我的集赞'
         },
          {
-          name: '/my/my-wallet',
+          path: '/my/my-wallet',
+          name: 'Wallet',
           image: wallet,
           title: '胡同书币'
         },
          {
-          name: '/my/my-distributorApply',
+          path: '/my/my-distributorApply',
+          name: 'DistributorApply',
           image: distribution,
           title: '分销中心'
         },
         {
-          name: '/my/Feedback',
+          path: '/my/Feedback',
+          name: 'Feedback',
           image: feedback,
           title: '意见反馈'
         }
@@ -128,9 +137,8 @@ export default {
       }
     },
     itemClick: function(name) {
-        console.log("name-",name)
       name = name === 'DistributorApply' && this.isDistributor?'DistributionCenter':name
-      this.$router.push({ path: name })
+      this.$router.push({ name: name })
     }
   },
   created() {
