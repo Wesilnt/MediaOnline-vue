@@ -19,7 +19,7 @@ export default {
         avatarUrl: 0,                                               //分销员头像
         totalIncome: 0,                                             //分销员累计收入
         noSettlement: 0,                                            //分销员待结算金额
-        level: 1,                                                   //分销员等级
+        level: '1',                                                 //分销员等级
         profitList: [],                                             //收益列表
         transferList: [],                                           //转账列表
         currentPage: 1,                                             //分页数据的当前页码
