@@ -13,7 +13,7 @@
 
         <!--底部描述-->
         <footer class="apply-success-footer" @click="nextOperate">
-            {{isDistributor?'查看详情':'去分享'}}
+            <p>{{isDistributor?'查看详情':'去分享'}}</p>
         </footer>
 
     </div>
@@ -66,14 +66,16 @@
         /*底部按钮*/
         &-footer {
             width: auto;
-            margin-top: 8px;
+            height: 96px;
             border: 1px solid #ffa32f; /*no*/
             color: #ffa32f;
-            line-height: 96px;
             border-radius: 48px;
             display: inline-flex;
             padding: 0 60px;
-
+            p{
+                line-height: 28px;
+                margin: auto;
+            }
         }
         &-footer:active{
           margin-top: 10px;
