@@ -69,13 +69,12 @@ export default {
             commit('bindDistributorInfo', {
                 hasDistributorCache:true,
                 distributorInfo: res,
-                distributorLevel:res.level,
                 mobileNo:res.mobileNo,
                 nickName:res.nickName,
                 avatarUrl:res.avatarUrl,
                 noSettlement: res.noSettlement,
                 totalIncome: res.totalIncome,
-                level:res.level
+                level: res.level.toString()
             })
         },
         /**申请成为分销员*/
