@@ -11,7 +11,7 @@
                 </li>
             </ul>
         </div>
-        <div v-if="!IS_ONLINE" class="qhht-flex clearinghouse-body" @click="toggleDiscount">
+        <div v-if="!IS_ONLINE||IS_ONLINE" class="qhht-flex clearinghouse-body" @click="toggleDiscount">
             <span>优惠书币：消耗{{deductionBookCoin}}书币</span>
             <span class="qhht-flex clearinghouse-discount" :class="{checked}">
                 <span>-￥{{ deductionAmount }}</span>
