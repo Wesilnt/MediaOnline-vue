@@ -74,7 +74,7 @@ export default {
                 avatarUrl:res.avatarUrl,
                 noSettlement: res.noSettlement,
                 totalIncome: res.totalIncome,
-                level: res.level.toString()
+                level: res.level+''
             })
         },
         /**申请成为分销员*/

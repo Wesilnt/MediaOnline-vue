@@ -72,7 +72,7 @@
             }
         },
         beforeDestroy() {
-            this.onDestroy();
+            this.onDestroy()
         }
     };
 </script>
