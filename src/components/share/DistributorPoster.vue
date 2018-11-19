@@ -117,6 +117,8 @@
 
             //1. 绘制背景图和颜色
             async drawBackground(resolve) {
+                this.ctx.fillStyle = 'rgba(0,0,0,0)'
+                this.ctx.fillRect(0, 0, this.canvasW, this.canvasH)
                 this.ctx.fillStyle = '#FFFFFF'
                 this.roundedRect(this.ctx,0, 0, this.canvasW, this.canvasH, 10)
                 resolve()
