@@ -66,14 +66,15 @@
             ...mapState(['paySucceed']),
             ...rootState(['coinNum', 'deductionOrder', 'deductionProp']),
             deductionBookCoin: function() {
-                let totalCoin = this.payDetail.price * this.deductionOrder / this.deductionProp;
-                return this.coinNum <= totalCoin ? this.coinNum : totalCoin;
+                let totalCoin = this.payDetail.price * this.deductionOrder / this.deductionProp
+                return this.coinNum <= totalCoin ? this.coinNum : totalCoin
             },
             deductionAmount: function() {
-                return this.deductionBookCoin * this.deductionOrder / 100;
+                return Math.round(this.deductionBookCoin * this.deductionOrder)/ 100
             },
             payAmount: function() {
-                return this.checked ? (this.payDetail.price - this.deductionAmount) : this.payDetail.price;
+                let amount = this.checked ? (this.payDetail.price - this.deductionAmount) : this.payDetail.price
+                return amount.toFixed(2)
             },
             payDetail: function() {
                 const {
@@ -84,9 +85,9 @@
                     price: origin,
                     lessonCount
                 } = this;
-                const payDetail = JSON.parse(sessionStorage.getItem('payDetail'));
+                const payDetail = JSON.parse(sessionStorage.getItem('payDetail'))
                 const { payType } = this.$route.params;
-                const price = payType === 'groupBuy' ? groupBuyPrice : origin;
+                const price = payType === 'groupBuy' ? groupBuyPrice : origin
                 return courseName
                     ? {
                         courseName,
@@ -101,13 +102,13 @@
         },
         watch: {
             checked: function(newChecked) {
-                this.currentPrice = newChecked ? 80 : this.spen;
-                this.prevPrice = newChecked ? this.spen : 80;
+                this.currentPrice = newChecked ? 80 : this.spen
+                this.prevPrice = newChecked ? this.spen : 80
             },
             paySucceed: function(isSucceed) {
                 if (isSucceed) {
-                    this.$toast('您已支付成功');
-                    setTimeout(() => this.$router.go(-1), 400);
+                    this.$toast('您已支付成功')
+                    setTimeout(() => this.$router.go(-1), 400)
                 }
             }
         },
@@ -138,14 +139,14 @@
                 this.payDisabled = false
             },
             toggleDiscount() {
-                this.checked = !this.checked;
+                this.checked = !this.checked
             }
         },
         created() {
-            this.getBookCoinInfo();
+            this.getBookCoinInfo()
         },
         mounted() {
-            document.title = '结算中心';
+            document.title = '结算中心'
             const {
                 courseName,
                 coverPic,
@@ -169,8 +170,8 @@
             }
         },
         destroyed() {
-            document.title = '秦汉胡同';
-            sessionStorage.setItem('payDetail', null);
+            document.title = '秦汉胡同'
+            sessionStorage.setItem('payDetail', null)
         },
         components: {
             Counter
