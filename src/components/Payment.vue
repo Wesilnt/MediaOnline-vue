@@ -70,7 +70,7 @@
                 return this.coinNum <= totalCoin ? this.coinNum : totalCoin
             },
             deductionAmount: function() {
-                return Math.round(this.deductionBookCoin * this.deductionOrder)/ 100
+                return Math.round(this.deductionBookCoin * this.deductionProp)/ 100
             },
             payAmount: function() {
                 let amount = this.checked ? (this.payDetail.price - this.deductionAmount) : this.payDetail.price
