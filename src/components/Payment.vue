@@ -51,7 +51,6 @@
                 payType,
                 currentPrice: 100,
                 prevPrice: 100,
-                preUserId: 0,
             };
         },
         computed: {
@@ -126,7 +125,7 @@
                 this.payDisabled = true;
                 const preUserIdStr = sessionStorage.getItem('preUserId')
                 const preUserIdJSON = JSON.parse(preUserIdStr || '{}')
-                this.preUserId = preUserIdJSON.preUserId || undefined
+
                 const payParams = {
                     courseId: this.courseId,              //购买专栏ID
                     useFlag: this.checked,                //是否使用书币

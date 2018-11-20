@@ -68,7 +68,7 @@
             console.log('分销人员ID：', preUserId)
             if(preUserId && preUserId>0)
             {
-                const distributorStr = JSON.stringify({ preUserId: preUserId })
+                const distributorStr = JSON.stringify({ preUserId })
                 sessionStorage.setItem('preUserId', distributorStr)
             }
             if(distributor){

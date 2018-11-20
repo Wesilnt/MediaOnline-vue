@@ -73,7 +73,3 @@ export function getNewMessageCount(params) {
 export function isDistributor(params) {
   return request(`/distribution/isDistributor`)
 }
-//申请为分销员
-export async function applyDistributor(params) {
-    return request.post(`/distribution/applyForDistribution`, params)
-}

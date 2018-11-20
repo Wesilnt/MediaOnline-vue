@@ -45,7 +45,7 @@
             //申请成为分销员
             becomeDistributor() {
                 //preUserId分会长ID
-                this.applyDistributor({ preUserId: 0 }).then(() => this.$router.replace({ name: 'DistributionApplyResult' }))
+                this.applyDistributor({}).then(() => this.$router.replace({ name: 'DistributionApplyResult' }))
             }
         }
     }

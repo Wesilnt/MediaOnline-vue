@@ -9,24 +9,26 @@
 
         <!--布局-->
         <main class="profit-main">
-            <h4 class="profit-main-title">
-                <hr class="title-line">
-                2018
-                <hr class="title-line">
-            </h4>
             <ul class="profit-main-list">
-                <li class="profit-main-item" v-for="item of profitList" :key="item.id">
-                    <aside class="item-left">
-                        <i v-lazy:background-image="`${item.userAvatar}?imageView2/1/w/100/h/100/format/jpg/q/50`"></i>
-                        <div class="item-left-content">
-                            <p>{{item.username}} </p>
-                            <p class="item-text bottom"> {{item.datetime | formatDuring}} </p>
-                        </div>
-                    </aside>
-                    <aside class="item-right">
-                        <p class="item-text">收益：<span>{{item.profit.toFixed(2)}}</span>元</p>
-                        <p class="item-text bottom">成交额： <span>{{item.purchase.toFixed(2)}}</span>元</p>
-                    </aside>
+                <li v-for="item of profitList" :key="item.id">
+                    <h4 v-if="item.showYear" class="profit-main-title">
+                        <hr class="title-line">
+                        2018
+                        <hr class="title-line">
+                    </h4>
+                    <section class="profit-main-item">
+                        <aside class="item-left">
+                            <i v-lazy:background-image="`${item.customerUrl}?imageView2/1/w/100/h/100/format/jpg/q/50`"></i>
+                            <div class="item-left-content">
+                                <p>{{item.customerNickName}} </p>
+                                <p class="item-text bottom"> {{item.createTime | formatDuring}} </p>
+                            </div>
+                        </aside>
+                        <aside class="item-right">
+                            <p class="item-text">收益：<span>{{item.scaleAmount.toFixed(2)}}</span>元</p>
+                            <p class="item-text bottom">成交额： <span>{{item.orderAmount.toFixed(2)}}</span>元</p>
+                        </aside>
+                    </section>
                 </li>
                 <div class="profit-main-more" @click="onLoadMore">
                     <p v-show="isLoading">加载中</p>
@@ -40,6 +42,7 @@
 
 <script>
     import { createNamespacedHelpers } from 'vuex';
+
     const { mapState, mapActions } = createNamespacedHelpers('myData/distributionData');
 
     export default {
@@ -47,32 +50,32 @@
             return {};
         },
         created() {
-            this.getDistributorInfo({useCache:true})
-            this.getProfitList(true)
+            this.getDistributorInfo({ useCache: true });
+            this.getProfitList(true);
         },
         filters: {
             formatDuring: date => {
-                let mss = new Date(date)
-                let year = mss.getFullYear()
-                let month = mss.getMonth()
-                let day = mss.getDate()
-                return `${year}年${month < 9 ? '0' + month : month}月${day < 9 ? '0' + day : day}日`
+                let mss = new Date(date);
+                let year = mss.getFullYear();
+                let month = mss.getMonth();
+                let day = mss.getDate();
+                return `${year}年${month < 9 ? '0' + month : month}月${day < 9 ? '0' + day : day}日`;
             }
         },
-        computed: { ...mapState(['isDistributor', 'totalIncome','noSettlement','profitList', 'isLoading', 'finished']) },
+        computed: { ...mapState(['isDistributor', 'totalIncome', 'noSettlement', 'profitList', 'isLoading', 'finished']) },
         methods: {
-            ...mapActions(['getProfitList', 'onDestroy','getDistributorInfo']),
+            ...mapActions(['getProfitList', 'onDestroy', 'getDistributorInfo']),
             //转账明细
             toTransferDetail() {
                 this.$router.push({ name: 'DistributionTransferDetail' });
             },
             onLoadMore() {
-                if (this.isLoading || this.finished)  return
-                setTimeout(()=>this.getProfitList(false),300)
+                if (this.isLoading || this.finished) return;
+                setTimeout(() => this.getProfitList(false), 300);
             }
         },
         beforeDestroy() {
-            this.onDestroy()
+            this.onDestroy();
         }
     };
 </script>
@@ -110,7 +113,7 @@
         }
         /*内容*/
         .profit-main {
-            margin: 40px 0;
+            margin-bottom: 40px;
             font-size: 26px;
             color: #333333;
             li + li {
@@ -120,8 +123,9 @@
                 display: inline-flex;
                 align-items: center;
                 color: #808080;
-                margin-bottom: 40px;
+                margin: 40px 0;
                 font-weight: 500;
+                align-self: center;
                 .title-line {
                     margin: auto 32px;
                     width: 48px;
@@ -131,7 +135,7 @@
                 }
             }
             &-list {
-                text-align: left;
+                margin: auto;
                 padding: 0 30px;
             }
             &-item {
@@ -142,18 +146,23 @@
                 align-items: center;
                 justify-content: space-between;
             }
+            &-item p {
+                font-size: 26px;
+                line-height: 26px;
+            }
             .item-left {
                 display: inline-flex;
                 flex-direction: row;
                 align-items: center;
+                text-align: left;
                 i {
                     margin: 28px 0;
                     display: inline-block;
                     width: 88px;
                     height: 88px;
                     border-radius: 50%;
-                    background-color: #FFD7D7;
                     background-size: 100%;
+                    background-repeat: no-repeat;
                 }
                 &-content {
                     margin-left: 24px;

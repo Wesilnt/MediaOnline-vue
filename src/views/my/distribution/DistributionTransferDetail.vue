@@ -2,17 +2,19 @@
     <div class="transfer-detail">
         <!--布局-->
         <main class="transfer-content">
-            <h4 class="transfer-content-title">
-                <hr class="title-line">
-                2018
-                <hr class="title-line">
-            </h4>
             <ul class="transfer-content-list">
-                <li class="transfer-content-item" v-for="item of transferList" :key="item.id">
-                    <aside>{{item.datetime | formatDuring}}</aside>
-                    <aside class="item-text">
-                        {{item.isAdd?'+':'-'}} <span>{{item.profit.toFixed(2)}}</span>元
+                <li v-for="item of transferList" :key="item.id">
+                    <h4 v-if="item.showYear" class="transfer-content-title">
+                        <hr class="title-line">
+                        2018
+                        <hr class="title-line">
+                    </h4>
+                    <section class="transfer-content-item">
+                        <aside>{{item.createTime | formatDuring}}</aside>
+                        <aside class="item-text">
+                        {{item.isAdd?'+':'-'}} <span>{{item.amount.toFixed(2)}}</span>元
                     </aside>
+                    </section>
                 </li>
             </ul>
         </main>
@@ -73,14 +75,14 @@
     }
 
     .transfer-content {
-        margin: 40px 0;
+        margin-bottom: 40px;
         font-size: 26px;
         color: #333333;
         &-title {
             display: inline-flex;
             align-items: center;
             color: #808080;
-            margin-bottom: 40px;
+            margin: 40px 0;
             font-weight: 500;
             .title-line {
                 margin: auto 32px;
@@ -90,14 +92,12 @@
                 background-color: #e3e3e3;
             }
         }
-        &-list {
-            text-align: left;
-        }
         &-item {
             display: flex;
             flex-direction: row;
             justify-content: space-between;
             align-items: center;
+            text-align: center;
             margin: 0 30px 56px;
         }
         .item-text span {
