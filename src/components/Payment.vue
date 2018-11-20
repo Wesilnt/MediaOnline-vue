@@ -104,18 +104,18 @@
                         price,
                         lessonCount
                     }
-                    : payDetail;
+                    : payDetail
             }
         },
         watch: {
             checked: function(newChecked) {
-                this.currentPrice = newChecked ? 80 : this.spen;
-                this.prevPrice = newChecked ? this.spen : 80;
+                this.currentPrice = newChecked ? 80 : this.spen
+                this.prevPrice = newChecked ? this.spen : 80
             },
             paySucceed: function(isSucceed) {
                 if (isSucceed) {
-                    this.$toast('您已支付成功');
-                    setTimeout(() => this.$router.go(-1), 400);
+                    this.$toast('您已支付成功')
+                    setTimeout(() => this.$router.go(-1), 400)
                 }
             }
         },
@@ -124,36 +124,35 @@
             ...rootActions(['getBookCoinInfo']),
             async handlePayment() {
                 this.payDisabled = true;
-                const preUserIdStr = sessionStorage.getItem('preUserId');
-                const preUserIdJSON = JSON.parse(preUserIdStr || '{}');
-                const preUserId = preUserIdJSON.preUserId || 0;
-                this.preUserId = preUserId;
+                const preUserIdStr = sessionStorage.getItem('preUserId')
+                const preUserIdJSON = JSON.parse(preUserIdStr || '{}')
+                this.preUserId = preUserIdJSON.preUserId || undefined
                 const payParams = {
                     courseId: this.courseId,              //购买专栏ID
                     useFlag: this.checked,                //是否使用书币
-                    preUserId                             //是否来自分销员分享
-                };
+                    ...preUserIdJSON                       //是否来自分销员分享
+                }
                 if (this.payType === 'groupBuy') {
                     if (this.groupBuyId) {
-                        await this.joinGroupBuy({ ...payParams, groupBuyId: this.groupBuyId });
+                        await this.joinGroupBuy({ ...payParams, groupBuyId: this.groupBuyId })
                     } else {
-                        await this.startGroupBuy(payParams);
+                        await this.startGroupBuy(payParams)
                     }
                 }
                 if (this.payType === 'origin') {
-                    await this.unlockCourse(payParams);
+                    await this.unlockCourse(payParams)
                 }
                 this.payDisabled = false;
             },
             toggleDiscount() {
-                this.checked = !this.checked;
+                this.checked = !this.checked
             }
         },
         created() {
-            this.getBookCoinInfo();
+            this.getBookCoinInfo()
         },
         mounted() {
-            document.title = '结算中心';
+            document.title = '结算中心'
             const {
                 courseName,
                 coverPic,
@@ -173,17 +172,17 @@
                         price,
                         lessonCount
                     })
-                );
+                )
             }
         },
         destroyed() {
-            document.title = '秦汉胡同';
-            sessionStorage.setItem('payDetail', null);
+            document.title = '秦汉胡同'
+            sessionStorage.setItem('payDetail', null)
         },
         components: {
             Counter
         }
-    };
+    }
 </script>
 
 <style lang="less">
