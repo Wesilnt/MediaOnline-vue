@@ -186,8 +186,11 @@
                 this.ctx.drawImage(img, left, top, width, width)
                 let currentSrc =  img.currentSrc
                 if("" !== currentSrc && img.complete) return resolve() //如果二维码没有加载则走下面的加载回调绘制
-                img.onload = () =>  this.ctx.drawImage(img, left, top, width, width)
-                resolve()
+                img.onload = () =>  {
+                    this.ctx.drawImage(img, left, top, width, width)
+                    resolve()
+                }
+
             },
             //5. 绘制头像
             async drawHeadImage(resolve) {
