@@ -41,25 +41,23 @@
 </template>
 
 <script>
-    import { createNamespacedHelpers } from 'vuex';
-
-    const { mapState, mapActions } = createNamespacedHelpers('myData/distributionData');
-
+    import { createNamespacedHelpers } from 'vuex'
+    const { mapState, mapActions } = createNamespacedHelpers('myData/distributionData')
     export default {
         data() {
             return {};
         },
         created() {
-            this.getDistributorInfo({ useCache: true });
-            this.getProfitList(true);
+            this.getDistributorInfo({ useCache: true })
+            this.getProfitList(true)
         },
         filters: {
             formatDuring: date => {
-                let mss = new Date(date);
-                let year = mss.getFullYear();
-                let month = mss.getMonth();
-                let day = mss.getDate();
-                return `${year}年${month < 9 ? '0' + month : month}月${day < 9 ? '0' + day : day}日`;
+                let mss = new Date(date)
+                let year = mss.getFullYear()
+                let month = mss.getMonth()
+                let day = mss.getDate()
+                return `${year}年${month < 9 ? '0' + month : month}月${day < 9 ? '0' + day : day}日`
             }
         },
         computed: { ...mapState(['isDistributor', 'totalIncome', 'noSettlement', 'profitList', 'isLoading', 'finished']) },
@@ -67,15 +65,15 @@
             ...mapActions(['getProfitList', 'onDestroy', 'getDistributorInfo']),
             //转账明细
             toTransferDetail() {
-                this.$router.push({ name: 'DistributionTransferDetail' });
+                this.$router.push({ name: 'DistributionTransferDetail' })
             },
             onLoadMore() {
-                if (this.isLoading || this.finished) return;
-                setTimeout(() => this.getProfitList(false), 300);
+                if (this.isLoading || this.finished) return
+                setTimeout(() => this.getProfitList(false), 300)
             }
         },
         beforeDestroy() {
-            this.onDestroy();
+            this.onDestroy()
         }
     };
 </script>

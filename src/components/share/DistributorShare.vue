@@ -85,9 +85,9 @@
             }
         },
         mounted() {
-            this.checkDistributor({ useCache: true }).then(() => {
-                if (!this.isDistributor) this.$refs.dialog.show()
-            });
+            this.checkDistributor(false).then(() => {
+                if (this.isDistributor) this.$refs.dialog.show()
+            })
             this.clipboardLink = new Clipboard('#link')
         },
         methods: {

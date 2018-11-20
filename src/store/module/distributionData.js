@@ -10,7 +10,7 @@ export default {
     namespaced: true,
     state: {
         hasDistributorCache:false,                                 //分销员信息是否有缓存数据
-        isDistributor: false,                                      //是否是分销员
+        isDistributor: -1,                                          //是否是分销员
         isBindMobile: false,                                       //是否绑定手机号
         extendAmount: 0,                                            //推广金额
         distributorInfo: {},                                        //分销员信息
@@ -54,8 +54,8 @@ export default {
     },
     actions: {
         /**是否是分销员*/
-        async checkDistributor({ commit ,dispatch},{useCache}) {
-            const res  = await dispatch('myData/checkDistributor',{useCache},{root:true})
+        async checkDistributor({ commit ,dispatch},useCache) {
+            const res  = await dispatch('myData/checkDistributor',useCache,{root:true})
             await commit('setDistributor', {isDistributor: res})
             return res
         },

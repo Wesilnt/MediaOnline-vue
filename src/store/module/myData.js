@@ -29,7 +29,7 @@ const myData = {
       if(undefined != state.isDistributor && useCache) return state.isDistributor
       const response = await isDistributor()
       await commit('save', {isDistributor: response})
-      return response.data
+      return response
     },
     async queryNewMessageCount({ dispatch, commit }) {
       const response = await getNewMessageCount({ busiTypes: 3101 })
