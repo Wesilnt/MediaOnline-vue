@@ -659,8 +659,7 @@ export default {
 }
 
 .payment-audition {
-  padding: 0;
-  padding-right: 28px;
+  padding: 0 28px 0 0;
   border-right: 1px solid #f8f8f8;
 }
 
@@ -668,7 +667,7 @@ export default {
   display: block;
   width: 40px;
   height: 40px;
-  background-image: url('../assets/images/onlinecourse-tabbar-try.png');
+  background: url('../assets/images/onlinecourse-tabbar-try.png') no-repeat;
   background-size: 40px;
 }
 
