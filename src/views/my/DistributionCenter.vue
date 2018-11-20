@@ -6,7 +6,7 @@
                 <span class="distribute-header-icon" :style="{backgroundImage:`url(${avatarUrl})`}"></span>
                 <span class="distribute-header-phone">{{mobileNo}}</span>
                 <div class="distribute-header-grade" @click="toDistributorUpgrade">
-                    <i></i>{{distributorGrades && distributorGrades[`${level}`].grade}}
+                    <i></i>{{distributorGrades && distributorGrades['1'].grade}}
                 </div>
             </section>
             <hr>
