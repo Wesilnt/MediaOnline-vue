@@ -1,8 +1,10 @@
+import {distributorGrades } from '../../utils/config'
 import {
     getDistributorInfo,
     applyDistributor,
     getDistributorIncomeList,
-    getTransferRecords
+    getTransferRecords,
+    getDistributorLevel
 } from '../../api/distributionApi'
 
 export default {
@@ -12,13 +14,14 @@ export default {
         isDistributor: -1,                                          //是否是分销员
         isBindMobile: false,                                       //是否绑定手机号
         extendAmount: 0,                                            //推广金额
+        distributorGrades,                                          //分销员等级列表
         distributorInfo: {},                                        //分销员信息
         mobileNo: 0,                                                //分销员手机号
         nickName: 0,                                                //分销员昵称
         avatarUrl: 0,                                               //分销员头像
         totalIncome: 0,                                             //分销员累计收入
         noSettlement: 0,                                            //分销员待结算金额
-        level: '1',                                                 //分销员等级
+        level:  1,                                                  //分销员等级
         profitList: [],                                             //收益列表
         transferList: [],                                           //转账列表
         currentPage: 1,                                             //分页数据的当前页码
@@ -31,6 +34,9 @@ export default {
             Object.assign(state, data)
         },
         setBindMobile(state, data) {
+            Object.assign(state, data)
+        },
+        setDistributorLevel(state, data) {
             Object.assign(state, data)
         },
         bindDistributorInfo(state, data) {
@@ -71,7 +77,7 @@ export default {
                 avatarUrl:res.avatarUrl,
                 noSettlement: res.noSettlement,
                 totalIncome: res.totalIncome,
-                level: res.level+''
+                level: res.level
             })
         },
         /**申请成为分销员*/
@@ -81,6 +87,15 @@ export default {
             await commit('bindDistributorInfo',{distributorInfo:res,extendAmount:res.extendAmount})
             await dispatch('checkDistributor', {useCache: false})
             return res
+        },
+        /**获取分销员等级设置*/
+        async getDistributorLevel({state,commit},useCache = false){
+            if(useCache && state.distributorGrades) return state.distributorGrades
+            const res = await  getDistributorLevel()
+             if(!res)return
+             const grades  = {...state.distributorGrades}
+             res.reduce((pre,item) => grades[item.level] = {...grades[item.level],...item},grades)
+             commit('setDistributorLevel',{distributorGrades:grades})
         },
         async getProfitList({ state, commit }, refresh) {
             await commit('toggleLoading',true)

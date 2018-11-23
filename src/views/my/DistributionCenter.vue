@@ -11,7 +11,9 @@
             </section>
             <hr>
             <a class="distribute-header-link" @click="toGradeRule">
-                <span>{{`升级到${'2' == distributorInfo.level?'高':'中'}级分销员，推广佣金比高达${'2' == distributorInfo.level?'35%':'20%'}`}}</span>
+                <span>
+                    {{`升级到${distributorGrades[level+1].grade}，推广佣金比高达${distributorGrades[level+1].incomePropors}%`}}
+                </span>
                 <i class="icon arrow-white"></i>
             </a>
         </header>
@@ -31,17 +33,19 @@
 </template>
 
 <script>
-    import {distributorGrades} from '../../utils/config'
     import { createNamespacedHelpers } from 'vuex'
     const { mapState, mapActions } = createNamespacedHelpers('myData/distributionData')
     export default {
         data() {
-            return {distributorGrades}
+            return { }
         },
-        created(){this.getDistributorInfo({useCache:false})},
-        computed:{...mapState(['distributorInfo','mobileNo','avatarUrl','level','totalIncome','noSettlement'])},
+        created(){
+            this.getDistributorLevel(false)
+            this.getDistributorInfo({useCache:false})
+        },
+        computed:{...mapState(['distributorInfo','distributorGrades','mobileNo','avatarUrl','level','totalIncome','noSettlement'])},
         methods: {
-            ...mapActions(['getDistributorInfo']),
+            ...mapActions(['getDistributorInfo','getDistributorLevel']),
             toDistributorUpgrade() {
             },
             toGradeRule() {

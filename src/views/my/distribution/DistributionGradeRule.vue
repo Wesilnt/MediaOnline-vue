@@ -5,7 +5,7 @@
             <h3>{{distributorGrades[level].grade}}</h3>
             <ul class="grade-header-map">
                 <li class="grade-header-level" v-for="item in Object.keys(distributorGrades)">
-                    <hr v-if="'1' !== item" class="grade-header-line"/>
+                    <hr v-if="1 != item" class="grade-header-line"/>
                     <div class="grade-header-dot">
                         <label class="grade-header-label">{{distributorGrades[item].grade}}</label>
                         <span v-if="item<=level" class="grade-header-active"></span>
@@ -19,7 +19,7 @@
                  <span class="grade-aside-img">
                      <i class="grade-aside-icon"></i>
                  </span>
-                <p class="grade-aside-text">{{distributorGrades[level].extensionRatio}}<br>推广佣金比</p>
+                <p class="grade-aside-text">{{distributorGrades[level].incomePropors}}%<br>推广佣金比</p>
             </div>
         </aside>
         <div class="grade-divide"></div>
@@ -43,7 +43,7 @@
                         <summary class="grade-introduce-topic">
                             <i class="icon-legal"></i>权益介绍
                         </summary>
-                        <p class="grade-introduce-desc">推广佣金比为{{distributorGrades[level].extensionRatio}}</p>
+                        <p class="grade-introduce-desc">推广佣金比为{{distributorGrades[level].incomePropors}}%</p>
                     </li>
                 </dd>
                 <hr>
@@ -54,17 +54,15 @@
 
 <script>
     import { createNamespacedHelpers } from 'vuex';
-    import {distributorGrades} from '../../../utils/config'
     const { mapState,mapActions } = createNamespacedHelpers('myData/distributionData');
     export default {
         data() {
             return {
-                distributorGrades
-            };
+            }
         },
-        computed: { ...mapState(['isDistributor','level']) },
-        created(){this.getDistributorInfo({useCache:true})},
-        methods:{...mapActions(['getDistributorInfo'])}
+        computed: { ...mapState(['isDistributor','distributorGrades','level']) },
+        created(){this.getDistributorLevel(true);this.getDistributorInfo({useCache:true})},
+        methods:{...mapActions(['getDistributorLevel','getDistributorInfo'])}
     };
 </script>
 
