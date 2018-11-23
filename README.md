@@ -7,7 +7,9 @@
 
 ___
 
-[App 接口文档访问地址](https://xcx.test.shbaoyuantech.com:30000/swagger-ui.html)
+[App 接口文档访问地址](http://192.168.1.161:32100/swagger-ui.html)
+
+`[App 接口文档访问地址](https://xcx.test.shbaoyuantech.com:30000/swagger-ui.html)`
 
 [App 原型文档访问地址](http://192.168.1.176:8080/prototype/app)
 

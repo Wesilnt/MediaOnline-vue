@@ -9,7 +9,6 @@ import { courseType } from '../../utils/config'
 import { getCommentList, postComment } from '../../api/commentApi.js'
 import questionListData from './questionListData'
 import commentData from './commentData'
-import router from '../../router/router'
 const videoCourseDetailData = {
   namespaced: true,
   state: {
@@ -192,7 +191,7 @@ const videoCourseDetailData = {
         dispatch('setShareOption',{courseId:result.courseId})
        
       //绑定单集详情内容
-      commit('bindVideoCourseDetail', result)
+        commit('bindVideoCourseDetail', result)
       //绑定目录列表哪一个单集处于播放状态
       commit('bindActiveId', lessonId)
       //刷新路由参数里的单集ID

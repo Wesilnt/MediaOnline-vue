@@ -131,7 +131,7 @@
                 </strong>
                 <p>请继续加油</p>
                 <hr class="settlement-dashed-underline">
-                <qr-code  class="settlement-qr" :text="qrCode" error-level="Q" />
+                <vue-qr :text="qrCode" class="settlement-qr" />
                 <p>分享二维码，邀请好友一起试听</p>
             </div>
         </van-popup>
@@ -140,6 +140,7 @@
 
 <script>
 import domtoimage from 'dom-to-image'
+import VueQr from 'vue-qr'
 import { createNamespacedHelpers } from 'vuex'
 import { mapActions as mapMainActions } from 'vuex'
 const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
@@ -220,7 +221,7 @@ export default {
         this.nickName = await nickName
 
         setTimeout(() => {
-            const {settlement}=this.$refs
+          const { settlement } = this.$refs
           domtoimage
             .toJpeg(settlement, {
               height: settlement.clientHeight,
@@ -269,7 +270,8 @@ export default {
         this.$emit('update', { lessonId })
       })
     }
-  }
+  },
+  components: { VueQr }
 }
 </script>
 
@@ -499,8 +501,8 @@ export default {
 .settlement-qr {
   display: block;
   margin: 0 auto 32px;
-  width: 200px;
-  height: 200px;
+  width: 280px;
+  height: 280px;
   background-color: #ffffff;
   /deep/ img {
     width: 100%;
