@@ -4,7 +4,6 @@ import {
     getDistributorIncomeList,
     getTransferRecords
 } from '../../api/distributionApi'
-import { isDistributor } from '../../api/myApi';
 
 export default {
     namespaced: true,

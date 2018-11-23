@@ -78,7 +78,7 @@
                     this.$toast({ position: 'bottom', message: '请输入正确的验证码' });
                     return;
                 }
-                this.validateMobileCode({ code: this.validateCode })
+                this.validateMobileCode({ code: this.code })
                     .then(isSuccess => {
                         if (isSuccess) {
                             this.$emit('input', false);

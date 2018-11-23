@@ -11,7 +11,7 @@
             </section>
             <hr>
             <a class="distribute-header-link" @click="toGradeRule">
-                <span>{{`升级到${'1' == distributorInfo.level?'中':'高'}级分销员，推广佣金比高达${'1' == distributorInfo.level?'20%':'35%'}`}}</span>
+                <span>{{`升级到${'2' == distributorInfo.level?'高':'中'}级分销员，推广佣金比高达${'2' == distributorInfo.level?'35%':'20%'}`}}</span>
                 <i class="icon arrow-white"></i>
             </a>
         </header>

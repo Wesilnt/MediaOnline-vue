@@ -50,10 +50,8 @@
         methods: {
             ...mapActions(['getTransferDetail', 'onDestroy']),
             onLoadMore() {
-                if(!this.isLoading && !this.finished){
-                    //TODO 分页加载
-                    this.getTransferDetail()
-                }
+                if (this.isLoading || this.finished) return
+                this.getTransferDetail()
             }
         },
         beforeDestroy() {
