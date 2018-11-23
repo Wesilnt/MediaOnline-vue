@@ -56,6 +56,7 @@ const checkResponseCode = (url, response) => {
     if (parseInt(response.data) === 0) {
       return response.data
     }
+    if(false === response.data) return response.data
     return response.data || response
   }
   ErrorHandler(response)
