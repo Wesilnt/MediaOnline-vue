@@ -15,6 +15,7 @@ export default {
         isBindMobile: false,                                       //是否绑定手机号
         extendAmount: 0,                                            //推广金额
         distributorGrades,                                          //分销员等级列表
+        gradesLocal:true,                                          //等级列表数据是不是本地的
         distributorInfo: {},                                        //分销员信息
         mobileNo: 0,                                                //分销员手机号
         nickName: 0,                                                //分销员昵称
@@ -89,13 +90,13 @@ export default {
             return res
         },
         /**获取分销员等级设置*/
-        async getDistributorLevel({state,commit},useCache = false){
-            if(useCache && state.distributorGrades) return state.distributorGrades
-            const res = await  getDistributorLevel()
+        async getDistributorLevel({state,commit}){
+             if(!state.gradesLocal && state.distributorGrades) return state.distributorGrades
+             const res = await  getDistributorLevel()
              if(!res)return
              const grades  = {...state.distributorGrades}
              res.reduce((pre,item) => grades[item.level] = {...grades[item.level],...item},grades)
-             commit('setDistributorLevel',{distributorGrades:grades})
+             commit('setDistributorLevel',{gradesLocal:false,distributorGrades:grades})
         },
         async getProfitList({ state, commit }, refresh) {
             await commit('toggleLoading',true)
