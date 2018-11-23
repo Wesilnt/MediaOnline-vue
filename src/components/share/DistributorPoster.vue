@@ -113,7 +113,7 @@
                     .then(() => new Promise(resolve => this.drawTitle(resolve)))
                     .then(() => new Promise(resolve => this.drawDashLine(resolve)))
                     .then(() => new Promise(resolve => this.drawQrcode(resolve)))
-                    .then(() => new Promise(resolve => this.drawHeadImage(resolve)))
+                    // .then(() => new Promise(resolve => this.drawHeadImage(resolve)))
                     .then(() => this.drawTip())
                     .then(() =>(this.$refs.saveImage.src = this.canvasData.toDataURL('images/png')))
                     .then(() => (this.isLoading = false), () => (this.isLoading = false))
