@@ -4,9 +4,9 @@
 const { NODE_ENV } = process.env
 
 // 调试选项，本地调试请改为 False
-export const IS_ONLINE = false
+export const IS_ONLINE = true
 // 测试 Token
-export const TEST_TOKEN = "60487b89-0503-4aa0-88c3-defe70607929" 
+export const TEST_TOKEN = "60487b89-0503-4aa0-88c3-defe70607929"
 
 // TODO router 设置未统一，后期需要统一格式
 export const courseType = {
@@ -197,9 +197,9 @@ export const bookCoinChannel = {
 }
 
 export const distributorGrades = {
-     '1': {grade:'普通分销员', totalAmount:200,extensionRatio: '15%'},
-     '2': {grade:'初级分销员', totalAmount:2000,extensionRatio: '20%'},
-     '3': {grade:'高级分销员', totalAmount:5000,extensionRatio: '35%'},
+     '1': {level:1,incomePropors: 15,levelLimit:200 ,grade:'普通分销员', totalAmount:200 },
+     '2': {level:2,incomePropors: 20,levelLimit:2000 ,grade:'初级分销员', totalAmount:2000 },
+     '3': {level:3,incomePropors: 35,levelLimit:5000 ,grade:'高级分销员', totalAmount:5000 },
 }
 
 export const identityType = {
