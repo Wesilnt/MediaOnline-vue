@@ -143,7 +143,7 @@
         position: fixed;
         width: 136px;
         height: 136px;
-        z-index: 99999;
+        z-index: 200;
         display: flex;
         justify-content: center;
         align-items: center;

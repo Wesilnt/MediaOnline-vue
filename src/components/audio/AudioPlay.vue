@@ -586,7 +586,7 @@ export default {
 //loading框
 .loading-container {
   position: fixed;
-  z-index: 9999;
+  z-index: 100;
   width: 180px;
   height: 180px;
   top: 50%;

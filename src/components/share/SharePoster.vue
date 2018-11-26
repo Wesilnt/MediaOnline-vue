@@ -262,7 +262,7 @@ export default {
       background-color: rgba(41, 41, 41, 0.6);
     }
     .top-container img {
-      z-index: 999;
+      z-index: 105;
       top: 0;
       margin: auto;
       height: auto;
@@ -270,7 +270,7 @@ export default {
       width: 100%;
     }
     .top-container p {
-      z-index: 1000;
+      z-index: 100;
       width: 100%;
       left: 0;
       font-size: 30px;

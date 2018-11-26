@@ -1,5 +1,5 @@
 <template>
-    <dialog ref="dialog" class="dialog-phone" @click.self="onMaskClick">
+    <div ref="dialog" class="dialog-phone" @click.self="onMaskClick">
         <form class="form">
             <fieldset>
                 <label class="form-label">手机号:</label>
@@ -16,7 +16,7 @@
             <input class="form-submit" :class="{'code-input':code.length>0}" type="submit"
                    @click.prevent="onPhoneConfirm" value="确认"/>
         </form>
-    </dialog>
+    </div>
 </template>
 
 <script>
@@ -95,6 +95,7 @@
 
 <style lang="less" scoped>
     .dialog-phone {
+        z-index: 10;
         height: 100vh;
         top: 0;
         bottom: 0;

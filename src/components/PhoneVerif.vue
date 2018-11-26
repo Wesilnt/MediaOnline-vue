@@ -203,9 +203,9 @@ export default {
 }
 
 .van-toast {
-  z-index: 3000;
+  z-index: 100;
   /deep/.van-toast--text {
-    z-index: 3000;
+    z-index: 100;
   }
 }
 </style>

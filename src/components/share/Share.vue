@@ -124,7 +124,7 @@ export default {
   right: 0;
   bottom: 0;
 
-  z-index: 2004;
+  z-index: 100;
   width: 100%;
   background-color: rgba(00, 00, 00, 0.5);
   height: 100%;
