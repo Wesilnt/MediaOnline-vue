@@ -13,12 +13,14 @@ const PageInfo_From_onlineCourse = [
   {
     path: '/videoCourseCmts/:courseId',
     name: 'videoCourseCmts',
-    component: videoCourseComment
+    component: videoCourseComment,
+      meta: { navHide: true }
   },
   {
     path: '/videoInnerList/:columnType/:courseId',
     name: 'videoInnerList',
-    component: videoInnerList
+    component: videoInnerList,
+      meta: { navHide: true }
   }
 ]
 

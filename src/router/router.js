@@ -51,12 +51,13 @@ export default new Router({
       path: '/detail/:columnType/:courseId',
       name: 'ColumnDetail',
       component: ColumnDetail,
-        meta: { navMarginBottom: 61 }
+      meta: { navMarginBottom: 61 }
     },
     {
       path: '/payment',
       name: 'Payment',
-      component: Payment
+      component: Payment,
+      meta: { navHide: true }
     },
     {
       path: '/home/:columnType/columnlist',

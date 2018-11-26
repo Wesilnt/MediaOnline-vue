@@ -49,7 +49,8 @@ const PageInfo_From_My = [
   {
     path: '/my/my-praise',
     name:'MyPraise',
-    component: myPuzzle_Praise
+    component: myPuzzle_Praise,
+      meta: { navHide: true }
   },
   {
     path: '/my/SysMessage',

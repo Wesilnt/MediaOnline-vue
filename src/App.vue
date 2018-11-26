@@ -1,10 +1,10 @@
 <template>
-    <div  class="router-view">
-        <keep-alive>
+    <div >
+        <keep-alive >
             <!-- 这里是会被缓存的视图组件，比如 AudioPlay！ -->
-            <router-view v-if="$route.meta.keepAlive"/>
+            <router-view v-if="$route.meta.keepAlive"  class="router-view" />
         </keep-alive>
-        <router-view v-if="!$route.meta.keepAlive"/>
+        <router-view v-if="!$route.meta.keepAlive"  class="router-view" />
         <Navigation />
         <MediaIcon />
     </div>
@@ -16,7 +16,7 @@ import Navigation from './components/Navigation'
 
 export default {
   name: 'App',
-  components: { MediaIcon,Navigation },
+  components: { MediaIcon, Navigation },
   methods: {
     ...mapActions(['registerWxConfig', 'setWxShareFriend', 'setWxShareZone']),
     handleWxShare: function(link) {
@@ -76,7 +76,7 @@ export default {
 @import 'publicUIConfig/common';
 
 .router-view {
-  min-height: 100vh;
+  min-height: 70vh;
   font-size: 24px;
   letter-spacing: 2px;
 }

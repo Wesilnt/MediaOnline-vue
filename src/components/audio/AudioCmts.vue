@@ -1,7 +1,7 @@
 <template>
   <div class="comments-container">
     <!-- 全部留言 -->
-      <comment-list  :regionid="lessonId" :regiontype="2202"></comment-list>
+      <CommentList  :regionid="lessonId" :regiontype="2202" />
     <!-- 评论按钮 -->
     <div class="comment-publish">
       <div class="comment-method" @click="onCommentMethod" v-if="false">
@@ -11,7 +11,7 @@
         <p v-if="isSpeak" class="speak-btn" @touchstart.prevent="handleTouchStart" @touchmove="handleTouchMove" @touchend="handleTouchEnd">
           {{isSpeaking?'松开&nbsp;结束':'按住&nbsp;说话'}}
         </p>
-        <textarea v-else v-model="commentContent" @focus="onFocus" @blur="onBlur" rows="1" placeholder="写评论" @keyup.enter="onKeyUp"/>
+        <textarea v-else v-model="commentContent" @focus="onFocus" @blur="onBlur" rows="1" placeholder="写评论" @keyup.enter="onKeyUp"></textarea>
       </div>
       <div v-if="!isSpeak" class="comment-send" @click="onSendComment">
         <img :src="require('../../assets/images/cmt_send_abled.png')" :style="{opacity:commentContent.length<=0?'0.5':'1'}">
@@ -25,12 +25,12 @@ import { createNamespacedHelpers } from 'vuex'
 const { mapState, mapActions, mapMutations } = createNamespacedHelpers(
   'commentData'
 )
-const commentInter = null 
+const commentInter = null
 export default {
-  components: { 'comment-list': CommentList },
+  components: { CommentList },
   data() {
     return {
-      lessonId: this.$route.params.lessonid,
+      lessonId: this.$route.params.lessonId,
       isSpeak: false,
       isSpeaking: false,
       commentContent: ''
@@ -44,10 +44,10 @@ export default {
     },
     //输入或者录入评论
     onInputeComment() {},
-    onFocus(){
+    onFocus() {
       this.handleResize()
     },
-    onBlur(){
+    onBlur() {
       clearInterval(commentInter)
     },
     //发送评论
@@ -72,7 +72,7 @@ export default {
       commentInter = setInterval(() => {
         const winHeight = window.innerHeight
         if (winHeight !== height) {
-          height = winHeight 
+          height = winHeight
           commentBar.scrollIntoView(false)
           window.scrollTo(0, document.body.scrollHeight)
         }
@@ -90,15 +90,15 @@ export default {
     onKeyUp(key) {
       this.onSendComment()
     }
-  },
-    /**
+  }
+  /**
    * 监听页面离开，设置本页面是否缓存起来， 如果跳转到评论页面, 设置本页面router:meta.keepAlive = true, 否则 = false
    */
-  // beforeRouteLeave(to, from, next) {  
+  // beforeRouteLeave(to, from, next) {
   //   // 设置下一个路由的 meta
   //   to.meta.keepAlive = true // 让 頁面缓存，即不刷新
   //   next()
-  // }, 
+  // },
 }
 </script>
 <style lang='scss' scoped>

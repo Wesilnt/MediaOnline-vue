@@ -33,14 +33,14 @@
 </template>
 <script>
 import { createNamespacedHelpers } from 'vuex'
-import {columnType,columnStatus} from '../../utils/config'
-const { mapState,mapMutations, mapActions } = createNamespacedHelpers('columnData')
+import { columnType, columnStatus } from '../../utils/config'
+const { mapState, mapActions } = createNamespacedHelpers('columnData')
 
 export default {
   data() {
     return {
       refreshing: false,
-      columnType:this.$route.params.columnType
+      columnType: this.$route.params.columnType
     }
   },
   directives: {
@@ -103,23 +103,24 @@ export default {
       this.refreshing = state.loading
     }
   },
-  created() { 
-    this.getColumnList({ refresh: false, columnType:this.columnType })
+  created() {
+    this.getColumnList({ refresh: false, columnType: this.columnType })
   },
   methods: {
-    ...mapMutations(['resetState']),
-    ...mapActions(['getColumnList']),
+    ...mapActions(['getColumnList', 'resetState']),
     scrollBottom() {
       console.log('分页')
-      this.getColumnList({ refresh: false, columnType:this.columnType })
+      this.getColumnList({ refresh: false, columnType: this.columnType })
     },
     //音频播放
     toDetail(id) {
-      this.$router.push({ name: 'ColumnDetail', params: {
-                                                          courseId:id,
-                                                          columnType: this.columnType 
-                                                        } 
-                        })
+      this.$router.push({
+        name: 'ColumnDetail',
+        params: {
+          courseId: id,
+          columnType: this.columnType
+        }
+      })
     }
   },
   beforeDestroy() {

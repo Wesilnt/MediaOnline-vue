@@ -15,7 +15,8 @@ const PageInfo_From_Home = [
   {
     path: '/home/freeList',
     name: 'FreeList',
-    component: FreeList
+    component: FreeList,
+
   },
   {
     path: '/home/visionList',
@@ -36,7 +37,8 @@ const PageInfo_From_Home = [
     path: '/home/visionDetail/visionCourseList/:columnType/:courseId',
     name: 'visionCourseList',
     component: visionCourseList,
-    props: true
+    props: true,
+      meta: { navHide: true }
   }
 ]
 export default PageInfo_From_Home

@@ -5,16 +5,19 @@ export default [
   {
     path: '/praise/:columnType/:courseId/:collectLikeId/detail',
     name: 'Praise',
-    component: Praise
+    component: Praise,
+      meta: { navHide: true }
   },
   {
     path: '/praise/:columnType/:courseId/:collectLikeId/active',
     name: 'PraiseActive',
-    component: PraiseActive
+    component: PraiseActive,
+      meta: { navHide: true }
   },
   {
     path: '/share/:columnType/:courseId/:postType/poster',
     name: 'SharePoster',
-    component: SharePoster
+    component: SharePoster,
+      meta: { navHide: true }
   }
 ]

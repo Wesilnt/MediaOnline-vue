@@ -31,7 +31,7 @@ export default {
   },
   // regionid   专栏: courseId ,单集: lessonId
   // regiontype 2201:专栏,2202:单集
-  props: ['regionid', 'regiontype','unindent'],
+  props: ['regionid', 'regiontype', 'unindent'],
   components: { 'comment-item': CommentItem },
   watch: {
     loading: function(loading) {
@@ -40,7 +40,7 @@ export default {
   },
   created() {
     let regionType = this.regiontype
-    let regionId = this.regionid 
+    let regionId = this.regionid
     this.getCommentList({ regionId, regionType, isLoadMore: false })
   },
   computed: { ...mapState(['commentList', 'finished', 'loading']) },
@@ -54,10 +54,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.comment-list-container{
+.comment-list-container {
   width: 100%;
 }
-.van-item{
+.van-item {
   padding: 20px 0px;
 }
 .comment-list {
@@ -67,7 +67,7 @@ export default {
   padding-top: 10px;
   // width: 100vw;
 }
-.nodata-container {  
+.nodata-container {
   text-align: center;
   line-height: 30vh;
   font-size: 20px;

@@ -13,17 +13,20 @@ export default [
     name: 'AudioPlay',
     component: AudioPlay,
     meta: {
-      keepAlive: false // 需要被缓存
+      keepAlive: false, // 需要被缓存
+      navHide: true
     }
   },
   {
     path: '/audio/:columnType/:courseId/:lessonId/commentlist',
     name: 'AudioCmts',
-    component: AudioCmts
+    component: AudioCmts,
+    meta: { navHide: true }
   },
   {
     path: '/audio/:columnType/:courseId/:lessonId/audiodraft',
     name: 'AudioDraft',
-    component: AudioDraft
+    component: AudioDraft,
+    meta: { navHide: true }
   }
 ]
