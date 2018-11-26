@@ -34,16 +34,16 @@ import HomeItem from '../components/HomeItem.vue'
 import homeData from '../store/module/homeData.js'
 import { homeColumnList } from '../utils/config'
 import { createNamespacedHelpers } from 'vuex'
-import { courseType,getColumnType } from '../utils/config'
-const { mapState, mapActions } = createNamespacedHelpers('homeData') 
+import { courseType, getColumnType } from '../utils/config'
+const { mapState, mapActions } = createNamespacedHelpers('homeData')
 
 export default {
   name: 'Homepage',
-  data(){
-     return{
-       show: false,
-       homeColumnList:homeColumnList
-     }
+  data() {
+    return {
+      show: false,
+      homeColumnList: homeColumnList
+    }
   },
   components: {
     SkeletonFullScreen,
@@ -68,17 +68,19 @@ export default {
     // type :"2501"
     routerToSwiperDetail(item) {
       if (!item) return
-        if(item.type === '2501'){
-          let data = item.link.split('&/&')
-          this.$router.push({ path: `/detail/${getColumnType(data[0])}/${data[1]}` })
-        }
-        if(item.type === '2502'){
-          window.location.href = item.url
-        }
+      if (item.type === '2501') {
+        let data = item.link.split('&/&')
+        this.$router.push({
+          path: `/detail/${getColumnType(data[0])}/${data[1]}`
+        })
+      }
+      if (item.type === '2502') {
+        window.location.href = item.url
+      }
       // if (url.includes('&/&')) {
       //   const [type, id] = url.split('&/&')
       //   // this.$router.push({ path: `/${courseType[type]}${id}` })
-      
+
       // } else {
       //   console.log(url)
       //   window.location.href = url
@@ -94,7 +96,6 @@ export default {
 <style lang='less' scoped>
 .index {
   color: #3e3e53;
-  margin-bottom: 100px;
   // /deep/.van-swipe__indicators{
   //   bottom:30px;
   // }
@@ -102,7 +103,7 @@ export default {
     background-color: #d9d9d9;
   }
   /deep/.van-swipe__indicator--active {
-    background-color:white ;
+    background-color: white;
   }
 }
 .index-swiper {
@@ -126,4 +127,3 @@ export default {
   padding: 0 28px;
 }
 </style>
-

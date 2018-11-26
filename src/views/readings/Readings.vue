@@ -235,10 +235,8 @@ export default {
     }
   }
   .load-more-container {
-    width: 100%;
     text-align: center;
-    height: 64px;
-    margin-bottom: 64px;
+    padding: 48px 0;
     color: rgb(200, 200, 200);
   }
 }

@@ -56,13 +56,11 @@
                         <CommentList  :regionid="courseId" :regiontype="2201" :unindent="true" ></CommentList>
                     </div>
                     <!-- 购买须知 -->
-                    <div class="column-base column-base-last">
+                    <div class="column-base">
                         <div class="column-sction-title">
                             <h4>购买须知</h4>
                         </div>
-                        <div class="column-purchase-tip-fatherView">
-                            <p v-html="columnDetail.buyIntro"></p>
-                        </div>
+                        <p class="column-bottom" v-html="columnDetail.buyIntro"></p>
                     </div>
                 </div>
             </div>
@@ -157,13 +155,15 @@ import {
   columnType as COLUMNTYPE
 } from '../utils/config'
 
-const { mapState, mapActions, mapGetters } = createNamespacedHelpers('columnData')
+const { mapState, mapActions, mapGetters } = createNamespacedHelpers(
+  'columnData'
+)
 export default {
   name: 'ColumnDetail',
   data() {
     const { columnType, courseId } = this.$route.params
     return {
-      show:false,
+      show: false,
       courseId,
       columnType,
       navBars: [
@@ -290,7 +290,7 @@ export default {
     },
     //分页加载
     scrollBottom() {
-        this.canLoadMore &&
+      this.canLoadMore &&
         this.getLessonList({ courseId: this.courseId, refresh: false })
     }
   },
@@ -373,7 +373,7 @@ export default {
 }
 .load-more-container {
   text-align: center;
-  padding: 96px 0 216px;
+  padding: 48px 0;
   color: #c8c8c8;
 }
 //banner头图
@@ -395,10 +395,9 @@ export default {
   padding: 0 40px;
   background-color: #fff;
   border-bottom: 8px solid rgb(247, 247, 247);
-  &.column-base-last {
-    padding-bottom: 180px;
-    border-bottom: none;
-  }
+}
+.column-bottom{
+    padding-bottom: 20px;
 }
 //大图浏览
 .column-bigimage {
@@ -406,7 +405,6 @@ export default {
   padding: 0 40px;
   width: 100%;
   height: auto;
-  //   margin: 40px 0;
   background-color: #fff;
   border-bottom: 8px solid rgb(247, 247, 247);
   overflow: hidden;

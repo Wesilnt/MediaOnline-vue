@@ -144,7 +144,7 @@ export default {
         paymentCollectLikeId,
         userAccessStatus,
         groupBuystatus,
-          userPaymentStatus,
+        userPaymentStatus,
         groupBuyFull
       } = this
       // console.log(
@@ -463,20 +463,25 @@ export default {
         userInfo,
         groupBuystatus
       } = this
-        const href = -1 != location.href.indexOf('?')?location.href.split('?')[0]:location.href
-        const shareHref = `${href}${-1 != href.indexOf('?') ? '&' : '?'}`
+      const hrefHasSign = location.href.includes('?')
+      const href = hrefHasSign ? location.href.split('?')[0] : location.href
+      const shareHref = `${href}${hrefHasSign ? '&' : '?'}`
       let title = `我正在学习《${this.courseName}》，快来一起学习吧`,
         link = `${shareHref}preUserId=${userInfo.id}`
       if (paymentGroupBuyId && groupBuystatus !== 1204) {
         title = `我正在参加《${courseName}》拼团活动,仅差${groupBuyPersonCount -
           alreadyCount}人,快来和我一起拼团吧!`
-        link = `${url}/#/detail/${columnType}/${courseId}&groupBuyId=${paymentGroupBuyId}&preUserId=${userInfo.id}`
+        link = `${url}/#/detail/${columnType}/${courseId}&groupBuyId=${paymentGroupBuyId}&preUserId=${
+          userInfo.id
+        }`
       }
       if (paymentCollectLikeId) {
         title = `我是${userInfo.nickName}, ${
           this.viewer === identityType.OWNER ? '我想免费' : '正在帮朋友'
         }领取《${courseName}》,求助攻~`
-        link = `${url}/#/praise/active/${courseId}/${paymentCollectLikeId}&columnType=${columnType}&preUserId=${userInfo.id}`
+        link = `${url}/#/praise/active/${courseId}/${paymentCollectLikeId}&columnType=${columnType}&preUserId=${
+          userInfo.id
+        }`
       }
       const share = {
         title,
@@ -598,6 +603,11 @@ export default {
         collect: this.renderCollectBuy.bind(this, paymentObj)
       })
     }
+
+    console.log(hide)
+    if (hide) {
+      document.getElementById('navigation').style.marginBottom = 0
+    }
     return hide ? null : (
       <div>
         {paymentGroupBuyId && (
@@ -620,7 +630,7 @@ export default {
           {paymentBtn}
           <Share
             show={sharePageShow}
-            courseId={courseId} 
+            courseId={courseId}
             postType="collage"
             close={this.toggleSharePage}
             columnType={columnType}

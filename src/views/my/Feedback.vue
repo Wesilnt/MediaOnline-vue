@@ -57,7 +57,7 @@ export default {
     -webkit-appearance: none;
   }
   &-warning {
-    margin: 72px 55px 0;
+    padding: 72px 55px 48px;
     &-content-length {
       color: #acacb4;
       text-align: right;

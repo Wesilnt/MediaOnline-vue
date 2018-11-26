@@ -32,19 +32,26 @@ export default new Router({
       path: '/',
       component: NavBar,
       redirect: '/home',
+
       children: [
-        { path: '', component: Home },
-        { path: 'home',name:'HOME', component: Home },
+        {
+          path: 'home',
+          name: 'HOME',
+          component: Home,
+          meta: { navHide: true }
+        },
         {
           path: '/my',
-          component: My
+          component: My,
+          meta: { navHide: true }
         }
       ]
     },
     {
       path: '/detail/:columnType/:courseId',
       name: 'ColumnDetail',
-      component: ColumnDetail
+      component: ColumnDetail,
+        meta: { navMarginBottom: 61 }
     },
     {
       path: '/payment',

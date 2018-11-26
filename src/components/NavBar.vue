@@ -56,6 +56,7 @@ export default {
   box-shadow: 0 0 2px #ddd;
   color: #ddd;
   background: #fff;
+    z-index: 10;
 }
 .navbar-item {
   flex-grow: 1;
