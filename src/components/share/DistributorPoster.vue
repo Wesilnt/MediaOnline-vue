@@ -189,10 +189,10 @@
                 let left = this.centerX - width / 2;
                 let img = this.$el.children[1].children[0];
                  console.log(img.currentSrc)
-                if(img.currentSrc && img.complete){
-                    this.ctx.drawImage(img, left, top, width, width);
-                    resolve();//如果二维码没有加载则走下面的加载回调绘制
-                }
+                // if(img.currentSrc && img.complete){
+                //     this.ctx.drawImage(img, left, top, width, width);
+                //     resolve();//如果二维码没有加载则走下面的加载回调绘制
+                // }
                 // let currentSrc = img.currentSrc
                 // if ('' !== currentSrc && img.complete) return resolve();//如果二维码没有加载则走下面的加载回调绘制
                 img.onload = () => {
