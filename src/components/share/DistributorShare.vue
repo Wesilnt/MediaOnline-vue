@@ -85,7 +85,7 @@
         },
         mounted() {
             this.checkDistributor(false).then(() => {
-                if (this.isDistributor) this.$refs.dialog.show()
+                // if (this.isDistributor) this.$refs.dialog.show()
             })
             this.clipboardLink = new Clipboard('#link')
             this.getUserInfo().then(user =>  this.setWxShare(user))
