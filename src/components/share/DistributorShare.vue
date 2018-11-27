@@ -122,8 +122,7 @@
                 const href = -1 != location.href.indexOf('?')?location.href.split('?')[0]:location.href;
                 const shareHref = `${href}${-1 != href.indexOf('?') ? '&' : '?'}`;
                 const distributor = btoa(encodeURIComponent(JSON.stringify({id:user.id,avatarUrl:user.avatarUrl,nickName:user.nickName})));
-                this.shareUrl = `${shareHref}preUserId=${user.id}&distributor=${distributor}`;
-                console.log("shareURL:==",this.shareUrl);
+                this.shareUrl = `${shareHref}preUserId=${user.id}&distributor=${distributor}`; 
                 const shareData = {
                     title: '秦汉胡同在线',
                     link:this.shareUrl,
