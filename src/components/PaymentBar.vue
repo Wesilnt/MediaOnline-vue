@@ -473,22 +473,20 @@ export default {
         link = `${url}/#/detail/${columnType}/${courseId}?groupBuyId=${paymentGroupBuyId}&preUserId=${userInfo.id}`
       }
       if (paymentCollectLikeId) {
-        title = `我是${userInfo.nickName}, ${
-          this.viewer === identityType.OWNER ? '我想免费' : '正在帮朋友'
-        }领取《${courseName}》,求助攻~`;
+        title = `我是${userInfo.nickName}, ${this.viewer === identityType.OWNER ? '我想免费' : '正在帮朋友'}领取《${courseName}》,求助攻~`;
         link = `${url}/#/praise/active/${courseId}/${paymentCollectLikeId}?columnType=${columnType}&preUserId=${userInfo.id}`
       }
       const share = {
         title,
         link
-      }
+      };
       const shareData = {
         desc: '你一定会爱上国学课...',
         imgUrl: this.sharePostUrl,
         ...share
-      }
-      console.log('shareLink_title ', shareData)
-      this.setWxShareFriend(shareData)
+      };
+      console.log('shareLink_title ', shareData);
+      this.setWxShareFriend(shareData);
       this.setWxShareZone(shareData)
     }
   },
