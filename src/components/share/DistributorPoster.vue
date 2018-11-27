@@ -191,7 +191,7 @@
                  console.log(img.currentSrc)
                 if(img.currentSrc && img.complete){
                     this.ctx.drawImage(img, left, top, width, width);
-                    return resolve();//如果二维码没有加载则走下面的加载回调绘制
+                    resolve();//如果二维码没有加载则走下面的加载回调绘制
                 }
                 // let currentSrc = img.currentSrc
                 // if ('' !== currentSrc && img.complete) return resolve();//如果二维码没有加载则走下面的加载回调绘制
