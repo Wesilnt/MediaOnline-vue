@@ -190,7 +190,7 @@
                 let top = this.qrcodeTop;
                 let width = this.qrcodeWidth;
                 let left = this.centerX - width / 2;
-                this.test = '2.1' 
+                this.test = '2.1'
                 let img = this.$el.children[1].children[0];
                 this.test = '2.2'
                 // if(img.currentSrc && img.complete){

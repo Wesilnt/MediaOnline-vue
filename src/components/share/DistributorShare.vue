@@ -96,14 +96,15 @@
             onShareItem(item) {
                 switch (item.id) {
                     case 0:         //海报分享
-                        this.$router.push({ name: 'DistributorPoster', query: { shareUrl: this.shareUrl } })
-                        break
+                        console.log("shareUrl",this.shareUrl)
+                        this.$router.push({ name: 'DistributorPoster', query: { shareUrl: this.shareUrl } });
+                        break;
                     case 1:
                     case 2:
-                        this.showTip = true
-                        break
+                        this.showTip = true;
+                        break;
                     case 3:        //分享链接
-                        this.clipboardLink.on('success', () => this.$toast('复制成功,快去分享吧'))
+                        this.clipboardLink.on('success', () => this.$toast('复制成功,快去分享吧'));
                         break
                 }
             },
@@ -124,6 +125,7 @@
                 const shareHref = `${href}${-1 != href.indexOf('?') ? '&' : '?'}`
                 const distributor = btoa(encodeURIComponent(JSON.stringify({id:user.id,avatarUrl:user.avatarUrl,nickName:user.nickName})))
                 this.shareUrl = `${shareHref}preUserId=${user.id}&distributor=${distributor}`
+                console.log("shareUrl1:",this.shareUrl)
                 const shareData = {
                     title: '秦汉胡同在线',
                     link:this.shareUrl,
@@ -208,7 +210,7 @@
                 flex-direction: row;
                 padding-left: 6px;
                 margin-top: 56px;
-                justify-content: space-around;
+                justify-content: space-between;
             }
             .share-item {
                 display: flex;
@@ -228,6 +230,9 @@
                     color: #52514d;
                     font-size: 24px;
                 }
+            }
+            .share-item :active{
+                opacity: 0.6;
             }
         }
         .share-cancel {
