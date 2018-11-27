@@ -1,5 +1,5 @@
 <template>
-    <div ref="dialog" class="dialog">
+    <div ref="dialog" v-if="isDistributor" class="dialog">
         <div v-show="value" class="share-container" @click.self="onCancel">
             <div v-show="showTip" class="indicator-container">
                 <div class="indicator-container-icon"></div>
@@ -63,12 +63,12 @@
             };
         },
         created() {
-            const preUserId = this.$route.query.preUserId
-            const distributor = this.$route.query.distributor
-            console.log('分销人员ID：', preUserId)
+            const preUserId = this.$route.query.preUserId;
+            const distributor = this.$route.query.distributor;
+            console.log('分销人员ID：', preUserId);
             if(preUserId && preUserId>0)
             {
-                const distributorStr = JSON.stringify({ preUserId })
+                const distributorStr = JSON.stringify({ preUserId });
                 sessionStorage.setItem('preUserId', distributorStr)
             }
             if(distributor){
@@ -86,9 +86,9 @@
         mounted() {
             this.checkDistributor(false).then(() => {
                 // if (this.isDistributor) this.$refs.dialog.show()
-            })
-            this.clipboardLink = new Clipboard('#link')
-            this.getUserInfo().then(user =>  this.setWxShare(user))
+            });
+            this.clipboardLink = new Clipboard('#link');
+            this.getUserInfo().then(user =>  this.setWxShare(user));
         },
         methods: {
             ...rootActions(['setWxShareFriend', 'setWxShareZone']),
@@ -108,30 +108,30 @@
                 }
             },
             openShareDialog() {
-                this.$emit('input', true)
-                this.isOpen = true
+                this.$emit('input', true);
+                this.isOpen = true;
             },
             onCancel() {
-                this.isOpen = false
-                this.showTip = false
+                this.isOpen = false;
+                this.showTip = false;
                 setTimeout(() => this.$emit('input', false), 200)
             },
             afterLeave() {
                 this.$emit('close')
             },
             setWxShare(user) {
-                const href = -1 != location.href.indexOf('?')?location.href.split('?')[0]:location.href
-                const shareHref = `${href}${-1 != href.indexOf('?') ? '&' : '?'}`
-                const distributor = btoa(encodeURIComponent(JSON.stringify({id:user.id,avatarUrl:user.avatarUrl,nickName:user.nickName})))
-                this.shareUrl = `${shareHref}preUserId=${user.id}&distributor=${distributor}`
+                const href = -1 != location.href.indexOf('?')?location.href.split('?')[0]:location.href;
+                const shareHref = `${href}${-1 != href.indexOf('?') ? '&' : '?'}`;
+                const distributor = btoa(encodeURIComponent(JSON.stringify({id:user.id,avatarUrl:user.avatarUrl,nickName:user.nickName})));
+                this.shareUrl = `${shareHref}preUserId=${user.id}&distributor=${distributor}`;
                 const shareData = {
                     title: '秦汉胡同在线',
                     link:this.shareUrl,
                     desc: '你一定会爱上国学课...',
                     imgUrl: require('../../assets/images/logo.png'),
-                }
-                console.log('shareLink_title ', shareData)
-                this.setWxShareFriend(shareData)
+                };
+                console.log('shareLink_title ', shareData);
+                this.setWxShareFriend(shareData);
                 this.setWxShareZone(shareData)
             }
         }
