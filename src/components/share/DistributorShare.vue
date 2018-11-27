@@ -96,8 +96,7 @@
             onShareItem(item) {
                 switch (item.id) {
                     case 0:         //海报分享
-                        console.log("shareUrl",this.shareUrl)
-                        this.$router.push({ path: '/share/distribution/poster', query: { shareUrl: this.shareUrl } });
+                        this.$router.push({ name: 'DistributorPoster', query: { shareUrl: this.shareUrl } });
                         break;
                     case 1:
                     case 2:
@@ -124,8 +123,7 @@
                 const href = -1 != location.href.indexOf('?')?location.href.split('?')[0]:location.href
                 const shareHref = `${href}${-1 != href.indexOf('?') ? '&' : '?'}`
                 const distributor = btoa(encodeURIComponent(JSON.stringify({id:user.id,avatarUrl:user.avatarUrl,nickName:user.nickName})))
-                this.shareUrl = `${shareHref}preUserId=${user.id}`
-                console.log("shareUrl1:",this.shareUrl)
+                this.shareUrl = `${shareHref}preUserId=${user.id}&distributor=${distributor}`
                 const shareData = {
                     title: '秦汉胡同在线',
                     link:this.shareUrl,
