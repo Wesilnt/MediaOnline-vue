@@ -51,7 +51,7 @@
                 ctx: null,
                 canvasData: null,
                 isLoading: true,
-                imageUrl: require('../../assets/images/logo.png')
+                imageUrl: require('../../assets/images/logo.png'),
             };
         },
         components: { 'loading-dialog': LoadingDialog, VueQr },
@@ -108,7 +108,7 @@
             //绘制海报
             drawBottomMap: function() {
                 this.getUserInfo()
-                    .then(user => (this.user = user))
+                    .then(user => this.user = user)
                     .then(() => new Promise(resolve => this.drawBackground(resolve)))
                     .then(() => new Promise(resolve => this.drawTitle(resolve)))
                     .then(() => new Promise(resolve => this.drawDashLine(resolve)))
@@ -188,9 +188,13 @@
                 let width = this.qrcodeWidth;
                 let left = this.centerX - width / 2;
                 let img = this.$el.children[1].children[0];
-                this.ctx.drawImage(img, left, top, width, width);
-                let currentSrc = img.currentSrc;
-                if ('' !== currentSrc && img.complete) return resolve(); //如果二维码没有加载则走下面的加载回调绘制
+                 console.log(img.currentSrc)
+                if(img.currentSrc && img.complete){
+                    this.ctx.drawImage(img, left, top, width, width);
+                    return resolve();//如果二维码没有加载则走下面的加载回调绘制
+                }
+                // let currentSrc = img.currentSrc
+                // if ('' !== currentSrc && img.complete) return resolve();//如果二维码没有加载则走下面的加载回调绘制
                 img.onload = () => {
                     this.ctx.drawImage(img, left, top, width, width);
                     resolve();

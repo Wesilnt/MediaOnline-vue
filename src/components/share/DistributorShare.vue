@@ -1,5 +1,5 @@
 <template>
-    <dialog ref="dialog" class="dialog">
+    <div ref="dialog" class="dialog">
         <div v-show="value" class="share-container" @click.self="onCancel">
             <div v-show="showTip" class="indicator-container">
                 <div class="indicator-container-icon"></div>
@@ -41,7 +41,7 @@
         </div>
         <!--分销-->
         <div v-if="true" class="earn-label" @click="openShareDialog">赚</div>
-    </dialog>
+    </div>
 </template>
 <script>
     import Clipboard from 'clipboard';
@@ -74,7 +74,6 @@
             if(distributor){
                 sessionStorage.setItem('distributor', distributor)
             }
-            this.getUserInfo().then(user =>  this.setWxShare(user))
         },
         computed: {
             ...mapState(['isDistributor'])
@@ -89,6 +88,7 @@
                 if (this.isDistributor) this.$refs.dialog.show()
             })
             this.clipboardLink = new Clipboard('#link')
+            this.getUserInfo().then(user =>  this.setWxShare(user))
         },
         methods: {
             ...rootActions(['setWxShareFriend', 'setWxShareZone']),
@@ -125,7 +125,7 @@
                 const distributor = btoa(encodeURIComponent(JSON.stringify({id:user.id,avatarUrl:user.avatarUrl,nickName:user.nickName})))
                 this.shareUrl = `${shareHref}preUserId=${user.id}&distributor=${distributor}`
                 const shareData = {
-                    title: '',
+                    title: '秦汉胡同在线',
                     link:this.shareUrl,
                     desc: '你一定会爱上国学课...',
                     imgUrl: require('../../assets/images/logo.png'),
@@ -140,6 +140,7 @@
 <style lang="scss" scoped>
     .dialog {
         border: 0;
+        z-index: 106;
     }
 
     .share-container {
