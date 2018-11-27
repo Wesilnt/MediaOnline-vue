@@ -65,7 +65,6 @@
         created() {
             const preUserId = this.$route.query.preUserId;
             const distributor = this.$route.query.distributor;
-            console.log('分销人员ID：', preUserId);
             if(preUserId && preUserId>0)
             {
                 const distributorStr = JSON.stringify({ preUserId });
@@ -208,7 +207,7 @@
                 flex-direction: row;
                 padding-left: 6px;
                 margin-top: 56px;
-                justify-content: space-between;
+                justify-content: space-around;
             }
             .share-item {
                 display: flex;

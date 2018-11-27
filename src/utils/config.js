@@ -4,7 +4,7 @@
 const { NODE_ENV } = process.env
 
 // 调试选项，本地调试请改为 False
-export const IS_ONLINE = true
+export const IS_ONLINE = true;
 // 测试 Token
 // export const TEST_TOKEN = "60487b89-0503-4aa0-88c3-defe70607929"
 export const TEST_TOKEN = 'd5baa57e-74ee-4dd4-8122-f9c0f360889f'
@@ -69,7 +69,7 @@ export const navbar = [
     activeIcon: require('../assets/images/nav_info_selected.png'),
     path: '/my'
   }
-]
+];
 import router from '../router/router'
 // 单集详情跳转： 视频详情
 export const openVideoDetail = (
@@ -80,7 +80,7 @@ export const openVideoDetail = (
     name: 'videoCourseDetail',
     params: { courseId, columnType, lessonId }
   })
-}
+};
 // 单集详情跳转： 音频详情
 export const openAudioDetail = (
   context,
@@ -91,7 +91,7 @@ export const openAudioDetail = (
     params: { courseId, columnType, lessonId },
     query: { courseName }
   })
-}
+};
 
 // 公众号 URL
 export const WECHAT_SUBSCRIPTION_URL =
@@ -131,28 +131,28 @@ export const puzzleTabs = {
   waiting: '中',
   succeed: '成功',
   fail: '失败'
-}
+};
 export const puzzleTypes = {
   all: '1200',
   waiting: '1202',
   succeed: '1203',
   fail: '1204'
-}
+};
 export const praiseTypes = {
   all: '1200',
   waiting: '1202',
   succeed: '1203,1205',
   fail: '1204'
-}
+};
 export const purchaseSortType = {
   lastBought: '最新购买',
   lastLearn: '最近学习'
-}
+};
 export const purchaseQueryType = {
   // '1007': '读书会',
   '1005': '线上课程',
   '1003': '少年视野'
-}
+};
 
 export const distributionShare = [
     {
@@ -186,8 +186,8 @@ export const distributionShare = [
         text:'复制链接',
         width: '28px',
         fillColor: '#acb5c6',
-    },[]
-]
+    },
+];
 
 export const bookCoinChannel = {
     "3501":{name: 'SELF_TEST',code: "3501", title:"自测题"},
