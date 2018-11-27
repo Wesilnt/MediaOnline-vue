@@ -4,7 +4,7 @@
             <canvas ref="canvasId" :width="canvasW" :height="canvasH"/>
             <div class="top-container">
                 <img ref="saveImage"/>
-                <p>长按分享图片{{test}}</p>
+                <p>长按分享{{test}}</p>
             </div>
         </main>
         <!-- 二维码生成组件 -->

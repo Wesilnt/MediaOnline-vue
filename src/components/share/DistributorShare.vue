@@ -97,7 +97,7 @@
                 switch (item.id) {
                     case 0:         //海报分享
                         console.log("shareUrl",this.shareUrl)
-                        this.$router.push({ name: 'DistributorPoster', query: { shareUrl: this.shareUrl } });
+                        this.$router.push({ path: '/share/distribution/poster', query: { shareUrl: this.shareUrl } });
                         break;
                     case 1:
                     case 2:
