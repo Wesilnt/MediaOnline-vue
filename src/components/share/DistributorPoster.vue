@@ -4,7 +4,7 @@
             <canvas ref="canvasId" :width="canvasW" :height="canvasH"/>
             <div class="top-container">
                 <img ref="saveImage"/>
-                <p>长按分享图片</p>
+                <p>长按分享图片{{test}}</p>
             </div>
         </main>
         <!-- 二维码生成组件 -->
@@ -52,6 +52,7 @@
                 canvasData: null,
                 isLoading: true,
                 imageUrl: require('../../assets/images/logo.png'),
+                test:0
             };
         },
         components: { 'loading-dialog': LoadingDialog, VueQr },
@@ -129,6 +130,7 @@
                 this.ctx.globalCompositeOperation = 'source-in';
                 this.roundedRect(this.ctx, 0, 0, this.canvasW, this.canvasH, 10);
                 this.ctx.restore();
+                this.test = '1'
                 resolve();
                 // let cover = new Image();
                 // cover.setAttribute('crossOrigin', 'anonymous');
@@ -180,6 +182,7 @@
                 this.ctx.clip();
                 this.ctx.fill();
                 this.ctx.restore();
+                this.test = '2'
                 resolve();
             },
             //4. 绘制二维码
@@ -187,8 +190,10 @@
                 let top = this.qrcodeTop;
                 let width = this.qrcodeWidth;
                 let left = this.centerX - width / 2;
+                this.test = '2.1'
+                 console.log(this)
                 let img = this.$el.children[1].children[0];
-                 console.log(img.currentSrc)
+                this.test = '2.2'
                 // if(img.currentSrc && img.complete){
                 //     this.ctx.drawImage(img, left, top, width, width);
                 //     resolve();//如果二维码没有加载则走下面的加载回调绘制
@@ -197,6 +202,7 @@
                 // if ('' !== currentSrc && img.complete) return resolve();//如果二维码没有加载则走下面的加载回调绘制
                 img.onload = () => {
                     this.ctx.drawImage(img, left, top, width, width);
+                    this.test = '2.3'
                     resolve();
                 };
             },
