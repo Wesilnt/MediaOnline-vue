@@ -628,8 +628,8 @@ export default {
             close={this.toggleSharePage}
             columnType={columnType}
             groupBuyId={this.paymentGroupBuyId}
-            startAvatar={this.starter.avatarUrl}
-            startUserName={this.starter.nickName}
+            startAvatar={this.starter&&this.starter.avatarUrl}
+            startUserName={this.starter&&this.starter.nickName}
           />
           {showTeleRegister && (
             <PhoneVerif
