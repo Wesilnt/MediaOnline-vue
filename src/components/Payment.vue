@@ -66,15 +66,15 @@
             ...rootState(['coinNum', 'deductionOrder', 'deductionProp']),
             //抵扣书币数
             deductionBookCoin: function() {
-                const price = parseFloat(this.payDetail.price)                                   //不抵扣书币的支付金额
-                let totalAmount = price * this.deductionOrder / 100                              //最多能抵扣金额, deductionOrder/100 抵扣金额比
-                totalAmount = price - totalAmount < 0.01 ? price - 0.01 : totalAmount             //书币抵扣完,剩余支付金额不能小于0.01
-                let totalCoin = (totalAmount * this.deductionProp).toFixed(0)                    //最多抵扣需要花费多少书币, 1元 需要多少书币：deductionProp
-                return this.coinNum <= totalCoin ? this.coinNum : totalCoin                     //计算可用书币总数
+                const price = parseFloat(this.payDetail.price);                                   //不抵扣书币的支付金额
+                let totalAmount = price * this.deductionProp / 100 ;                              //最多能抵扣金额, deductionProp/100 抵扣金额比
+                totalAmount = price - totalAmount < 0.01 ? price - 0.01 : totalAmount;            //书币抵扣完,剩余支付金额不能小于0.01
+                let totalCoin = (totalAmount * this.deductionOrder).toFixed(0);                   //最多抵扣需要花费多少书币, 1元 需要多少书币：deductionOrder
+                return this.coinNum <= totalCoin ? this.coinNum : totalCoin                       //计算可用书币总数
             },
             //抵扣金额
             deductionAmount: function() {
-                return (Math.round(this.deductionBookCoin * 100 / this.deductionProp) / 100).toFixed(2)
+                return (Math.round(this.deductionBookCoin * 100 / this.deductionOrder) / 100).toFixed(2)
             },
             //支付金额
             payAmount: function() {
