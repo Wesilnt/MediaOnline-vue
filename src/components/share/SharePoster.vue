@@ -34,6 +34,7 @@ export default {
       shareType: this.$route.params.columnType,
       courseId: this.$route.params.courseId,
       collectLikeId: this.$route.query.collectLikeId, //集赞海报分享得集赞ID
+      groupBuyId: this.$route.query.groupBuyId, //帮别人分享的拼团ID
       sharePostUrl: this.$route.query.sharePostUrl, //集赞分享海报
       startUserName: this.$route.query.startUserName, //集赞发起人姓名
       startAvatar: this.$route.query.startAvatar, //集赞发起人头像
@@ -63,10 +64,7 @@ export default {
   created() {
     this.shareType = this.shareType || this.columnType;
     // 1. 传入分享地址
-    if (
-      this.shareUrl &&
-      this.shareUrl != `${location.href.split('#')[0]}#/home`
-    ) {
+    if (this.shareUrl && this.shareUrl != `${location.href.split('#')[0]}#/home`) {
       this.drawBottomMap(); //重新生成图片
       return
     }
@@ -86,7 +84,6 @@ export default {
     if (this.shareType && this.columnDetail) {
       this.setPosterConfig(); //设置分享地址
       this.drawBottomMap(); //重新生成图片
-      return;
     }
   },
   mounted: function() {
@@ -119,24 +116,20 @@ export default {
     ...mapActions(['getPosterInfo', 'getPosterforPraise', 'getColumnDetail']),
     //設置海報分享地址
     setPosterConfig() {
+      let  baseUrl = location.href.includes('?')?location.href.split('?')[0]:location.href;
+        baseUrl = baseUrl.includes('#')?baseUrl.split('#')[0]:baseUrl;
       //0. 有专栏详情, 非集赞中和拼团中
       if (!this.columnDetail) return;
-      this.shareUrl = `${this.url}/#/detail/${this.shareType}/${
-        this.columnDetail.id
-      }`;
+      this.shareUrl = `${baseUrl}/#/detail/${this.shareType}/${this.columnDetail.id}`;
       //1. 有专栏详情, 拼团中
       if (this.postType === 'collage') {
-        this.shareUrl = `${this.shareUrl}?groupBuyId=${
-          this.columnDetail.groupBuyId
-        }&startUserName=${this.startUserName}&startAvatar=${this.startAvatar}`
+        let groupBuyId = this.groupBuyId || this.columnDetail.groupBuyId;
+        this.shareUrl = `${this.shareUrl}?${groupBuyId?'groupBuyId='+groupBuyId : ''}&startUserName=${this.startUserName}&startAvatar=${this.startAvatar}`
       }
       //2. 有专栏详情, 集赞中
       if (this.postType === 'praise') {
-        this.shareUrl = `${this.url}/#/praise/${this.shareType}/${
-          this.courseId
-        }/${this.collectLikeId}/active?startUserName=${
-          this.startUserName
-        }&startAvatar=${this.startAvatar}`
+        let likeId = this.collectLikeId || this.columnDetail.collectLikeId;
+        this.shareUrl = `${baseUrl}/#/praise/${this.shareType}/${this.courseId}/${likeId||0}/active?startUserName=${this.startUserName}&startAvatar=${this.startAvatar}`
       }
       console.log('SharePoster-Link:', this.shareUrl)
     },

@@ -202,9 +202,10 @@ export default {
       dispatch('getWechatPayment', { ...result, ...payload })
     },
     //参与拼团
-    async joinGroupBuy({ dispatch, commit }, { groupBuyId, courseId }) {
-      const result = await joinGroupBuy({ groupBuyId })
-      if (!result) return
+    async joinGroupBuy({ dispatch, commit }, { groupBuyId, courseId ,useFlag, preUserId }) {
+      let preUser = preUserId ?{preUserId}:{};
+      const result = await joinGroupBuy({ groupBuyId ,useFlag,...preUser});
+      if (!result) return;
       dispatch('getWechatPayment', { ...result, courseId }).then(res => {
         console.log(res)
       })

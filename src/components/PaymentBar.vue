@@ -51,7 +51,7 @@ export default {
       groupBuyId: groupBuyIdFromShare,
       collectLikeId: collectLikeIdFromShare
     } = this.$route.query
-    const { columnType, courseId } = this.$route.params
+    const { columnType, courseId } = this.$route.params;
     return {
       userInfo: {}, // 用户信息
       columnType,
@@ -90,7 +90,7 @@ export default {
       'groupBuyErr'
     ]),
     paymentGroupBuyId: function() {
-      const { groupBuyIdFromShare, groupBuyId, viewer } = this
+      const { groupBuyIdFromShare, groupBuyId, viewer } = this;
       if (
         groupBuyIdFromShare &&
         groupBuyId &&
@@ -112,6 +112,10 @@ export default {
     },
     paymentCollectLikeId: function() {
       return this.collectLikeIdFromShare || this.collectLikeId
+    },
+    starter : function() {
+        if(!this.userList||this.userList.length<=0)return;
+        return this.userList.find(item => item.isStarter)
     }
   },
   methods: {
@@ -428,10 +432,10 @@ export default {
             courseId,
             columnType,
             lessonId: id
-          })
-          break
+          });
+          break;
         case 'FreeZone':
-          break
+          break;
         // case 'reading':
         //   case 'onlineVision':
         default:
@@ -440,7 +444,7 @@ export default {
             columnType,
             lessonId: id,
             courseName
-          })
+          });
           break
       }
     },
@@ -489,10 +493,10 @@ export default {
     }
   },
   async mounted() {
-    await this.getUserInfo()
-    await this.mapGroupBuyDetailToPayment()
+    await this.getUserInfo();
+    await this.mapGroupBuyDetailToPayment();
     // 配置状态
-    let handler = this.toggleSharePage.bind(this, true)
+    let handler = this.toggleSharePage.bind(this, true);
     this.groupBuyStatusType = {
       normal: {
         txt: this.groupBuyPersonCount === 3 ? '三人团' : '六人团',
@@ -559,8 +563,8 @@ export default {
         this.returnToSelfColumn()
       }, 1000)
     }
-    const paymentObj = this.renderPaymentStatus()
-    if (!paymentObj || this.loading) return null
+    const paymentObj = this.renderPaymentStatus();
+    if (!paymentObj || this.loading) return null;
     const {
       isTryScan,
       courseId,
@@ -572,18 +576,18 @@ export default {
       sharePageShow,
       paymentGroupBuyId,
       paymentCollectLikeId
-    } = this
-    const tryTxt = isTryScan ? '试看' : '试听'
+    } = this;
+    const tryTxt = isTryScan ? '试看' : '试听';
     const { hide, showOrigin = false } = paymentObj || {
       txt: '当前状态错误，前去反馈',
       handler: this.goToFeedBack
-    }
+    };
     let paymentBtn = this.renderPayment({
       origin: price && showOrigin && this.renderOriginBuy,
       group: groupBuyTemplateId && this.renderGroupBuy.bind(this, paymentObj),
       collect:
         collectLikeTemplateId && this.renderCollectBuy.bind(this, paymentObj)
-    })
+    });
     if (paymentGroupBuyId) {
       paymentBtn = this.renderPayment({
         group: this.renderGroupBuy.bind(this, paymentObj)
@@ -594,10 +598,8 @@ export default {
         collect: this.renderCollectBuy.bind(this, paymentObj)
       })
     }
-
-    console.log(hide)
     if (hide) {
-      document.getElementById('navigation').style.marginBottom = 0
+      document.getElementById('navigation').style.marginBottom = 0;
     }
     return hide ? null : (
       <div>
@@ -625,6 +627,9 @@ export default {
             postType="collage"
             close={this.toggleSharePage}
             columnType={columnType}
+            groupBuyId={this.paymentGroupBuyId}
+            startAvatar={this.starter.avatarUrl}
+            startUserName={this.starter.nickName}
           />
           {showTeleRegister && (
             <PhoneVerif

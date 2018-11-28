@@ -37,7 +37,7 @@
  <script>
 import { mapActions, mapState } from 'vuex'
 export default {
-  props: ['show','postType', 'courseId','collectLikeId','startUserName','startAvatar','posterImg', 'columnType', 'close'],
+  props: ['show','postType', 'courseId','collectLikeId','groupBuyId','startUserName','startAvatar','posterImg', 'columnType', 'close'],
   data() {
     return {
       isOpen: false,
@@ -86,8 +86,14 @@ export default {
     },
  
     toPoster(){ 
-      let postType = this.postType|| 'default'
-      console.log("Share-courseId:",this.courseId)
+      let postType = this.postType|| 'default';
+      let queryParams = 'collage' === postType ?
+      {
+          groupBuyId:this.groupBuyId,
+      }:
+      {
+        collectLikeId: this.collectLikeId,
+      };
      this.$router.push({
      name: 'SharePoster',
      params:{
@@ -96,10 +102,10 @@ export default {
               postType,
             },
      query: {
-         collectLikeId: this.collectLikeId,
+         ...queryParams,
          sharePostUrl: this.posterImg,
          startUserName:this.startUserName,
-         startAvatar:this.startAvatar
+         startAvatar:this.startAvatar,
      }
       })
     },

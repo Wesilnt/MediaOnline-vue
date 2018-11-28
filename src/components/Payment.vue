@@ -123,14 +123,14 @@
             ...rootActions(['getBookCoinInfo']),
             async handlePayment() {
                 this.payDisabled = true;
-                const preUserIdStr = sessionStorage.getItem('preUserId')
-                const preUserIdJSON = JSON.parse(preUserIdStr || '{}')
+                const preUserIdStr = sessionStorage.getItem('preUserId');
+                const preUserIdJSON = JSON.parse(preUserIdStr || '{}');
 
                 const payParams = {
                     courseId: this.courseId,              //购买专栏ID
                     useFlag: this.checked,                //是否使用书币
-                    ...preUserIdJSON                       //是否来自分销员分享
-                }
+                    ...preUserIdJSON                      //是否来自分销员分享
+                };
                 if (this.payType === 'groupBuy') {
                     if (this.groupBuyId) {
                         await this.joinGroupBuy({ ...payParams, groupBuyId: this.groupBuyId })
