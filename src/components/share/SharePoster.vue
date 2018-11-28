@@ -3,7 +3,7 @@
     <div class="poster-pic-container">
       <canvas ref="canvasId" :width="this.canvasW" :height="this.canvasH"/>
       <div class="top-container" >
-        <img  ref="saveimage"/>
+        <img  ref="saveImage"/>
         <p>长按分享图片</p>
       </div>
     </div>  
@@ -29,8 +29,7 @@ export default {
   data() {
     return {
       user: {},
-      shareUrl:
-        this.$route.query.shareUrl || `${location.href.split('#')[0]}#/home`,
+      shareUrl: this.$route.query.shareUrl || `${location.href.split('#')[0]}#/home`,
       postType: this.$route.params.postType, //海报类型  collage ： 拼团   praise ：集赞
       shareType: this.$route.params.columnType,
       courseId: this.$route.params.courseId,
@@ -62,13 +61,13 @@ export default {
     ...mapState(['loading', 'poster'])
   },
   created() {
-    this.shareType = this.shareType || this.columnType
+    this.shareType = this.shareType || this.columnType;
     // 1. 传入分享地址
     if (
       this.shareUrl &&
       this.shareUrl != `${location.href.split('#')[0]}#/home`
     ) {
-      this.drawBottomMap() //重新生成图片
+      this.drawBottomMap(); //重新生成图片
       return
     }
     // 2.  有专栏ID
@@ -78,26 +77,26 @@ export default {
         columnType: this.columnType,
         useCache: true
       }).then(() => {
-        this.setPosterConfig() //设置分享地址
+        this.setPosterConfig(); //设置分享地址
         this.drawBottomMap() //重新生成图片
-      })
+      });
       return
     }
     //3. 有专栏详情和专栏类型
     if (this.shareType && this.columnDetail) {
-      this.setPosterConfig() //设置分享地址
-      this.drawBottomMap() //重新生成图片
-      return
+      this.setPosterConfig(); //设置分享地址
+      this.drawBottomMap(); //重新生成图片
+      return;
     }
   },
   mounted: function() {
-    let canvasData = this.$refs.canvasId
-    this.canvasData = canvasData
-    this.ctx = canvasData.getContext('2d')
-    this.ctx.mozImageSmoothingEnabled = false
-    this.ctx.webkitImageSmoothingEnabled = false
-    this.ctx.msImageSmoothingEnabled = false
-    this.ctx.imageSmoothingEnabled = false
+    let canvasData = this.$refs.canvasId;
+    this.canvasData = canvasData;
+    this.ctx = canvasData.getContext('2d');
+    this.ctx.mozImageSmoothingEnabled = false;
+    this.ctx.webkitImageSmoothingEnabled = false;
+    this.ctx.msImageSmoothingEnabled = false;
+    this.ctx.imageSmoothingEnabled = false;
 
     let getPixelRatio = function(context) {
       let backingStore =
@@ -107,20 +106,13 @@ export default {
         context.msBackingStorePixelRatio ||
         context.oBackingStorePixelRatio ||
         context.backingStorePixelRatio ||
-        1
+        1;
       return (window.devicePixelRatio || 1) / backingStore
-    }
-    this.pixelRatio = getPixelRatio(this.ctx)
+    };
+    this.pixelRatio = getPixelRatio(this.ctx);
     //将画布放 屏幕像素比
-    this.canvasData.height = this.canvasH * this.pixelRatio
-    this.canvasData.width = this.canvasW * this.pixelRatio
-
-    const { saveimage } = this.$refs
-    let bodyHeight = document.body.offsetHeight
-
-    let scale = 1
-    if (bodyHeight < this.canvasH) scale = bodyHeight / this.canvasH
-    saveimage.style.width = this.canvasW * scale + 'px'
+    this.canvasData.height = this.canvasH * this.pixelRatio;
+    this.canvasData.width = this.canvasW * this.pixelRatio;
   },
   methods: {
     ...rootActions(['getUserInfo']),
@@ -128,10 +120,10 @@ export default {
     //設置海報分享地址
     setPosterConfig() {
       //0. 有专栏详情, 非集赞中和拼团中
-      if (!this.columnDetail) return
+      if (!this.columnDetail) return;
       this.shareUrl = `${this.url}/#/detail/${this.shareType}/${
         this.columnDetail.id
-      }`
+      }`;
       //1. 有专栏详情, 拼团中
       if (this.postType === 'collage') {
         this.shareUrl = `${this.shareUrl}?groupBuyId=${
@@ -151,56 +143,53 @@ export default {
     //绘制海报
     drawBottomMap: function() {
       //指定绘制上下文, 放大 this.pixelRatio 比例进行绘制所有的内容
-      this.ctx.scale(this.pixelRatio, this.pixelRatio)
+      this.ctx.scale(this.pixelRatio, this.pixelRatio);
       this.getUserInfo()
         .then(user => (this.user = user))
         .then(() => new Promise(resolve => this.drawBackground(resolve)))
         .then(() => new Promise(resolve => this.drawHeadImage(resolve)))
         .then(() => {
-          this.drawUserName()
+          this.drawUserName();
           this.drawQrcode()
         })
-        .then(
-          () =>
-            (this.$refs.saveimage.src = this.canvasData.toDataURL('images/png'))
-        )
-        .then(() => (this.isLoading = false), () => (this.isLoading = false))
-        .catch(() => (this.isLoading = false))
+        .then(() =>(this.$refs.saveImage.src = this.canvasData.toDataURL('images/png')))
+        .then(() => this.setImageConfig(), () => this.setImageConfig())
+        .catch(() => this.setImageConfig())
     },
 
     //1. 绘制背景图和颜色
     async drawBackground(resolve) {
-      this.ctx.fillStyle = '#ffffff'
-      this.ctx.fillRect(0, this.bottomY, this.canvasW, this.bottomH)
-      let cover = new Image()
-      cover.setAttribute('crossOrigin', 'anonymous')
+      this.ctx.fillStyle = '#ffffff';
+      this.ctx.fillRect(0, this.bottomY, this.canvasW, this.bottomH);
+      let cover = new Image();
+      cover.setAttribute('crossOrigin', 'anonymous');
       //默认专栏海报分享
-      let sharePoster = this.columnDetail.sharePostUrl
+      let sharePoster = this.columnDetail.sharePostUrl;
       //拼团分享海报
       if ('collage' == this.postType)
-        sharePoster = this.columnDetail.groupBuySharePostUrl
+        sharePoster = this.columnDetail.groupBuySharePostUrl;
       // 集赞分享海报
-      if ('praise' == this.postType) sharePoster = this.sharePostUrl
-      cover.src = sharePoster
+      if ('praise' == this.postType) sharePoster = this.sharePostUrl;
+      cover.src = sharePoster;
       cover.onload = () => {
-        this.ctx.save()
-        this.ctx.drawImage(cover, 0, 0, this.canvasW, this.canvasH)
-        this.ctx.restore()
+        this.ctx.save();
+        this.ctx.drawImage(cover, 0, 0, this.canvasW, this.canvasH);
+        this.ctx.restore();
         resolve()
       }
     },
     //2. 绘制头像
     async drawHeadImage(resolve) {
-      var header = new Image()
-      header.setAttribute('crossOrigin', 'anonymous')
+      var header = new Image();
+      header.setAttribute('crossOrigin', 'anonymous');
       header.src =
-        (this.startAvatar || this.user.avatarUrl) + '?timeStamp=' + Date.now()
+        (this.startAvatar || this.user.avatarUrl) + '?timeStamp=' + Date.now();
       header.onload = () => {
-        let radius = this.headImageW * this.radio
-        let x = this.headLeft * this.radio
-        let y = this.headTop * this.radio
-        this.ctx.save()
-        this.ctx.beginPath()
+        let radius = this.headImageW * this.radio;
+        let x = this.headLeft * this.radio;
+        let y = this.headTop * this.radio;
+        this.ctx.save();
+        this.ctx.beginPath();
         this.ctx.arc(
           x + this.headImageW / 2,
           y + this.headImageW / 2,
@@ -208,18 +197,18 @@ export default {
           0,
           Math.PI * 2,
           false
-        )
-        this.ctx.clip()
-        this.ctx.drawImage(header, x, y, this.headImageW, this.headImageW)
-        this.ctx.restore()
+        );
+        this.ctx.clip();
+        this.ctx.drawImage(header, x, y, this.headImageW, this.headImageW);
+        this.ctx.restore();
         resolve()
       }
     },
     //3. 绘制名字
     async drawUserName() {
-      let username = this.startUserName || this.user.nickName
-      this.ctx.fillStyle = '#262626'
-      this.ctx.font = '15px Georgia'
+      let username = this.startUserName || this.user.nickName;
+      this.ctx.fillStyle = '#262626';
+      this.ctx.font = '15px Georgia';
       this.ctx.fillText(
         username,
         this.userNameLeft * this.radio,
@@ -228,14 +217,23 @@ export default {
     },
     //4. 绘制二维码
     async drawQrcode() {
-      const left = this.qrcodeLeft * this.radio
-      const top = this.qrcodeTop * this.radio
-      const width = this.qrcodeWidth * this.radio
-      const qr = document.getElementById('qr').querySelector('img')
-      this.ctx.drawImage(qr, left, top, width, width)
-      const currentSrc = qr.currentSrc
-      if ('' !== currentSrc && this.shareUrl === currentSrc) return
+      const left = this.qrcodeLeft * this.radio;
+      const top = this.qrcodeTop * this.radio;
+      const width = this.qrcodeWidth * this.radio;
+      const qr = document.getElementById('qr').querySelector('img');
+      this.ctx.drawImage(qr, left, top, width, width);
+      const currentSrc = qr.currentSrc;
+      if ('' !== currentSrc && this.shareUrl === currentSrc) return;
       qr.onload = () => this.ctx.drawImage(qr, left, top, width, width)
+    },
+    //5. 显示图片
+    setImageConfig(){
+        const { saveImage } = this.$refs;
+        let bodyHeight = document.body.clientHeight;
+        let scale = 1;
+        if (bodyHeight < this.canvasH) scale = bodyHeight / this.canvasH;
+        saveImage.style.width = this.canvasW * scale + 'px'
+        this.isLoading = false
     }
   }
 }
