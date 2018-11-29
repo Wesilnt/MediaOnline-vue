@@ -40,10 +40,11 @@ export default {
       // this.$router.push({ path: '/home/visionDetail/' + id })
     },
     enterVisionPlay() {
-      const { freeLessonList } = this.data
-      if (!freeLessonList || freeLessonList.length === 0) return
-      let columnType = this.columnType || this.$route.params.columnType
-       openAudioDetail(this,{courseId:this.data.id, columnType, lessonId:this.data.freeLessonList[0].id})
+      const { freeLessonList } = this.data;
+      if (!freeLessonList || freeLessonList.length === 0) return;
+      let columnType = this.columnType || this.$route.params.columnType;
+      const lesson = freeLessonList.reduce((pre,item)=>(-1 == pre.categoryId && -1 != item.categoryId) ? item:pre,freeLessonList[0]);
+      openAudioDetail(this,{courseId:this.data.id, columnType, lessonId:lesson.id})
       // this.$router.push({
       //   name: 'AudioPlay',
       //   params: { 

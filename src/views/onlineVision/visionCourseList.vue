@@ -69,10 +69,14 @@ export default {
   },
   mounted() {
     this.getCategoryList(this.$route.params.courseId).then(() => {
-      this.selectCate = this.lessonList[0].id
+      this.selectCate = this.lessonList[0].id;
+      let categoryCount = 0;
+      let narmalCount = 0;
       this.lessonList.map(item => {
-        this.courseCount += item.lessonList.length
-      })
+          if(-1==item.id) narmalCount = item.lessonList.length;
+          categoryCount += item.lessonList.length
+      });
+      this.courseCount =   categoryCount || narmalCount
     })
   }
 }

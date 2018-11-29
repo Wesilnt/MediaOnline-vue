@@ -1,4 +1,4 @@
-<template>
+<template xmlns:v-lazy="http://www.w3.org/1999/xhtml">
     <div class="clearinghouse">
         <div class="qhht-flex clearinghouse-header">
             <i class="lazy-img-larger clearinghouse-header-img" v-lazy:background-image="payDetail.coverPic"></i>
