@@ -1,7 +1,7 @@
 <template>
 	<div class="my">
 		<div class="my-user-info">
-			<i class="qhht-icon my-user-info-avatar" :style="{backgroundImage:`url(${userInfo.avatarUrl})`}" @click="editUserInfo"></i>
+			<i class="qhht-icon my-user-info-avatar" :style="{backgroundImage:`${userInfo&&userInfo.avatarUrl?'url('+userInfo.avatarUrl+')':'transparent'}`}" @click="editUserInfo"></i>
 			<span class="my-user-info-nickname">{{ userInfo.nickName }}</span>
 			<div v-if="showEdit" class="my-user-info-edit" @click="editUserInfo">编辑个人资料</div>
 		</div>
@@ -24,7 +24,7 @@
 	const {
 		mapState,
 		mapActions
-	} = createNamespacedHelpers('myData')
+	} = createNamespacedHelpers('myData');
 
 	import purchase from '../assets/images/my_purchase.png'
 	import record from '../assets/images/my_record.png'
@@ -154,8 +154,8 @@
 			}
 		},
 		created() {
-			this.checkDistributor()
-			this.queryNewMessageCount()
+			this.checkDistributor();
+			this.queryNewMessageCount();
 			this.getMyUserInfo(true).then(() => {
 				this.showEdit =
 					undefined == this.userInfo.gender ||

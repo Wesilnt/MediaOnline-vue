@@ -1,5 +1,5 @@
 <template>
-    <div ref="dialog" class="dialog-phone" @click.self="onMaskClick">
+    <div v-if="value" ref="dialog" class="dialog-phone" @click.self="onMaskClick">
         <form class="form">
             <fieldset>
                 <label class="form-label">手机号:</label>
@@ -13,8 +13,7 @@
                 <label class="form-label"> 验证码:</label>
                 <input class="form-input" v-model="code" type="text" placeholder="请输入验证码"/><br>
             </fieldset>
-            <input class="form-submit" :class="{'code-input':code.length>0}" type="submit"
-                   @click.prevent="onPhoneConfirm" value="确认"/>
+            <input class="form-submit" :class="{'code-input':code.length>0}" type="submit" @click.prevent="onPhoneConfirm" value="确认"/>
         </form>
     </div>
 </template>
@@ -47,8 +46,7 @@
             ...mapActions(['init', 'sendMobileCode', 'validateMobileCode']),
             toggleDialog(isShow) {
                 if (!this.$refs.dialog) return;
-                if (isShow) this.$refs.dialog.show();
-                if (!isShow) this.$refs.dialog.close();
+                this.$emit('input', isShow);
             },
             //获取验证码
             getCode() {
@@ -68,7 +66,7 @@
                 this.$emit('input', false);
             },
             onPhoneConfirm() {
-                this.$emit('success')
+                this.$emit('success');
                 let phoneNum = this.number.trim();
                 if (phoneNum === '') {
                     Toast({ position: 'bottom', message: '请输入手机号' });
@@ -95,8 +93,8 @@
 
 <style lang="less" scoped>
     .dialog-phone {
+        position: fixed;
         z-index: 10;
-        height: 100vh;
         top: 0;
         bottom: 0;
         left: 0;

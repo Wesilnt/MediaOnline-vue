@@ -26,18 +26,18 @@ const myData = {
   actions: {
     /**是否是分销员*/
     async checkDistributor({state, commit }, useCache = false) {
-      if(undefined != state.isDistributor && useCache) return state.isDistributor
-      const response = await isDistributor()
-      await commit('save', {isDistributor: response})
+      if(undefined != state.isDistributor && useCache) return state.isDistributor;
+      const response = await isDistributor();
+      await commit('save', {isDistributor: response});
       return response
     },
     async queryNewMessageCount({ dispatch, commit }) {
-      const response = await getNewMessageCount({ busiTypes: 3101 })
+      const response = await getNewMessageCount({ busiTypes: 3101 });
       await commit('save', {replyMessageCount: response})
     },
     async getMyUserInfo({ dispatch, commit }) {
-      const response = await store.dispatch('getUserInfo', true)
-      commit('saveUserInfo', response)
+      const response = await store.dispatch('getUserInfo', true);
+      commit('saveUserInfo', response);
       return response
     }
   },

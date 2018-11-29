@@ -38,8 +38,8 @@
             ...mapActions(['getUserInfo','getDistributorInfo', 'applyDistributor']),
             //手机号校验, 已校验直接申请分销员
             checkMobile() {
-                this.show = !this.isBindMobile
-                if (!this.isBindMobile) return
+                this.show = !this.isBindMobile;
+                if (!this.isBindMobile) return;
                 this.becomeDistributor()
             },
             //申请成为分销员

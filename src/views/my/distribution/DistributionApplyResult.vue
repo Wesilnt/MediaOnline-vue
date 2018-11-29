@@ -47,6 +47,7 @@
         font-size: 28px;
         color: #333333;
         text-align: center;
+        height: auto;
         em {
             font-style: normal;
             color: #ffa32f;
