@@ -1,5 +1,5 @@
 <template>
-    <div ref="dialog" v-if="isDistributor" class="dialog">
+    <div ref="dialog" v-show="isDistributor" class="dialog">
         <div v-show="value" class="share-container" @click.self="onCancel">
             <div v-show="showTip" class="indicator-container">
                 <div class="indicator-container-icon"></div>
