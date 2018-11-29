@@ -18,7 +18,7 @@
       <a v-else-if="data.freeLessonList" 
                 class="cell-footer-btn" 
                 @click.stop="enterVisionPlay">
-        <i class="qhht-icon play-tringle" />
+        <i class="qhht-icon play-tringle"></i>
         <span class="try-listen">试听</span>
       </a>
       
@@ -61,6 +61,7 @@ export default {
 
 <style lang="less" scoped>
 .cell {
+  width: 100%;
   flex-wrap: nowrap;
   /*height: 240px;*/
   align-items: center;
@@ -70,13 +71,20 @@ export default {
   width: 180px;
   height: 240px;
   border-radius: 12px;
+  flex-shrink: 0;
 }
 .cell-content {
   flex: 1;
   margin-left: 20px;
   padding: 20px 0;
+  flex-basis: inherit;
   /deep/ li {
     color: #666666;
+    word-break: break-all;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    max-width: 48vw;
   }
   .cell-content-title {
     font-size: 32px;
