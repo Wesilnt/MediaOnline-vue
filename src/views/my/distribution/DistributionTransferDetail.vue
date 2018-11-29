@@ -10,7 +10,7 @@
                         <hr class="title-line">
                     </h4>
                     <section class="transfer-content-item">
-                        <aside>{{item.createTime | formatDuring}}</aside>
+                        <aside>{{item.createTime | formatYMD}}</aside>
                         <aside class="item-text">
                         {{item.isAdd?'+':'-'}} <span>{{item.amount.toFixed(2)}}</span>元
                     </aside>
@@ -37,14 +37,6 @@
         },
         created() {
             this.getTransferDetail(true)
-        },
-        filters: {
-            formatDuring: date => {
-                let mss = new Date(date)
-                let month = mss.getMonth()
-                let day = mss.getDate()
-                return `${month < 9 ? '0' + month : month}月${day < 9 ? '0' + day : day}日`
-            }
         },
         computed: { ...mapState(['isDistributor', 'transferList', 'isLoading', 'finished']) },
         methods: {

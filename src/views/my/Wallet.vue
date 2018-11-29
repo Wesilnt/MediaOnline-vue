@@ -16,7 +16,7 @@
             <li class="wallet-item" v-for="item of coinRecords">
                 <div class="wallet-item-section">
                     <span class="wallet-item-title">{{bookCoinChannel[item.channel].title}}</span>
-                    <span class="wallet-item-time">{{item.createTime|formatDuring}}</span>
+                    <span class="wallet-item-time">{{item.createTime|formatYMD}}</span>
                 </div>
                 <span class="wallet-item-number">{{`${item.coinNum.toFixed(2)}`}}</span>
             </li>
@@ -36,15 +36,6 @@
             return { bookCoinChannel }
         },
         computed:{...mapState(['coinNum','coinRecords', 'isLoading', 'finished'])},
-        filters: {
-            formatDuring: date => {
-                let mss = new Date(date)
-                let year = mss.getFullYear()
-                let month = mss.getMonth()
-                let day = mss.getDate()
-                return `${year}年${month < 9 ? '0' + month : month}月${day < 9 ? '0' + day : day}日`
-            }
-        },
         created(){
          this.getBookCoinInfo()
         },

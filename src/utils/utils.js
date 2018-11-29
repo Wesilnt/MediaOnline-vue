@@ -14,7 +14,7 @@ export const json2formData = json => {
     formData.append(key, value)
   }
   return formData
-}
+};
 export const formatDuring = mss => {
   if (isNaN(mss)) return '00:00'
   mss = Math.round(mss)
@@ -26,7 +26,14 @@ export const formatDuring = mss => {
   minutes = minutes < 10 ? '0' + minutes : minutes
   seconds = seconds < 10 ? '0' + seconds : seconds
   return minutes + ':' + seconds
-}
+};
+export const formatYMD = date => {
+    let mss = new Date(date);
+    let year = mss.getFullYear();
+    let month = mss.getMonth()+1;
+    let day = mss.getDate();
+    return `${year}年${month < 9 ? '0' + month : month}月${day < 9 ? '0' + day : day}日`
+};
 export function getDateDiff(dateStr) {
   var publishTime = dateStr / 1000,
     d_seconds,

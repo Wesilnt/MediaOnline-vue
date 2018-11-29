@@ -21,7 +21,7 @@
                             <i v-lazy:background-image="`${item.customerUrl}?imageView2/1/w/100/h/100/format/jpg/q/50`"></i>
                             <div class="item-left-content">
                                 <p>{{item.customerNickName}} </p>
-                                <p class="item-text bottom"> {{item.createTime | formatDuring}} </p>
+                                <p class="item-text bottom"> {{item.createTime | formatYMD}} </p>
                             </div>
                         </aside>
                         <aside class="item-right">
@@ -50,15 +50,6 @@
         created() {
             this.getDistributorInfo({ useCache: true })
             this.getProfitList(true)
-        },
-        filters: {
-            formatDuring: date => {
-                let mss = new Date(date)
-                let year = mss.getFullYear()
-                let month = mss.getMonth()
-                let day = mss.getDate()
-                return `${year}年${month < 9 ? '0' + month : month}月${day < 9 ? '0' + day : day}日`
-            }
         },
         computed: { ...mapState(['isDistributor', 'totalIncome', 'noSettlement', 'profitList', 'isLoading', 'finished']) },
         methods: {
