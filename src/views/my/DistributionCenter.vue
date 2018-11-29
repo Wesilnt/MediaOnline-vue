@@ -3,7 +3,7 @@
         <!--头部-->
         <header class="distribute-header">
             <section class="distribute-header-section">
-                <span class="distribute-header-icon" v-lazy:background-image="`${avatarUrl?(avatarUrl+'?imageView2/1/w/100/h/100/format/jpg/q/50'):'transparent'}`" ></span>
+                <span class="distribute-header-icon" :style="{backgroundImage:`${avatarUrl?'url('+avatarUrl+')':'transparent'}`}"></span>
                 <span class="distribute-header-phone">{{mobileNo}}</span>
                 <div class="distribute-header-grade" @click="toDistributorUpgrade">
                     <i></i>{{level && distributorGrades[level].grade}}
