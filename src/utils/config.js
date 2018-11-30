@@ -1,12 +1,12 @@
 /** @format */
 
 // 编译环境
-const { NODE_ENV } = process.env
+const { NODE_ENV } = process.env;
 
 // 调试选项，本地调试请改为 False
 export const IS_ONLINE = true;
 // 测试 Token
-export const TEST_TOKEN = "60487b89-0503-4aa0-88c3-defe70607929"
+export const TEST_TOKEN = "bff1d77b-0fcf-4a50-80fc-47b62093dc37";
 // export const TEST_TOKEN = 'd5baa57e-74ee-4dd4-8122-f9c0f360889f'
 
 // TODO router 设置未统一，后期需要统一格式
@@ -15,24 +15,24 @@ export const courseType = {
   '1005': 'detail/onlineCourse/', // 线上课程
   '1003': 'detail/onlineVision/', // 少年视野
   '1001': 'detail/freezone/' // 免费专区
-}
+};
 
 export const columnType = {
   reading: { name: 'reading', code: 1007 }, // 读书会
   onlineCourse: { name: 'onlineCourse', code: 1005 }, // 线上课程
   onlineVision: { name: 'onlineVision', code: 1003 }, // 少年视野
   freezone: { name: 'freezone', code: 1001 } // 免费专区
-}
+};
 
 export const getColumnType = code =>
-  Object.keys(columnType).find(key => columnType[key].code == parseInt(code))
+  Object.keys(columnType).find(key => columnType[key].code == parseInt(code));
 
 export const columnStatus = {
   reading: '1007', // 读书会
   onlineCourse: '1005', // 线上课程
   onlineVision: '1003', // 少年视野
   freezone: '1001' // 免费专区
-}
+};
 
 export const homeColumnList = {
   // 'freezone': {componentName:'FreeList', title:'免费专区',listKey:'freeList',link:"/home/freezone"},// 免费专区
@@ -54,7 +54,7 @@ export const homeColumnList = {
   },
   // 读书会
   'reading': {code: 1007, componentName:'BookCell', title:'少年读书会',listKey:'bookList',link:`/home/${columnType['reading'].name}/columnlist`},
-}
+};
 // 首页导航配置
 export const navbar = [
   {
@@ -195,17 +195,24 @@ export const bookCoinChannel = {
     "3503":{name: 'FIRSRT_FOCUS',code: "3503", title:"首次关注"},
     "3504":{name: 'FRIEND_BUY',code: "3504", title:"好友购买"},
     "3505":{name: 'SPEND',code: "3505", title:"支出"},
-}
+    "3506":{name: 'SPEND',code: "3505", title:"拼团超时返还"},
+};
 
 export const distributorGrades = {
      '1': {level:1,incomePropors: 15,levelLimit:200 ,grade:'普通分销员', totalAmount:200 },
      '2': {level:2,incomePropors: 20,levelLimit:2000 ,grade:'初级分销员', totalAmount:2000 },
      '3': {level:3,incomePropors: 35,levelLimit:5000 ,grade:'高级分销员', totalAmount:5000 },
-}
+};
+//分销员申请状态： 1 申请 成功 跳转分销中心  2 申请中，跳转申请佣金  3 未申请，跳转分销员申请页面
+export const distributorStatus = {
+        '1':'DistributionCenter',
+        '2':'DistributionApplyResult',
+        '3':'DistributorApply',
+};
 
 export const identityType = {
     OWNER: 31000, // 发起人
     PARTNER: 31001, // 此拼团参与人
     PASSER: 31002, // 非参与人 拼团未满
     PASSERFULL: 31003 // 非参与人 拼团已满
-}
+};

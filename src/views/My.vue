@@ -148,7 +148,7 @@
 					}
 				}
 			},
-			itemClick: function(name) {
+			itemClick: function(name) { 
 				this.$router.push({
 					name: (name === 'DistributorApply' && this.distributorStatus[this.isDistributor]) || name
 				})
