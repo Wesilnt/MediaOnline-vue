@@ -167,7 +167,8 @@ export default new Vuex.Store({
           success: res => successCB(res),
           cancel: res => cancelCB(res)
         };
-        wx.ready(() => {
+          console.log('Share-Link:',link);
+          wx.ready(() => {
           // 分享给朋友
           wx.onMenuShareAppMessage(shareOptions);
           // 分享给qq

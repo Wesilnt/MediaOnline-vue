@@ -70,7 +70,8 @@ export default {
             // const distributor = btoa(encodeURIComponent(JSON.stringify({id:user.id,avatarUrl:user.avatarUrl,nickName:user.nickName})));
             // const shareUrl = `${shareHref}preUserId=${user.id}&distributor=${distributor}`;
             // console.log('App-ShareUrl:',shareUrl);
-            this.handleWxShare(window.location.href)
+
+            this.handleWxShare(location.href.indexOf('?')?location.href.split('?')[0]:location.href)
           // })
         }
       },
