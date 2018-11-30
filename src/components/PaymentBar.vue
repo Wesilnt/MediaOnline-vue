@@ -51,7 +51,7 @@ export default {
       groupBuyId: groupBuyIdFromShare,
       collectLikeId: collectLikeIdFromShare
     } = this.$route.query
-    const { columnType, courseId } = this.$route.params;
+    const { columnType, courseId } = this.$route.params
     return {
       userInfo: {}, // 用户信息
       columnType,
@@ -75,7 +75,10 @@ export default {
       'groupBuyPersonCount',
       'freeLesson',
       'courseName',
-      'purchased'
+      'purchased',
+      'coverPic',
+      'briefIntro',
+      'lessonCount'
     ]),
     ...mapState([
       'viewer',
@@ -90,7 +93,7 @@ export default {
       'groupBuyErr'
     ]),
     paymentGroupBuyId: function() {
-      const { groupBuyIdFromShare, groupBuyId, viewer } = this;
+      const { groupBuyIdFromShare, groupBuyId, viewer } = this
       if (
         groupBuyIdFromShare &&
         groupBuyId &&
@@ -113,9 +116,9 @@ export default {
     paymentCollectLikeId: function() {
       return this.collectLikeIdFromShare || this.collectLikeId
     },
-    starter : function() {
-        if(!this.userList||this.userList.length<=0)return;
-        return this.userList.find(item => item.isStarter)
+    starter: function() {
+      if (!this.userList || this.userList.length <= 0) return
+      return this.userList.find(item => item.isStarter)
     }
   },
   methods: {
@@ -285,9 +288,7 @@ export default {
     async handlePayment(paymentQueryType, params) {
       this.payDisabled = true
       const { userInfo } = this
-
       await this.checkoutWxAuthor()
-
       if (!userInfo || !userInfo.mobileNo) {
         await this.hideToast()
         this.toggleTeleRegister(true)
@@ -305,7 +306,10 @@ export default {
       return (
         <div
           class={originPriceClass}
-          onClick={this.handlePayment.bind(this, 'handleOriginBuy')}
+          onClick={this.handlePayment.bind(this, 'goToPaymentCenter', {
+            price,
+            payFuncName: 'unlockCourse'
+          })}
         >
           <div class="payment-price">￥{price}</div>
           <span class="payment-low-attention">原价购买</span>
@@ -321,7 +325,10 @@ export default {
           onClick={
             handler
               ? handler
-              : this.handlePayment.bind(this, 'handleStartGroupBuy')
+              : this.handlePayment.bind(this, 'goToPaymentCenter', {
+                  price: groupBuyPrice,
+                  payFuncName: 'startGroupBuy'
+                })
           }
         >
           {showPrice && <div class="payment-price">￥{groupBuyPrice}</div>}
@@ -361,34 +368,29 @@ export default {
         </div>
       )
     },
-    handleOriginBuy() {
+    goToPaymentCenter({ courseId, price, payFuncName, isJoinGroupBuy }) {
+      const { courseName, coverPic, briefIntro, lessonCount } = this
+      sessionStorage.setItem(
+        'payDetail',
+        JSON.stringify({
+          courseName,
+          coverPic,
+          price,
+          briefIntro,
+          lessonCount,
+          payFuncName,
+          isJoinGroupBuy,
+          ...(isJoinGroupBuy ? { groupBuyId: this.paymentGroupBuyId } : null)
+        })
+      )
       return this.$router.push({
         path: '/payment',
         query: {
-          payType: 'origin',
-          courseId: this.courseId
+          courseId
         }
       })
     },
-    handleJoinGroupBuy() {
-      return this.$router.push({
-        path: '/payment',
-        query: {
-          payType: 'groupBuy',
-          courseId: this.courseId,
-          groupBuyId: this.paymentGroupBuyId
-        }
-      })
-    },
-    handleStartGroupBuy() {
-      return this.$router.push({
-        path: '/payment',
-        query: {
-          payType: 'groupBuy',
-          courseId: this.courseId
-        }
-      })
-    },
+
     handleStartCollectLike() {
       return this.handlePayment('startCollectLike')
     },
@@ -432,10 +434,10 @@ export default {
             courseId,
             columnType,
             lessonId: id
-          });
-          break;
+          })
+          break
         case 'FreeZone':
-          break;
+          break
         // case 'reading':
         //   case 'onlineVision':
         default:
@@ -444,7 +446,7 @@ export default {
             columnType,
             lessonId: id,
             courseName
-          });
+          })
           break
       }
     },
@@ -466,38 +468,54 @@ export default {
         groupBuyPersonCount,
         userInfo,
         groupBuystatus
-      } = this;
+      } = this
       // const hrefHasSign = location.href.includes('?');
       // const href = hrefHasSign ? location.href.split('?')[0] : location.href;
       // const shareHref = `${href}?`;
-      const distributor = '';//btoa(encodeURIComponent(JSON.stringify({id:userInfo.id,avatarUrl:userInfo.avatarUrl,nickName:userInfo.nickName})));
+      const distributor = '' //btoa(encodeURIComponent(JSON.stringify({id:userInfo.id,avatarUrl:userInfo.avatarUrl,nickName:userInfo.nickName})));
       let title = `我正在学习《${this.courseName}》，快来一起学习吧`,
-      // link = `${shareHref}preUserId=${userInfo.id}&distributor=${distributor}`;
-      link =  window.location.href;
+        // link = `${shareHref}preUserId=${userInfo.id}&distributor=${distributor}`;
+        link = window.location.href
       if (paymentGroupBuyId && groupBuystatus !== 1204) {
-        title = `我正在参加《${courseName}》拼团活动,仅差${groupBuyPersonCount - alreadyCount}人,快来和我一起拼团吧!`;
-        link = `${url}/#/detail/${columnType}/${courseId}?groupBuyId=${paymentGroupBuyId}&preUserId=${userInfo.id}&distributor=${distributor}`
+        title = `我正在参加《${courseName}》拼团活动,仅差${groupBuyPersonCount -
+          alreadyCount}人,快来和我一起拼团吧!`
+        link = `${url}/#/detail/${columnType}/${courseId}?groupBuyId=${paymentGroupBuyId}&preUserId=${
+          userInfo.id
+        }&distributor=${distributor}`
       }
       if (paymentCollectLikeId) {
-        title = `我是${userInfo.nickName}, ${this.viewer === identityType.OWNER ? '我想免费' : '正在帮朋友'}领取《${courseName}》,求助攻~`;
-        link = `${url}/#/praise/active/${courseId}/${paymentCollectLikeId}?columnType=${columnType}&preUserId=${userInfo.id}&distributor=${distributor}`
+        title = `我是${userInfo.nickName}, ${
+          this.viewer === identityType.OWNER ? '我想免费' : '正在帮朋友'
+        }领取《${courseName}》,求助攻~`
+        link = `${url}/#/praise/active/${courseId}/${paymentCollectLikeId}?columnType=${columnType}&preUserId=${
+          userInfo.id
+        }&distributor=${distributor}`
       }
-      const share = {title, link};
+      const share = { title, link }
       const shareData = {
         desc: '你一定会爱上国学课...',
         imgUrl: this.sharePostUrl,
         ...share
-      };
-      console.log('shareLink_title ', shareData);
-      this.setWxShareFriend(shareData);
+      }
+      console.log('shareLink_title ', shareData)
+      this.setWxShareFriend(shareData)
       this.setWxShareZone(shareData)
     }
   },
   async mounted() {
-    await this.getUserInfo();
-    await this.mapGroupBuyDetailToPayment();
+    await this.getUserInfo()
+    await this.mapGroupBuyDetailToPayment()
     // 配置状态
-    let handler = this.toggleSharePage.bind(this, true);
+    let handler = this.toggleSharePage.bind(this, true)
+    const joinGroupBuyHandler = this.handlePayment.bind(
+      this,
+      'goToPaymentCenter',
+      {
+        price: this.groupBuyPrice,
+        payFuncName: 'joinGroupBuy',
+        isJoinGroupBuy: true
+      }
+    )
     this.groupBuyStatusType = {
       normal: {
         txt: this.groupBuyPersonCount === 3 ? '三人团' : '六人团',
@@ -513,12 +531,12 @@ export default {
       join: {
         txt: '参与拼团',
         showPrice: true,
-        handler: this.handlePayment.bind(this, 'handleJoinGroupBuy')
+        handler: joinGroupBuyHandler
       }, // 支付事件->弹出拼团界面
       waitPaySucc: { txt: '请等待其他参与者完成支付', handler },
       goOnPay: {
         txt: '继续支付',
-        handler: this.handlePayment.bind(this, 'handleJoinGroupBuy')
+        handler: joinGroupBuyHandler
       },
       shareGroupBuy: { txt: '邀请其他好友拼团', handler },
       shareGroupBuyForFriend: { txt: '您已获取该专栏，帮助好友分享', handler },
@@ -537,7 +555,10 @@ export default {
       got: { hide: true },
       resume: {
         txt: '拼团失败,重新开团',
-        handler: this.handlePayment.bind(this, 'handleStartGroupBuy')
+        handler: this.handlePayment.bind(this, 'goToPaymentCenter', {
+          price: this.groupBuyPrice,
+          payFuncName: 'startGroupBuy'
+        })
       },
       succeed: {
         txt: '您的好友已拼团成功',
@@ -564,8 +585,8 @@ export default {
         this.returnToSelfColumn()
       }, 1000)
     }
-    const paymentObj = this.renderPaymentStatus();
-    if (!paymentObj || this.loading) return null;
+    const paymentObj = this.renderPaymentStatus()
+    if (!paymentObj || this.loading) return null
     const {
       isTryScan,
       courseId,
@@ -577,18 +598,18 @@ export default {
       sharePageShow,
       paymentGroupBuyId,
       paymentCollectLikeId
-    } = this;
-    const tryTxt = isTryScan ? '试看' : '试听';
+    } = this
+    const tryTxt = isTryScan ? '试看' : '试听'
     const { hide, showOrigin = false } = paymentObj || {
       txt: '当前状态错误，前去反馈',
       handler: this.goToFeedBack
-    };
+    }
     let paymentBtn = this.renderPayment({
       origin: price && showOrigin && this.renderOriginBuy,
       group: groupBuyTemplateId && this.renderGroupBuy.bind(this, paymentObj),
       collect:
         collectLikeTemplateId && this.renderCollectBuy.bind(this, paymentObj)
-    });
+    })
     if (paymentGroupBuyId) {
       paymentBtn = this.renderPayment({
         group: this.renderGroupBuy.bind(this, paymentObj)
@@ -600,7 +621,7 @@ export default {
       })
     }
     if (hide) {
-      document.getElementById('navigation').style.marginBottom = 0;
+      document.getElementById('navigation').style.marginBottom = 0
     }
     return hide ? null : (
       <div>
@@ -629,8 +650,8 @@ export default {
             close={this.toggleSharePage}
             columnType={columnType}
             groupBuyId={this.paymentGroupBuyId}
-            startAvatar={this.starter&&this.starter.avatarUrl}
-            startUserName={this.starter&&this.starter.nickName}
+            startAvatar={this.starter && this.starter.avatarUrl}
+            startUserName={this.starter && this.starter.nickName}
           />
           {showTeleRegister && (
             <PhoneVerif
