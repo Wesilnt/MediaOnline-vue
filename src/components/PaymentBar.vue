@@ -470,7 +470,7 @@ export default {
       // const hrefHasSign = location.href.includes('?');
       // const href = hrefHasSign ? location.href.split('?')[0] : location.href;
       // const shareHref = `${href}?`;
-      // const distributor = btoa(encodeURIComponent(JSON.stringify({id:userInfo.id,avatarUrl:userInfo.avatarUrl,nickName:userInfo.nickName})));
+      const distributor = '';//btoa(encodeURIComponent(JSON.stringify({id:userInfo.id,avatarUrl:userInfo.avatarUrl,nickName:userInfo.nickName})));
       let title = `我正在学习《${this.courseName}》，快来一起学习吧`,
       // link = `${shareHref}preUserId=${userInfo.id}&distributor=${distributor}`;
       link =  window.location.href;

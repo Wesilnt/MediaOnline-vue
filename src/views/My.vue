@@ -128,7 +128,7 @@
 					undefined != this.userInfo.mobileNo
 				) {
 					// 用户信息都填写完整
-					this.showEdit = false
+					this.showEdit = false;
 					this.$router.push({
 						path: './my/DisplayUserInfo'
 					})
@@ -147,7 +147,7 @@
 				}
 			},
 			itemClick: function(name) {
-				name = name === 'DistributorApply' && this.isDistributor ? 'DistributionCenter' : name
+				name = name === 'DistributorApply' && this.isDistributor ? 'DistributionCenter' : name;
 				this.$router.push({
 					name: name
 				})
