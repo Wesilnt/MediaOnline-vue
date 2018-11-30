@@ -37,6 +37,7 @@ export default {
 .book-list {
   flex-wrap: wrap;
   justify-content: space-between;
+  margin-bottom: 56px;
 }
 .emptyItem {
   visibility: hidden;

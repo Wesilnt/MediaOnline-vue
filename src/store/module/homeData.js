@@ -40,11 +40,15 @@ const homeData = {
       commit('setFromAvatarUrl', fromAvatarUrl)
     },
     async getAllList({ commit }) {
-      let result = await getAllList()
-        await commit('setVisionList', result.visionList)
-        await commit('setVideoList', result.videoList)
-        await commit('setBookList', result.bookList)
-        await commit('setList', result)
+      let result = await getAllList();
+        await commit('setVisionList', result.visionList);
+        await commit('setVideoList', result.videoList);
+        let bookList = result.bookList;
+        if (bookList && (bookList.length % 3 == 2 || 1 == bookList.length % 3))
+            bookList = bookList.concat({});
+        await commit('setBookList', result.bookList);
+        result.bookList = bookList;
+        await commit('setList', result);
         commit('setLoading', false)
     },
   },
