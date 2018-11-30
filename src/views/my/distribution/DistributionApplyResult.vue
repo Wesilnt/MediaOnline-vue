@@ -1,19 +1,19 @@
 <template>
     <div class="apply-success">
         <!--头部-->
-        <header class="apply-success-header" :style="{backgroundImage:`url(${isDistributor?successIcon:failureIcon})`}">
+        <header class="apply-success-header" :style="{backgroundImage:`url(${1 === isDistributor?successIcon:failureIcon})`}">
         </header>
 
         <!--布局-->
         <article class="apply-success-introduce">
-            <p v-if="isDistributor">您已成功申请成为分销员</p>
+            <p v-if="1 === isDistributor">您已成功申请成为分销员</p>
             <p v-else>您目前的推广金额为<em>{{ extendAmount.toFixed(2)}}</em>元，还差<em>{{(200-extendAmount<0?0:200-extendAmount).toFixed(2)}}</em>元就可以成为分销员啦！
             </p>
         </article>
 
         <!--底部描述-->
         <footer class="apply-success-footer" @click="nextOperate">
-            <p>{{isDistributor?'查看详情':'去分享'}}</p>
+            <p>{{1 === isDistributor?'查看详情':'去分享'}}</p>
         </footer>
 
     </div>
@@ -28,7 +28,11 @@
             return {
                 successIcon: require('../../../assets/images/distributor_success.png'),
                 failureIcon: require('../../../assets/images/distributor_failure.png'),
-                distributorStatus
+                distributorStatus : {
+                    '1':'DistributionCenter',
+                    '2':'HOME',
+                    '3':'DistributorApply',
+                }
             };
         },
         computed: { ...mapState(['distributorInfo','extendAmount','isDistributor'])},
@@ -41,7 +45,8 @@
         methods: {
             ...mapActions(['checkDistributor','applyDistributor']),
             nextOperate() {
-                this.$router.replace({ name: distributorStatus[this.isDistributor]})
+                console.log(this.distributorStatus[this.isDistributor]);
+                this.$router.replace({ name: this.distributorStatus[this.isDistributor]})
             }
         }
     };

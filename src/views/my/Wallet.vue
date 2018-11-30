@@ -15,7 +15,7 @@
         <ul class="wallet-list">
             <li class="wallet-item" v-for="item of coinRecords">
                 <div class="wallet-item-section">
-                    <span class="wallet-item-title">{{bookCoinChannel[item.channel].title}}</span>
+                    <span class="wallet-item-title">{{bookCoinChannel[item.channel]&&bookCoinChannel[item.channel].title}}</span>
                     <span class="wallet-item-time">{{item.createTime|formatYMD}}</span>
                 </div>
                 <span class="wallet-item-number">{{`${item.coinNum.toFixed(2)}`}}</span>

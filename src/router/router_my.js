@@ -65,17 +65,20 @@ const PageInfo_From_My = [
   {
     path: '/my/my-distributionCenter',
     name:'DistributionCenter',
-    component: distributionCenter
+    component: distributionCenter,
+    meta: { navHide: true }
   },
   {
     path: '/my/my-distributorApply',
     name:'DistributorApply',
-    component: distributorApply
+    component: distributorApply,
+    meta: { navHide: true }
   },
   {
     path: '/my/distribution/apply',
     name:'DistributionApplyResult',
-    component: DistributionApplyResult
+    component: DistributionApplyResult,
+    meta: { navHide: true }
   },
   {
     path: '/my/distribution/profit',
