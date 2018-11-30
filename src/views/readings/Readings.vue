@@ -169,7 +169,7 @@ export default {
     right: 0;
     width: 100%;
     background-color: white;
-    z-index: 2004;
+    z-index: 100;
   }
   .book-btn {
     display: inline-block;
