@@ -83,7 +83,6 @@ export default {
         ).toFixed(2)
       )
     },
-
     payDetail: function() {
       const payDetail = JSON.parse(sessionStorage.getItem('payDetail'))
       const { groupBuyPrice, price: origin } = payDetail
@@ -166,7 +165,7 @@ export default {
   },
   destroyed() {
     document.title = '秦汉胡同'
-    // sessionStorage.setItem('payDetail', null)
+    sessionStorage.setItem('payDetail', null)
   },
   components: {
     Counter
