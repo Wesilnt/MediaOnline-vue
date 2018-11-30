@@ -46,7 +46,7 @@
 <script>
     import Clipboard from 'clipboard';
 
-    import { distributionShare } from '../../utils/config';
+    import { distributionShare ,originUrl} from '../../utils/config';
     import { createNamespacedHelpers, mapActions as rootActions, mapState as rootState } from 'vuex';
 
     const { mapState, mapActions } = createNamespacedHelpers('myData/distributionData');
@@ -60,6 +60,7 @@
                 showTip: false,
                 shareConfigs: distributionShare,
                 clipboardLink: null,
+                originUrl
             };
         },
         created() {
@@ -119,18 +120,17 @@
                 this.$emit('close')
             },
             setWxShare(user) {
-                this.shareUrl =  window.location.href;
+                let currentUrl = location.href.includes('?')?location.href.split('?')[0]:location.href;
+                currentUrl = currentUrl === this.originUrl.split('#')[0]?this.originUrl:currentUrl;
                 const shareData = {
                     title: '秦汉胡同在线',
-                    link:this.shareUrl,
+                    link:currentUrl,
                     desc: '你一定会爱上国学课...',
                     imgUrl: require('../../assets/images/logo.png'),
                 };
-                const href = -1 != location.href.indexOf('?')?location.href.split('?')[0]:location.href;
-                const shareHref = `${href}${-1 != href.indexOf('?') ? '&' : '?'}`;
                 const distributor = '';//btoa(encodeURIComponent(JSON.stringify({id:user.id,avatarUrl:user.avatarUrl,nickName:user.nickName})));
-                this.shareUrl = `${shareHref}preUserId=${user.id}&distributor=${distributor}`;
-                console.log('shareLink_title ', shareData);
+                this.shareUrl = `${currentUrl}?preUserId=${user.id}&distributor=${distributor}`;
+                console.log('shareLink_title ', this.shareUrl);
                 this.setWxShareFriend(shareData);
                 this.setWxShareZone(shareData)
             }
