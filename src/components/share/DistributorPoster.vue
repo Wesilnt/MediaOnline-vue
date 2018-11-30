@@ -122,7 +122,7 @@
 
             //1. 绘制背景图和颜色
             async drawBackground(resolve) {
-                this.ctx.fillStyle = '#ffffff';
+                this.ctx.fillStyle = '#000000';
                 this.ctx.fillRect(0, 0, this.canvasW, this.canvasH);
                 this.ctx.save();
                 this.ctx.fillStyle = '#FFFFFF';
@@ -188,7 +188,7 @@
                 let width = this.qrcodeWidth;
                 let left = this.centerX - width / 2;
                 let img = this.$el.children[1].children[0];
-                 console.log(img.currentSrc)
+                 console.log(img.currentSrc);
                 if(img.currentSrc && img.complete){
                     this.ctx.drawImage(img, left, top, width, width);
                     return resolve();//如果二维码没有加载则走下面的加载回调绘制

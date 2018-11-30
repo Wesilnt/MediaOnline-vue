@@ -68,31 +68,30 @@ export default new Vuex.Store({
       noAccessToken() && dispatch('getAccessToken')
     },
     async getUserInfo({ state, commit }, forceUpdate = false) {
-      const { userInfo } = state
-      if (userInfo && !forceUpdate) return userInfo
-      const response = await getUserByToken()
-      commit('saveUserInfo', { userInfo: response })
+      const { userInfo } = state;
+      if (userInfo && !forceUpdate) return userInfo;
+      const response = await getUserByToken();
+      commit('saveUserInfo', { userInfo: response });
       return response
     },
     /** 注入配置信息 */
     async registerWxConfig({ state, commit }, { fullPath, jsApiList = [] }) {
-      const { url, wxRegisterPath } = state
+      const { url, wxRegisterPath } = state;
       if (!Array.isArray(jsApiList) || jsApiList.length === 0) {
-        throw new Error('[array] jsApiList need')
-        return
+        throw new Error('[array] jsApiList need');
       }
       if (wxRegisterPath === fullPath) {
         return
       }
       const response = await wxConfigApi({
         url: url
-      })
+      });
       const {
         appid: appId,
         nonceStr,
         timestamp,
         signature
-      } = await response.js_config
+      } = await response.js_config;
       await wx.config({
         debug: false,
         appId,
@@ -100,7 +99,7 @@ export default new Vuex.Store({
         timestamp,
         signature,
         jsApiList
-      })
+      });
       commit('saveWxRegisterPath', {
         wxRegisterPath: fullPath
       })
@@ -110,10 +109,10 @@ export default new Vuex.Store({
       { state, dispatch },
       { timestamp, nonceStr, packageStr, paySign, successCB, failCB }
     ) {
-      let fullPath = window.location.href
-      let jsApiList = ['chooseWXPay']
-      dispatch('registerWxConfig', { fullPath, jsApiList })
-      console.log('packageStr = ', packageStr)
+      let fullPath = window.location.href;
+      let jsApiList = ['chooseWXPay'];
+      dispatch('registerWxConfig', { fullPath, jsApiList });
+      console.log('packageStr = ', packageStr);
       wx.ready(function() {
         wx.chooseWXPay({
           timestamp: timestamp,
@@ -150,11 +149,13 @@ export default new Vuex.Store({
       }
     ) {
       if (!link.includes(state.url)) {
-        throw new Error('link error')
-        return
+        throw new Error('link error');
       }
       dispatch('getUserInfo').then(user => {
-        const nickname = user.nickName
+        const shareUrl = `${link}${-1 != link.indexOf('?') ? '&' : '?'}`;
+        const distributor = '';//btoa(encodeURIComponent(JSON.stringify({id:user.id,avatarUrl:user.avatarUrl,nickName:user.nickName})));
+        link = `${shareUrl}preUserId=${user.id}&distributor=${distributor}`;
+        const nickname = user.nickName;
           // user.id
         const shareOptions = {
           title: title || `${nickname}邀请您一起上课啦！`, // 分享标题
@@ -165,10 +166,11 @@ export default new Vuex.Store({
           dataUrl, // 如果type是music或video，则要提供数据链接，默认为空      *****只对分享给朋友有效*****
           success: res => successCB(res),
           cancel: res => cancelCB(res)
-        }
+        };
+        console.log("Share-Link:", link);
         wx.ready(() => {
           // 分享给朋友
-          wx.onMenuShareAppMessage(shareOptions)
+          wx.onMenuShareAppMessage(shareOptions);
           // 分享给qq
           wx.onMenuShareQQ(shareOptions)
         })
@@ -186,8 +188,7 @@ export default new Vuex.Store({
       }
     ) {
       if (!link.includes(state.url)) {
-        throw new Error('link error')
-        return
+        throw new Error('link error');
       }
       const shareOptions = {
         title, // 分享标题
@@ -196,12 +197,12 @@ export default new Vuex.Store({
         imgUrl, // 分享图标
         success: res => successCB(res),
         cancel: res => cancelCB(res)
-      }
+      };
       wx.ready(() => {
         // 分享到朋友圈
-        wx.onMenuShareTimeline(shareOptions)
+        wx.onMenuShareTimeline(shareOptions);
         // 分享到空间
-        wx.onMenuShareQZone(shareOptions)
+        wx.onMenuShareQZone(shareOptions);
         // 分享到微博
         wx.onMenuShareWeibo(shareOptions)
       })
@@ -212,7 +213,7 @@ export default new Vuex.Store({
         sizeType: ['original'], // 可以指定是原图还是压缩图，默认二者都有
         sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
         success: function(res) {
-          console.log(res)
+          console.log(res);
           const localIds = res.localIds // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
         }
       })

@@ -75,14 +75,12 @@ export default {
         columnType: this.columnType,
         useCache: true
       }).then(() => {
-        this.setPosterConfig(); //设置分享地址
         this.drawBottomMap() //重新生成图片
       });
       return
     }
     //3. 有专栏详情和专栏类型
     if (this.shareType && this.columnDetail) {
-      this.setPosterConfig(); //设置分享地址
       this.drawBottomMap(); //重新生成图片
     }
   },
@@ -115,30 +113,36 @@ export default {
     ...rootActions(['getUserInfo']),
     ...mapActions(['getPosterInfo', 'getPosterforPraise', 'getColumnDetail']),
     //設置海報分享地址
-    setPosterConfig() {
+    setPosterConfig(resolve) {
       let  baseUrl = location.href.includes('?')?location.href.split('?')[0]:location.href;
-        baseUrl = baseUrl.includes('#')?baseUrl.split('#')[0]:baseUrl;
-      //0. 有专栏详情, 非集赞中和拼团中
+      baseUrl = baseUrl.includes('#')?baseUrl.split('#')[0]:baseUrl;
+      //1. 有专栏详情, 非集赞中和拼团中
       if (!this.columnDetail) return;
       this.shareUrl = `${baseUrl}/#/detail/${this.shareType}/${this.columnDetail.id}`;
-      //1. 有专栏详情, 拼团中
+      //2. 有专栏详情, 拼团中
       if (this.postType === 'collage') {
         let groupBuyId = this.groupBuyId || this.columnDetail.groupBuyId;
         this.shareUrl = `${this.shareUrl}?${groupBuyId?'groupBuyId='+groupBuyId : ''}&startUserName=${this.startUserName}&startAvatar=${this.startAvatar}`
       }
-      //2. 有专栏详情, 集赞中
+      //3. 有专栏详情, 集赞中
       if (this.postType === 'praise') {
         let likeId = this.collectLikeId || this.columnDetail.collectLikeId;
         this.shareUrl = `${baseUrl}/#/praise/${this.shareType}/${this.courseId}/${likeId||0}/active?startUserName=${this.startUserName}&startAvatar=${this.startAvatar}`
       }
-      console.log('SharePoster-Link:', this.shareUrl)
+      //4.添加分享人信息
+      const shareUrl = `${this.shareUrl}${this.shareUrl.includes('?') ? '&' : '?'}`;
+      const distributor = '';//btoa(encodeURIComponent(JSON.stringify({id:this.user.id,avatarUrl:this.user.avatarUrl,nickName:this.user.nickName})));
+      this.shareUrl = `${shareUrl}preUserId=${this.user.id}&distributor=${distributor}`;
+      console.log('SharePoster-Link:', this.shareUrl);
+      resolve()
     },
     //绘制海报
     drawBottomMap: function() {
-      //指定绘制上下文, 放大 this.pixelRatio 比例进行绘制所有的内容
+      //指定绘制上下文, 放大 this.pixelRatio 比例进行绘制所有的内容       ; //设置分享地址
       this.ctx.scale(this.pixelRatio, this.pixelRatio);
       this.getUserInfo()
         .then(user => (this.user = user))
+        .then(() => new Promise(resolve => this.setPosterConfig(resolve)))
         .then(() => new Promise(resolve => this.drawBackground(resolve)))
         .then(() => new Promise(resolve => this.drawHeadImage(resolve)))
         .then(() => {

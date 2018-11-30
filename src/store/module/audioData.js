@@ -141,8 +141,8 @@ export default {
     },
     //音频单集列表
     async getCommentList({ commit }, params) {
-      params.currentPage = (params.currentPage || 1) + 1
-      const res = await getCommentList(params)
+      params.currentPage = (params.currentPage || 1) + 1;
+      const res = await getCommentList(params);
       commit('bindCommentList', res)
     },
     //设置分享信息
@@ -159,9 +159,8 @@ export default {
         imgUrl:`${rootState.columnDetail.sharePostUrl}?imageView2/1/w/100/h/100/format/jpg`,
         successCB: () => console.log('分享回调成功'),
         cancelCB: () => console.log('分享回调失败')
-      }
-      console.log('Audio-ShareLink:',shareData.link)
-      dispatch('setWxShareFriend',shareData,{root:true})
+      } ;
+      dispatch('setWxShareFriend',shareData,{root:true});
       dispatch('setWxShareZone',shareData,{root:true})
     }
   },

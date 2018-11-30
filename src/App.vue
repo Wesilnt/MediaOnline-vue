@@ -64,14 +64,14 @@ export default {
               'hideMenuItems'
             ]
           });
-          this.getUserInfo(user=>{
-            const href = -1 != location.href.indexOf('?')?location.href.split('?')[0]:location.href;
-            const shareHref = `${href}${-1 != href.indexOf('?') ? '&' : '?'}`;
-            const distributor = btoa(encodeURIComponent(JSON.stringify({id:user.id,avatarUrl:user.avatarUrl,nickName:user.nickName})));
-            const shareUrl = `${shareHref}preUserId=${user.id}&distributor=${distributor}`;
-            console.log('App-ShareUrl:',shareUrl);
-            this.handleWxShare(shareUrl)
-          })
+          // this.getUserInfo(user=>{
+            // const href = -1 != location.href.indexOf('?')?location.href.split('?')[0]:location.href;
+            // const shareHref = `${href}${-1 != href.indexOf('?') ? '&' : '?'}`;
+            // const distributor = btoa(encodeURIComponent(JSON.stringify({id:user.id,avatarUrl:user.avatarUrl,nickName:user.nickName})));
+            // const shareUrl = `${shareHref}preUserId=${user.id}&distributor=${distributor}`;
+            // console.log('App-ShareUrl:',shareUrl);
+            this.handleWxShare(window.location.href)
+          // })
         }
       },
       immediate: true
