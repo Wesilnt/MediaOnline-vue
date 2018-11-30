@@ -53,7 +53,7 @@ export default {
       payType,
       payAmount: 0,
       difference: 0,
-      showPrice: 0
+      showPrice: 0,
     }
   },
   computed: {
@@ -63,41 +63,49 @@ export default {
       'briefIntro',
       'groupBuyPrice',
       'price',
-      'lessonCount'
+      'lessonCount',
     ]),
     ...mapState(['paySucceed']),
     ...rootState(['coinNum', 'deductionOrder', 'deductionProp']),
     //抵扣书币数
     deductionBookCoin: function() {
-      const price = parseFloat(this.payDetail.price) //不抵扣书币的支付金额
-      let totalAmount = (price * this.deductionProp) / 100 //最多能抵扣金额, deductionProp/100 抵扣金额比
-      totalAmount = price - totalAmount < 0.01 ? price - 0.01 : totalAmount //书币抵扣完,剩余支付金额不能小于0.01
-      let totalCoin = (totalAmount * this.deductionOrder).toFixed(0) //最多抵扣需要花费多少书币, 1元 需要多少书币：deductionOrder
+      const price = parseFloat(this.payDetail.price); //不抵扣书币的支付金额
+      let totalAmount = (price * this.deductionProp) / 100; //最多能抵扣金额, deductionProp/100 抵扣金额比
+      totalAmount = price - totalAmount < 0.01 ? price - 0.01 : totalAmount; //书币抵扣完,剩余支付金额不能小于0.01
+      let totalCoin = (totalAmount * this.deductionOrder).toFixed(0); //最多抵扣需要花费多少书币, 1元 需要多少书币：deductionOrder
       return this.coinNum <= totalCoin ? this.coinNum : totalCoin //计算可用书币总数
     },
     //抵扣金额
     deductionAmount: function() {
-      return parseFloat(
-        (
-          Math.round((this.deductionBookCoin * 100) / this.deductionOrder) / 100
-        ).toFixed(2)
-      )
+      return parseFloat((Math.round((this.deductionBookCoin * 100) / this.deductionOrder) / 100).toFixed(2))
     },
     payDetail: function() {
-      const payDetail = JSON.parse(sessionStorage.getItem('payDetail'))
-      const { groupBuyPrice, price: origin } = payDetail
-      const { payType } = this.$route.query
-      const price = parseFloat(payType === 'groupBuy' ? groupBuyPrice : origin)
-      console.log(payType === 'groupBuy')
-      this.payAmount = price
-      this.showPrice = price
+      let payDetail = JSON.parse(sessionStorage.getItem('payDetail'));
+      if(!payDetail) {
+          if (this.courseName) {
+              payDetail = {
+                      courseName: this.courseName,
+                      coverPic: this.coverPic,
+                      briefIntro: this.briefIntro,
+                      groupBuyPrice: this.groupBuyPrice,
+                      price: this.price,
+                      lessonCount: this.lessonCount
+                  }
+          }
+      }
+      const { groupBuyPrice, price: origin } = payDetail;
+      const { payType } = this.$route.query;
+      const price = parseFloat(payType === 'groupBuy' ? groupBuyPrice : origin);
+      console.log(payType === 'groupBuy');
+      this.payAmount = price;
+      this.showPrice = price;
       return payDetail
     }
   },
   watch: {
     paySucceed: function(isSucceed) {
       if (isSucceed) {
-        this.$toast('您已支付成功')
+        this.$toast('您已支付成功');
         setTimeout(() => this.$router.go(-1), 400)
       }
     }
@@ -106,15 +114,15 @@ export default {
     ...mapActions(['unlockCourse', 'joinGroupBuy', 'startGroupBuy']),
     ...rootActions(['getBookCoinInfo']),
     async handlePayment() {
-      this.payDisabled = true
-      const preUserIdStr = sessionStorage.getItem('preUserId')
-      const preUserIdJSON = JSON.parse(preUserIdStr || '{}')
-
+      this.payDisabled = true;
+      const preUserIdStr = sessionStorage.getItem('preUserId');
+      const preUserIdJSON = JSON.parse(preUserIdStr || '{}');
+       console.log('preUserIdStr:',preUserIdStr);
       const payParams = {
         courseId: this.courseId, //购买专栏ID
         useFlag: this.checked, //是否使用书币
         ...preUserIdJSON //是否来自分销员分享
-      }
+      };
       if (this.payType === 'groupBuy') {
         if (this.groupBuyId) {
           await this.joinGroupBuy({ ...payParams, groupBuyId: this.groupBuyId })
@@ -128,19 +136,19 @@ export default {
       this.payDisabled = false
     },
     toggleDiscount() {
-      const toggledChecked = !this.checked
+      const toggledChecked = !this.checked;
       this.difference = toggledChecked
         ? -this.deductionAmount
-        : this.deductionAmount
+        : this.deductionAmount;
       this.showPrice = toggledChecked
         ? -(this.deductionAmount - this.payAmount).toFixed(2)
-        : this.payAmount
+        : this.payAmount;
       this.checked = toggledChecked
     }
   },
   async created() {
-    document.title = '结算中心'
-    await this.getBookCoinInfo()
+    document.title = '结算中心';
+    await this.getBookCoinInfo();
     const {
       courseName,
       coverPic,
@@ -148,7 +156,7 @@ export default {
       groupBuyPrice,
       price,
       lessonCount
-    } = this
+    } = this;
     if (courseName) {
       sessionStorage.setItem(
         'payDetail',
@@ -160,7 +168,7 @@ export default {
           price,
           lessonCount
         })
-      )
+      );
     }
   },
   destroyed() {
