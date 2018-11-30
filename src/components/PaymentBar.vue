@@ -479,17 +479,13 @@ export default {
       if (paymentGroupBuyId && groupBuystatus !== 1204) {
         title = `我正在参加《${courseName}》拼团活动,仅差${groupBuyPersonCount -
           alreadyCount}人,快来和我一起拼团吧!`
-        link = `${url}/#/detail/${columnType}/${courseId}?groupBuyId=${paymentGroupBuyId}&preUserId=${
-          userInfo.id
-        }&distributor=${distributor}`
+        link = `${url}/#/detail/${columnType}/${courseId}?groupBuyId=${paymentGroupBuyId}`
       }
       if (paymentCollectLikeId) {
         title = `我是${userInfo.nickName}, ${
           this.viewer === identityType.OWNER ? '我想免费' : '正在帮朋友'
         }领取《${courseName}》,求助攻~`
-        link = `${url}/#/praise/active/${courseId}/${paymentCollectLikeId}?columnType=${columnType}&preUserId=${
-          userInfo.id
-        }&distributor=${distributor}`
+        link = `${url}/#/praise/active/${courseId}/${paymentCollectLikeId}?columnType=${columnType}`
       }
       const share = { title, link }
       const shareData = {
