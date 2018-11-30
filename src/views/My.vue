@@ -25,6 +25,7 @@
 		mapState,
 		mapActions
 	} = createNamespacedHelpers('myData');
+	import  {distributorStatus} from '../utils/config'
 
 	import purchase from '../assets/images/my_purchase.png'
 	import record from '../assets/images/my_record.png'
@@ -112,7 +113,8 @@
 					    image: require('../assets/images/logo.png'),
 					    title: '组件测试'
 					  }*/
-				]
+				] ,
+                distributorStatus
 			}
 		},
 		computed: {
@@ -147,9 +149,8 @@
 				}
 			},
 			itemClick: function(name) {
-				name = name === 'DistributorApply' && this.isDistributor ? 'DistributionCenter' : name;
 				this.$router.push({
-					name: name
+					name: (name === 'DistributorApply' && this.distributorStatus[this.isDistributor]) || name
 				})
 			}
 		},

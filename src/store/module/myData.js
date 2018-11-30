@@ -9,7 +9,7 @@ const myData = {
     replyMessageCount: 0,
     userInfo: [],
     loading: false,
-    isDistributor: false
+    isDistributor: -1
   },
   mutations: {
     save(state, payload) {
@@ -26,7 +26,7 @@ const myData = {
   actions: {
     /**是否是分销员*/
     async checkDistributor({state, commit }, useCache = false) {
-      if(undefined != state.isDistributor && useCache) return state.isDistributor;
+      if(-1 !== state.isDistributor && useCache) return state.isDistributor;
       const response = await isDistributor();
       await commit('save', {isDistributor: response});
       return response

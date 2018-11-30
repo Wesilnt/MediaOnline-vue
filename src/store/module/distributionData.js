@@ -61,15 +61,15 @@ export default {
     actions: {
         /**是否是分销员*/
         async checkDistributor({ commit ,dispatch},useCache) {
-            const res  = await dispatch('myData/checkDistributor',useCache,{root:true})
-            await commit('setDistributor', {isDistributor: res})
+            const res  = await dispatch('myData/checkDistributor',useCache,{root:true});
+            await commit('setDistributor', {isDistributor: res});
             return res
         },
         /**获取分销员信息*/
         async getDistributorInfo({ state, commit },{useCache=false}) {
-            if(state.hasDistributorCache && useCache) return
-            const res = await getDistributorInfo()
-            if (!res) return
+            if(state.hasDistributorCache && useCache) return;
+            const res = await getDistributorInfo();
+            if (!res) return;
             commit('bindDistributorInfo', {
                 hasDistributorCache:true,
                 distributorInfo: res,
@@ -83,60 +83,60 @@ export default {
         },
         /**申请成为分销员*/
         async applyDistributor({ state, commit, dispatch },) {
-            const res = await applyDistributor()
-            if (!res) return
-            await commit('bindDistributorInfo',{distributorInfo:res,extendAmount:res.extendAmount})
-            await dispatch('checkDistributor', {useCache: false})
+            const res = await applyDistributor();
+            if (!res) return;
+            await commit('bindDistributorInfo',{distributorInfo:res,extendAmount:res.extendAmount});
+            await dispatch('checkDistributor', {useCache: false});
             return res
         },
         /**获取分销员等级设置*/
         async getDistributorLevel({state,commit}){
-             if(!state.gradesLocal && state.distributorGrades) return state.distributorGrades
-             const res = await  getDistributorLevel()
-             if(!res)return
-             const grades  = {...state.distributorGrades}
-             res.reduce((pre,item) => grades[item.level] = {...grades[item.level],...item},grades)
+             if(!state.gradesLocal && state.distributorGrades) return state.distributorGrades;
+             const res = await  getDistributorLevel();
+             if(!res)return;
+             const grades  = {...state.distributorGrades};
+             res.reduce((pre,item) => grades[item.level] = {...grades[item.level],...item},grades);
              commit('setDistributorLevel',{gradesLocal:false,distributorGrades:grades})
         },
         async getProfitList({ state, commit }, refresh) {
-            await commit('toggleLoading',true)
-            let currentPage = refresh ? 1:  state.currentPage + 1
-            let params = {currentPage,pageSize: state.pageSize}
-            const res = await getDistributorIncomeList(params)
-            commit('toggleLoading',false)
-            if(!res) return
-            let data = refresh || !state.profitList ? res.result: state.profitList.concat(res.result)
-            let finished = data.length >= res.totalCount
+            await commit('toggleLoading',true);
+            let currentPage = refresh ? 1:  state.currentPage + 1;
+            let params = {currentPage,pageSize: state.pageSize};
+            const res = await getDistributorIncomeList(params);
+            commit('toggleLoading',false);
+            if(!res) return;
+            let data = refresh || !state.profitList ? res.result: state.profitList.concat(res.result);
+            let finished = data.length >= res.totalCount;
             data.reduce((pre,item)=>{
-                let year = new Date(item.createTime).getFullYear()
-                item['showYear'] = year !== pre
+                let year = new Date(item.createTime).getFullYear();
+                item['showYear'] = year !== pre;
                 return year
-            },0)
+            },0);
             commit('bindProfitList', {profitList : data ,finished});
         },
         async getTransferDetail({ state, commit }, refresh) {
-            await commit('toggleLoading',true)
-            let currentPage = refresh ? 1:  state.currentPage + 1
-            let params = {currentPage,pageSize: state.pageSize}
-            const res = await getTransferRecords(params)
-            commit('toggleLoading',false)
-            if(!res) return
-            let data = refresh || !state.transferList?res.result: state.transferList.concat(res.result)
-            let finished = data.length >= res.totalCount
+            await commit('toggleLoading',true);
+            let currentPage = refresh ? 1:  state.currentPage + 1;
+            let params = {currentPage,pageSize: state.pageSize};
+            const res = await getTransferRecords(params);
+            commit('toggleLoading',false);
+            if(!res) return;
+            let data = refresh || !state.transferList?res.result: state.transferList.concat(res.result);
+            let finished = data.length >= res.totalCount;
             data.reduce((pre,item)=>{
-                let year = new Date(item.createTime).getFullYear()
-                item['showYear'] = year !== pre
+                let year = new Date(item.createTime).getFullYear();
+                item['showYear'] = year !== pre;
                 return year
-            },0)
+            },0);
             commit('bindTransferDetail', {transferList : data ,finished})
         },
         async getUserInfo({commit,dispatch}) {
-            const userInfo = await dispatch('getUserInfo', false,{root:true})
-            commit('setBindMobile', { isBindMobile: userInfo && userInfo.mobileNo.length > 0 })
+            const userInfo = await dispatch('getUserInfo', false,{root:true});
+            commit('setBindMobile', { isBindMobile: userInfo && userInfo.mobileNo.length > 0 });
             return userInfo
         },
         setDistributor({commit,dispatch},{preUserId}){
-          if(!preUserId || preUserId <=0) return
+          if(!preUserId || preUserId <=0) return;
           dispatch('setDistributor',{preUserId},{root:true})
         },
         onDestroy({ commit }) {
