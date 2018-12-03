@@ -112,12 +112,9 @@ if (NODE_ENV === 'development') {
 // http://t.shbaoyuantech.com/#    测试环境
 // http://m.shbaoyuantech.com/#    正式环境
 let originUrl = 'http://t.shbaoyuantech.com/#/home';
-if(NODE_ENV === 'development'){
-    const href = window.location.href
-    console.log('href=',href)
-    originUrl = href.includes('?')?href.split('?')[0]:href
-    originUrl = originUrl.split('#')[0]
-}
+// if(NODE_ENV === 'development'){
+//     originUrl = window.location.href.split('#')[0]
+// }
 if (NODE_ENV === 'production') {
   originUrl = 'http://m.shbaoyuantech.com/#/home'
 }
