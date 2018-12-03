@@ -50,7 +50,7 @@ export default {
     const {
       groupBuyId: groupBuyIdFromShare,
       collectLikeId: collectLikeIdFromShare
-    } = this.$route.query;
+    } = this.$route.query
     const { columnType, courseId } = this.$route.params
     return {
       userInfo: {}, // 用户信息
