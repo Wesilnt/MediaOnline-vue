@@ -154,7 +154,7 @@ export default new Vuex.Store({
       dispatch('getUserInfo').then(user => {
         const shareUrl = `${link}${-1 != link.indexOf('?') ? '&' : '?'}`;
         const distributor = '';//btoa(encodeURIComponent(JSON.stringify({id:user.id,avatarUrl:user.avatarUrl,nickName:user.nickName})));
-        link = `${shareUrl}preUserId=${user.id}&distributor=${distributor}?&`;
+        link = `${shareUrl}preUserId=${user.id}&distributor=${distributor}`;
         const nickname = user.nickName;
           // user.id
         const shareOptions = {
