@@ -126,7 +126,7 @@
                     title: '秦汉胡同在线',
                     link:currentUrl,
                     desc: '你一定会爱上国学课...',
-                    imgUrl: require('../../assets/images/logo.png'),
+                    imgUrl: 'http://qiniu.shbaoyuantech.com/FsvTsNINf5rPwNOmQTfe-WSxTSF1?imageView2/1/w/100/h/100/format/jpg',
                 };
                 const distributor = '';//btoa(encodeURIComponent(JSON.stringify({id:user.id,avatarUrl:user.avatarUrl,nickName:user.nickName})));
                 this.shareUrl = `${currentUrl}?preUserId=${user.id}&distributor=${distributor}`;
