@@ -16,18 +16,12 @@ Vue.filter('formatYMD', formatYMD);
 Vue.filter('learntimeFormat', learntimeFormat);
 Vue.config.productionTip = false
 
-router.beforeEach((to, from, next) => {
-  if (to.name === 'AudioPlay') {
-    to.meta.keepAlive = from.name === 'AudioCmts'
-  }
-  next()
-})
 
 new Vue({
   router,
   store,
   render: h => {
-    if (noAccessToken() && IS_ONLINE) {
+      if (noAccessToken() && IS_ONLINE) {
       store.dispatch('getAccessToken')
       return h(SkeletonFullScreen)
     }

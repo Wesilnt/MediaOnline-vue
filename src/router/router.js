@@ -18,15 +18,7 @@ const ColumnList = () =>
   import(/* webpackChunkName: "index" */ '../views/ColumnList')
 
 Vue.use(Router)
-
-export default new Router({
-  scrollBehavior(to, from, savedPosition) {
-    if (savedPosition) {
-      return savedPosition
-    } else {
-      return { x: 0, y: 0 }
-    }
-  },
+const router = new Router({
   routes: [
     {
       path: '/',
@@ -77,3 +69,10 @@ export default new Router({
     ...PageInfo_From_Praise
   ]
 })
+router.beforeEach((to, from, next) => {
+  if (to.name === 'AudioPlay') {
+    to.meta.keepAlive = from.name === 'AudioCmts'
+  }
+  next()
+})
+export default router
