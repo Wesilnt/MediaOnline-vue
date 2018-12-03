@@ -6,7 +6,7 @@ const { NODE_ENV } = process.env;
 // 调试选项，本地调试请改为 False
 export const IS_ONLINE = true;
 // 测试 Token
-export const TEST_TOKEN = "bff1d77b-0fcf-4a50-80fc-47b62093dc37";
+export const TEST_TOKEN = "e86597d8-298a-4506-864c-c0e20864134b";
 // export const TEST_TOKEN = 'd5baa57e-74ee-4dd4-8122-f9c0f360889f'
 
 // TODO router 设置未统一，后期需要统一格式
@@ -111,9 +111,12 @@ if (NODE_ENV === 'development') {
 // 前端访问地址
 // http://t.shbaoyuantech.com/#    测试环境
 // http://m.shbaoyuantech.com/#    正式环境
-let originUrl = 'http://t.shbaoyuantech.com/#'
+let originUrl = 'http://t.shbaoyuantech.com/#/home';
+if(NODE_ENV === 'development'){
+    originUrl = window.location.href.split('#')[0]
+}
 if (NODE_ENV === 'production') {
-  originUrl = 'http://m.shbaoyuantech.com/#'
+  originUrl = 'http://m.shbaoyuantech.com/#/home'
 }
 
 // 微信授权地址

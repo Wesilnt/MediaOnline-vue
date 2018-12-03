@@ -130,7 +130,7 @@
                 };
                 const distributor = '';//btoa(encodeURIComponent(JSON.stringify({id:user.id,avatarUrl:user.avatarUrl,nickName:user.nickName})));
                 this.shareUrl = `${currentUrl}?preUserId=${user.id}&distributor=${distributor}`;
-                console.log('shareLink_title ', this.shareUrl);
+                console.log('Distributor-Share: ', this.shareUrl);
                 this.setWxShareFriend(shareData);
                 this.setWxShareZone(shareData)
             }

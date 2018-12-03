@@ -4,7 +4,7 @@ import {
   mapState as rootState,
   mapActions as rootActions
 } from 'vuex'
-import { openVideoDetail, openAudioDetail, identityType } from '../utils/config'
+import { openVideoDetail, openAudioDetail, identityType,originUrl } from '../utils/config'
 import PhoneVerif from './PhoneVerif'
 import Share from './share/Share'
 import GroupHeader from './GroupHeader'
@@ -475,19 +475,19 @@ export default {
       const distributor = '' //btoa(encodeURIComponent(JSON.stringify({id:userInfo.id,avatarUrl:userInfo.avatarUrl,nickName:userInfo.nickName})));
       let title = `我正在学习《${this.courseName}》，快来一起学习吧`,
         // link = `${shareHref}preUserId=${userInfo.id}&distributor=${distributor}`;
-        link = window.location.href
+        link = window.location.href;
+      const baseUrl = this.originUrl.split('#')[0];
       if (paymentGroupBuyId && groupBuystatus !== 1204) {
-        title = `我正在参加《${courseName}》拼团活动,仅差${groupBuyPersonCount -
-          alreadyCount}人,快来和我一起拼团吧!`
-        link = `${url}/#/detail/${columnType}/${courseId}?groupBuyId=${paymentGroupBuyId}`
+        title = `我正在参加《${courseName}》拼团活动,仅差${groupBuyPersonCount - alreadyCount}人,快来和我一起拼团吧!`;
+        link = `${baseUrl}/#/detail/${columnType}/${courseId}?groupBuyId=${paymentGroupBuyId}`
       }
       if (paymentCollectLikeId) {
         title = `我是${userInfo.nickName}, ${
           this.viewer === identityType.OWNER ? '我想免费' : '正在帮朋友'
-        }领取《${courseName}》,求助攻~`
-        link = `${url}/#/praise/active/${courseId}/${paymentCollectLikeId}?columnType=${columnType}`
+        }领取《${courseName}》,求助攻~`;
+        link = `${baseUrl}/#/praise/active/${courseId}/${paymentCollectLikeId}?columnType=${columnType}`
       }
-      const share = { title, link }
+      const share = { title, link };
       const shareData = {
         desc: '你一定会爱上国学课...',
         imgUrl: this.sharePostUrl,
