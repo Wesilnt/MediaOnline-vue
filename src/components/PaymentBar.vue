@@ -61,7 +61,8 @@ export default {
       payDisabled: false, // 所有支付是否可点击
       showTeleRegister: false, // 手机号注册弹窗
       sharePageShow: false, // 分享弹框页
-      groupBuyStatusType: {}
+      groupBuyStatusType: {},
+      originUrl
     }
   },
   computed: {
@@ -479,7 +480,7 @@ export default {
       const baseUrl = this.originUrl.split('#')[0];
       if (paymentGroupBuyId && groupBuystatus !== 1204) {
         title = `我正在参加《${courseName}》拼团活动,仅差${groupBuyPersonCount - alreadyCount}人,快来和我一起拼团吧!`;
-        link = `${baseUrl}/#/detail/${columnType}/${courseId}?groupBuyId=${paymentGroupBuyId}`
+        link = `${baseUrl}#/detail/${columnType}/${courseId}?groupBuyId=${paymentGroupBuyId}`
       }
       if (paymentCollectLikeId) {
         title = `我是${userInfo.nickName}, ${
