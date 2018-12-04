@@ -148,9 +148,9 @@ export default new Vuex.Store({
         cancelCB = () => {}
       }
     ) {
-      if (!link.includes(state.url)) {
-        throw new Error('link error');
-      }
+      // if (!link.includes(state.url)) {
+      //   throw new Error('link error');
+      // }
       dispatch('getUserInfo').then(user => {
         const shareUrl = `${link}${link.includes('?') ? '&' : '?'}`;
         const distributor = '';//btoa(encodeURIComponent(JSON.stringify({id:user.id,avatarUrl:user.avatarUrl,nickName:user.nickName})));
@@ -169,9 +169,9 @@ export default new Vuex.Store({
         };
           console.log('Share-Link:',link);
           wx.ready(() => {
-          // 分享给朋友
+          //分享给朋友
           wx.onMenuShareAppMessage(shareOptions);
-          // 分享给qq
+          //分享给qq
           wx.onMenuShareQQ(shareOptions)
         })
       })
