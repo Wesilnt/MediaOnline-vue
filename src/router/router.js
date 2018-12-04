@@ -70,6 +70,28 @@ const router = new Router({
   ]
 })
 router.beforeEach((to, from, next) => {
+  console.log(to)
+  const { fullPath } = to
+  if (!fullPath.includes('?')) {
+    const newPathArr = fullPath.split('&')
+    const len = newPathArr.length
+    if (len <= 1) {
+      next()
+    }
+    const newp = newPathArr.reduce((prev, item, index) => {
+      if (index === 1) {
+        prev += '?' + item
+      } else if (index > 1) {
+        prev += '&' + item
+      } else {
+        prev += item
+      }
+      return prev
+    }, '')
+      next(newp)
+      // originUrl+newp
+    // console.log(newp)
+  }
   if (to.name === 'AudioPlay') {
     to.meta.keepAlive = from.name === 'AudioCmts'
   }

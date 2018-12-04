@@ -111,12 +111,12 @@ if (NODE_ENV === 'development') {
 // 前端访问地址
 // http://t.shbaoyuantech.com/#    测试环境
 // http://m.shbaoyuantech.com/#    正式环境
-let originUrl = 'http://t.shbaoyuantech.com/#/home';
+let originUrl = 'http://t.shbaoyuantech.com/#/';
 // if(NODE_ENV === 'development'){
 //     originUrl = window.location.href.split('#')[0]
 // }
 if (NODE_ENV === 'production') {
-  originUrl = 'http://m.shbaoyuantech.com/#/home'
+  originUrl = 'http://m.shbaoyuantech.com/#/'
 }
 
 // 微信授权地址

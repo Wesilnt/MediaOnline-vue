@@ -16,6 +16,28 @@ Vue.filter('formatYMD', formatYMD);
 Vue.filter('learntimeFormat', learntimeFormat);
 Vue.config.productionTip = false
 
+console.log(router)
+// const { fullPath } = this.$route
+/*if (!fullPath.includes('?')) {
+    const newPathArr = fullPath.split('&')
+    const len = newPathArr.length
+    if (len <= 1) {
+        return
+    }
+    const newp = newPathArr.reduce((prev, item, index) => {
+        if (index === 1) {
+            prev += '?' + item
+        } else if (index > 1) {
+            prev += '&' + item
+        } else {
+            prev += item
+        }
+        return prev
+    }, '')
+    // originUrl+newp
+    console.log(newp)
+}*/
+
 
 new Vue({
   router,
