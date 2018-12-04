@@ -187,9 +187,9 @@ export default new Vuex.Store({
         cancelCB = () => {}
       }
     ) {
-      if (!link.includes(state.url)) {
-        throw new Error('link error');
-      }
+      // if (!link.includes(state.url)) {
+      //   throw new Error('link error');
+      // }
       const shareOptions = {
         title, // 分享标题
         desc, // 分享描述
